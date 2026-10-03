@@ -1,0 +1,18 @@
+.kappa-format {
+  display: inline;
+  color: var(--kappa-default, inherit);
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
+  white-space: nowrap;
+}
+
+.kappa-format--relative-time {
+  color: var(--kappa-subtle, inherit);
+}
+
+@media (forced-colors: active) {
+  .kappa-format,
+  .kappa-format--relative-time {
+    color: CanvasText;
+  }
+}

@@ -1,0 +1,174 @@
+---
+import ArkUiDocsLink from "../../../components/ArkUiDocsLink.astro";
+import CodeBlock from "../../../components/CodeBlock.astro";
+import CompositionTree from "../../../components/CompositionTree.astro";
+import CopyPageControls from "../../../components/CopyPageControls.vue";
+import DocsPageNavigation from "../../../components/DocsPageNavigation.astro";
+import ProgressCircleDocsDemo from "../../../components/ProgressCircleDocsDemo.vue";
+import {
+  barrelCode,
+  controlledCode,
+  cssVariables,
+  events,
+  exportsList,
+  granularCode,
+  indeterminateCode,
+  parts,
+  previewCode,
+  rootProps,
+  sizesCode,
+  usageCode,
+} from "../../../data/progress-circle-docs";
+import DocsLayout from "../../../layouts/DocsLayout.astro";
+import "../../../styles/docs-components.css";
+
+const currentPath = "/docs/components/progress-circle";
+const description =
+  "Shows task completion in a compact circular indicator.";
+---
+
+<DocsLayout title="Progress Circle" description={description}>
+  <div class="docs-page docs-page--component">
+    <header class="docs-page-header">
+      <div class="docs-page-header__inner">
+        <div class="docs-page-header__content">
+          <div class="docs-page-header__mobile-actions">
+            <CopyPageControls client:only="vue" align="center" />
+          </div>
+          <div class="docs-page-header__title-row">
+            <h1>Progress Circle</h1>
+            <ArkUiDocsLink />
+            <div class="docs-page-header__navigation-actions">
+              <div class="docs-page-header__desktop-actions"><CopyPageControls client:only="vue" /></div>
+              <DocsPageNavigation currentPath={currentPath} variant="compact" />
+            </div>
+          </div>
+          <p class="docs-page-header__lede">{description}</p>
+        </div>
+      </div>
+    </header>
+
+    <div class="docs-page-body">
+      <article class="docs-article docs-article--component">
+        <section id="preview" class="docs-section">
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><ProgressCircleDocsDemo client:load variant="preview" /></div>
+            <CodeBlock code={previewCode} lang="vue" collapsible revealId="progress-circle-preview-code" />
+          </div>
+        </section>
+
+        <section id="installation" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#installation">Installation</a></h2>
+          <p>Progress Circle is part of the main Kappa package. It uses Ark UI's circular Progress anatomy.</p>
+          <h3 id="barrel"><a class="docs-section-anchor" href="#barrel">Barrel</a></h3>
+          <CodeBlock code={barrelCode} lang="javascript" />
+          <h3 id="granular"><a class="docs-section-anchor" href="#granular">Granular</a></h3>
+          <CodeBlock code={granularCode} lang="javascript" />
+        </section>
+
+        <section id="usage" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#usage">Usage</a></h2>
+          <p>
+            Use Progress Circle when horizontal space is limited or when progress belongs to one compact object.
+            Use linear <a href="/docs/components/progress">Progress</a> when the label or exact status needs more space.
+          </p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><ProgressCircleDocsDemo client:load variant="usage" /></div>
+            <CodeBlock code={usageCode} lang="vue" collapsible revealId="progress-circle-usage-code" />
+          </div>
+        </section>
+
+        <section id="composition" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#composition">Composition</a></h2>
+          <CompositionTree component="progressCircle" />
+          <p>
+            Progress Circle shares Ark UI's Progress state machine with linear Progress. Kappa gives
+            the circular anatomy a separate import path, namespace, data slots, and visual contract.
+          </p>
+          <ul>
+            <li><code>Circle</code> is the SVG progressbar and owns the accessible name.</li>
+            <li><code>CircleTrack</code> shows the complete range.</li>
+            <li><code>CircleRange</code> shows the current arc or indeterminate sweep.</li>
+            <li><code>ValueText</code> is centered over the SVG by default.</li>
+          </ul>
+        </section>
+
+        <section id="examples" class="docs-section docs-section--component-examples">
+          <h2><a class="docs-section-anchor" href="#examples">Examples</a></h2>
+
+          <h3 id="sizes"><a class="docs-section-anchor" href="#sizes">Size and Thickness</a></h3>
+          <p>Set the public CSS variables on the root to fit compact status areas or larger summaries.</p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><ProgressCircleDocsDemo client:load variant="sizes" /></div>
+            <CodeBlock code={sizesCode} lang="vue" collapsible revealId="progress-circle-sizes-code" />
+          </div>
+
+          <h3 id="indeterminate"><a class="docs-section-anchor" href="#indeterminate">Indeterminate</a></h3>
+          <p>Set the value to <code>null</code> when completion cannot be estimated.</p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><ProgressCircleDocsDemo client:load variant="indeterminate" /></div>
+            <CodeBlock code={indeterminateCode} lang="vue" collapsible revealId="progress-circle-indeterminate-code" />
+          </div>
+
+          <h3 id="controlled"><a class="docs-section-anchor" href="#controlled">Controlled</a></h3>
+          <p>Use <code>v-model</code> when application state owns the current progress value.</p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><ProgressCircleDocsDemo client:load variant="controlled" /></div>
+            <CodeBlock code={controlledCode} lang="vue" collapsible revealId="progress-circle-controlled-code" />
+          </div>
+        </section>
+
+        <section id="accessibility" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#accessibility">Accessibility</a></h2>
+          <ul>
+            <li><code>Circle</code> exposes <code>role=progressbar</code>, its range, state, and current value.</li>
+            <li>Give the SVG progressbar an accessible name that identifies the process.</li>
+            <li>Do not rely on the arc alone. Keep a visible label or nearby status description.</li>
+            <li>A <code>null</code> value removes <code>aria-valuenow</code> and signals an indeterminate process.</li>
+            <li>Reduced-motion preferences stop both circular animations and the value transition.</li>
+          </ul>
+        </section>
+
+        <section id="api-reference" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#api-reference">API Reference</a></h2>
+          <div class="docs-api-group">
+            <h3 id="root-api"><a class="docs-section-anchor" href="#root-api">ProgressCircle.Root</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>{rootProps.map((prop) => <tr><td><code>{prop.name}</code></td><td><code>{prop.type}</code></td><td><code>{prop.defaultValue}</code></td><td>{prop.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="parts-api"><a class="docs-section-anchor" href="#parts-api">Parts</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Part</th><th>Element</th><th>Description</th></tr></thead><tbody>{parts.map((part) => <tr><td><code>ProgressCircle.{part.name}</code></td><td><code>{part.element}</code></td><td>{part.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="css-variables"><a class="docs-section-anchor" href="#css-variables">CSS Variables</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Variable</th><th>Default</th><th>Description</th></tr></thead><tbody>{cssVariables.map((item) => <tr><td><code>{item.name}</code></td><td><code>{item.defaultValue}</code></td><td>{item.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="events-api"><a class="docs-section-anchor" href="#events-api">Events</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Event</th><th>Payload</th><th>Description</th></tr></thead><tbody>{events.map((event) => <tr><td><code>{event.name}</code></td><td><code>{event.payload}</code></td><td>{event.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="exports"><a class="docs-section-anchor" href="#exports">Exports</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Export</th><th>Description</th></tr></thead><tbody>{exportsList.map((item) => <tr><td><code>{item.name}</code></td><td>{item.description}</td></tr>)}</tbody></table></div>
+          </div>
+        </section>
+
+        <DocsPageNavigation currentPath={currentPath} />
+      </article>
+
+      <aside class="docs-page-toc" aria-label="On this page">
+        <div class="docs-page-toc__inner">
+          <span class="docs-page-toc__title">On this page</span>
+          <ul>
+            <li><a href="#installation" data-toc-link="installation">Installation</a><ul><li><a href="#barrel" data-toc-link="barrel">Barrel</a></li><li><a href="#granular" data-toc-link="granular">Granular</a></li></ul></li>
+            <li><a href="#usage" data-toc-link="usage">Usage</a></li>
+            <li><a href="#composition" data-toc-link="composition">Composition</a></li>
+            <li><a href="#examples" data-toc-link="examples">Examples</a><ul><li><a href="#sizes" data-toc-link="sizes">Size and Thickness</a></li><li><a href="#indeterminate" data-toc-link="indeterminate">Indeterminate</a></li><li><a href="#controlled" data-toc-link="controlled">Controlled</a></li></ul></li>
+            <li><a href="#accessibility" data-toc-link="accessibility">Accessibility</a></li>
+            <li><a href="#api-reference" data-toc-link="api-reference">API Reference</a><ul><li><a href="#root-api" data-toc-link="root-api">ProgressCircle.Root</a></li><li><a href="#parts-api" data-toc-link="parts-api">Parts</a></li><li><a href="#css-variables" data-toc-link="css-variables">CSS Variables</a></li><li><a href="#events-api" data-toc-link="events-api">Events</a></li><li><a href="#exports" data-toc-link="exports">Exports</a></li></ul></li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+  </div>
+</DocsLayout>

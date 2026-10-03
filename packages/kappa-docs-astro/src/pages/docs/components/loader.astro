@@ -1,0 +1,201 @@
+---
+import CodeBlock from "../../../components/CodeBlock.astro";
+import CopyPageControls from "../../../components/CopyPageControls.vue";
+import DocsPageNavigation from "../../../components/DocsPageNavigation.astro";
+import LoaderDocsDemo from "../../../components/LoaderDocsDemo.vue";
+import {
+  badgeCode,
+  barrelCode,
+  buttonCode,
+  customSizeCode,
+  emptyCode,
+  exportsList,
+  granularCode,
+  loaderProps,
+  previewCode,
+  runCode,
+  sizesCode,
+  usageCode,
+  variantsCode,
+} from "../../../data/loader-docs";
+import DocsLayout from "../../../layouts/DocsLayout.astro";
+import "../../../styles/docs-components.css";
+
+const currentPath = "/docs/components/loader";
+const description = "Compact motion indicators for work with an unknown duration.";
+---
+
+<DocsLayout title="Loader" description={description}>
+  <div class="docs-page docs-page--component">
+    <header class="docs-page-header">
+      <div class="docs-page-header__inner">
+        <div class="docs-page-header__content">
+          <div class="docs-page-header__mobile-actions">
+            <CopyPageControls client:only="vue" align="center" />
+          </div>
+          <div class="docs-page-header__title-row">
+            <h1>Loader</h1>
+            <div class="docs-page-header__navigation-actions">
+              <div class="docs-page-header__desktop-actions"><CopyPageControls client:only="vue" /></div>
+              <DocsPageNavigation currentPath={currentPath} variant="compact" />
+            </div>
+          </div>
+          <p class="docs-page-header__lede">{description}</p>
+        </div>
+      </div>
+    </header>
+
+    <div class="docs-page-body">
+      <article class="docs-article docs-article--component">
+        <section id="preview" class="docs-section">
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><LoaderDocsDemo client:load variant="preview" /></div>
+            <CodeBlock code={previewCode} lang="vue" collapsible revealId="loader-preview-code" />
+          </div>
+        </section>
+
+        <section id="installation" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#installation">Installation</a></h2>
+          <p>
+            Loader is part of the main Kappa package. It uses CSS motion and has no runtime
+            dependency or state machine.
+          </p>
+          <h3 id="barrel"><a class="docs-section-anchor" href="#barrel">Barrel</a></h3>
+          <CodeBlock code={barrelCode} lang="javascript" />
+          <h3 id="granular"><a class="docs-section-anchor" href="#granular">Granular</a></h3>
+          <CodeBlock code={granularCode} lang="javascript" />
+        </section>
+
+        <section id="usage" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#usage">Usage</a></h2>
+          <p>
+            Loader announces a polite status with the text <code>Loading</code> by default. Set
+            <code>label</code> to specific, translated text when the operation needs more context.
+          </p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><LoaderDocsDemo variant="basic" /></div>
+            <CodeBlock code={usageCode} lang="vue" collapsible revealId="loader-usage-code" />
+          </div>
+        </section>
+
+        <section id="design" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#design">Design</a></h2>
+          <p>
+            The default Loader uses a compact two-circle form. Other variants provide distinct
+            motion for technical states, dense controls, and larger waiting surfaces.
+            Ark UI does not provide a Loader primitive; use
+            <a href="https://ark-ui.com/docs/components/progress">Ark UI Progress</a> when a value or
+            determinate range is available.
+          </p>
+          <p>
+            Every graphic inherits <code>currentColor</code>. Motion uses Kappa CSS keyframes and
+            becomes a stable static shape when the user requests reduced motion.
+          </p>
+        </section>
+
+        <section id="examples" class="docs-section docs-section--component-examples">
+          <h2><a class="docs-section-anchor" href="#examples">Examples</a></h2>
+
+          <h3 id="variants"><a class="docs-section-anchor" href="#variants">Variants</a></h3>
+          <p>
+            Choose a motion that fits the available space and the character of the pending task.
+            Keep one variant consistent within the same workflow.
+          </p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><LoaderDocsDemo variant="variants" /></div>
+            <CodeBlock code={variantsCode} lang="vue" collapsible revealId="loader-variants-code" />
+          </div>
+
+          <h3 id="run-waiting"><a class="docs-section-anchor" href="#run-waiting">Run Waiting</a></h3>
+          <p>
+            The orbit variant matches the established dicehub run-waiting indicator. Use a visible
+            status message and make the graphic decorative to prevent duplicate announcements.
+          </p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><LoaderDocsDemo variant="run" /></div>
+            <CodeBlock code={runCode} lang="vue" collapsible revealId="loader-run-code" />
+          </div>
+
+          <h3 id="sizes"><a class="docs-section-anchor" href="#sizes">Sizes</a></h3>
+          <p>Use small inline, base in ordinary surfaces, and large in prominent loading states.</p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><LoaderDocsDemo variant="sizes" /></div>
+            <CodeBlock code={sizesCode} lang="vue" collapsible revealId="loader-sizes-code" />
+          </div>
+
+          <h3 id="custom-size"><a class="docs-section-anchor" href="#custom-size">Custom Size</a></h3>
+          <p>Pass a positive number when a composition needs a size outside the three presets.</p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><LoaderDocsDemo variant="custom" /></div>
+            <CodeBlock code={customSizeCode} lang="vue" collapsible revealId="loader-custom-code" />
+          </div>
+
+          <h3 id="button"><a class="docs-section-anchor" href="#button">Button</a></h3>
+          <p>
+            Keep the button label visible, set <code>aria-busy</code> on the affected control or region,
+            and make the Loader decorative so assistive technology does not announce the same state twice.
+          </p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><LoaderDocsDemo variant="button" /></div>
+            <CodeBlock code={buttonCode} lang="vue" collapsible revealId="loader-button-code" />
+          </div>
+
+          <h3 id="badge"><a class="docs-section-anchor" href="#badge">Badge</a></h3>
+          <p>Use current-color inheritance to keep the Loader legible in each Badge treatment.</p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><LoaderDocsDemo variant="badge" /></div>
+            <CodeBlock code={badgeCode} lang="vue" collapsible revealId="loader-badge-code" />
+          </div>
+
+          <h3 id="empty"><a class="docs-section-anchor" href="#empty">Empty</a></h3>
+          <p>Use a decorative Loader when the Empty title and description provide the status text.</p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><LoaderDocsDemo variant="empty" /></div>
+            <CodeBlock code={emptyCode} lang="vue" collapsible revealId="loader-empty-code" />
+          </div>
+        </section>
+
+        <section id="accessibility" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#accessibility">Accessibility</a></h2>
+          <ul>
+            <li>The default Loader is a polite status with real visually hidden text.</li>
+            <li>Use a short, translated <code>label</code> that describes the operation.</li>
+            <li>Set <code>decorative</code> when nearby visible text already reports the same state.</li>
+            <li>Put <code>aria-busy="true"</code> on the region or control whose update is pending.</li>
+            <li>Do not use Loader for known progress. Use a progress indicator with a value instead.</li>
+            <li>Reduced-motion mode removes Loader animations and keeps a static loading shape.</li>
+          </ul>
+        </section>
+
+        <section id="api-reference" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#api-reference">API Reference</a></h2>
+          <div class="docs-api-group">
+            <h3 id="loader-api"><a class="docs-section-anchor" href="#loader-api">Loader</a></h3>
+            <p>Renders a span and forwards native attributes and listeners to it.</p>
+            <div class="docs-api-table"><table><thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>{loaderProps.map((prop) => <tr><td><code>{prop.name}</code></td><td><code>{prop.type}</code></td><td><code>{prop.defaultValue}</code></td><td>{prop.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="exports"><a class="docs-section-anchor" href="#exports">Exports</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Export</th><th>Description</th></tr></thead><tbody>{exportsList.map((item) => <tr><td><code>{item.name}</code></td><td>{item.description}</td></tr>)}</tbody></table></div>
+          </div>
+        </section>
+
+        <DocsPageNavigation currentPath={currentPath} />
+      </article>
+
+      <aside class="docs-page-toc" aria-label="On this page">
+        <div class="docs-page-toc__inner">
+          <span class="docs-page-toc__title">On this page</span>
+          <ul>
+            <li><a href="#installation" data-toc-link="installation">Installation</a><ul><li><a href="#barrel" data-toc-link="barrel">Barrel</a></li><li><a href="#granular" data-toc-link="granular">Granular</a></li></ul></li>
+            <li><a href="#usage" data-toc-link="usage">Usage</a></li>
+            <li><a href="#design" data-toc-link="design">Design</a></li>
+            <li><a href="#examples" data-toc-link="examples">Examples</a><ul><li><a href="#variants" data-toc-link="variants">Variants</a></li><li><a href="#run-waiting" data-toc-link="run-waiting">Run Waiting</a></li><li><a href="#sizes" data-toc-link="sizes">Sizes</a></li><li><a href="#custom-size" data-toc-link="custom-size">Custom Size</a></li><li><a href="#button" data-toc-link="button">Button</a></li><li><a href="#badge" data-toc-link="badge">Badge</a></li><li><a href="#empty" data-toc-link="empty">Empty</a></li></ul></li>
+            <li><a href="#accessibility" data-toc-link="accessibility">Accessibility</a></li>
+            <li><a href="#api-reference" data-toc-link="api-reference">API Reference</a><ul><li><a href="#loader-api" data-toc-link="loader-api">Loader</a></li><li><a href="#exports" data-toc-link="exports">Exports</a></li></ul></li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+  </div>
+</DocsLayout>

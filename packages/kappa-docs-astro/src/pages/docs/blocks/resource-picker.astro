@@ -1,0 +1,71 @@
+---
+import CodeBlock from "../../../components/CodeBlock.astro";
+import CopyPageControls from "../../../components/CopyPageControls.vue";
+import DocsPageNavigation from "../../../components/DocsPageNavigation.astro";
+import ResourcePickerDocsDemo from "../../../components/ResourcePickerDocsDemo.vue";
+import { resourcePickerCode, resourcePickerExamples, resourcePickerExternalCode, resourcePickerMultipleCode, resourcePickerProps } from "../../../data/resource-picker-docs";
+import DocsLayout from "../../../layouts/DocsLayout.astro";
+import "../../../styles/docs-components.css";
+
+const currentPath = "/docs/blocks/resource-picker";
+const description = "Search and select one or more items in a dialog. Apply the selection only when the user confirms.";
+---
+
+<DocsLayout title="Resource Picker" description={description}>
+  <div class="docs-page docs-page--component">
+    <header class="docs-page-header"><div class="docs-page-header__inner"><div class="docs-page-header__content">
+      <div class="docs-page-header__mobile-actions"><CopyPageControls client:only="vue" align="center" /></div>
+      <div class="docs-page-header__title-row"><h1>Resource Picker</h1><div class="docs-page-header__navigation-actions"><div class="docs-page-header__desktop-actions"><CopyPageControls client:only="vue" /></div><DocsPageNavigation currentPath={currentPath} variant="compact" /></div></div>
+      <p class="docs-page-header__lede">{description}</p>
+    </div></div></header>
+    <div class="docs-page-body">
+      <article class="docs-article docs-article--component">
+        <section id="overview" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#overview">Overview</a></h2>
+          <p>Resource Picker combines Kappa <a href="/docs/components/dialog-layout">Dialog Layout</a>, <a href="/docs/components/selection-list">Selection List</a>, Input, Button, Loader, and Empty. The application supplies resource data and performs network requests.</p>
+          <p>Use it when selection requires search, descriptions, or an explicit confirmation step. Use Select for a short field value or Selection List for a list that must stay visible.</p>
+        </section>
+        <section id="examples" class="docs-section docs-section--component-examples">
+          <h2><a class="docs-section-anchor" href="#examples">Examples</a></h2>
+          {resourcePickerExamples.map(example => <>
+            <h3 id={example.id}><a class="docs-section-anchor" href={`#${example.id}`}>{example.title}</a></h3>
+            <p>{example.description}</p>
+            <div class="docs-component-example">
+              <div class="docs-component-preview"><ResourcePickerDocsDemo client:load variant={example.id} /></div>
+              <CodeBlock code={example.id === "single" ? resourcePickerCode : example.id === "multiple" ? resourcePickerMultipleCode : resourcePickerExternalCode} lang="vue" collapsible revealId={`resource-picker-${example.id}-code`} />
+            </div>
+          </>)}
+        </section>
+        <section id="installation" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#installation">Installation</a></h2>
+          <CodeBlock code={'import { ResourcePicker } from "@dicehub/kappa";\n// Or the dedicated block entrypoint:\nimport { ResourcePicker } from "@dicehub/kappa/blocks/resource-picker";'} lang="typescript" />
+        </section>
+        <section id="behavior" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#behavior">Selection and search</a></h2>
+          <p>Opening the dialog copies the committed IDs into a draft. Selecting a row changes the draft. Confirm emits <code>update:modelValue</code> and <code>confirm</code>, then requests closure. Cancel, Escape, the close control, and an outside click discard the draft. The next opening starts from the current committed value.</p>
+          <p>The value is always a string array. In multiple mode, a click toggles a row without modifier keys. Search does not clear the selection. Local search matches labels, descriptions, metadata, and keywords without case sensitivity.</p>
+          <p>In external mode, listen to <code>searchChange</code> and supply the results, loading flag, and error message. Debounce requests and cancel stale responses in your application. Selected IDs remain available across result pages. Removed or disabled local resources cannot be confirmed. In external mode, the consumer must validate IDs that are absent from the current result set.</p>
+          <p>The list is scrollable, not virtualized. Use server-side search and a limited result set for large collections. Use Virtual Tree for large hierarchical data.</p>
+        </section>
+        <section id="api" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#api">API</a></h2>
+          <div class="docs-api-table"><table><thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Purpose</th></tr></thead><tbody>{resourcePickerProps.map(row => <tr>{row.map(cell => <td>{cell}</td>)}</tr>)}</tbody></table></div>
+          <h3 id="items">Items</h3>
+          <CodeBlock code={'interface ResourcePickerItem {\n  value: string;\n  label: string;\n  description?: string;\n  meta?: string;\n  keywords?: string[];\n  disabled?: boolean;\n}'} lang="typescript" />
+          <h3 id="events">Events</h3>
+          <p><code>update:open(boolean)</code>, <code>update:modelValue(string[])</code>, <code>confirm(string[])</code>, <code>cancel()</code>, <code>searchChange(string)</code>, and <code>retry()</code>. Use <code>v-model:open</code> and <code>v-model</code> for controlled state.</p>
+          <h3 id="slots">Slots</h3>
+          <p><code>trigger</code> accepts one button. <code>media</code>, <code>description</code>, and <code>meta</code> receive <code>{'{ item }'}</code>. Keep their contents non-interactive. <code>empty</code> receives <code>{'{ query }'}</code>, <code>error</code> receives <code>{'{ message, retry }'}</code>, <code>loading</code> replaces the loading state, and <code>selection</code> receives <code>{'{ value }'}</code>.</p>
+          <p>Attributes, including <code>class</code>, <code>style</code>, and data attributes, are forwarded to the dialog content. Import <code>ResourcePickerProps</code>, <code>ResourcePickerItem</code>, and <code>ResourcePickerLabels</code> from the same entrypoint.</p>
+        </section>
+        <section id="accessibility" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#accessibility">Accessibility</a></h2>
+          <p>Kappa Dialog traps focus, closes on Escape, and restores focus to the trigger. The search input receives initial focus. Selection List supplies listbox roles, arrow-key navigation, disabled options, and selected states. Enter selects the highlighted resource; it does not confirm the dialog. Tab moves to Cancel and the confirmation button.</p>
+          <p>Use unique resource values and a clear title. Keep resource labels understandable without icons. Loading, errors, empty results, and selection counts are announced. Kappa components support visible focus and reduced motion.</p>
+        </section>
+        <DocsPageNavigation currentPath={currentPath} />
+      </article>
+      <aside class="docs-page-toc" aria-label="On this page"><div class="docs-page-toc__inner"><span class="docs-page-toc__title">On this page</span><ul>{["overview", "examples", "installation", "behavior", "api", "accessibility"].map(id => <li><a href={`#${id}`} data-toc-link={id}>{id === "behavior" ? "Selection and search" : id === "api" ? "API" : id[0].toUpperCase() + id.slice(1)}</a></li>)}</ul></div></aside>
+    </div>
+  </div>
+</DocsLayout>

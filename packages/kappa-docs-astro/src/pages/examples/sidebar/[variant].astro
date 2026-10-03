@@ -1,0 +1,36 @@
+---
+import SidebarBlocksDocsDemo from "../../../components/SidebarBlocksDocsDemo.vue";
+import SidebarGroupedDocsDemo from "../../../components/SidebarGroupedDocsDemo.vue";
+import SidebarDropdownSubmenusDocsDemo from "../../../components/SidebarDropdownSubmenusDocsDemo.vue";
+import SidebarInboxDocsDemo from "../../../components/SidebarInboxDocsDemo.vue";
+import SidebarWorkspacePagesDocsDemo from "../../../components/SidebarWorkspacePagesDocsDemo.vue";
+import SidebarMinimalWorkspaceDocsDemo from "../../../components/SidebarMinimalWorkspaceDocsDemo.vue";
+import SidebarSubmenusDocsDemo from "../../../components/SidebarSubmenusDocsDemo.vue";
+import { sidebarBlocks } from "../../../data/sidebar-blocks";
+import "../../../styles/docs.css";
+
+export function getStaticPaths() {
+  return sidebarBlocks.map(block => ({ params: { variant: block.id }, props: { block } }));
+}
+const { block } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en" class="kappa-docs-root">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="robots" content="noindex" />
+    <title>{block.title} Application Shell — Kappa Blocks</title>
+    <script is:inline>
+      const mode = localStorage.getItem("theme") === "dark" ? "dark" : "light";
+      document.documentElement.dataset.mode = mode;
+      document.documentElement.dataset.kappaTheme = mode;
+      document.documentElement.style.colorScheme = mode;
+    </script>
+  </head>
+  <body><main>{block.id === "minimal-workspace" ? <SidebarMinimalWorkspaceDocsDemo client:load standalone /> : block.id === "workspace-pages" ? <SidebarWorkspacePagesDocsDemo client:load standalone /> : block.id === "inbox-navigation" ? <SidebarInboxDocsDemo client:load standalone /> : block.id === "dropdown-submenus" ? <SidebarDropdownSubmenusDocsDemo client:load standalone /> : block.id === "submenus" || block.id === "floating-submenus" || block.id === "collapsible-submenus" ? <SidebarSubmenusDocsDemo client:load standalone floating={block.id === "floating-submenus"} collapsible={block.id === "collapsible-submenus"} /> : block.id === "grouped" || block.id === "collapsible-sections" ? <SidebarGroupedDocsDemo client:load standalone collapsibleSections={block.id === "collapsible-sections"} /> : <SidebarBlocksDocsDemo client:load variant={block.id === "inset-navigation" ? "inset" : block.id === "collapsible-icons" ? "workspace" : block.id} iconNavigation={block.id === "collapsible-icons"} insetNavigation={block.id === "inset-navigation"} standalone />}</main></body>
+</html>
+
+<style>body { margin: 0; } main { min-inline-size: 0; }</style>

@@ -1,0 +1,469 @@
+.kappa-loader {
+  --kappa-loader-size: 1.5rem;
+  --kappa-loader-duration: 1500ms;
+  --kappa-loader-duration-slow: 6000ms;
+  --kappa-loader-half-duration: -750ms;
+  --kappa-loader-track-opacity: 0.16;
+
+  position: relative;
+  display: inline-flex;
+  inline-size: var(--kappa-loader-size);
+  block-size: var(--kappa-loader-size);
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  color: currentColor;
+  vertical-align: middle;
+}
+
+.kappa-loader__graphic {
+  position: relative;
+  display: block;
+  inline-size: 100%;
+  block-size: 100%;
+  color: currentColor;
+}
+
+.kappa-loader__spinner {
+  overflow: visible;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-width: 2;
+  transform-origin: center;
+  animation: kappa-loader-rotate var(--kappa-loader-duration) linear infinite;
+}
+
+.kappa-loader__track {
+  opacity: var(--kappa-loader-track-opacity);
+}
+
+.kappa-loader__indicator {
+  stroke-dasharray: 0 60;
+  animation: kappa-loader-dash var(--kappa-loader-duration) ease-in-out infinite;
+}
+
+.kappa-loader__graphic[data-graphic="waveform"] {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 5% 8%;
+}
+
+.kappa-loader__bar {
+  inline-size: 12%;
+  block-size: 90%;
+  border-radius: 999px;
+  background: currentColor;
+  transform: scaleY(0.3);
+  animation: kappa-loader-waveform var(--kappa-loader-duration) ease-in-out infinite;
+  animation-delay: var(--kappa-loader-delay);
+}
+
+.kappa-loader__graphic[data-graphic="helix"] {
+  display: flex;
+  flex-direction: column;
+}
+
+.kappa-loader__helix-slice {
+  position: relative;
+  display: block;
+  inline-size: 100%;
+  block-size: calc(100% / 6);
+}
+
+.kappa-loader__helix-slice::before,
+.kappa-loader__helix-slice::after {
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-start: calc(50% - 8.333%);
+  inline-size: calc(100% / 6);
+  block-size: 100%;
+  border-radius: 50%;
+  background: currentColor;
+  content: "";
+  animation: kappa-loader-helix var(--kappa-loader-duration) linear infinite;
+  animation-delay: var(--kappa-loader-delay);
+}
+
+.kappa-loader__helix-slice::after {
+  animation-delay: var(--kappa-loader-opposite-delay);
+}
+
+.kappa-loader__quantum-field {
+  position: absolute;
+  inset: 0;
+  display: block;
+  animation: kappa-loader-rotate var(--kappa-loader-duration-slow) linear infinite;
+}
+
+.kappa-loader__quantum-particle {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: rotate(var(--kappa-loader-rotation));
+}
+
+.kappa-loader__quantum-particle::before {
+  inline-size: 17.5%;
+  block-size: 17.5%;
+  border-radius: 50%;
+  background: currentColor;
+  content: "";
+  opacity: 0.4;
+  animation: kappa-loader-quantum var(--kappa-loader-duration) linear infinite;
+  animation-delay: var(--kappa-loader-delay);
+}
+
+.kappa-loader__graphic[data-graphic="dot-wave"] {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-inline: 3%;
+}
+
+.kappa-loader__graphic[data-graphic="dot-wave"] .kappa-loader__dot {
+  inline-size: 18%;
+  block-size: 18%;
+  border-radius: 50%;
+  background: currentColor;
+  animation: kappa-loader-dot-wave var(--kappa-loader-duration) ease-in-out infinite;
+  animation-delay: var(--kappa-loader-delay);
+}
+
+.kappa-loader__graphic[data-graphic="dot-stream"],
+.kappa-loader__graphic[data-graphic="mirage"] {
+  overflow: hidden;
+}
+
+.kappa-loader__graphic[data-graphic="mirage"] {
+  filter: blur(max(0.5px, calc(var(--kappa-loader-size) * 0.025)));
+}
+
+.kappa-loader__graphic[data-graphic="dot-stream"] .kappa-loader__dot,
+.kappa-loader__graphic[data-graphic="mirage"] .kappa-loader__dot {
+  position: absolute;
+  inset-block-start: 41%;
+  inset-inline-start: -10%;
+  inline-size: 18%;
+  block-size: 18%;
+  border-radius: 50%;
+  background: currentColor;
+  animation: kappa-loader-dot-stream var(--kappa-loader-duration) linear infinite both;
+  animation-delay: var(--kappa-loader-delay);
+}
+
+.kappa-loader__graphic[data-graphic="mirage"] .kappa-loader__dot {
+  inset-block-start: 38%;
+  inline-size: 24%;
+  block-size: 24%;
+  opacity: 0.82;
+}
+
+.kappa-loader__ping {
+  position: absolute;
+  inset: 0;
+  display: block;
+}
+
+.kappa-loader__ping::before,
+.kappa-loader__ping::after {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: currentColor;
+  content: "";
+  opacity: 0;
+  transform: scale(0);
+  animation: kappa-loader-ping var(--kappa-loader-duration) linear infinite;
+}
+
+.kappa-loader__ping::after {
+  animation-delay: var(--kappa-loader-half-duration);
+}
+
+.kappa-loader__graphic[data-graphic="orbit"] {
+  perspective: calc(var(--kappa-loader-size) * 14);
+}
+
+.kappa-loader__orbit {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+}
+
+.kappa-loader__orbit--one {
+  border-block-end: max(1.5px, calc(var(--kappa-loader-size) * 0.055)) solid currentColor;
+  animation: kappa-loader-orbit-one var(--kappa-loader-duration) linear infinite;
+}
+
+.kappa-loader__orbit--two {
+  border-inline-end: max(1.5px, calc(var(--kappa-loader-size) * 0.055)) solid currentColor;
+  animation: kappa-loader-orbit-two var(--kappa-loader-duration) linear infinite;
+}
+
+.kappa-loader__orbit--three {
+  border-block-start: max(1.5px, calc(var(--kappa-loader-size) * 0.055)) solid currentColor;
+  animation: kappa-loader-orbit-three var(--kappa-loader-duration) linear infinite;
+}
+
+.kappa-loader__label {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  padding: 0;
+  border: 0;
+  margin: -1px;
+  clip-path: inset(50%);
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+@keyframes kappa-loader-rotate {
+  to {
+    transform: rotate(1turn);
+  }
+}
+
+@keyframes kappa-loader-dash {
+  0% {
+    stroke-dasharray: 0 60;
+    stroke-dashoffset: 0;
+  }
+
+  50% {
+    stroke-dasharray: 42 60;
+    stroke-dashoffset: -16;
+  }
+
+  100% {
+    stroke-dasharray: 42 60;
+    stroke-dashoffset: -59;
+  }
+}
+
+@keyframes kappa-loader-waveform {
+  0%,
+  100% {
+    transform: scaleY(0.3);
+  }
+
+  50% {
+    transform: scaleY(1);
+  }
+}
+
+@keyframes kappa-loader-helix {
+  0%,
+  100% {
+    opacity: 0.66;
+    transform: translateX(calc(var(--kappa-loader-size) * 0.25)) scale(0.72);
+  }
+
+  25% {
+    opacity: 0.3;
+    transform: translateX(0) scale(0.48);
+  }
+
+  50% {
+    opacity: 0.66;
+    transform: translateX(calc(var(--kappa-loader-size) * -0.25)) scale(0.72);
+  }
+
+  75% {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}
+
+@keyframes kappa-loader-quantum {
+  0%,
+  100% {
+    opacity: 0.65;
+    transform: translateX(calc(var(--kappa-loader-size) * 0.42)) scale(0.72);
+  }
+
+  25% {
+    opacity: 0.28;
+    transform: translateX(0) scale(0.48);
+  }
+
+  50% {
+    opacity: 0.65;
+    transform: translateX(calc(var(--kappa-loader-size) * -0.42)) scale(0.72);
+  }
+
+  75% {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}
+
+@keyframes kappa-loader-dot-wave {
+  0%,
+  100% {
+    transform: translateY(45%);
+  }
+
+  50% {
+    transform: translateY(-145%);
+  }
+}
+
+@keyframes kappa-loader-dot-stream {
+  0%,
+  100% {
+    opacity: 0;
+    transform: translateX(0) scale(0);
+  }
+
+  50% {
+    opacity: 1;
+    transform: translateX(calc(var(--kappa-loader-size) * 0.5)) scale(1);
+  }
+
+  99.99% {
+    opacity: 0;
+    transform: translateX(calc(var(--kappa-loader-size) * 1.1)) scale(0);
+  }
+}
+
+@keyframes kappa-loader-ping {
+  0% {
+    opacity: 1;
+    transform: scale(0);
+  }
+
+  100% {
+    opacity: 0;
+    transform: scale(1);
+  }
+}
+
+@keyframes kappa-loader-orbit-one {
+  from {
+    transform: rotateX(35deg) rotateY(-45deg) rotate(0);
+  }
+
+  to {
+    transform: rotateX(35deg) rotateY(-45deg) rotate(1turn);
+  }
+}
+
+@keyframes kappa-loader-orbit-two {
+  from {
+    transform: rotateX(50deg) rotateY(10deg) rotate(0);
+  }
+
+  to {
+    transform: rotateX(50deg) rotateY(10deg) rotate(1turn);
+  }
+}
+
+@keyframes kappa-loader-orbit-three {
+  from {
+    transform: rotateX(35deg) rotateY(55deg) rotate(0);
+  }
+
+  to {
+    transform: rotateX(35deg) rotateY(55deg) rotate(1turn);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kappa-loader__graphic,
+  .kappa-loader__graphic *,
+  .kappa-loader__graphic *::before,
+  .kappa-loader__graphic *::after {
+    animation: none;
+  }
+
+  .kappa-loader__indicator {
+    stroke-dasharray: 18 60;
+  }
+
+  .kappa-loader__bar {
+    transform: scaleY(0.65);
+  }
+
+  .kappa-loader__helix-slice::before {
+    transform: translateX(calc(var(--kappa-loader-size) * -0.2)) scale(0.72);
+  }
+
+  .kappa-loader__helix-slice::after {
+    transform: translateX(calc(var(--kappa-loader-size) * 0.2)) scale(0.72);
+  }
+
+  .kappa-loader__quantum-particle::before {
+    opacity: 0.72;
+    transform: translateX(calc(var(--kappa-loader-size) * 0.42)) scale(0.72);
+  }
+
+  .kappa-loader__graphic[data-graphic="dot-wave"] .kappa-loader__dot {
+    transform: translateY(0);
+  }
+
+  .kappa-loader__graphic[data-graphic="dot-stream"] .kappa-loader__dot,
+  .kappa-loader__graphic[data-graphic="mirage"] .kappa-loader__dot {
+    opacity: 0.72;
+    transform: scale(0.72);
+  }
+
+  .kappa-loader__graphic[data-graphic="dot-stream"] .kappa-loader__dot:nth-child(1),
+  .kappa-loader__graphic[data-graphic="mirage"] .kappa-loader__dot:nth-child(1) {
+    inset-inline-start: 0;
+  }
+
+  .kappa-loader__graphic[data-graphic="dot-stream"] .kappa-loader__dot:nth-child(2),
+  .kappa-loader__graphic[data-graphic="mirage"] .kappa-loader__dot:nth-child(2) {
+    inset-inline-start: 20%;
+  }
+
+  .kappa-loader__graphic[data-graphic="dot-stream"] .kappa-loader__dot:nth-child(3),
+  .kappa-loader__graphic[data-graphic="mirage"] .kappa-loader__dot:nth-child(3) {
+    inset-inline-start: 40%;
+  }
+
+  .kappa-loader__graphic[data-graphic="dot-stream"] .kappa-loader__dot:nth-child(4),
+  .kappa-loader__graphic[data-graphic="mirage"] .kappa-loader__dot:nth-child(4) {
+    inset-inline-start: 60%;
+  }
+
+  .kappa-loader__graphic[data-graphic="dot-stream"] .kappa-loader__dot:nth-child(5),
+  .kappa-loader__graphic[data-graphic="mirage"] .kappa-loader__dot:nth-child(5) {
+    inset-inline-start: 80%;
+  }
+
+  .kappa-loader__ping::before {
+    opacity: 0.45;
+    transform: scale(0.72);
+  }
+
+  .kappa-loader__ping::after {
+    opacity: 1;
+    transform: scale(0.18);
+  }
+
+  .kappa-loader__orbit--one {
+    transform: rotateX(35deg) rotateY(-45deg);
+  }
+
+  .kappa-loader__orbit--two {
+    transform: rotateX(50deg) rotateY(10deg);
+  }
+
+  .kappa-loader__orbit--three {
+    transform: rotateX(35deg) rotateY(55deg);
+  }
+}
+
+@media (forced-colors: active) {
+  .kappa-loader {
+    --kappa-loader-track-opacity: 0.45;
+
+    color: CanvasText;
+    forced-color-adjust: auto;
+  }
+}

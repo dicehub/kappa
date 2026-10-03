@@ -1,0 +1,180 @@
+---
+import ArkUiDocsLink from "../../../components/ArkUiDocsLink.astro";
+import CodeBlock from "../../../components/CodeBlock.astro";
+import CompositionTree from "../../../components/CompositionTree.astro";
+import CopyPageControls from "../../../components/CopyPageControls.vue";
+import DocsPageNavigation from "../../../components/DocsPageNavigation.astro";
+import PresenceDocsDemo from "../../../components/PresenceDocsDemo.vue";
+import {
+  asChildCode,
+  barrelCode,
+  events,
+  exportsList,
+  granularCode,
+  lazyCode,
+  presenceProps,
+  previewCode,
+  usageCode,
+} from "../../../data/presence-docs";
+import DocsLayout from "../../../layouts/DocsLayout.astro";
+import "../../../styles/docs-components.css";
+
+const currentPath = "/docs/components/presence";
+const description = "Keeps Vue content mounted until its entrance or exit motion completes.";
+---
+
+<DocsLayout title="Presence" description={description}>
+  <div class="docs-page docs-page--component">
+    <header class="docs-page-header">
+      <div class="docs-page-header__inner">
+        <div class="docs-page-header__content">
+          <div class="docs-page-header__mobile-actions">
+            <CopyPageControls client:only="vue" align="center" />
+          </div>
+          <div class="docs-page-header__title-row">
+            <h1>Presence</h1>
+            <ArkUiDocsLink href="https://ark-ui.com/docs/utilities/presence" />
+            <div class="docs-page-header__navigation-actions">
+              <div class="docs-page-header__desktop-actions">
+                <CopyPageControls client:only="vue" />
+              </div>
+              <DocsPageNavigation currentPath={currentPath} variant="compact" />
+            </div>
+          </div>
+          <p class="docs-page-header__lede">{description}</p>
+        </div>
+      </div>
+    </header>
+
+    <div class="docs-page-body">
+      <article class="docs-article docs-article--component">
+        <section id="preview" class="docs-section">
+          <div class="docs-component-example">
+            <div class="docs-component-preview">
+              <PresenceDocsDemo client:load variant="preview" />
+            </div>
+            <CodeBlock code={previewCode} lang="vue" collapsible revealId="presence-preview-code" />
+          </div>
+        </section>
+
+        <section id="installation" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#installation">Installation</a></h2>
+          <p>
+            Presence is part of the main Kappa package. It composes Ark UI's presence utility and
+            uses Kappa's shared entrance and exit motion.
+          </p>
+          <h3 id="barrel"><a class="docs-section-anchor" href="#barrel">Barrel</a></h3>
+          <CodeBlock code={barrelCode} lang="javascript" />
+          <h3 id="granular"><a class="docs-section-anchor" href="#granular">Granular</a></h3>
+          <CodeBlock code={granularCode} lang="javascript" />
+        </section>
+
+        <section id="usage" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#usage">Usage</a></h2>
+          <p>Bind <code>present</code> to application state. Presence waits for CSS motion before it hides content.</p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview">
+              <PresenceDocsDemo client:load variant="usage" />
+            </div>
+            <CodeBlock code={usageCode} lang="vue" collapsible revealId="presence-usage-code" />
+          </div>
+        </section>
+
+        <section id="composition" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#composition">Composition</a></h2>
+          <CompositionTree component="presence" />
+          <p>
+            Presence renders one element by default. Use <code>asChild</code> when the semantic
+            child must own the Ark state attributes and Kappa motion class.
+          </p>
+          <h3 id="reference-behavior">
+            <a class="docs-section-anchor" href="#reference-behavior">Reference Behavior</a>
+          </h3>
+          <p>
+            Kappa follows Ark UI Presence for mount timing and lifecycle events. The component
+            reads CSS animation state, so exit content remains available until motion completes.
+          </p>
+        </section>
+
+        <section id="examples" class="docs-section docs-section--component-examples">
+          <h2><a class="docs-section-anchor" href="#examples">Examples</a></h2>
+
+          <h3 id="lazy-mount"><a class="docs-section-anchor" href="#lazy-mount">Lazy Mount</a></h3>
+          <p>Defer expensive content until it is first needed, then remove it after exit.</p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview">
+              <PresenceDocsDemo client:load variant="lazy" />
+            </div>
+            <CodeBlock code={lazyCode} lang="vue" collapsible revealId="presence-lazy-code" />
+          </div>
+
+          <h3 id="custom-child"><a class="docs-section-anchor" href="#custom-child">Custom Child</a></h3>
+          <p>Merge presence behavior onto one direct semantic element.</p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview">
+              <PresenceDocsDemo client:load variant="as-child" />
+            </div>
+            <CodeBlock code={asChildCode} lang="vue" collapsible revealId="presence-child-code" />
+          </div>
+        </section>
+
+        <section id="accessibility" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#accessibility">Accessibility</a></h2>
+          <ul>
+            <li>Connect disclosure controls and content with <code>aria-controls</code> and <code>aria-expanded</code>.</li>
+            <li>Move focus before you hide content that contains the active element.</li>
+            <li>Use an appropriate live region only when the state change needs an announcement.</li>
+            <li>Kappa reduces the animation to one millisecond when reduced motion is requested.</li>
+          </ul>
+        </section>
+
+        <section id="api-reference" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#api-reference">API Reference</a></h2>
+          <div class="docs-api-group">
+            <h3 id="presence-api"><a class="docs-section-anchor" href="#presence-api">Presence</a></h3>
+            <div class="docs-api-table">
+              <table>
+                <thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+                <tbody>{presenceProps.map((prop) => <tr><td><code>{prop.name}</code></td><td><code>{prop.type}</code></td><td><code>{prop.defaultValue}</code></td><td>{prop.description}</td></tr>)}</tbody>
+              </table>
+            </div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="events"><a class="docs-section-anchor" href="#events">Events</a></h3>
+            <div class="docs-api-table">
+              <table>
+                <thead><tr><th>Event</th><th>Description</th></tr></thead>
+                <tbody>{events.map((event) => <tr><td><code>{event.name}</code></td><td>{event.description}</td></tr>)}</tbody>
+              </table>
+            </div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="exports"><a class="docs-section-anchor" href="#exports">Exports</a></h3>
+            <div class="docs-api-table">
+              <table>
+                <thead><tr><th>Export</th><th>Description</th></tr></thead>
+                <tbody>{exportsList.map((item) => <tr><td><code>{item.name}</code></td><td>{item.description}</td></tr>)}</tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <DocsPageNavigation currentPath={currentPath} />
+      </article>
+
+      <aside class="docs-page-toc" aria-label="On this page">
+        <div class="docs-page-toc__inner">
+          <span class="docs-page-toc__title">On this page</span>
+          <ul>
+            <li><a href="#installation" data-toc-link="installation">Installation</a><ul><li><a href="#barrel" data-toc-link="barrel">Barrel</a></li><li><a href="#granular" data-toc-link="granular">Granular</a></li></ul></li>
+            <li><a href="#usage" data-toc-link="usage">Usage</a></li>
+            <li><a href="#composition" data-toc-link="composition">Composition</a><ul><li><a href="#reference-behavior" data-toc-link="reference-behavior">Reference Behavior</a></li></ul></li>
+            <li><a href="#examples" data-toc-link="examples">Examples</a><ul><li><a href="#lazy-mount" data-toc-link="lazy-mount">Lazy Mount</a></li><li><a href="#custom-child" data-toc-link="custom-child">Custom Child</a></li></ul></li>
+            <li><a href="#accessibility" data-toc-link="accessibility">Accessibility</a></li>
+            <li><a href="#api-reference" data-toc-link="api-reference">API Reference</a><ul><li><a href="#presence-api" data-toc-link="presence-api">Presence</a></li><li><a href="#events" data-toc-link="events">Events</a></li><li><a href="#exports" data-toc-link="exports">Exports</a></li></ul></li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+  </div>
+</DocsLayout>

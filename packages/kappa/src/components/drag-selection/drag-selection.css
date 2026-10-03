@@ -1,0 +1,62 @@
+.kappa-drag-selection {
+  min-inline-size: 0;
+  color: var(--kappa-default);
+  font-family: var(--kappa-font-sans, inherit);
+  font-size: 0.8125rem;
+}
+.kappa-drag-selection__viewport {
+  box-sizing: border-box;
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(var(--kappa-drag-selection-columns), minmax(0, 1fr));
+  gap: 0.625rem;
+  align-content: start;
+  padding: 1rem;
+  min-block-size: 10rem;
+  max-block-size: var(--kappa-drag-selection-max-height, 22rem);
+  overflow: auto;
+  overscroll-behavior: contain;
+  border: 1px solid var(--kappa-line);
+  border-radius: var(--kappa-radius-md, 0.625rem);
+  background: var(--kappa-canvas);
+  outline: none;
+  user-select: none;
+}
+.kappa-drag-selection__viewport:focus-visible {
+  outline: 2px solid var(--kappa-focus);
+  outline-offset: 2px;
+}
+.kappa-drag-selection__item {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  min-inline-size: 0;
+  min-block-size: 3rem;
+  padding: 0.625rem;
+  border: 1px solid var(--kappa-line);
+  border-radius: var(--kappa-radius-sm, 0.375rem);
+  background: var(--kappa-base);
+  cursor: default;
+}
+.kappa-drag-selection__item:hover:not([data-disabled]) { background: var(--kappa-tint); }
+.kappa-drag-selection__item[data-selected] {
+  border-color: var(--kappa-accent);
+  background: var(--kappa-tint);
+}
+.kappa-drag-selection__viewport:focus-visible .kappa-drag-selection__item[data-highlighted] {
+  outline: 2px solid var(--kappa-focus);
+  outline-offset: 2px;
+}
+.kappa-drag-selection__item[data-disabled] { opacity: 0.5; cursor: not-allowed; }
+.kappa-drag-selection__rectangle {
+  position: absolute;
+  box-sizing: border-box;
+  z-index: 1;
+  border: 1px solid var(--kappa-accent);
+  background: var(--kappa-focus-soft);
+  pointer-events: none;
+}
+.kappa-drag-selection__empty { grid-column: 1 / -1; padding: 2rem 0; text-align: center; color: var(--kappa-subtle); }
+@media (forced-colors: active) {
+  .kappa-drag-selection__item[data-selected], .kappa-drag-selection__rectangle { border-color: Highlight; }
+}

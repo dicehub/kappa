@@ -1,0 +1,238 @@
+---
+import ArkUiDocsLink from "../../../components/ArkUiDocsLink.astro";
+import CodeBlock from "../../../components/CodeBlock.astro";
+import CompositionTree from "../../../components/CompositionTree.astro";
+import CopyPageControls from "../../../components/CopyPageControls.vue";
+import DocsPageNavigation from "../../../components/DocsPageNavigation.astro";
+import SwitchDocsDemo from "../../../components/SwitchDocsDemo.vue";
+import {
+  barrelCode,
+  choiceCardCode,
+  compositionCode,
+  contextCode,
+  controlledCode,
+  dataAttributes,
+  descriptionCode,
+  events,
+  exportsList,
+  formCode,
+  granularCode,
+  keyboardRows,
+  parts,
+  previewCode,
+  rootProps,
+  rtlCode,
+  sizesCode,
+  statesCode,
+  usageCode,
+} from "../../../data/switch-docs";
+import DocsLayout from "../../../layouts/DocsLayout.astro";
+import "../../../styles/docs-components.css";
+
+const currentPath = "/docs/components/switch";
+const description =
+  "A binary form control for settings that take effect immediately.";
+
+const examples = [
+  {
+    id: "with-description",
+    title: "With Description",
+    description: "Put persistent guidance beside the switch when the setting needs more context.",
+    variant: "description",
+    code: descriptionCode,
+  },
+  {
+    id: "choice-card",
+    title: "Choice Card",
+    description: "Because Root renders a label, the complete bordered row remains one clickable target.",
+    variant: "choice-card",
+    code: choiceCardCode,
+  },
+  {
+    id: "controlled",
+    title: "Controlled",
+    description: "Use v-model:checked when application state must own and report the value.",
+    variant: "controlled",
+    code: controlledCode,
+  },
+  {
+    id: "context",
+    title: "State from Context",
+    description: "Read the current state inside the component without creating a second source of truth.",
+    variant: "context",
+    code: contextCode,
+  },
+  {
+    id: "states",
+    title: "States",
+    description: "Disabled, read-only, and invalid states keep distinct behavior and visible treatment.",
+    variant: "states",
+    code: statesCode,
+  },
+  {
+    id: "sizes",
+    title: "Sizes",
+    description: "Use small, base, or large geometry without changing the interaction contract.",
+    variant: "sizes",
+    code: sizesCode,
+  },
+  {
+    id: "native-form",
+    title: "Native Form",
+    description: "The automatic hidden input submits name and value through native FormData.",
+    variant: "form",
+    code: formCode,
+  },
+  {
+    id: "right-to-left",
+    title: "Right to Left",
+    description: "Logical thumb positioning mirrors the checked state in right-to-left layouts.",
+    variant: "rtl",
+    code: rtlCode,
+  },
+] as const;
+---
+
+<DocsLayout title="Switch" description={description}>
+  <div class="docs-page docs-page--component">
+    <header class="docs-page-header">
+      <div class="docs-page-header__inner">
+        <div class="docs-page-header__content">
+          <div class="docs-page-header__mobile-actions">
+            <CopyPageControls client:only="vue" align="center" />
+          </div>
+          <div class="docs-page-header__title-row">
+            <h1>Switch</h1>
+            <ArkUiDocsLink href="https://ark-ui.com/docs/components/switch" />
+            <div class="docs-page-header__navigation-actions">
+              <div class="docs-page-header__desktop-actions"><CopyPageControls client:only="vue" /></div>
+              <DocsPageNavigation currentPath={currentPath} variant="compact" />
+            </div>
+          </div>
+          <p class="docs-page-header__lede">{description}</p>
+        </div>
+      </div>
+    </header>
+
+    <div class="docs-page-body">
+      <article class="docs-article docs-article--component">
+        <section id="preview" class="docs-section">
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><SwitchDocsDemo client:load variant="preview" /></div>
+            <CodeBlock code={previewCode} lang="vue" collapsible revealId="switch-preview-code" />
+          </div>
+        </section>
+
+        <section id="installation" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#installation">Installation</a></h2>
+          <p>Switch is part of the main Kappa package and uses the Ark UI Vue switch primitive.</p>
+          <h3 id="barrel"><a class="docs-section-anchor" href="#barrel">Barrel</a></h3>
+          <CodeBlock code={barrelCode} lang="javascript" />
+          <h3 id="granular"><a class="docs-section-anchor" href="#granular">Granular</a></h3>
+          <CodeBlock code={granularCode} lang="javascript" />
+        </section>
+
+        <section id="usage" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#usage">Usage</a></h2>
+          <p>
+            Use Switch for a setting that changes immediately. Use Checkbox when the user confirms
+            a selection later with a form action. Root renders the native hidden input automatically.
+          </p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><SwitchDocsDemo client:load variant="usage" /></div>
+            <CodeBlock code={usageCode} lang="vue" collapsible revealId="switch-usage-code" />
+          </div>
+        </section>
+
+        <section id="composition" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#composition">Composition</a></h2>
+          <CompositionTree component="switch" />
+          <p>
+            <a href="https://ark-ui.com/docs/components/switch">Ark UI Switch</a> owns binary state,
+            keyboard behavior, focus, label activation, and the form input. Kappa adds the compound
+            exports, automatic hidden input, default thumb, three compact sizes, and semantic styling.
+          </p>
+          <p>
+            Kappa uses Ark parts and native fieldsets instead of a custom switch-group state layer.
+          </p>
+          <div class="docs-component-example">
+            <CodeBlock code={compositionCode} lang="vue" collapsible revealId="switch-composition-code" />
+          </div>
+        </section>
+
+        <section id="examples" class="docs-section docs-section--component-examples">
+          <h2><a class="docs-section-anchor" href="#examples">Examples</a></h2>
+          {examples.map((example) => (
+            <>
+              <h3 id={example.id}><a class="docs-section-anchor" href={`#${example.id}`}>{example.title}</a></h3>
+              <p>{example.description}</p>
+              <div class="docs-component-example">
+                <div class="docs-component-preview"><SwitchDocsDemo client:load variant={example.variant} /></div>
+                <CodeBlock code={example.code} lang="vue" collapsible revealId={`switch-${example.id}-code`} />
+              </div>
+            </>
+          ))}
+        </section>
+
+        <section id="accessibility" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#accessibility">Accessibility</a></h2>
+          <ul>
+            <li>Every switch needs a visible <code>Switch.Label</code> or an equivalent accessible name.</li>
+            <li>The hidden checkbox input preserves native focus, form submission, reset, and validation behavior.</li>
+            <li>Use Switch only for immediate binary settings. Use Checkbox for agreement or batch selection.</li>
+            <li>Pair invalid state with clear error text. Field supplies the hidden input’s <code>aria-errormessage</code>.</li>
+            <li>Do not use “on” and “off” as the label. Name the setting that changes.</li>
+            <li>Keep checked and unchecked meaning stable. Do not reverse the label after activation.</li>
+            <li>Motion follows reduced-motion preferences, and forced-colors mode keeps track geometry visible.</li>
+          </ul>
+        </section>
+
+        <section id="keyboard-support" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#keyboard-support">Keyboard Support</a></h2>
+          <div class="docs-api-table"><table><thead><tr><th>Key</th><th>Action</th></tr></thead><tbody>{keyboardRows.map((row) => <tr><td><kbd>{row.key}</kbd></td><td>{row.description}</td></tr>)}</tbody></table></div>
+        </section>
+
+        <section id="api-reference" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#api-reference">API Reference</a></h2>
+          <div class="docs-api-group">
+            <h3 id="root-api"><a class="docs-section-anchor" href="#root-api">Switch.Root</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>{rootProps.map((prop) => <tr><td><code>{prop.name}</code></td><td><code>{prop.type}</code></td><td><code>{prop.defaultValue}</code></td><td>{prop.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="parts-api"><a class="docs-section-anchor" href="#parts-api">Parts</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Part</th><th>Element</th><th>Description</th></tr></thead><tbody>{parts.map((part) => <tr><td><code>Switch.{part.name}</code></td><td><code>{part.element}</code></td><td>{part.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="events-api"><a class="docs-section-anchor" href="#events-api">Events</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Event</th><th>Payload</th><th>Description</th></tr></thead><tbody>{events.map((event) => <tr><td><code>{event.name}</code></td><td><code>{event.payload}</code></td><td>{event.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="data-attributes"><a class="docs-section-anchor" href="#data-attributes">Data Attributes</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Attribute</th><th>Value</th><th>Description</th></tr></thead><tbody>{dataAttributes.map((attribute) => <tr><td><code>{attribute.name}</code></td><td><code>{attribute.value}</code></td><td>{attribute.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="exports"><a class="docs-section-anchor" href="#exports">Exports</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Export</th><th>Description</th></tr></thead><tbody>{exportsList.map((item) => <tr><td><code>{item.name}</code></td><td>{item.description}</td></tr>)}</tbody></table></div>
+          </div>
+        </section>
+
+        <DocsPageNavigation currentPath={currentPath} />
+      </article>
+
+      <aside class="docs-page-toc" aria-label="On this page">
+        <div class="docs-page-toc__inner">
+          <span class="docs-page-toc__title">On this page</span>
+          <ul>
+            <li><a href="#installation" data-toc-link="installation">Installation</a><ul><li><a href="#barrel" data-toc-link="barrel">Barrel</a></li><li><a href="#granular" data-toc-link="granular">Granular</a></li></ul></li>
+            <li><a href="#usage" data-toc-link="usage">Usage</a></li>
+            <li><a href="#composition" data-toc-link="composition">Composition</a></li>
+            <li><a href="#examples" data-toc-link="examples">Examples</a><ul>{examples.map((example) => <li><a href={`#${example.id}`} data-toc-link={example.id}>{example.title}</a></li>)}</ul></li>
+            <li><a href="#accessibility" data-toc-link="accessibility">Accessibility</a></li>
+            <li><a href="#keyboard-support" data-toc-link="keyboard-support">Keyboard Support</a></li>
+            <li><a href="#api-reference" data-toc-link="api-reference">API Reference</a><ul><li><a href="#root-api" data-toc-link="root-api">Root</a></li><li><a href="#parts-api" data-toc-link="parts-api">Parts</a></li><li><a href="#events-api" data-toc-link="events-api">Events</a></li><li><a href="#data-attributes" data-toc-link="data-attributes">Data Attributes</a></li><li><a href="#exports" data-toc-link="exports">Exports</a></li></ul></li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+  </div>
+</DocsLayout>

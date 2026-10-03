@@ -1,0 +1,249 @@
+.kappa-field {
+  box-sizing: border-box;
+  display: grid;
+  inline-size: 100%;
+  min-inline-size: 0;
+  align-content: start;
+  gap: 0.4375rem;
+  color: var(--kappa-default, #17191f);
+  font-family: var(--kappa-font-sans, inherit);
+}
+
+.kappa-field__label {
+  display: inline-flex;
+  inline-size: fit-content;
+  min-inline-size: 0;
+  align-items: baseline;
+  gap: 0.25rem;
+  color: var(--kappa-default, #17191f);
+  cursor: default;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+.kappa-field__required-indicator {
+  color: var(--kappa-danger-text, var(--kappa-danger, #b42318));
+  font-weight: 650;
+}
+
+.kappa-field__required-indicator[data-optional] {
+  color: var(--kappa-subtle, #6c7480);
+  font-weight: 450;
+}
+
+.kappa-field__input,
+.kappa-field__textarea,
+.kappa-field__select {
+  box-sizing: border-box;
+  inline-size: 100%;
+  min-inline-size: 0;
+  min-block-size: 2.25rem;
+  padding-block: 0.4375rem;
+  padding-inline: 0.625rem;
+  border: 1px solid var(--kappa-input-border, #dcdcdc);
+  border-radius: 0.125rem;
+  background: var(--kappa-control, #ffffff);
+  color: var(--kappa-default, #17191f);
+  font-family: inherit;
+  font-size: 0.8125rem;
+  font-weight: 450;
+  line-height: 1.35;
+  outline: 2px solid transparent;
+  outline-offset: 1px;
+  transition:
+    background-color 120ms ease,
+    border-color 120ms ease,
+    box-shadow 120ms ease,
+    outline-color 120ms ease;
+}
+
+.kappa-field__textarea {
+  min-block-size: 5.75rem;
+  resize: vertical;
+}
+
+.kappa-field__select-control {
+  position: relative;
+  display: block;
+  inline-size: 100%;
+  min-inline-size: 0;
+}
+
+.kappa-field__select {
+  display: block;
+  appearance: none;
+  padding-inline-end: 2.25rem;
+}
+
+.kappa-field__select-icon {
+  position: absolute;
+  inset-block-start: 50%;
+  inset-inline-end: 0.75rem;
+  display: block;
+  inline-size: 0.875rem;
+  block-size: 0.875rem;
+  color: var(--kappa-subtle, #6c7480);
+  pointer-events: none;
+  transform: translateY(-50%);
+}
+
+.kappa-field__input::placeholder,
+.kappa-field__textarea::placeholder {
+  color: var(--kappa-muted, #9aa2ae);
+  opacity: 1;
+}
+
+.kappa-field__input:hover:not(:disabled, :read-only, [data-invalid]),
+.kappa-field__textarea:hover:not(:disabled, :read-only, [data-invalid]),
+.kappa-field__select:hover:not(:disabled, [data-invalid]) {
+  border-color: var(--kappa-focus, #247ab7);
+}
+
+.kappa-field__input:focus-visible,
+.kappa-field__textarea:focus-visible,
+.kappa-field__select:focus-visible {
+  border-color: var(--kappa-focus, #247ab7);
+  box-shadow: 0 0 5px var(--kappa-focus, #247ab7);
+}
+
+.kappa-field[data-invalid] .kappa-field__input,
+.kappa-field[data-invalid] .kappa-field__textarea,
+.kappa-field[data-invalid] .kappa-field__select,
+.kappa-field__input[data-invalid],
+.kappa-field__textarea[data-invalid],
+.kappa-field__select[data-invalid] {
+  border-color: var(--kappa-danger, #b42318);
+}
+
+.kappa-field[data-invalid] .kappa-field__input:focus-visible,
+.kappa-field[data-invalid] .kappa-field__textarea:focus-visible,
+.kappa-field[data-invalid] .kappa-field__select:focus-visible,
+.kappa-field__input[data-invalid]:focus-visible,
+.kappa-field__textarea[data-invalid]:focus-visible,
+.kappa-field__select[data-invalid]:focus-visible {
+  box-shadow: 0 0 5px var(--kappa-danger, #b42318);
+}
+
+.kappa-field[data-disabled] .kappa-field__input,
+.kappa-field[data-disabled] .kappa-field__textarea,
+.kappa-field[data-disabled] .kappa-field__select,
+.kappa-field__input:disabled,
+.kappa-field__textarea:disabled,
+.kappa-field__select:disabled {
+  background: var(--kappa-disabled-surface, var(--kappa-tint, #f4f6f9));
+  color: var(--kappa-subtle, #6c7480);
+  cursor: not-allowed;
+  opacity: 0.62;
+}
+
+.kappa-field__select:disabled + .kappa-field__select-icon {
+  color: var(--kappa-muted, #9aa2ae);
+  opacity: 0.62;
+}
+
+.kappa-field[data-disabled] .kappa-field__label {
+  color: var(--kappa-subtle, #6c7480);
+  cursor: not-allowed;
+}
+
+.kappa-field[data-readonly] .kappa-field__input,
+.kappa-field[data-readonly] .kappa-field__textarea,
+.kappa-field__input:read-only,
+.kappa-field__textarea:read-only {
+  background: var(--kappa-readonly-surface, var(--kappa-tint, #f4f6f9));
+  cursor: default;
+}
+
+.kappa-field__helper-text,
+.kappa-field__error-text {
+  margin: 0;
+  color: var(--kappa-subtle, #6c7480);
+  font-size: 0.75rem;
+  line-height: 1.4;
+}
+
+.kappa-field__error-text {
+  color: var(--kappa-danger-text, var(--kappa-danger, #b42318));
+}
+
+.kappa-field__error-text :where(ul, ol) {
+  margin: 0;
+  padding-inline-start: 1.125rem;
+}
+
+.kappa-field[data-orientation="horizontal"] {
+  grid-template-columns: minmax(7.5rem, 0.42fr) minmax(0, 1fr);
+  column-gap: 1rem;
+}
+
+.kappa-field[data-orientation="horizontal"] > .kappa-field__label {
+  grid-column: 1;
+  grid-row: 1;
+  padding-block-start: 0.5rem;
+}
+
+.kappa-field[data-orientation="horizontal"] > :is(
+    .kappa-field__input,
+    .kappa-field__textarea,
+    .kappa-field__select-control,
+    .kappa-field__helper-text,
+    .kappa-field__error-text
+  ) {
+  grid-column: 2;
+}
+
+@media (min-width: 40rem) {
+  .kappa-field[data-orientation="responsive"] {
+    grid-template-columns: minmax(7.5rem, 0.42fr) minmax(0, 1fr);
+    column-gap: 1rem;
+  }
+
+  .kappa-field[data-orientation="responsive"] > .kappa-field__label {
+    grid-column: 1;
+    grid-row: 1;
+    padding-block-start: 0.5rem;
+  }
+
+  .kappa-field[data-orientation="responsive"] > :is(
+      .kappa-field__input,
+      .kappa-field__textarea,
+      .kappa-field__select-control,
+      .kappa-field__helper-text,
+      .kappa-field__error-text
+    ) {
+    grid-column: 2;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kappa-field__input,
+  .kappa-field__textarea,
+  .kappa-field__select {
+    transition: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .kappa-field__input:focus-visible,
+  .kappa-field__textarea:focus-visible,
+  .kappa-field__select:focus-visible {
+    border-color: Highlight;
+    box-shadow: none;
+    outline-color: Highlight;
+  }
+
+  .kappa-field__error-text,
+  .kappa-field__required-indicator {
+    color: MarkText;
+  }
+
+  .kappa-field__select {
+    appearance: auto;
+    padding-inline-end: 0.625rem;
+  }
+
+  .kappa-field__select-icon {
+    display: none;
+  }
+}

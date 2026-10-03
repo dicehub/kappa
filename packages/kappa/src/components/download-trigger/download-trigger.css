@@ -1,0 +1,24 @@
+.kappa-download-trigger[data-size="base"] {
+  --kappa-button-icon-size: 0.875rem;
+}
+
+@supports (text-box: trim-both cap alphabetic) {
+  .kappa-download-trigger .kappa-button__label {
+    display: block;
+    text-box: trim-both cap alphabetic;
+  }
+}
+
+.kappa-download-trigger[data-loading] {
+  cursor: progress;
+}
+
+.kappa-download-trigger[data-loading] .kappa-button__label {
+  opacity: 0.82;
+}
+
+@media (forced-colors: active) {
+  .kappa-download-trigger[data-loading] {
+    color: GrayText;
+  }
+}

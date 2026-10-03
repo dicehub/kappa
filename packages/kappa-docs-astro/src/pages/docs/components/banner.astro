@@ -1,0 +1,333 @@
+---
+import BannerDocsDemo from "../../../components/BannerDocsDemo.vue";
+import CodeBlock from "../../../components/CodeBlock.astro";
+import CompositionTree from "../../../components/CompositionTree.astro";
+import CopyPageControls from "../../../components/CopyPageControls.vue";
+import DocsPageNavigation from "../../../components/DocsPageNavigation.astro";
+import {
+  actionCode,
+  actionProps,
+  bannerProps,
+  bannerSlots,
+  barrelCode,
+  compactCode,
+  customContentCode,
+  exportsList,
+  granularCode,
+  iconCode,
+  multipleActionsCode,
+  previewCode,
+  roleCode,
+  rtlCode,
+  usageCode,
+  variantsCode,
+} from "../../../data/banner-docs";
+import DocsLayout from "../../../layouts/DocsLayout.astro";
+import "../../../styles/docs-components.css";
+
+const currentPath = "/docs/components/banner";
+const description = "Displays contextual inline messages with optional accent-aware actions.";
+---
+
+<DocsLayout title="Banner" description={description}>
+  <div class="docs-page docs-page--component">
+    <header class="docs-page-header">
+      <div class="docs-page-header__inner">
+        <div class="docs-page-header__content">
+          <div class="docs-page-header__mobile-actions">
+            <CopyPageControls client:only="vue" align="center" />
+          </div>
+          <div class="docs-page-header__title-row">
+            <h1>Banner</h1>
+            <div class="docs-page-header__navigation-actions">
+              <div class="docs-page-header__desktop-actions">
+                <CopyPageControls client:only="vue" />
+              </div>
+              <DocsPageNavigation currentPath={currentPath} variant="compact" />
+            </div>
+          </div>
+          <p class="docs-page-header__lede">{description}</p>
+        </div>
+      </div>
+    </header>
+
+    <div class="docs-page-body">
+      <article class="docs-article docs-article--component">
+        <section id="preview" class="docs-section">
+          <div class="docs-component-example">
+            <div class="docs-component-preview">
+              <BannerDocsDemo client:load variant="preview" />
+            </div>
+            <CodeBlock code={previewCode} lang="vue" collapsible revealId="banner-preview-code" />
+          </div>
+        </section>
+
+        <section id="installation" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#installation">Installation</a></h2>
+
+          <h3 id="barrel"><a class="docs-section-anchor" href="#barrel">Barrel</a></h3>
+          <CodeBlock code={barrelCode} lang="javascript" />
+
+          <h3 id="granular"><a class="docs-section-anchor" href="#granular">Granular</a></h3>
+          <CodeBlock code={granularCode} lang="javascript" />
+        </section>
+
+        <section id="usage" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#usage">Usage</a></h2>
+          <p>
+            Banner is a neutral container. Add <code>role="status"</code> when a routine update should
+            be announced after the page loads.
+          </p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview">
+              <BannerDocsDemo variant="usage" />
+            </div>
+            <CodeBlock code={usageCode} lang="vue" collapsible revealId="banner-usage-code" />
+          </div>
+        </section>
+
+        <section id="composition" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#composition">Composition</a></h2>
+          <CompositionTree component="banner" />
+          <p>
+            Banner uses named slots for its icon, primary message, description, and action area.
+            Place <code>Banner.Action</code> in the action slot when the message needs a native button
+            that inherits the banner accent and density.
+          </p>
+        </section>
+
+        <section id="examples" class="docs-section docs-section--component-examples">
+          <h2><a class="docs-section-anchor" href="#examples">Examples</a></h2>
+
+          <h3 id="variants"><a class="docs-section-anchor" href="#variants">Variants</a></h3>
+          <p>
+            Select a treatment that matches the message—not its live-region urgency. Theme tokens
+            keep each variant consistent in light and dark modes.
+          </p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview">
+              <BannerDocsDemo variant="variants" />
+            </div>
+            <CodeBlock code={variantsCode} lang="vue" collapsible revealId="banner-variants-code" />
+          </div>
+
+          <h3 id="with-icon"><a class="docs-section-anchor" href="#with-icon">With Icon</a></h3>
+          <p>
+            Use <code>icon</code> for a reusable component or the <code>icon</code> slot for inline SVG.
+            Banner treats its leading icon as decorative.
+          </p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview">
+              <BannerDocsDemo variant="icon" />
+            </div>
+            <CodeBlock code={iconCode} lang="vue" collapsible revealId="banner-icon-code" />
+          </div>
+
+          <h3 id="with-action"><a class="docs-section-anchor" href="#with-action">With Action</a></h3>
+          <p>
+            Place <code>Banner.Action</code> in the action slot. It inherits the parent accent and
+            density while remaining a native button.
+          </p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview">
+              <BannerDocsDemo client:load variant="action" />
+            </div>
+            <CodeBlock code={actionCode} lang="vue" collapsible revealId="banner-action-code" />
+          </div>
+
+          <h3 id="multiple-actions">
+            <a class="docs-section-anchor" href="#multiple-actions">Multiple Actions</a>
+          </h3>
+          <p>
+            Use one clear primary action. A secondary action can defer or dismiss the message.
+          </p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview">
+              <BannerDocsDemo client:load variant="actions" />
+            </div>
+            <CodeBlock
+              code={multipleActionsCode}
+              lang="vue"
+              collapsible
+              revealId="banner-multiple-actions-code"
+            />
+          </div>
+
+          <h3 id="compact"><a class="docs-section-anchor" href="#compact">Compact</a></h3>
+          <p>
+            Use <code>size="sm"</code> for concise, single-line notices in dense application layouts.
+            Composed actions inherit the extra-small density and remain at the logical inline end.
+          </p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview">
+              <BannerDocsDemo variant="compact" />
+            </div>
+            <CodeBlock code={compactCode} lang="vue" collapsible revealId="banner-compact-code" />
+          </div>
+
+          <h3 id="custom-description">
+            <a class="docs-section-anchor" href="#custom-description">Custom Description</a>
+          </h3>
+          <p>The description slot supports inline emphasis and links without replacing the layout.</p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview">
+              <BannerDocsDemo variant="custom" />
+            </div>
+            <CodeBlock
+              code={customContentCode}
+              lang="vue"
+              collapsible
+              revealId="banner-custom-code"
+            />
+          </div>
+
+          <h3 id="right-to-left">
+            <a class="docs-section-anchor" href="#right-to-left">Right-to-left</a>
+          </h3>
+          <p>Logical alignment keeps the icon, content, and actions ordered correctly in RTL layouts.</p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview">
+              <BannerDocsDemo variant="rtl" />
+            </div>
+            <CodeBlock code={rtlCode} lang="vue" collapsible revealId="banner-rtl-code" />
+          </div>
+        </section>
+
+        <section id="accessibility" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#accessibility">Accessibility</a></h2>
+          <ul>
+            <li>Banner does not add a role or live-region behavior by default.</li>
+            <li>Use <code>role="status"</code> for routine, non-urgent updates inserted after page load.</li>
+            <li>Reserve <code>role="alert"</code> for urgent errors inserted or updated after page load.</li>
+            <li>Do not choose a role from the visual variant alone. Static page content usually needs no role.</li>
+            <li>An alert announces content but never moves focus. Use a dialog when an immediate response is required.</li>
+            <li>Keep icon meaning redundant with visible copy; the leading icon is decorative.</li>
+            <li>Use concise action labels and preserve a visible keyboard focus indicator.</li>
+          </ul>
+          <p>
+            See the <a href="https://www.w3.org/WAI/ARIA/apg/patterns/alert/">WAI-ARIA Alert Pattern</a>
+            for live-region behavior and focus guidance.
+          </p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview">
+              <BannerDocsDemo variant="roles" />
+            </div>
+            <CodeBlock code={roleCode} lang="vue" />
+          </div>
+        </section>
+
+        <section id="api-reference" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#api-reference">API Reference</a></h2>
+
+          <div class="docs-api-group">
+            <h3 id="banner-api"><a class="docs-section-anchor" href="#banner-api">Banner</a></h3>
+            <p>Forwards remaining native attributes, ARIA properties, listeners, and data attributes.</p>
+            <div class="docs-api-table">
+              <table>
+                <thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+                <tbody>
+                  {bannerProps.map((prop) => (
+                    <tr><td><code>{prop.name}</code></td><td><code>{prop.type}</code></td><td><code>{prop.defaultValue}</code></td><td>{prop.description}</td></tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="docs-api-group">
+            <h3 id="banner-slots"><a class="docs-section-anchor" href="#banner-slots">Slots</a></h3>
+            <div class="docs-api-table">
+              <table>
+                <thead><tr><th>Slot</th><th>Description</th></tr></thead>
+                <tbody>
+                  {bannerSlots.map((slot) => (
+                    <tr><td><code>{slot.name}</code></td><td>{slot.description}</td></tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="docs-api-group">
+            <h3 id="banner-action-api">
+              <a class="docs-section-anchor" href="#banner-action-api">Banner.Action</a>
+            </h3>
+            <p>Forwards native button attributes and events to its <code>&lt;button&gt;</code>.</p>
+            <div class="docs-api-table">
+              <table>
+                <thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+                <tbody>
+                  {actionProps.map((prop) => (
+                    <tr><td><code>{prop.name}</code></td><td><code>{prop.type}</code></td><td><code>{prop.defaultValue}</code></td><td>{prop.description}</td></tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <div class="docs-component-note">
+              Kappa's native action intentionally omits <code>icon</code>,
+              <code>iconProps</code>, <code>loading</code>, and <code>shape</code>. Compose icon markup in
+              the default slot and manage pending state with visible text plus <code>disabled</code>.
+            </div>
+          </div>
+
+          <div class="docs-api-group">
+            <h3 id="banner-exports">
+              <a class="docs-section-anchor" href="#banner-exports">Exports</a>
+            </h3>
+            <div class="docs-api-table">
+              <table>
+                <thead><tr><th>Export</th><th>Description</th></tr></thead>
+                <tbody>
+                  {exportsList.map((item) => (
+                    <tr><td><code>{item.name}</code></td><td>{item.description}</td></tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <DocsPageNavigation currentPath={currentPath} />
+      </article>
+
+      <aside class="docs-page-toc" aria-label="On this page">
+        <div class="docs-page-toc__inner">
+          <span class="docs-page-toc__title">On this page</span>
+          <ul>
+            <li>
+              <a href="#installation" data-toc-link="installation">Installation</a>
+              <ul>
+                <li><a href="#barrel" data-toc-link="barrel">Barrel</a></li>
+                <li><a href="#granular" data-toc-link="granular">Granular</a></li>
+              </ul>
+            </li>
+            <li><a href="#usage" data-toc-link="usage">Usage</a></li>
+            <li><a href="#composition" data-toc-link="composition">Composition</a></li>
+            <li>
+              <a href="#examples" data-toc-link="examples">Examples</a>
+              <ul>
+                <li><a href="#variants" data-toc-link="variants">Variants</a></li>
+                <li><a href="#with-icon" data-toc-link="with-icon">With Icon</a></li>
+                <li><a href="#with-action" data-toc-link="with-action">With Action</a></li>
+                <li><a href="#multiple-actions" data-toc-link="multiple-actions">Multiple Actions</a></li>
+                <li><a href="#compact" data-toc-link="compact">Compact</a></li>
+                <li><a href="#custom-description" data-toc-link="custom-description">Custom Description</a></li>
+                <li><a href="#right-to-left" data-toc-link="right-to-left">Right-to-left</a></li>
+              </ul>
+            </li>
+            <li><a href="#accessibility" data-toc-link="accessibility">Accessibility</a></li>
+            <li>
+              <a href="#api-reference" data-toc-link="api-reference">API Reference</a>
+              <ul>
+                <li><a href="#banner-api" data-toc-link="banner-api">Banner</a></li>
+                <li><a href="#banner-slots" data-toc-link="banner-slots">Slots</a></li>
+                <li><a href="#banner-action-api" data-toc-link="banner-action-api">Banner.Action</a></li>
+                <li><a href="#banner-exports" data-toc-link="banner-exports">Exports</a></li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+  </div>
+</DocsLayout>

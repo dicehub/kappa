@@ -1,0 +1,226 @@
+.kappa-toolbar {
+  --kappa-toolbar-radius: 0.5rem;
+  --kappa-toolbar-divider: var(--kappa-line, #e3e6eb);
+  --kappa-toolbar-background: var(--kappa-control, #ffffff);
+  --kappa-toolbar-foreground: var(--kappa-default, #17191f);
+  --kappa-toolbar-muted: var(--kappa-subtle, #6c7480);
+  --kappa-toolbar-hover: var(--kappa-overlay, #e9edf2);
+
+  box-sizing: border-box;
+  display: inline-flex;
+  max-inline-size: 100%;
+  align-items: stretch;
+  overflow: visible;
+  border: 1px solid var(--kappa-toolbar-divider);
+  border-radius: var(--kappa-toolbar-radius);
+  background: var(--kappa-toolbar-background);
+  color: var(--kappa-toolbar-foreground);
+  font-family: var(--kappa-font-sans, inherit);
+  isolation: isolate;
+}
+
+.kappa-toolbar[data-size="xs"] {
+  --kappa-toolbar-radius: 0.375rem;
+}
+
+.kappa-toolbar[data-size="sm"] {
+  --kappa-toolbar-radius: 0.4375rem;
+}
+
+.kappa-toolbar[data-orientation="vertical"] {
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.kappa-toolbar[data-disabled] {
+  cursor: not-allowed;
+  opacity: var(--kappa-disabled-opacity, 0.56);
+}
+
+.kappa-toolbar[data-disabled] * {
+  pointer-events: none;
+}
+
+.kappa-toolbar__item {
+  position: relative;
+  z-index: 0;
+  min-inline-size: 0;
+  flex: none;
+  border-radius: 0;
+}
+
+.kappa-toolbar__item:not(:first-child) {
+  border-inline-start: 1px solid var(--kappa-toolbar-divider);
+}
+
+.kappa-toolbar[data-orientation="vertical"] .kappa-toolbar__item:not(:first-child) {
+  border-block-start: 1px solid var(--kappa-toolbar-divider);
+  border-inline-start: 0;
+}
+
+.kappa-toolbar__item:first-child {
+  border-start-start-radius: calc(var(--kappa-toolbar-radius) - 1px);
+  border-end-start-radius: calc(var(--kappa-toolbar-radius) - 1px);
+}
+
+.kappa-toolbar__item:last-child {
+  border-start-end-radius: calc(var(--kappa-toolbar-radius) - 1px);
+  border-end-end-radius: calc(var(--kappa-toolbar-radius) - 1px);
+}
+
+.kappa-toolbar[data-orientation="vertical"] .kappa-toolbar__item:first-child {
+  border-start-end-radius: calc(var(--kappa-toolbar-radius) - 1px);
+  border-end-start-radius: 0;
+}
+
+.kappa-toolbar[data-orientation="vertical"] .kappa-toolbar__item:last-child {
+  border-start-end-radius: 0;
+  border-end-start-radius: calc(var(--kappa-toolbar-radius) - 1px);
+}
+
+.kappa-toolbar__button.kappa-button,
+.kappa-toolbar__input.kappa-input,
+.kappa-toolbar__input-group.kappa-input-group {
+  border-color: transparent;
+  background: transparent;
+  box-shadow: none;
+}
+
+.kappa-toolbar__button.kappa-button {
+  min-block-size: var(--kappa-button-size);
+  block-size: auto;
+  align-self: stretch;
+  color: var(--kappa-toolbar-foreground);
+}
+
+.kappa-toolbar[data-orientation="vertical"] .kappa-toolbar__button.kappa-button {
+  inline-size: auto;
+}
+
+.kappa-toolbar__button.kappa-button:hover:not(:disabled, [aria-disabled="true"]) {
+  background: var(--kappa-toolbar-hover);
+}
+
+/*
+ * Pressed stays a filled, readable pair. The `:is(:hover, :active)` variant
+ * outranks the shared hover and active fills so pressing or hovering a pressed
+ * control never mixes a hover surface with the selection foreground.
+ */
+.kappa-toolbar__button.kappa-button[aria-pressed="true"],
+.kappa-toolbar__button.kappa-button[aria-pressed="true"]:is(:hover, :active):not(
+    :disabled,
+    [aria-disabled="true"]
+  ) {
+  background: var(--kappa-selected, var(--kappa-selected-background, #e7ebf3));
+  color: var(--kappa-selected-contrast, var(--kappa-toolbar-foreground));
+}
+
+.kappa-toolbar__button.kappa-button:focus-visible,
+.kappa-toolbar__input.kappa-input:focus,
+.kappa-toolbar__input-group.kappa-input-group:focus-within {
+  z-index: 1;
+  outline: 2px solid var(--kappa-focus, #4c63ff);
+  outline-offset: -2px;
+}
+
+.kappa-toolbar__button[aria-disabled="true"],
+.kappa-toolbar__input[aria-disabled="true"],
+.kappa-toolbar__input-group[aria-disabled="true"] {
+  cursor: not-allowed;
+  opacity: var(--kappa-disabled-opacity, 0.56);
+}
+
+.kappa-toolbar__input.kappa-input {
+  inline-size: min(16rem, 100%);
+  flex: 1 1 12rem;
+  border-radius: 0;
+}
+
+.kappa-toolbar__input-group.kappa-input-group {
+  inline-size: auto;
+  flex: 1 1 auto;
+  overflow: hidden;
+  border-radius: 0;
+}
+
+.kappa-toolbar__input-group.kappa-input-group:focus-within {
+  overflow: visible;
+}
+
+.kappa-toolbar__input-group .kappa-input-group__control {
+  min-inline-size: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.kappa-toolbar__input-group .kappa-input-group__control:focus-visible,
+.kappa-toolbar__input-group .kappa-input-group__control:focus {
+  outline: 0;
+}
+
+.kappa-toolbar__separator {
+  flex: none;
+  border: 0;
+  background: var(--kappa-toolbar-divider);
+}
+
+.kappa-toolbar__separator[data-orientation="vertical"] {
+  inline-size: 1px;
+  block-size: auto;
+  min-block-size: 1.25rem;
+  margin-block: 0.375rem;
+}
+
+.kappa-toolbar__separator[data-orientation="horizontal"] {
+  inline-size: auto;
+  block-size: 1px;
+  min-inline-size: 1.25rem;
+  margin-inline: 0.375rem;
+}
+
+.kappa-toolbar[data-orientation="vertical"] .kappa-toolbar__separator[data-orientation="vertical"] {
+  inline-size: auto;
+  block-size: 1px;
+  min-inline-size: 1.25rem;
+  margin-inline: 0.375rem;
+}
+
+.kappa-toolbar[data-orientation="vertical"] .kappa-toolbar__separator[data-orientation="horizontal"] {
+  inline-size: 1px;
+  block-size: auto;
+  min-block-size: 1.25rem;
+  margin-block: 0.375rem;
+}
+
+@media (forced-colors: active) {
+  .kappa-toolbar {
+    border-color: CanvasText;
+  }
+
+  .kappa-toolbar__item:not(:first-child),
+  .kappa-toolbar[data-orientation="vertical"] .kappa-toolbar__item:not(:first-child) {
+    border-color: CanvasText;
+  }
+
+  .kappa-toolbar__separator {
+    background: CanvasText;
+  }
+
+  .kappa-toolbar__button.kappa-button:focus-visible,
+  .kappa-toolbar__input.kappa-input:focus,
+  .kappa-toolbar__input-group.kappa-input-group:focus-within {
+    outline-color: Highlight;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kappa-toolbar *,
+  .kappa-toolbar *::before,
+  .kappa-toolbar *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}

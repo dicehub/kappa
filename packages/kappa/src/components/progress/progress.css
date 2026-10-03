@@ -1,0 +1,122 @@
+.kappa-progress {
+  --kappa-progress-range-color: var(--kappa-accent-solid, #247ab7);
+  --kappa-progress-track-size: 0.375rem;
+
+  display: grid;
+  inline-size: 100%;
+  min-inline-size: 0;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0.5rem 1rem;
+  color: var(--kappa-default, #17191f);
+  font-family: var(--kappa-font-sans, inherit);
+}
+
+.kappa-progress__label {
+  min-inline-size: 0;
+  overflow: hidden;
+  color: var(--kappa-subtle, #6c7480);
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.kappa-progress__value-text {
+  justify-self: end;
+  font-family: var(--kappa-font-mono, ui-monospace, monospace);
+  font-size: 0.75rem;
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  line-height: 1rem;
+}
+
+.kappa-progress__track {
+  position: relative;
+  grid-column: 1 / -1;
+  inline-size: 100%;
+  block-size: var(--kappa-progress-track-size);
+  overflow: hidden;
+  border-radius: calc(var(--kappa-progress-track-size) / 2);
+  background: var(--kappa-tint, #f4f6f9);
+  box-shadow: inset 0 0 0 1px var(--kappa-hairline, var(--kappa-line, #e3e6eb));
+}
+
+.kappa-progress__range {
+  block-size: 100%;
+  border-radius: inherit;
+  background: var(--kappa-progress-range-color);
+  transition: inline-size 180ms ease-out, block-size 180ms ease-out;
+}
+
+.kappa-progress__track[data-orientation="vertical"] {
+  inline-size: var(--kappa-progress-track-size);
+  block-size: 8rem;
+  justify-self: start;
+}
+
+.kappa-progress__range[data-orientation="vertical"] {
+  inline-size: 100%;
+}
+
+.kappa-progress__range[data-state="indeterminate"] {
+  inline-size: 38%;
+  animation: kappa-progress-indeterminate-x 1.25s ease-in-out infinite;
+}
+
+.kappa-progress__range[data-state="indeterminate"][data-orientation="vertical"] {
+  inline-size: 100%;
+  block-size: 38%;
+  animation-name: kappa-progress-indeterminate-y;
+}
+
+.kappa-progress__view[hidden] {
+  display: none;
+}
+
+@keyframes kappa-progress-indeterminate-x {
+  0% {
+    transform: translateX(-110%);
+  }
+
+  100% {
+    transform: translateX(275%);
+  }
+}
+
+@keyframes kappa-progress-indeterminate-y {
+  0% {
+    transform: translateY(-110%);
+  }
+
+  100% {
+    transform: translateY(275%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kappa-progress__range {
+    transition: none;
+  }
+
+  .kappa-progress__range[data-state="indeterminate"] {
+    animation: none;
+    transform: translateX(82%);
+  }
+
+  .kappa-progress__range[data-state="indeterminate"][data-orientation="vertical"] {
+    transform: translateY(82%);
+  }
+}
+
+@media (forced-colors: active) {
+  .kappa-progress__track {
+    border: 1px solid CanvasText;
+    background: Canvas;
+    box-shadow: none;
+  }
+
+  .kappa-progress__range {
+    background: Highlight;
+  }
+}

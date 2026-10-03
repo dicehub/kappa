@@ -1,0 +1,294 @@
+.kappa-button {
+  --kappa-button-size: 2rem;
+  --kappa-button-icon-size: 1rem;
+  --kappa-button-radius: 0.25rem;
+  --kappa-button-background: var(--kappa-control, #ffffff);
+  --kappa-button-border: var(--kappa-line, #e3e6eb);
+  --kappa-button-foreground: var(--kappa-default, #17191f);
+  --kappa-button-hover-background: var(--kappa-overlay, #e9edf2);
+  --kappa-button-hover-foreground: var(--kappa-button-foreground);
+  --kappa-button-active-background: color-mix(
+    in oklab,
+    var(--kappa-button-hover-background) 92%,
+    var(--kappa-button-active-mix, var(--kappa-emphasis, #17191f)) 8%
+  );
+
+  box-sizing: border-box;
+  display: inline-flex;
+  inline-size: fit-content;
+  min-inline-size: 0;
+  block-size: var(--kappa-button-size);
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  gap: 0.375rem;
+  padding-block: 0;
+  padding-inline: 0.75rem;
+  border: 1px solid var(--kappa-button-border);
+  border-radius: var(--kappa-button-radius);
+  background: var(--kappa-button-background);
+  box-shadow: none;
+  color: var(--kappa-button-foreground);
+  cursor: pointer;
+  font-family: var(--kappa-font-sans, inherit);
+  font-size: 0.8125rem;
+  font-weight: 550;
+  line-height: 1rem;
+  text-align: center;
+  text-decoration: none;
+  user-select: none;
+  vertical-align: middle;
+  white-space: nowrap;
+  transition:
+    background-color 120ms ease,
+    border-color 120ms ease,
+    color 120ms ease,
+    transform 80ms ease;
+}
+
+.kappa-button:hover:not(:disabled, [aria-disabled="true"]) {
+  background: var(--kappa-button-hover-background);
+  color: var(--kappa-button-hover-foreground);
+}
+
+.kappa-button:active:not(:disabled, [aria-disabled="true"]) {
+  background: var(--kappa-button-active-background);
+  transform: translateY(1px);
+}
+
+.kappa-button:focus-visible {
+  outline: 2px solid var(--kappa-focus, #4c63ff);
+  outline-offset: 2px;
+}
+
+.kappa-button:disabled,
+.kappa-button[aria-disabled="true"] {
+  cursor: not-allowed;
+  opacity: 0.56;
+}
+
+.kappa-button:disabled {
+  pointer-events: none;
+}
+
+.kappa-button[aria-expanded="true"]:is(
+    [data-variant="secondary"],
+    [data-variant="outline"],
+    [data-variant="ghost"]
+  ) {
+  background: var(--kappa-overlay, #e9edf2);
+}
+
+.kappa-button[data-size="xs"] {
+  --kappa-button-size: 1.5rem;
+  --kappa-button-icon-size: 0.75rem;
+
+  gap: 0.25rem;
+  padding-inline: 0.5rem;
+  font-size: 0.75rem;
+}
+
+.kappa-button[data-size="sm"] {
+  --kappa-button-size: 1.75rem;
+  --kappa-button-icon-size: 0.875rem;
+
+  gap: 0.25rem;
+  padding-inline: 0.625rem;
+  font-size: 0.75rem;
+}
+
+.kappa-button[data-size="lg"] {
+  --kappa-button-size: 2.25rem;
+  --kappa-button-icon-size: 1.125rem;
+
+  gap: 0.5rem;
+  padding-inline: 0.875rem;
+  font-size: 0.875rem;
+}
+
+.kappa-button[data-shape="square"],
+.kappa-button[data-shape="circle"] {
+  inline-size: var(--kappa-button-size);
+  padding-inline: 0;
+}
+
+.kappa-button[data-shape="circle"] {
+  --kappa-button-radius: 999px;
+}
+
+.kappa-button--full-width {
+  inline-size: 100%;
+}
+
+.kappa-button__icon,
+.kappa-button > [data-icon] {
+  display: block;
+  inline-size: var(--kappa-button-icon-size);
+  block-size: var(--kappa-button-icon-size);
+  flex: none;
+  pointer-events: none;
+}
+
+.kappa-button__icon[data-position="inline-start"] {
+  order: 0;
+}
+
+.kappa-button__label {
+  display: inline-flex;
+  min-inline-size: 0;
+  order: 1;
+  align-items: center;
+  justify-content: center;
+}
+
+.kappa-button__icon[data-position="inline-end"] {
+  order: 2;
+}
+
+.kappa-button:has(> .kappa-button__icon[data-position="inline-start"]):not(
+    [data-shape="square"],
+    [data-shape="circle"]
+  ) {
+  padding-inline-start: 0.625rem;
+}
+
+.kappa-button:has(> .kappa-button__icon[data-position="inline-end"]):not(
+    [data-shape="square"],
+    [data-shape="circle"]
+  ) {
+  padding-inline-end: 0.625rem;
+}
+
+.kappa-button__spinner {
+  border: 2px solid currentColor;
+  border-inline-end-color: transparent;
+  border-radius: 999px;
+  animation: kappa-button-spin 650ms linear infinite;
+}
+
+.kappa-button[data-variant="primary"] {
+  --kappa-button-background: var(
+    --kappa-button-primary,
+    var(--kappa-accent-solid, #247ab7)
+  );
+  --kappa-button-border: transparent;
+  --kappa-button-foreground: var(--kappa-accent-contrast, #ffffff);
+  --kappa-button-hover-background: color-mix(
+    in oklab,
+    var(--kappa-button-primary, var(--kappa-accent-solid, #247ab7)) 92%,
+    var(--kappa-button-active-mix, #17191f) 8%
+  );
+}
+
+.kappa-button[data-variant="outline"] {
+  --kappa-button-background: transparent;
+}
+
+.kappa-button[data-variant="ghost"] {
+  --kappa-button-background: transparent;
+  --kappa-button-border: transparent;
+}
+
+.kappa-button[data-variant="destructive"] {
+  --kappa-button-background: var(--kappa-danger-solid, #b42318);
+  --kappa-button-border: transparent;
+  --kappa-button-foreground: var(--kappa-accent-contrast, #ffffff);
+  --kappa-button-hover-background: color-mix(
+    in oklab,
+    var(--kappa-danger-solid, #b42318) 92%,
+    var(--kappa-button-active-mix, #17191f) 8%
+  );
+}
+
+.kappa-button[data-variant="secondary-destructive"] {
+  --kappa-button-foreground: var(--kappa-danger-text, #b42318);
+}
+
+.kappa-button[data-variant="destructive-outline"] {
+  --kappa-button-background: transparent;
+  --kappa-button-border: var(--kappa-danger-text, #b42318);
+  --kappa-button-foreground: var(--kappa-danger-text, #b42318);
+  --kappa-button-hover-background: var(--kappa-danger-tint, #fee4e2);
+}
+
+.kappa-button[data-variant="success"] {
+  --kappa-button-background: var(--kappa-success-solid, #027a48);
+  --kappa-button-border: transparent;
+  --kappa-button-foreground: var(--kappa-accent-contrast, #ffffff);
+  --kappa-button-hover-background: color-mix(
+    in oklab,
+    var(--kappa-success-solid, #027a48) 92%,
+    var(--kappa-button-active-mix, #17191f) 8%
+  );
+}
+
+.kappa-button[data-variant="warning"] {
+  --kappa-button-background: var(--kappa-warning-solid, #b54708);
+  --kappa-button-border: transparent;
+  --kappa-button-foreground: var(--kappa-accent-contrast, #ffffff);
+  --kappa-button-hover-background: color-mix(
+    in oklab,
+    var(--kappa-warning-solid, #b54708) 92%,
+    var(--kappa-button-active-mix, #17191f) 8%
+  );
+}
+
+.kappa-button[data-variant="link"] {
+  --kappa-button-background: transparent;
+  --kappa-button-border: transparent;
+  --kappa-button-foreground: var(--kappa-accent, #2479b6);
+  --kappa-button-hover-background: transparent;
+  --kappa-button-hover-foreground: var(--kappa-button-foreground);
+
+  padding-inline: 0;
+  text-underline-offset: 0.1875rem;
+}
+
+.kappa-button[data-variant="link"]:hover:not(:disabled, [aria-disabled="true"]) {
+  text-decoration: underline;
+}
+
+.kappa-button[aria-invalid="true"] {
+  border-color: var(--kappa-danger-solid, #b42318);
+  outline: 1px solid var(--kappa-danger-solid, #b42318);
+  outline-offset: 1px;
+}
+
+.kappa-button[aria-invalid="true"]:focus-visible {
+  outline-color: var(--kappa-danger-solid, #b42318);
+  outline-width: 2px;
+  outline-offset: 2px;
+}
+
+@keyframes kappa-button-spin {
+  to {
+    transform: rotate(1turn);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kappa-button {
+    transition: none;
+  }
+
+  .kappa-button__spinner {
+    animation: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .kappa-button {
+    border-color: ButtonText;
+  }
+
+  .kappa-button:focus-visible {
+    outline-color: Highlight;
+  }
+
+  .kappa-button:disabled,
+  .kappa-button[aria-disabled="true"] {
+    border-color: GrayText;
+    color: GrayText;
+    opacity: 1;
+  }
+}

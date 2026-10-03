@@ -1,0 +1,183 @@
+---
+import CodeBlock from "../../../components/CodeBlock.astro";
+import CompositionTree from "../../../components/CompositionTree.astro";
+import CopyPageControls from "../../../components/CopyPageControls.vue";
+import DocsPageNavigation from "../../../components/DocsPageNavigation.astro";
+import AspectRatioDocsDemo from "../../../components/AspectRatioDocsDemo.vue";
+import {
+  aspectRatioProps,
+  barrelCode,
+  customCode,
+  dataAttributes,
+  dataSlots,
+  exportsList,
+  granularCode,
+  portraitCode,
+  previewCode,
+  slots,
+  squareCode,
+  usageCode,
+} from "../../../data/aspect-ratio-docs";
+import DocsLayout from "../../../layouts/DocsLayout.astro";
+import "../../../styles/docs-components.css";
+
+const currentPath = "/docs/components/aspect-ratio";
+const description = "Keeps media and content inside a predictable width-to-height ratio.";
+---
+
+<DocsLayout title="Aspect Ratio" description={description}>
+  <div class="docs-page docs-page--component">
+    <header class="docs-page-header">
+      <div class="docs-page-header__inner">
+        <div class="docs-page-header__content">
+          <div class="docs-page-header__mobile-actions">
+            <CopyPageControls client:only="vue" align="center" />
+          </div>
+          <div class="docs-page-header__title-row">
+            <h1>Aspect Ratio</h1>
+            <div class="docs-page-header__navigation-actions">
+              <div class="docs-page-header__desktop-actions">
+                <CopyPageControls client:only="vue" />
+              </div>
+              <DocsPageNavigation currentPath={currentPath} variant="compact" />
+            </div>
+          </div>
+          <p class="docs-page-header__lede">{description}</p>
+        </div>
+      </div>
+    </header>
+
+    <div class="docs-page-body">
+      <article class="docs-article docs-article--component">
+        <section id="preview" class="docs-section">
+          <div class="docs-component-example">
+            <div class="docs-component-preview">
+              <AspectRatioDocsDemo variant="preview" />
+            </div>
+            <CodeBlock code={previewCode} lang="vue" collapsible revealId="aspect-ratio-preview-code" />
+          </div>
+        </section>
+
+        <section id="installation" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#installation">Installation</a></h2>
+          <p>
+            Aspect Ratio is part of the main Kappa package. It uses the native CSS
+            <code>aspect-ratio</code> property and adds no runtime dependency beyond Vue.
+          </p>
+          <h3 id="barrel"><a class="docs-section-anchor" href="#barrel">Barrel</a></h3>
+          <CodeBlock code={barrelCode} lang="javascript" />
+          <h3 id="granular"><a class="docs-section-anchor" href="#granular">Granular</a></h3>
+          <CodeBlock code={granularCode} lang="javascript" />
+        </section>
+
+        <section id="usage" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#usage">Usage</a></h2>
+          <p>
+            Pass a positive ratio as width divided by height. Give the child a full width and
+            height when it is media, then use <code>object-fit: cover</code> or another content
+            policy that matches the surface.
+          </p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview">
+              <AspectRatioDocsDemo variant="usage" />
+            </div>
+            <CodeBlock code={usageCode} lang="vue" collapsible revealId="aspect-ratio-usage-code" />
+          </div>
+        </section>
+
+        <section id="composition" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#composition">Composition</a></h2>
+          <CompositionTree component="aspectRatio" label="Rendered structure" />
+          <p>
+            The single <code>ratio</code> prop sets the native CSS <code>aspect-ratio</code> value.
+            Ark UI Vue has no matching
+            primitive, so Kappa keeps this layout helper native and unopinionated.
+          </p>
+        </section>
+
+        <section id="examples" class="docs-section docs-section--component-examples">
+          <h2><a class="docs-section-anchor" href="#examples">Examples</a></h2>
+
+          <h3 id="square"><a class="docs-section-anchor" href="#square">Square</a></h3>
+          <p>Use <code>:ratio="1 / 1"</code> for avatars, thumbnails, and tile-based content.</p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview">
+              <AspectRatioDocsDemo variant="square" />
+            </div>
+            <CodeBlock code={squareCode} lang="vue" collapsible revealId="aspect-ratio-square-code" />
+          </div>
+
+          <h3 id="portrait"><a class="docs-section-anchor" href="#portrait">Portrait</a></h3>
+          <p>Use <code>:ratio="9 / 16"</code> for posters and mobile-oriented media.</p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview">
+              <AspectRatioDocsDemo variant="portrait" />
+            </div>
+            <CodeBlock code={portraitCode} lang="vue" collapsible revealId="aspect-ratio-portrait-code" />
+          </div>
+
+          <h3 id="custom"><a class="docs-section-anchor" href="#custom">Custom Ratio</a></h3>
+          <p>Use any positive finite number when a standard media ratio does not fit the content.</p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview">
+              <AspectRatioDocsDemo variant="custom" />
+            </div>
+            <CodeBlock code={customCode} lang="vue" collapsible revealId="aspect-ratio-custom-code" />
+          </div>
+        </section>
+
+        <section id="accessibility" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#accessibility">Accessibility</a></h2>
+          <ul>
+            <li>Aspect Ratio is a layout wrapper. Give images meaningful alternative text.</li>
+            <li>Keep interactive controls keyboard reachable inside the ratio root.</li>
+            <li>Do not use the wrapper as a replacement for a heading or landmark.</li>
+            <li>Choose a content policy for overflow. For media, <code>object-fit: cover</code> is often appropriate.</li>
+            <li>Invalid or missing runtime values resolve to a square to keep a stable layout.</li>
+          </ul>
+        </section>
+
+        <section id="api-reference" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#api-reference">API Reference</a></h2>
+          <div class="docs-api-group">
+            <h3 id="aspect-ratio-api"><a class="docs-section-anchor" href="#aspect-ratio-api">AspectRatio</a></h3>
+            <p>Renders a native <code>div</code>. Native attributes, data attributes, styles, classes, and events pass to the root.</p>
+            <div class="docs-api-table"><table><thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>{aspectRatioProps.map((prop) => <tr><td><code>{prop.name}</code></td><td><code>{prop.type}</code></td><td><code>{prop.defaultValue}</code></td><td>{prop.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="slots"><a class="docs-section-anchor" href="#slots">Slots</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Slot</th><th>Description</th></tr></thead><tbody>{slots.map((slot) => <tr><td><code>{slot.name}</code></td><td>{slot.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="data-slots"><a class="docs-section-anchor" href="#data-slots">Data Slots</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Slot</th><th>Element</th><th>Description</th></tr></thead><tbody>{dataSlots.map((part) => <tr><td><code>{part.name}</code></td><td><code>{part.element}</code></td><td>{part.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="data-attributes"><a class="docs-section-anchor" href="#data-attributes">Data Attributes</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Attribute</th><th>Value</th><th>Description</th></tr></thead><tbody>{dataAttributes.map((attribute) => <tr><td><code>{attribute.name}</code></td><td><code>{attribute.value}</code></td><td>{attribute.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="exports"><a class="docs-section-anchor" href="#exports">Exports</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Export</th><th>Description</th></tr></thead><tbody>{exportsList.map((item) => <tr><td><code>{item.name}</code></td><td>{item.description}</td></tr>)}</tbody></table></div>
+          </div>
+        </section>
+
+        <DocsPageNavigation currentPath={currentPath} />
+      </article>
+
+      <aside class="docs-page-toc" aria-label="On this page">
+        <div class="docs-page-toc__inner">
+          <span class="docs-page-toc__title">On this page</span>
+          <ul>
+            <li><a href="#installation" data-toc-link="installation">Installation</a><ul><li><a href="#barrel" data-toc-link="barrel">Barrel</a></li><li><a href="#granular" data-toc-link="granular">Granular</a></li></ul></li>
+            <li><a href="#usage" data-toc-link="usage">Usage</a></li>
+            <li><a href="#composition" data-toc-link="composition">Composition</a></li>
+            <li><a href="#examples" data-toc-link="examples">Examples</a><ul><li><a href="#square" data-toc-link="square">Square</a></li><li><a href="#portrait" data-toc-link="portrait">Portrait</a></li><li><a href="#custom" data-toc-link="custom">Custom Ratio</a></li></ul></li>
+            <li><a href="#accessibility" data-toc-link="accessibility">Accessibility</a></li>
+            <li><a href="#api-reference" data-toc-link="api-reference">API Reference</a><ul><li><a href="#aspect-ratio-api" data-toc-link="aspect-ratio-api">AspectRatio</a></li><li><a href="#slots" data-toc-link="slots">Slots</a></li><li><a href="#data-slots" data-toc-link="data-slots">Data Slots</a></li><li><a href="#data-attributes" data-toc-link="data-attributes">Data Attributes</a></li><li><a href="#exports" data-toc-link="exports">Exports</a></li></ul></li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+  </div>
+</DocsLayout>

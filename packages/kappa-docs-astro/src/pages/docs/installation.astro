@@ -1,0 +1,121 @@
+---
+import CopyPageControls from "../../components/CopyPageControls.vue";
+import CodeBlock from "../../components/CodeBlock.astro";
+import DocsPageNavigation from "../../components/DocsPageNavigation.astro";
+import DocsLayout from "../../layouts/DocsLayout.astro";
+
+const currentPath = "/docs/installation";
+const toc = [
+  { id: "requirements", label: "Requirements" },
+  { id: "install-package", label: "Install Package" },
+  { id: "theme", label: "Styles and Theme" },
+  { id: "typescript", label: "TypeScript" },
+  { id: "next-steps", label: "Next Steps" },
+];
+---
+
+<DocsLayout title="Installation" description="Install Kappa in a Vue application.">
+  <div class="docs-page docs-page--installation">
+    <header id="page-header" class="docs-page-header">
+      <div class="docs-page-header__inner">
+        <div class="docs-page-header__content">
+          <div class="docs-page-header__mobile-actions">
+            <CopyPageControls client:only="vue" align="center" />
+          </div>
+          <div class="docs-page-header__title-row">
+            <h1>Installation</h1>
+            <div class="docs-page-header__navigation-actions">
+              <div class="docs-page-header__desktop-actions">
+                <CopyPageControls client:only="vue" />
+              </div>
+              <DocsPageNavigation currentPath={currentPath} variant="compact" />
+            </div>
+          </div>
+          <p class="docs-page-header__lede">Install Kappa in a Vue application.</p>
+        </div>
+      </div>
+    </header>
+
+    <div class="docs-page-body">
+      <article class="docs-article docs-article--installation">
+        <section id="requirements" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#requirements">Requirements</a></h2>
+          <ul class="docs-section-list">
+            <li>Vue <code>^3.5.0</code></li>
+            <li>Node.js <code>&gt;=24.19.0 &lt;25</code></li>
+            <li>pnpm for the commands below</li>
+          </ul>
+        </section>
+
+        <section id="install-package" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#install-package">Install Package</a></h2>
+          <p>Public npm publication is pending. Build and pack Kappa from the repository root.</p>
+          <CodeBlock
+            code={`pnpm install
+pnpm --filter @dicehub/kappa build
+pnpm --filter @dicehub/kappa pack --out dist/kappa.tgz`}
+            lang="bash"
+          />
+          <p>
+            From your Vue project, install the generated tarball and Vue. Replace the example path
+            with the absolute path to <code>dist/kappa.tgz</code>.
+          </p>
+          <CodeBlock code="pnpm add /path/to/kappa-ui/dist/kappa.tgz vue" lang="bash" />
+        </section>
+
+        <section id="theme" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#theme">Styles and Theme</a></h2>
+          <p>
+            Import the component styles and Kappa color theme once in your application. Component imports never inject a
+            global theme or reset, so this stays explicit and the stylesheet remains a public
+            export.
+          </p>
+          <CodeBlock
+            code={`import "@dicehub/kappa/styles/kappa.css";
+import "@dicehub/kappa/styles/theme-kappa.css";`}
+            lang="typescript"
+          />
+          <p>
+            The <a href="/docs/colors">Colors</a> reference lists every token, its light and dark
+            values, and the recommended contrast pairs.
+          </p>
+        </section>
+
+        <section id="typescript" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#typescript">TypeScript</a></h2>
+          <p>
+            Ark UI 5.39.2 has upstream declaration errors. Set <code>skipLibCheck</code> to
+            <code>true</code> in your application's TypeScript configuration until those errors are fixed.
+          </p>
+          <CodeBlock code={`{
+  "compilerOptions": {
+    "skipLibCheck": true
+  }
+}`} lang="json" />
+        </section>
+
+        <section id="next-steps" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#next-steps">Next Steps</a></h2>
+          <p>
+            Browse the <a href="/docs/components">Components</a> and <a href="/docs/blocks">Blocks</a>
+            pages for supported exports and examples. To change the library, see <a href="/docs/contributing">Contributing</a>.
+          </p>
+        </section>
+        <DocsPageNavigation currentPath={currentPath} />
+      </article>
+
+      <aside class="docs-page-toc" aria-label="On this page">
+        <div class="docs-page-toc__inner">
+          <span class="docs-page-toc__title">On this page</span>
+          <ul>
+            {
+              toc.map((item) => (
+                <li><a href={`#${item.id}`} data-toc-link={item.id}>{item.label}</a></li>
+              ))
+            }
+          </ul>
+        </div>
+      </aside>
+    </div>
+  </div>
+</DocsLayout>

@@ -1,0 +1,33 @@
+.charts-demo {
+  display: grid;
+  inline-size: min(100%, 58rem);
+  min-inline-size: 0;
+  margin-inline: auto;
+  color: var(--kappa-default, #171717);
+  font-family: var(--kappa-font-sans, inherit);
+}
+
+.charts-demo__states {
+  display: grid;
+  inline-size: 100%;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.charts-demo__stream-dot {
+  inline-size: 0.4375rem;
+  block-size: 0.4375rem;
+  border-radius: 50%;
+  background: var(--kappa-subtle, #696969);
+}
+
+.charts-demo__stream-dot[data-active] {
+  background: var(--kappa-success-text, #027a48);
+  box-shadow: 0 0 0 0.1875rem color-mix(in srgb, var(--kappa-success-text, #027a48) 14%, transparent);
+}
+
+@media (max-width: 52rem) {
+  .charts-demo__states {
+    grid-template-columns: 1fr;
+  }
+}

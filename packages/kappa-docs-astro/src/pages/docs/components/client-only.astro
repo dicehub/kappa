@@ -1,0 +1,211 @@
+---
+import ArkUiDocsLink from "../../../components/ArkUiDocsLink.astro";
+import ClientOnlyDocsDemo from "../../../components/ClientOnlyDocsDemo.vue";
+import CodeBlock from "../../../components/CodeBlock.astro";
+import CompositionTree from "../../../components/CompositionTree.astro";
+import CopyPageControls from "../../../components/CopyPageControls.vue";
+import DocsPageNavigation from "../../../components/DocsPageNavigation.astro";
+import {
+  barrelCode,
+  clientOnlyProps,
+  clientOnlySlots,
+  compositionCode,
+  dataAttributes,
+  exportsList,
+  fallbackCode,
+  granularCode,
+  noFallbackCode,
+  previewCode,
+  usageCode,
+} from "../../../data/client-only-docs";
+import DocsLayout from "../../../layouts/DocsLayout.astro";
+import "../../../styles/docs-components.css";
+
+const currentPath = "/docs/components/client-only";
+const description = "Defers browser-only content while keeping a stable server-rendered fallback.";
+---
+
+<DocsLayout title="Client Only" description={description}>
+  <div class="docs-page docs-page--component">
+    <header class="docs-page-header">
+      <div class="docs-page-header__inner">
+        <div class="docs-page-header__content">
+          <div class="docs-page-header__mobile-actions">
+            <CopyPageControls client:only="vue" align="center" />
+          </div>
+          <div class="docs-page-header__title-row">
+            <h1>Client Only</h1>
+            <ArkUiDocsLink href="https://ark-ui.com/docs/utilities/client-only" />
+            <div class="docs-page-header__navigation-actions">
+              <div class="docs-page-header__desktop-actions">
+                <CopyPageControls client:only="vue" />
+              </div>
+              <DocsPageNavigation currentPath={currentPath} variant="compact" />
+            </div>
+          </div>
+          <p class="docs-page-header__lede">{description}</p>
+        </div>
+      </div>
+    </header>
+
+    <div class="docs-page-body">
+      <article class="docs-article docs-article--component">
+        <section id="preview" class="docs-section">
+          <div class="docs-component-example">
+            <div class="docs-component-preview">
+              <ClientOnlyDocsDemo client:load variant="preview" />
+            </div>
+            <CodeBlock code={previewCode} lang="vue" collapsible revealId="client-only-preview-code" />
+          </div>
+        </section>
+
+        <section id="installation" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#installation">Installation</a></h2>
+          <p>
+            Client Only is part of the main Kappa package. It is a renderless boundary backed by
+            Ark UI and adds no runtime dependency beyond the existing Ark UI package.
+          </p>
+          <h3 id="barrel"><a class="docs-section-anchor" href="#barrel">Barrel</a></h3>
+          <CodeBlock code={barrelCode} lang="javascript" />
+          <h3 id="granular"><a class="docs-section-anchor" href="#granular">Granular</a></h3>
+          <CodeBlock code={granularCode} lang="javascript" />
+        </section>
+
+        <section id="usage" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#usage">Usage</a></h2>
+          <p>
+            Put browser-only content in the default slot. Use the fallback slot for content that
+            must be present during server-side rendering and before the browser mount completes.
+          </p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview">
+              <ClientOnlyDocsDemo client:load variant="usage" />
+            </div>
+            <CodeBlock code={usageCode} lang="vue" collapsible revealId="client-only-usage-code" />
+          </div>
+        </section>
+
+        <section id="composition" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#composition">Composition</a></h2>
+          <CompositionTree component="clientOnly" label="Renderless slot composition" />
+          <p>
+            Client Only renders the fallback slot until the component mounts in the browser. It
+            then renders the default slot. The boundary does not add a wrapper, attributes, or
+            layout styles to either slot.
+          </p>
+          <h3 id="reference-behavior">
+            <a class="docs-section-anchor" href="#reference-behavior">Reference Behavior</a>
+          </h3>
+          <p>
+            Kappa follows Ark UI's
+            <a href="https://ark-ui.com/docs/utilities/client-only">Client Only utility</a>.
+            Keep browser APIs, charts, and controls in the default slot when they cannot render
+            during SSR. Keep fallback markup structurally useful and visually close to the ready
+            state to reduce layout shift.
+          </p>
+          <CodeBlock code={compositionCode} lang="plaintext" />
+        </section>
+
+        <section id="examples" class="docs-section docs-section--component-examples">
+          <h2><a class="docs-section-anchor" href="#examples">Examples</a></h2>
+
+          <h3 id="layout-safe-fallback">
+            <a class="docs-section-anchor" href="#layout-safe-fallback">Layout-safe Fallback</a>
+          </h3>
+          <p>
+            Reserve the same space as a browser-only chart or data view while the server fallback
+            is visible.
+          </p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview">
+              <ClientOnlyDocsDemo client:load variant="fallback" />
+            </div>
+            <CodeBlock code={fallbackCode} lang="vue" collapsible revealId="client-only-fallback-code" />
+          </div>
+
+          <h3 id="no-fallback">
+            <a class="docs-section-anchor" href="#no-fallback">No Fallback</a>
+          </h3>
+          <p>
+            Omit the fallback slot when empty server output is the correct experience. The browser
+            content still mounts after hydration.
+          </p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview">
+              <ClientOnlyDocsDemo client:load variant="no-fallback" />
+            </div>
+            <CodeBlock code={noFallbackCode} lang="vue" collapsible revealId="client-only-no-fallback-code" />
+          </div>
+        </section>
+
+        <section id="accessibility" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#accessibility">Accessibility</a></h2>
+          <ul>
+            <li>Make fallback content communicate the same purpose as the browser-only content.</li>
+            <li>Preserve a stable region size so the client transition does not move nearby content.</li>
+            <li>Use live regions only for meaningful status changes, not for the boundary itself.</li>
+            <li>Keep interactive controls in the default slot so they cannot be activated before mount.</li>
+          </ul>
+        </section>
+
+        <section id="api-reference" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#api-reference">API Reference</a></h2>
+          <div class="docs-api-group">
+            <h3 id="client-only-api">
+              <a class="docs-section-anchor" href="#client-only-api">ClientOnly</a>
+            </h3>
+            <div class="docs-api-table">
+              <table>
+                <thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+                <tbody>{clientOnlyProps.map((prop) => <tr><td><code>{prop.name}</code></td><td><code>{prop.type}</code></td><td><code>{prop.defaultValue}</code></td><td>{prop.description}</td></tr>)}</tbody>
+              </table>
+            </div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="slots"><a class="docs-section-anchor" href="#slots">Slots</a></h3>
+            <div class="docs-api-table">
+              <table>
+                <thead><tr><th>Slot</th><th>Description</th></tr></thead>
+                <tbody>{clientOnlySlots.map((slot) => <tr><td><code>{slot.name}</code></td><td>{slot.description}</td></tr>)}</tbody>
+              </table>
+            </div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="data-attributes"><a class="docs-section-anchor" href="#data-attributes">Data Attributes</a></h3>
+            <div class="docs-api-table">
+              <table>
+                <thead><tr><th>Attribute</th><th>Value</th><th>Description</th></tr></thead>
+                <tbody>{dataAttributes.map((item) => <tr><td><code>{item.name}</code></td><td><code>{item.value}</code></td><td>{item.description}</td></tr>)}</tbody>
+              </table>
+            </div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="exports"><a class="docs-section-anchor" href="#exports">Exports</a></h3>
+            <div class="docs-api-table">
+              <table>
+                <thead><tr><th>Export</th><th>Description</th></tr></thead>
+                <tbody>{exportsList.map((item) => <tr><td><code>{item.name}</code></td><td>{item.description}</td></tr>)}</tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <DocsPageNavigation currentPath={currentPath} />
+      </article>
+
+      <aside class="docs-page-toc" aria-label="On this page">
+        <div class="docs-page-toc__inner">
+          <span class="docs-page-toc__title">On this page</span>
+          <ul>
+            <li><a href="#installation" data-toc-link="installation">Installation</a><ul><li><a href="#barrel" data-toc-link="barrel">Barrel</a></li><li><a href="#granular" data-toc-link="granular">Granular</a></li></ul></li>
+            <li><a href="#usage" data-toc-link="usage">Usage</a></li>
+            <li><a href="#composition" data-toc-link="composition">Composition</a><ul><li><a href="#reference-behavior" data-toc-link="reference-behavior">Reference Behavior</a></li></ul></li>
+            <li><a href="#examples" data-toc-link="examples">Examples</a><ul><li><a href="#layout-safe-fallback" data-toc-link="layout-safe-fallback">Layout-safe Fallback</a></li><li><a href="#no-fallback" data-toc-link="no-fallback">No Fallback</a></li></ul></li>
+            <li><a href="#accessibility" data-toc-link="accessibility">Accessibility</a></li>
+            <li><a href="#api-reference" data-toc-link="api-reference">API Reference</a><ul><li><a href="#client-only-api" data-toc-link="client-only-api">ClientOnly</a></li><li><a href="#slots" data-toc-link="slots">Slots</a></li><li><a href="#data-attributes" data-toc-link="data-attributes">Data Attributes</a></li><li><a href="#exports" data-toc-link="exports">Exports</a></li></ul></li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+  </div>
+</DocsLayout>

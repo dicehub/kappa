@@ -1,0 +1,172 @@
+.kappa-native-select {
+  --kappa-native-select-height: 2.25rem;
+  --kappa-native-select-padding: 0.625rem;
+  --kappa-native-select-radius: 0.5rem;
+  --kappa-native-select-font-size: 0.8125rem;
+  --kappa-native-select-icon-size: 0.875rem;
+  --kappa-native-select-icon-inset: 0.75rem;
+
+  position: relative;
+  box-sizing: border-box;
+  display: inline-grid;
+  max-inline-size: 100%;
+  color: var(--kappa-default, #17191f);
+  font-family: var(--kappa-font-sans, inherit);
+  vertical-align: middle;
+}
+
+.kappa-native-select[data-size="xs"] {
+  --kappa-native-select-height: 1.5rem;
+  --kappa-native-select-padding: 0.5rem;
+  --kappa-native-select-radius: 0.375rem;
+  --kappa-native-select-font-size: 0.75rem;
+  --kappa-native-select-icon-size: 0.75rem;
+  --kappa-native-select-icon-inset: 0.5rem;
+}
+
+.kappa-native-select[data-size="sm"] {
+  --kappa-native-select-height: 1.75rem;
+  --kappa-native-select-padding: 0.625rem;
+  --kappa-native-select-radius: 0.4375rem;
+  --kappa-native-select-font-size: 0.75rem;
+  --kappa-native-select-icon-size: 0.8125rem;
+  --kappa-native-select-icon-inset: 0.625rem;
+}
+
+.kappa-native-select[data-size="lg"] {
+  --kappa-native-select-height: 2.5rem;
+  --kappa-native-select-padding: 0.75rem;
+  --kappa-native-select-font-size: 0.875rem;
+  --kappa-native-select-icon-size: 1rem;
+  --kappa-native-select-icon-inset: 0.75rem;
+}
+
+.kappa-native-select__control {
+  box-sizing: border-box;
+  display: block;
+  inline-size: 100%;
+  min-inline-size: 0;
+  block-size: var(--kappa-native-select-height);
+  appearance: none;
+  padding-block: 0;
+  padding-inline-start: var(--kappa-native-select-padding);
+  padding-inline-end: calc(
+    var(--kappa-native-select-icon-size) + var(--kappa-native-select-icon-inset) * 2
+  );
+  border: 1px solid var(--kappa-line, #e3e6eb);
+  border-radius: var(--kappa-native-select-radius);
+  background: var(--kappa-control, #ffffff);
+  box-shadow: none;
+  color: var(--kappa-default, #17191f);
+  font-family: inherit;
+  font-size: var(--kappa-native-select-font-size);
+  font-weight: 450;
+  line-height: 1.35;
+  outline: 2px solid transparent;
+  outline-offset: 1px;
+  transition:
+    background-color 120ms ease,
+    border-color 120ms ease,
+    color 120ms ease,
+    outline-color 120ms ease;
+}
+
+.kappa-native-select__icon {
+  position: absolute;
+  inset-block-start: 50%;
+  inset-inline-end: var(--kappa-native-select-icon-inset, 0.75rem);
+  display: block;
+  inline-size: var(--kappa-native-select-icon-size, 0.875rem);
+  block-size: var(--kappa-native-select-icon-size, 0.875rem);
+  color: var(--kappa-subtle, #6c7480);
+  pointer-events: none;
+  transform: translateY(-50%);
+  user-select: none;
+}
+
+.kappa-native-select__control:hover:not(:disabled) {
+  border-color: var(--kappa-subtle, #6c7480);
+}
+
+.kappa-native-select__control:focus-visible {
+  border-color: var(--kappa-focus, #4c63ff);
+  outline-color: var(--kappa-focus, #4c63ff);
+}
+
+.kappa-native-select__control:where([data-invalid], [aria-invalid="true"]) {
+  border-color: var(--kappa-danger, #b42318);
+}
+
+.kappa-native-select__control:where([data-invalid], [aria-invalid="true"]):focus-visible {
+  outline-color: var(--kappa-danger, #b42318);
+}
+
+.kappa-native-select__control:disabled {
+  background: var(--kappa-disabled-surface, var(--kappa-tint, #f4f6f9));
+  color: var(--kappa-subtle, #6c7480);
+  cursor: not-allowed;
+  opacity: 0.62;
+}
+
+.kappa-native-select[data-disabled] .kappa-native-select__icon {
+  color: var(--kappa-muted, #9aa2ae);
+  opacity: 0.62;
+}
+
+.kappa-native-select__control[multiple] {
+  block-size: auto;
+  min-block-size: calc(var(--kappa-native-select-height) * 2.5);
+  padding-block: 0.375rem;
+  padding-inline-end: var(--kappa-native-select-padding);
+}
+
+.kappa-native-select[data-multiple] .kappa-native-select__icon {
+  display: none;
+}
+
+.kappa-native-select__option,
+.kappa-native-select__optgroup {
+  background: Canvas;
+  color: CanvasText;
+  font: inherit;
+}
+
+.kappa-native-select__option:checked {
+  background: Highlight;
+  color: HighlightText;
+}
+
+.kappa-native-select__option:disabled {
+  color: GrayText;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kappa-native-select__control {
+    transition: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .kappa-native-select__control {
+    appearance: auto;
+    padding-inline-end: var(--kappa-native-select-padding);
+  }
+
+  .kappa-native-select__control:focus-visible {
+    border-color: Highlight;
+    outline-color: Highlight;
+  }
+
+  .kappa-native-select__control:where([data-invalid], [aria-invalid="true"]) {
+    border-color: Mark;
+  }
+
+  .kappa-native-select__control:disabled {
+    color: GrayText;
+    opacity: 1;
+  }
+
+  .kappa-native-select__icon {
+    display: none;
+  }
+}

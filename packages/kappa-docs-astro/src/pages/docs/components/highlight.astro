@@ -1,0 +1,179 @@
+---
+import ArkUiDocsLink from "../../../components/ArkUiDocsLink.astro";
+import CodeBlock from "../../../components/CodeBlock.astro";
+import CompositionTree from "../../../components/CompositionTree.astro";
+import CopyPageControls from "../../../components/CopyPageControls.vue";
+import DocsPageNavigation from "../../../components/DocsPageNavigation.astro";
+import HighlightDocsDemo from "../../../components/HighlightDocsDemo.vue";
+import {
+  barrelCode,
+  caseSensitiveCode,
+  dataSlots,
+  exactMatchCode,
+  exportsList,
+  granularCode,
+  highlightProps,
+  multipleQueryCode,
+  previewCode,
+  singleQueryCode,
+  usageCode,
+} from "../../../data/highlight-docs";
+import DocsLayout from "../../../layouts/DocsLayout.astro";
+import "../../../styles/docs-components.css";
+
+const currentPath = "/docs/components/highlight";
+const description = "Highlights query terms inside text with Ark UI matching semantics and Kappa mark styling.";
+---
+
+<DocsLayout title="Highlight" description={description}>
+  <div class="docs-page docs-page--component">
+    <header class="docs-page-header">
+      <div class="docs-page-header__inner">
+        <div class="docs-page-header__content">
+          <div class="docs-page-header__mobile-actions">
+            <CopyPageControls client:only="vue" align="center" />
+          </div>
+          <div class="docs-page-header__title-row">
+            <h1>Highlight</h1>
+            <ArkUiDocsLink />
+            <div class="docs-page-header__navigation-actions">
+              <div class="docs-page-header__desktop-actions"><CopyPageControls client:only="vue" /></div>
+              <DocsPageNavigation currentPath={currentPath} variant="compact" />
+            </div>
+          </div>
+          <p class="docs-page-header__lede">{description}</p>
+        </div>
+      </div>
+    </header>
+
+    <div class="docs-page-body">
+      <article class="docs-article docs-article--component">
+        <section id="preview" class="docs-section">
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><HighlightDocsDemo client:load variant="preview" /></div>
+            <CodeBlock code={previewCode} lang="vue" collapsible revealId="highlight-preview-code" />
+          </div>
+        </section>
+
+        <section id="installation" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#installation">Installation</a></h2>
+          <p>
+            Highlight is part of the main Kappa package. Use the barrel import for application code or
+            the component entry point when keeping imports granular.
+          </p>
+          <h3 id="barrel"><a class="docs-section-anchor" href="#barrel">Barrel</a></h3>
+          <CodeBlock code={barrelCode} lang="javascript" />
+          <h3 id="granular"><a class="docs-section-anchor" href="#granular">Granular</a></h3>
+          <CodeBlock code={granularCode} lang="javascript" />
+        </section>
+
+        <section id="usage" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#usage">Usage</a></h2>
+          <p>
+            Pass the source string through <code>text</code> and the term or terms through
+            <code>query</code>. The component renders an inline <code>span</code>; matching chunks are
+            semantic <code>mark</code> elements.
+          </p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><HighlightDocsDemo client:load variant="usage" /></div>
+            <CodeBlock code={usageCode} lang="vue" collapsible revealId="highlight-usage-code" />
+          </div>
+        </section>
+
+        <section id="composition" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#composition">Composition</a></h2>
+          <CompositionTree component="highlight" />
+          <p>
+            Kappa wraps the fragment-rendering <a href="https://ark-ui.com/docs/components/highlight">Ark UI Highlight</a>
+            primitive in one inline root. Ark UI owns matching, while Kappa owns the root marker and
+            semantic styling. Consumer attributes, listeners, and classes pass to the root span.
+          </p>
+        </section>
+
+        <section id="examples" class="docs-section docs-section--component-examples">
+          <h2><a class="docs-section-anchor" href="#examples">Examples</a></h2>
+
+          <h3 id="single-query"><a class="docs-section-anchor" href="#single-query">Single Query</a></h3>
+          <p>A string query marks the first occurrence by default. Set <code>matchAll</code> to mark every occurrence.</p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><HighlightDocsDemo client:load variant="single" /></div>
+            <CodeBlock code={singleQueryCode} lang="vue" collapsible revealId="highlight-single-query-code" />
+          </div>
+
+          <h3 id="multiple-queries"><a class="docs-section-anchor" href="#multiple-queries">Multiple Queries</a></h3>
+          <p>
+            An array query marks all terms. Keep <code>matchAll</code> enabled when passing multiple
+            queries; this is the Ark UI contract.
+          </p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><HighlightDocsDemo client:load variant="multiple" /></div>
+            <CodeBlock code={multipleQueryCode} lang="vue" collapsible revealId="highlight-multiple-query-code" />
+          </div>
+
+          <h3 id="case-sensitive"><a class="docs-section-anchor" href="#case-sensitive">Case Sensitive</a></h3>
+          <p>
+            Matching is case-sensitive by default. Set <code>ignoreCase</code> when a search field should
+            treat upper- and lower-case terms as equal.
+          </p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><HighlightDocsDemo client:load variant="case-sensitive" /></div>
+            <CodeBlock code={caseSensitiveCode} lang="vue" collapsible revealId="highlight-case-sensitive-code" />
+          </div>
+
+          <h3 id="exact-matching"><a class="docs-section-anchor" href="#exact-matching">Exact Matching</a></h3>
+          <p>
+            <code>exactMatch</code> matches complete words, so a query does not mark a longer word that
+            only starts with the same characters.
+          </p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><HighlightDocsDemo client:load variant="exact" /></div>
+            <CodeBlock code={exactMatchCode} lang="vue" collapsible revealId="highlight-exact-match-code" />
+          </div>
+        </section>
+
+        <section id="accessibility" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#accessibility">Accessibility</a></h2>
+          <ul>
+            <li>Use the semantic <code>mark</code> output to communicate search context, not only color.</li>
+            <li>Keep the complete source text available; highlighting does not replace the original copy.</li>
+            <li>Provide a visible label for the search or filter control that supplies the query.</li>
+            <li>Check long matches and forced-colors mode in the surrounding layout.</li>
+          </ul>
+        </section>
+
+        <section id="api-reference" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#api-reference">API Reference</a></h2>
+          <div class="docs-api-group">
+            <h3 id="highlight-api"><a class="docs-section-anchor" href="#highlight-api">Highlight</a></h3>
+            <p>Wraps Ark UI matching in an inline Kappa root. Attributes and listeners pass to the root span.</p>
+            <div class="docs-api-table"><table><thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>{highlightProps.map((prop) => <tr><td><code>{prop.name}</code></td><td><code>{prop.type}</code></td><td><code>{prop.defaultValue}</code></td><td>{prop.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="data-slots"><a class="docs-section-anchor" href="#data-slots">Data Slots</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Slot</th><th>Element</th><th>Description</th></tr></thead><tbody>{dataSlots.map((part) => <tr><td><code>{part.name}</code></td><td><code>{part.element}</code></td><td>{part.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="exports"><a class="docs-section-anchor" href="#exports">Exports</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Export</th><th>Description</th></tr></thead><tbody>{exportsList.map((item) => <tr><td><code>{item.name}</code></td><td>{item.description}</td></tr>)}</tbody></table></div>
+          </div>
+        </section>
+
+        <DocsPageNavigation currentPath={currentPath} />
+      </article>
+
+      <aside class="docs-page-toc" aria-label="On this page">
+        <div class="docs-page-toc__inner">
+          <span class="docs-page-toc__title">On this page</span>
+          <ul>
+            <li><a href="#installation" data-toc-link="installation">Installation</a><ul><li><a href="#barrel" data-toc-link="barrel">Barrel</a></li><li><a href="#granular" data-toc-link="granular">Granular</a></li></ul></li>
+            <li><a href="#usage" data-toc-link="usage">Usage</a></li>
+            <li><a href="#composition" data-toc-link="composition">Composition</a></li>
+            <li><a href="#examples" data-toc-link="examples">Examples</a><ul><li><a href="#single-query" data-toc-link="single-query">Single Query</a></li><li><a href="#multiple-queries" data-toc-link="multiple-queries">Multiple Queries</a></li><li><a href="#case-sensitive" data-toc-link="case-sensitive">Case Sensitive</a></li><li><a href="#exact-matching" data-toc-link="exact-matching">Exact Matching</a></li></ul></li>
+            <li><a href="#accessibility" data-toc-link="accessibility">Accessibility</a></li>
+            <li><a href="#api-reference" data-toc-link="api-reference">API Reference</a><ul><li><a href="#highlight-api" data-toc-link="highlight-api">Highlight</a></li><li><a href="#data-slots" data-toc-link="data-slots">Data Slots</a></li><li><a href="#exports" data-toc-link="exports">Exports</a></li></ul></li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+  </div>
+</DocsLayout>

@@ -1,0 +1,83 @@
+---
+import ArkUiDocsLink from "../../../components/ArkUiDocsLink.astro";
+import CodeBlock from "../../../components/CodeBlock.astro";
+import ColorPickerDocsDemo from "../../../components/ColorPickerDocsDemo.vue";
+import CompositionTree from "../../../components/CompositionTree.astro";
+import CopyPageControls from "../../../components/CopyPageControls.vue";
+import DocsPageNavigation from "../../../components/DocsPageNavigation.astro";
+import { barrelCode, dataAttributes, events, exportsList, granularCode, inlineCode, inputCode, parts, rootProps, sizesCode, statesCode, usageCode } from "../../../data/color-picker-docs";
+import DocsLayout from "../../../layouts/DocsLayout.astro";
+import "../../../styles/docs-components.css";
+
+const currentPath = "/docs/components/color-picker";
+const description = "Selects, edits, and submits colors through precise inputs, sliders, and swatches.";
+const examples = [
+  { id: "inline", title: "Inline", description: "Keep the full picker visible when color is a primary task.", variant: "inline", code: inlineCode },
+  { id: "input", title: "Input Only", description: "Use the color model and form value without a popup.", variant: "input", code: inputCode },
+  { id: "sizes", title: "Sizes", description: "Match compact toolbars, standard forms, or larger touch targets.", variant: "sizes", code: sizesCode },
+  { id: "states", title: "States", description: "Disabled, read-only, and invalid states remain distinct.", variant: "states", code: statesCode },
+] as const;
+---
+
+<DocsLayout title="Color Picker" description={description}>
+  <div class="docs-page docs-page--component">
+    <header class="docs-page-header"><div class="docs-page-header__inner"><div class="docs-page-header__content">
+      <div class="docs-page-header__mobile-actions"><CopyPageControls client:only="vue" align="center" /></div>
+      <div class="docs-page-header__title-row"><h1>Color Picker</h1><ArkUiDocsLink /><div class="docs-page-header__navigation-actions"><div class="docs-page-header__desktop-actions"><CopyPageControls client:only="vue" /></div><DocsPageNavigation currentPath={currentPath} variant="compact" /></div></div>
+      <p class="docs-page-header__lede">{description}</p>
+    </div></div></header>
+
+    <div class="docs-page-body">
+      <article class="docs-article docs-article--component">
+        <section id="preview" class="docs-section"><div class="docs-component-example"><div class="docs-component-preview"><ColorPickerDocsDemo client:load variant="preview" /></div><CodeBlock code={usageCode} lang="vue" collapsible revealId="color-picker-preview-code" /></div></section>
+
+        <section id="installation" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#installation">Installation</a></h2>
+          <p>Color Picker is part of Kappa. Ark UI owns the color model, focus, keyboard input, popover behavior, and form value. Kappa owns the visual design and compact size options.</p>
+          <h3 id="barrel"><a class="docs-section-anchor" href="#barrel">Barrel</a></h3><CodeBlock code={barrelCode} lang="javascript" />
+          <h3 id="granular"><a class="docs-section-anchor" href="#granular">Granular</a></h3><CodeBlock code={granularCode} lang="javascript" />
+        </section>
+
+        <section id="usage" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#usage">Usage</a></h2>
+          <p>Use <code>parseColor</code> for initial and controlled values. Add <code>HiddenInput</code> when the value must submit with a form.</p>
+          <div class="docs-component-example"><div class="docs-component-preview"><ColorPickerDocsDemo client:load variant="usage" /></div><CodeBlock code={usageCode} lang="vue" collapsible revealId="color-picker-usage-code" /></div>
+        </section>
+
+        <section id="composition" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#composition">Composition</a></h2>
+          <CompositionTree component="colorPicker" />
+          <ul><li><code>Control</code> groups the channel input and popup trigger.</li><li><code>Area</code> changes two channels. Channel sliders change one channel.</li><li><code>Content</code> includes positioning and teleports to <code>body</code> by default.</li><li><code>SwatchTrigger</code> requires a color value. Nest <code>Swatch</code> and <code>SwatchIndicator</code> inside it.</li></ul>
+        </section>
+
+        <section id="examples" class="docs-section docs-section--component-examples">
+          <h2><a class="docs-section-anchor" href="#examples">Examples</a></h2>
+          {examples.map((example) => <><h3 id={example.id}><a class="docs-section-anchor" href={`#${example.id}`}>{example.title}</a></h3><p>{example.description}</p><div class="docs-component-example"><div class="docs-component-preview"><ColorPickerDocsDemo client:load variant={example.variant} /></div><CodeBlock code={example.code} lang="vue" collapsible revealId={`color-picker-${example.id}-code`} /></div></>)}
+        </section>
+
+        <section id="accessibility" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#accessibility">Accessibility</a></h2>
+          <ul><li>Use <code>Label</code> for the visible accessible name.</li><li>Add an accessible name to every channel input and trigger when visible text does not name it.</li><li>Arrow keys change focused area and slider thumbs. Page keys make larger slider changes.</li><li>Disabled, read-only, invalid, focus-visible, dark, and forced-color states remain distinct.</li><li>The popup restores focus to its trigger after dismissal.</li></ul>
+          <p>See the <a href="https://ark-ui.com/docs/components/color-picker">official Ark UI Color Picker documentation</a> for the complete behavior contract.</p>
+        </section>
+
+        <section id="api-reference" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#api-reference">API Reference</a></h2>
+          <div class="docs-api-group"><h3 id="root-api"><a class="docs-section-anchor" href="#root-api">ColorPicker.Root</a></h3><div class="docs-api-table"><table><thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>{rootProps.map((prop) => <tr><td><code>{prop.name}</code></td><td><code>{prop.type}</code></td><td><code>{prop.defaultValue}</code></td><td>{prop.description}</td></tr>)}</tbody></table></div></div>
+          <div class="docs-api-group"><h3 id="parts-api"><a class="docs-section-anchor" href="#parts-api">Parts</a></h3><div class="docs-api-table"><table><thead><tr><th>Part</th><th>Element</th><th>Description</th></tr></thead><tbody>{parts.map((part) => <tr><td><code>ColorPicker.{part.name}</code></td><td><code>{part.element}</code></td><td>{part.description}</td></tr>)}</tbody></table></div></div>
+          <div class="docs-api-group"><h3 id="events-api"><a class="docs-section-anchor" href="#events-api">Events</a></h3><div class="docs-api-table"><table><thead><tr><th>Event</th><th>Payload</th><th>Description</th></tr></thead><tbody>{events.map((event) => <tr><td><code>{event.name}</code></td><td><code>{event.payload}</code></td><td>{event.description}</td></tr>)}</tbody></table></div></div>
+          <div class="docs-api-group"><h3 id="data-attributes"><a class="docs-section-anchor" href="#data-attributes">Data Attributes</a></h3><div class="docs-api-table"><table><thead><tr><th>Attribute</th><th>Value</th><th>Description</th></tr></thead><tbody>{dataAttributes.map((attribute) => <tr><td><code>{attribute.name}</code></td><td><code>{attribute.value}</code></td><td>{attribute.description}</td></tr>)}</tbody></table></div></div>
+          <div class="docs-api-group"><h3 id="exports"><a class="docs-section-anchor" href="#exports">Exports</a></h3><div class="docs-api-table"><table><thead><tr><th>Export</th><th>Description</th></tr></thead><tbody>{exportsList.map((item) => <tr><td><code>{item.name}</code></td><td>{item.description}</td></tr>)}</tbody></table></div></div>
+        </section>
+        <DocsPageNavigation currentPath={currentPath} />
+      </article>
+      <aside class="docs-page-toc" aria-label="On this page"><div class="docs-page-toc__inner"><span class="docs-page-toc__title">On this page</span><ul>
+        <li><a href="#installation" data-toc-link="installation">Installation</a><ul><li><a href="#barrel" data-toc-link="barrel">Barrel</a></li><li><a href="#granular" data-toc-link="granular">Granular</a></li></ul></li>
+        <li><a href="#usage" data-toc-link="usage">Usage</a></li><li><a href="#composition" data-toc-link="composition">Composition</a></li>
+        <li><a href="#examples" data-toc-link="examples">Examples</a><ul>{examples.map((example) => <li><a href={`#${example.id}`} data-toc-link={example.id}>{example.title}</a></li>)}</ul></li>
+        <li><a href="#accessibility" data-toc-link="accessibility">Accessibility</a></li>
+        <li><a href="#api-reference" data-toc-link="api-reference">API Reference</a><ul><li><a href="#root-api" data-toc-link="root-api">ColorPicker.Root</a></li><li><a href="#parts-api" data-toc-link="parts-api">Parts</a></li><li><a href="#events-api" data-toc-link="events-api">Events</a></li><li><a href="#data-attributes" data-toc-link="data-attributes">Data Attributes</a></li><li><a href="#exports" data-toc-link="exports">Exports</a></li></ul></li>
+      </ul></div></aside>
+    </div>
+  </div>
+</DocsLayout>

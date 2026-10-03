@@ -1,0 +1,126 @@
+.kappa-empty {
+  --kappa-empty-foreground: var(--kappa-default, #17191f);
+  --kappa-empty-muted: var(--kappa-subtle, #6c7480);
+  --kappa-empty-media-background: var(--kappa-tint, #f4f6f9);
+  --kappa-empty-media-border: var(--kappa-line, #e3e6eb);
+  --kappa-empty-media-foreground: var(--kappa-default, #17191f);
+  --kappa-empty-gap: 1.25rem;
+  --kappa-empty-padding-block: 3.5rem;
+  --kappa-empty-padding-inline: 2rem;
+  --kappa-empty-header-gap: 0.5rem;
+  --kappa-empty-title-size: 1rem;
+  --kappa-empty-description-size: 0.8125rem;
+  --kappa-empty-media-size: 2.75rem;
+  --kappa-empty-icon-size: 1.125rem;
+
+  box-sizing: border-box;
+  display: flex;
+  inline-size: 100%;
+  min-inline-size: 0;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--kappa-empty-gap);
+  padding-block: var(--kappa-empty-padding-block);
+  padding-inline: var(--kappa-empty-padding-inline);
+  color: var(--kappa-empty-foreground);
+  font-family: var(--kappa-font-sans, inherit);
+  line-height: 1.4;
+  text-align: center;
+}
+
+.kappa-empty--sm {
+  --kappa-empty-gap: 1rem;
+  --kappa-empty-padding-block: 2rem;
+  --kappa-empty-padding-inline: 1.25rem;
+  --kappa-empty-header-gap: 0.375rem;
+  --kappa-empty-title-size: 0.875rem;
+  --kappa-empty-description-size: 0.75rem;
+  --kappa-empty-media-size: 2.25rem;
+  --kappa-empty-icon-size: 1rem;
+}
+
+.kappa-empty--lg {
+  --kappa-empty-gap: 1.5rem;
+  --kappa-empty-padding-block: 5rem;
+  --kappa-empty-padding-inline: 2.5rem;
+  --kappa-empty-header-gap: 0.625rem;
+  --kappa-empty-title-size: 1.125rem;
+  --kappa-empty-description-size: 0.875rem;
+  --kappa-empty-media-size: 3.25rem;
+  --kappa-empty-icon-size: 1.25rem;
+}
+
+.kappa-empty__header {
+  display: flex;
+  max-inline-size: 32rem;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--kappa-empty-header-gap);
+}
+
+.kappa-empty__media {
+  box-sizing: border-box;
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  color: var(--kappa-empty-media-foreground);
+}
+
+.kappa-empty__media--icon {
+  inline-size: var(--kappa-empty-media-size);
+  block-size: var(--kappa-empty-media-size);
+  border: 1px solid var(--kappa-empty-media-border);
+  border-radius: 0.75rem;
+  background: var(--kappa-empty-media-background);
+}
+
+.kappa-empty__media--icon > svg,
+.kappa-empty__media--icon > [data-icon] {
+  inline-size: var(--kappa-empty-icon-size);
+  block-size: var(--kappa-empty-icon-size);
+  flex: none;
+}
+
+.kappa-empty__media--default > img,
+.kappa-empty__media--default > picture,
+.kappa-empty__media--default > video {
+  display: block;
+  max-inline-size: 100%;
+}
+
+.kappa-empty__title {
+  margin: 0;
+  color: var(--kappa-empty-foreground);
+  font-size: var(--kappa-empty-title-size);
+  font-weight: 600;
+  letter-spacing: -0.008em;
+  line-height: 1.35;
+  text-wrap: balance;
+}
+
+.kappa-empty__description {
+  max-inline-size: 32rem;
+  margin: 0;
+  color: var(--kappa-empty-muted);
+  font-size: var(--kappa-empty-description-size);
+  font-weight: 400;
+  line-height: 1.5;
+  text-wrap: pretty;
+}
+
+.kappa-empty__content {
+  display: flex;
+  max-inline-size: 100%;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+@media (forced-colors: active) {
+  .kappa-empty__media--icon {
+    border-color: CanvasText;
+  }
+}

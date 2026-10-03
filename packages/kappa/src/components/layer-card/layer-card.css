@@ -1,0 +1,112 @@
+.kappa-layer-card {
+  --kappa-layer-card-surface: var(--kappa-control, #ffffff);
+  --kappa-layer-card-elevated: color-mix(
+    in srgb,
+    var(--kappa-control, #ffffff) 72%,
+    var(--kappa-tint, #f4f6f9)
+  );
+  --kappa-layer-card-border: var(--kappa-line, #e3e6eb);
+  --kappa-layer-card-hairline: var(--kappa-hairline, var(--kappa-line, #e3e6eb));
+  --kappa-layer-card-foreground: var(--kappa-default, #17191f);
+  --kappa-layer-card-muted: var(--kappa-subtle, #6c7480);
+  --kappa-layer-card-radius: 0.625rem;
+  --kappa-layer-card-padding: 1rem;
+
+  box-sizing: border-box;
+  display: block;
+  min-inline-size: 0;
+  overflow: hidden;
+  padding: var(--kappa-layer-card-padding);
+  border-radius: var(--kappa-layer-card-radius);
+  background: var(--kappa-layer-card-surface);
+  box-shadow:
+    0 0 0 1px var(--kappa-layer-card-border),
+    var(--kappa-shadow, 0 1px 2px rgba(16, 24, 40, 0.05));
+  color: var(--kappa-layer-card-foreground);
+  font-family: var(--kappa-font-sans, inherit);
+  font-size: 0.875rem;
+  line-height: 1.4;
+  text-align: start;
+  text-decoration: none;
+}
+
+.kappa-layer-card:has(> .kappa-layer-card__primary),
+.kappa-layer-card:has(> .kappa-layer-card__secondary) {
+  display: flex;
+  inline-size: 100%;
+  flex-direction: column;
+  gap: 0;
+  padding: 0;
+  background: var(--kappa-layer-card-elevated);
+  box-shadow: 0 0 0 1px var(--kappa-layer-card-hairline);
+}
+
+.kappa-layer-card__secondary {
+  box-sizing: border-box;
+  display: flex;
+  min-block-size: 2.25rem;
+  min-inline-size: 0;
+  align-items: center;
+  gap: 0.5rem;
+  padding-block: 0.5rem;
+  padding-inline: 1rem;
+  background: var(--kappa-layer-card-elevated);
+  color: var(--kappa-layer-card-muted);
+  font-family: var(--kappa-font-sans, inherit);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  line-height: 1.25rem;
+  overflow-wrap: anywhere;
+}
+
+.kappa-layer-card__primary {
+  box-sizing: border-box;
+  position: relative;
+  display: flex;
+  min-inline-size: 0;
+  flex-direction: column;
+  gap: 0.5rem;
+  overflow: hidden;
+  padding-block: 0.875rem 1rem;
+  padding-inline: 1rem;
+  border-radius: 0;
+  background: var(--kappa-layer-card-surface);
+  box-shadow:
+    0 0 0 1px var(--kappa-layer-card-border),
+    var(--kappa-shadow, 0 1px 2px rgba(16, 24, 40, 0.05));
+  color: var(--kappa-layer-card-foreground);
+  font-family: var(--kappa-font-sans, inherit);
+  font-size: 0.875rem;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+  text-decoration: none;
+}
+
+.kappa-layer-card:is(a):hover,
+.kappa-layer-card__primary:is(a):hover {
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--kappa-focus, #4c63ff) 32%, var(--kappa-layer-card-border)),
+    var(--kappa-shadow, 0 1px 2px rgba(16, 24, 40, 0.05));
+}
+
+.kappa-layer-card:is(a):focus-visible,
+.kappa-layer-card__primary:is(a):focus-visible {
+  z-index: 1;
+  outline: 2px solid var(--kappa-focus, #4c63ff);
+  outline-offset: -3px;
+  box-shadow:
+    0 0 0 1px var(--kappa-focus, #4c63ff),
+    0 0 0 4px var(--kappa-focus-soft, rgba(76, 99, 255, 0.16));
+}
+
+@media (forced-colors: active) {
+  .kappa-layer-card,
+  .kappa-layer-card__primary {
+    box-shadow: 0 0 0 1px CanvasText;
+  }
+
+  .kappa-layer-card:is(a):focus-visible,
+  .kappa-layer-card__primary:is(a):focus-visible {
+    outline-color: Highlight;
+  }
+}

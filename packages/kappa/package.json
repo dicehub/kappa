@@ -1,0 +1,164 @@
+{
+  "name": "@dicehub/kappa",
+  "version": "0.4.0",
+  "description": "Vue components and application blocks for dicehub products.",
+  "license": "MIT",
+  "type": "module",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist",
+    "CHANGELOG.md",
+    "LICENSE",
+    "licenses",
+    "README.md",
+    "THIRD_PARTY_NOTICES.md"
+  ],
+  "sideEffects": [
+    "**/*.css"
+  ],
+  "engines": {
+    "node": ">=24.19.0 <25"
+  },
+  "publishConfig": {
+    "access": "restricted",
+    "registry": "https://gitlab.dicehub.org/api/v4/projects/394/packages/npm/"
+  },
+  "scripts": {
+    "build": "pnpm run codegen:registry && pnpm run codegen:themes && vite build && pnpm run codegen:licenses && pnpm run check:theme-build",
+    "benchmark:data-grid": "node scripts/benchmark-data-grid.mjs",
+    "benchmark:virtual-tree": "node scripts/benchmark-virtual-tree.mjs",
+    "check:registry": "node scripts/component-registry/index.mjs --check",
+    "check:themes": "node scripts/theme-generator/index.mjs --check",
+    "check:theme-build": "node scripts/check-theme-build.mjs",
+    "codegen:licenses": "node scripts/generate-third-party-notices.mjs",
+    "codegen:registry": "node scripts/component-registry/index.mjs",
+    "codegen:themes": "node scripts/theme-generator/index.mjs",
+    "test": "node --test \"src/**/*.test.mjs\" \"scripts/*.test.mjs\"",
+    "typecheck": "pnpm run check:registry && pnpm run check:themes && vue-tsc --noEmit",
+    "validate:package": "node scripts/validate-package.mjs"
+  },
+  "dependencies": {
+    "@ark-ui/vue": "5.39.2",
+    "@tanstack/vue-table": "9.2.4",
+    "@tanstack/vue-virtual": "3.13.39",
+    "@types/geojson": "7946.0.16"
+  },
+  "peerDependencies": {
+    "@shikijs/langs": "^4.4.3",
+    "@shikijs/themes": "^4.4.3",
+    "echarts": "^6.1.0",
+    "maplibre-gl": "^6.11.2",
+    "shiki": "^4.4.3",
+    "uplot": "^1.6.32",
+    "vue": "^3.5.0"
+  },
+  "peerDependenciesMeta": {
+    "@shikijs/langs": {
+      "optional": true
+    },
+    "@shikijs/themes": {
+      "optional": true
+    },
+    "echarts": {
+      "optional": true
+    },
+    "maplibre-gl": {
+      "optional": true
+    },
+    "shiki": {
+      "optional": true
+    },
+    "uplot": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@floating-ui/dom": "1.8.0",
+    "@floating-ui/utils": "0.2.12",
+    "@internationalized/date": "3.12.3",
+    "@shikijs/langs": "4.4.3",
+    "@shikijs/themes": "4.4.3",
+    "@types/node": "24.13.3",
+    "@vitejs/plugin-vue": "6.0.8",
+    "@vue/language-core": "3.3.11",
+    "@zag-js/clipboard": "1.43.3",
+    "@zag-js/combobox": "1.43.3",
+    "@zag-js/date-picker": "1.43.3",
+    "@zag-js/drawer": "1.43.3",
+    "@zag-js/editable": "1.43.3",
+    "@zag-js/file-upload": "1.43.3",
+    "@zag-js/i18n-utils": "1.43.3",
+    "@zag-js/listbox": "1.43.3",
+    "@zag-js/menu": "1.43.3",
+    "@zag-js/number-input": "1.43.3",
+    "@zag-js/pagination": "1.43.3",
+    "@zag-js/pin-input": "1.43.3",
+    "@zag-js/popover": "1.43.3",
+    "@zag-js/popper": "1.43.3",
+    "@zag-js/progress": "1.43.3",
+    "@zag-js/qr-code": "1.43.3",
+    "@zag-js/rating-group": "1.43.3",
+    "@zag-js/rect-utils": "1.43.3",
+    "@zag-js/select": "1.43.3",
+    "@zag-js/slider": "1.43.3",
+    "@zag-js/splitter": "1.43.3",
+    "@zag-js/steps": "1.43.3",
+    "@zag-js/tabs": "1.43.3",
+    "@zag-js/tags-input": "1.43.3",
+    "@zag-js/timer": "1.43.3",
+    "@zag-js/tree-view": "1.43.3",
+    "@zag-js/types": "1.43.3",
+    "@zag-js/vue": "1.43.3",
+    "csstype": "3.2.3",
+    "echarts": "6.1.0",
+    "maplibre-gl": "6.11.2",
+    "shiki": "4.4.3",
+    "typescript": "5.9.3",
+    "unplugin-dts": "1.1.0",
+    "uplot": "1.6.32",
+    "vite": "8.2.1",
+    "vue": "3.5.32",
+    "vue-tsc": "3.3.3"
+  },
+  "exports": {
+    ".": {
+      "kappa-source": "./src/index.ts",
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./blocks/*": {
+      "kappa-source": "./src/blocks/*/index.ts",
+      "types": "./dist/blocks/*/index.d.ts",
+      "import": "./dist/blocks/*.js"
+    },
+    "./components/toast/store": {
+      "kappa-source": "./src/components/toast/store.ts",
+      "types": "./dist/components/toast/store.d.ts",
+      "import": "./dist/components/toast/store.js"
+    },
+    "./components/*": {
+      "kappa-source": "./src/components/*/index.ts",
+      "types": "./dist/components/*/index.d.ts",
+      "import": "./dist/components/*.js"
+    },
+    "./registry": {
+      "kappa-source": "./src/registry/index.ts",
+      "types": "./dist/registry/index.d.ts",
+      "import": "./dist/registry.js"
+    },
+    "./registry/component-registry.json": {
+      "kappa-source": "./src/registry/component-registry.json",
+      "default": "./dist/registry/component-registry.json"
+    },
+    "./styles/kappa.css": "./dist/styles/kappa.css",
+    "./styles/theme-kappa.css": {
+      "kappa-source": "./src/styles/theme-kappa.css",
+      "default": "./dist/styles/theme-kappa.css"
+    },
+    "./styles/tokens.json": {
+      "kappa-source": "./src/styles/tokens.json",
+      "default": "./dist/styles/tokens.json"
+    }
+  }
+}

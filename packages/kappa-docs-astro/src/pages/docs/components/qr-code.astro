@@ -1,0 +1,193 @@
+---
+import ArkUiDocsLink from "../../../components/ArkUiDocsLink.astro";
+import CodeBlock from "../../../components/CodeBlock.astro";
+import CompositionTree from "../../../components/CompositionTree.astro";
+import CopyPageControls from "../../../components/CopyPageControls.vue";
+import DocsPageNavigation from "../../../components/DocsPageNavigation.astro";
+import QrCodeDocsDemo from "../../../components/QrCodeDocsDemo.vue";
+import {
+  barrelCode,
+  controlledCode,
+  downloadCode,
+  downloadProps,
+  events,
+  exportsList,
+  granularCode,
+  overlayCode,
+  parts,
+  previewCode,
+  rootProps,
+  usageCode,
+} from "../../../data/qr-code-docs";
+import DocsLayout from "../../../layouts/DocsLayout.astro";
+import "../../../styles/docs-components.css";
+
+const currentPath = "/docs/components/qr-code";
+const description = "Generates accessible, customizable QR codes from reactive text values.";
+---
+
+<DocsLayout title="QR Code" description={description}>
+  <div class="docs-page docs-page--component">
+    <header class="docs-page-header">
+      <div class="docs-page-header__inner">
+        <div class="docs-page-header__content">
+          <div class="docs-page-header__mobile-actions">
+            <CopyPageControls client:only="vue" align="center" />
+          </div>
+          <div class="docs-page-header__title-row">
+            <h1>QR Code</h1>
+            <ArkUiDocsLink href="https://ark-ui.com/docs/components/qr-code" />
+            <div class="docs-page-header__navigation-actions">
+              <div class="docs-page-header__desktop-actions">
+                <CopyPageControls client:only="vue" />
+              </div>
+              <DocsPageNavigation currentPath={currentPath} variant="compact" />
+            </div>
+          </div>
+          <p class="docs-page-header__lede">{description}</p>
+        </div>
+      </div>
+    </header>
+
+    <div class="docs-page-body">
+      <article class="docs-article docs-article--component">
+        <section id="preview" class="docs-section">
+          <div class="docs-component-example">
+            <div class="docs-component-preview">
+              <QrCodeDocsDemo client:load variant="preview" />
+            </div>
+            <CodeBlock code={previewCode} lang="vue" collapsible revealId="qr-code-preview-code" />
+          </div>
+        </section>
+
+        <section id="installation" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#installation">Installation</a></h2>
+          <p>QR Code is part of the main Kappa package and uses Ark UI's reactive generator.</p>
+          <h3 id="barrel"><a class="docs-section-anchor" href="#barrel">Barrel</a></h3>
+          <CodeBlock code={barrelCode} lang="javascript" />
+          <h3 id="granular"><a class="docs-section-anchor" href="#granular">Granular</a></h3>
+          <CodeBlock code={granularCode} lang="javascript" />
+        </section>
+
+        <section id="usage" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#usage">Usage</a></h2>
+          <p>Compose the generated pattern inside a labelled SVG frame.</p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><QrCodeDocsDemo client:load variant="usage" /></div>
+            <CodeBlock code={usageCode} lang="vue" collapsible revealId="qr-code-usage-code" />
+          </div>
+        </section>
+
+        <section id="composition" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#composition">Composition</a></h2>
+          <CompositionTree component="qrCode" />
+          <p>
+            Root owns generation state. Frame and Pattern render the SVG. Overlay and
+            DownloadTrigger are optional. Context exposes the current value and helpers.
+          </p>
+          <h3 id="reference-behavior">
+            <a class="docs-section-anchor" href="#reference-behavior">Reference Behavior</a>
+          </h3>
+          <p>
+            Kappa follows Ark UI QR Code for encoding, reactive values, context, and image downloads.
+            Kappa defaults <code>encoding.border</code> to four modules in both Root and
+            <code>useQrCode</code>, rather than Ark's one-module default. This clear border is
+            encoded into the SVG and survives resizing and downloads. Explicit encoding values
+            are preserved; do not reduce the border below four modules for production codes.
+          </p>
+          <p>
+            Frame includes an SVG background so exported images are opaque. Pattern carries a
+            foreground fill for export. Without page CSS, downloads use the white and dark
+            fallback colors. With <code>Frame as-child</code>, include a background rectangle in
+            your custom SVG. RootProvider uses the supplied machine unchanged; create it with
+            Kappa's <code>useQrCode</code> to get the same border default.
+          </p>
+        </section>
+
+        <section id="examples" class="docs-section docs-section--component-examples">
+          <h2><a class="docs-section-anchor" href="#examples">Examples</a></h2>
+
+          <h3 id="controlled"><a class="docs-section-anchor" href="#controlled">Controlled</a></h3>
+          <p>Bind the destination with <code>v-model</code>, or change it through Context.</p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><QrCodeDocsDemo client:load variant="controlled" /></div>
+            <CodeBlock code={controlledCode} lang="vue" collapsible revealId="qr-code-controlled-code" />
+          </div>
+
+          <h3 id="overlay"><a class="docs-section-anchor" href="#overlay">Overlay</a></h3>
+          <p>
+            Use <code>{`:encoding="{ ecc: 'H' }"`}</code> for a small central mark. High error correction
+            reduces the risk from covered modules; it does not guarantee that an arbitrary logo
+            will scan. Keep the overlay small and test the final image.
+          </p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><QrCodeDocsDemo client:load variant="overlay" /></div>
+            <CodeBlock code={overlayCode} lang="vue" collapsible revealId="qr-code-overlay-code" />
+          </div>
+
+          <h3 id="download"><a class="docs-section-anchor" href="#download">Download</a></h3>
+          <p>
+            Export the current code as PNG, JPEG, or WebP. The encoded clear border and SVG
+            background remain in the downloaded image. Ark exports image or SVG overlays, not
+            arbitrary HTML or text overlays. Test the downloaded file as well as the displayed code.
+          </p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><QrCodeDocsDemo client:load variant="download" /></div>
+            <CodeBlock code={downloadCode} lang="vue" collapsible revealId="qr-code-download-code" />
+          </div>
+        </section>
+
+        <section id="accessibility" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#accessibility">Accessibility</a></h2>
+          <ul>
+            <li>Give Frame <code>role="img"</code> and an accessible label that describes the destination.</li>
+            <li>Show the destination as readable text when users must verify it before scanning.</li>
+            <li>Keep strong foreground and background contrast. Do not invert the pattern in dark mode.</li>
+            <li>Keep at least four clear modules on each side, including in exported images.</li>
+            <li>Keep overlays small and test generated codes with more than one scanner.</li>
+          </ul>
+        </section>
+
+        <section id="api-reference" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#api-reference">API Reference</a></h2>
+          <div class="docs-api-group">
+            <h3 id="root-api"><a class="docs-section-anchor" href="#root-api">QrCode.Root</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>{rootProps.map((prop) => <tr><td><code>{prop.name}</code></td><td><code>{prop.type}</code></td><td><code>{prop.defaultValue}</code></td><td>{prop.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="download-api"><a class="docs-section-anchor" href="#download-api">QrCode.DownloadTrigger</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>{downloadProps.map((prop) => <tr><td><code>{prop.name}</code></td><td><code>{prop.type}</code></td><td><code>{prop.defaultValue}</code></td><td>{prop.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="parts"><a class="docs-section-anchor" href="#parts">Parts</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Part</th><th>Element</th><th>Description</th></tr></thead><tbody>{parts.map((part) => <tr><td><code>{part.name}</code></td><td><code>{part.element}</code></td><td>{part.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="events"><a class="docs-section-anchor" href="#events">Events</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Event</th><th>Payload</th><th>Description</th></tr></thead><tbody>{events.map((event) => <tr><td><code>{event.name}</code></td><td><code>{event.payload}</code></td><td>{event.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="exports"><a class="docs-section-anchor" href="#exports">Exports</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Export</th><th>Description</th></tr></thead><tbody>{exportsList.map((item) => <tr><td><code>{item.name}</code></td><td>{item.description}</td></tr>)}</tbody></table></div>
+          </div>
+        </section>
+
+        <DocsPageNavigation currentPath={currentPath} />
+      </article>
+
+      <aside class="docs-page-toc" aria-label="On this page">
+        <div class="docs-page-toc__inner">
+          <span class="docs-page-toc__title">On this page</span>
+          <ul>
+            <li><a href="#installation" data-toc-link="installation">Installation</a><ul><li><a href="#barrel" data-toc-link="barrel">Barrel</a></li><li><a href="#granular" data-toc-link="granular">Granular</a></li></ul></li>
+            <li><a href="#usage" data-toc-link="usage">Usage</a></li>
+            <li><a href="#composition" data-toc-link="composition">Composition</a><ul><li><a href="#reference-behavior" data-toc-link="reference-behavior">Reference Behavior</a></li></ul></li>
+            <li><a href="#examples" data-toc-link="examples">Examples</a><ul><li><a href="#controlled" data-toc-link="controlled">Controlled</a></li><li><a href="#overlay" data-toc-link="overlay">Overlay</a></li><li><a href="#download" data-toc-link="download">Download</a></li></ul></li>
+            <li><a href="#accessibility" data-toc-link="accessibility">Accessibility</a></li>
+            <li><a href="#api-reference" data-toc-link="api-reference">API Reference</a><ul><li><a href="#root-api" data-toc-link="root-api">QrCode.Root</a></li><li><a href="#download-api" data-toc-link="download-api">QrCode.DownloadTrigger</a></li><li><a href="#parts" data-toc-link="parts">Parts</a></li><li><a href="#events" data-toc-link="events">Events</a></li><li><a href="#exports" data-toc-link="exports">Exports</a></li></ul></li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+  </div>
+</DocsLayout>

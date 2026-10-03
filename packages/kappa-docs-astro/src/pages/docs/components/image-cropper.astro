@@ -1,0 +1,65 @@
+---
+import CodeBlock from "../../../components/CodeBlock.astro";
+import CopyPageControls from "../../../components/CopyPageControls.vue";
+import DocsPageNavigation from "../../../components/DocsPageNavigation.astro";
+import ImageCropperDocsDemo from "../../../components/ImageCropperDocsDemo.vue";
+import { previewCode, examples } from "../../../data/image-cropper-docs";
+import DocsLayout from "../../../layouts/DocsLayout.astro";
+import "../../../styles/docs-components.css";
+const currentPath = "/docs/components/image-cropper";
+const description = "Crop local images with a movable, resizable selection. Keep a fixed ratio or resize freely, then preview and export in the browser.";
+---
+
+<DocsLayout title="Image Cropper" description={description}>
+  <div class="docs-page docs-page--component">
+    <header class="docs-page-header"><div class="docs-page-header__inner"><div class="docs-page-header__content">
+      <div class="docs-page-header__title-row"><h1>Image Cropper</h1><div class="docs-page-header__navigation-actions"><CopyPageControls client:only="vue" /><DocsPageNavigation currentPath={currentPath} variant="compact" /></div></div>
+      <p class="docs-page-header__lede">{description}</p>
+    </div></div></header>
+    <div class="docs-page-body">
+      <article class="docs-article docs-article--component">
+        <section id="preview" class="docs-section"><div class="docs-component-example"><div class="docs-component-preview"><ImageCropperDocsDemo client:load /></div><CodeBlock code={previewCode} lang="vue" /></div></section>
+        <section id="installation" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#installation">Installation</a></h2>
+          <CodeBlock code={'import { ImageCropper } from "@dicehub/kappa";\n// Or: "@dicehub/kappa/components/image-cropper"'} lang="typescript" />
+          <p>Import <code>@dicehub/kappa/styles/theme-kappa.css</code> once in your application. Component imports include only the required component styles.</p>
+        </section>
+        <section id="composition" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#composition">Composition</a></h2>
+          <p>Kappa composes <a href="https://ark-ui.com/docs/components/image-cropper">Ark UI Image Cropper</a> with Kappa Slider and Button. Ark owns selection limits, resize gestures, focus semantics, and keyboard controls. Kappa keeps the image fixed and adds image loading, a live preview, lifecycle cleanup, and a smaller application API.</p>
+          <p>The crop frame stays inside the image and can move without moving the source. Eight handles resize it. Numeric ratios preserve their proportions; <code>aspect-ratio="free"</code> allows independent width and height. The viewport follows the source ratio so that wide and tall images keep their proportions. Kappa calculates rectangular exports from fractional viewport coordinates. The preview uses the same crop. Use Avatar or application CSS to display the result as a circle.</p>
+          <p>Compose File Upload outside the cropper for file choice, type checks, and file-size limits. The demo allows images up to 10 MB. The component does not select files, call an upload service, or depend on an application store.</p>
+        </section>
+        <section id="examples" class="docs-section docs-section--component-examples">
+          <h2><a class="docs-section-anchor" href="#examples">Examples</a></h2>
+          {examples.map(example => <Fragment><h3 id={example.id}><a class="docs-section-anchor" href={`#${example.id}`}>{example.title}</a></h3><p>{example.description}</p><div class="docs-component-example"><div class="docs-component-preview"><ImageCropperDocsDemo client:load variant={example.id} /></div><CodeBlock code={example.code} lang="vue" /></div></Fragment>)}
+        </section>
+        <section id="accessibility" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#accessibility">Accessibility</a></h2>
+          <p>Tab reaches the crop selection, zoom slider, and reset button. On the selection, arrow keys move the crop; Alt plus an arrow resizes its bottom or right edge. Shift increases the step to 10 pixels and Control or Command increases it to 50 pixels. Plus and minus zoom. The zoom slider uses Ark UI keyboard controls, including Home, End, and Page Up or Page Down.</p>
+          <p>The selection has a visible focus ring and reports its original-image coordinates to assistive tools. Pointer and touch input can move or resize the crop. The viewport captures the wheel for zoom. Read-only mode keeps the selection focusable. Disabled mode removes the editing controls from the tab order. Reduced-motion mode removes grid transitions.</p>
+          <p>Set <code>labels</code> to localize the visible labels and instructions. Native attributes, ARIA attributes, and listeners reach the outer root. Use <code>labels.region</code> and <code>labels.selection</code> to name the interactive regions.</p>
+        </section>
+        <section id="api-reference" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#api-reference">API reference</a></h2>
+          <p><code>src?: string | Blob | null</code> accepts a URL, File, or Blob; null clears the image. <code>aspectRatio?: number | "free"</code> defaults to 1. Positive numbers lock the crop ratio; free enables independent edge and corner resizing. Invalid ratios use 1. <code>maxZoom</code> defaults to 5 and is clamped from 1 to 20. <code>showPreview</code> defaults to true. <code>disabled</code> and <code>readOnly</code> default to false. <code>crossOrigin</code> defaults to anonymous and also accepts use-credentials.</p>
+          <p><code>labels</code> accepts any of: region, selection, instructions, zoom, reset, preview, empty, loading, and error. The root exposes <code>data-state="empty | loading | ready | error"</code>, <code>data-disabled</code>, and <code>data-readonly</code>.</p>
+          <p><code>change</code> reports <code>{'{ x, y, width, height, zoom, naturalWidth, naturalHeight }'}</code>. Coordinates refer to the original image pixels and can be fractional. <code>load</code> reports the decoded width and height; the editor then measures the crop. <code>statusChange</code> reports source status. <code>error</code> reports <code>{'{ phase: "load" | "export", error: Error }'}</code>.</p>
+          <p>The template ref implements <code>ImageCropperApi</code>: <code>reset()</code> restores the centered crop at 100%; <code>setZoom(number)</code> respects limits; <code>getCrop()</code> returns the crop or null; and <code>exportBlob(options?)</code> returns <code>Promise&lt;Blob&gt;</code>. Disabled and read-only states block reset and zoom. Read-only export remains available.</p>
+          <p>Export options are <code>type</code> (image/png, image/jpeg, or image/webp), <code>quality</code> (0–1; default 0.92), and <code>maxSize</code> (width and height; default 2048 × 2048). Output is scaled down proportionally, with no upscale. Each dimension must be from 1 to 8192 pixels. The browser may fall back to PNG for an unsupported encoder; check <code>blob.type</code>.</p>
+          <p>Public types include ImageCropperProps, ImageCropperSource, ImageCropperStatus, ImageCropperCrop, ImageCropperApi, ImageCropperLabels, ImageCropperEmits, ImageCropperErrorDetails, and ImageCropperExportOptions. The root and granular imports expose the same API. The package export wildcard covers the component subpath.</p>
+        </section>
+        <section id="lifecycle" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#lifecycle">Loading, disposal, and export</a></h2>
+          <p>The source loads in the browser after mount. A source change clears the previous crop and resets its position and zoom. Superseded load callbacks are ignored. URLs made from Blob sources are revoked on replacement or unmount; URLs supplied by the application remain application-owned.</p>
+          <p>Export rejects while the editor is unavailable, if a canvas cannot encode the result, or if the source changes during export. A source replacement or unmount rejects an active export with AbortError. Catch export errors in the application. If you make a URL with URL.createObjectURL for the returned Blob, revoke it when your preview or download is no longer needed.</p>
+          <p>Remote image hosts must allow cross-origin image access. A denied CORS request shows the error state. This version produces rectangular raster exports; rotation, flip, and animated output are not part of the Kappa API.</p>
+        </section>
+        <DocsPageNavigation currentPath={currentPath} />
+      </article>
+      <aside class="docs-page-toc" aria-label="On this page"><div class="docs-page-toc__inner"><span class="docs-page-toc__title">On this page</span><ul>
+        <li><a href="#installation" data-toc-link="installation">Installation</a></li><li><a href="#composition" data-toc-link="composition">Composition</a></li><li><a href="#examples" data-toc-link="examples">Examples</a></li><li><a href="#accessibility" data-toc-link="accessibility">Accessibility</a></li><li><a href="#api-reference" data-toc-link="api-reference">API reference</a></li><li><a href="#lifecycle" data-toc-link="lifecycle">Loading, disposal, and export</a></li>
+      </ul></div></aside>
+    </div>
+  </div>
+</DocsLayout>

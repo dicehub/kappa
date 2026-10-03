@@ -1,0 +1,72 @@
+---
+import CodeBlock from "../../../components/CodeBlock.astro";
+import CopyPageControls from "../../../components/CopyPageControls.vue";
+import DocsPageNavigation from "../../../components/DocsPageNavigation.astro";
+import ContentLoaderDocsDemo from "../../../components/ContentLoaderDocsDemo.vue";
+import { previewCode, examples } from "../../../data/content-loader-docs";
+import DocsLayout from "../../../layouts/DocsLayout.astro";
+import "../../../styles/docs-components.css";
+const currentPath = "/docs/components/content-loader";
+const description = "Show loading, empty, error, or ready content in the same region.";
+---
+
+<DocsLayout title="Content Loader" description={description}>
+  <div class="docs-page docs-page--component">
+    <header class="docs-page-header"><div class="docs-page-header__inner"><div class="docs-page-header__content">
+      <div class="docs-page-header__title-row"><h1>Content Loader</h1><div class="docs-page-header__navigation-actions"><CopyPageControls client:only="vue" /><DocsPageNavigation currentPath={currentPath} variant="compact" /></div></div>
+      <p class="docs-page-header__lede">{description}</p>
+    </div></div></header>
+    <div class="docs-page-body">
+      <article class="docs-article docs-article--component">
+        <section id="preview" class="docs-section">
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><ContentLoaderDocsDemo client:load /></div>
+            <CodeBlock code={previewCode} lang="vue" collapsible revealId="content-loader-preview-code" />
+          </div>
+        </section>
+        <section id="installation" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#installation">Installation</a></h2>
+          <CodeBlock code={'import { ContentLoader } from "@dicehub/kappa";\n// Or: "@dicehub/kappa/components/content-loader"'} lang="typescript" />
+        </section>
+        <section id="composition" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#composition">Composition</a></h2>
+          <p>Content Loader composes Kappa Loader, Empty, and Button. The application sets one state and owns data requests, cancellation, and retries. The component does not fetch data or infer whether a response is empty.</p>
+          <p>The default slot renders only in the ready state. With <code>keep-mounted</code>, content mounts on the first ready state and remains hidden during later loading, empty, or error states. Controls inside that hidden region cannot receive keyboard focus. Close any open dialogs or dropdowns before changing state: their portalled content lives outside the hidden region. Avoid this option when keeping a large view mounted is expensive.</p>
+        </section>
+        <section id="examples" class="docs-section docs-section--component-examples">
+          <h2><a class="docs-section-anchor" href="#examples">Examples</a></h2>
+          {examples.map(example => <Fragment>
+            <h3 id={example.id}><a class="docs-section-anchor" href={`#${example.id}`}>{example.title}</a></h3>
+            <p>{example.description}</p>
+            <div class="docs-component-example">
+              <div class="docs-component-preview"><ContentLoaderDocsDemo client:load variant={example.id} /></div>
+              <CodeBlock code={example.code} lang="vue" collapsible revealId={`content-loader-${example.id}-code`} />
+            </div>
+          </Fragment>)}
+        </section>
+        <section id="accessibility" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#accessibility">Accessibility</a></h2>
+          <p>The content region exposes <code>aria-busy</code> while loading. A separate, persistent status region announces the current state without moving focus. Default labels can be translated with props. Custom slots reuse these announcements; avoid a second live region with the same message.</p>
+          <p>When a refresh removes a focused control, the application should move focus to a stable control. Loader respects reduced-motion preferences. Empty and error states use no animation.</p>
+        </section>
+        <section id="api-reference" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#api-reference">API Reference</a></h2>
+          <p><code>state</code>: <code>ready | loading | empty | error</code>, default <code>ready</code>. <code>compact</code>, <code>keepMounted</code>, and <code>retryable</code> default to false. Native attributes and listeners reach the root.</p>
+          <p>Text props: <code>loadingLabel</code> (“Loading…”), <code>emptyTitle</code> (“No results”), <code>emptyDescription</code> (“There is no content to show.”), <code>errorTitle</code> (“Unable to load content”), <code>errorDescription</code> (“Try again in a moment.”), and <code>retryLabel</code> (“Try again”).</p>
+          <p>Slots: default (ready content), <code>loading</code>, <code>empty</code>, and <code>error</code>. The error slot receives <code>retry()</code>, which emits the <code>retry</code> event. The default retry button appears only with <code>retryable</code>. Set the next state in the application handler.</p>
+          <p>Set <code>--kappa-content-loader-min-height</code> to reserve placeholder space. The default is 10rem, or 6rem with compact spacing. Ready content uses its natural height.</p>
+          <p>Exports: <code>ContentLoader</code>, <code>ContentLoaderProps</code>, <code>ContentLoaderState</code>, <code>ContentLoaderSlots</code>, <code>ContentLoaderEmits</code>, and <code>CONTENT_LOADER_STATES</code>.</p>
+        </section>
+        <DocsPageNavigation currentPath={currentPath} />
+      </article>
+      <aside class="docs-page-toc" aria-label="On this page"><div class="docs-page-toc__inner"><span class="docs-page-toc__title">On this page</span><ul>
+        <li><a href="#installation" data-toc-link="installation">Installation</a></li>
+        <li><a href="#composition" data-toc-link="composition">Composition</a></li>
+        <li><a href="#examples" data-toc-link="examples">Examples</a></li>
+        {examples.map(example => <li><a href={`#${example.id}`} data-toc-link={example.id}>{example.title}</a></li>)}
+        <li><a href="#accessibility" data-toc-link="accessibility">Accessibility</a></li>
+        <li><a href="#api-reference" data-toc-link="api-reference">API Reference</a></li>
+      </ul></div></aside>
+    </div>
+  </div>
+</DocsLayout>

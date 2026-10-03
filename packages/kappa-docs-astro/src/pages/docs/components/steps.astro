@@ -1,0 +1,178 @@
+---
+import ArkUiDocsLink from "../../../components/ArkUiDocsLink.astro";
+import CodeBlock from "../../../components/CodeBlock.astro";
+import CompositionTree from "../../../components/CompositionTree.astro";
+import CopyPageControls from "../../../components/CopyPageControls.vue";
+import DocsPageNavigation from "../../../components/DocsPageNavigation.astro";
+import StepsDocsDemo from "../../../components/StepsDocsDemo.vue";
+import {
+  barrelCode,
+  compositionCode,
+  correspondence,
+  events,
+  examples,
+  exportsList,
+  granularCode,
+  itemProps,
+  listProps,
+  parts,
+  previewCode,
+  rootProps,
+  usageCode,
+} from "../../../data/steps-docs";
+import DocsLayout from "../../../layouts/DocsLayout.astro";
+import "../../../styles/docs-components.css";
+
+const currentPath = "/docs/components/steps";
+const description = "Shows progress through an ordered process and controls movement between its stages.";
+---
+
+<DocsLayout title="Steps" description={description}>
+  <div class="docs-page docs-page--component">
+    <header class="docs-page-header">
+      <div class="docs-page-header__inner">
+        <div class="docs-page-header__content">
+          <div class="docs-page-header__mobile-actions">
+            <CopyPageControls client:only="vue" align="center" />
+          </div>
+          <div class="docs-page-header__title-row">
+            <h1>Steps</h1>
+            <ArkUiDocsLink />
+            <div class="docs-page-header__navigation-actions">
+              <div class="docs-page-header__desktop-actions"><CopyPageControls client:only="vue" /></div>
+              <DocsPageNavigation currentPath={currentPath} variant="compact" />
+            </div>
+          </div>
+          <p class="docs-page-header__lede">{description}</p>
+        </div>
+      </div>
+    </header>
+
+    <div class="docs-page-body">
+      <article class="docs-article docs-article--component">
+        <section id="preview" class="docs-section">
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><StepsDocsDemo client:only="vue" variant="preview" /></div>
+            <CodeBlock code={previewCode} lang="vue" collapsible revealId="steps-preview-code" />
+          </div>
+        </section>
+
+        <section id="installation" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#installation">Installation</a></h2>
+          <h3 id="barrel"><a class="docs-section-anchor" href="#barrel">Barrel</a></h3>
+          <CodeBlock code={barrelCode} lang="javascript" />
+          <h3 id="granular"><a class="docs-section-anchor" href="#granular">Granular</a></h3>
+          <CodeBlock code={granularCode} lang="javascript" />
+        </section>
+
+        <section id="usage" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#usage">Usage</a></h2>
+          <p>
+            Give each item and content panel the same zero-based index. Set <code>count</code> to the number of
+            items. The completion state starts when <code>step</code> equals <code>count</code>.
+          </p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><StepsDocsDemo client:only="vue" variant="usage" /></div>
+            <CodeBlock code={usageCode} lang="vue" collapsible revealId="steps-usage-code" />
+          </div>
+        </section>
+
+        <section id="composition" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#composition">Composition</a></h2>
+          <CompositionTree component="steps" />
+          <p>
+            Place each trigger, indicator, and separator inside its item. Every enabled item needs a matching
+            content panel. The indicator slot exposes its item state for custom complete and current markers.
+          </p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><StepsDocsDemo client:only="vue" variant="composition" /></div>
+            <CodeBlock code={compositionCode} lang="vue" collapsible revealId="steps-composition-code" />
+          </div>
+        </section>
+
+        <section id="examples" class="docs-section docs-section--component-examples">
+          <h2><a class="docs-section-anchor" href="#examples">Examples</a></h2>
+          {examples.map((example) => (
+            <>
+              <h3 id={example.id}><a class="docs-section-anchor" href={`#${example.id}`}>{example.title}</a></h3>
+              <p>{example.description}</p>
+              <div class="docs-component-example">
+                <div class="docs-component-preview"><StepsDocsDemo client:only="vue" variant={example.variant} /></div>
+                <CodeBlock code={example.code} lang="vue" collapsible revealId={`steps-${example.id}-code`} />
+              </div>
+            </>
+          ))}
+        </section>
+
+        <section id="correspondence" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#correspondence">Correspondence</a></h2>
+          <div class="docs-api-table">
+            <table>
+              <thead><tr><th>Reference</th><th>Corresponding component</th><th>Role in Kappa</th></tr></thead>
+              <tbody>{correspondence.map((item) => <tr><td>{item.reference}</td><td><code>{item.component}</code></td><td>{item.role}</td></tr>)}</tbody>
+            </table>
+          </div>
+        </section>
+
+        <section id="accessibility" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#accessibility">Accessibility</a></h2>
+          <ul>
+            <li>The list uses <code>tablist</code>, each trigger uses <code>tab</code>, and each panel uses <code>tabpanel</code>.</li>
+            <li>In non-linear mode, users can select an item trigger directly. In linear mode, movement uses the previous and next triggers.</li>
+            <li>Validation can block forward movement. A skippable step can bypass its validation check.</li>
+            <li>Give <code>CompletedContent</code> an accessible label because it has no matching item trigger.</li>
+            <li>Use at least one step. Keep controlled values in the range from zero through <code>count</code>.</li>
+            <li>Focus remains visible. State transitions stop when reduced motion is requested.</li>
+          </ul>
+          <p>Kappa preserves Ark UI behavior.</p>
+          <p><a href="https://ark-ui.com/docs/components/steps">Official Ark UI Steps documentation</a></p>
+        </section>
+
+        <section id="api-reference" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#api-reference">API Reference</a></h2>
+          <div class="docs-api-group">
+            <h3 id="root-api"><a class="docs-section-anchor" href="#root-api">Steps.Root</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>{rootProps.map((prop) => <tr><td><code>{prop.name}</code></td><td><code>{prop.type}</code></td><td><code>{prop.defaultValue}</code></td><td>{prop.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="list-api"><a class="docs-section-anchor" href="#list-api">Steps.List</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>{listProps.map((prop) => <tr><td><code>{prop.name}</code></td><td><code>{prop.type}</code></td><td><code>{prop.defaultValue}</code></td><td>{prop.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="item-api"><a class="docs-section-anchor" href="#item-api">Steps.Item and Steps.Content</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>{itemProps.map((prop) => <tr><td><code>{prop.name}</code></td><td><code>{prop.type}</code></td><td><code>{prop.defaultValue}</code></td><td>{prop.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="parts-api"><a class="docs-section-anchor" href="#parts-api">Parts</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Part</th><th>Element</th><th>Description</th></tr></thead><tbody>{parts.map((part) => <tr><td><code>Steps.{part.name}</code></td><td><code>{part.element}</code></td><td>{part.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="events-api"><a class="docs-section-anchor" href="#events-api">Events</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Event</th><th>Payload</th><th>Description</th></tr></thead><tbody>{events.map((event) => <tr><td><code>{event.name}</code></td><td><code>{event.payload}</code></td><td>{event.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="exports"><a class="docs-section-anchor" href="#exports">Exports</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Export</th><th>Description</th></tr></thead><tbody>{exportsList.map((item) => <tr><td><code>{item.name}</code></td><td>{item.description}</td></tr>)}</tbody></table></div>
+          </div>
+        </section>
+
+        <DocsPageNavigation currentPath={currentPath} />
+      </article>
+
+      <aside class="docs-page-toc" aria-label="On this page">
+        <div class="docs-page-toc__inner">
+          <span class="docs-page-toc__title">On this page</span>
+          <ul>
+            <li><a href="#installation" data-toc-link="installation">Installation</a></li>
+            <li><a href="#usage" data-toc-link="usage">Usage</a></li>
+            <li><a href="#composition" data-toc-link="composition">Composition</a></li>
+            <li><a href="#examples" data-toc-link="examples">Examples</a><ul>{examples.map((example) => <li><a href={`#${example.id}`} data-toc-link={example.id}>{example.title}</a></li>)}</ul></li>
+            <li><a href="#correspondence" data-toc-link="correspondence">Correspondence</a></li>
+            <li><a href="#accessibility" data-toc-link="accessibility">Accessibility</a></li>
+            <li><a href="#api-reference" data-toc-link="api-reference">API Reference</a></li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+  </div>
+</DocsLayout>

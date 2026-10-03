@@ -1,0 +1,140 @@
+---
+import CodeBlock from "../../../components/CodeBlock.astro";
+import CompositionTree from "../../../components/CompositionTree.astro";
+import CopyPageControls from "../../../components/CopyPageControls.vue";
+import DocsPageNavigation from "../../../components/DocsPageNavigation.astro";
+import SidebarDocsDemo from "../../../components/SidebarDocsDemo.vue";
+import SidebarMobilePreview from "../../../components/SidebarMobilePreview.vue";
+import SidebarScrollToItemDocsDemo from "../../../components/SidebarScrollToItemDocsDemo.vue";
+import { barrelCode, granularCode, previewCode, nestedCode, routingCode, examples, providerProps, partProps } from "../../../data/sidebar-docs";
+import DocsLayout from "../../../layouts/DocsLayout.astro";
+import "../../../styles/docs-components.css";
+
+const currentPath = "/docs/components/sidebar";
+const description = "Compact application navigation with resizing, peeking, sliding views, and an accessible mobile drawer.";
+---
+
+<DocsLayout title="Sidebar" description={description}>
+  <div class="docs-page docs-page--component">
+    <header class="docs-page-header">
+      <div class="docs-page-header__inner"><div class="docs-page-header__content">
+        <div class="docs-page-header__mobile-actions"><CopyPageControls client:only="vue" align="center" /></div>
+        <div class="docs-page-header__title-row">
+          <h1>Sidebar</h1>
+          <div class="docs-page-header__navigation-actions">
+            <div class="docs-page-header__desktop-actions"><CopyPageControls client:only="vue" /></div>
+            <DocsPageNavigation currentPath={currentPath} variant="compact" />
+          </div>
+        </div>
+        <p class="docs-page-header__lede">{description}</p>
+      </div></div>
+    </header>
+    <div class="docs-page-body">
+      <article class="docs-article docs-article--component">
+        <section id="preview" class="docs-section">
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><SidebarDocsDemo client:load /></div>
+            <CodeBlock code={previewCode} lang="vue" collapsible revealId="sidebar-preview-code" />
+          </div>
+        </section>
+        <section id="installation" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#installation">Installation</a></h2>
+          <p>Sidebar is part of Kappa. It adds no dependencies. Icons in these examples come from the documentation site's existing icon package; the library accepts any Vue icon component or icon slot.</p>
+          <h3 id="barrel"><a class="docs-section-anchor" href="#barrel">Barrel</a></h3><CodeBlock code={barrelCode} lang="javascript" />
+          <h3 id="granular"><a class="docs-section-anchor" href="#granular">Granular</a></h3><CodeBlock code={granularCode} lang="javascript" />
+        </section>
+        <section id="usage" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#usage">Usage</a></h2>
+          <p>For complete application layouts, see <a href="/docs/blocks/sidebar">Blocks → Sidebar</a>: workspace, icon rail, inset, floating, two-column navigation, and top-header examples.</p>
+          <p>Put one Root and the application content inside a Provider. Give the layout a height, then let Content scroll between Header and Footer. Keep one Trigger in the application header so the mobile drawer and offcanvas Sidebar can be reopened. A second footer toggle is not needed. These demos align both desktop headers at 4rem. Include Close in the navigation header for mobile.</p>
+          <p>Use MenuItem around every top-level entry and MenuSubItem around nested entries. These explicit list items keep navigation semantics predictable when you compose a Collapsible.</p>
+          <p>Use icons for every top-level item when <code>collapsible="icon"</code>. Labels remain accessible when visually hidden; <code>tooltip</code> adds a visible label on hover or focus. Custom header and footer content must also fit the rail. Wrap text in MenuLabel, or use Context to change the composition.</p>
+        </section>
+        <section id="composition" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#composition">Composition</a></h2>
+          <CompositionTree component="sidebar" />
+          <p><code>Sidebar</code> and <code>Sidebar.Root</code> are the same navigation component. Provider supplies the state and flex layout; it does not provide an application header, router, or store.</p>
+          <p>Kappa owns desktop state, navigation markup, dimensions, and semantic-token styling. Ark owns mobile modality, scroll locking, focus trapping, Escape/outside dismissal, and section accessibility. Mobile panels teleport to body. Global Kappa theme tokens must reach the teleport target.</p>
+          <p>Resizing adapts Ark Splitter's two-panel size model to a pixel-width Sidebar and normal flex content. No extra application wrapper is required. The separator controls the navigation landmark. Ark's collapse threshold and keyboard behavior are preserved.</p>
+          <p>The resize scope uses physical left/right panel order, including RTL. This avoids an installed Ark Splitter inconsistency between RTL pointer and keyboard direction without replacing its interaction code. Enter targets the navigation panel through Ark's collapse/expand API when that panel follows the content. Navigation retains the application locale.</p>
+          <p>Namespace, profile, and Quick search examples compose Dropdown and CommandPalette. They are not application-specific Sidebar parts. The scroll-to-item example uses native scrolling scoped to Content; it does not add a Sidebar scrolling API or move the outer page.</p>
+          <p>Inside the mobile drawer, keep Dropdown.Content in the drawer with <code>:teleport="false"</code> and fixed positioning. This keeps popup focus inside the modal boundary. Desktop popups can teleport to body.</p>
+          <h3 id="nested-sections"><a class="docs-section-anchor" href="#nested-sections">Nested Sections</a></h3>
+          <CodeBlock code={nestedCode} lang="vue" collapsible revealId="sidebar-nested-code" />
+          <p>Icon collapse hides nested content without resetting each section's open preference. Activating a collapsed section requests expansion of the Sidebar and section. Controlled parents must accept both updates when both levels are controlled.</p>
+        </section>
+        <section id="examples" class="docs-section docs-section--component-examples">
+          <h2><a class="docs-section-anchor" href="#examples">Examples</a></h2>
+          {examples.map(example => <>
+            {example.id === "full-screen-mobile" && <span id="full-screen" />}
+            <h3 id={example.id}><a class="docs-section-anchor" href={`#${example.id}`}>{example.title}</a></h3>
+            <p>{example.description}</p>
+            <div class="docs-component-example">
+              <div class="docs-component-preview">
+                {example.id === "mobile" || example.id === "full-screen-mobile"
+                  ? <SidebarMobilePreview client:load variant={example.id} />
+                  : example.id === "scroll-to-item"
+                    ? <SidebarScrollToItemDocsDemo client:load />
+                    : <SidebarDocsDemo client:load variant={example.id} />}
+              </div>
+              <CodeBlock code={example.code} lang="vue" collapsible revealId={`sidebar-${example.id}-code`} />
+            </div>
+          </>)}
+        </section>
+        <section id="routing-and-state" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#routing-and-state">Routing and State</a></h2>
+          <p>Supply <code>href</code> for normal links, or compose a router link with <code>as-child</code>. The library does not read the URL or select routes. Set <code>active</code> from your route state. For custom children, put the icon and MenuLabel inside the link.</p>
+          <p>MenuButton does not close the mobile drawer automatically. Call <code>setMobileOpen(false)</code> after your router accepts the navigation. This keeps rejected and asynchronous navigation under application control.</p>
+          <CodeBlock code={routingCode} lang="vue" collapsible revealId="sidebar-routing-code" />
+          <p>Provider supports <code>v-model:open</code> and <code>v-model:mobile-open</code>. Uncontrolled defaults are read once. Leaving mobile mode requests that mobile state close; the desktop preference is unchanged. Controlled parents must handle update events. No cookies, storage, global keyboard shortcuts, or application state are added.</p>
+          <p>SSR renders the desktop structure, then checks the viewport after hydration. Navigation content remounts when switching between desktop and mobile. Keep persistent form state and controlled section state outside Root when they must survive that transition.</p>
+        </section>
+        <section id="accessibility" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#accessibility">Accessibility</a></h2>
+          <ul>
+            <li>Root is a named navigation landmark, not an ARIA menu. Use Tab and Shift+Tab to move between links; Enter activates links, and Enter or Space activates buttons and disclosures.</li>
+            <li>Active entries use <code>aria-current="page"</code>. Disabled entries cannot navigate or activate and leave the tab order.</li>
+            <li>Mobile uses a named modal dialog. Focus stays inside while open. Escape, Close, and backdrop interaction dismiss it; focus returns to the opening Trigger.</li>
+            <li>Use a visible Close in mobile headers. Do not rely only on the backdrop.</li>
+            <li>Offcanvas content is hidden and inert. Icon labels remain in the accessibility tree; nested hidden links leave the tab order.</li>
+            <li>ResizeHandle is a focusable vertical separator. Arrow keys, Shift+Arrow, Home, End, and Enter use Ark's resize behavior. End placement reverses which edge grows the Sidebar. The handle is not rendered on mobile.</li>
+            <li>Peeking keeps the desktop layout width fixed. Escape dismisses it without moving the pointer. It also closes when both pointer and focus leave. Popups linked through aria-controls remain part of the interaction area; their first Escape closes the popup.</li>
+            <li>Sliding views keep inactive content mounted, hidden, and inert. In-view navigation transfers focus; an external view change does not take focus from its external control.</li>
+            <li>Content is a keyboard-focusable scrolling region. Use a descriptive aria-label if its default is not suitable.</li>
+            <li>Pass translated Root, Trigger, Close, and Loading labels. Pair DirectionProvider with a DOM dir attribute for RTL.</li>
+            <li>Motion respects reduced-motion preferences. Mobile navigation controls keep a 44px minimum height, including compact mode.</li>
+          </ul>
+        </section>
+        <section id="api-reference" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#api-reference">API Reference</a></h2>
+          <h3 id="provider-api"><a class="docs-section-anchor" href="#provider-api">Sidebar.Provider</a></h3>
+          <div class="docs-api-table"><table><thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>{providerProps.map(row => <tr>{row.map((cell, index) => <td>{index < 3 ? <code>{cell}</code> : cell}</td>)}</tr>)}</tbody></table></div>
+          <h3 id="parts-api"><a class="docs-section-anchor" href="#parts-api">Parts</a></h3>
+          <div class="docs-api-table"><table><thead><tr><th>Part</th><th>Props</th><th>Default</th><th>Description</th></tr></thead><tbody>{partProps.map(row => <tr>{row.map((cell, index) => <td>{index < 3 ? <code>{cell}</code> : cell}</td>)}</tr>)}</tbody></table></div>
+          <h3 id="events-and-context"><a class="docs-section-anchor" href="#events-and-context">Events and Context</a></h3>
+          <p>Provider emits <code>update:open(boolean)</code>, <code>openChange(&#123; open &#125;)</code>, <code>update:mobileOpen(boolean)</code>, and <code>mobileOpenChange(&#123; open &#125;)</code>. Collapsible emits <code>update:open</code> and <code>openChange</code>. Controlled components emit requests without changing the supplied value.</p>
+          <p>Resizing emits <code>update:resizeWidth(number)</code>, <code>resize(&#123; width &#125;)</code>, and <code>resizeEnd(&#123; width &#125;)</code>. Widths are in pixels. The expanded width is retained during collapse and mobile mode. Use <code>v-model:resize-width</code> to control it.</p>
+          <p><code>Sidebar.Context</code> exposes unwrapped <code>open</code>, <code>mobileOpen</code>, <code>isMobile</code>, <code>state</code>, <code>iconCollapsed</code>, <code>side</code>, <code>compact</code>, and <code>collapsible</code>, plus <code>setOpen</code>, <code>setMobileOpen</code>, and <code>toggle</code>. <code>useSidebarContext()</code> exposes the same values as Vue refs in a descendant setup function.</p>
+          <p>Context also exposes <code>resizable</code>, <code>width</code>, <code>isResizing</code>, <code>setWidth</code>, <code>peekable</code>, and <code>isPeeking</code>. State can be <code>expanded</code>, <code>collapsed</code>, or <code>peeking</code>. Peeking never emits a desktop open change.</p>
+          <h3 id="styling-and-exports"><a class="docs-section-anchor" href="#styling-and-exports">Styling and Exports</a></h3>
+          <p>Structural parts forward attributes, classes, styles, and listeners. Root and Provider use reserved generated IDs; supply the Provider id prop to customize their relationships. Root exposes <code>data-state</code>, <code>data-side</code>, <code>data-collapsible</code>, <code>data-mobile</code>, and <code>data-compact</code>. MenuButton exposes <code>data-active</code> and <code>data-disabled</code>; Ark parts retain their state attributes.</p>
+          <p>Colors inherit Kappa control, default, subtle, line, tint, overlay, and focus tokens. Dimensions use <code>--kappa-sidebar-width</code>, <code>--kappa-sidebar-collapsed-width</code>, and <code>--kappa-sidebar-mobile-width</code>; prefer the matching Provider props so teleported mobile content receives them too.</p>
+          <p>Every compound part has a named export, such as <code>SidebarProvider</code>, <code>SidebarRoot</code>, and <code>SidebarMenuButton</code>. Public props, slots, state, events, <code>SidebarContextValue</code>, and <code>SIDEBAR_DEFAULTS</code> are exported from the same subpath.</p>
+        </section>
+        <DocsPageNavigation currentPath={currentPath} />
+      </article>
+      <aside class="docs-page-toc" aria-label="On this page"><div class="docs-page-toc__inner">
+        <span class="docs-page-toc__title">On this page</span>
+        <ul>
+          <li><a href="#installation" data-toc-link="installation">Installation</a><ul><li><a href="#barrel" data-toc-link="barrel">Barrel</a></li><li><a href="#granular" data-toc-link="granular">Granular</a></li></ul></li>
+          <li><a href="#usage" data-toc-link="usage">Usage</a></li>
+          <li><a href="#composition" data-toc-link="composition">Composition</a><ul><li><a href="#nested-sections" data-toc-link="nested-sections">Nested Sections</a></li></ul></li>
+          <li><a href="#examples" data-toc-link="examples">Examples</a><ul>{examples.map(example => <li><a href={`#${example.id}`} data-toc-link={example.id}>{example.title}</a></li>)}</ul></li>
+          <li><a href="#routing-and-state" data-toc-link="routing-and-state">Routing and State</a></li>
+          <li><a href="#accessibility" data-toc-link="accessibility">Accessibility</a></li>
+          <li><a href="#api-reference" data-toc-link="api-reference">API Reference</a><ul><li><a href="#provider-api" data-toc-link="provider-api">Sidebar.Provider</a></li><li><a href="#parts-api" data-toc-link="parts-api">Parts</a></li><li><a href="#events-and-context" data-toc-link="events-and-context">Events and Context</a></li><li><a href="#styling-and-exports" data-toc-link="styling-and-exports">Styling and Exports</a></li></ul></li>
+        </ul>
+      </div></aside>
+    </div>
+  </div>
+</DocsLayout>

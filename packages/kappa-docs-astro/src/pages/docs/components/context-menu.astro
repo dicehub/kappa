@@ -1,0 +1,95 @@
+---
+import ArkUiDocsLink from "../../../components/ArkUiDocsLink.astro";
+import CodeBlock from "../../../components/CodeBlock.astro";
+import CompositionTree from "../../../components/CompositionTree.astro";
+import ContextMenuDocsDemo from "../../../components/ContextMenuDocsDemo.vue";
+import CopyPageControls from "../../../components/CopyPageControls.vue";
+import DocsPageNavigation from "../../../components/DocsPageNavigation.astro";
+import {
+  barrelCode,
+  events,
+  exportsList,
+  granularCode,
+  optionsCode,
+  parts,
+  resourceListCode,
+  rootProps,
+  submenuCode,
+  treeViewCode,
+  usageCode,
+} from "../../../data/context-menu-docs";
+import DocsLayout from "../../../layouts/DocsLayout.astro";
+import "../../../styles/docs-components.css";
+
+const currentPath = "/docs/components/context-menu";
+const description = "Shows actions for the selected object at the pointer or keyboard context position.";
+const examples = [
+  { id: "resource-list", title: "Resource List", description: "Give each resource its own menu so selection stays tied to the correct target.", variant: "resource-list", code: resourceListCode },
+  { id: "tree-view", title: "Tree View", description: "Compose the trigger around each tree item or branch control so file actions stay available by pointer and keyboard.", variant: "tree-view", code: treeViewCode },
+  { id: "submenu", title: "Nested Actions", description: "Use a submenu when an action needs a short second choice.", variant: "submenu", code: submenuCode },
+  { id: "options", title: "Persistent Options", description: "Checkbox and radio items remain open while related options change.", variant: "options", code: optionsCode },
+] as const;
+---
+
+<DocsLayout title="Context Menu" description={description}>
+  <div class="docs-page docs-page--component">
+    <header class="docs-page-header"><div class="docs-page-header__inner"><div class="docs-page-header__content">
+      <div class="docs-page-header__mobile-actions"><CopyPageControls client:only="vue" align="center" /></div>
+      <div class="docs-page-header__title-row"><h1>Context Menu</h1><ArkUiDocsLink /><div class="docs-page-header__navigation-actions"><div class="docs-page-header__desktop-actions"><CopyPageControls client:only="vue" /></div><DocsPageNavigation currentPath={currentPath} variant="compact" /></div></div>
+      <p class="docs-page-header__lede">{description}</p>
+    </div></div></header>
+
+    <div class="docs-page-body">
+      <article class="docs-article docs-article--component">
+        <section id="preview" class="docs-section"><div class="docs-component-example"><div class="docs-component-preview"><ContextMenuDocsDemo client:load variant="preview" /></div><CodeBlock code={usageCode} lang="vue" collapsible revealId="context-menu-preview-code" /></div></section>
+
+        <section id="installation" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#installation">Installation</a></h2>
+          <p>Context Menu uses the same Ark UI menu behavior and Kappa styling as Dropdown. It provides a dedicated trigger for secondary actions without creating a second menu implementation.</p>
+          <h3 id="barrel"><a class="docs-section-anchor" href="#barrel">Barrel</a></h3><CodeBlock code={barrelCode} lang="javascript" />
+          <h3 id="granular"><a class="docs-section-anchor" href="#granular">Granular</a></h3><CodeBlock code={granularCode} lang="javascript" />
+        </section>
+
+        <section id="usage" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#usage">Usage</a></h2>
+          <p>Wrap one focusable target with <code>Trigger</code>. Use a unique <code>value</code> for every item. Handle commands from the root <code>select</code> event.</p>
+          <ul><li>Right-click opens the menu at the pointer.</li><li><kbd>Shift</kbd>+<kbd>F10</kbd> or the Context Menu key opens it from the focused target.</li><li>Touch and pen input use the long-press behavior supplied by Ark UI.</li></ul>
+        </section>
+
+        <section id="composition" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#composition">Composition</a></h2>
+          <CompositionTree component="contextMenu" />
+          <p><code>ContextMenu.Trigger</code> is the context-trigger counterpart of <code>Dropdown.Trigger</code>. The other parts share Kappa's menu behavior, styles, item variants, and state contracts.</p>
+          <ul><li>Use <code>as-child</code> when an existing button, row, or tree item must remain the semantic target.</li><li>Use <code>LinkItem</code> for navigation. Do not put a link inside <code>Item</code>.</li><li>Use <code>Sub</code> sparingly. Deep secondary navigation is difficult with pointer and touch input.</li><li>Keep primary actions visible. A context menu is an additional route, not the only route, to important commands.</li></ul>
+        </section>
+
+        <section id="examples" class="docs-section docs-section--component-examples">
+          <h2><a class="docs-section-anchor" href="#examples">Examples</a></h2>
+          {examples.map((example) => <><h3 id={example.id}><a class="docs-section-anchor" href={`#${example.id}`}>{example.title}</a></h3><p>{example.description}</p><div class="docs-component-example"><div class="docs-component-preview"><ContextMenuDocsDemo client:load variant={example.variant} /></div><CodeBlock code={example.code} lang="vue" collapsible revealId={`context-menu-${example.id}-code`} /></div></>)}
+        </section>
+
+        <section id="accessibility" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#accessibility">Accessibility</a></h2>
+          <ul><li>The trigger must be keyboard focusable and have a clear accessible name.</li><li>Arrow keys move the active item. Home and End move to the first or last enabled item.</li><li>Escape closes the menu. A keyboard-opened menu restores focus to its trigger.</li><li>Disabled items remain visible but are skipped by keyboard navigation.</li><li>Item labels must describe the action without depending on an icon.</li></ul>
+          <p>See the <a href="https://ark-ui.com/docs/components/menu">official Ark UI Menu documentation</a> for the complete behavior contract.</p>
+        </section>
+
+        <section id="api-reference" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#api-reference">API Reference</a></h2>
+          <div class="docs-api-group"><h3 id="root-api"><a class="docs-section-anchor" href="#root-api">ContextMenu.Root</a></h3><div class="docs-api-table"><table><thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>{rootProps.map((prop) => <tr><td><code>{prop.name}</code></td><td><code>{prop.type}</code></td><td><code>{prop.defaultValue}</code></td><td>{prop.description}</td></tr>)}</tbody></table></div></div>
+          <div class="docs-api-group"><h3 id="parts-api"><a class="docs-section-anchor" href="#parts-api">Parts</a></h3><div class="docs-api-table"><table><thead><tr><th>Part</th><th>Element</th><th>Description</th></tr></thead><tbody>{parts.map((part) => <tr><td><code>ContextMenu.{part.name}</code></td><td><code>{part.element}</code></td><td>{part.description}</td></tr>)}</tbody></table></div></div>
+          <div class="docs-api-group"><h3 id="events-api"><a class="docs-section-anchor" href="#events-api">Events</a></h3><div class="docs-api-table"><table><thead><tr><th>Event</th><th>Payload</th><th>Description</th></tr></thead><tbody>{events.map((event) => <tr><td><code>{event.name}</code></td><td><code>{event.payload}</code></td><td>{event.description}</td></tr>)}</tbody></table></div></div>
+          <div class="docs-api-group"><h3 id="exports"><a class="docs-section-anchor" href="#exports">Exports</a></h3><div class="docs-api-table"><table><thead><tr><th>Export</th><th>Description</th></tr></thead><tbody>{exportsList.map((item) => <tr><td><code>{item.name}</code></td><td>{item.description}</td></tr>)}</tbody></table></div></div>
+        </section>
+        <DocsPageNavigation currentPath={currentPath} />
+      </article>
+      <aside class="docs-page-toc" aria-label="On this page"><div class="docs-page-toc__inner"><span class="docs-page-toc__title">On this page</span><ul>
+        <li><a href="#installation" data-toc-link="installation">Installation</a><ul><li><a href="#barrel" data-toc-link="barrel">Barrel</a></li><li><a href="#granular" data-toc-link="granular">Granular</a></li></ul></li>
+        <li><a href="#usage" data-toc-link="usage">Usage</a></li><li><a href="#composition" data-toc-link="composition">Composition</a></li>
+        <li><a href="#examples" data-toc-link="examples">Examples</a><ul>{examples.map((example) => <li><a href={`#${example.id}`} data-toc-link={example.id}>{example.title}</a></li>)}</ul></li>
+        <li><a href="#accessibility" data-toc-link="accessibility">Accessibility</a></li>
+        <li><a href="#api-reference" data-toc-link="api-reference">API Reference</a><ul><li><a href="#root-api" data-toc-link="root-api">ContextMenu.Root</a></li><li><a href="#parts-api" data-toc-link="parts-api">Parts</a></li><li><a href="#events-api" data-toc-link="events-api">Events</a></li><li><a href="#exports" data-toc-link="exports">Exports</a></li></ul></li>
+      </ul></div></aside>
+    </div>
+  </div>
+</DocsLayout>

@@ -1,0 +1,244 @@
+---
+import CodeBlock from "../../../components/CodeBlock.astro";
+import CompositionTree from "../../../components/CompositionTree.astro";
+import CopyPageControls from "../../../components/CopyPageControls.vue";
+import DocsPageNavigation from "../../../components/DocsPageNavigation.astro";
+import InputGroupDocsDemo from "../../../components/InputGroupDocsDemo.vue";
+import {
+  addonProps,
+  alignmentCode,
+  barrelCode,
+  buttonCode,
+  buttonProps,
+  controlProps,
+  dataAttributes,
+  events,
+  exportsList,
+  granularCode,
+  inputGroupProps,
+  previewCode,
+  rtlCode,
+  sizesCode,
+  slots,
+  statesCode,
+  textCode,
+  textareaCode,
+  usageCode,
+} from "../../../data/input-group-docs";
+import DocsLayout from "../../../layouts/DocsLayout.astro";
+import "../../../styles/docs-components.css";
+
+const currentPath = "/docs/components/input-group";
+const description = "Composes native inputs with logical addons, helper text, and compact actions.";
+
+const examples = [
+  {
+    id: "alignment",
+    title: "Alignment",
+    description: "Use logical alignment values. Keep every addon after the control in DOM order; Kappa moves it visually.",
+    variant: "alignment",
+    code: alignmentCode,
+  },
+  {
+    id: "text",
+    title: "Text",
+    description: "Use InputGroup.Text for units, prefixes, suffixes, and short helper content.",
+    variant: "text",
+    code: textCode,
+  },
+  {
+    id: "button",
+    title: "Button",
+    description: "Use a quiet Kappa Button for a related action such as reveal, copy, or search.",
+    variant: "button",
+    code: buttonCode,
+  },
+  {
+    id: "textarea",
+    title: "Textarea",
+    description: "Use the block-end addon for counts and submit actions without hiding the text area.",
+    variant: "textarea",
+    code: textareaCode,
+  },
+  {
+    id: "states",
+    title: "States",
+    description: "Complete the group state with invalid, disabled, and loading controls.",
+    variant: "states",
+    code: statesCode,
+  },
+  {
+    id: "sizes",
+    title: "Sizes",
+    description: "Use xs, sm, base, or lg to match nearby Kappa controls.",
+    variant: "sizes",
+    code: sizesCode,
+  },
+  {
+    id: "right-to-left",
+    title: "Right to Left",
+    description: "Logical placement and spacing keep addons correct in right-to-left content.",
+    variant: "rtl",
+    code: rtlCode,
+  },
+] as const;
+---
+
+<DocsLayout title="Input Group" description={description}>
+  <div class="docs-page docs-page--component">
+    <header class="docs-page-header">
+      <div class="docs-page-header__inner">
+        <div class="docs-page-header__content">
+          <div class="docs-page-header__mobile-actions">
+            <CopyPageControls client:only="vue" align="center" />
+          </div>
+          <div class="docs-page-header__title-row">
+            <h1>Input Group</h1>
+            <div class="docs-page-header__navigation-actions">
+              <div class="docs-page-header__desktop-actions"><CopyPageControls client:only="vue" /></div>
+              <DocsPageNavigation currentPath={currentPath} variant="compact" />
+            </div>
+          </div>
+          <p class="docs-page-header__lede">{description}</p>
+        </div>
+      </div>
+    </header>
+
+    <div class="docs-page-body">
+      <article class="docs-article docs-article--component">
+        <section id="preview" class="docs-section">
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><InputGroupDocsDemo client:load variant="preview" /></div>
+            <CodeBlock code={previewCode} lang="vue" collapsible revealId="input-group-preview-code" />
+          </div>
+        </section>
+
+        <section id="installation" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#installation">Installation</a></h2>
+          <p>
+            Input Group is part of the main Kappa package. It uses native input and textarea
+            elements, the Kappa Button primitive, and colocated CSS. It adds no state-machine dependency.
+          </p>
+          <h3 id="barrel"><a class="docs-section-anchor" href="#barrel">Barrel</a></h3>
+          <CodeBlock code={barrelCode} lang="javascript" />
+          <h3 id="granular"><a class="docs-section-anchor" href="#granular">Granular</a></h3>
+          <CodeBlock code={granularCode} lang="javascript" />
+        </section>
+
+        <section id="usage" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#usage">Usage</a></h2>
+          <p>
+            Place the input or textarea first in DOM order. Place each addon after it, then use
+            <code>align</code> to position the addon. Give every native control its own accessible label;
+            the group label does not replace the control label.
+          </p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><InputGroupDocsDemo client:load variant="usage" /></div>
+            <CodeBlock code={usageCode} lang="vue" collapsible revealId="input-group-usage-code" />
+          </div>
+        </section>
+
+        <section id="composition" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#composition">Composition</a></h2>
+          <CompositionTree component="inputGroup" />
+          <p>
+            Input Group combines a control, logical addons, helper text, and related buttons. Ark UI has no
+            matching Vue Input Group primitive, so Kappa owns the native composition and preserves
+            browser input behavior. The <code>base</code> button size supports icons and text.
+            InputGroupButton composes the existing Kappa Button for consistent variants.
+          </p>
+          <ul>
+            <li>Use <code>InputGroup.Input</code> for a one-line native input and <code>InputGroup.Textarea</code> for multiline content.</li>
+            <li>Use <code>InputGroup.Addon</code> for icons, text, or related actions. Use logical <code>inline-*</code> and <code>block-*</code> alignment.</li>
+            <li>Keep an addon after its control in DOM order. This preserves the focus and reading order while CSS handles placement.</li>
+            <li>Use <code>InputGroup.Button</code> only for an action. Icon-only buttons need <code>aria-label</code> or <code>aria-labelledby</code>.</li>
+          </ul>
+        </section>
+
+        <section id="examples" class="docs-section docs-section--component-examples">
+          <h2><a class="docs-section-anchor" href="#examples">Examples</a></h2>
+          {
+            examples.map((example) => (
+              <>
+                <h3 id={example.id}><a class="docs-section-anchor" href={`#${example.id}`}>{example.title}</a></h3>
+                <p>{example.description}</p>
+                <div class="docs-component-example">
+                  <div class="docs-component-preview"><InputGroupDocsDemo client:load variant={example.variant} /></div>
+                  <CodeBlock code={example.code} lang="vue" collapsible revealId={`input-group-${example.id}-code`} />
+                </div>
+              </>
+            ))
+          }
+        </section>
+
+        <section id="accessibility" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#accessibility">Accessibility</a></h2>
+          <ul>
+            <li>Every input and textarea needs an accessible name from a visible label, <code>aria-label</code>, or <code>aria-labelledby</code>.</li>
+            <li>The root uses <code>role="group"</code>. Add <code>aria-label</code> or <code>aria-labelledby</code> when the group needs a name.</li>
+            <li>Use <code>invalid</code> on the group or control when validation fails. Pair it with visible error text in the surrounding Field composition.</li>
+            <li>Use native disabled controls. Group-level <code>disabled</code> propagates to Input, Textarea, and InputGroup.Button.</li>
+            <li>Keep the addon after the control in DOM order. This keeps keyboard and screen-reader order predictable.</li>
+            <li>Do not use a non-interactive addon as the only label. Use a real label or an explicit ARIA name on the control.</li>
+          </ul>
+        </section>
+
+        <section id="api-reference" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#api-reference">API Reference</a></h2>
+          <div class="docs-api-group">
+            <h3 id="input-group-api"><a class="docs-section-anchor" href="#input-group-api">InputGroup</a></h3>
+            <p>Root <code>div</code> with <code>role="group"</code>. Native attributes, ARIA properties, data attributes, and listeners pass through.</p>
+            <div class="docs-api-table"><table><thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>{inputGroupProps.map((prop) => <tr><td><code>{prop.name}</code></td><td><code>{prop.type}</code></td><td><code>{prop.defaultValue}</code></td><td>{prop.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="addon-api"><a class="docs-section-anchor" href="#addon-api">InputGroupAddon</a></h3>
+            <p>Logical addon wrapper for icons, text, and related actions.</p>
+            <div class="docs-api-table"><table><thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>{addonProps.map((prop) => <tr><td><code>{prop.name}</code></td><td><code>{prop.type}</code></td><td><code>{prop.defaultValue}</code></td><td>{prop.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="control-api"><a class="docs-section-anchor" href="#control-api">InputGroupInput / Textarea</a></h3>
+            <p>Native controls with group styling. All other native input and textarea attributes pass through.</p>
+            <div class="docs-api-table"><table><thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>{controlProps.map((prop) => <tr><td><code>{prop.name}</code></td><td><code>{prop.type}</code></td><td><code>{prop.defaultValue}</code></td><td>{prop.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="button-api"><a class="docs-section-anchor" href="#button-api">InputGroupButton</a></h3>
+            <p>Existing Kappa Button composed inside an addon. All Kappa Button props and native listeners pass through.</p>
+            <div class="docs-api-table"><table><thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>{buttonProps.map((prop) => <tr><td><code>{prop.name}</code></td><td><code>{prop.type}</code></td><td><code>{prop.defaultValue}</code></td><td>{prop.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="events"><a class="docs-section-anchor" href="#events">Events</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Event</th><th>Payload</th><th>Description</th></tr></thead><tbody>{events.map((event) => <tr><td><code>{event.name}</code></td><td><code>{event.payload}</code></td><td>{event.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="slots"><a class="docs-section-anchor" href="#slots">Slots</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Component</th><th>Slot</th><th>Description</th></tr></thead><tbody>{slots.map((slot) => <tr><td><code>{slot.component}</code></td><td><code>{slot.name}</code></td><td>{slot.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="data-attributes"><a class="docs-section-anchor" href="#data-attributes">Data Attributes</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Slot</th><th>Element</th><th>Description</th></tr></thead><tbody>{dataAttributes.map((part) => <tr><td><code>{part.name}</code></td><td><code>{part.element}</code></td><td>{part.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="exports"><a class="docs-section-anchor" href="#exports">Exports</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Export</th><th>Description</th></tr></thead><tbody>{exportsList.map((item) => <tr><td><code>{item.name}</code></td><td>{item.description}</td></tr>)}</tbody></table></div>
+          </div>
+        </section>
+
+        <DocsPageNavigation currentPath={currentPath} />
+      </article>
+
+      <aside class="docs-page-toc" aria-label="On this page">
+        <div class="docs-page-toc__inner">
+          <span class="docs-page-toc__title">On this page</span>
+          <ul>
+            <li><a href="#installation" data-toc-link="installation">Installation</a><ul><li><a href="#barrel" data-toc-link="barrel">Barrel</a></li><li><a href="#granular" data-toc-link="granular">Granular</a></li></ul></li>
+            <li><a href="#usage" data-toc-link="usage">Usage</a></li>
+            <li><a href="#composition" data-toc-link="composition">Composition</a></li>
+            <li><a href="#examples" data-toc-link="examples">Examples</a><ul>{examples.map((example) => <li><a href={`#${example.id}`} data-toc-link={example.id}>{example.title}</a></li>)}</ul></li>
+            <li><a href="#accessibility" data-toc-link="accessibility">Accessibility</a></li>
+            <li><a href="#api-reference" data-toc-link="api-reference">API Reference</a><ul><li><a href="#input-group-api" data-toc-link="input-group-api">InputGroup</a></li><li><a href="#addon-api" data-toc-link="addon-api">InputGroupAddon</a></li><li><a href="#control-api" data-toc-link="control-api">InputGroupInput / Textarea</a></li><li><a href="#button-api" data-toc-link="button-api">InputGroupButton</a></li><li><a href="#events" data-toc-link="events">Events</a></li><li><a href="#slots" data-toc-link="slots">Slots</a></li><li><a href="#data-attributes" data-toc-link="data-attributes">Data Attributes</a></li><li><a href="#exports" data-toc-link="exports">Exports</a></li></ul></li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+  </div>
+</DocsLayout>

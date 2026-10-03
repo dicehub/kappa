@@ -1,0 +1,124 @@
+.kappa-input-area {
+  --kappa-input-area-min-height: 5rem;
+  --kappa-input-area-padding-block: 0.5rem;
+  --kappa-input-area-padding-inline: 0.625rem;
+  --kappa-input-area-radius: 0.5rem;
+  --kappa-input-area-font-size: 0.8125rem;
+
+  box-sizing: border-box;
+  display: block;
+  inline-size: 100%;
+  min-inline-size: 0;
+  min-block-size: var(--kappa-input-area-min-height);
+  padding-block: var(--kappa-input-area-padding-block);
+  padding-inline: var(--kappa-input-area-padding-inline);
+  border: 1px solid var(--kappa-line, #e3e6eb);
+  border-radius: var(--kappa-input-area-radius);
+  background: var(--kappa-control, #ffffff);
+  box-shadow: none;
+  color: var(--kappa-default, #17191f);
+  font-family: var(--kappa-font-sans, inherit);
+  font-size: var(--kappa-input-area-font-size);
+  font-weight: 450;
+  line-height: 1.4;
+  outline: 2px solid transparent;
+  outline-offset: 1px;
+  overflow-wrap: anywhere;
+  resize: vertical;
+  scrollbar-color: var(--kappa-line, #e3e6eb) transparent;
+  scrollbar-width: thin;
+  transition:
+    background-color 120ms ease,
+    border-color 120ms ease,
+    color 120ms ease,
+    outline-color 120ms ease;
+}
+
+.kappa-input-area[data-size="xs"] {
+  --kappa-input-area-min-height: 3.5rem;
+  --kappa-input-area-padding-block: 0.375rem;
+  --kappa-input-area-padding-inline: 0.5rem;
+  --kappa-input-area-radius: 0.375rem;
+  --kappa-input-area-font-size: 0.75rem;
+}
+
+.kappa-input-area[data-size="sm"] {
+  --kappa-input-area-min-height: 4rem;
+  --kappa-input-area-padding-block: 0.4375rem;
+  --kappa-input-area-padding-inline: 0.625rem;
+  --kappa-input-area-radius: 0.4375rem;
+  --kappa-input-area-font-size: 0.75rem;
+}
+
+.kappa-input-area[data-size="lg"] {
+  --kappa-input-area-min-height: 6rem;
+  --kappa-input-area-padding-block: 0.625rem;
+  --kappa-input-area-padding-inline: 0.75rem;
+  --kappa-input-area-font-size: 0.875rem;
+}
+
+.kappa-input-area::placeholder {
+  color: var(--kappa-muted, #9aa2ae);
+  opacity: 1;
+}
+
+.kappa-input-area::selection {
+  background: var(--kappa-accent, #2479b6);
+  color: var(--kappa-accent-contrast, #ffffff);
+}
+
+.kappa-input-area:hover:not(:disabled, :read-only) {
+  border-color: var(--kappa-subtle, #6c7480);
+}
+
+.kappa-input-area:focus-visible {
+  border-color: var(--kappa-focus, #4c63ff);
+  outline-color: var(--kappa-focus, #4c63ff);
+}
+
+.kappa-input-area:where([data-invalid], [aria-invalid="true"]) {
+  border-color: var(--kappa-danger, #b42318);
+}
+
+.kappa-input-area:where([data-invalid], [aria-invalid="true"]):focus-visible {
+  outline-color: var(--kappa-danger, #b42318);
+}
+
+.kappa-input-area:disabled {
+  background: var(--kappa-disabled-surface, var(--kappa-tint, #f4f6f9));
+  color: var(--kappa-subtle, #6c7480);
+  cursor: not-allowed;
+  opacity: 0.62;
+  resize: none;
+}
+
+.kappa-input-area:read-only:not(:disabled) {
+  background: var(--kappa-readonly-surface, var(--kappa-tint, #f4f6f9));
+  cursor: default;
+}
+
+.kappa-input-area[data-autoresize] {
+  resize: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kappa-input-area {
+    transition: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .kappa-input-area:focus-visible {
+    border-color: Highlight;
+    outline-color: Highlight;
+  }
+
+  .kappa-input-area:where([data-invalid], [aria-invalid="true"]) {
+    border-color: Mark;
+  }
+
+  .kappa-input-area:disabled {
+    color: GrayText;
+    opacity: 1;
+  }
+}

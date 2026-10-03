@@ -1,0 +1,215 @@
+---
+import ArkUiDocsLink from "../../../components/ArkUiDocsLink.astro";
+import CodeBlock from "../../../components/CodeBlock.astro";
+import CompositionTree from "../../../components/CompositionTree.astro";
+import CopyPageControls from "../../../components/CopyPageControls.vue";
+import DocsPageNavigation from "../../../components/DocsPageNavigation.astro";
+import SliderDocsDemo from "../../../components/SliderDocsDemo.vue";
+import {
+  barrelCode,
+  controlledCode,
+  dataAttributes,
+  events,
+  exportsList,
+  granularCode,
+  keyboardRows,
+  marksCode,
+  originCode,
+  parts,
+  previewCode,
+  rangeCode,
+  rootProps,
+  rootProviderCode,
+  sizesCode,
+  slots,
+  statesCode,
+  usageCode,
+  verticalCode,
+} from "../../../data/slider-docs";
+import DocsLayout from "../../../layouts/DocsLayout.astro";
+import "../../../styles/docs-components.css";
+
+const currentPath = "/docs/components/slider";
+const description = "A precise range control for selecting one value or a bounded interval.";
+
+const examples = [
+  {
+    id: "range",
+    title: "Range",
+    description: "Render two thumbs when a filter or interval needs a lower and upper bound.",
+    variant: "range",
+    code: rangeCode,
+  },
+  {
+    id: "marks",
+    title: "Marks",
+    description: "Add non-interactive markers to make important values easy to scan.",
+    variant: "marks",
+    code: marksCode,
+  },
+  {
+    id: "vertical",
+    title: "Vertical",
+    description: "Vertical controls use a block-size set by Kappa and Arrow Up or Arrow Down for keyboard input.",
+    variant: "vertical",
+    code: verticalCode,
+  },
+  {
+    id: "sizes",
+    title: "Sizes",
+    description: "Small, base, and large sizes adjust track and thumb geometry without changing the value contract.",
+    variant: "sizes",
+    code: sizesCode,
+  },
+  {
+    id: "states",
+    title: "States",
+    description: "Disabled, read-only, and invalid states keep clear visual and semantic differences.",
+    variant: "states",
+    code: statesCode,
+  },
+  {
+    id: "controlled",
+    title: "Controlled",
+    description: "Use v-model when another control or application state owns the current value.",
+    variant: "controlled",
+    code: controlledCode,
+  },
+] as const;
+---
+
+<DocsLayout title="Slider" description={description}>
+  <div class="docs-page docs-page--component">
+    <header class="docs-page-header">
+      <div class="docs-page-header__inner">
+        <div class="docs-page-header__content">
+          <div class="docs-page-header__mobile-actions">
+            <CopyPageControls client:only="vue" align="center" />
+          </div>
+          <div class="docs-page-header__title-row">
+            <h1>Slider</h1>
+            <ArkUiDocsLink />
+            <div class="docs-page-header__navigation-actions">
+              <div class="docs-page-header__desktop-actions"><CopyPageControls client:only="vue" /></div>
+              <DocsPageNavigation currentPath={currentPath} variant="compact" />
+            </div>
+          </div>
+          <p class="docs-page-header__lede">{description}</p>
+        </div>
+      </div>
+    </header>
+
+    <div class="docs-page-body">
+      <article class="docs-article docs-article--component">
+        <section id="preview" class="docs-section">
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><SliderDocsDemo client:load variant="preview" /></div>
+            <CodeBlock code={previewCode} lang="vue" collapsible revealId="slider-preview-code" />
+          </div>
+        </section>
+
+        <section id="installation" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#installation">Installation</a></h2>
+          <p>Slider is part of the main Kappa package. Ark UI owns pointer input, value constraints, keyboard behavior, and slider semantics.</p>
+          <h3 id="barrel"><a class="docs-section-anchor" href="#barrel">Barrel</a></h3>
+          <CodeBlock code={barrelCode} lang="javascript" />
+          <h3 id="granular"><a class="docs-section-anchor" href="#granular">Granular</a></h3>
+          <CodeBlock code={granularCode} lang="javascript" />
+        </section>
+
+        <section id="usage" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#usage">Usage</a></h2>
+          <p>Compose a root with one Label, ValueText, Control, Track, Range, Thumb, and HiddenInput. Add one Thumb and HiddenInput pair for every value in a range slider.</p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><SliderDocsDemo client:load variant="usage" /></div>
+            <CodeBlock code={usageCode} lang="vue" collapsible revealId="slider-usage-code" />
+          </div>
+          <p>Use a visible <code>Slider.Label</code> whenever possible. The label links to each generated thumb; use the per-thumb <code>aria-label</code> array for cases without visible text.</p>
+        </section>
+
+        <section id="composition" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#composition">Composition</a></h2>
+          <CompositionTree component="slider" />
+          <p>Ark UI provides range calculations, hidden form inputs, focus handling, and state attributes. Kappa provides the track geometry, token use, focus ring, marker layout, and size option.</p>
+          <p><code>Slider.MarkerGroup</code> belongs after <code>Slider.Control</code>. Give every marker a numeric <code>value</code>; its position comes from the Ark machine.</p>
+          <p>Use <code>Slider.Context</code> to read the value or call an API method in a slot. Use <code>RootProvider</code> with <code>useSlider</code> when the machine is created outside the template.</p>
+          <CodeBlock code={rootProviderCode} lang="vue" />
+        </section>
+
+        <section id="examples" class="docs-section docs-section--component-examples">
+          <h2><a class="docs-section-anchor" href="#examples">Examples</a></h2>
+          {examples.map((example) => (
+            <>
+              <h3 id={example.id}><a class="docs-section-anchor" href={`#${example.id}`}>{example.title}</a></h3>
+              <p>{example.description}</p>
+              <div class="docs-component-example">
+                <div class="docs-component-preview"><SliderDocsDemo client:load variant={example.variant} /></div>
+                <CodeBlock code={example.code} lang="vue" collapsible revealId={`slider-${example.id}-code`} />
+              </div>
+            </>
+          ))}
+          <h3 id="origin"><a class="docs-section-anchor" href="#origin">Centered Origin</a></h3>
+          <p>Use <code>origin="center"</code> for offsets that should fill from the middle of the track.</p>
+          <CodeBlock code={originCode} lang="vue" collapsible revealId="slider-origin-code" />
+        </section>
+
+        <section id="accessibility" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#accessibility">Accessibility</a></h2>
+          <ul>
+            <li>Each thumb exposes <code>role=slider</code>, its current value, range, orientation, and disabled state.</li>
+            <li>Use <code>Slider.Label</code> for a visible accessible name. Use one <code>aria-label</code> or <code>aria-labelledby</code> entry per thumb when no visible label exists.</li>
+            <li>Keep a <code>Slider.HiddenInput</code> inside every thumb when the value must submit with a native form.</li>
+            <li>Read-only sliders remain focusable but do not change their value. Disabled sliders are removed from focus and interaction.</li>
+            <li>Focus-visible, invalid, forced-colors, reduced-motion, and dark-mode styles remain distinct.</li>
+          </ul>
+          <h3 id="keyboard-support"><a class="docs-section-anchor" href="#keyboard-support">Keyboard Support</a></h3>
+          <div class="docs-api-table"><table><thead><tr><th>Key</th><th>Behavior</th></tr></thead><tbody>{keyboardRows.map((row) => <tr><td><code>{row.key}</code></td><td>{row.description}</td></tr>)}</tbody></table></div>
+        </section>
+
+        <section id="api-reference" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#api-reference">API Reference</a></h2>
+          <div class="docs-api-group">
+            <h3 id="root-api"><a class="docs-section-anchor" href="#root-api">Slider.Root</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>{rootProps.map((prop) => <tr><td><code>{prop.name}</code></td><td><code>{prop.type}</code></td><td><code>{prop.defaultValue}</code></td><td>{prop.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="parts-api"><a class="docs-section-anchor" href="#parts-api">Parts</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Part</th><th>Element</th><th>Description</th></tr></thead><tbody>{parts.map((part) => <tr><td><code>Slider.{part.name}</code></td><td><code>{part.element}</code></td><td>{part.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="events-api"><a class="docs-section-anchor" href="#events-api">Events</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Event</th><th>Payload</th><th>Description</th></tr></thead><tbody>{events.map((event) => <tr><td><code>{event.name}</code></td><td><code>{event.payload}</code></td><td>{event.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="slots"><a class="docs-section-anchor" href="#slots">Slots</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Slot</th><th>Description</th></tr></thead><tbody>{slots.map((slot) => <tr><td><code>{slot.name}</code></td><td>{slot.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="data-attributes"><a class="docs-section-anchor" href="#data-attributes">Data Attributes</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Attribute</th><th>Value</th><th>Description</th></tr></thead><tbody>{dataAttributes.map((attribute) => <tr><td><code>{attribute.name}</code></td><td><code>{attribute.value}</code></td><td>{attribute.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="exports"><a class="docs-section-anchor" href="#exports">Exports</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Export</th><th>Description</th></tr></thead><tbody>{exportsList.map((item) => <tr><td><code>{item.name}</code></td><td>{item.description}</td></tr>)}</tbody></table></div>
+          </div>
+        </section>
+
+        <DocsPageNavigation currentPath={currentPath} />
+      </article>
+
+      <aside class="docs-page-toc" aria-label="On this page">
+        <div class="docs-page-toc__inner">
+          <span class="docs-page-toc__title">On this page</span>
+          <ul>
+            <li><a href="#installation" data-toc-link="installation">Installation</a><ul><li><a href="#barrel" data-toc-link="barrel">Barrel</a></li><li><a href="#granular" data-toc-link="granular">Granular</a></li></ul></li>
+            <li><a href="#usage" data-toc-link="usage">Usage</a></li>
+            <li><a href="#composition" data-toc-link="composition">Composition</a></li>
+            <li><a href="#examples" data-toc-link="examples">Examples</a><ul>{examples.map((example) => <li><a href={`#${example.id}`} data-toc-link={example.id}>{example.title}</a></li>)}<li><a href="#origin" data-toc-link="origin">Centered Origin</a></li></ul></li>
+            <li><a href="#accessibility" data-toc-link="accessibility">Accessibility</a><ul><li><a href="#keyboard-support" data-toc-link="keyboard-support">Keyboard Support</a></li></ul></li>
+            <li><a href="#api-reference" data-toc-link="api-reference">API Reference</a><ul><li><a href="#root-api" data-toc-link="root-api">Slider.Root</a></li><li><a href="#parts-api" data-toc-link="parts-api">Parts</a></li><li><a href="#events-api" data-toc-link="events-api">Events</a></li><li><a href="#slots" data-toc-link="slots">Slots</a></li><li><a href="#data-attributes" data-toc-link="data-attributes">Data Attributes</a></li><li><a href="#exports" data-toc-link="exports">Exports</a></li></ul></li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+  </div>
+</DocsLayout>

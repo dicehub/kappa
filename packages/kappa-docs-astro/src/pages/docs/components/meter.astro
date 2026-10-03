@@ -1,0 +1,192 @@
+---
+import CodeBlock from "../../../components/CodeBlock.astro";
+import CompositionTree from "../../../components/CompositionTree.astro";
+import CopyPageControls from "../../../components/CopyPageControls.vue";
+import DocsPageNavigation from "../../../components/DocsPageNavigation.astro";
+import MeterDocsDemo from "../../../components/MeterDocsDemo.vue";
+import {
+  barrelCode,
+  customRangeCode,
+  dataAttributes,
+  dataSlots,
+  exportsList,
+  granularCode,
+  hiddenValueCode,
+  meterProps,
+  previewCode,
+  sizesCode,
+  tonesCode,
+  usageCode,
+} from "../../../data/meter-docs";
+import DocsLayout from "../../../layouts/DocsLayout.astro";
+import "../../../styles/docs-components.css";
+
+const currentPath = "/docs/components/meter";
+const description = "Displays a scalar measurement within a known range.";
+---
+
+<DocsLayout title="Meter" description={description}>
+  <div class="docs-page docs-page--component">
+    <header class="docs-page-header">
+      <div class="docs-page-header__inner">
+        <div class="docs-page-header__content">
+          <div class="docs-page-header__mobile-actions">
+            <CopyPageControls client:only="vue" align="center" />
+          </div>
+          <div class="docs-page-header__title-row">
+            <h1>Meter</h1>
+            <div class="docs-page-header__navigation-actions">
+              <div class="docs-page-header__desktop-actions">
+                <CopyPageControls client:only="vue" />
+              </div>
+              <DocsPageNavigation currentPath={currentPath} variant="compact" />
+            </div>
+          </div>
+          <p class="docs-page-header__lede">{description}</p>
+        </div>
+      </div>
+    </header>
+
+    <div class="docs-page-body">
+      <article class="docs-article docs-article--component">
+        <section id="preview" class="docs-section">
+          <div class="docs-component-example">
+            <div class="docs-component-preview">
+              <MeterDocsDemo variant="preview" />
+            </div>
+            <CodeBlock code={previewCode} lang="vue" collapsible revealId="meter-preview-code" />
+          </div>
+        </section>
+
+        <section id="installation" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#installation">Installation</a></h2>
+          <p>
+            Meter is part of the main Kappa package. It uses Vue and native WAI-ARIA meter
+            semantics. It adds no behavior dependency.
+          </p>
+          <h3 id="barrel"><a class="docs-section-anchor" href="#barrel">Barrel</a></h3>
+          <CodeBlock code={barrelCode} lang="javascript" />
+          <h3 id="granular"><a class="docs-section-anchor" href="#granular">Granular</a></h3>
+          <CodeBlock code={granularCode} lang="javascript" />
+        </section>
+
+        <section id="usage" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#usage">Usage</a></h2>
+          <p>
+            Use Meter for a measurement with a meaningful minimum and maximum, such as storage,
+            battery charge, or capacity. Do not use it for task completion.
+          </p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview">
+              <MeterDocsDemo variant="usage" />
+            </div>
+            <CodeBlock code={usageCode} lang="vue" collapsible revealId="meter-usage-code" />
+          </div>
+        </section>
+
+        <section id="composition" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#composition">Composition</a></h2>
+          <CompositionTree component="meter" />
+          <p>
+            The internal anatomy follows
+            <a href="https://base-ui.com/react/components/meter">Base UI Meter</a>.
+            Ark UI has no Meter primitive.
+            Kappa therefore owns this small WAI-ARIA composition and exposes stable data slots.
+          </p>
+        </section>
+
+        <section id="examples" class="docs-section docs-section--component-examples">
+          <h2><a class="docs-section-anchor" href="#examples">Examples</a></h2>
+
+          <h3 id="custom-range"><a class="docs-section-anchor" href="#custom-range">Custom Range and Value Text</a></h3>
+          <p>Set the numeric range independently from the human-readable value text.</p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview">
+              <MeterDocsDemo variant="custom-range" />
+            </div>
+            <CodeBlock code={customRangeCode} lang="vue" collapsible revealId="meter-custom-range-code" />
+          </div>
+
+          <h3 id="sizes"><a class="docs-section-anchor" href="#sizes">Sizes</a></h3>
+          <p>Use the small, default, and large densities to match the surrounding information.</p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview">
+              <MeterDocsDemo variant="sizes" />
+            </div>
+            <CodeBlock code={sizesCode} lang="vue" collapsible revealId="meter-sizes-code" />
+          </div>
+
+          <h3 id="tones"><a class="docs-section-anchor" href="#tones">Semantic Tones</a></h3>
+          <p>
+            Select a tone from the meaning of the measurement. Meter does not infer whether a high
+            or low value is good.
+          </p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview">
+              <MeterDocsDemo variant="tones" />
+            </div>
+            <CodeBlock code={tonesCode} lang="vue" collapsible revealId="meter-tones-code" />
+          </div>
+
+          <h3 id="hidden-value"><a class="docs-section-anchor" href="#hidden-value">Hidden Visual Value</a></h3>
+          <p>Hide repeated visual text without removing the value from assistive technology.</p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview">
+              <MeterDocsDemo variant="hidden-value" />
+            </div>
+            <CodeBlock code={hiddenValueCode} lang="vue" collapsible revealId="meter-hidden-value-code" />
+          </div>
+        </section>
+
+        <section id="accessibility" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#accessibility">Accessibility</a></h2>
+          <ul>
+            <li>Meter always has a visible label and an accessible name.</li>
+            <li>Kappa clamps <code>aria-valuenow</code> between the resolved minimum and maximum.</li>
+            <li>Use <code>valueText</code> when a percentage does not explain the measurement.</li>
+            <li><code>showValue=false</code> hides only the visual value. Assistive value text remains.</li>
+            <li>Do not use Meter for loading or task completion. Those states require a progress bar.</li>
+            <li>Color is supplementary. Keep the label and value text sufficient without color.</li>
+          </ul>
+        </section>
+
+        <section id="api-reference" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#api-reference">API Reference</a></h2>
+          <div class="docs-api-group">
+            <h3 id="meter-api"><a class="docs-section-anchor" href="#meter-api">Meter</a></h3>
+            <p>Renders a labelled <code>div</code> with <code>role=meter</code>. Native attributes, data attributes, consumer classes, and CSS variables pass to the root.</p>
+            <div class="docs-api-table"><table><thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>{meterProps.map((prop) => <tr><td><code>{prop.name}</code></td><td><code>{prop.type}</code></td><td><code>{prop.defaultValue}</code></td><td>{prop.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="data-slots"><a class="docs-section-anchor" href="#data-slots">Data Slots</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Slot</th><th>Element</th><th>Description</th></tr></thead><tbody>{dataSlots.map((part) => <tr><td><code>{part.name}</code></td><td><code>{part.element}</code></td><td>{part.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="data-attributes"><a class="docs-section-anchor" href="#data-attributes">Data Attributes</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Attribute</th><th>Value</th><th>Description</th></tr></thead><tbody>{dataAttributes.map((attribute) => <tr><td><code>{attribute.name}</code></td><td><code>{attribute.value}</code></td><td>{attribute.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="exports"><a class="docs-section-anchor" href="#exports">Exports</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Export</th><th>Description</th></tr></thead><tbody>{exportsList.map((item) => <tr><td><code>{item.name}</code></td><td>{item.description}</td></tr>)}</tbody></table></div>
+          </div>
+        </section>
+
+        <DocsPageNavigation currentPath={currentPath} />
+      </article>
+
+      <aside class="docs-page-toc" aria-label="On this page">
+        <div class="docs-page-toc__inner">
+          <span class="docs-page-toc__title">On this page</span>
+          <ul>
+            <li><a href="#installation" data-toc-link="installation">Installation</a><ul><li><a href="#barrel" data-toc-link="barrel">Barrel</a></li><li><a href="#granular" data-toc-link="granular">Granular</a></li></ul></li>
+            <li><a href="#usage" data-toc-link="usage">Usage</a></li>
+            <li><a href="#composition" data-toc-link="composition">Composition</a></li>
+            <li><a href="#examples" data-toc-link="examples">Examples</a><ul><li><a href="#custom-range" data-toc-link="custom-range">Custom Range and Value Text</a></li><li><a href="#sizes" data-toc-link="sizes">Sizes</a></li><li><a href="#tones" data-toc-link="tones">Semantic Tones</a></li><li><a href="#hidden-value" data-toc-link="hidden-value">Hidden Visual Value</a></li></ul></li>
+            <li><a href="#accessibility" data-toc-link="accessibility">Accessibility</a></li>
+            <li><a href="#api-reference" data-toc-link="api-reference">API Reference</a><ul><li><a href="#meter-api" data-toc-link="meter-api">Meter</a></li><li><a href="#data-slots" data-toc-link="data-slots">Data Slots</a></li><li><a href="#data-attributes" data-toc-link="data-attributes">Data Attributes</a></li><li><a href="#exports" data-toc-link="exports">Exports</a></li></ul></li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+  </div>
+</DocsLayout>

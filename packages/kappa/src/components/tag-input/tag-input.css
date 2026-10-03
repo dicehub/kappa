@@ -1,0 +1,306 @@
+.kappa-tag-input {
+  --kappa-tag-input-min-height: 2.25rem;
+  --kappa-tag-input-padding-block: 0.25rem;
+  --kappa-tag-input-padding-inline: 0.375rem;
+  --kappa-tag-input-gap: 0.25rem;
+  --kappa-tag-input-radius: 0.5rem;
+  --kappa-tag-input-font-size: 0.8125rem;
+  --kappa-tag-input-item-height: 1.625rem;
+  --kappa-tag-input-item-padding: 0.375rem;
+
+  box-sizing: border-box;
+  display: grid;
+  inline-size: 100%;
+  min-inline-size: 0;
+  gap: 0.375rem;
+  color: var(--kappa-default, #17191f);
+  font-family: var(--kappa-font-sans, inherit);
+}
+
+.kappa-tag-input[data-size="xs"] {
+  --kappa-tag-input-min-height: 1.5rem;
+  --kappa-tag-input-padding-block: 0.125rem;
+  --kappa-tag-input-padding-inline: 0.1875rem;
+  --kappa-tag-input-gap: 0.125rem;
+  --kappa-tag-input-radius: 0.375rem;
+  --kappa-tag-input-font-size: 0.6875rem;
+  --kappa-tag-input-item-height: 1.125rem;
+  --kappa-tag-input-item-padding: 0.25rem;
+}
+
+.kappa-tag-input[data-size="sm"] {
+  --kappa-tag-input-min-height: 1.75rem;
+  --kappa-tag-input-padding-block: 0.1875rem;
+  --kappa-tag-input-padding-inline: 0.25rem;
+  --kappa-tag-input-radius: 0.4375rem;
+  --kappa-tag-input-font-size: 0.75rem;
+  --kappa-tag-input-item-height: 1.25rem;
+  --kappa-tag-input-item-padding: 0.3125rem;
+}
+
+.kappa-tag-input[data-size="lg"] {
+  --kappa-tag-input-min-height: 2.5rem;
+  --kappa-tag-input-padding-block: 0.3125rem;
+  --kappa-tag-input-padding-inline: 0.5rem;
+  --kappa-tag-input-font-size: 0.875rem;
+  --kappa-tag-input-item-height: 1.75rem;
+  --kappa-tag-input-item-padding: 0.5rem;
+}
+
+.kappa-tag-input__label {
+  display: inline-flex;
+  inline-size: fit-content;
+  align-items: center;
+  gap: 0.25rem;
+  color: var(--kappa-default, #17191f);
+  cursor: default;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+.kappa-tag-input__label[data-required]::after {
+  color: var(--kappa-danger-text, #b42318);
+  content: "*";
+}
+
+.kappa-tag-input__label[data-invalid] {
+  color: var(--kappa-danger-text, #b42318);
+}
+
+.kappa-tag-input__control {
+  box-sizing: border-box;
+  display: flex;
+  inline-size: 100%;
+  min-inline-size: 0;
+  min-block-size: var(--kappa-tag-input-min-height);
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--kappa-tag-input-gap);
+  padding-block: var(--kappa-tag-input-padding-block);
+  padding-inline: var(--kappa-tag-input-padding-inline);
+  border: 1px solid var(--kappa-line, #e3e6eb);
+  border-radius: var(--kappa-tag-input-radius);
+  background: var(--kappa-control, #ffffff);
+  color: var(--kappa-default, #17191f);
+  outline: 2px solid transparent;
+  outline-offset: 1px;
+  transition:
+    background-color 120ms ease,
+    border-color 120ms ease,
+    outline-color 120ms ease;
+}
+
+.kappa-tag-input__control:hover:not([data-disabled], [data-readonly]) {
+  border-color: var(--kappa-subtle, #6c7480);
+}
+
+.kappa-tag-input__control:where([data-focus], :focus-within) {
+  border-color: var(--kappa-focus, #4c63ff);
+  outline-color: var(--kappa-focus, #4c63ff);
+}
+
+.kappa-tag-input__control[data-invalid] {
+  border-color: var(--kappa-danger, #b42318);
+}
+
+.kappa-tag-input__control[data-invalid]:where([data-focus], :focus-within) {
+  outline-color: var(--kappa-danger, #b42318);
+}
+
+.kappa-tag-input__control[data-disabled] {
+  background: var(--kappa-disabled-surface, var(--kappa-tint, #f4f6f9));
+  color: var(--kappa-subtle, #6c7480);
+  cursor: not-allowed;
+  opacity: 0.62;
+}
+
+.kappa-tag-input__control[data-readonly] {
+  background: var(--kappa-readonly-surface, var(--kappa-tint, #f4f6f9));
+  cursor: default;
+}
+
+.kappa-tag-input__item {
+  display: inline-flex;
+  min-inline-size: 0;
+  align-items: center;
+}
+
+.kappa-tag-input__item-preview {
+  box-sizing: border-box;
+  display: inline-flex;
+  min-inline-size: 0;
+  block-size: var(--kappa-tag-input-item-height);
+  align-items: center;
+  gap: 0.125rem;
+  padding-inline-start: var(--kappa-tag-input-item-padding);
+  padding-inline-end: 0.125rem;
+  border: 1px solid var(--kappa-line, #e3e6eb);
+  border-radius: calc(var(--kappa-tag-input-radius) - 0.125rem);
+  background: var(--kappa-tint, #f4f6f9);
+  color: var(--kappa-default, #17191f);
+  font-size: var(--kappa-tag-input-font-size);
+  font-weight: 550;
+  line-height: 1;
+  transition:
+    background-color 120ms ease,
+    border-color 120ms ease,
+    color 120ms ease;
+}
+
+.kappa-tag-input__item-preview[data-highlighted] {
+  border-color: var(--kappa-accent, #2479b6);
+  background: var(--kappa-accent-soft, #eef0ff);
+  color: var(--kappa-accent-text, #3042bd);
+}
+
+.kappa-tag-input__item-preview[data-disabled] {
+  cursor: not-allowed;
+}
+
+.kappa-tag-input__item-preview[hidden],
+.kappa-tag-input__item-input[hidden],
+.kappa-tag-input__clear-trigger[hidden] {
+  display: none;
+}
+
+.kappa-tag-input__item-text {
+  min-inline-size: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.kappa-tag-input__item-delete-trigger,
+.kappa-tag-input__clear-trigger {
+  box-sizing: border-box;
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 0;
+  border-radius: calc(var(--kappa-tag-input-radius) - 0.1875rem);
+  background: transparent;
+  color: var(--kappa-subtle, #6c7480);
+  cursor: pointer;
+  transition:
+    background-color 120ms ease,
+    color 120ms ease;
+}
+
+.kappa-tag-input__item-delete-trigger {
+  inline-size: calc(var(--kappa-tag-input-item-height) - 0.25rem);
+  block-size: calc(var(--kappa-tag-input-item-height) - 0.25rem);
+}
+
+.kappa-tag-input__clear-trigger {
+  inline-size: var(--kappa-tag-input-item-height);
+  block-size: var(--kappa-tag-input-item-height);
+  margin-inline-start: auto;
+}
+
+.kappa-tag-input__item-delete-trigger svg,
+.kappa-tag-input__clear-trigger svg {
+  inline-size: 0.75rem;
+  block-size: 0.75rem;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-width: 1.75;
+}
+
+.kappa-tag-input__item-delete-trigger:hover:not(:disabled),
+.kappa-tag-input__clear-trigger:hover:not(:disabled) {
+  background: var(--kappa-overlay, #e9edf2);
+  color: var(--kappa-default, #17191f);
+}
+
+.kappa-tag-input__item-delete-trigger:focus-visible,
+.kappa-tag-input__clear-trigger:focus-visible {
+  outline: 2px solid var(--kappa-focus, #4c63ff);
+  outline-offset: 1px;
+}
+
+.kappa-tag-input__item-delete-trigger:disabled,
+.kappa-tag-input__clear-trigger:disabled {
+  cursor: not-allowed;
+}
+
+.kappa-tag-input[data-readonly] .kappa-tag-input__item-delete-trigger,
+.kappa-tag-input__clear-trigger[data-readonly] {
+  display: none;
+}
+
+.kappa-tag-input__input,
+.kappa-tag-input__item-input {
+  box-sizing: border-box;
+  block-size: var(--kappa-tag-input-item-height);
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font-family: inherit;
+  font-size: var(--kappa-tag-input-font-size);
+  font-weight: 450;
+  line-height: 1.35;
+  outline: none;
+}
+
+.kappa-tag-input__input {
+  min-inline-size: min(8rem, 100%);
+  flex: 1 1 8rem;
+}
+
+.kappa-tag-input__item-input {
+  inline-size: 12ch;
+  min-inline-size: 4rem;
+  padding-inline: var(--kappa-tag-input-item-padding);
+  border: 1px solid var(--kappa-focus, #4c63ff);
+  border-radius: calc(var(--kappa-tag-input-radius) - 0.125rem);
+  outline: 1px solid var(--kappa-focus, #4c63ff);
+  outline-offset: 0;
+}
+
+.kappa-tag-input__input::placeholder {
+  color: var(--kappa-muted, #9aa2ae);
+  opacity: 1;
+}
+
+.kappa-tag-input__input::selection,
+.kappa-tag-input__item-input::selection {
+  background: var(--kappa-accent, #2479b6);
+  color: var(--kappa-accent-contrast, #ffffff);
+}
+
+.kappa-tag-input__input:disabled {
+  color: inherit;
+  cursor: not-allowed;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kappa-tag-input__control,
+  .kappa-tag-input__item-preview,
+  .kappa-tag-input__item-delete-trigger,
+  .kappa-tag-input__clear-trigger {
+    transition: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .kappa-tag-input__control:where([data-focus], :focus-within),
+  .kappa-tag-input__item-delete-trigger:focus-visible,
+  .kappa-tag-input__clear-trigger:focus-visible,
+  .kappa-tag-input__item-input {
+    border-color: Highlight;
+    outline-color: Highlight;
+  }
+
+  .kappa-tag-input__control[data-invalid] {
+    border-color: Mark;
+  }
+
+  .kappa-tag-input__control[data-disabled] {
+    color: GrayText;
+    opacity: 1;
+  }
+}

@@ -1,0 +1,229 @@
+---
+import ArkUiDocsLink from "../../../components/ArkUiDocsLink.astro";
+import CodeBlock from "../../../components/CodeBlock.astro";
+import CompositionTree from "../../../components/CompositionTree.astro";
+import CopyPageControls from "../../../components/CopyPageControls.vue";
+import DocsPageNavigation from "../../../components/DocsPageNavigation.astro";
+import EditableDocsDemo from "../../../components/EditableDocsDemo.vue";
+import {
+  barrelCode,
+  compositionCode,
+  controlledCode,
+  controlsCode,
+  events,
+  exportsList,
+  granularCode,
+  parts,
+  previewCode,
+  rootProps,
+  sizesCode,
+  statesCode,
+  textareaCode,
+  usageCode,
+} from "../../../data/editable-docs";
+import DocsLayout from "../../../layouts/DocsLayout.astro";
+import "../../../styles/docs-components.css";
+
+const currentPath = "/docs/components/editable";
+const description = "Lets users edit a short value in place without leaving its current context.";
+---
+
+<DocsLayout title="Editable" description={description}>
+  <div class="docs-page docs-page--component">
+    <header class="docs-page-header">
+      <div class="docs-page-header__inner">
+        <div class="docs-page-header__content">
+          <div class="docs-page-header__mobile-actions">
+            <CopyPageControls client:only="vue" align="center" />
+          </div>
+          <div class="docs-page-header__title-row">
+            <h1>Editable</h1>
+            <ArkUiDocsLink />
+            <div class="docs-page-header__navigation-actions">
+              <div class="docs-page-header__desktop-actions"><CopyPageControls client:only="vue" /></div>
+              <DocsPageNavigation currentPath={currentPath} variant="compact" />
+            </div>
+          </div>
+          <p class="docs-page-header__lede">{description}</p>
+        </div>
+      </div>
+    </header>
+
+    <div class="docs-page-body">
+      <article class="docs-article docs-article--component">
+        <section id="preview" class="docs-section">
+          <div class="docs-component-example">
+            <div class="docs-component-preview">
+              <EditableDocsDemo client:only="vue" variant="preview" />
+            </div>
+            <CodeBlock code={previewCode} lang="vue" collapsible revealId="editable-preview-code" />
+          </div>
+        </section>
+
+        <section id="installation" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#installation">Installation</a></h2>
+          <p>
+            Editable is part of the main Kappa package. Ark UI supplies edit state, keyboard
+            behavior, focus management, form integration, and accessible relationships.
+          </p>
+          <h3 id="barrel"><a class="docs-section-anchor" href="#barrel">Barrel</a></h3>
+          <CodeBlock code={barrelCode} lang="javascript" />
+          <h3 id="granular"><a class="docs-section-anchor" href="#granular">Granular</a></h3>
+          <CodeBlock code={granularCode} lang="javascript" />
+        </section>
+
+        <section id="usage" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#usage">Usage</a></h2>
+          <p>
+            Place Input and Preview in the same Area. The two parts keep one stable footprint while
+            edit mode changes. Single-line inputs use a compact line height so the text selection
+            does not fill the control height. Use a visible Label when the value needs context.
+          </p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><EditableDocsDemo client:only="vue" variant="basic" /></div>
+            <CodeBlock code={usageCode} lang="vue" collapsible revealId="editable-usage-code" />
+          </div>
+        </section>
+
+        <section id="composition" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#composition">Composition</a></h2>
+          <CompositionTree component="editable" />
+          <p>
+            The compound API follows Ark UI part names. Root also works as <code>Editable</code>.
+            Named parts and hooks remain available for granular imports and external state machines.
+          </p>
+          <CodeBlock code={compositionCode} lang="vue" />
+        </section>
+
+        <section id="examples" class="docs-section docs-section--component-examples">
+          <h2><a class="docs-section-anchor" href="#examples">Examples</a></h2>
+
+          <h3 id="explicit-controls"><a class="docs-section-anchor" href="#explicit-controls">Explicit Controls</a></h3>
+          <p>
+            Set <code>submitMode="none"</code> when users must confirm or cancel with visible actions.
+          </p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><EditableDocsDemo client:only="vue" variant="controls" /></div>
+            <CodeBlock code={controlsCode} lang="vue" collapsible revealId="editable-controls-code" />
+          </div>
+
+          <h3 id="controlled"><a class="docs-section-anchor" href="#controlled">Controlled</a></h3>
+          <p>
+            Use <code>v-model</code> for the live value. Use <code>valueCommit</code> when application
+            work must start only after the user commits the edit.
+          </p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><EditableDocsDemo client:only="vue" variant="controlled" /></div>
+            <CodeBlock code={controlledCode} lang="vue" collapsible revealId="editable-controlled-code" />
+          </div>
+
+          <h3 id="states"><a class="docs-section-anchor" href="#states">States</a></h3>
+          <p>Disabled, read-only, and invalid states stay distinct in both color themes.</p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><EditableDocsDemo client:only="vue" variant="states" /></div>
+            <CodeBlock code={statesCode} lang="vue" collapsible revealId="editable-states-code" />
+          </div>
+
+          <h3 id="sizes"><a class="docs-section-anchor" href="#sizes">Sizes</a></h3>
+          <p>
+            Use <code>size="xs"</code> on Root or RootProvider for dense dicehub settings.
+            At a 16px root font size, it matches the dicehub input field's 20px height,
+            3px side padding, and 2px corners. Kappa keeps its typeface, 13px text, and
+            flexible field width. The other heights are 28px for sm, 36px for default,
+            and 40px for lg. Input and Preview keep the same height while editing.
+          </p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><EditableDocsDemo client:only="vue" variant="sizes" /></div>
+            <CodeBlock code={sizesCode} lang="vue" collapsible revealId="editable-sizes-code" />
+          </div>
+
+          <h3 id="textarea"><a class="docs-section-anchor" href="#textarea">Textarea</a></h3>
+          <p>
+            Use Input with <code>as-child</code> to merge Ark UI behavior into one textarea. Enter
+            creates a new line; Ctrl+Enter, or Command+Enter on macOS, submits when enabled.
+          </p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><EditableDocsDemo client:only="vue" variant="textarea" /></div>
+            <CodeBlock code={textareaCode} lang="vue" collapsible revealId="editable-textarea-code" />
+          </div>
+        </section>
+
+        <section id="accessibility" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#accessibility">Accessibility</a></h2>
+          <ul>
+            <li>Label is associated with the input through Ark UI-managed identifiers.</li>
+            <li>Enter commits a single-line edit when the selected submit mode allows it.</li>
+            <li>Escape cancels an edit and restores the value present when editing started.</li>
+            <li>Focus, double-click, click, or an explicit trigger can enter edit mode.</li>
+            <li>Visible focus and invalid states use Kappa semantic tokens.</li>
+          </ul>
+          <p>
+            See the
+            <a href="https://ark-ui.com/docs/components/editable">official Ark UI Editable documentation</a>
+            for the primitive behavior contract.
+          </p>
+        </section>
+
+        <section id="api-reference" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#api-reference">API Reference</a></h2>
+
+          <div class="docs-api-group">
+            <h3 id="root-api"><a class="docs-section-anchor" href="#root-api">Editable.Root</a></h3>
+            <div class="docs-api-table">
+              <table>
+                <thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+                <tbody>{rootProps.map((prop) => <tr><td><code>{prop.name}</code></td><td><code>{prop.type}</code></td><td><code>{prop.defaultValue}</code></td><td>{prop.description}</td></tr>)}</tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="docs-api-group">
+            <h3 id="parts-api"><a class="docs-section-anchor" href="#parts-api">Parts</a></h3>
+            <div class="docs-api-table">
+              <table>
+                <thead><tr><th>Part</th><th>Element</th><th>Description</th></tr></thead>
+                <tbody>{parts.map((part) => <tr><td><code>{part.name}</code></td><td><code>{part.element}</code></td><td>{part.description}</td></tr>)}</tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="docs-api-group">
+            <h3 id="events-api"><a class="docs-section-anchor" href="#events-api">Events</a></h3>
+            <div class="docs-api-table">
+              <table>
+                <thead><tr><th>Event</th><th>Payload</th><th>Description</th></tr></thead>
+                <tbody>{events.map((event) => <tr><td><code>{event.name}</code></td><td><code>{event.payload}</code></td><td>{event.description}</td></tr>)}</tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="docs-api-group">
+            <h3 id="exports"><a class="docs-section-anchor" href="#exports">Exports</a></h3>
+            <div class="docs-api-table">
+              <table>
+                <thead><tr><th>Export</th><th>Description</th></tr></thead>
+                <tbody>{exportsList.map((item) => <tr><td><code>{item.name}</code></td><td>{item.description}</td></tr>)}</tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <DocsPageNavigation currentPath={currentPath} />
+      </article>
+
+      <aside class="docs-page-toc" aria-label="On this page">
+        <div class="docs-page-toc__inner">
+          <span class="docs-page-toc__title">On this page</span>
+          <ul>
+            <li><a href="#installation" data-toc-link="installation">Installation</a><ul><li><a href="#barrel" data-toc-link="barrel">Barrel</a></li><li><a href="#granular" data-toc-link="granular">Granular</a></li></ul></li>
+            <li><a href="#usage" data-toc-link="usage">Usage</a></li>
+            <li><a href="#composition" data-toc-link="composition">Composition</a></li>
+            <li><a href="#examples" data-toc-link="examples">Examples</a><ul><li><a href="#explicit-controls" data-toc-link="explicit-controls">Explicit Controls</a></li><li><a href="#controlled" data-toc-link="controlled">Controlled</a></li><li><a href="#states" data-toc-link="states">States</a></li><li><a href="#sizes" data-toc-link="sizes">Sizes</a></li><li><a href="#textarea" data-toc-link="textarea">Textarea</a></li></ul></li>
+            <li><a href="#accessibility" data-toc-link="accessibility">Accessibility</a></li>
+            <li><a href="#api-reference" data-toc-link="api-reference">API Reference</a><ul><li><a href="#root-api" data-toc-link="root-api">Editable.Root</a></li><li><a href="#parts-api" data-toc-link="parts-api">Parts</a></li><li><a href="#events-api" data-toc-link="events-api">Events</a></li><li><a href="#exports" data-toc-link="exports">Exports</a></li></ul></li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+  </div>
+</DocsLayout>

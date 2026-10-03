@@ -1,0 +1,293 @@
+---
+import BadgeDocsDemo from "../../../components/BadgeDocsDemo.vue";
+import CodeBlock from "../../../components/CodeBlock.astro";
+import CopyPageControls from "../../../components/CopyPageControls.vue";
+import DocsPageNavigation from "../../../components/DocsPageNavigation.astro";
+import {
+  badgeProps,
+  barrelCode,
+  colorVariants,
+  colorsCode,
+  exportsList,
+  granularCode,
+  iconsCode,
+  linkCode,
+  numericCode,
+  previewCode,
+  semanticCode,
+  semanticVariants,
+  sentenceCode,
+  usageCode,
+} from "../../../data/badge-docs";
+import DocsLayout from "../../../layouts/DocsLayout.astro";
+import "../../../styles/docs-components.css";
+
+const currentPath = "/docs/components/badge";
+const description = "A compact label for status, classification, and supporting metadata.";
+---
+
+<DocsLayout title="Badge" description={description}>
+  <div class="docs-page docs-page--component">
+    <header class="docs-page-header">
+      <div class="docs-page-header__inner">
+        <div class="docs-page-header__content">
+          <div class="docs-page-header__mobile-actions">
+            <CopyPageControls client:only="vue" align="center" />
+          </div>
+          <div class="docs-page-header__title-row">
+            <h1>Badge</h1>
+            <div class="docs-page-header__navigation-actions">
+              <div class="docs-page-header__desktop-actions">
+                <CopyPageControls client:only="vue" />
+              </div>
+              <DocsPageNavigation currentPath={currentPath} variant="compact" />
+            </div>
+          </div>
+          <p class="docs-page-header__lede">{description}</p>
+        </div>
+      </div>
+    </header>
+
+    <div class="docs-page-body">
+      <article class="docs-article docs-article--component">
+        <section id="preview" class="docs-section">
+          <div class="docs-component-example">
+            <div class="docs-component-preview">
+              <BadgeDocsDemo variant="preview" />
+            </div>
+            <CodeBlock code={previewCode} lang="vue" collapsible revealId="badge-preview-code" />
+          </div>
+        </section>
+
+        <section id="installation" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#installation">Installation</a></h2>
+
+          <h3 id="barrel"><a class="docs-section-anchor" href="#barrel">Barrel</a></h3>
+          <CodeBlock code={barrelCode} lang="javascript" />
+
+          <h3 id="granular"><a class="docs-section-anchor" href="#granular">Granular</a></h3>
+          <CodeBlock code={granularCode} lang="javascript" />
+        </section>
+
+        <section id="usage" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#usage">Usage</a></h2>
+          <p>
+            Badge renders a non-interactive <code>&lt;span&gt;</code> by default and forwards standard
+            attributes to that element.
+          </p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview">
+              <BadgeDocsDemo variant="usage" />
+            </div>
+            <CodeBlock code={usageCode} lang="vue" collapsible revealId="badge-usage-code" />
+          </div>
+        </section>
+
+        <section id="examples" class="docs-section docs-section--component-examples">
+          <h2><a class="docs-section-anchor" href="#examples">Examples</a></h2>
+
+          <h3 id="semantic-variants">
+            <a class="docs-section-anchor" href="#semantic-variants">Semantic Variants</a>
+          </h3>
+          <p>
+            Prefer semantic variants for application state. Their meaning remains stable when the
+            theme changes.
+          </p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview">
+              <BadgeDocsDemo variant="semantic" />
+            </div>
+            <CodeBlock code={semanticCode} lang="vue" collapsible revealId="badge-semantic-code" />
+          </div>
+
+          <h3 id="color-variants">
+            <a class="docs-section-anchor" href="#color-variants">Color Variants</a>
+          </h3>
+          <p>
+            Use color variants for categorical data with a legend or text label—not as the only
+            indication of state.
+          </p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview">
+              <BadgeDocsDemo variant="colors" />
+            </div>
+            <CodeBlock code={colorsCode} lang="vue" collapsible revealId="badge-colors-code" />
+          </div>
+
+          <h3 id="with-icons">
+            <a class="docs-section-anchor" href="#with-icons">With Icons</a>
+          </h3>
+          <p>
+            Mark decorative icons with <code>aria-hidden</code>. Add <code>data-icon="inline-start"</code>
+            or <code>data-icon="inline-end"</code> for optically balanced padding in both directions.
+          </p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview">
+              <BadgeDocsDemo variant="icons" />
+            </div>
+            <CodeBlock code={iconsCode} lang="vue" collapsible revealId="badge-icons-code" />
+          </div>
+
+          <h3 id="link"><a class="docs-section-anchor" href="#link">Link</a></h3>
+          <p>
+            Set <code>as="a"</code> when the badge navigates. The resulting anchor retains native
+            keyboard and link semantics.
+          </p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview">
+              <BadgeDocsDemo variant="link" />
+            </div>
+            <CodeBlock code={linkCode} lang="vue" collapsible revealId="badge-link-code" />
+          </div>
+
+          <h3 id="in-a-sentence">
+            <a class="docs-section-anchor" href="#in-a-sentence">In a Sentence</a>
+          </h3>
+          <p>Badge aligns with surrounding text without changing the sentence semantics.</p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview">
+              <BadgeDocsDemo variant="sentence" />
+            </div>
+            <CodeBlock code={sentenceCode} lang="vue" collapsible revealId="badge-sentence-code" />
+          </div>
+
+          <h3 id="numeric-values">
+            <a class="docs-section-anchor" href="#numeric-values">Numeric Values</a>
+          </h3>
+          <p>
+            Legacy Badge versions accepted <code>value</code>, <code>maxVal</code>, and <code>maxLen</code>.
+            Format numeric content in application code and pass it through the default slot instead.
+          </p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview">
+              <BadgeDocsDemo variant="numeric" />
+            </div>
+            <CodeBlock code={numericCode} lang="vue" collapsible revealId="badge-numeric-code" />
+          </div>
+          <div class="docs-component-note">
+            When visible content is shortened, hide that shortcut from assistive technology and
+            preserve the full value in visually hidden text.
+          </div>
+        </section>
+
+        <section id="accessibility" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#accessibility">Accessibility</a></h2>
+          <ul>
+            <li>Badge is presentational text; it does not add a role or live-region behavior.</li>
+            <li>Keep labels short. Badge preserves its complete visible text instead of truncating it.</li>
+            <li>Use meaningful text so state never depends on color or an icon alone.</li>
+            <li>Decorative icons should use <code>aria-hidden="true"</code>.</li>
+            <li>Use <code>as="a"</code> for navigation. Badge does not render buttons; use Button for actions.</li>
+            <li>For changing status, place Badge inside an appropriately labelled live region managed by the application.</li>
+          </ul>
+        </section>
+
+        <section id="api-reference" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#api-reference">API Reference</a></h2>
+
+          <div class="docs-api-group">
+            <h3 id="badge-api"><a class="docs-section-anchor" href="#badge-api">Badge</a></h3>
+            <p>Forwards remaining attributes and listeners to the rendered element.</p>
+            <div class="docs-api-table">
+              <table>
+                <thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+                <tbody>
+                  {badgeProps.map((prop) => (
+                    <tr>
+                      <td><code>{prop.name}</code></td>
+                      <td><code>{prop.type}</code></td>
+                      <td><code>{prop.defaultValue}</code></td>
+                      <td>{prop.description}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="docs-api-group">
+            <h3 id="semantic-variant-reference">
+              <a class="docs-section-anchor" href="#semantic-variant-reference">Semantic Variants</a>
+            </h3>
+            <div class="docs-api-table">
+              <table>
+                <thead><tr><th>Variant</th><th>Purpose</th></tr></thead>
+                <tbody>
+                  {semanticVariants.map((variant) => (
+                    <tr><td><code>{variant.name}</code></td><td>{variant.purpose}</td></tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="docs-api-group">
+            <h3 id="color-variant-reference">
+              <a class="docs-section-anchor" href="#color-variant-reference">Color Variants</a>
+            </h3>
+            <p><code>{colorVariants.join(" | ")}</code></p>
+          </div>
+
+          <div class="docs-api-group">
+            <h3 id="badge-exports">
+              <a class="docs-section-anchor" href="#badge-exports">Exports</a>
+            </h3>
+            <div class="docs-api-table">
+              <table>
+                <thead><tr><th>Export</th><th>Description</th></tr></thead>
+                <tbody>
+                  {exportsList.map((item) => (
+                    <tr><td><code>{item.name}</code></td><td>{item.description}</td></tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <DocsPageNavigation currentPath={currentPath} />
+      </article>
+
+      <aside class="docs-page-toc" aria-label="On this page">
+        <div class="docs-page-toc__inner">
+          <span class="docs-page-toc__title">On this page</span>
+          <ul>
+            <li>
+              <a href="#installation" data-toc-link="installation">Installation</a>
+              <ul>
+                <li><a href="#barrel" data-toc-link="barrel">Barrel</a></li>
+                <li><a href="#granular" data-toc-link="granular">Granular</a></li>
+              </ul>
+            </li>
+            <li><a href="#usage" data-toc-link="usage">Usage</a></li>
+            <li>
+              <a href="#examples" data-toc-link="examples">Examples</a>
+              <ul>
+                <li><a href="#semantic-variants" data-toc-link="semantic-variants">Semantic Variants</a></li>
+                <li><a href="#color-variants" data-toc-link="color-variants">Color Variants</a></li>
+                <li><a href="#with-icons" data-toc-link="with-icons">With Icons</a></li>
+                <li><a href="#link" data-toc-link="link">Link</a></li>
+                <li><a href="#in-a-sentence" data-toc-link="in-a-sentence">In a Sentence</a></li>
+                <li><a href="#numeric-values" data-toc-link="numeric-values">Numeric Values</a></li>
+              </ul>
+            </li>
+            <li><a href="#accessibility" data-toc-link="accessibility">Accessibility</a></li>
+            <li>
+              <a href="#api-reference" data-toc-link="api-reference">API Reference</a>
+              <ul>
+                <li><a href="#badge-api" data-toc-link="badge-api">Badge</a></li>
+                <li>
+                  <a href="#semantic-variant-reference" data-toc-link="semantic-variant-reference">Semantic Variants</a>
+                </li>
+                <li>
+                  <a href="#color-variant-reference" data-toc-link="color-variant-reference">Color Variants</a>
+                </li>
+                <li><a href="#badge-exports" data-toc-link="badge-exports">Exports</a></li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+  </div>
+</DocsLayout>

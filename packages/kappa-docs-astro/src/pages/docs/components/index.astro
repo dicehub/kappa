@@ -1,0 +1,148 @@
+---
+import CopyPageControls from "../../../components/CopyPageControls.vue";
+import DocsPageNavigation from "../../../components/DocsPageNavigation.astro";
+import { implementedComponentLinks } from "../../../data/docs-nav";
+import DocsLayout from "../../../layouts/DocsLayout.astro";
+import "../../../styles/docs-directory.css";
+
+const description = "Browse the opinionated Vue components used in dicehub products.";
+const currentPath = "/docs/components";
+const toc = [
+  { id: "recently-added", label: "Recently added" },
+  { id: "all-components", label: "All components" },
+];
+const recentComponents = [
+  {
+    label: "Diff Viewer",
+    href: "/docs/components/diff-viewer",
+    description: "Read unified patches in split or inline view.",
+  },
+  {
+    label: "Image Cropper",
+    href: "/docs/components/image-cropper",
+    description: "Crop an image with fixed-image controls and custom handles.",
+  },
+  {
+    label: "Drag Selection",
+    href: "/docs/components/drag-selection",
+    description: "Select items in a grid with pointer or keyboard controls.",
+  },
+  {
+    label: "Selection List",
+    href: "/docs/components/selection-list",
+    description: "Select one or more visible choices with full keyboard support.",
+  },
+  {
+    label: "Timer",
+    href: "/docs/components/timer",
+    description: "Record elapsed time or count down to a target.",
+  },
+  {
+    label: "Tree View",
+    href: "/docs/components/tree-view",
+    description: "Browse small hierarchies or window 100,000-node data sets.",
+  },
+  {
+    label: "Dialog Layout",
+    href: "/docs/components/dialog-layout",
+    description: "Arrange the header, content, and actions in a dense dialog.",
+  },
+];
+---
+
+<DocsLayout title="Components" description={description}>
+  <div class="docs-page">
+    <header class="docs-page-header">
+      <div class="docs-page-header__inner">
+        <div class="docs-page-header__content">
+          <div class="docs-page-header__mobile-actions">
+            <CopyPageControls client:only="vue" align="center" />
+          </div>
+          <div class="docs-page-header__title-row">
+            <h1>Components</h1>
+            <div class="docs-page-header__navigation-actions">
+              <div class="docs-page-header__desktop-actions">
+                <CopyPageControls client:only="vue" />
+              </div>
+              <DocsPageNavigation currentPath={currentPath} variant="compact" />
+            </div>
+          </div>
+          <p class="docs-page-header__lede">{description}</p>
+        </div>
+      </div>
+    </header>
+
+    <div class="docs-page-body">
+      <article class="docs-article">
+        <section id="recently-added" class="docs-section docs-component-directory__recent-section">
+          <h2>
+            <a class="docs-section-anchor" href="#recently-added">Recently added</a>
+          </h2>
+          <ul class="docs-component-directory__recent" role="list">
+            {
+              recentComponents.map((component, index) => (
+                <li>
+                  <a class="docs-component-directory__recent-link" href={component.href}>
+                    <span class="docs-component-directory__recent-index" aria-hidden="true">
+                      {String(index + 1).padStart(2, "0")}
+                    </span>
+                    <strong>{component.label}</strong>
+                    <span>{component.description}</span>
+                    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                      <path d="M5 12h14M13 6l6 6-6 6"></path>
+                    </svg>
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </section>
+
+        <section
+          id="all-components"
+          class="docs-section docs-component-directory"
+          aria-labelledby="all-components-heading"
+        >
+          <div class="docs-component-directory__heading-row">
+            <h2 id="all-components-heading">
+              <a class="docs-section-anchor" href="#all-components">All components</a>
+            </h2>
+            <span class="docs-component-directory__count">
+              {implementedComponentLinks.length} available
+            </span>
+          </div>
+          <nav aria-label="Component directory">
+            <ul class="docs-component-directory__list" role="list">
+              {
+                implementedComponentLinks.map((link) => (
+                  <li class="docs-component-directory__item">
+                    <a class="docs-component-directory__link" href={link.href}>
+                      <span>{link.label}</span>
+                      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <path d="m9 18 6-6-6-6"></path>
+                      </svg>
+                    </a>
+                  </li>
+                ))
+              }
+            </ul>
+          </nav>
+        </section>
+        <DocsPageNavigation currentPath={currentPath} />
+      </article>
+
+      <aside class="docs-page-toc" aria-label="On this page">
+        <div class="docs-page-toc__inner">
+          <span class="docs-page-toc__title">On this page</span>
+          <ul>
+            {
+              toc.map((item) => (
+                <li><a href={`#${item.id}`} data-toc-link={item.id}>{item.label}</a></li>
+              ))
+            }
+          </ul>
+        </div>
+      </aside>
+    </div>
+  </div>
+</DocsLayout>

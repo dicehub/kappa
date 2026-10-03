@@ -1,0 +1,111 @@
+.minimal-workspace-demo { container: minimal-workspace / inline-size; inline-size: 100%; block-size: 36rem; min-inline-size: 0; text-align: start; }
+.minimal-workspace-demo[data-standalone] { block-size: 100svh; }
+.minimal-workspace-demo .kappa-sidebar-layout { background: var(--kappa-tint); border: 1px solid var(--kappa-line); border-radius: 0.625rem; overflow: hidden; }
+.minimal-workspace-demo[data-standalone] .kappa-sidebar-layout { border: 0; border-radius: 0; }
+.minimal-workspace-demo .kappa-sidebar-layout .kappa-sidebar-layout__site-header { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); gap: 0.75rem; min-block-size: 3rem; padding: 0.375rem 0.75rem; border: 0; background: var(--kappa-tint); }
+/* The built-in trigger opens mobile navigation; desktop uses the footer trigger. */
+.minimal-workspace-demo .kappa-sidebar-layout:not([data-mobile]) .kappa-sidebar-layout__site-header > .kappa-sidebar__trigger { display: none; }
+.minimal-workspace-demo .kappa-sidebar-layout__site-header > .kappa-sidebar__trigger { grid-area: 1 / 1; justify-self: start; z-index: 1; }
+.minimal-workspace-demo__header-start, .minimal-workspace-demo__header-end { display: flex; align-items: center; gap: 0.75rem; min-inline-size: 0; }
+.minimal-workspace-demo__header-start { grid-area: 1 / 1; }
+.minimal-workspace-demo__header-end { grid-area: 1 / 3; justify-self: end; }
+.minimal-workspace-demo .kappa-sidebar-layout[data-mobile] .minimal-workspace-demo__header-start { padding-inline-start: 2.5rem; }
+.minimal-workspace-demo .kappa-sidebar-layout__body { padding-block-end: 0.5rem; padding-inline-end: 0.5rem; gap: 0.5rem; }
+.minimal-workspace-demo .kappa-sidebar-layout__main { border-radius: 0.5rem; overflow: hidden; }
+.minimal-workspace-demo .kappa-sidebar-layout__navigation { border: 0; background: var(--kappa-tint); }
+.minimal-workspace-demo .kappa-sidebar__resize-handle::after { opacity: 0; }
+.minimal-workspace-demo .kappa-sidebar__resize-handle:is(:hover, :focus-visible, [data-dragging]):not([data-disabled])::after { opacity: 1; }
+.minimal-workspace-demo .kappa-sidebar-layout__navigation > .kappa-sidebar__header { min-block-size: 2.875rem; padding: 0.375rem 0.5rem; }
+.minimal-workspace-demo .kappa-sidebar-layout__navigation > .kappa-sidebar__footer { flex-direction: column; align-items: stretch; gap: 0; padding-block: 0.375rem; }
+.minimal-workspace-demo .kappa-sidebar-layout__navigation .kappa-sidebar__menu-button { min-block-size: 1.875rem; padding-block: 0.25rem; font-size: 0.8125rem; }
+.minimal-workspace-demo .kappa-sidebar-layout__navigation .kappa-sidebar__menu-button[data-active] { background: var(--kappa-overlay); font-weight: 550; }
+.minimal-workspace-demo .kappa-sidebar-layout__navigation .kappa-sidebar__menu-icon { color: var(--kappa-subtle); }
+.minimal-workspace-demo .kappa-sidebar-layout__navigation .kappa-sidebar__menu-button[data-active] > .kappa-sidebar__menu-icon { color: var(--kappa-accent-text); }
+.minimal-workspace-demo .kappa-sidebar-layout__navigation .kappa-sidebar__menu-sub { border: 0; margin-inline-start: 1.375rem; padding-inline-start: 0; }
+.minimal-workspace-demo__brand { flex: 0 0 auto; display: block; inline-size: 5.75rem; border-radius: 0.25rem; }
+.minimal-workspace-demo__brand .kappa-dicehub-logo { color: var(--kappa-default); }
+.minimal-workspace-demo__global-nav { display: flex; gap: 0.25rem; }
+.minimal-workspace-demo__global-nav a { padding: 0.375rem 0.5rem; border-radius: 0.25rem; color: var(--kappa-subtle); font-size: 0.75rem; text-decoration: none; white-space: nowrap; }
+.minimal-workspace-demo__global-nav a:hover, .minimal-workspace-demo__global-nav a[aria-current] { color: var(--kappa-default); background: var(--kappa-overlay); }
+.minimal-workspace-demo__brand:focus-visible, .minimal-workspace-demo__global-nav a:focus-visible, .minimal-workspace-demo__breadcrumb a:focus-visible { outline: 2px solid var(--kappa-focus); outline-offset: 2px; }
+.minimal-workspace-demo__browse.kappa-button { display: none; }
+.minimal-workspace-demo__search.kappa-button { grid-area: 1 / 2; inline-size: 14rem; min-inline-size: 0; justify-content: flex-start; border: 1px solid var(--kappa-line); background: color-mix(in srgb, var(--kappa-control) 25%, var(--kappa-tint)); color: var(--kappa-subtle); }
+.minimal-workspace-demo__search .kappa-button__label { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.minimal-workspace-demo__profile.kappa-button { padding: 0.125rem 0.25rem; flex: 0 0 auto; gap: 0.375rem; }
+.minimal-workspace-demo__profile .kappa-button__label { display: flex; align-items: center; gap: 0.375rem; }
+.minimal-workspace-demo__profile .kappa-avatar { --kappa-avatar-size: 1.5rem; }
+.minimal-workspace-demo__profile svg { inline-size: 0.75rem; block-size: 0.75rem; color: var(--kappa-subtle); }
+.minimal-workspace-demo__profile-menu.kappa-dropdown__content { min-inline-size: 14rem; }
+.minimal-workspace-demo__identity { display: flex; flex-direction: column; gap: 0.25rem; padding: 0.625rem 0.5rem; font-size: 0.8125rem; }
+.minimal-workspace-demo__identity strong { font-weight: 550; }
+.minimal-workspace-demo__identity span { color: var(--kappa-subtle); font-size: 0.75rem; }
+.minimal-workspace-demo__namespace .kappa-avatar { --kappa-avatar-size: 1.25rem; }
+.minimal-workspace-demo__namespace > .kappa-sidebar__menu-icon { inline-size: 1.25rem; block-size: 1.25rem; }
+.minimal-workspace-demo__namespace .kappa-sidebar__menu-label { display: flex; align-items: center; gap: 0.5rem; }
+.minimal-workspace-demo__namespace .kappa-sidebar__menu-label > span { overflow: hidden; text-overflow: ellipsis; }
+.minimal-workspace-demo__namespace .kappa-sidebar__menu-label > svg { inline-size: 0.75rem; block-size: 0.75rem; flex: none; color: var(--kappa-subtle); }
+.minimal-workspace-demo__help, .minimal-workspace-demo__collapse { color: var(--kappa-subtle); }
+.minimal-workspace-demo__collapse.kappa-sidebar__menu-button { min-inline-size: 0; padding-inline: 0.5rem; text-align: start; }
+.minimal-workspace-demo__breadcrumb { display: flex; gap: 0.375rem; align-items: center; min-block-size: 2.875rem; padding: 0.5rem 1.25rem; font-size: 0.6875rem; }
+.minimal-workspace-demo__breadcrumb > :last-child { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.minimal-workspace-demo__breadcrumb a { flex-shrink: 0; color: var(--kappa-accent-text); text-decoration: none; border-radius: 0.125rem; }
+.minimal-workspace-demo__breadcrumb svg { inline-size: 0.75rem; block-size: 0.75rem; }
+.minimal-workspace-demo__page { max-inline-size: 72rem; margin-inline: auto; padding: 1.25rem 1.5rem 2rem; }
+.minimal-workspace-demo__page-heading { display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: space-between; gap: 1rem; margin-block-end: 1.5rem; }
+.minimal-workspace-demo__page-heading h2 { margin: 0 !important; font-size: 1.125rem !important; line-height: 1.5rem !important; font-weight: 550; }
+.minimal-workspace-demo__page-heading p { margin: 0.375rem 0 0 !important; color: var(--kappa-subtle); font-size: 0.8125rem !important; line-height: 1.5 !important; }
+.minimal-workspace-demo__project-panel { overflow: hidden; border: 1px solid var(--kappa-line); border-radius: 0.375rem; }
+.minimal-workspace-demo__panel-heading { display: flex; align-items: center; gap: 0.5rem; padding: 0.625rem 0.75rem; border-block-end: 1px solid var(--kappa-line); background: color-mix(in srgb, var(--kappa-tint) 40%, var(--kappa-control)); }
+.minimal-workspace-demo__panel-heading h3 { margin: 0 !important; font-size: 0.8125rem !important; line-height: 1.125rem !important; font-weight: 550; }
+.minimal-workspace-demo__panel-heading > span { color: var(--kappa-subtle); font-size: 0.6875rem; }
+.minimal-workspace-demo__filters { display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; padding: 0.5rem 0.75rem; border-block-end: 1px solid var(--kappa-line); }
+.minimal-workspace-demo__filter { position: relative; inline-size: min(14rem, 100%); min-inline-size: 0; }
+.minimal-workspace-demo__filter > svg { position: absolute; inset-inline-start: 0.625rem; inset-block-start: 50%; transform: translateY(-50%); inline-size: 0.875rem; block-size: 0.875rem; color: var(--kappa-subtle); pointer-events: none; }
+.minimal-workspace-demo__filter .kappa-input { padding-inline-start: 1.875rem; }
+.minimal-workspace-demo__filters > span { flex-shrink: 0; color: var(--kappa-subtle); font-size: 0.6875rem; }
+.minimal-workspace-demo__project-panel .kappa-table { border: 0; }
+.minimal-workspace-demo__project-panel .kappa-table__cell { padding: 0.625rem 0.75rem; font-size: 0.75rem; }
+.minimal-workspace-demo__project-panel .kappa-table__head { padding-inline: 0.75rem; }
+.minimal-workspace-demo__project-link { display: flex; align-items: center; gap: 0.625rem; padding: 0; border: 0; background: transparent; color: var(--kappa-default); font: inherit; text-align: start; cursor: pointer; }
+.minimal-workspace-demo__project-link small { display: block; margin-block-end: 0.125rem; color: var(--kappa-subtle); font-size: 0.6875rem; }
+.minimal-workspace-demo__project-link strong { font-weight: 550; }
+.minimal-workspace-demo__project-link:hover strong { text-decoration: underline; text-underline-offset: 0.2em; }
+.minimal-workspace-demo__project-link:focus-visible { outline: 2px solid var(--kappa-focus); outline-offset: 3px; border-radius: 0.125rem; }
+.minimal-workspace-demo__project-icon { display: grid; place-items: center; flex: 0 0 2rem; block-size: 2rem; border-radius: 0.25rem; background: var(--kappa-tint); color: var(--kappa-subtle); font-size: 0.875rem; }
+.minimal-workspace-demo__status { display: inline-flex; align-items: center; gap: 0.375rem; white-space: nowrap; color: var(--kappa-subtle); font-size: 0.6875rem; }
+.minimal-workspace-demo__status::before { content: ""; inline-size: 0.3125rem; block-size: 0.3125rem; border-radius: 50%; background: var(--kappa-subtle); }
+.minimal-workspace-demo__status[data-ready]::before { background: var(--kappa-success-text); }
+.minimal-workspace-demo__empty { padding: 1.5rem !important; text-align: center; color: var(--kappa-subtle); }
+.minimal-workspace-demo__details { margin: 0; border-block-start: 1px solid var(--kappa-line); font-size: 0.8125rem; }
+.minimal-workspace-demo__details > div { display: grid; grid-template-columns: 7rem 1fr; padding: 0.75rem 0; border-block-end: 1px solid var(--kappa-line); }
+.minimal-workspace-demo__details dt { color: var(--kappa-subtle); }
+.minimal-workspace-demo__details dd { margin: 0; }
+.minimal-workspace-demo__list { margin: 0 !important; padding: 0 !important; list-style: none; font-size: 0.8125rem; }
+.minimal-workspace-demo__list li { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding-block: 0.75rem; border-block-end: 1px solid var(--kappa-line); }
+.minimal-workspace-demo__list small { color: var(--kappa-subtle); font-size: 0.6875rem; }
+.minimal-workspace-demo__note { display: flex; gap: 0.5rem; margin: 1.25rem 0 0 !important; color: var(--kappa-subtle); font-size: 0.6875rem !important; line-height: 1.5 !important; }
+.minimal-workspace-demo__note svg { inline-size: 0.875rem; block-size: 0.875rem; flex: none; }
+.minimal-workspace-demo__sr-only { position: absolute; inline-size: 1px; block-size: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+@container minimal-workspace (max-width: 68rem) {
+  .minimal-workspace-demo__global-nav { display: none; }
+  .minimal-workspace-demo__browse.kappa-button { display: inline-flex; }
+  .minimal-workspace-demo__page { padding-inline: 1rem; }
+}
+@container minimal-workspace (max-width: 40rem) {
+  .minimal-workspace-demo__search.kappa-button { inline-size: 2rem; padding-inline: 0.5rem; }
+  .minimal-workspace-demo__search .kappa-button__label { display: none; }
+}
+@container minimal-workspace (max-width: 26rem) {
+  .minimal-workspace-demo .kappa-sidebar-layout .kappa-sidebar-layout__site-header { gap: 0.5rem; padding-inline: 0.5rem; }
+  .minimal-workspace-demo__header-end { gap: 0.5rem; }
+  .minimal-workspace-demo__profile .kappa-button__label > svg { display: none; }
+  .minimal-workspace-demo__brand { inline-size: 5.25rem; }
+  .minimal-workspace-demo__project-panel .kappa-table__cell { padding-inline: 0.5rem; }
+  .minimal-workspace-demo__project-icon { display: none; }
+  .minimal-workspace-demo__page-heading { gap: 0.75rem; }
+}
+@media (max-width: 767px) {
+  .minimal-workspace-demo .kappa-sidebar-layout__body { padding: 0; }
+  .minimal-workspace-demo .kappa-sidebar-layout__main { border-radius: 0; }
+  .minimal-workspace-demo__namespace.kappa-sidebar__menu-button { min-block-size: 2.75rem; }
+}

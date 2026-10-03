@@ -1,0 +1,227 @@
+---
+import ArkUiDocsLink from "../../../components/ArkUiDocsLink.astro";
+import ComboboxDocsDemo from "../../../components/ComboboxDocsDemo.vue";
+import CodeBlock from "../../../components/CodeBlock.astro";
+import CompositionTree from "../../../components/CompositionTree.astro";
+import CopyPageControls from "../../../components/CopyPageControls.vue";
+import DocsPageNavigation from "../../../components/DocsPageNavigation.astro";
+import {
+  barrelCode,
+  customTriggerCode,
+  events,
+  exportsList,
+  granularCode,
+  groupedCode,
+  multipleCode,
+  partProps,
+  popupSearchCode,
+  previewCode,
+  rootProps,
+  sizesCode,
+  statesCode,
+  usageCode,
+} from "../../../data/combobox-docs";
+import DocsLayout from "../../../layouts/DocsLayout.astro";
+import "../../../styles/docs-components.css";
+
+const currentPath = "/docs/components/combobox";
+const description =
+  "Filters a known collection and selects one or more values in dense technical workflows.";
+---
+
+<DocsLayout title="Combobox" description={description}>
+  <div class="docs-page docs-page--component">
+    <header class="docs-page-header">
+      <div class="docs-page-header__inner">
+        <div class="docs-page-header__content">
+          <div class="docs-page-header__mobile-actions">
+            <CopyPageControls client:only="vue" align="center" />
+          </div>
+          <div class="docs-page-header__title-row">
+            <h1>Combobox</h1>
+            <ArkUiDocsLink />
+            <div class="docs-page-header__navigation-actions">
+              <div class="docs-page-header__desktop-actions"><CopyPageControls client:only="vue" /></div>
+              <DocsPageNavigation currentPath={currentPath} variant="compact" />
+            </div>
+          </div>
+          <p class="docs-page-header__lede">{description}</p>
+        </div>
+      </div>
+    </header>
+
+    <div class="docs-page-body">
+      <article class="docs-article docs-article--component">
+        <section id="preview" class="docs-section">
+          <div class="docs-component-example">
+            <div class="docs-component-preview">
+              <ComboboxDocsDemo client:only="vue" variant="preview" />
+            </div>
+            <CodeBlock code={previewCode} lang="vue" collapsible revealId="combobox-preview-code" />
+          </div>
+        </section>
+
+        <section id="installation" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#installation">Installation</a></h2>
+          <p>
+            Combobox is part of the main Kappa package. Ark UI owns focus, keyboard navigation,
+            selection, form values, live option state, and floating positioning.
+          </p>
+          <h3 id="barrel"><a class="docs-section-anchor" href="#barrel">Barrel</a></h3>
+          <CodeBlock code={barrelCode} lang="javascript" />
+          <h3 id="granular"><a class="docs-section-anchor" href="#granular">Granular</a></h3>
+          <CodeBlock code={granularCode} lang="javascript" />
+        </section>
+
+        <section id="usage" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#usage">Usage</a></h2>
+          <p>
+            Use Combobox when the submitted value must come from a known collection. It rejects
+            custom text by default. Use Autocomplete when free-form text is valid.
+          </p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><ComboboxDocsDemo client:only="vue" variant="usage" /></div>
+            <CodeBlock code={usageCode} lang="vue" collapsible revealId="combobox-usage-code" />
+          </div>
+        </section>
+
+        <section id="composition" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#composition">Composition</a></h2>
+          <CompositionTree component="combobox" />
+          <p>
+            <code>TriggerInput</code> is an editable control. <code>TriggerValue</code> is a
+            select-like button. Add <code>Input</code> inside <code>Content</code> when a button
+            trigger still needs search. Multiple selection uses <code>TriggerMultipleWithInput</code>.
+          </p>
+          <p>
+            <code>Content</code> teleports to <code>body</code> by default and accepts Ark positioning
+            props such as <code>placement</code>, <code>sameWidth</code>, <code>flip</code>, and
+            <code>strategy</code>.
+          </p>
+        </section>
+
+        <section id="examples" class="docs-section docs-section--component-examples">
+          <h2><a class="docs-section-anchor" href="#examples">Examples</a></h2>
+
+          <h3 id="popup-search"><a class="docs-section-anchor" href="#popup-search">Popup Search</a></h3>
+          <p>Keep the selected value quiet until the user opens a searchable popup.</p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><ComboboxDocsDemo client:only="vue" variant="popup-search" /></div>
+            <CodeBlock code={popupSearchCode} lang="vue" collapsible revealId="combobox-popup-code" />
+          </div>
+
+          <h3 id="custom-trigger"><a class="docs-section-anchor" href="#custom-trigger">Custom Trigger</a></h3>
+          <p>Use <code>asChild</code> to merge Ark trigger behavior into one Kappa Button.</p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><ComboboxDocsDemo client:only="vue" variant="custom-trigger" /></div>
+            <CodeBlock code={customTriggerCode} lang="vue" collapsible revealId="combobox-custom-code" />
+          </div>
+
+          <h3 id="grouped"><a class="docs-section-anchor" href="#grouped">Grouped Options</a></h3>
+          <p>The root scoped slot exposes the filtered collection, so empty groups disappear with the query.</p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><ComboboxDocsDemo client:only="vue" variant="grouped" /></div>
+            <CodeBlock code={groupedCode} lang="vue" collapsible revealId="combobox-grouped-code" />
+          </div>
+
+          <h3 id="multiple"><a class="docs-section-anchor" href="#multiple">Multiple Values</a></h3>
+          <p>Selected values become removable chips. The popup stays open after each selection.</p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><ComboboxDocsDemo client:only="vue" variant="multiple" /></div>
+            <CodeBlock code={multipleCode} lang="vue" collapsible revealId="combobox-multiple-code" />
+          </div>
+
+          <h3 id="sizes"><a class="docs-section-anchor" href="#sizes">Sizes</a></h3>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><ComboboxDocsDemo client:only="vue" variant="sizes" /></div>
+            <CodeBlock code={sizesCode} lang="vue" collapsible revealId="combobox-sizes-code" />
+          </div>
+
+          <h3 id="states"><a class="docs-section-anchor" href="#states">Disabled and Invalid</a></h3>
+          <p>Error text sets invalid state and joins the input's accessible description.</p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><ComboboxDocsDemo client:only="vue" variant="states" /></div>
+            <CodeBlock code={statesCode} lang="vue" collapsible revealId="combobox-states-code" />
+          </div>
+        </section>
+
+        <section id="accessibility" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#accessibility">Accessibility</a></h2>
+          <ul>
+            <li>Arrow Down and Arrow Up move through enabled options.</li>
+            <li>Enter selects the highlighted option. Escape closes the popup.</li>
+            <li>Home and End move to the first and last enabled options.</li>
+            <li>Labels, descriptions, errors, disabled state, and invalid state stay connected.</li>
+            <li>Selected indicators are visual support; Ark announces selection state.</li>
+            <li>Popup motion honors <code>prefers-reduced-motion</code>.</li>
+          </ul>
+          <p>
+            Kappa preserves the primitive contract. See the
+            <a href="https://ark-ui.com/vue/docs/components/combobox">official Ark UI Combobox documentation</a>.
+          </p>
+        </section>
+
+        <section id="api-reference" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#api-reference">API Reference</a></h2>
+
+          <div class="docs-api-group">
+            <h3 id="root-api"><a class="docs-section-anchor" href="#root-api">Combobox.Root</a></h3>
+            <p>Forwards remaining attributes, listeners, controlled state, and Ark UI root behavior.</p>
+            <div class="docs-api-table">
+              <table>
+                <thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+                <tbody>{rootProps.map((prop) => <tr><td><code>{prop.name}</code></td><td><code>{prop.type}</code></td><td><code>{prop.defaultValue}</code></td><td>{prop.description}</td></tr>)}</tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="docs-api-group">
+            <h3 id="parts-api"><a class="docs-section-anchor" href="#parts-api">Parts</a></h3>
+            <div class="docs-api-table">
+              <table>
+                <thead><tr><th>Part</th><th>Element</th><th>Description</th></tr></thead>
+                <tbody>{partProps.map((part) => <tr><td><code>{part.name}</code></td><td><code>{part.element}</code></td><td>{part.description}</td></tr>)}</tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="docs-api-group">
+            <h3 id="events-api"><a class="docs-section-anchor" href="#events-api">Events</a></h3>
+            <div class="docs-api-table">
+              <table>
+                <thead><tr><th>Event</th><th>Payload</th><th>Description</th></tr></thead>
+                <tbody>{events.map((event) => <tr><td><code>{event.name}</code></td><td><code>{event.payload}</code></td><td>{event.description}</td></tr>)}</tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="docs-api-group">
+            <h3 id="exports"><a class="docs-section-anchor" href="#exports">Exports</a></h3>
+            <div class="docs-api-table">
+              <table>
+                <thead><tr><th>Export</th><th>Description</th></tr></thead>
+                <tbody>{exportsList.map((item) => <tr><td><code>{item.name}</code></td><td>{item.description}</td></tr>)}</tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <DocsPageNavigation currentPath={currentPath} />
+      </article>
+
+      <aside class="docs-page-toc" aria-label="On this page">
+        <div class="docs-page-toc__inner">
+          <span class="docs-page-toc__title">On this page</span>
+          <ul>
+            <li><a href="#installation" data-toc-link="installation">Installation</a><ul><li><a href="#barrel" data-toc-link="barrel">Barrel</a></li><li><a href="#granular" data-toc-link="granular">Granular</a></li></ul></li>
+            <li><a href="#usage" data-toc-link="usage">Usage</a></li>
+            <li><a href="#composition" data-toc-link="composition">Composition</a></li>
+            <li><a href="#examples" data-toc-link="examples">Examples</a><ul><li><a href="#popup-search" data-toc-link="popup-search">Popup Search</a></li><li><a href="#custom-trigger" data-toc-link="custom-trigger">Custom Trigger</a></li><li><a href="#grouped" data-toc-link="grouped">Grouped Options</a></li><li><a href="#multiple" data-toc-link="multiple">Multiple Values</a></li><li><a href="#sizes" data-toc-link="sizes">Sizes</a></li><li><a href="#states" data-toc-link="states">Disabled and Invalid</a></li></ul></li>
+            <li><a href="#accessibility" data-toc-link="accessibility">Accessibility</a></li>
+            <li><a href="#api-reference" data-toc-link="api-reference">API Reference</a><ul><li><a href="#root-api" data-toc-link="root-api">Combobox.Root</a></li><li><a href="#parts-api" data-toc-link="parts-api">Parts</a></li><li><a href="#events-api" data-toc-link="events-api">Events</a></li><li><a href="#exports" data-toc-link="exports">Exports</a></li></ul></li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+  </div>
+</DocsLayout>

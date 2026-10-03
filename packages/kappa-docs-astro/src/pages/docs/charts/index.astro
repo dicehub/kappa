@@ -1,0 +1,187 @@
+---
+import CodeBlock from "../../../components/CodeBlock.astro";
+import CopyPageControls from "../../../components/CopyPageControls.vue";
+import DocsPageNavigation from "../../../components/DocsPageNavigation.astro";
+import ChartsDocsDemo from "../../../components/ChartsDocsDemo.vue";
+import {
+  chartCode,
+  chartProps,
+  denseCode,
+  engineRows,
+  exportsList,
+  heatmapCode,
+  installCode,
+  methods,
+  sankeyCode,
+  scatterCode,
+  statesCode,
+  streamingCode,
+  xyPlotCode,
+  xyPlotProps,
+} from "../../../data/charts-docs";
+import DocsLayout from "../../../layouts/DocsLayout.astro";
+import "../../../styles/docs-components.css";
+
+const description = "Render broad data visualizations or high-density numeric plots with explicit engine boundaries.";
+const currentPath = "/docs/charts";
+const examples = [
+  { id: "scatter", title: "Scatter", description: "Use ECharts Canvas and its large mode for a broad scatter plot.", variant: "scatter", code: scatterCode },
+  { id: "heatmap", title: "Heatmap", description: "Use categorical axes and a visual scale for a compact utilization matrix.", variant: "heatmap", code: heatmapCode },
+  { id: "sankey", title: "Sankey", description: "Show flow between stages without changing the Kappa frame or accessibility contract.", variant: "sankey", code: sankeyCode },
+  { id: "dense-xy", title: "100,000-point X/Y Plot", description: "Pass aligned typed arrays directly to uPlot. Kappa does not deep-watch the values.", variant: "dense", code: denseCode },
+  { id: "streaming", title: "Streaming", description: "Append bounded chunks. Calls in one animation frame become one draw.", variant: "streaming", code: streamingCode },
+  { id: "states", title: "Data States", description: "The same frame provides loading, empty, and error states for both engines.", variant: "states", code: statesCode },
+] as const;
+---
+
+<DocsLayout title="Charts" description={description}>
+  <div class="docs-page docs-page--component">
+    <header class="docs-page-header">
+      <div class="docs-page-header__inner">
+        <div class="docs-page-header__content">
+          <div class="docs-page-header__mobile-actions"><CopyPageControls client:only="vue" align="center" /></div>
+          <div class="docs-page-header__title-row">
+            <h1>Charts</h1>
+            <div class="docs-page-header__navigation-actions">
+              <div class="docs-page-header__desktop-actions"><CopyPageControls client:only="vue" /></div>
+              <DocsPageNavigation currentPath={currentPath} variant="compact" />
+            </div>
+          </div>
+          <p class="docs-page-header__lede">{description}</p>
+        </div>
+      </div>
+    </header>
+
+    <div class="docs-page-body">
+      <article class="docs-article docs-article--component">
+        <section id="preview" class="docs-section">
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><ChartsDocsDemo client:only="vue" variant="preview" /></div>
+            <CodeBlock code={chartCode} lang="vue" collapsible revealId="charts-preview-code" />
+          </div>
+        </section>
+
+        <section id="choose-an-engine" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#choose-an-engine">Choose an Engine</a></h2>
+          <p>
+            Kappa has three chart components across two engines. Select one from the data shape and required chart type. The components do not switch engines at runtime.
+          </p>
+          <div class="docs-api-table">
+            <table><thead><tr><th>Kappa component</th><th>Engine</th><th>Use</th><th>Data</th></tr></thead><tbody>
+              {engineRows.map((row) => <tr><td><code>{row.component}</code></td><td>{row.engine}</td><td>{row.use}</td><td>{row.data}</td></tr>)}
+            </tbody></table>
+          </div>
+        </section>
+
+        <section id="installation" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#installation">Installation</a></h2>
+          <p>
+            The engines are optional peer dependencies. Install only the engine that your application imports. Import each component from its isolated path.
+          </p>
+          <CodeBlock code={installCode} lang="bash" />
+        </section>
+
+        <section id="chart" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#chart">Chart</a></h2>
+          <p>
+            <code>Chart</code> hosts a modular ECharts instance. Register only the chart types, components, and renderer that the application uses. It supports the full ECharts catalogue, including bars, lines, pie charts, scatter plots, heatmaps, Sankey diagrams, and maps.
+          </p>
+          <CodeBlock code={chartCode} lang="vue" collapsible revealId="charts-chart-code" />
+        </section>
+
+        <section id="xy-plot" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#xy-plot">XYPlot</a></h2>
+          <p>
+            <code>XYPlot</code> uses uPlot for aligned numeric or time data. Keep the data in a <code>shallowRef</code> or outside Vue reactivity. Replace the data reference, update <code>revision</code>, or call an exposed method.
+          </p>
+          <p>
+            For polished dashboard time data, use <a href="/docs/charts/timeseries"><code>TimeseriesChart</code></a>. It composes ECharts with opinionated line, area, bar, axis, legend, tooltip, and motion defaults. Keep <code>XYPlot</code> for dense or sustained technical data.
+          </p>
+          <CodeBlock code={xyPlotCode} lang="vue" collapsible revealId="charts-xy-code" />
+        </section>
+
+        <section id="examples" class="docs-section docs-section--component-examples">
+          <h2><a class="docs-section-anchor" href="#examples">Examples</a></h2>
+          {examples.map((example) => (
+            <>
+              <h3 id={example.id}><a class="docs-section-anchor" href={`#${example.id}`}>{example.title}</a></h3>
+              <p>{example.description}</p>
+              <div class="docs-component-example">
+                <div class="docs-component-preview"><ChartsDocsDemo client:only="vue" variant={example.variant} /></div>
+                <CodeBlock code={example.code} lang="vue" collapsible revealId={`charts-${example.id}-code`} />
+              </div>
+            </>
+          ))}
+        </section>
+
+        <section id="performance" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#performance">Performance</a></h2>
+          <ul>
+            <li>Use ECharts Canvas for normal dashboards and broad chart types.</li>
+            <li>Use <code>XYPlot</code> for dense aligned numeric series and sustained updates.</li>
+            <li>Use typed arrays for large static series. Do not put million-point arrays in deep Vue reactivity.</li>
+            <li>Aggregate and window million-point history before it reaches the browser. A renderer cannot remove transfer, parsing, and memory costs.</li>
+            <li>Batch live updates and keep a fixed point window. Stop subscriptions when the component unmounts or the view becomes inactive.</li>
+          </ul>
+        </section>
+
+        <section id="accessibility" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#accessibility">Accessibility</a></h2>
+          <ul>
+            <li><code>ariaLabel</code> names the chart. <code>ariaDescription</code> states the visible range, units, series, and main trend.</li>
+            <li>Do not use color as the only series identifier. Keep labels or a linked data table available.</li>
+            <li><code>XYPlot</code> supports drag, wheel, keyboard zoom, double-click reset, and a visible reset button.</li>
+            <li>Press plus or minus to zoom X. Hold Shift to zoom Y. Press 0 or Home to reset.</li>
+            <li>Loading, empty, and error messages use live status semantics.</li>
+          </ul>
+        </section>
+
+        <section id="security" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#security">Security</a></h2>
+          <p>
+            Treat engine options and callbacks as application code. Never pass serialized user configuration directly. Kappa removes ECharts HTML tooltip formatters, extra tooltip CSS, data view, and built-in image download from the standard option path. Use parsed and validated GeoJSON objects for maps.
+          </p>
+        </section>
+
+        <section id="api-reference" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#api-reference">API Reference</a></h2>
+          <div class="docs-api-group">
+            <h3 id="chart-api"><a class="docs-section-anchor" href="#chart-api">Chart</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>{chartProps.map((prop) => <tr><td><code>{prop.name}</code></td><td><code>{prop.type}</code></td><td><code>{prop.defaultValue}</code></td><td>{prop.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="xy-plot-api"><a class="docs-section-anchor" href="#xy-plot-api">XYPlot</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>{xyPlotProps.map((prop) => <tr><td><code>{prop.name}</code></td><td><code>{prop.type}</code></td><td><code>{prop.defaultValue}</code></td><td>{prop.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="methods"><a class="docs-section-anchor" href="#methods">Exposed Methods</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Component</th><th>Method</th><th>Description</th></tr></thead><tbody>{methods.map((method) => <tr><td><code>{method.component}</code></td><td><code>{method.name}</code></td><td>{method.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="exports"><a class="docs-section-anchor" href="#exports">Exports</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Path</th><th>Exports</th></tr></thead><tbody>{exportsList.map((item) => <tr><td><code>{item.path}</code></td><td><code>{item.exports}</code></td></tr>)}</tbody></table></div>
+          </div>
+        </section>
+
+        <DocsPageNavigation currentPath={currentPath} />
+      </article>
+
+      <aside class="docs-page-toc" aria-label="On this page">
+        <div class="docs-page-toc__inner">
+          <span class="docs-page-toc__title">On this page</span>
+          <ul>
+            <li><a href="#choose-an-engine" data-toc-link="choose-an-engine">Choose an Engine</a></li>
+            <li><a href="#installation" data-toc-link="installation">Installation</a></li>
+            <li><a href="#chart" data-toc-link="chart">Chart</a></li>
+            <li><a href="#xy-plot" data-toc-link="xy-plot">XYPlot</a></li>
+            <li><a href="#examples" data-toc-link="examples">Examples</a><ul>{examples.map((example) => <li><a href={`#${example.id}`} data-toc-link={example.id}>{example.title}</a></li>)}</ul></li>
+            <li><a href="#performance" data-toc-link="performance">Performance</a></li>
+            <li><a href="#accessibility" data-toc-link="accessibility">Accessibility</a></li>
+            <li><a href="#security" data-toc-link="security">Security</a></li>
+            <li><a href="#api-reference" data-toc-link="api-reference">API Reference</a><ul><li><a href="#chart-api" data-toc-link="chart-api">Chart</a></li><li><a href="#xy-plot-api" data-toc-link="xy-plot-api">XYPlot</a></li><li><a href="#methods" data-toc-link="methods">Methods</a></li><li><a href="#exports" data-toc-link="exports">Exports</a></li></ul></li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+  </div>
+</DocsLayout>

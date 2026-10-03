@@ -1,0 +1,156 @@
+.kappa-timer {
+  --kappa-timer-area-height: 2.25rem;
+  --kappa-timer-item-size: 1.125rem;
+  --kappa-timer-action-height: 1.75rem;
+
+  display: inline-grid;
+  inline-size: fit-content;
+  gap: 0.625rem;
+  color: var(--kappa-default, #17191f);
+  font-family: var(--kappa-font-sans, inherit);
+}
+
+.kappa-timer[data-size="sm"] {
+  --kappa-timer-area-height: 1.75rem;
+  --kappa-timer-item-size: 0.875rem;
+  --kappa-timer-action-height: 1.5rem;
+}
+
+.kappa-timer[data-size="lg"] {
+  --kappa-timer-area-height: 3rem;
+  --kappa-timer-item-size: 1.625rem;
+  --kappa-timer-action-height: 2rem;
+}
+
+.kappa-timer__area {
+  box-sizing: border-box;
+  display: inline-flex;
+  min-inline-size: 0;
+  block-size: var(--kappa-timer-area-height);
+  align-items: center;
+  gap: 0.125rem;
+  padding-inline: 0.625rem;
+  border: 1px solid var(--kappa-line, #e3e6eb);
+  border-radius: 0.5rem;
+  background: var(--kappa-control, #ffffff);
+  box-shadow: inset 0 1px 0 color-mix(in oklab, var(--kappa-default, #17191f) 3%, transparent);
+  font-family: var(--kappa-font-mono, ui-monospace, monospace);
+  font-size: var(--kappa-timer-item-size);
+  font-variant-numeric: tabular-nums;
+  font-weight: 650;
+  letter-spacing: -0.025em;
+  line-height: 1;
+}
+
+.kappa-timer__item {
+  display: inline-block;
+  min-inline-size: 2ch;
+  color: inherit;
+  text-align: center;
+  transform-origin: 50% 80%;
+}
+
+.kappa-timer__item[data-type="milliseconds"] {
+  min-inline-size: 3ch;
+}
+
+.kappa-timer__item[data-animate] {
+  animation: kappa-timer-number-pop-in 180ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+.kappa-timer__separator {
+  display: inline-flex;
+  min-inline-size: 0.5ch;
+  align-items: center;
+  justify-content: center;
+  color: var(--kappa-subtle, #6c7480);
+  font-weight: 500;
+  transform: translateY(-0.06em);
+}
+
+.kappa-timer__control {
+  display: flex;
+  min-inline-size: 0;
+  align-items: center;
+  gap: 0.375rem;
+}
+
+.kappa-timer__action {
+  box-sizing: border-box;
+  display: inline-flex;
+  inline-size: fit-content;
+  block-size: var(--kappa-timer-action-height);
+  align-items: center;
+  justify-content: center;
+  padding-inline: 0.625rem;
+  border: 1px solid var(--kappa-line, #e3e6eb);
+  border-radius: 0.4375rem;
+  background: transparent;
+  color: var(--kappa-default, #17191f);
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.75rem;
+  font-weight: 550;
+  line-height: 1;
+  transition: background-color 120ms ease, border-color 120ms ease, transform 80ms ease;
+}
+
+.kappa-timer__action:hover:not(:disabled) {
+  background: var(--kappa-overlay, #e9edf2);
+}
+
+.kappa-timer__action:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+.kappa-timer__action:focus-visible {
+  outline: 2px solid var(--kappa-focus, #4c63ff);
+  outline-offset: 2px;
+}
+
+.kappa-timer__action:disabled {
+  cursor: not-allowed;
+  opacity: 0.56;
+}
+
+.kappa-timer__action[hidden] {
+  display: none;
+}
+
+@keyframes kappa-timer-number-pop-in {
+  from {
+    opacity: 0;
+    filter: blur(0.16rem);
+    transform: translateY(0.32em) scale(0.94);
+  }
+
+  to {
+    opacity: 1;
+    filter: blur(0);
+    transform: translateY(0) scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kappa-timer__item[data-animate] {
+    animation: none;
+  }
+
+  .kappa-timer__action {
+    transition: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .kappa-timer__area,
+  .kappa-timer__action {
+    border-color: CanvasText;
+    background: Canvas;
+    box-shadow: none;
+    color: CanvasText;
+  }
+
+  .kappa-timer__action:focus-visible {
+    outline-color: Highlight;
+  }
+}

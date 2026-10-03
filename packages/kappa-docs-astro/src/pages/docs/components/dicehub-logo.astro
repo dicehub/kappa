@@ -1,0 +1,337 @@
+---
+import CopyPageControls from "../../../components/CopyPageControls.vue";
+import CodeBlock from "../../../components/CodeBlock.astro";
+import DicehubLogoDocsDemo from "../../../components/DicehubLogoDocsDemo.vue";
+import DocsPageNavigation from "../../../components/DocsPageNavigation.astro";
+import {
+  barrelCode,
+  colorVariantsCode,
+  copyCode,
+  glyphCode,
+  glyphVariantsCode,
+  granularCode,
+  logoProps,
+  poweredBasicCode,
+  poweredFooterCode,
+  poweredProps,
+  poweredVariantsCode,
+  previewCode,
+  sizesCode,
+  svgGenerationCode,
+  usageCode,
+} from "../../../data/dicehub-logo-docs";
+import DocsLayout from "../../../layouts/DocsLayout.astro";
+import "../../../styles/docs-components.css";
+
+const currentPath = "/docs/components/dicehub-logo";
+const description = "Official dicehub logo component with glyph and full logo variants.";
+---
+
+<DocsLayout title="DicehubLogo" description={description}>
+  <div class="docs-page docs-page--component">
+    <header class="docs-page-header">
+      <div class="docs-page-header__inner">
+        <div class="docs-page-header__content">
+          <div class="docs-page-header__mobile-actions">
+            <CopyPageControls client:only="vue" align="center" />
+          </div>
+          <div class="docs-page-header__title-row">
+            <h1>DicehubLogo</h1>
+            <div class="docs-page-header__navigation-actions">
+              <div class="docs-page-header__desktop-actions">
+                <CopyPageControls client:only="vue" />
+              </div>
+              <DocsPageNavigation currentPath={currentPath} variant="compact" />
+            </div>
+          </div>
+          <p class="docs-page-header__lede">{description}</p>
+        </div>
+      </div>
+    </header>
+
+    <div class="docs-page-body">
+      <article class="docs-article docs-article--component">
+        <section id="preview" class="docs-section">
+          <div class="docs-component-example">
+            <div class="docs-component-preview docs-component-preview--dicehub-logo">
+              <DicehubLogoDocsDemo client:load variant="basic" />
+            </div>
+            <CodeBlock
+              code={previewCode}
+              lang="vue"
+              collapsible
+              revealId="dicehub-logo-preview-code"
+            />
+          </div>
+        </section>
+
+        <section id="installation" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#installation">Installation</a></h2>
+
+          <h3 id="barrel"><a class="docs-section-anchor" href="#barrel">Barrel</a></h3>
+          <CodeBlock code={barrelCode} lang="javascript" />
+
+          <h3 id="granular"><a class="docs-section-anchor" href="#granular">Granular</a></h3>
+          <CodeBlock code={granularCode} lang="javascript" />
+        </section>
+
+        <section id="usage" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#usage">Usage</a></h2>
+          <div class="docs-component-example">
+            <div class="docs-component-preview docs-component-preview--dicehub-logo">
+              <DicehubLogoDocsDemo client:load variant="usage" />
+            </div>
+            <CodeBlock
+              code={usageCode}
+              lang="vue"
+              collapsible
+              revealId="dicehub-logo-usage-code"
+            />
+          </div>
+        </section>
+
+        <section id="examples" class="docs-section docs-section--component-examples">
+          <h2><a class="docs-section-anchor" href="#examples">Examples</a></h2>
+
+          <h3 id="glyph-only"><a class="docs-section-anchor" href="#glyph-only">Glyph Only</a></h3>
+          <p>Use <code>variant="glyph"</code> to display just the dicehub mark without the wordmark.</p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview docs-component-preview--dicehub-logo">
+              <DicehubLogoDocsDemo client:load variant="glyph" />
+            </div>
+            <CodeBlock
+              code={glyphCode}
+              lang="vue"
+              collapsible
+              revealId="dicehub-logo-glyph-code"
+            />
+          </div>
+
+          <h3 id="color-variants"><a class="docs-section-anchor" href="#color-variants">Color Variants</a></h3>
+          <p>The logo supports three color schemes: color, black, and white.</p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview docs-component-preview--dicehub-logo">
+              <DicehubLogoDocsDemo client:load variant="colors" />
+            </div>
+            <CodeBlock
+              code={colorVariantsCode}
+              lang="vue"
+              collapsible
+              revealId="dicehub-logo-colors-code"
+            />
+          </div>
+
+          <h3 id="glyph-color-variants">
+            <a class="docs-section-anchor" href="#glyph-color-variants">Glyph Color Variants</a>
+          </h3>
+          <div class="docs-component-example">
+            <div class="docs-component-preview docs-component-preview--dicehub-logo">
+              <DicehubLogoDocsDemo client:load variant="glyph-colors" />
+            </div>
+            <CodeBlock
+              code={glyphVariantsCode}
+              lang="vue"
+              collapsible
+              revealId="dicehub-logo-glyph-colors-code"
+            />
+          </div>
+
+          <h3 id="sizing"><a class="docs-section-anchor" href="#sizing">Sizing</a></h3>
+          <p>Size the logo using CSS width. The height adjusts automatically to maintain aspect ratio.</p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview docs-component-preview--dicehub-logo">
+              <DicehubLogoDocsDemo client:load variant="sizes" />
+            </div>
+            <CodeBlock
+              code={sizesCode}
+              lang="vue"
+              collapsible
+              revealId="dicehub-logo-sizing-code"
+            />
+          </div>
+
+          <h3 id="brand-assets-menu">
+            <a class="docs-section-anchor" href="#brand-assets-menu">Brand Assets Menu</a>
+          </h3>
+          <p>
+            Combine the logo with a native disclosure menu. Use <code>generateDicehubLogoSvg()</code> to get
+            copy-paste ready SVG markup.
+          </p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview docs-component-preview--dicehub-logo docs-component-preview--open-space">
+              <DicehubLogoDocsDemo client:load variant="copy" />
+            </div>
+            <CodeBlock
+              code={copyCode}
+              lang="vue"
+              collapsible
+              revealId="dicehub-logo-copy-code"
+            />
+          </div>
+        </section>
+
+        <section id="powered-by-dicehub" class="docs-section docs-section--component-examples">
+          <h2><a class="docs-section-anchor" href="#powered-by-dicehub">PoweredByDicehub</a></h2>
+          <p>A pre-built "Powered by dicehub" badge component for footers and attribution.</p>
+
+          <h3 id="powered-basic-usage">
+            <a class="docs-section-anchor" href="#powered-basic-usage">Basic Usage</a>
+          </h3>
+          <div class="docs-component-example">
+            <div class="docs-component-preview docs-component-preview--dicehub-logo">
+              <DicehubLogoDocsDemo client:load variant="powered-basic" />
+            </div>
+            <CodeBlock
+              code={poweredBasicCode}
+              lang="vue"
+              collapsible
+              revealId="powered-by-dicehub-basic-code"
+            />
+          </div>
+
+          <h3 id="powered-color-variants">
+            <a class="docs-section-anchor" href="#powered-color-variants">Color Variants</a>
+          </h3>
+          <div class="docs-component-example">
+            <div class="docs-component-preview docs-component-preview--dicehub-logo">
+              <DicehubLogoDocsDemo client:load variant="powered-variants" />
+            </div>
+            <CodeBlock
+              code={poweredVariantsCode}
+              lang="vue"
+              collapsible
+              revealId="powered-by-dicehub-variants-code"
+            />
+          </div>
+
+          <h3 id="footer-example"><a class="docs-section-anchor" href="#footer-example">Footer Example</a></h3>
+          <div class="docs-component-example">
+            <div class="docs-component-preview docs-component-preview--dicehub-logo">
+              <DicehubLogoDocsDemo client:load variant="powered-footer" />
+            </div>
+            <CodeBlock
+              code={poweredFooterCode}
+              lang="vue"
+              collapsible
+              revealId="powered-by-dicehub-footer-code"
+            />
+          </div>
+        </section>
+
+        <section id="svg-generation" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#svg-generation">SVG Generation</a></h2>
+          <p>
+            Use <code>generateDicehubLogoSvg()</code> to get copy-paste ready SVG markup for non-Vue contexts.
+          </p>
+          <CodeBlock code={svgGenerationCode} lang="javascript" />
+        </section>
+
+        <section id="api-reference" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#api-reference">API Reference</a></h2>
+          <p><code>DicehubLogo</code> renders an SVG and accepts standard SVG attributes.</p>
+
+          <div class="docs-api-group">
+            <h3 id="dicehub-logo-api">
+              <a class="docs-section-anchor" href="#dicehub-logo-api">DicehubLogo</a>
+            </h3>
+            <div class="docs-api-table">
+              <table>
+                <thead>
+                  <tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr>
+                </thead>
+                <tbody>
+                  {
+                    logoProps.map((prop) => (
+                      <tr>
+                        <td><code>{prop.name}</code></td>
+                        <td><code>{prop.type}</code></td>
+                        <td><code>{prop.defaultValue}</code></td>
+                        <td>{prop.description}</td>
+                      </tr>
+                    ))
+                  }
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="docs-api-group">
+            <h3 id="powered-by-dicehub-api">
+              <a class="docs-section-anchor" href="#powered-by-dicehub-api">PoweredByDicehub</a>
+            </h3>
+            <p>Extends <code>HTMLAnchorElement</code> and accepts standard anchor attributes.</p>
+            <div class="docs-api-table">
+              <table>
+                <thead>
+                  <tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr>
+                </thead>
+                <tbody>
+                  {
+                    poweredProps.map((prop) => (
+                      <tr>
+                        <td><code>{prop.name}</code></td>
+                        <td><code>{prop.type}</code></td>
+                        <td><code>{prop.defaultValue}</code></td>
+                        <td>{prop.description}</td>
+                      </tr>
+                    ))
+                  }
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <DocsPageNavigation currentPath={currentPath} />
+      </article>
+
+      <aside class="docs-page-toc" aria-label="On this page">
+        <div class="docs-page-toc__inner">
+          <span class="docs-page-toc__title">On this page</span>
+          <ul>
+            <li>
+              <a href="#installation" data-toc-link="installation">Installation</a>
+              <ul>
+                <li><a href="#barrel" data-toc-link="barrel">Barrel</a></li>
+                <li><a href="#granular" data-toc-link="granular">Granular</a></li>
+              </ul>
+            </li>
+            <li><a href="#usage" data-toc-link="usage">Usage</a></li>
+            <li>
+              <a href="#examples" data-toc-link="examples">Examples</a>
+              <ul>
+                <li><a href="#glyph-only" data-toc-link="glyph-only">Glyph Only</a></li>
+                <li><a href="#color-variants" data-toc-link="color-variants">Color Variants</a></li>
+                <li>
+                  <a href="#glyph-color-variants" data-toc-link="glyph-color-variants">Glyph Color Variants</a>
+                </li>
+                <li><a href="#sizing" data-toc-link="sizing">Sizing</a></li>
+                <li><a href="#brand-assets-menu" data-toc-link="brand-assets-menu">Brand Assets Menu</a></li>
+              </ul>
+            </li>
+            <li>
+              <a href="#powered-by-dicehub" data-toc-link="powered-by-dicehub">PoweredByDicehub</a>
+              <ul>
+                <li><a href="#powered-basic-usage" data-toc-link="powered-basic-usage">Basic Usage</a></li>
+                <li>
+                  <a href="#powered-color-variants" data-toc-link="powered-color-variants">Color Variants</a>
+                </li>
+                <li><a href="#footer-example" data-toc-link="footer-example">Footer Example</a></li>
+              </ul>
+            </li>
+            <li><a href="#svg-generation" data-toc-link="svg-generation">SVG Generation</a></li>
+            <li>
+              <a href="#api-reference" data-toc-link="api-reference">API Reference</a>
+              <ul>
+                <li><a href="#dicehub-logo-api" data-toc-link="dicehub-logo-api">DicehubLogo</a></li>
+                <li>
+                  <a href="#powered-by-dicehub-api" data-toc-link="powered-by-dicehub-api">PoweredByDicehub</a>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+  </div>
+</DocsLayout>

@@ -1,0 +1,169 @@
+---
+import CodeBlock from "../../../components/CodeBlock.astro";
+import CompositionTree from "../../../components/CompositionTree.astro";
+import CopyPageControls from "../../../components/CopyPageControls.vue";
+import DocsPageNavigation from "../../../components/DocsPageNavigation.astro";
+import FormatDocsDemo from "../../../components/FormatDocsDemo.vue";
+import {
+  barrelCode,
+  dataSlots,
+  exportsList,
+  formatProps,
+  granularCode,
+  localeCode,
+  partProps,
+  previewCode,
+  relativeCode,
+  timeCode,
+  usageCode,
+} from "../../../data/format-docs";
+import DocsLayout from "../../../layouts/DocsLayout.astro";
+import "../../../styles/docs-components.css";
+
+const currentPath = "/docs/components/format";
+const description = "Formats technical values and timestamps through an explicit locale context.";
+---
+
+<DocsLayout title="Format" description={description}>
+  <div class="docs-page docs-page--component">
+    <header class="docs-page-header">
+      <div class="docs-page-header__inner">
+        <div class="docs-page-header__content">
+          <div class="docs-page-header__mobile-actions">
+            <CopyPageControls client:only="vue" align="center" />
+          </div>
+          <div class="docs-page-header__title-row">
+            <h1>Format</h1>
+            <div class="docs-page-header__navigation-actions">
+              <div class="docs-page-header__desktop-actions"><CopyPageControls client:only="vue" /></div>
+              <DocsPageNavigation currentPath={currentPath} variant="compact" />
+            </div>
+          </div>
+          <p class="docs-page-header__lede">{description}</p>
+        </div>
+      </div>
+    </header>
+
+    <div class="docs-page-body">
+      <article class="docs-article docs-article--component">
+        <section id="preview" class="docs-section">
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><FormatDocsDemo client:load variant="preview" /></div>
+            <CodeBlock code={previewCode} lang="vue" collapsible revealId="format-preview-code" />
+          </div>
+        </section>
+
+        <section id="installation" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#installation">Installation</a></h2>
+          <p>
+            Format is part of the main Kappa package. It wraps the current Ark UI format helpers
+            and locale provider, so it adds no dependency beyond Vue and Ark UI.
+          </p>
+          <h3 id="barrel"><a class="docs-section-anchor" href="#barrel">Barrel</a></h3>
+          <CodeBlock code={barrelCode} lang="javascript" />
+          <h3 id="granular"><a class="docs-section-anchor" href="#granular">Granular</a></h3>
+          <CodeBlock code={granularCode} lang="javascript" />
+        </section>
+
+        <section id="usage" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#usage">Usage</a></h2>
+          <p>
+            Use <code>Format</code> as a transparent locale provider, then place one or more
+            named parts inside it. Each part renders a styled inline <code>span</code> and forwards
+            consumer attributes to that span. A part also works on its own with the default
+            <code>en-US</code> locale.
+          </p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><FormatDocsDemo client:load variant="usage" /></div>
+            <CodeBlock code={usageCode} lang="vue" collapsible revealId="format-usage-code" />
+          </div>
+        </section>
+
+        <section id="composition" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#composition">Composition</a></h2>
+          <CompositionTree component="format" />
+          <p>
+            <code>Format.Root</code> is an Ark UI <code>LocaleProvider</code> with no DOM element.
+            The root and each part accept an explicit BCP 47 locale. A part-level locale overrides
+            the nearest provider for that value only. See the
+            <a href="https://ark-ui.com/docs/components/format">Ark UI Format documentation</a>
+            for the formatter behavior and supported option semantics.
+          </p>
+        </section>
+
+        <section id="examples" class="docs-section docs-section--component-examples">
+          <h2><a class="docs-section-anchor" href="#examples">Examples</a></h2>
+
+          <h3 id="locales"><a class="docs-section-anchor" href="#locales">Locales and Overrides</a></h3>
+          <p>Set one locale for a technical surface, then override a value when needed.</p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><FormatDocsDemo client:load variant="locale" /></div>
+            <CodeBlock code={localeCode} lang="vue" collapsible revealId="format-locale-code" />
+          </div>
+
+          <h3 id="relative-time"><a class="docs-section-anchor" href="#relative-time">Relative Time</a></h3>
+          <p>Use a reactive Date when the relative label must update as the underlying record changes.</p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><FormatDocsDemo client:load variant="relative" /></div>
+            <CodeBlock code={relativeCode} lang="vue" collapsible revealId="format-relative-code" />
+          </div>
+
+          <h3 id="time"><a class="docs-section-anchor" href="#time">Time Display</a></h3>
+          <p>Choose 12-hour or 24-hour display and opt into seconds for operational timestamps.</p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><FormatDocsDemo client:load variant="time" /></div>
+            <CodeBlock code={timeCode} lang="vue" collapsible revealId="format-time-code" />
+          </div>
+        </section>
+
+        <section id="accessibility" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#accessibility">Accessibility</a></h2>
+          <ul>
+            <li>Format parts render text in a <code>span</code>; they do not add a role or announce updates.</li>
+            <li>Use a surrounding <code>time</code> element when the value needs a machine-readable datetime.</li>
+            <li>Provide a clear label when a number or relative time is not understandable from context.</li>
+            <li>Use a stable server/client value for relative time to avoid hydration changes near a unit boundary.</li>
+            <li>Keep units and labels visible when color or typography alone would carry meaning.</li>
+          </ul>
+        </section>
+
+        <section id="api-reference" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#api-reference">API Reference</a></h2>
+          <div class="docs-api-group">
+            <h3 id="format-api"><a class="docs-section-anchor" href="#format-api">Format</a></h3>
+            <p>Provides locale context without adding a DOM element.</p>
+            <div class="docs-api-table"><table><thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>{formatProps.map((prop) => <tr><td><code>{prop.name}</code></td><td><code>{prop.type}</code></td><td><code>{prop.defaultValue}</code></td><td>{prop.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="parts"><a class="docs-section-anchor" href="#parts">Parts</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Component</th><th>Props</th><th>Description</th></tr></thead><tbody>{partProps.map((part) => <tr><td><code>{part.component}</code></td><td><code>{part.props}</code></td><td>{part.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="data-slots"><a class="docs-section-anchor" href="#data-slots">Data Slots</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Slot</th><th>Element</th><th>Description</th></tr></thead><tbody>{dataSlots.map((part) => <tr><td><code>{part.name}</code></td><td><code>{part.element}</code></td><td>{part.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="exports"><a class="docs-section-anchor" href="#exports">Exports</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Export</th><th>Description</th></tr></thead><tbody>{exportsList.map((item) => <tr><td><code>{item.name}</code></td><td>{item.description}</td></tr>)}</tbody></table></div>
+          </div>
+        </section>
+
+        <DocsPageNavigation currentPath={currentPath} />
+      </article>
+
+      <aside class="docs-page-toc" aria-label="On this page">
+        <div class="docs-page-toc__inner">
+          <span class="docs-page-toc__title">On this page</span>
+          <ul>
+            <li><a href="#installation" data-toc-link="installation">Installation</a><ul><li><a href="#barrel" data-toc-link="barrel">Barrel</a></li><li><a href="#granular" data-toc-link="granular">Granular</a></li></ul></li>
+            <li><a href="#usage" data-toc-link="usage">Usage</a></li>
+            <li><a href="#composition" data-toc-link="composition">Composition</a></li>
+            <li><a href="#examples" data-toc-link="examples">Examples</a><ul><li><a href="#locales" data-toc-link="locales">Locales and Overrides</a></li><li><a href="#relative-time" data-toc-link="relative-time">Relative Time</a></li><li><a href="#time" data-toc-link="time">Time Display</a></li></ul></li>
+            <li><a href="#accessibility" data-toc-link="accessibility">Accessibility</a></li>
+            <li><a href="#api-reference" data-toc-link="api-reference">API Reference</a><ul><li><a href="#format-api" data-toc-link="format-api">Format</a></li><li><a href="#parts" data-toc-link="parts">Parts</a></li><li><a href="#data-slots" data-toc-link="data-slots">Data Slots</a></li><li><a href="#exports" data-toc-link="exports">Exports</a></li></ul></li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+  </div>
+</DocsLayout>

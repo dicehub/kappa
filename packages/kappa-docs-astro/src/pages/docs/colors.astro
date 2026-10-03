@@ -1,0 +1,301 @@
+---
+import CodeBlock from "../../components/CodeBlock.astro";
+import ColorsPreviewDocsDemo from "../../components/ColorsPreviewDocsDemo.vue";
+import ColorsTokenReference from "../../components/ColorsTokenReference.vue";
+import CopyPageControls from "../../components/CopyPageControls.vue";
+import DocsPageNavigation from "../../components/DocsPageNavigation.astro";
+import {
+  colorContrastPairs,
+  colorDeprecations,
+  colorModes,
+  colorReferenceGroups,
+  colorThemeAttributes,
+  colorTokenCount,
+  themePackageName,
+} from "../../data/colors-docs";
+import { formatContrastRatio } from "../../lib/contrast";
+import DocsLayout from "../../layouts/DocsLayout.astro";
+import "../../styles/docs-colors.css";
+
+const currentPath = "/docs/colors";
+const description = "Use Kappa semantic color tokens, theme modes, and customizations.";
+const toc = [
+  { id: "overview", label: "Overview" },
+  { id: "install", label: "Install and Use" },
+  { id: "modes", label: "Modes" },
+  { id: "reference", label: "Token Reference" },
+  { id: "contrast", label: "Contrast" },
+  { id: "maintenance", label: "Maintenance" },
+];
+
+const installCode = `import "@dicehub/kappa/styles/theme-kappa.css";`;
+
+const usageCode = `.panel {
+  border: 1px solid var(--kappa-line);
+  border-radius: 0.5rem;
+  background: var(--kappa-base);
+  color: var(--kappa-default);
+}
+
+.panel__meta {
+  color: var(--kappa-subtle);
+}`;
+
+const modeCode = `<!-- Light is the default. Declare the mode on the document or on a section. -->
+<html data-kappa-theme="light">
+
+<section data-kappa-theme="dark">
+  <p>Dark scope inside a light document.</p>
+</section>
+
+<!-- Compatibility: the legacy attribute keeps working. -->
+<html data-mode="dark">`;
+
+const overrideCode = `:root {
+  --kappa-accent-solid: #3b46c9;
+  --kappa-accent-contrast: #ffffff;
+}
+
+.hero {
+  --kappa-selected-background: #0f172a;
+  --kappa-selected-contrast: #ffffff;
+}`;
+
+const metadataCode = `import tokens from "@dicehub/kappa/styles/tokens.json";
+
+tokens.tokens.map((token) => token.name);`;
+
+const generateCode = `pnpm --filter @dicehub/kappa codegen:themes
+pnpm --filter @dicehub/kappa check:themes`;
+---
+
+<DocsLayout title="Colors" description={description}>
+  <div class="docs-page docs-page--colors">
+    <header class="docs-page-header">
+      <div class="docs-page-header__inner">
+        <div class="docs-page-header__content">
+          <div class="docs-page-header__mobile-actions">
+            <CopyPageControls client:only="vue" align="center" />
+          </div>
+          <div class="docs-page-header__title-row">
+            <h1>Colors</h1>
+            <div class="docs-page-header__navigation-actions">
+              <div class="docs-page-header__desktop-actions">
+                <CopyPageControls client:only="vue" />
+              </div>
+              <DocsPageNavigation currentPath={currentPath} variant="compact" />
+            </div>
+          </div>
+          <p class="docs-page-header__lede">
+            {colorTokenCount} semantic color tokens, one value per mode, consumed as CSS custom
+            properties.
+          </p>
+        </div>
+      </div>
+    </header>
+
+    <div class="docs-page-body">
+      <article class="docs-article docs-article--colors">
+        <section id="overview" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#overview">Overview</a></h2>
+          <p>
+            Kappa components style themselves through semantic tokens such as
+            <code>--kappa-control</code> and <code>--kappa-subtle</code>. The theme declares every
+            token in both modes, so light and dark are equal targets and no component carries its
+            own palette.
+          </p>
+          <p>
+            The same tokens drive application surfaces, controls, status messaging, and selection
+            states. The preview uses real Kappa controls inside two explicit mode scopes.
+          </p>
+          <div class="docs-colors-preview">
+            <ColorsPreviewDocsDemo client:load />
+          </div>
+        </section>
+
+        <section id="install" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#install">Install and Use</a></h2>
+          <p>
+            Import the theme stylesheet once in your application entry point. Component imports
+            never inject a global theme or reset, so the import stays explicit.
+          </p>
+          <CodeBlock code={installCode} lang="typescript" />
+          <p>Consume tokens in your own CSS alongside Kappa components.</p>
+          <CodeBlock code={usageCode} lang="css" />
+          <p>
+            Tooling and documentation read the same metadata from the public JSON export
+            <code>@dicehub/kappa/styles/tokens.json</code>.
+          </p>
+          <CodeBlock code={metadataCode} lang="typescript" />
+        </section>
+
+        <section id="modes" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#modes">Modes</a></h2>
+          <p>
+            Light is the default. The canonical attribute is{" "}
+            <code>{colorThemeAttributes.canonical}</code> with the values{" "}
+            <code>{colorThemeAttributes.values[0]}</code> and{" "}
+            <code>{colorThemeAttributes.values[1]}</code>. The legacy{" "}
+            <code>{colorThemeAttributes.compatibility[0]}</code> attribute keeps
+            working: {colorThemeAttributes.precedence}
+          </p>
+          <CodeBlock code={modeCode} lang="html" />
+          <p>
+            Scopes nest. A section with an explicit mode keeps its own values, and the theme sets a
+            matching <code>color-scheme</code> so native controls and scrollbars follow.
+          </p>
+          <p>
+            Override tokens where your application needs its own palette. Overrides inherit down the
+            tree, so a component scope can carry a different accent than the page.
+          </p>
+          <CodeBlock code={overrideCode} lang="css" />
+          <p>
+            Popups follow their real DOM ancestry. A dialog or combobox popup is portaled, so it
+            matches the element it is mounted into: theme the document root, or mount the
+            portal inside the scope you want.
+          </p>
+        </section>
+
+        <section id="reference" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#reference">Token Reference</a></h2>
+          <p>
+            Every token lists its purpose, both configured values, and copy controls for the whole
+            variable expression, the light value, and the dark value. Values that alias another
+            token show the expression and the value it resolves to.
+          </p>
+
+          <ColorsTokenReference client:load groups={colorReferenceGroups} total={colorTokenCount} />
+        </section>
+
+        <section id="contrast" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#contrast">Contrast</a></h2>
+          <p>
+            Recommended foreground and background pairs. Text pairs hold at least 4.5:1 and
+            non-text indicators at least 3:1, measured from unrounded luminance ratios in both
+            modes.
+          </p>
+          <p class="docs-colors-note">
+            Decorative boundaries such as <code>--kappa-hairline</code> and
+            <code>--kappa-line-strong</code>, plus disabled surfaces and labels, are exempt from
+            these minimums. When a boundary has to convey essential state, use
+            <code>--kappa-strong</code> or <code>--kappa-focus</code>, or pair the boundary with a
+            fill. Meeting these minimums does not certify every combination an application can
+            build, and color alone never carries meaning: pair status and selection with labels,
+            icons, or text.
+          </p>
+
+          <div class="docs-colors-contrast-scroll">
+            <table class="docs-colors-contrast">
+              <caption class="docs-visually-hidden">
+                Recommended contrast pairs for Kappa semantic tokens
+              </caption>
+              <thead>
+                <tr>
+                  <th scope="col">Pair</th>
+                  <th scope="col">Foreground</th>
+                  <th scope="col">Background</th>
+                  <th scope="col">Minimum</th>
+                  {colorModes.map((mode) => (
+                    <th scope="col">{mode === "light" ? "Light" : "Dark"}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {colorContrastPairs.map((pair) => (
+                  <tr>
+                    <th scope="row">
+                      <span class="docs-colors-contrast__label">{pair.label}</span>
+                      <span class="docs-colors-contrast__note">{pair.note}</span>
+                    </th>
+                    <td><code class="docs-colors-contrast__token">{pair.foreground}</code></td>
+                    <td><code class="docs-colors-contrast__token">{pair.background}</code></td>
+                    <td>{pair.minimum}:1</td>
+                    {colorModes.map((mode) => (
+                      <td>
+                        <span class="docs-colors-contrast__cell">
+                          <span
+                            class={`docs-colors-contrast__specimen docs-colors-contrast__specimen--${pair.kind}`}
+                            data-kappa-theme={mode}
+                            style={`--docs-colors-contrast-foreground: var(${pair.foreground}); --docs-colors-contrast-background: var(${pair.background});`}
+                            aria-hidden="true"
+                          >
+                            {pair.kind === "text" ? "Aa" : ""}
+                          </span>
+                          <span
+                            class="docs-colors-contrast__ratio"
+                            data-contrast-ratio={pair.ratios[mode].toFixed(4)}
+                            data-contrast-status={pair.ratios[mode] >= pair.minimum ? "pass" : "below"}
+                          >
+                            {formatContrastRatio(pair.ratios[mode])}
+                          </span>
+                        </span>
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section id="maintenance" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#maintenance">Maintenance</a></h2>
+          <p>
+            <code>packages/kappa/scripts/theme-generator/config.ts</code> is the source of truth,
+            with tokens, contrast pairs, and deprecations in sibling modules. The generator
+            validates groups, modes, references, cycles, and contrast metadata, then writes
+            <code>src/styles/theme-kappa.css</code> and <code>src/styles/tokens.json</code>.
+          </p>
+          <CodeBlock code={generateCode} lang="bash" />
+          <p>
+            Theme generation runs before the library build, and the type check fails when the
+            generated files drift from the configuration. The library build then re-verifies the
+            packed assets with <code>check:theme-build</code>.
+          </p>
+
+          <h3>Compatibility and deprecations</h3>
+          {colorDeprecations.length === 0 ? (
+            <p>No tokens are deprecated in the current theme.</p>
+          ) : (
+            <ul class="docs-section-list">
+              {colorDeprecations.map((deprecation) => (
+                <li>
+                  <code>{deprecation.name}</code> is withdrawn. Use{" "}
+                  <code>{deprecation.replacements.join(", ")}</code> instead. {deprecation.note}
+                </li>
+              ))}
+            </ul>
+          )}
+
+          <h3>Documentation values</h3>
+          <p>
+            The previews and component pages in this site render {themePackageName} components. The
+            docs shell maps its own variables to the theme and keeps documentation-only values, such
+            as the Geist font stack, the translucent header overlay, and the shell success accent,
+            in its own stylesheet.
+          </p>
+          <p>
+            This reference is one server-rendered Vue island. It marks itself with
+            <code>data-markdown-keep</code> so the Markdown export carries the complete token table,
+            while ordinary demo islands stay out of Markdown.
+          </p>
+        </section>
+
+        <DocsPageNavigation currentPath={currentPath} />
+      </article>
+
+      <aside class="docs-page-toc" aria-label="On this page">
+        <div class="docs-page-toc__inner">
+          <span class="docs-page-toc__title">On this page</span>
+          <ul>
+            {
+              toc.map((item) => (
+                <li><a href={`#${item.id}`} data-toc-link={item.id}>{item.label}</a></li>
+              ))
+            }
+          </ul>
+        </div>
+      </aside>
+    </div>
+  </div>
+</DocsLayout>

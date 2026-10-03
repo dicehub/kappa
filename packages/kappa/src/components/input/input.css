@@ -1,0 +1,130 @@
+.kappa-input {
+  --kappa-input-height: 2.25rem;
+  --kappa-input-padding: 0.75rem;
+  --kappa-input-radius: 0.125rem;
+  --kappa-input-font-size: 0.8125rem;
+
+  box-sizing: border-box;
+  display: block;
+  inline-size: 100%;
+  min-inline-size: 0;
+  block-size: var(--kappa-input-height);
+  padding-block: 0;
+  padding-inline: var(--kappa-input-padding);
+  border: 1px solid var(--kappa-input-border, #dcdcdc);
+  border-radius: var(--kappa-input-radius);
+  background: var(--kappa-control, #ffffff);
+  box-shadow: none;
+  color: var(--kappa-default, #17191f);
+  font-family: var(--kappa-font-sans, inherit);
+  font-size: var(--kappa-input-font-size);
+  font-weight: 450;
+  line-height: 1.35;
+  outline: 2px solid transparent;
+  outline-offset: 1px;
+  transition:
+    background-color 120ms ease,
+    border-color 120ms ease,
+    box-shadow 120ms ease,
+    color 120ms ease,
+    outline-color 120ms ease;
+}
+
+.kappa-input[data-size="xs"] {
+  --kappa-input-height: 1.5rem;
+  --kappa-input-padding: 0.5rem;
+  --kappa-input-radius: 0.125rem;
+  --kappa-input-font-size: 0.75rem;
+}
+
+.kappa-input[data-size="sm"] {
+  --kappa-input-height: 1.75rem;
+  --kappa-input-padding: 0.625rem;
+  --kappa-input-radius: 0.125rem;
+  --kappa-input-font-size: 0.75rem;
+}
+
+.kappa-input[data-size="lg"] {
+  --kappa-input-height: 2.5rem;
+  --kappa-input-padding: 0.75rem;
+  --kappa-input-font-size: 0.875rem;
+}
+
+.kappa-input::placeholder {
+  color: var(--kappa-muted, #9aa2ae);
+  opacity: 1;
+}
+
+.kappa-input::selection {
+  background: var(--kappa-accent, #2479b6);
+  color: var(--kappa-accent-contrast, #ffffff);
+}
+
+.kappa-input:hover:not(:disabled, :read-only, [data-invalid], [aria-invalid="true"]) {
+  border-color: var(--kappa-focus, #247ab7);
+}
+
+.kappa-input:focus-visible {
+  border-color: var(--kappa-focus, #247ab7);
+  box-shadow: 0 0 5px var(--kappa-focus, #247ab7);
+}
+
+.kappa-input:where([data-invalid], [aria-invalid="true"]) {
+  border-color: var(--kappa-danger, #b42318);
+}
+
+.kappa-input:where([data-invalid], [aria-invalid="true"]):focus-visible {
+  box-shadow: 0 0 5px var(--kappa-danger, #b42318);
+}
+
+.kappa-input:disabled {
+  background: var(--kappa-disabled-surface, var(--kappa-tint, #f4f6f9));
+  color: var(--kappa-subtle, #6c7480);
+  cursor: not-allowed;
+  opacity: 0.62;
+}
+
+.kappa-input:read-only:not(:disabled) {
+  background: var(--kappa-readonly-surface, var(--kappa-tint, #f4f6f9));
+  cursor: default;
+}
+
+.kappa-input::file-selector-button {
+  block-size: calc(var(--kappa-input-height) - 2px);
+  margin-inline-end: var(--kappa-input-padding);
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--kappa-default, #17191f);
+  cursor: pointer;
+  font: inherit;
+  font-weight: 600;
+}
+
+.kappa-input:disabled::file-selector-button {
+  color: inherit;
+  cursor: not-allowed;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kappa-input {
+    transition: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .kappa-input:focus-visible {
+    border-color: Highlight;
+    box-shadow: none;
+    outline-color: Highlight;
+  }
+
+  .kappa-input:where([data-invalid], [aria-invalid="true"]) {
+    border-color: Mark;
+  }
+
+  .kappa-input:disabled {
+    color: GrayText;
+    opacity: 1;
+  }
+}

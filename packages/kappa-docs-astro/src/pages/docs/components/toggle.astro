@@ -1,0 +1,219 @@
+---
+import CodeBlock from "../../../components/CodeBlock.astro";
+import CompositionTree from "../../../components/CompositionTree.astro";
+import CopyPageControls from "../../../components/CopyPageControls.vue";
+import DocsPageNavigation from "../../../components/DocsPageNavigation.astro";
+import ToggleDocsDemo from "../../../components/ToggleDocsDemo.vue";
+import {
+  barrelCode,
+  controlledCode,
+  dataAttributes,
+  disabledCode,
+  events,
+  exportsList,
+  granularCode,
+  keyboardRows,
+  previewCode,
+  rtlCode,
+  sizesCode,
+  slots,
+  textCode,
+  toggleProps,
+  usageCode,
+  variantsCode,
+} from "../../../data/toggle-docs";
+import DocsLayout from "../../../layouts/DocsLayout.astro";
+import "../../../styles/docs-components.css";
+
+const currentPath = "/docs/components/toggle";
+const description = "A two-state button that represents whether an action or display option is active.";
+
+const examples = [
+  {
+    id: "variants",
+    title: "Variants",
+    description: "Use the default treatment in quiet toolbars. Use outline when the control needs a visible boundary.",
+    variant: "variants",
+    code: variantsCode,
+  },
+  {
+    id: "with-text",
+    title: "With Text",
+    description: "Keep a visible label when the icon alone may not be clear.",
+    variant: "text",
+    code: textCode,
+  },
+  {
+    id: "sizes",
+    title: "Sizes",
+    description: "Small, base, and large sizes keep one pressed-state contract.",
+    variant: "sizes",
+    code: sizesCode,
+  },
+  {
+    id: "controlled",
+    title: "Controlled",
+    description: "Use v-model:pressed when application state must own and report the value.",
+    variant: "controlled",
+    code: controlledCode,
+  },
+  {
+    id: "disabled",
+    title: "Disabled",
+    description: "A disabled toggle preserves its visible state and blocks focus and activation.",
+    variant: "disabled",
+    code: disabledCode,
+  },
+  {
+    id: "right-to-left",
+    title: "Right to Left",
+    description: "Logical spacing keeps icon and text order correct in right-to-left content.",
+    variant: "rtl",
+    code: rtlCode,
+  },
+] as const;
+---
+
+<DocsLayout title="Toggle" description={description}>
+  <div class="docs-page docs-page--component">
+    <header class="docs-page-header">
+      <div class="docs-page-header__inner">
+        <div class="docs-page-header__content">
+          <div class="docs-page-header__mobile-actions">
+            <CopyPageControls client:only="vue" align="center" />
+          </div>
+          <div class="docs-page-header__title-row">
+            <h1>Toggle</h1>
+            <div class="docs-page-header__navigation-actions">
+              <div class="docs-page-header__desktop-actions"><CopyPageControls client:only="vue" /></div>
+              <DocsPageNavigation currentPath={currentPath} variant="compact" />
+            </div>
+          </div>
+          <p class="docs-page-header__lede">{description}</p>
+        </div>
+      </div>
+    </header>
+
+    <div class="docs-page-body">
+      <article class="docs-article docs-article--component">
+        <section id="preview" class="docs-section">
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><ToggleDocsDemo client:load variant="preview" /></div>
+            <CodeBlock code={previewCode} lang="vue" collapsible revealId="toggle-preview-code" />
+          </div>
+        </section>
+
+        <section id="installation" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#installation">Installation</a></h2>
+          <p>Toggle is part of the main Kappa package. It uses a native pressed button and adds no state-machine dependency.</p>
+          <h3 id="barrel"><a class="docs-section-anchor" href="#barrel">Barrel</a></h3>
+          <CodeBlock code={barrelCode} lang="javascript" />
+          <h3 id="granular"><a class="docs-section-anchor" href="#granular">Granular</a></h3>
+          <CodeBlock code={granularCode} lang="javascript" />
+        </section>
+
+        <section id="usage" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#usage">Usage</a></h2>
+          <p>
+            Use Toggle for a persistent pressed state, such as bold text or a saved view. Use Button
+            for a one-time action and Switch for a setting that takes effect immediately.
+          </p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><ToggleDocsDemo client:load variant="usage" /></div>
+            <CodeBlock code={usageCode} lang="vue" collapsible revealId="toggle-usage-code" />
+          </div>
+        </section>
+
+        <section id="composition" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#composition">Composition</a></h2>
+          <CompositionTree component="toggle" />
+          <p>
+            Kappa renders a native <code>button</code> with <code>aria-pressed</code>. The browser owns
+            focus and keyboard activation. Kappa owns controlled and uncontrolled state, compact
+            geometry, and the visible on and off states.
+          </p>
+          <p>
+            The API uses a native button with <code>aria-pressed</code>.
+            Ark UI provides <a href="https://ark-ui.com/docs/components/toggle-group">Toggle Group</a>,
+            but it does not provide a standalone Toggle primitive. Wrapping one group item would add
+            an unnecessary element and group keyboard behavior, so Kappa uses the native button pattern.
+          </p>
+          <p>
+            Kappa uses the size name <code>base</code> to match the rest of the library. Its Vue event is
+            <code>pressedChange</code>, which corresponds to Base UI's React
+            <code>onPressedChange</code> callback.
+          </p>
+        </section>
+
+        <section id="examples" class="docs-section docs-section--component-examples">
+          <h2><a class="docs-section-anchor" href="#examples">Examples</a></h2>
+          {examples.map((example) => (
+            <>
+              <h3 id={example.id}><a class="docs-section-anchor" href={`#${example.id}`}>{example.title}</a></h3>
+              <p>{example.description}</p>
+              <div class="docs-component-example">
+                <div class="docs-component-preview"><ToggleDocsDemo client:load variant={example.variant} /></div>
+                <CodeBlock code={example.code} lang="vue" collapsible revealId={`toggle-${example.id}-code`} />
+              </div>
+            </>
+          ))}
+        </section>
+
+        <section id="accessibility" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#accessibility">Accessibility</a></h2>
+          <ul>
+            <li>The native button keeps standard focus, Space, Enter, and disabled behavior.</li>
+            <li><code>aria-pressed</code> exposes the resolved on or off state.</li>
+            <li>Give icon-only toggles an <code>aria-label</code> or <code>aria-labelledby</code>.</li>
+            <li>Use a visible text label when an icon may be unfamiliar.</li>
+            <li>The default <code>type=button</code> prevents accidental form submission.</li>
+            <li>Pressed, disabled, focus-visible, forced-colors, and reduced-motion states remain distinct.</li>
+          </ul>
+          <h3 id="keyboard-support"><a class="docs-section-anchor" href="#keyboard-support">Keyboard Support</a></h3>
+          <div class="docs-api-table"><table><thead><tr><th>Key</th><th>Behavior</th></tr></thead><tbody>{keyboardRows.map((row) => <tr><td><code>{row.key}</code></td><td>{row.description}</td></tr>)}</tbody></table></div>
+        </section>
+
+        <section id="api-reference" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#api-reference">API Reference</a></h2>
+          <div class="docs-api-group">
+            <h3 id="toggle-api"><a class="docs-section-anchor" href="#toggle-api">Toggle</a></h3>
+            <p>Renders a native pressed button. Native attributes, data attributes, event listeners, and consumer classes pass to the root.</p>
+            <div class="docs-api-table"><table><thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>{toggleProps.map((prop) => <tr><td><code>{prop.name}</code></td><td><code>{prop.type}</code></td><td><code>{prop.defaultValue}</code></td><td>{prop.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="events"><a class="docs-section-anchor" href="#events">Events</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Event</th><th>Payload</th><th>Description</th></tr></thead><tbody>{events.map((event) => <tr><td><code>{event.name}</code></td><td><code>{event.payload}</code></td><td>{event.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="slots"><a class="docs-section-anchor" href="#slots">Slots</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Slot</th><th>Description</th></tr></thead><tbody>{slots.map((slot) => <tr><td><code>{slot.name}</code></td><td>{slot.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="data-attributes"><a class="docs-section-anchor" href="#data-attributes">Data Attributes</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Attribute</th><th>Value</th><th>Description</th></tr></thead><tbody>{dataAttributes.map((attribute) => <tr><td><code>{attribute.name}</code></td><td><code>{attribute.value}</code></td><td>{attribute.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="exports"><a class="docs-section-anchor" href="#exports">Exports</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Export</th><th>Description</th></tr></thead><tbody>{exportsList.map((item) => <tr><td><code>{item.name}</code></td><td>{item.description}</td></tr>)}</tbody></table></div>
+          </div>
+        </section>
+
+        <DocsPageNavigation currentPath={currentPath} />
+      </article>
+
+      <aside class="docs-page-toc" aria-label="On this page">
+        <div class="docs-page-toc__inner">
+          <span class="docs-page-toc__title">On this page</span>
+          <ul>
+            <li><a href="#installation" data-toc-link="installation">Installation</a><ul><li><a href="#barrel" data-toc-link="barrel">Barrel</a></li><li><a href="#granular" data-toc-link="granular">Granular</a></li></ul></li>
+            <li><a href="#usage" data-toc-link="usage">Usage</a></li>
+            <li><a href="#composition" data-toc-link="composition">Composition</a></li>
+            <li><a href="#examples" data-toc-link="examples">Examples</a><ul>{examples.map((example) => <li><a href={`#${example.id}`} data-toc-link={example.id}>{example.title}</a></li>)}</ul></li>
+            <li><a href="#accessibility" data-toc-link="accessibility">Accessibility</a><ul><li><a href="#keyboard-support" data-toc-link="keyboard-support">Keyboard Support</a></li></ul></li>
+            <li><a href="#api-reference" data-toc-link="api-reference">API Reference</a><ul><li><a href="#toggle-api" data-toc-link="toggle-api">Toggle</a></li><li><a href="#events" data-toc-link="events">Events</a></li><li><a href="#slots" data-toc-link="slots">Slots</a></li><li><a href="#data-attributes" data-toc-link="data-attributes">Data Attributes</a></li><li><a href="#exports" data-toc-link="exports">Exports</a></li></ul></li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+  </div>
+</DocsLayout>

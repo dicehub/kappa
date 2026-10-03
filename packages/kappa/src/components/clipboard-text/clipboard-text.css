@@ -1,0 +1,135 @@
+.kappa-clipboard-text {
+  box-sizing: border-box;
+  display: grid;
+  inline-size: max-content;
+  max-inline-size: 100%;
+  gap: 0.375rem;
+  color: var(--kappa-default, #17191f);
+  font-family: var(--kappa-font-sans, inherit);
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
+.kappa-clipboard-text *,
+.kappa-clipboard-text *::before,
+.kappa-clipboard-text *::after {
+  box-sizing: border-box;
+}
+
+.kappa-clipboard-text__label {
+  color: var(--kappa-default, #17191f);
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1.25rem;
+}
+
+.kappa-clipboard-text__control {
+  display: flex;
+  inline-size: 100%;
+  min-inline-size: 0;
+  min-block-size: 2rem;
+  align-items: stretch;
+  overflow: hidden;
+  border: 1px solid var(--kappa-line, #e3e6eb);
+  border-radius: 0.5rem;
+  background: var(--kappa-control, #ffffff);
+  color: var(--kappa-default, #17191f);
+  transition:
+    border-color 120ms ease,
+    box-shadow 120ms ease;
+}
+
+.kappa-clipboard-text__control:focus-within {
+  border-color: var(--kappa-focus, #4c63ff);
+  box-shadow: 0 0 0 1px var(--kappa-focus, #4c63ff);
+}
+
+.kappa-clipboard-text__input {
+  min-inline-size: 0;
+  flex: 1 1 auto;
+  padding-inline: 0.625rem;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font-family: var(--kappa-font-mono, ui-monospace, SFMono-Regular, Menlo, monospace);
+  font-size: 0.8125rem;
+  outline: none;
+  text-overflow: ellipsis;
+}
+
+.kappa-clipboard-text__input::selection {
+  background: var(--kappa-focus-soft, rgba(76, 99, 255, 0.2));
+}
+
+.kappa-clipboard-text__trigger {
+  display: inline-flex;
+  inline-size: 2rem;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  align-self: stretch;
+  border: 0;
+  border-inline-start: 1px solid var(--kappa-line, #e3e6eb);
+  border-radius: 0;
+  background: transparent;
+  color: var(--kappa-subtle, #6c7480);
+  cursor: pointer;
+  font: inherit;
+  transition:
+    background-color 120ms ease,
+    color 120ms ease;
+}
+
+.kappa-clipboard-text__trigger:hover:not(:disabled) {
+  background: var(--kappa-tint, #f4f6f9);
+  color: var(--kappa-default, #17191f);
+}
+
+.kappa-clipboard-text__trigger:focus-visible {
+  outline: 2px solid var(--kappa-focus, #4c63ff);
+  outline-offset: -2px;
+}
+
+.kappa-clipboard-text__trigger[data-copied] {
+  color: var(--kappa-success-solid, #027a48);
+}
+
+.kappa-clipboard-text__indicator {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.kappa-clipboard-text__icon {
+  display: block;
+  inline-size: 0.875rem;
+  block-size: 0.875rem;
+}
+
+.kappa-clipboard-text__value-text {
+  overflow: hidden;
+  color: inherit;
+  font-family: var(--kappa-font-mono, ui-monospace, SFMono-Regular, Menlo, monospace);
+  font-size: 0.8125rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kappa-clipboard-text__control,
+  .kappa-clipboard-text__trigger {
+    transition: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .kappa-clipboard-text__control,
+  .kappa-clipboard-text__trigger {
+    border-color: ButtonText;
+  }
+
+  .kappa-clipboard-text__trigger[data-copied] {
+    color: Highlight;
+  }
+}

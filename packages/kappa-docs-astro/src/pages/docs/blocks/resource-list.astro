@@ -1,0 +1,182 @@
+---
+import CodeBlock from "../../../components/CodeBlock.astro";
+import CopyPageControls from "../../../components/CopyPageControls.vue";
+import DocsPageNavigation from "../../../components/DocsPageNavigation.astro";
+import ResourceListDocsDemo from "../../../components/ResourceListDocsDemo.vue";
+import {
+  resourceListExamples,
+  resourceListSource,
+} from "../../../data/resource-list-docs";
+import DocsLayout from "../../../layouts/DocsLayout.astro";
+import "../../../styles/docs-components.css";
+import "../../../styles/docs-blocks.css";
+
+const currentPath = "/docs/blocks/resource-list";
+const description =
+  "Responsive resource pages with clear identity, controls, primary content, and optional contextual information.";
+---
+
+<DocsLayout title="Resource List" description={description}>
+  <div class="docs-page docs-page--component docs-page--blocks">
+    <header class="docs-page-header">
+      <div class="docs-page-header__inner">
+        <div class="docs-page-header__content">
+          <div class="docs-page-header__mobile-actions">
+            <CopyPageControls client:only="vue" align="center" />
+          </div>
+          <div class="docs-page-header__title-row">
+            <h1>Resource List</h1>
+            <div class="docs-page-header__navigation-actions">
+              <div class="docs-page-header__desktop-actions">
+                <CopyPageControls client:only="vue" />
+              </div>
+              <DocsPageNavigation currentPath={currentPath} variant="compact" />
+            </div>
+          </div>
+          <p class="docs-page-header__lede">{description}</p>
+        </div>
+      </div>
+    </header>
+
+    <div class="docs-page-body">
+      <article class="docs-article docs-article--component">
+        <section id="overview" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#overview">Overview</a></h2>
+          <p>
+            <code>ResourceListLayout</code> supplies the responsive page structure. The
+            application supplies resource data and controls filtering, sorting, loading,
+            pagination, selection, and navigation.
+          </p>
+          <div class="docs-api-table">
+            <table>
+              <thead><tr><th>Kappa component</th><th>Purpose</th></tr></thead>
+              <tbody>
+                <tr><td><code>ResourceListLayout</code></td><td>Page identity, actions, primary resource region, and optional sticky sidebar.</td></tr>
+                <tr><td><a href="/docs/components/item">Item</a></td><td>Compact resource rows with media, description, metadata, and actions.</td></tr>
+                <tr><td><a href="/docs/components/input">Input</a></td><td>Search text in the toolbar slot.</td></tr>
+                <tr><td><a href="/docs/components/dropdown">Dropdown</a></td><td>Type and sort filters with visible selected states.</td></tr>
+                <tr><td><a href="/docs/components/meter">Meter</a></td><td>Optional usage context in the sidebar.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section id="examples" class="docs-section docs-section--component-examples">
+          <h2><a class="docs-section-anchor" href="#examples">Examples</a></h2>
+          {
+            resourceListExamples.map(example => (
+              <>
+                <h3 id={example.id}>
+                  <a class="docs-section-anchor" href={`#${example.id}`}>{example.title}</a>
+                </h3>
+                <p>{example.description}</p>
+                <div class="docs-component-example docs-block-example" data-block-example={example.id}>
+                  <div class="docs-block-example__bar">
+                    <span>Resource List · {example.id}</span>
+                    <a href={`/examples/resource-list/${example.id}`} target="_blank" rel="noopener noreferrer">
+                      Open full example <span aria-hidden="true">↗</span>
+                      <span class="docs-block-example__sr-only"> (new tab)</span>
+                    </a>
+                  </div>
+                  <div class="docs-component-preview docs-block-example__preview">
+                    <ResourceListDocsDemo client:load variant={example.id} />
+                  </div>
+                  <CodeBlock
+                    code={resourceListSource(example.id)}
+                    lang="vue"
+                    collapsible
+                    revealId={`resource-list-${example.id}-code`}
+                  />
+                </div>
+              </>
+            ))
+          }
+        </section>
+
+        <section id="installation" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#installation">Installation</a></h2>
+          <p>
+            Import the block from <code>@dicehub/kappa</code> or the granular
+            <code>@dicehub/kappa/blocks/resource-list-layout</code> path. Import the Kappa theme
+            once in the application entry point.
+          </p>
+          <CodeBlock
+            code={`import { ResourceListLayout } from "@dicehub/kappa"
+import "@dicehub/kappa/styles/theme-kappa.css"`}
+            lang="javascript"
+          />
+        </section>
+
+        <section id="api" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#api">API and Composition</a></h2>
+          <div class="docs-api-table">
+            <table>
+              <thead><tr><th>Prop</th><th>Default</th><th>Purpose</th></tr></thead>
+              <tbody>
+                <tr><td><code>title</code></td><td>—</td><td>Page heading. The title slot takes priority.</td></tr>
+                <tr><td><code>description</code></td><td>—</td><td>Supporting text below the heading.</td></tr>
+                <tr><td><code>density</code></td><td><code>default</code></td><td><code>default</code> or <code>compact</code> page spacing.</td></tr>
+                <tr><td><code>sidebarSide</code></td><td><code>end</code></td><td>Logical <code>start</code> or <code>end</code> placement on wide containers.</td></tr>
+                <tr><td><code>stickySidebar</code></td><td><code>true</code></td><td>Keeps contextual information visible on wide containers.</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p>
+            Slots: <code>icon</code>, <code>title</code>, <code>description</code>,
+            <code>actions</code>, <code>toolbar</code>, <code>aside</code>, and the default resource
+            region. Attributes, ARIA attributes, styles, and DOM listeners pass to the root.
+          </p>
+          <p>
+            The primary region stays first in document order. A start sidebar moves visually on
+            wide containers, then returns below the primary region when space is limited. Container
+            queries make the layout respond to its available space, not only to the viewport.
+          </p>
+        </section>
+
+        <section id="accessibility" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#accessibility">Accessibility</a></h2>
+          <ul>
+            <li>The title renders as the page's level-one heading. Do not add another level-one heading for the same page.</li>
+            <li>The optional icon is decorative. Put essential meaning in the title and description.</li>
+            <li>Give toolbar controls visible labels or accessible names. Announce result counts when filters change.</li>
+            <li>Use native links for resource navigation and buttons for row actions. Do not nest buttons in a linked row.</li>
+            <li>Loading, empty, and error states belong in the default slot, near the content they replace.</li>
+          </ul>
+        </section>
+
+        <section id="styling" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#styling">Styling</a></h2>
+          <p>
+            The block uses Kappa semantic colors, spacing, typography, radius, and shadow tokens in
+            both themes. Optional layout variables are
+            <code>--kappa-resource-list-layout-content-max</code>,
+            <code>--kappa-resource-list-layout-aside-width</code>, and
+            <code>--kappa-resource-list-layout-gap</code>.
+          </p>
+          <p>
+            When the block's wrapper is a flex item, set the wrapper's
+            <code>inline-size</code> to <code>100%</code>. Inline-size containment means the
+            block's content does not set the wrapper's width. Use container queries for resource
+            rows and toolbar controls so they also fit narrow panels on wide screens.
+          </p>
+        </section>
+
+        <DocsPageNavigation currentPath={currentPath} />
+      </article>
+
+      <aside class="docs-page-toc" aria-label="On this page">
+        <div class="docs-page-toc__inner">
+          <span class="docs-page-toc__title">On this page</span>
+          <ul>
+            <li><a href="#overview" data-toc-link="overview">Overview</a></li>
+            <li><a href="#examples" data-toc-link="examples">Examples</a><ul>{resourceListExamples.map(example => <li><a href={`#${example.id}`} data-toc-link={example.id}>{example.title}</a></li>)}</ul></li>
+            <li><a href="#installation" data-toc-link="installation">Installation</a></li>
+            <li><a href="#api" data-toc-link="api">API and Composition</a></li>
+            <li><a href="#accessibility" data-toc-link="accessibility">Accessibility</a></li>
+            <li><a href="#styling" data-toc-link="styling">Styling</a></li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+  </div>
+</DocsLayout>

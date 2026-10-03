@@ -1,0 +1,118 @@
+@font-face {
+  font-family: "Kappa Dicehub Reference";
+  src: url("/fonts/nunito/nunito-latin-400-normal.woff2") format("woff2");
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Kappa Dicehub Reference";
+  src: url("/fonts/nunito/nunito-latin-700-normal.woff2") format("woff2");
+  font-weight: 700;
+  font-display: swap;
+}
+
+.kappa-compact-number-demo {
+  inline-size: min(100%, 17rem);
+  --kappa-font-sans: "Kappa Dicehub Reference";
+  color: var(--kappa-dicehub-number-text);
+  font-family: var(--kappa-font-sans);
+  font-size: 0.8125rem;
+}
+
+/* Keep the demo layout stable when the base component CSS loads later. */
+.kappa-compact-number-field.kappa-number-input {
+  display: grid;
+  grid-template-columns: 30% minmax(0, 1fr);
+  column-gap: 0.625rem;
+  inline-size: 100%;
+}
+
+.kappa-compact-number-demo .kappa-compact-number-field[data-size="xs"] {
+  --kappa-number-input-trigger-size: 1.01875rem;
+}
+
+.kappa-compact-number-field .kappa-number-input__label {
+  display: block;
+  inline-size: 100%;
+  align-self: center;
+  margin-block: 0;
+  color: inherit;
+  font: 400 0.8125rem/1 var(--kappa-font-sans);
+  text-align: end;
+}
+
+.kappa-compact-number-field .kappa-number-input__control,
+.kappa-compact-number-field[data-readonly] .kappa-number-input__control {
+  inline-size: 100%;
+  position: relative;
+  border: 0;
+  background: var(--kappa-dicehub-number-surface);
+  outline: none;
+  box-shadow: none;
+}
+
+.kappa-compact-number-field .kappa-number-input__scrubbable-input {
+  block-size: 1.25rem;
+  border-radius: 0.125rem;
+  background: transparent;
+}
+
+.kappa-compact-number-field .kappa-number-input__scrubbable-display {
+  padding-inline: 1.25rem;
+  color: var(--kappa-dicehub-number-text);
+  font-weight: 400;
+  font-variant-numeric: normal;
+}
+
+.kappa-compact-number-field .kappa-number-input__scrubbable-input:hover:not([data-readonly], [data-editing]),
+.kappa-compact-number-field .kappa-number-input__scrubbable-input[data-dragging] {
+  background: var(--kappa-dicehub-number-hover);
+}
+
+.kappa-compact-number-field .kappa-number-input__scrubbable-input[data-editing] {
+  background: var(--kappa-control);
+}
+
+.kappa-compact-number-field .kappa-number-input__input {
+  block-size: 1.25rem;
+  padding-inline: 3px;
+  border: 1px solid var(--kappa-dicehub-number-focus);
+  border-radius: 2px;
+  color: var(--kappa-dicehub-number-text);
+  /* The native editor font is isolated to this compact demo. */
+  font: 400 13.333333px/1 Arial;
+}
+
+.kappa-compact-number-field .kappa-number-input__trigger {
+  position: absolute;
+  inset-block: 0;
+  z-index: 1;
+  block-size: 1.25rem;
+  padding-inline: 1px;
+  border: 0;
+  visibility: hidden;
+  background: var(--kappa-dicehub-number-trigger);
+  color: var(--kappa-dicehub-number-trigger-text);
+}
+
+.kappa-compact-number-field .kappa-number-input__trigger--decrement { inset-inline-start: 0; }
+.kappa-compact-number-field .kappa-number-input__trigger--increment { inset-inline-end: 0; }
+.kappa-compact-number-field .kappa-number-input__trigger svg { inline-size: 14.3px; block-size: 14.3px; }
+.kappa-compact-number-field .kappa-number-input__trigger:hover {
+  background: var(--kappa-dicehub-number-trigger-hover);
+  color: var(--kappa-dicehub-number-trigger-active-text);
+}
+
+.kappa-compact-number-field:not([data-readonly]) .kappa-number-input__control:hover:not(:has([data-editing])) .kappa-number-input__trigger {
+  visibility: visible;
+}
+
+.kappa-compact-number-field[data-readonly] .kappa-number-input__label,
+.kappa-compact-number-field[data-readonly] .kappa-number-input__scrubbable-display {
+  color: var(--kappa-muted);
+}
+
+.kappa-compact-number-row[data-recently-edited] .kappa-number-input__scrubbable-display {
+  background: var(--kappa-dicehub-number-updated);
+}

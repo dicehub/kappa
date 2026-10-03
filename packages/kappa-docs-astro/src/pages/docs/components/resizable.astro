@@ -1,0 +1,202 @@
+---
+import ArkUiDocsLink from "../../../components/ArkUiDocsLink.astro";
+import CodeBlock from "../../../components/CodeBlock.astro";
+import CompositionTree from "../../../components/CompositionTree.astro";
+import CopyPageControls from "../../../components/CopyPageControls.vue";
+import DocsPageNavigation from "../../../components/DocsPageNavigation.astro";
+import ResizableDocsDemo from "../../../components/ResizableDocsDemo.vue";
+import {
+  barrelCode,
+  collapsibleCode,
+  controlledCode,
+  dataAttributes,
+  events,
+  exportsList,
+  granularCode,
+  handleCode,
+  keyboardRows,
+  nestedCode,
+  parts,
+  previewCode,
+  rootProps,
+  rootProviderCode,
+  slots,
+  usageCode,
+  verticalCode,
+} from "../../../data/resizable-docs";
+import DocsLayout from "../../../layouts/DocsLayout.astro";
+import "../../../styles/docs-components.css";
+
+const currentPath = "/docs/components/resizable";
+const description = "A precise splitter for resizable panels, workspaces, and dense application layouts.";
+
+const examples = [
+  {
+    id: "vertical",
+    title: "Vertical",
+    description: "Set orientation to vertical when the divider should separate stacked panels.",
+    variant: "vertical",
+    code: verticalCode,
+  },
+  {
+    id: "handle",
+    title: "Handle and indicator",
+    description: "Handle includes a quiet grip by default. Use the Ark-aligned ResizeTrigger and indicator parts for custom content.",
+    variant: "handle",
+    code: handleCode,
+  },
+  {
+    id: "collapsible",
+    title: "Collapsible panels",
+    description: "Mark a panel collapsible, then use Enter on its handle or Context methods to collapse and expand it.",
+    variant: "collapsible",
+    code: collapsibleCode,
+  },
+  {
+    id: "nested",
+    title: "Nested splitters",
+    description: "Compose a second Root inside a panel when a workbench needs independent horizontal and vertical boundaries.",
+    variant: "nested",
+    code: nestedCode,
+  },
+  {
+    id: "controlled",
+    title: "Controlled layout",
+    description: "Use v-model:size when application state or another control owns the current layout.",
+    variant: "controlled",
+    code: controlledCode,
+  },
+] as const;
+---
+
+<DocsLayout title="Resizable" description={description}>
+  <div class="docs-page docs-page--component">
+    <header class="docs-page-header">
+      <div class="docs-page-header__inner">
+        <div class="docs-page-header__content">
+          <div class="docs-page-header__mobile-actions">
+            <CopyPageControls client:only="vue" align="center" />
+          </div>
+          <div class="docs-page-header__title-row">
+            <h1>Resizable</h1>
+            <ArkUiDocsLink href="https://ark-ui.com/docs/components/splitter" />
+            <div class="docs-page-header__navigation-actions">
+              <div class="docs-page-header__desktop-actions"><CopyPageControls client:only="vue" /></div>
+              <DocsPageNavigation currentPath={currentPath} variant="compact" />
+            </div>
+          </div>
+          <p class="docs-page-header__lede">{description}</p>
+        </div>
+      </div>
+    </header>
+
+    <div class="docs-page-body">
+      <article class="docs-article docs-article--component">
+        <section id="preview" class="docs-section">
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><ResizableDocsDemo client:load variant="preview" /></div>
+            <CodeBlock code={previewCode} lang="vue" collapsible revealId="resizable-preview-code" />
+          </div>
+        </section>
+
+        <section id="installation" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#installation">Installation</a></h2>
+          <p>Resizable is part of the main Kappa package. Ark UI owns panel measurements, pointer capture, keyboard behavior, and splitter semantics; Kappa provides the visual divider, grip, and semantic token treatment.</p>
+          <h3 id="barrel"><a class="docs-section-anchor" href="#barrel">Barrel</a></h3>
+          <CodeBlock code={barrelCode} lang="javascript" />
+          <h3 id="granular"><a class="docs-section-anchor" href="#granular">Granular</a></h3>
+          <CodeBlock code={granularCode} lang="javascript" />
+        </section>
+
+        <section id="usage" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#usage">Usage</a></h2>
+          <p>Declare every panel in <code>panels</code>, render a Panel for each id, and place a Handle between adjacent panels. Give Root a size through its parent or a block-size class so the divider has a measurable area. Kappa panels are scroll containers, so long content can scroll without changing the splitter’s flex sizing.</p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><ResizableDocsDemo client:load variant="usage" /></div>
+            <CodeBlock code={usageCode} lang="vue" collapsible revealId="resizable-usage-code" />
+          </div>
+          <p>Use the full id form <code>before:after</code> for predictable composition. A Handle is a Kappa alias for <code>ResizeTrigger</code> and includes <code>ResizeTriggerIndicator</code> when it has no custom slot.</p>
+        </section>
+
+        <section id="composition" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#composition">Composition</a></h2>
+          <CompositionTree component="resizable" />
+          <p>Ark UI's splitter machine remains the behavior layer. Kappa wraps the current Ark Vue 5.39.1 API and adds named parts, styling, a default grip for Handle, and the same Root / RootProvider / Context composition model.</p>
+          <p>Use <code>RootProvider</code> with <code>useSplitter</code> when the machine belongs in setup code. Use <code>Context</code> to call <code>setSizes</code>, <code>collapsePanel</code>, <code>expandPanel</code>, or other API methods from a descendant.</p>
+          <CodeBlock code={rootProviderCode} lang="vue" />
+        </section>
+
+        <section id="examples" class="docs-section docs-section--component-examples">
+          <h2><a class="docs-section-anchor" href="#examples">Examples</a></h2>
+          {examples.map((example) => (
+            <>
+              <h3 id={example.id}><a class="docs-section-anchor" href={`#${example.id}`}>{example.title}</a></h3>
+              <p>{example.description}</p>
+              <div class="docs-component-example">
+                <div class="docs-component-preview"><ResizableDocsDemo client:load variant={example.variant} /></div>
+                <CodeBlock code={example.code} lang="vue" collapsible revealId={`resizable-${example.id}-code`} />
+              </div>
+            </>
+          ))}
+        </section>
+
+        <section id="accessibility" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#accessibility">Accessibility</a></h2>
+          <ul>
+            <li>Give every Handle or ResizeTrigger a concise accessible label. Ark UI exposes a separator role, orientation, current value, limits, and controlled panel ids.</li>
+            <li>Keep panel ids unique within each Root and keep the panels array synchronized with rendered Panel parts.</li>
+            <li>Use visible focus styles. Pointer dragging and keyboard resizing remain available in light, dark, forced-colors, and reduced-motion modes.</li>
+            <li>Use <code>disabled</code> on a divider when that boundary must not move. Use panel constraints for minimum and maximum sizes.</li>
+            <li>When a panel is collapsible, explain the behavior in nearby text if the affordance is not obvious from the layout.</li>
+          </ul>
+          <h3 id="keyboard-support"><a class="docs-section-anchor" href="#keyboard-support">Keyboard Support</a></h3>
+          <div class="docs-api-table"><table><thead><tr><th>Key</th><th>Behavior</th></tr></thead><tbody>{keyboardRows.map((row) => <tr><td><code>{row.key}</code></td><td>{row.description}</td></tr>)}</tbody></table></div>
+        </section>
+
+        <section id="api-reference" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#api-reference">API Reference</a></h2>
+          <div class="docs-api-group">
+            <h3 id="root-api"><a class="docs-section-anchor" href="#root-api">Resizable.Root</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>{rootProps.map((prop) => <tr><td><code>{prop.name}</code></td><td><code>{prop.type}</code></td><td><code>{prop.defaultValue}</code></td><td>{prop.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="parts-api"><a class="docs-section-anchor" href="#parts-api">Parts</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Part</th><th>Element</th><th>Description</th></tr></thead><tbody>{parts.map((part) => <tr><td><code>Resizable.{part.name}</code></td><td><code>{part.element}</code></td><td>{part.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="events-api"><a class="docs-section-anchor" href="#events-api">Events</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Event</th><th>Payload</th><th>Description</th></tr></thead><tbody>{events.map((event) => <tr><td><code>{event.name}</code></td><td><code>{event.payload}</code></td><td>{event.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="slots"><a class="docs-section-anchor" href="#slots">Slots</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Slot</th><th>Description</th></tr></thead><tbody>{slots.map((slot) => <tr><td><code>{slot.name}</code></td><td>{slot.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="data-attributes"><a class="docs-section-anchor" href="#data-attributes">Data Attributes</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Attribute</th><th>Value</th><th>Description</th></tr></thead><tbody>{dataAttributes.map((attribute) => <tr><td><code>{attribute.name}</code></td><td><code>{attribute.value}</code></td><td>{attribute.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="exports"><a class="docs-section-anchor" href="#exports">Exports</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Export</th><th>Description</th></tr></thead><tbody>{exportsList.map((item) => <tr><td><code>{item.name}</code></td><td>{item.description}</td></tr>)}</tbody></table></div>
+          </div>
+        </section>
+
+        <DocsPageNavigation currentPath={currentPath} />
+      </article>
+
+      <aside class="docs-page-toc" aria-label="On this page">
+        <div class="docs-page-toc__inner">
+          <span class="docs-page-toc__title">On this page</span>
+          <ul>
+            <li><a href="#installation" data-toc-link="installation">Installation</a><ul><li><a href="#barrel" data-toc-link="barrel">Barrel</a></li><li><a href="#granular" data-toc-link="granular">Granular</a></li></ul></li>
+            <li><a href="#usage" data-toc-link="usage">Usage</a></li>
+            <li><a href="#composition" data-toc-link="composition">Composition</a></li>
+            <li><a href="#examples" data-toc-link="examples">Examples</a><ul>{examples.map((example) => <li><a href={`#${example.id}`} data-toc-link={example.id}>{example.title}</a></li>)}</ul></li>
+            <li><a href="#accessibility" data-toc-link="accessibility">Accessibility</a><ul><li><a href="#keyboard-support" data-toc-link="keyboard-support">Keyboard Support</a></li></ul></li>
+            <li><a href="#api-reference" data-toc-link="api-reference">API Reference</a><ul><li><a href="#root-api" data-toc-link="root-api">Resizable.Root</a></li><li><a href="#parts-api" data-toc-link="parts-api">Parts</a></li><li><a href="#events-api" data-toc-link="events-api">Events</a></li><li><a href="#slots" data-toc-link="slots">Slots</a></li><li><a href="#data-attributes" data-toc-link="data-attributes">Data Attributes</a></li><li><a href="#exports" data-toc-link="exports">Exports</a></li></ul></li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+  </div>
+</DocsLayout>

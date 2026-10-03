@@ -1,0 +1,103 @@
+.kappa-resource-picker {
+  --kappa-resource-picker-surface: var(--kappa-tint);
+  inline-size: min(100%, 36rem);
+}
+
+.kappa-resource-picker .kappa-dialog-layout__actions {
+  background: var(--kappa-resource-picker-surface);
+}
+
+.kappa-resource-picker__results .kappa-selection-list__item[data-selected] {
+  background: var(--kappa-resource-picker-surface);
+}
+
+.kappa-resource-picker .kappa-resource-picker__body {
+  padding: 0;
+  overflow: hidden;
+  scrollbar-gutter: auto;
+}
+
+.kappa-resource-picker__list {
+  gap: 0;
+}
+
+.kappa-resource-picker__search {
+  padding: 0.875rem 1rem;
+  border-block-end: 1px solid var(--kappa-hairline, #edf0f3);
+}
+
+.kappa-resource-picker__search .kappa-input {
+  padding-inline: 0.75rem;
+  border-color: var(--kappa-input-border, #dcdcdc);
+  border-radius: 0.125rem;
+}
+
+.kappa-resource-picker__search .kappa-input:hover:not(:disabled),
+.kappa-resource-picker__search .kappa-input:focus-visible {
+  border-color: var(--kappa-focus, #247ab7);
+}
+
+.kappa-resource-picker__search .kappa-input:focus-visible {
+  box-shadow: 0 0 5px var(--kappa-focus, #247ab7);
+}
+
+.kappa-resource-picker__results {
+  min-block-size: 15rem;
+  max-block-size: min(24rem, 45dvb);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.kappa-resource-picker__results .kappa-selection-list__content {
+  max-block-size: none;
+  overflow: visible;
+  padding: 0.25rem;
+  border: 0;
+  border-radius: 0;
+  scrollbar-gutter: auto;
+}
+
+.kappa-resource-picker__results .kappa-selection-list__item {
+  min-block-size: 3.25rem;
+  padding-block: 0.625rem;
+  padding-inline-start: 0.75rem;
+  padding-inline-end: 2.5rem;
+  border-radius: 0.125rem;
+}
+
+.kappa-resource-picker__results .kappa-selection-list__item + .kappa-selection-list__item {
+  border-block-start: 1px solid var(--kappa-hairline, #edf0f3);
+}
+
+.kappa-resource-picker__results .kappa-selection-list__item-text {
+  font-weight: 500;
+}
+
+.kappa-resource-picker__results .kappa-selection-list__item-meta {
+  max-inline-size: 9rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.kappa-resource-picker__state {
+  display: flex;
+  min-block-size: 15rem;
+  align-items: center;
+  justify-content: center;
+  gap: 0.625rem;
+  padding: 1rem;
+  color: var(--kappa-subtle, #6c7480);
+  font-size: 0.8125rem;
+}
+
+.kappa-resource-picker__selection {
+  color: var(--kappa-subtle, #6c7480);
+  font-size: 0.75rem;
+  font-variant-numeric: tabular-nums;
+}
+
+@media (max-width: 30rem) {
+  .kappa-resource-picker__results .kappa-selection-list__item-meta {
+    max-inline-size: 5rem;
+  }
+}

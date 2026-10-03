@@ -1,0 +1,201 @@
+---
+import ArkUiDocsLink from "../../../components/ArkUiDocsLink.astro";
+import CodeBlock from "../../../components/CodeBlock.astro";
+import CompositionTree from "../../../components/CompositionTree.astro";
+import CopyPageControls from "../../../components/CopyPageControls.vue";
+import DocsPageNavigation from "../../../components/DocsPageNavigation.astro";
+import FileUploadDocsDemo from "../../../components/FileUploadDocsDemo.vue";
+import {
+  barrelCode,
+  dataAttributes,
+  events,
+  exportsList,
+  granularCode,
+  modalCode,
+  parts,
+  previewCode,
+  providerCode,
+  rootProps,
+  statesCode,
+  usageCode,
+  validationCode,
+} from "../../../data/file-upload-docs";
+import DocsLayout from "../../../layouts/DocsLayout.astro";
+import "../../../styles/docs-components.css";
+
+const currentPath = "/docs/components/file-upload";
+const description = "Selects and validates files with a keyboard-accessible picker and drag-and-drop surface.";
+
+const examples = [
+  {
+    id: "modal-upload",
+    title: "Upload Dialog with Progress",
+    description: "Open a focused upload flow, explain the limits, select or drop files, and report transfer progress.",
+    variant: "modal",
+    code: modalCode,
+  },
+  {
+    id: "validation",
+    title: "File Constraints",
+    description: "Restrict file types, sizes, and counts. Keep rejected files visible with a clear recovery message.",
+    variant: "validation",
+    code: validationCode,
+  },
+  {
+    id: "states",
+    title: "Disabled and Invalid",
+    description: "Set state at the root so the label, drop zone, trigger, and input stay synchronized.",
+    variant: "states",
+    code: statesCode,
+  },
+] as const;
+---
+
+<DocsLayout title="File Upload" description={description}>
+  <div class="docs-page docs-page--component">
+    <header class="docs-page-header">
+      <div class="docs-page-header__inner">
+        <div class="docs-page-header__content">
+          <div class="docs-page-header__mobile-actions">
+            <CopyPageControls client:only="vue" align="center" />
+          </div>
+          <div class="docs-page-header__title-row">
+            <h1>File Upload</h1>
+            <ArkUiDocsLink />
+            <div class="docs-page-header__navigation-actions">
+              <div class="docs-page-header__desktop-actions"><CopyPageControls client:only="vue" /></div>
+              <DocsPageNavigation currentPath={currentPath} variant="compact" />
+            </div>
+          </div>
+          <p class="docs-page-header__lede">{description}</p>
+        </div>
+      </div>
+    </header>
+
+    <div class="docs-page-body">
+      <article class="docs-article docs-article--component">
+        <section id="preview" class="docs-section">
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><FileUploadDocsDemo client:load variant="preview" /></div>
+            <CodeBlock code={previewCode} lang="vue" collapsible revealId="file-upload-preview-code" />
+          </div>
+        </section>
+
+        <section id="installation" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#installation">Installation</a></h2>
+          <p>
+            File Upload is part of the main Kappa package. Kappa wraps the Ark UI Vue file-upload
+            primitive and adds semantic-token styling, compact file rows, and useful default media and actions.
+          </p>
+          <h3 id="barrel"><a class="docs-section-anchor" href="#barrel">Barrel</a></h3>
+          <CodeBlock code={barrelCode} lang="javascript" />
+          <h3 id="granular"><a class="docs-section-anchor" href="#granular">Granular</a></h3>
+          <CodeBlock code={granularCode} lang="javascript" />
+        </section>
+
+        <section id="usage" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#usage">Usage</a></h2>
+          <p>
+            Add <code>disableClick</code> to a drop zone that contains a <code>Trigger</code>. This avoids
+            opening the native picker twice. Render file rows from <code>acceptedFiles</code> in
+            <code>FileUpload.Context</code>.
+          </p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><FileUploadDocsDemo client:load variant="usage" /></div>
+            <CodeBlock code={usageCode} lang="vue" collapsible revealId="file-upload-usage-code" />
+          </div>
+        </section>
+
+        <section id="composition" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#composition">Composition</a></h2>
+          <CompositionTree component="fileUpload" />
+          <p>
+            Ark UI owns file selection, drag state, validation, native input behavior, and accepted or rejected
+            collections. Kappa does not send files. The application owns the transfer, cancellation, retry, and progress state.
+          </p>
+          <ul>
+            <li><code>Root</code> defines constraints and file state. <code>RootProvider</code> accepts a machine from <code>useFileUpload</code>.</li>
+            <li><code>Dropzone</code> accepts drops. <code>Trigger</code> opens the operating system file picker.</li>
+            <li><code>ItemGroup</code> and <code>Item</code> render accepted or rejected files.</li>
+            <li>Compose Kappa <code>Progress</code> inside an item when the application starts a transfer.</li>
+          </ul>
+          <div class="docs-component-example">
+            <CodeBlock code={providerCode} lang="vue" collapsible revealId="file-upload-provider-code" />
+          </div>
+        </section>
+
+        <section id="examples" class="docs-section docs-section--component-examples">
+          <h2><a class="docs-section-anchor" href="#examples">Examples</a></h2>
+          {
+            examples.map((example) => (
+              <>
+                <h3 id={example.id}><a class="docs-section-anchor" href={`#${example.id}`}>{example.title}</a></h3>
+                <p>{example.description}</p>
+                <div class="docs-component-example">
+                  <div class="docs-component-preview"><FileUploadDocsDemo client:load variant={example.variant} /></div>
+                  <CodeBlock code={example.code} lang="vue" collapsible revealId={`file-upload-${example.id}-code`} />
+                </div>
+              </>
+            ))
+          }
+        </section>
+
+        <section id="accessibility" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#accessibility">Accessibility</a></h2>
+          <ul>
+            <li>Use a visible <code>Label</code> for every upload field.</li>
+            <li>The drop zone and trigger support keyboard file selection. Do not replace them with pointer-only handlers.</li>
+            <li>Give each delete action a file-specific accessible name.</li>
+            <li>Report rejection and transfer status in an <code>aria-live</code> region.</li>
+            <li>Do not close a modal while a transfer is active unless cancellation is safe and explicit.</li>
+            <li>Drag, focus, invalid, disabled, and rejected states stay visible in both themes and forced colors.</li>
+          </ul>
+          <p>
+            See the <a href="https://ark-ui.com/docs/components/file-upload">official Ark UI File Upload documentation</a>
+            for the underlying behavior and accessibility contract.
+          </p>
+        </section>
+
+        <section id="api-reference" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#api-reference">API Reference</a></h2>
+          <div class="docs-api-group">
+            <h3 id="root-api"><a class="docs-section-anchor" href="#root-api">FileUpload.Root</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>{rootProps.map((prop) => <tr><td><code>{prop.name}</code></td><td><code>{prop.type}</code></td><td><code>{prop.defaultValue}</code></td><td>{prop.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="parts-api"><a class="docs-section-anchor" href="#parts-api">Parts</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Part</th><th>Element</th><th>Description</th></tr></thead><tbody>{parts.map((part) => <tr><td><code>FileUpload.{part.name}</code></td><td><code>{part.element}</code></td><td>{part.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="events-api"><a class="docs-section-anchor" href="#events-api">Events</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Event</th><th>Payload</th><th>Description</th></tr></thead><tbody>{events.map((event) => <tr><td><code>{event.name}</code></td><td><code>{event.payload}</code></td><td>{event.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="data-attributes"><a class="docs-section-anchor" href="#data-attributes">Data Attributes</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Attribute</th><th>Value</th><th>Description</th></tr></thead><tbody>{dataAttributes.map((attribute) => <tr><td><code>{attribute.name}</code></td><td><code>{attribute.value}</code></td><td>{attribute.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="exports"><a class="docs-section-anchor" href="#exports">Exports</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Export</th><th>Description</th></tr></thead><tbody>{exportsList.map((item) => <tr><td><code>{item.name}</code></td><td>{item.description}</td></tr>)}</tbody></table></div>
+          </div>
+        </section>
+
+        <DocsPageNavigation currentPath={currentPath} />
+      </article>
+
+      <aside class="docs-page-toc" aria-label="On this page">
+        <div class="docs-page-toc__inner">
+          <span class="docs-page-toc__title">On this page</span>
+          <ul>
+            <li><a href="#installation" data-toc-link="installation">Installation</a><ul><li><a href="#barrel" data-toc-link="barrel">Barrel</a></li><li><a href="#granular" data-toc-link="granular">Granular</a></li></ul></li>
+            <li><a href="#usage" data-toc-link="usage">Usage</a></li>
+            <li><a href="#composition" data-toc-link="composition">Composition</a></li>
+            <li><a href="#examples" data-toc-link="examples">Examples</a><ul>{examples.map((example) => <li><a href={`#${example.id}`} data-toc-link={example.id}>{example.title}</a></li>)}</ul></li>
+            <li><a href="#accessibility" data-toc-link="accessibility">Accessibility</a></li>
+            <li><a href="#api-reference" data-toc-link="api-reference">API Reference</a><ul><li><a href="#root-api" data-toc-link="root-api">FileUpload.Root</a></li><li><a href="#parts-api" data-toc-link="parts-api">Parts</a></li><li><a href="#events-api" data-toc-link="events-api">Events</a></li><li><a href="#data-attributes" data-toc-link="data-attributes">Data Attributes</a></li><li><a href="#exports" data-toc-link="exports">Exports</a></li></ul></li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+  </div>
+</DocsLayout>

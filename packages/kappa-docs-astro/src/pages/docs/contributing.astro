@@ -1,0 +1,83 @@
+---
+import CodeBlock from "../../components/CodeBlock.astro";
+import CopyPageControls from "../../components/CopyPageControls.vue";
+import DocsPageNavigation from "../../components/DocsPageNavigation.astro";
+import DocsLayout from "../../layouts/DocsLayout.astro";
+
+const currentPath = "/docs/contributing";
+const description = "How to change Kappa components, blocks, and documentation.";
+const toc = [
+  { id: "workspace", label: "Workspace" },
+  { id: "setup", label: "Set Up" },
+  { id: "make-a-change", label: "Make a Change" },
+  { id: "verify", label: "Verify" },
+];
+---
+
+<DocsLayout title="Contributing" description={description}>
+  <div class="docs-page">
+    <header class="docs-page-header"><div class="docs-page-header__inner"><div class="docs-page-header__content">
+      <div class="docs-page-header__mobile-actions"><CopyPageControls client:only="vue" align="center" /></div>
+      <div class="docs-page-header__title-row">
+        <h1>Contributing</h1>
+        <div class="docs-page-header__navigation-actions">
+          <div class="docs-page-header__desktop-actions"><CopyPageControls client:only="vue" /></div>
+          <DocsPageNavigation currentPath={currentPath} variant="compact" />
+        </div>
+      </div>
+      <p class="docs-page-header__lede">{description}</p>
+    </div></div></header>
+
+    <div class="docs-page-body">
+      <article class="docs-article">
+        <p>Use this guide to contribute to Kappa. To install Kappa in your application, see <a href="/docs/installation">Installation</a>.</p>
+        <section id="workspace" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#workspace">Workspace</a></h2>
+          <p><code>packages/kappa</code> contains the Vue library. <code>packages/kappa-docs-astro</code> contains the documentation, demos, and browser tests.</p>
+          <p>Add reusable controls to <code>packages/kappa/src/components</code> and application blocks to <code>packages/kappa/src/blocks</code>. Put guides and demos in the docs package. See <a href="/docs/components">Components</a> and <a href="/docs/blocks">Blocks</a> for examples.</p>
+          <p>Run the commands below from the repository root.</p>
+        </section>
+
+        <section id="setup" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#setup">Set Up</a></h2>
+          <p>Use the Node.js and pnpm versions listed in the root <code>package.json</code>. Install dependencies and start the documentation site:</p>
+          <CodeBlock code={`corepack enable
+pnpm install
+pnpm dev`} lang="bash" />
+          <p>To run browser tests, install Chromium:</p>
+          <CodeBlock code="pnpm --filter @dicehub/kappa-docs-astro exec playwright install chromium" lang="bash" />
+        </section>
+
+        <section id="make-a-change" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#make-a-change">Make a Change</a></h2>
+          <ul class="docs-section-list">
+            <li>Use an Ark UI Vue primitive when one exists. Kappa defines its public API and visual design.</li>
+            <li>When you change a public component or block, update its exports, documentation, demo, and relevant tests.</li>
+            <li>For registry or theme changes, edit the source and run its generator. Do not edit generated files by hand.</li>
+            <li>Add a changeset for each user-visible package change. Documentation-only changes do not need one.</li>
+          </ul>
+          <CodeBlock code={`pnpm --filter @dicehub/kappa codegen:registry
+pnpm --filter @dicehub/kappa codegen:themes
+pnpm changeset`} lang="bash" />
+          <p>Run the commands that apply to your change. See <a href="/docs/registry">Registry</a> and <a href="/docs/colors">Colors</a> for the source files.</p>
+        </section>
+
+        <section id="verify" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#verify">Verify</a></h2>
+          <p>Run tests for the code you change while you work. Before you submit a change, check the types, build, and test suite:</p>
+          <CodeBlock code={`pnpm typecheck
+pnpm build
+pnpm test`} lang="bash" />
+          <p>If you change exports or package output, also validate the packed package:</p>
+          <CodeBlock code="pnpm --filter @dicehub/kappa validate:package" lang="bash" />
+          <p>For release work, follow <code>docs/RELEASING.md</code> in the repository. CI publishes the package from protected tags.</p>
+        </section>
+        <DocsPageNavigation currentPath={currentPath} />
+      </article>
+      <aside class="docs-page-toc" aria-label="On this page"><div class="docs-page-toc__inner">
+        <span class="docs-page-toc__title">On this page</span>
+        <ul>{toc.map((item) => <li><a href={`#${item.id}`} data-toc-link={item.id}>{item.label}</a></li>)}</ul>
+      </div></aside>
+    </div>
+  </div>
+</DocsLayout>

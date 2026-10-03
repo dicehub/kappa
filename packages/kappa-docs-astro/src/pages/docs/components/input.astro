@@ -1,0 +1,230 @@
+---
+import ArkUiDocsLink from "../../../components/ArkUiDocsLink.astro";
+import CodeBlock from "../../../components/CodeBlock.astro";
+import CompositionTree from "../../../components/CompositionTree.astro";
+import CopyPageControls from "../../../components/CopyPageControls.vue";
+import DocsPageNavigation from "../../../components/DocsPageNavigation.astro";
+import InputDocsDemo from "../../../components/InputDocsDemo.vue";
+import DocsLayout from "../../../layouts/DocsLayout.astro";
+import {
+  badgeCode,
+  barrelCode,
+  basicCode,
+  controlledCode,
+  dataAttributes,
+  events,
+  exportsList,
+  fileCode,
+  granularCode,
+  gridCode,
+  inlineCode,
+  inputProps,
+  previewCode,
+  requiredCode,
+  rtlCode,
+  sizesCode,
+  statesCode,
+} from "../../../data/input-docs";
+import "../../../styles/docs-components.css";
+
+const currentPath = "/docs/components/input";
+const description =
+  "A native text-entry control with compact density, complete form states, and Vue v-model support.";
+---
+
+<DocsLayout title="Input" description={description}>
+  <div class="docs-page docs-page--component">
+    <header class="docs-page-header">
+      <div class="docs-page-header__inner">
+        <div class="docs-page-header__content">
+          <div class="docs-page-header__mobile-actions">
+            <CopyPageControls client:only="vue" align="center" />
+          </div>
+          <div class="docs-page-header__title-row">
+            <h1>Input</h1>
+            <ArkUiDocsLink />
+            <div class="docs-page-header__navigation-actions">
+              <div class="docs-page-header__desktop-actions"><CopyPageControls client:only="vue" /></div>
+              <DocsPageNavigation currentPath={currentPath} variant="compact" />
+            </div>
+          </div>
+          <p class="docs-page-header__lede">{description}</p>
+        </div>
+      </div>
+    </header>
+
+    <div class="docs-page-body">
+      <article class="docs-article docs-article--component">
+        <section id="preview" class="docs-section">
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><InputDocsDemo client:load variant="preview" /></div>
+            <CodeBlock code={previewCode} lang="vue" collapsible revealId="input-preview-code" />
+          </div>
+        </section>
+
+        <section id="installation" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#installation">Installation</a></h2>
+          <p>
+            Input is part of the main Kappa package. It renders native HTML and adds no state-machine
+            dependency.
+          </p>
+          <h3 id="barrel"><a class="docs-section-anchor" href="#barrel">Barrel</a></h3>
+          <CodeBlock code={barrelCode} lang="javascript" />
+          <h3 id="granular"><a class="docs-section-anchor" href="#granular">Granular</a></h3>
+          <CodeBlock code={granularCode} lang="javascript" />
+        </section>
+
+        <section id="usage" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#usage">Usage</a></h2>
+          <p>
+            Input forwards native input attributes, data attributes, classes, styles, and event listeners.
+            Use <code>v-model</code> for a controlled value or native <code>value</code> for an uncontrolled
+            initial value. Every Input needs an accessible name.
+          </p>
+          <p>
+            The resting border uses <code>--kappa-input-border</code>. Hover and focus use
+            <code>--kappa-focus</code>; focus adds a 5 px glow. Invalid inputs keep the danger color.
+          </p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><InputDocsDemo client:load variant="basic" /></div>
+            <CodeBlock code={basicCode} lang="vue" collapsible revealId="input-basic-code" />
+          </div>
+        </section>
+
+        <section id="composition" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#composition">Composition</a></h2>
+          <CompositionTree component="input" />
+          <p>
+            Kappa uses a native control without label, help, or error content around it.
+            Label and Field provide that content.
+          </p>
+          <ul>
+            <li>Use <a href="/docs/components/label">Label</a> with a standalone Input.</li>
+            <li>Use <a href="/docs/components/field">Field.Input</a> when Ark UI must connect required, disabled, invalid, helper, and error state.</li>
+            <li>Use native <code>aria-describedby</code> for persistent help or error content outside Field.</li>
+            <li>The visual <code>size</code> prop replaces the native character-count size attribute because Input fills its container.</li>
+          </ul>
+        </section>
+
+        <section id="examples" class="docs-section docs-section--component-examples">
+          <h2><a class="docs-section-anchor" href="#examples">Examples</a></h2>
+
+          <h3 id="sizes"><a class="docs-section-anchor" href="#sizes">Sizes</a></h3>
+          <p>Use compact sizes for dense toolbars and larger sizes for prominent form entry.</p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><InputDocsDemo client:load variant="sizes" /></div>
+            <CodeBlock code={sizesCode} lang="vue" collapsible revealId="input-sizes-code" />
+          </div>
+
+          <h3 id="controlled"><a class="docs-section-anchor" href="#controlled">Controlled Value</a></h3>
+          <p><code>v-model</code> receives the native input value as a string on every input event.</p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><InputDocsDemo client:load variant="controlled" /></div>
+            <CodeBlock code={controlledCode} lang="vue" collapsible revealId="input-controlled-code" />
+          </div>
+
+          <h3 id="states"><a class="docs-section-anchor" href="#states">Form States</a></h3>
+          <p>
+            Native disabled and read-only behavior remains authoritative. Use <code>invalid</code> or
+            <code>aria-invalid="true"</code> for validation presentation, then connect the message.
+          </p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><InputDocsDemo client:load variant="states" /></div>
+            <CodeBlock code={statesCode} lang="vue" collapsible revealId="input-states-code" />
+          </div>
+
+          <h3 id="file"><a class="docs-section-anchor" href="#file">File</a></h3>
+          <p>Set <code>type="file"</code> and use native <code>accept</code>, <code>multiple</code>, and form attributes.</p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><InputDocsDemo client:load variant="file" /></div>
+            <CodeBlock code={fileCode} lang="vue" collapsible revealId="input-file-code" />
+          </div>
+
+          <h3 id="inline"><a class="docs-section-anchor" href="#inline">Inline Action</a></h3>
+          <p>Place Input beside Button for a compact search or filter action. Keep a visible label.</p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><InputDocsDemo client:load variant="inline" /></div>
+            <CodeBlock code={inlineCode} lang="vue" collapsible revealId="input-inline-code" />
+          </div>
+
+          <h3 id="grid"><a class="docs-section-anchor" href="#grid">Grid</a></h3>
+          <p>Use container layout for related inputs. Each control keeps its own visible label and id.</p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><InputDocsDemo client:load variant="grid" /></div>
+            <CodeBlock code={gridCode} lang="vue" collapsible revealId="input-grid-code" />
+          </div>
+
+          <h3 id="required"><a class="docs-section-anchor" href="#required">Required</a></h3>
+          <p>The native <code>required</code> attribute controls constraint validation. The visible marker is supplementary.</p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><InputDocsDemo client:load variant="required" /></div>
+            <CodeBlock code={requiredCode} lang="vue" collapsible revealId="input-required-code" />
+          </div>
+
+          <h3 id="badge"><a class="docs-section-anchor" href="#badge">Label Metadata</a></h3>
+          <p>Place short, non-interactive metadata beside label text. Keep the control name concise.</p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><InputDocsDemo client:load variant="badge" /></div>
+            <CodeBlock code={badgeCode} lang="vue" collapsible revealId="input-badge-code" />
+          </div>
+
+          <h3 id="right-to-left"><a class="docs-section-anchor" href="#right-to-left">Right to Left</a></h3>
+          <p>Logical padding, file-button spacing, and text alignment follow the inherited direction.</p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><InputDocsDemo client:load variant="rtl" /></div>
+            <CodeBlock code={rtlCode} lang="vue" collapsible revealId="input-rtl-code" />
+          </div>
+        </section>
+
+        <section id="accessibility" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#accessibility">Accessibility</a></h2>
+          <ul>
+            <li>Give every Input a visible Label when the layout permits it. A placeholder is not a label.</li>
+            <li>Connect persistent instructions and validation messages with <code>aria-describedby</code>.</li>
+            <li>Use native <code>disabled</code>, <code>readonly</code>, <code>required</code>, type, and autocomplete attributes.</li>
+            <li>Use <code>invalid</code> only with a clear message that explains how to correct the value.</li>
+            <li>Password-manager suppression is advisory. Do not use it on username, password, or payment fields.</li>
+            <li>Input preserves visible focus in both themes, reduced motion, and forced-color modes.</li>
+          </ul>
+        </section>
+
+        <section id="api-reference" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#api-reference">API Reference</a></h2>
+          <div class="docs-api-group">
+            <h3 id="input-api"><a class="docs-section-anchor" href="#input-api">Input</a></h3>
+            <p>Renders one native input. Standard native attributes pass to the same element.</p>
+            <div class="docs-api-table"><table><thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>{inputProps.map((prop) => <tr><td><code>{prop.name}</code></td><td><code>{prop.type}</code></td><td><code>{prop.defaultValue}</code></td><td>{prop.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="events"><a class="docs-section-anchor" href="#events">Events</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Event</th><th>Payload</th><th>Description</th></tr></thead><tbody>{events.map((event) => <tr><td><code>{event.name}</code></td><td><code>{event.payload}</code></td><td>{event.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="data-attributes"><a class="docs-section-anchor" href="#data-attributes">Data Attributes</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Attribute</th><th>Value</th><th>Description</th></tr></thead><tbody>{dataAttributes.map((attribute) => <tr><td><code>{attribute.name}</code></td><td><code>{attribute.value}</code></td><td>{attribute.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="exports"><a class="docs-section-anchor" href="#exports">Exports</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Export</th><th>Description</th></tr></thead><tbody>{exportsList.map((item) => <tr><td><code>{item.name}</code></td><td>{item.description}</td></tr>)}</tbody></table></div>
+          </div>
+        </section>
+
+        <DocsPageNavigation currentPath={currentPath} />
+      </article>
+
+      <aside class="docs-page-toc" aria-label="On this page">
+        <div class="docs-page-toc__inner">
+          <span class="docs-page-toc__title">On this page</span>
+          <ul>
+            <li><a href="#installation" data-toc-link="installation">Installation</a><ul><li><a href="#barrel" data-toc-link="barrel">Barrel</a></li><li><a href="#granular" data-toc-link="granular">Granular</a></li></ul></li>
+            <li><a href="#usage" data-toc-link="usage">Usage</a></li>
+            <li><a href="#composition" data-toc-link="composition">Composition</a></li>
+            <li><a href="#examples" data-toc-link="examples">Examples</a><ul><li><a href="#sizes" data-toc-link="sizes">Sizes</a></li><li><a href="#controlled" data-toc-link="controlled">Controlled Value</a></li><li><a href="#states" data-toc-link="states">Form States</a></li><li><a href="#file" data-toc-link="file">File</a></li><li><a href="#inline" data-toc-link="inline">Inline Action</a></li><li><a href="#grid" data-toc-link="grid">Grid</a></li><li><a href="#required" data-toc-link="required">Required</a></li><li><a href="#badge" data-toc-link="badge">Label Metadata</a></li><li><a href="#right-to-left" data-toc-link="right-to-left">Right to Left</a></li></ul></li>
+            <li><a href="#accessibility" data-toc-link="accessibility">Accessibility</a></li>
+            <li><a href="#api-reference" data-toc-link="api-reference">API Reference</a><ul><li><a href="#input-api" data-toc-link="input-api">Input</a></li><li><a href="#events" data-toc-link="events">Events</a></li><li><a href="#data-attributes" data-toc-link="data-attributes">Data Attributes</a></li><li><a href="#exports" data-toc-link="exports">Exports</a></li></ul></li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+  </div>
+</DocsLayout>

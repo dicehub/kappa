@@ -1,0 +1,39 @@
+.kappa-label {
+  display: inline-flex;
+  inline-size: fit-content;
+  min-inline-size: 0;
+  align-items: baseline;
+  gap: 0.25rem;
+  color: var(--kappa-default, #17191f);
+  cursor: default;
+  font-family: var(--kappa-font-sans, inherit);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  line-height: 1.25;
+  user-select: none;
+}
+
+.kappa-label__optional {
+  color: var(--kappa-subtle, #6c7480);
+  font-weight: 450;
+}
+
+.kappa-label[data-content] {
+  color: inherit;
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  line-height: inherit;
+  user-select: inherit;
+}
+
+.kappa-label:where([data-disabled], [aria-disabled="true"]) {
+  color: var(--kappa-subtle, #6c7480);
+  cursor: not-allowed;
+}
+
+@media (forced-colors: active) {
+  .kappa-label:where([data-disabled], [aria-disabled="true"]) {
+    color: GrayText;
+  }
+}

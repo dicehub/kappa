@@ -1,0 +1,128 @@
+---
+import ChangelogPagination from "../../../components/ChangelogPagination.vue";
+import CopyPageControls from "../../../components/CopyPageControls.vue";
+import DocsPageNavigation from "../../../components/DocsPageNavigation.astro";
+import { getChangelogStaticPaths } from "../../../lib/changelog.js";
+import DocsLayout from "../../../layouts/DocsLayout.astro";
+import "../../../styles/docs-changelog.css";
+
+export function getStaticPaths() {
+  return getChangelogStaticPaths();
+}
+
+type Bump = "major" | "minor" | "patch";
+type ChangelogEntry = { displayHash: string; hash: string; html: string };
+type ChangelogSection = { entries: ChangelogEntry[]; label: string; type: Bump };
+type ChangelogVersion = {
+  bump: Bump;
+  id: string;
+  sections: ChangelogSection[];
+  version: string;
+};
+type ChangelogPageProps = {
+  isAllVersionsPage: boolean;
+  page: number;
+  perPage: number;
+  totalPages: number;
+  totalVersions: number;
+  versions: ChangelogVersion[];
+};
+
+const { isAllVersionsPage, page, perPage, totalPages, totalVersions, versions } =
+  Astro.props as ChangelogPageProps;
+const currentPath = "/docs/changelog";
+const description = "Release notes for Kappa.";
+
+const badgeLabels: Record<Bump, string> = {
+  major: "Major",
+  minor: "Minor",
+  patch: "Patch",
+};
+---
+
+<DocsLayout title="Changelog" description={description}>
+  <div class="docs-page docs-page--changelog">
+    <header class="docs-page-header">
+      <div class="docs-page-header__inner">
+        <div class="docs-page-header__content">
+          <div class="docs-page-header__mobile-actions">
+            <CopyPageControls client:only="vue" align="center" markdown-path="/docs/changelog.md" />
+          </div>
+          <div class="docs-page-header__title-row">
+            <h1>Changelog</h1>
+            <div class="docs-page-header__navigation-actions">
+              <div class="docs-page-header__desktop-actions">
+                <CopyPageControls client:only="vue" markdown-path="/docs/changelog.md" />
+              </div>
+              <DocsPageNavigation currentPath={currentPath} variant="compact" />
+            </div>
+          </div>
+          <p class="docs-page-header__lede">{description}</p>
+        </div>
+      </div>
+    </header>
+
+    <div class="docs-page-body docs-page-body--changelog">
+      <article class="docs-article docs-article--changelog">
+        {
+          versions.length === 0 ? (
+            <p class="changelog-empty">No releases are available yet.</p>
+          ) : (
+            <div class="changelog-list">
+              {versions.map((version) => (
+                <section id={version.id} class="changelog-release">
+                  <header class="changelog-release__meta">
+                    <h2 class="changelog-release__version">
+                      <a class="changelog-release__anchor" href={`#${version.id}`}>
+                        <span class="changelog-release__marker" aria-hidden="true" />
+                        {version.version}
+                      </a>
+                    </h2>
+                    <p class="changelog-release__links">
+                      <span class:list={["changelog-release__badge", `changelog-release__badge--${version.bump}`]}>
+                        {badgeLabels[version.bump]}
+                      </span>
+                    </p>
+                  </header>
+
+                  <div class="changelog-release__content">
+                    {version.sections.map((section) => (
+                      <section class="changelog-section">
+                        <h3>{section.label}</h3>
+                        <ul class="changelog-entries">
+                          {section.entries.map((entry) => (
+                            <li class="changelog-entry">
+                              {entry.displayHash && (
+                                <span class="changelog-entry__hash">
+                                  {entry.displayHash}
+                                </span>
+                              )}
+                              <div class="changelog-entry__content" set:html={entry.html} />
+                            </li>
+                          ))}
+                        </ul>
+                      </section>
+                    ))}
+                  </div>
+                </section>
+              ))}
+            </div>
+          )
+        }
+
+        {!isAllVersionsPage && totalPages > 1 && (
+          <div class="changelog-pagination" data-copy-ignore>
+            <ChangelogPagination
+              page={page}
+              perPage={perPage}
+              totalCount={totalVersions}
+              client:load
+            />
+          </div>
+        )}
+
+        <DocsPageNavigation currentPath={currentPath} />
+      </article>
+    </div>
+  </div>
+</DocsLayout>

@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="640" viewBox="0 0 960 640">
+  <defs>
+    <linearGradient id="field" x2="1" y2="1"><stop stop-color="#082a3b"/><stop offset="1" stop-color="#125b66"/></linearGradient>
+    <linearGradient id="foil" x2="0" y2="1"><stop stop-color="#f4f1df"/><stop offset="1" stop-color="#9cb4b8"/></linearGradient>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M40 0H0V40" fill="none" stroke="#a0d9da" stroke-opacity=".12"/></pattern>
+  </defs>
+  <rect width="960" height="640" fill="url(#field)"/>
+  <rect width="960" height="640" fill="url(#grid)"/>
+  <g fill="none" stroke-width="3">
+    <path d="M-40 100C240 100 215 170 420 110S740 100 1000 140" stroke="#1f7482"/>
+    <path d="M-40 160C220 160 260 220 450 170S750 130 1000 200" stroke="#2a96a1"/>
+    <path d="M-40 220C170 220 250 270 450 235S710 170 1000 260" stroke="#3abcba"/>
+    <path d="M-40 285C140 285 300 300 465 275S700 215 1000 315" stroke="#94d7b5"/>
+    <path d="M-40 350C180 350 225 390 465 395S780 340 1000 365" stroke="#d7de86"/>
+    <path d="M-40 400C220 400 260 455 465 455S770 395 1000 425" stroke="#65bbb1"/>
+    <path d="M-40 465C220 465 280 510 465 510S770 460 1000 485" stroke="#31979d"/>
+    <path d="M-40 530C220 530 310 560 490 565S790 525 1000 545" stroke="#227b88"/>
+  </g>
+  <path d="M255 330C308 265 455 258 746 318C536 347 324 377 255 330Z" fill="url(#foil)" stroke="#fff7de" stroke-width="2"/>
+  <path d="M267 329C430 313 560 305 738 318" fill="none" stroke="#395768" stroke-opacity=".55"/>
+  <g stroke="#b7dbd7" stroke-opacity=".75" stroke-width="1" fill="none"><path d="M56 52H112M56 52V108M904 52H848M904 52V108M56 588H112M56 588V532M904 588H848M904 588V532"/></g>
+  <circle cx="94" cy="586" r="4" fill="#94d7b5"/>
+</svg>

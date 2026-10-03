@@ -1,0 +1,151 @@
+.kappa-checkbox {
+  box-sizing: border-box;
+  display: inline-flex;
+  inline-size: max-content;
+  max-inline-size: 100%;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--kappa-default, #17191f);
+  cursor: pointer;
+  font-family: var(--kappa-font-sans, inherit);
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  user-select: none;
+}
+
+.kappa-checkbox *,
+.kappa-checkbox *::before,
+.kappa-checkbox *::after {
+  box-sizing: border-box;
+}
+
+.kappa-checkbox__control {
+  display: inline-flex;
+  flex: none;
+  inline-size: 1rem;
+  block-size: 1rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--kappa-radius-sm, 0.25rem);
+  background: var(--kappa-control, #ffffff);
+  box-shadow: inset 0 0 0 1px var(--kappa-line, #e3e6eb);
+  color: var(--kappa-accent-contrast, #ffffff);
+  transition:
+    background-color 120ms ease,
+    box-shadow 120ms ease;
+}
+
+.kappa-checkbox__control[data-hover]:not([data-disabled]) {
+  box-shadow: inset 0 0 0 1px var(--kappa-subtle, #6c7480);
+}
+
+.kappa-checkbox__control[data-focus-visible] {
+  outline: 2px solid var(--kappa-focus, #4c63ff);
+  outline-offset: 2px;
+}
+
+.kappa-checkbox__control[data-state="checked"],
+.kappa-checkbox__control[data-state="indeterminate"] {
+  background: var(--kappa-accent-solid, #247ab7);
+  box-shadow: inset 0 0 0 1px var(--kappa-accent-solid, #247ab7);
+}
+
+.kappa-checkbox__control[data-hover]:not([data-disabled])[data-state="checked"],
+.kappa-checkbox__control[data-hover]:not([data-disabled])[data-state="indeterminate"] {
+  background: color-mix(
+    in oklab,
+    var(--kappa-accent-solid, #247ab7) 92%,
+    var(--kappa-button-active-mix, #17191f) 8%
+  );
+  box-shadow: inset 0 0 0 1px
+    color-mix(
+      in oklab,
+      var(--kappa-accent-solid, #247ab7) 92%,
+      var(--kappa-button-active-mix, #17191f) 8%
+    );
+}
+
+.kappa-checkbox__control[data-invalid] {
+  box-shadow: inset 0 0 0 1px var(--kappa-danger, #b42318);
+}
+
+.kappa-checkbox__control[data-invalid][data-state="checked"],
+.kappa-checkbox__control[data-invalid][data-state="indeterminate"] {
+  background: var(--kappa-danger, #b42318);
+  box-shadow: inset 0 0 0 1px var(--kappa-danger, #b42318);
+}
+
+.kappa-checkbox__control[data-invalid][data-focus-visible] {
+  outline-color: var(--kappa-danger, #b42318);
+}
+
+.kappa-checkbox[data-disabled] {
+  cursor: not-allowed;
+  opacity: var(--kappa-disabled-opacity, 0.58);
+}
+
+.kappa-checkbox[data-readonly] {
+  cursor: default;
+}
+
+.kappa-checkbox__indicator {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.kappa-checkbox__indicator[hidden] {
+  display: none;
+}
+
+.kappa-checkbox__mark {
+  display: block;
+  inline-size: 0.75rem;
+  block-size: 0.75rem;
+}
+
+.kappa-checkbox__label {
+  min-inline-size: 0;
+}
+
+.kappa-checkbox-group {
+  box-sizing: border-box;
+  display: flex;
+  min-inline-size: 0;
+  flex-direction: column;
+  gap: 0.5rem;
+  color: var(--kappa-default, #17191f);
+  font-family: var(--kappa-font-sans, inherit);
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
+.kappa-checkbox-group *,
+.kappa-checkbox-group *::before,
+.kappa-checkbox-group *::after {
+  box-sizing: border-box;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kappa-checkbox__control {
+    transition: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .kappa-checkbox__control {
+    box-shadow: inset 0 0 0 1px ButtonText;
+  }
+
+  .kappa-checkbox__control[data-state="checked"],
+  .kappa-checkbox__control[data-state="indeterminate"] {
+    background: Highlight;
+    box-shadow: inset 0 0 0 1px Highlight;
+    color: HighlightText;
+  }
+
+  .kappa-checkbox__control[data-focus-visible] {
+    outline-color: Highlight;
+  }
+}

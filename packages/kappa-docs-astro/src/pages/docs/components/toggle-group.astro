@@ -1,0 +1,209 @@
+---
+import ArkUiDocsLink from "../../../components/ArkUiDocsLink.astro";
+import CodeBlock from "../../../components/CodeBlock.astro";
+import CompositionTree from "../../../components/CompositionTree.astro";
+import CopyPageControls from "../../../components/CopyPageControls.vue";
+import DocsPageNavigation from "../../../components/DocsPageNavigation.astro";
+import ToggleGroupDocsDemo from "../../../components/ToggleGroupDocsDemo.vue";
+import {
+  barrelCode,
+  compositionCode,
+  controlledCode,
+  dataAttributes,
+  events,
+  exportsList,
+  granularCode,
+  itemProps,
+  keyboardRows,
+  multipleCode,
+  parts,
+  previewCode,
+  rootProps,
+  sizesCode,
+  slots,
+  statesCode,
+  usageCode,
+  verticalCode,
+} from "../../../data/toggle-group-docs";
+import DocsLayout from "../../../layouts/DocsLayout.astro";
+import "../../../styles/docs-components.css";
+
+const currentPath = "/docs/components/toggle-group";
+const description =
+  "A keyboard-friendly set of selectable controls for one or many related options.";
+
+const examples = [
+  {
+    id: "multiple",
+    title: "Multiple Selection",
+    description: "Set multiple when the selected array represents independent options, such as visible table columns.",
+    variant: "multiple",
+    code: multipleCode,
+  },
+  {
+    id: "vertical",
+    title: "Vertical",
+    description: "Use the vertical orientation when the options belong in a compact side rail or stacked control.",
+    variant: "vertical",
+    code: verticalCode,
+  },
+  {
+    id: "sizes",
+    title: "Sizes",
+    description: "Small, base, and large sizes keep the same Ark selection and focus behavior.",
+    variant: "sizes",
+    code: sizesCode,
+  },
+  {
+    id: "states",
+    title: "States",
+    description: "Disabled groups and items keep their selection visible while blocking interaction.",
+    variant: "states",
+    code: statesCode,
+  },
+  {
+    id: "controlled",
+    title: "Controlled",
+    description: "Use v-model when the selected values belong to application state or need a live readout.",
+    variant: "controlled",
+    code: controlledCode,
+  },
+] as const;
+---
+
+<DocsLayout title="Toggle Group" description={description}>
+  <div class="docs-page docs-page--component">
+    <header class="docs-page-header">
+      <div class="docs-page-header__inner">
+        <div class="docs-page-header__content">
+          <div class="docs-page-header__mobile-actions">
+            <CopyPageControls client:only="vue" align="center" />
+          </div>
+          <div class="docs-page-header__title-row">
+            <h1>Toggle Group</h1>
+            <ArkUiDocsLink />
+            <div class="docs-page-header__navigation-actions">
+              <div class="docs-page-header__desktop-actions"><CopyPageControls client:only="vue" /></div>
+              <DocsPageNavigation currentPath={currentPath} variant="compact" />
+            </div>
+          </div>
+          <p class="docs-page-header__lede">{description}</p>
+        </div>
+      </div>
+    </header>
+
+    <div class="docs-page-body">
+      <article class="docs-article docs-article--component">
+        <section id="preview" class="docs-section">
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><ToggleGroupDocsDemo client:load variant="preview" /></div>
+            <CodeBlock code={previewCode} lang="vue" collapsible revealId="toggle-group-preview-code" />
+          </div>
+        </section>
+
+        <section id="installation" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#installation">Installation</a></h2>
+          <p>Toggle Group is part of the main Kappa package. Ark UI owns selection, roving focus, and group semantics.</p>
+          <h3 id="barrel"><a class="docs-section-anchor" href="#barrel">Barrel</a></h3>
+          <CodeBlock code={barrelCode} lang="javascript" />
+          <h3 id="granular"><a class="docs-section-anchor" href="#granular">Granular</a></h3>
+          <CodeBlock code={granularCode} lang="javascript" />
+        </section>
+
+        <section id="usage" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#usage">Usage</a></h2>
+          <p>Use a single-select group for a view switcher or a multiple-select group for independent filters. Give the root a concise accessible name.</p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><ToggleGroupDocsDemo client:load variant="usage" /></div>
+            <CodeBlock code={usageCode} lang="vue" collapsible revealId="toggle-group-usage-code" />
+          </div>
+          <p>Set <code>spacing="none"</code> for a connected control. Use <code>variant="outline"</code> when the group needs a clear boundary.</p>
+        </section>
+
+        <section id="composition" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#composition">Composition</a></h2>
+          <CompositionTree component="toggleGroup" />
+          <CodeBlock code={compositionCode} lang="vue" />
+          <p><code>ToggleGroup.Root</code> renders the Ark group element. Each <code>ToggleGroup.Item</code> renders a native button with radio semantics in single-select mode or pressed semantics in multiple-select mode.</p>
+          <p>Kappa adds visual options and token-based CSS. Ark UI remains the behavior authority, including controlled and uncontrolled values, disabled items, roving focus, and orientation-aware keyboard support.</p>
+          <p>Use <code>ToggleGroup.Context</code> for a renderless state readout. Use <code>RootProvider</code> with <code>useToggleGroup</code> when the machine must be created outside the template.</p>
+        </section>
+
+        <section id="examples" class="docs-section docs-section--component-examples">
+          <h2><a class="docs-section-anchor" href="#examples">Examples</a></h2>
+          {examples.map((example) => (
+            <>
+              <h3 id={example.id}><a class="docs-section-anchor" href={`#${example.id}`}>{example.title}</a></h3>
+              <p>{example.description}</p>
+              <div class="docs-component-example">
+                <div class="docs-component-preview"><ToggleGroupDocsDemo client:load variant={example.variant} /></div>
+                <CodeBlock code={example.code} lang="vue" collapsible revealId={`toggle-group-${example.id}-code`} />
+              </div>
+            </>
+          ))}
+        </section>
+
+        <section id="accessibility" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#accessibility">Accessibility</a></h2>
+          <ul>
+            <li>Give the group an accessible name with a visible label, <code>aria-label</code>, or <code>aria-labelledby</code>.</li>
+            <li>Ark uses a roving tab stop, so Tab enters the group once and arrow keys move between enabled items.</li>
+            <li>Single-select groups expose radio semantics. Multiple-select groups expose pressed semantics.</li>
+            <li>Disabled roots and items keep their current state visible and are removed from keyboard interaction.</li>
+            <li>Focus-visible, forced-colors, reduced-motion, and dark-mode styles remain distinct.</li>
+          </ul>
+          <h3 id="keyboard-support"><a class="docs-section-anchor" href="#keyboard-support">Keyboard Support</a></h3>
+          <div class="docs-api-table"><table><thead><tr><th>Key</th><th>Behavior</th></tr></thead><tbody>{keyboardRows.map((row) => <tr><td><code>{row.key}</code></td><td>{row.description}</td></tr>)}</tbody></table></div>
+        </section>
+
+        <section id="api-reference" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#api-reference">API Reference</a></h2>
+          <div class="docs-api-group">
+            <h3 id="root-api"><a class="docs-section-anchor" href="#root-api">ToggleGroup.Root</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>{rootProps.map((prop) => <tr><td><code>{prop.name}</code></td><td><code>{prop.type}</code></td><td><code>{prop.defaultValue}</code></td><td>{prop.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="item-api"><a class="docs-section-anchor" href="#item-api">ToggleGroup.Item</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>{itemProps.map((prop) => <tr><td><code>{prop.name}</code></td><td><code>{prop.type}</code></td><td><code>{prop.defaultValue}</code></td><td>{prop.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="parts-api"><a class="docs-section-anchor" href="#parts-api">Parts</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Part</th><th>Element</th><th>Description</th></tr></thead><tbody>{parts.map((part) => <tr><td><code>ToggleGroup.{part.name}</code></td><td><code>{part.element}</code></td><td>{part.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="events-api"><a class="docs-section-anchor" href="#events-api">Events</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Event</th><th>Payload</th><th>Description</th></tr></thead><tbody>{events.map((event) => <tr><td><code>{event.name}</code></td><td><code>{event.payload}</code></td><td>{event.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="slots"><a class="docs-section-anchor" href="#slots">Slots</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Slot</th><th>Description</th></tr></thead><tbody>{slots.map((slot) => <tr><td><code>{slot.name}</code></td><td>{slot.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="data-attributes"><a class="docs-section-anchor" href="#data-attributes">Data Attributes</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Attribute</th><th>Value</th><th>Description</th></tr></thead><tbody>{dataAttributes.map((attribute) => <tr><td><code>{attribute.name}</code></td><td><code>{attribute.value}</code></td><td>{attribute.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="exports"><a class="docs-section-anchor" href="#exports">Exports</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Export</th><th>Description</th></tr></thead><tbody>{exportsList.map((item) => <tr><td><code>{item.name}</code></td><td>{item.description}</td></tr>)}</tbody></table></div>
+          </div>
+        </section>
+
+        <DocsPageNavigation currentPath={currentPath} />
+      </article>
+
+      <aside class="docs-page-toc" aria-label="On this page">
+        <div class="docs-page-toc__inner">
+          <span class="docs-page-toc__title">On this page</span>
+          <ul>
+            <li><a href="#installation" data-toc-link="installation">Installation</a><ul><li><a href="#barrel" data-toc-link="barrel">Barrel</a></li><li><a href="#granular" data-toc-link="granular">Granular</a></li></ul></li>
+            <li><a href="#usage" data-toc-link="usage">Usage</a></li>
+            <li><a href="#composition" data-toc-link="composition">Composition</a></li>
+            <li><a href="#examples" data-toc-link="examples">Examples</a><ul>{examples.map((example) => <li><a href={`#${example.id}`} data-toc-link={example.id}>{example.title}</a></li>)}</ul></li>
+            <li><a href="#accessibility" data-toc-link="accessibility">Accessibility</a><ul><li><a href="#keyboard-support" data-toc-link="keyboard-support">Keyboard Support</a></li></ul></li>
+            <li><a href="#api-reference" data-toc-link="api-reference">API Reference</a><ul><li><a href="#root-api" data-toc-link="root-api">ToggleGroup.Root</a></li><li><a href="#item-api" data-toc-link="item-api">ToggleGroup.Item</a></li><li><a href="#parts-api" data-toc-link="parts-api">Parts</a></li><li><a href="#events-api" data-toc-link="events-api">Events</a></li><li><a href="#slots" data-toc-link="slots">Slots</a></li><li><a href="#data-attributes" data-toc-link="data-attributes">Data Attributes</a></li><li><a href="#exports" data-toc-link="exports">Exports</a></li></ul></li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+  </div>
+</DocsLayout>

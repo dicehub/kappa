@@ -1,0 +1,210 @@
+---
+import { Code } from "astro:components";
+import githubDark from "@shikijs/themes/github-dark";
+import githubLight from "@shikijs/themes/github-light";
+import type { ShikiTransformer } from "shiki";
+
+const markupTextScopes = ["text.html.vue text", "text.html.basic text"];
+const lightTheme = {
+  ...githubLight,
+  name: "kappa-docs-light",
+  tokenColors: [
+    ...(githubLight.tokenColors ?? []),
+    { scope: markupTextScopes, settings: { foreground: "#032F62" } },
+  ],
+};
+const darkTheme = {
+  ...githubDark,
+  name: "kappa-docs-dark",
+  tokenColors: [
+    ...(githubDark.tokenColors ?? []),
+    { scope: markupTextScopes, settings: { foreground: "#9ECBFF" } },
+  ],
+};
+
+const createVueFragmentTransformer = (): ShikiTransformer => ({
+  name: "kappa-vue-fragment",
+  preprocess(source, options) {
+    const language = String(options.lang ?? "");
+    const trimmed = source.trimStart();
+    const isFullSfc = /^<(script|style)\b/.test(trimmed) || /^<template\s*>/.test(trimmed);
+    const shouldWrap = language === "vue" && trimmed.startsWith("<") && !isFullSfc;
+    (this.meta as { kappaVueFragment?: boolean }).kappaVueFragment = shouldWrap;
+    return shouldWrap ? `<template>\n${source}\n</template>` : source;
+  },
+  code(node) {
+    if (!(this.meta as { kappaVueFragment?: boolean }).kappaVueFragment) return;
+    node.children = node.children.slice(2, -2);
+  },
+});
+
+type CodeLanguage =
+  | "astro"
+  | "bash"
+  | "shell"
+  | "tsx"
+  | "ts"
+  | "typescript"
+  | "jsx"
+  | "js"
+  | "javascript"
+  | "vue"
+  | "css"
+  | "json"
+  | "html"
+  | "plaintext";
+
+interface Props {
+  code: string;
+  lang?: CodeLanguage;
+  collapsible?: boolean;
+  previewLines?: number;
+  revealId?: string;
+}
+
+const {
+  code,
+  lang = "tsx",
+  collapsible = false,
+  previewLines = 3,
+  revealId,
+} = Astro.props as Props;
+
+if (collapsible && !revealId) {
+  throw new Error("CodeBlock requires revealId when collapsible is enabled.");
+}
+
+const resolvedPreviewLines = Math.max(1, previewLines);
+---
+
+<div
+  class="docs-code-block"
+  data-code-block
+  data-code-expanded={collapsible ? "false" : undefined}
+  style={collapsible ? `--docs-code-preview-lines: ${resolvedPreviewLines}` : undefined}
+>
+  <div class="docs-code-full" id={collapsible ? revealId : undefined} data-code-full>
+    <Code
+      code={code}
+      lang={lang}
+      themes={{ light: lightTheme, dark: darkTheme }}
+      defaultColor={false}
+      transformers={[createVueFragmentTransformer()]}
+    />
+    <button
+      type="button"
+      class="docs-code-copy"
+      aria-label="Copy code"
+      data-code-copy
+      data-copy-ignore
+    >
+      <svg
+        class="docs-code-copy__icon docs-code-copy__icon--copy"
+        width="16"
+        height="16"
+        viewBox="0 0 256 256"
+        fill="currentColor"
+        aria-hidden="true"
+      >
+        <path d="M184,64H40a8,8,0,0,0-8,8V216a8,8,0,0,0,8,8H184a8,8,0,0,0,8-8V72A8,8,0,0,0,184,64Zm-8,144H48V80H176ZM224,40V184a8,8,0,0,1-16,0V48H72a8,8,0,0,1,0-16H216A8,8,0,0,1,224,40Z"></path>
+      </svg>
+      <svg
+        class="docs-code-copy__icon docs-code-copy__icon--done"
+        width="16"
+        height="16"
+        viewBox="0 0 256 256"
+        fill="currentColor"
+        aria-hidden="true"
+      >
+        <path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"></path>
+      </svg>
+    </button>
+  </div>
+
+  {
+    collapsible && (
+      <div class="docs-code-reveal" data-code-reveal-overlay data-copy-ignore>
+        <div class="docs-code-reveal__gradient" aria-hidden="true" />
+        <button
+          type="button"
+          class="docs-code-reveal__button"
+          aria-controls={revealId}
+          aria-expanded="false"
+          data-code-reveal
+        >
+          View Code
+        </button>
+      </div>
+    )
+  }
+</div>
+
+<script>
+  const codeWindow = window as Window & {
+    kappaDocsCodeActionsReady?: boolean;
+    kappaDocsPrepareCollapsedCode?: () => void;
+  };
+
+  const prepareCollapsedCode = () => {
+    document
+      .querySelectorAll<HTMLElement>('[data-code-block][data-code-expanded="false"]')
+      .forEach((block) => {
+        const fullCode = block.querySelector<HTMLElement>("[data-code-full]");
+        if (!fullCode) return;
+        fullCode.inert = true;
+        fullCode.setAttribute("aria-hidden", "true");
+      });
+  };
+
+  codeWindow.kappaDocsPrepareCollapsedCode = prepareCollapsedCode;
+  prepareCollapsedCode();
+
+  if (!codeWindow.kappaDocsCodeActionsReady) {
+    codeWindow.kappaDocsCodeActionsReady = true;
+    document.addEventListener("astro:page-load", () => {
+      codeWindow.kappaDocsPrepareCollapsedCode?.();
+    });
+    document.addEventListener("click", async (event) => {
+      const target = event.target instanceof Element ? event.target : null;
+      const reveal = target?.closest<HTMLElement>("[data-code-reveal]");
+      if (reveal) {
+        const block = reveal.closest<HTMLElement>("[data-code-block]");
+        const fullCode = block?.querySelector<HTMLElement>("[data-code-full]");
+        const pre = fullCode?.querySelector<HTMLElement>("pre");
+        if (!block || !fullCode || !pre) return;
+
+        fullCode.inert = false;
+        fullCode.removeAttribute("aria-hidden");
+        block.dataset.codeExpanded = "true";
+        reveal.setAttribute("aria-expanded", "true");
+        pre.setAttribute("aria-label", "Example source code");
+        pre.tabIndex = 0;
+        requestAnimationFrame(() => pre.focus({ preventScroll: true }));
+        return;
+      }
+
+      const copy =
+        event.target instanceof Element
+          ? event.target.closest<HTMLElement>("[data-code-copy]")
+          : null;
+      if (!copy) return;
+
+      const fullCode = copy.closest("[data-code-full]");
+      const pre = fullCode?.querySelector("pre");
+      if (!pre) return;
+
+      const code = pre.querySelector("code")?.textContent ?? pre.textContent ?? "";
+      try {
+        await navigator.clipboard.writeText(code);
+        copy.classList.add("docs-code-copy--done");
+        copy.setAttribute("aria-label", "Code copied");
+        window.setTimeout(() => {
+          copy.classList.remove("docs-code-copy--done");
+          copy.setAttribute("aria-label", "Copy code");
+        }, 1500);
+      } catch {
+        copy.setAttribute("aria-label", "Unable to copy code");
+      }
+    });
+  }
+</script>

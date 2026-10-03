@@ -1,0 +1,176 @@
+---
+import CodeBlock from "../../../components/CodeBlock.astro";
+import CompositionTree from "../../../components/CompositionTree.astro";
+import CopyPageControls from "../../../components/CopyPageControls.vue";
+import DocsPageNavigation from "../../../components/DocsPageNavigation.astro";
+import LayerCardDocsDemo from "../../../components/LayerCardDocsDemo.vue";
+import {
+  barrelCode,
+  dataSlots,
+  examples,
+  exportsList,
+  granularCode,
+  parts,
+  previewCode,
+  rootProps,
+  usageCode,
+} from "../../../data/layer-card-docs";
+import DocsLayout from "../../../layouts/DocsLayout.astro";
+import "../../../styles/docs-components.css";
+
+const currentPath = "/docs/components/layer-card";
+const description = "Stacks a supporting layer behind one raised primary surface.";
+---
+
+<DocsLayout title="Layer Card" description={description}>
+  <div class="docs-page docs-page--component">
+    <header class="docs-page-header">
+      <div class="docs-page-header__inner">
+        <div class="docs-page-header__content">
+          <div class="docs-page-header__mobile-actions">
+            <CopyPageControls client:only="vue" align="center" />
+          </div>
+          <div class="docs-page-header__title-row">
+            <h1>Layer Card</h1>
+            <div class="docs-page-header__navigation-actions">
+              <div class="docs-page-header__desktop-actions">
+                <CopyPageControls client:only="vue" />
+              </div>
+              <DocsPageNavigation currentPath={currentPath} variant="compact" />
+            </div>
+          </div>
+          <p class="docs-page-header__lede">{description}</p>
+        </div>
+      </div>
+    </header>
+
+    <div class="docs-page-body">
+      <article class="docs-article docs-article--component">
+        <section id="preview" class="docs-section">
+          <div class="docs-component-example">
+            <div class="docs-component-preview">
+              <LayerCardDocsDemo client:load variant="preview" />
+            </div>
+            <CodeBlock code={previewCode} lang="vue" collapsible revealId="layer-card-preview-code" />
+          </div>
+        </section>
+
+        <section id="installation" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#installation">Installation</a></h2>
+          <p>
+            Layer Card is part of the main Kappa package. It uses native semantic elements and adds
+            no state-machine dependency.
+          </p>
+          <h3 id="barrel"><a class="docs-section-anchor" href="#barrel">Barrel</a></h3>
+          <CodeBlock code={barrelCode} lang="javascript" />
+          <h3 id="granular"><a class="docs-section-anchor" href="#granular">Granular</a></h3>
+          <CodeBlock code={granularCode} lang="javascript" />
+        </section>
+
+        <section id="usage" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#usage">Usage</a></h2>
+          <p>
+            Place Secondary first for context such as a run identifier, resource name, or category.
+            Primary then carries the raised content and stays flush with the outer surface.
+          </p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview docs-component-preview--compact">
+              <LayerCardDocsDemo client:load variant="usage" />
+            </div>
+            <CodeBlock code={usageCode} lang="vue" collapsible revealId="layer-card-usage-code" />
+          </div>
+        </section>
+
+        <section id="composition" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#composition">Composition</a></h2>
+          <CompositionTree component="layerCard" />
+          <p>
+            The root owns the outer radius and clips both layers. The primary surface stays square,
+            so the outer silhouette supplies every visible corner. Ark UI has no static layer
+            primitive, so Kappa owns this native presentation and its semantic element choices.
+          </p>
+          <ul>
+            <li>Use Secondary and Primary together for two clear surfaces.</li>
+            <li>Use direct root content when one surface is enough.</li>
+            <li>Place dense toolbars, filters, and tables inside Primary; keep Secondary to one line of context.</li>
+            <li>Keep one primary target per layer. Do not nest other controls inside a linked surface.</li>
+            <li>Do not nest Layer Cards to fake depth. Use Grid or another layout container.</li>
+          </ul>
+        </section>
+
+        <section id="examples" class="docs-section docs-section--component-examples">
+          <h2><a class="docs-section-anchor" href="#examples">Examples</a></h2>
+          {
+            examples.map((example) => (
+              <>
+                <h3 id={example.id}>
+                  <a class="docs-section-anchor" href={`#${example.id}`}>{example.title}</a>
+                </h3>
+                <p>{example.description}</p>
+                <div class="docs-component-example">
+                  <div class="docs-component-preview">
+                    <LayerCardDocsDemo client:load variant={example.variant} />
+                  </div>
+                  <CodeBlock
+                    code={example.code}
+                    lang="vue"
+                    collapsible
+                    revealId={`layer-card-${example.id}-code`}
+                  />
+                </div>
+              </>
+            ))
+          }
+        </section>
+
+        <section id="accessibility" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#accessibility">Accessibility</a></h2>
+          <ul>
+            <li>Layer Card adds no widget role or keyboard behavior.</li>
+            <li>Choose article, section, aside, and header only when the content meets native HTML sectioning rules.</li>
+            <li>Use <code>as="a"</code> on the root or on Primary only when the complete surface has one target. Do not place other controls inside that anchor.</li>
+            <li>Linked roots and linked primaries keep a visible focus indicator and a forced-colors boundary.</li>
+            <li>HTML, ARIA, data attributes, and event listeners pass to the selected native element.</li>
+          </ul>
+        </section>
+
+        <section id="api-reference" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#api-reference">API Reference</a></h2>
+          <div class="docs-api-group">
+            <h3 id="layer-card-api"><a class="docs-section-anchor" href="#layer-card-api">LayerCard</a></h3>
+            <p>Outer surface for layered or direct content.</p>
+            <div class="docs-api-table"><table><thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>{rootProps.map((prop) => <tr><td><code>{prop.name}</code></td><td><code>{prop.type}</code></td><td><code>{prop.defaultValue}</code></td><td>{prop.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="parts"><a class="docs-section-anchor" href="#parts">Parts</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Part</th><th>Supported <code>as</code></th><th>Default</th><th>Description</th></tr></thead><tbody>{parts.map((part) => <tr><td><code>{part.name}</code></td><td><code>{part.element}</code></td><td><code>{part.defaultValue}</code></td><td>{part.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="data-slots"><a class="docs-section-anchor" href="#data-slots">Data Slots</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Slot</th><th>Description</th></tr></thead><tbody>{dataSlots.map(([name, slotDescription]) => <tr><td><code>{name}</code></td><td>{slotDescription}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="exports"><a class="docs-section-anchor" href="#exports">Exports</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Export</th><th>Description</th></tr></thead><tbody>{exportsList.map((item) => <tr><td><code>{item.name}</code></td><td>{item.description}</td></tr>)}</tbody></table></div>
+          </div>
+        </section>
+
+        <DocsPageNavigation currentPath={currentPath} />
+      </article>
+
+      <aside class="docs-page-toc" aria-label="On this page">
+        <div class="docs-page-toc__inner">
+          <span class="docs-page-toc__title">On this page</span>
+          <ul>
+            <li><a href="#installation" data-toc-link="installation">Installation</a><ul><li><a href="#barrel" data-toc-link="barrel">Barrel</a></li><li><a href="#granular" data-toc-link="granular">Granular</a></li></ul></li>
+            <li><a href="#usage" data-toc-link="usage">Usage</a></li>
+            <li><a href="#composition" data-toc-link="composition">Composition</a></li>
+            <li><a href="#examples" data-toc-link="examples">Examples</a><ul>{examples.map((example) => <li><a href={`#${example.id}`} data-toc-link={example.id}>{example.title}</a></li>)}</ul></li>
+            <li><a href="#accessibility" data-toc-link="accessibility">Accessibility</a></li>
+            <li><a href="#api-reference" data-toc-link="api-reference">API Reference</a><ul><li><a href="#layer-card-api" data-toc-link="layer-card-api">LayerCard</a></li><li><a href="#parts" data-toc-link="parts">Parts</a></li><li><a href="#data-slots" data-toc-link="data-slots">Data Slots</a></li><li><a href="#exports" data-toc-link="exports">Exports</a></li></ul></li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+  </div>
+</DocsLayout>

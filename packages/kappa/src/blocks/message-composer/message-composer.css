@@ -1,0 +1,31 @@
+.kappa-message-composer { min-inline-size: 0; color: var(--kappa-default, #171717); font-family: var(--kappa-font-sans, inherit); font-size: 0.8125rem; line-height: 1.5; }
+.kappa-message-composer *, .kappa-message-composer *::before, .kappa-message-composer *::after { box-sizing: border-box; }
+.kappa-message-composer__upload { gap: 0.5rem; }
+.kappa-message-composer__upload.kappa-file-upload { opacity: 1; }
+.kappa-message-composer__label { color: var(--kappa-default, #171717); font-weight: 600; }
+.kappa-message-composer__context { padding: 0.5rem 0.75rem; border-inline-start: 2px solid var(--kappa-accent-solid, #247ab7); background: var(--kappa-tint, #f2f3f5); color: var(--kappa-subtle, #696969); font-size: 0.75rem; }
+.kappa-message-composer__surface.kappa-file-upload__dropzone { position: relative; display: block; place-items: normal; gap: 0; min-block-size: 0; padding: 0; border: 1px solid var(--kappa-input-border, #dcdcdc); border-radius: 0.5rem; background: var(--kappa-control, #ffffff); cursor: text; text-align: start; }
+.kappa-message-composer__surface:focus-within { border-color: var(--kappa-focus, #247ab7); box-shadow: 0 0 0 2px var(--kappa-focus-soft, rgba(36, 122, 183, 0.2)); }
+.kappa-message-composer__surface[data-invalid] { border-color: var(--kappa-danger, #b42318); }
+.kappa-message-composer__input.kappa-input-area { min-block-size: 5.5rem; max-block-size: var(--kappa-message-composer-max-height, 15rem); padding: 0.75rem; border: 0; border-radius: 0.5rem 0.5rem 0 0; outline: 0; background: transparent; box-shadow: none; overflow-y: auto; }
+.kappa-message-composer__input.kappa-input-area:focus-visible { outline: 0; }
+.kappa-message-composer__toolbar { display: flex; align-items: center; flex-wrap: wrap; gap: 0.375rem; padding: 0.5rem; border-block-start: 1px solid var(--kappa-hairline, #e7eaef); cursor: default; }
+.kappa-message-composer__toolbar .kappa-file-upload__trigger { inline-size: auto; }
+.kappa-message-composer__icon { inline-size: 1rem; block-size: 1rem; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+.kappa-message-composer__count { margin-inline-start: auto; padding-inline: 0.375rem; color: var(--kappa-subtle, #696969); font-family: var(--kappa-font-mono, monospace); font-size: 0.6875rem; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.kappa-message-composer__count[data-invalid] { color: var(--kappa-danger, #b42318); }
+.kappa-message-composer__attachments { display: flex; flex-wrap: wrap; gap: 0.375rem; padding: 0 0.75rem 0.75rem; margin: 0; list-style: none; }
+.kappa-message-composer__attachments li { min-inline-size: 0; max-inline-size: 100%; }
+.kappa-message-composer__attachment.kappa-attachment { max-inline-size: 17rem; min-inline-size: min(10rem, 100%); }
+.kappa-message-composer__attachment .kappa-attachment__title { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.kappa-message-composer__attachment svg { inline-size: 1rem; block-size: 1rem; stroke: currentColor; stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; }
+.kappa-message-composer__support { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0.375rem; margin-block-start: 0.375rem; }
+.kappa-message-composer__hint, .kappa-message-composer__pending { margin: 0; color: var(--kappa-subtle, #696969); font-size: 0.6875rem; }
+.kappa-message-composer__error, .kappa-message-composer__errors { margin: 0.5rem 0 0; color: var(--kappa-danger, #b42318); font-size: 0.75rem; overflow-wrap: anywhere; }
+.kappa-message-composer__errors ul { margin: 0 0 0.25rem; padding-inline-start: 1rem; }
+.kappa-message-composer__drop { position: absolute; inset: 0; display: grid; place-items: center; border: 2px dashed var(--kappa-accent-solid, #247ab7); border-radius: 0.5rem; background: color-mix(in srgb, var(--kappa-base, #ffffff) 95%, transparent); color: var(--kappa-accent, #2479b6); font-weight: 600; pointer-events: none; }
+.kappa-message-composer[data-disabled] .kappa-message-composer__surface { background: var(--kappa-disabled-surface, #f2f3f5); cursor: not-allowed; }
+.kappa-message-composer[data-pending] .kappa-message-composer__input { background: var(--kappa-readonly-surface, #f2f3f5); }
+.kappa-message-composer__sr-only { position: absolute; inline-size: 1px; block-size: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+@media (prefers-reduced-motion: reduce) { .kappa-message-composer__surface { transition: none; } }
+@media (forced-colors: active) { .kappa-message-composer__surface:focus-within { outline: 2px solid Highlight; outline-offset: 2px; } }

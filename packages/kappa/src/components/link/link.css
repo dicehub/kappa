@@ -1,0 +1,104 @@
+.kappa-link {
+  --kappa-link-color: var(--kappa-info-text, #175cd3);
+  --kappa-link-focus: var(--kappa-focus, #4c63ff);
+
+  box-sizing: border-box;
+  display: inline-flex;
+  max-inline-size: 100%;
+  align-items: baseline;
+  gap: 0.1875em;
+  border-radius: 0.125rem;
+  color: var(--kappa-link-color);
+  cursor: pointer;
+  font: inherit;
+  line-height: inherit;
+  overflow-wrap: anywhere;
+  text-align: start;
+  text-decoration-thickness: 0.0625em;
+  text-underline-offset: 0.15em;
+  transition:
+    color 120ms ease,
+    text-decoration-color 120ms ease;
+  vertical-align: baseline;
+}
+
+.kappa-link:visited {
+  color: var(--kappa-link-color);
+}
+
+.kappa-link[data-variant="inline"],
+.kappa-link[data-variant="current"] {
+  text-decoration-line: underline;
+  text-decoration-color: color-mix(in srgb, currentColor 38%, transparent);
+}
+
+.kappa-link[data-variant="current"] {
+  --kappa-link-color: currentColor;
+}
+
+.kappa-link[data-variant="plain"] {
+  text-decoration-line: none;
+}
+
+.kappa-link[data-variant="inline"]:hover,
+.kappa-link[data-variant="current"]:hover {
+  text-decoration-color: currentColor;
+}
+
+.kappa-link[data-variant="plain"]:hover {
+  text-decoration-line: underline;
+}
+
+.kappa-link:active {
+  color: color-mix(in oklab, var(--kappa-link-color) 82%, var(--kappa-default, #17191f));
+}
+
+.kappa-link[aria-current="page"] {
+  font-weight: 600;
+  text-decoration-color: currentColor;
+}
+
+.kappa-link:focus-visible {
+  outline: 2px solid var(--kappa-link-focus);
+  outline-offset: 2px;
+}
+
+.kappa-link:not([href]):not([role="link"]) {
+  color: var(--kappa-subtle, #6c7480);
+  cursor: default;
+  text-decoration-color: currentColor;
+  text-decoration-style: dotted;
+}
+
+.kappa-link__external-icon {
+  display: inline-block;
+  inline-size: 1em;
+  block-size: 1em;
+  flex: none;
+  align-self: center;
+  stroke-width: 1.75;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kappa-link {
+    transition: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .kappa-link {
+    color: LinkText;
+  }
+
+  .kappa-link:visited {
+    color: VisitedText;
+  }
+
+  .kappa-link[data-variant="current"] {
+    color: currentColor;
+  }
+
+  .kappa-link:focus-visible {
+    outline-color: Highlight;
+  }
+}

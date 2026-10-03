@@ -1,0 +1,269 @@
+.kappa-editable {
+  --kappa-editable-height: 2.25rem;
+  --kappa-editable-padding: 0.625rem;
+  --kappa-editable-radius: 0.5rem;
+  --kappa-editable-font-size: 0.8125rem;
+
+  box-sizing: border-box;
+  display: grid;
+  inline-size: 100%;
+  min-inline-size: 0;
+  gap: 0.375rem;
+  color: var(--kappa-default, #17191f);
+  font-family: var(--kappa-font-sans, inherit);
+}
+
+.kappa-editable[data-size="xs"] {
+  --kappa-editable-height: 1.25rem;
+  --kappa-editable-padding: 0.1875rem;
+  --kappa-editable-radius: 0.125rem;
+}
+
+.kappa-editable[data-size="sm"] {
+  --kappa-editable-height: 1.75rem;
+  --kappa-editable-padding: 0.5rem;
+  --kappa-editable-radius: 0.4375rem;
+  --kappa-editable-font-size: 0.75rem;
+}
+
+.kappa-editable[data-size="lg"] {
+  --kappa-editable-height: 2.5rem;
+  --kappa-editable-padding: 0.75rem;
+  --kappa-editable-font-size: 0.875rem;
+}
+
+.kappa-editable__label {
+  display: inline-flex;
+  inline-size: fit-content;
+  align-items: center;
+  gap: 0.25rem;
+  color: var(--kappa-default, #17191f);
+  cursor: default;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+.kappa-editable__label[data-required]::after {
+  color: var(--kappa-danger-text, #b42318);
+  content: "*";
+}
+
+.kappa-editable__label[data-invalid] {
+  color: var(--kappa-danger-text, #b42318);
+}
+
+.kappa-editable__area {
+  box-sizing: border-box;
+  display: flex;
+  inline-size: 100%;
+  min-inline-size: 0;
+  align-items: center;
+}
+
+.kappa-editable__area:has([data-autoresize]) {
+  inline-size: fit-content;
+  max-inline-size: 100%;
+}
+
+.kappa-editable__input,
+.kappa-editable__preview {
+  box-sizing: border-box;
+  inline-size: 100%;
+  min-inline-size: 0;
+  min-block-size: var(--kappa-editable-height);
+  padding-block: 0;
+  padding-inline: var(--kappa-editable-padding);
+  border: 1px solid transparent;
+  border-radius: var(--kappa-editable-radius);
+  color: inherit;
+  font-family: inherit;
+  font-size: var(--kappa-editable-font-size);
+  font-weight: 500;
+  line-height: calc(var(--kappa-editable-height) - 2px);
+  outline: 2px solid transparent;
+  outline-offset: 1px;
+  text-align: start;
+  transition:
+    background-color 120ms ease,
+    border-color 120ms ease,
+    color 120ms ease,
+    outline-color 120ms ease;
+}
+
+.kappa-editable__preview {
+  overflow: hidden;
+  background: transparent;
+  cursor: text;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.kappa-editable__preview:hover:not([data-disabled], [data-readonly]) {
+  border-color: var(--kappa-line, #e3e6eb);
+  background: var(--kappa-tint, #f4f6f9);
+}
+
+.kappa-editable__preview:focus-visible {
+  border-color: var(--kappa-focus, #4c63ff);
+  outline-color: var(--kappa-focus, #4c63ff);
+}
+
+.kappa-editable__preview[data-placeholder-shown] {
+  color: var(--kappa-muted, #9aa2ae);
+  font-weight: 450;
+}
+
+.kappa-editable__input {
+  background: var(--kappa-control, #ffffff);
+  border-color: var(--kappa-line, #e3e6eb);
+  box-shadow: none;
+  line-height: 1.35;
+}
+
+.kappa-editable__input::placeholder {
+  color: var(--kappa-muted, #9aa2ae);
+  opacity: 1;
+}
+
+.kappa-editable__input:hover:not(:disabled, :read-only) {
+  border-color: var(--kappa-subtle, #6c7480);
+}
+
+.kappa-editable__input:focus-visible {
+  border-color: var(--kappa-focus, #4c63ff);
+  outline-color: var(--kappa-focus, #4c63ff);
+}
+
+.kappa-editable__input[data-invalid],
+.kappa-editable__preview[data-invalid] {
+  border-color: var(--kappa-danger, #b42318);
+}
+
+.kappa-editable__input[data-invalid]:focus-visible,
+.kappa-editable__preview[data-invalid]:focus-visible {
+  outline-color: var(--kappa-danger, #b42318);
+}
+
+.kappa-editable__input[data-autoresize],
+.kappa-editable__preview[data-autoresize] {
+  inline-size: auto;
+  min-inline-size: 3rem;
+  max-inline-size: 100%;
+}
+
+.kappa-editable__input[data-disabled],
+.kappa-editable__preview[data-disabled] {
+  background: var(--kappa-disabled-surface, var(--kappa-tint, #f4f6f9));
+  color: var(--kappa-subtle, #6c7480);
+  cursor: not-allowed;
+  opacity: 0.62;
+}
+
+.kappa-editable__input[data-readonly],
+.kappa-editable__preview[data-readonly],
+.kappa-editable__preview[aria-readonly="true"] {
+  background: var(--kappa-readonly-surface, var(--kappa-tint, #f4f6f9));
+  cursor: default;
+}
+
+.kappa-editable__control {
+  display: flex;
+  min-inline-size: 0;
+  align-items: center;
+  gap: 0.375rem;
+}
+
+.kappa-editable__trigger {
+  box-sizing: border-box;
+  display: inline-flex;
+  inline-size: fit-content;
+  min-inline-size: 0;
+  block-size: 1.75rem;
+  align-items: center;
+  justify-content: center;
+  padding-block: 0;
+  padding-inline: 0.625rem;
+  border: 1px solid var(--kappa-line, #e3e6eb);
+  border-radius: 0.4375rem;
+  background: var(--kappa-control, #ffffff);
+  color: var(--kappa-default, #17191f);
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.75rem;
+  font-weight: 550;
+  line-height: 1;
+  transition:
+    background-color 120ms ease,
+    border-color 120ms ease,
+    color 120ms ease;
+}
+
+.kappa-editable__input[hidden],
+.kappa-editable__preview[hidden],
+.kappa-editable__trigger[hidden] {
+  display: none;
+}
+
+.kappa-editable__trigger:hover:not(:disabled) {
+  background: var(--kappa-overlay, #e9edf2);
+}
+
+.kappa-editable__trigger:focus-visible {
+  outline: 2px solid var(--kappa-focus, #4c63ff);
+  outline-offset: 2px;
+}
+
+.kappa-editable__trigger--submit {
+  border-color: transparent;
+  background: var(--kappa-accent-solid, #247ab7);
+  color: var(--kappa-accent-contrast, #ffffff);
+}
+
+.kappa-editable__trigger--submit:hover:not(:disabled) {
+  background: color-mix(
+    in oklab,
+    var(--kappa-accent-solid, #247ab7) 92%,
+    var(--kappa-default, #17191f) 8%
+  );
+}
+
+.kappa-editable__trigger--cancel {
+  border-color: transparent;
+  background: transparent;
+  color: var(--kappa-subtle, #6c7480);
+}
+
+.kappa-editable__trigger:disabled {
+  cursor: not-allowed;
+  opacity: 0.56;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kappa-editable__input,
+  .kappa-editable__preview,
+  .kappa-editable__trigger {
+    transition: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .kappa-editable__input:focus-visible,
+  .kappa-editable__preview:focus-visible,
+  .kappa-editable__trigger:focus-visible {
+    border-color: Highlight;
+    outline-color: Highlight;
+  }
+
+  .kappa-editable__input[data-invalid],
+  .kappa-editable__preview[data-invalid] {
+    border-color: Mark;
+  }
+
+  .kappa-editable__input[data-disabled],
+  .kappa-editable__preview[data-disabled],
+  .kappa-editable__trigger:disabled {
+    color: GrayText;
+    opacity: 1;
+  }
+}

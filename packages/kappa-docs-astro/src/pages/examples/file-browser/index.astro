@@ -1,0 +1,25 @@
+---
+import FileBrowserDocsDemo from "../../../components/FileBrowserDocsDemo.vue";
+import "../../../styles/docs.css";
+---
+<!doctype html>
+<html lang="en" class="kappa-docs-root">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="robots" content="noindex" />
+    <title>File Browser — Kappa Blocks</title>
+    <script is:inline>
+      const mode = localStorage.getItem("theme") === "dark" ? "dark" : "light";
+      document.documentElement.dataset.mode = mode;
+      document.documentElement.dataset.kappaTheme = mode;
+      document.documentElement.style.colorScheme = mode;
+    </script>
+  </head>
+  <body><main><FileBrowserDocsDemo client:load variant="editing" standalone /></main></body>
+</html>
+<style>
+  body { margin: 0; background: var(--kappa-canvas); }
+  main { min-inline-size: 0; }
+</style>

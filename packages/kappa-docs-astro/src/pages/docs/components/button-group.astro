@@ -1,0 +1,417 @@
+---
+import ButtonGroupDocsDemo from "../../../components/ButtonGroupDocsDemo.vue";
+import ButtonGroupCompositionDocsDemo from "../../../components/ButtonGroupCompositionDocsDemo.vue";
+import CodeBlock from "../../../components/CodeBlock.astro";
+import CompositionTree from "../../../components/CompositionTree.astro";
+import CopyPageControls from "../../../components/CopyPageControls.vue";
+import DocsPageNavigation from "../../../components/DocsPageNavigation.astro";
+import {
+  barrelCode,
+  basicCode,
+  exportsList,
+  granularCode,
+  linksCode,
+  nestedCode,
+  orientationCode,
+  previewCode,
+  rootProps,
+  rtlCode,
+  separatorCode,
+  separatorProps,
+  sizesCode,
+  splitCode,
+  textCode,
+  textProps,
+  usageCode,
+} from "../../../data/button-group-docs";
+import {
+  dropdownMenuCode,
+  inputCode,
+  inputGroupCode,
+  nestedComposerCode,
+  popoverCode,
+  selectCode,
+} from "../../../data/button-group-composition-docs";
+import DocsLayout from "../../../layouts/DocsLayout.astro";
+import "../../../styles/docs-components.css";
+
+const currentPath = "/docs/components/button-group";
+const description =
+  "Connects related actions into one compact visual unit without changing native control behavior.";
+---
+
+<DocsLayout title="Button Group" description={description}>
+  <div class="docs-page docs-page--component">
+    <header class="docs-page-header">
+      <div class="docs-page-header__inner">
+        <div class="docs-page-header__content">
+          <div class="docs-page-header__mobile-actions">
+            <CopyPageControls client:only="vue" align="center" />
+          </div>
+          <div class="docs-page-header__title-row">
+            <h1>Button Group</h1>
+            <div class="docs-page-header__navigation-actions">
+              <div class="docs-page-header__desktop-actions">
+                <CopyPageControls client:only="vue" />
+              </div>
+              <DocsPageNavigation currentPath={currentPath} variant="compact" />
+            </div>
+          </div>
+          <p class="docs-page-header__lede">{description}</p>
+        </div>
+      </div>
+    </header>
+
+    <div class="docs-page-body">
+      <article class="docs-article docs-article--component">
+        <section id="preview" class="docs-section">
+          <div class="docs-component-example">
+            <div class="docs-component-preview">
+              <ButtonGroupDocsDemo client:load variant="preview" />
+            </div>
+            <CodeBlock
+              code={previewCode}
+              lang="vue"
+              collapsible
+              revealId="button-group-preview-code"
+            />
+          </div>
+        </section>
+
+        <section id="installation" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#installation">Installation</a></h2>
+          <h3 id="barrel"><a class="docs-section-anchor" href="#barrel">Barrel</a></h3>
+          <CodeBlock code={barrelCode} lang="javascript" />
+          <h3 id="granular"><a class="docs-section-anchor" href="#granular">Granular</a></h3>
+          <CodeBlock code={granularCode} lang="javascript" />
+        </section>
+
+        <section id="usage" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#usage">Usage</a></h2>
+          <p>
+            Give the group an accessible name when its purpose is not clear from nearby content.
+            Each child keeps its native action or link behavior.
+          </p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview">
+              <ButtonGroupDocsDemo variant="usage" />
+            </div>
+            <CodeBlock
+              code={usageCode}
+              lang="vue"
+              collapsible
+              revealId="button-group-usage-code"
+            />
+          </div>
+        </section>
+
+        <section id="composition" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#composition">Composition</a></h2>
+          <CompositionTree component="buttonGroup" />
+          <p>
+            Place <code>Button</code>, <code>LinkButton</code>, <code>ButtonGroup.Text</code>, or
+            <code>ButtonGroup.Separator</code> directly inside the root. Nest roots when separate
+            connected clusters need a small gap. Native inputs can join the group with
+            <code>data-slot="input"</code>. The Menu, Select, and Popover examples use Ark UI
+            directly because Kappa does not yet provide styled wrappers for those primitives.
+          </p>
+          <ul>
+            <li><code>ButtonGroup</code> — semantic group and visual axis.</li>
+            <li><code>ButtonGroup.Text</code> — static context for adjacent controls.</li>
+            <li><code>ButtonGroup.Separator</code> — accessible boundary between actions.</li>
+          </ul>
+        </section>
+
+        <section id="examples" class="docs-section docs-section--component-examples">
+          <h2><a class="docs-section-anchor" href="#examples">Examples</a></h2>
+
+          <h3 id="basic"><a class="docs-section-anchor" href="#basic">Basic</a></h3>
+          <p>Connected outline buttons share one border and retain separate actions.</p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><ButtonGroupDocsDemo variant="basic" /></div>
+            <CodeBlock
+              code={basicCode}
+              lang="vue"
+              collapsible
+              revealId="button-group-basic-code"
+            />
+          </div>
+
+          <h3 id="orientation"><a class="docs-section-anchor" href="#orientation">Orientation</a></h3>
+          <p>
+            Horizontal is the default. Vertical changes only the visual axis; native Tab order stays
+            unchanged.
+          </p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><ButtonGroupDocsDemo variant="orientation" /></div>
+            <CodeBlock
+              code={orientationCode}
+              lang="vue"
+              collapsible
+              revealId="button-group-orientation-code"
+            />
+          </div>
+
+          <h3 id="sizes"><a class="docs-section-anchor" href="#sizes">Sizes</a></h3>
+          <p>Set the same size on each child. Button Group does not override child props.</p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><ButtonGroupDocsDemo variant="sizes" /></div>
+            <CodeBlock
+              code={sizesCode}
+              lang="vue"
+              collapsible
+              revealId="button-group-sizes-code"
+            />
+          </div>
+
+          <h3 id="nested"><a class="docs-section-anchor" href="#nested">Nested</a></h3>
+          <p>Nest roots to separate related clusters without introducing decorative containers.</p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><ButtonGroupDocsDemo variant="nested" /></div>
+            <CodeBlock
+              code={nestedCode}
+              lang="vue"
+              collapsible
+              revealId="button-group-nested-code"
+            />
+          </div>
+          <p>
+            The second composition keeps the message field and inline voice indicator in one input
+            surface, separated from the attachment action.
+          </p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview">
+              <ButtonGroupCompositionDocsDemo client:load variant="nested-composer" />
+            </div>
+            <CodeBlock
+              code={nestedComposerCode}
+              lang="vue"
+              collapsible
+              revealId="button-group-nested-composer-code"
+            />
+          </div>
+
+          <h3 id="separator"><a class="docs-section-anchor" href="#separator">Separator</a></h3>
+          <p>
+            Use a separator with borderless variants such as ghost or primary. Outline buttons
+            already provide a single seam and do not need another line. Set
+            <code>orientation="horizontal"</code> inside a vertical group.
+          </p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><ButtonGroupDocsDemo variant="separator" /></div>
+            <CodeBlock
+              code={separatorCode}
+              lang="vue"
+              collapsible
+              revealId="button-group-separator-code"
+            />
+          </div>
+
+          <h3 id="split"><a class="docs-section-anchor" href="#split">Split</a></h3>
+          <p>
+            This example uses split geometry for two independent actions. It does not provide a menu
+            or claim popup behavior; compose a real menu trigger when one is available.
+          </p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><ButtonGroupDocsDemo variant="split" /></div>
+            <CodeBlock
+              code={splitCode}
+              lang="vue"
+              collapsible
+              revealId="button-group-split-code"
+            />
+          </div>
+
+          <h3 id="input"><a class="docs-section-anchor" href="#input">Input</a></h3>
+          <p>
+            A native input can join a Button when it uses <code>data-slot="input"</code>. Keep the
+            input labelled and apply product input styles in the consumer.
+          </p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview">
+              <ButtonGroupCompositionDocsDemo client:load variant="input" />
+            </div>
+            <CodeBlock
+              code={inputCode}
+              lang="vue"
+              collapsible
+              revealId="button-group-input-code"
+            />
+          </div>
+
+          <h3 id="input-group">
+            <a class="docs-section-anchor" href="#input-group">Input Group</a>
+          </h3>
+          <p>
+            Nest a local input surface when the field owns an inline action. This example keeps the
+            voice toggle state and accessible name on a real Button.
+          </p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview">
+              <ButtonGroupCompositionDocsDemo client:load variant="input-group" />
+            </div>
+            <CodeBlock
+              code={inputGroupCode}
+              lang="vue"
+              collapsible
+              revealId="button-group-input-group-code"
+            />
+          </div>
+
+          <h3 id="dropdown-menu">
+            <a class="docs-section-anchor" href="#dropdown-menu">Dropdown Menu</a>
+          </h3>
+          <p>
+            Use Ark Menu for popup behavior. Keep its positioner outside ButtonGroup so it does not
+            become part of the joined border sequence.
+          </p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview docs-component-preview--open-space">
+              <ButtonGroupCompositionDocsDemo client:load variant="dropdown-menu" />
+            </div>
+            <CodeBlock
+              code={dropdownMenuCode}
+              lang="vue"
+              collapsible
+              revealId="button-group-dropdown-menu-code"
+            />
+          </div>
+
+          <h3 id="select"><a class="docs-section-anchor" href="#select">Select</a></h3>
+          <p>
+            A Select trigger, amount field, and send action form one compact transfer control. Ark
+            owns option navigation and selection.
+          </p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview docs-component-preview--open-space">
+              <ButtonGroupCompositionDocsDemo client:load variant="select" />
+            </div>
+            <CodeBlock
+              code={selectCode}
+              lang="vue"
+              collapsible
+              revealId="button-group-select-code"
+            />
+          </div>
+
+          <h3 id="popover"><a class="docs-section-anchor" href="#popover">Popover</a></h3>
+          <p>
+            Use Ark Popover for focus, outside-interaction, and Escape handling. The positioner stays
+            beside the ButtonGroup rather than inside it.
+          </p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview docs-component-preview--open-space">
+              <ButtonGroupCompositionDocsDemo client:load variant="popover" />
+            </div>
+            <CodeBlock
+              code={popoverCode}
+              lang="vue"
+              collapsible
+              revealId="button-group-popover-code"
+            />
+          </div>
+
+          <h3 id="text-as-child">
+            <a class="docs-section-anchor" href="#text-as-child">Text and asChild</a>
+          </h3>
+          <p>
+            Text supplies non-interactive context. Use <code>asChild</code> to keep a more suitable
+            semantic child while Kappa applies the connected treatment. Text aligns with base-size
+            controls; consumers remain responsible for the size of every interactive child.
+          </p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><ButtonGroupDocsDemo variant="text" /></div>
+            <CodeBlock
+              code={textCode}
+              lang="vue"
+              collapsible
+              revealId="button-group-text-code"
+            />
+          </div>
+
+          <h3 id="link-buttons">
+            <a class="docs-section-anchor" href="#link-buttons">Link Buttons</a>
+          </h3>
+          <p>LinkButton remains a real anchor when navigation belongs beside related actions.</p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><ButtonGroupDocsDemo variant="links" /></div>
+            <CodeBlock
+              code={linksCode}
+              lang="vue"
+              collapsible
+              revealId="button-group-links-code"
+            />
+          </div>
+
+          <h3 id="rtl"><a class="docs-section-anchor" href="#rtl">RTL</a></h3>
+          <p>
+            Kappa uses logical borders and corner radii. Set the surrounding direction and choose
+            directional icons that match the reading direction.
+          </p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><ButtonGroupDocsDemo variant="rtl" /></div>
+            <CodeBlock
+              code={rtlCode}
+              lang="vue"
+              collapsible
+              revealId="button-group-rtl-code"
+            />
+          </div>
+        </section>
+
+        <section id="accessibility" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#accessibility">Accessibility</a></h2>
+          <ul>
+            <li>The root has <code>role="group"</code>. Add <code>aria-label</code> or <code>aria-labelledby</code> when context does not name it.</li>
+            <li>Tab and Shift+Tab move through every control. Button Group does not add arrow-key navigation or roving focus.</li>
+            <li>Every icon-only button needs its own concise accessible name.</li>
+            <li>Separator is intentionally semantic, matching the official Base Separator contract. It exposes its axis with <code>role="separator"</code> and <code>aria-orientation</code>.</li>
+            <li>Use toggle controls for pressed or selected states. Button Group manages layout only.</li>
+            <li>Focus, disabled, loading, dark-mode, and reduced-motion behavior stay owned by each child component.</li>
+          </ul>
+        </section>
+
+        <section id="api-reference" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#api-reference">API Reference</a></h2>
+
+          <div class="docs-api-group">
+            <h3 id="root-api"><a class="docs-section-anchor" href="#root-api">ButtonGroup</a></h3>
+            <p>Renders a semantic group and forwards remaining HTML attributes and listeners.</p>
+            <div class="docs-api-table"><table><thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>{rootProps.map((prop) => <tr><td><code>{prop.name}</code></td><td><code>{prop.type}</code></td><td><code>{prop.defaultValue}</code></td><td>{prop.description}</td></tr>)}</tbody></table></div>
+          </div>
+
+          <div class="docs-api-group">
+            <h3 id="text-api"><a class="docs-section-anchor" href="#text-api">ButtonGroup.Text</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>{textProps.map((prop) => <tr><td><code>{prop.name}</code></td><td><code>{prop.type}</code></td><td><code>{prop.defaultValue}</code></td><td>{prop.description}</td></tr>)}</tbody></table></div>
+          </div>
+
+          <div class="docs-api-group">
+            <h3 id="separator-api"><a class="docs-section-anchor" href="#separator-api">ButtonGroup.Separator</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>{separatorProps.map((prop) => <tr><td><code>{prop.name}</code></td><td><code>{prop.type}</code></td><td><code>{prop.defaultValue}</code></td><td>{prop.description}</td></tr>)}</tbody></table></div>
+          </div>
+
+          <div class="docs-api-group">
+            <h3 id="exports"><a class="docs-section-anchor" href="#exports">Exports</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Export</th><th>Description</th></tr></thead><tbody>{exportsList.map((item) => <tr><td><code>{item.name}</code></td><td>{item.description}</td></tr>)}</tbody></table></div>
+          </div>
+        </section>
+
+        <DocsPageNavigation currentPath={currentPath} />
+      </article>
+
+      <aside class="docs-page-toc" aria-label="On this page">
+        <div class="docs-page-toc__inner">
+          <span class="docs-page-toc__title">On this page</span>
+          <ul>
+            <li><a href="#installation" data-toc-link="installation">Installation</a><ul><li><a href="#barrel" data-toc-link="barrel">Barrel</a></li><li><a href="#granular" data-toc-link="granular">Granular</a></li></ul></li>
+            <li><a href="#usage" data-toc-link="usage">Usage</a></li>
+            <li><a href="#composition" data-toc-link="composition">Composition</a></li>
+            <li><a href="#examples" data-toc-link="examples">Examples</a><ul><li><a href="#basic" data-toc-link="basic">Basic</a></li><li><a href="#orientation" data-toc-link="orientation">Orientation</a></li><li><a href="#sizes" data-toc-link="sizes">Sizes</a></li><li><a href="#nested" data-toc-link="nested">Nested</a></li><li><a href="#separator" data-toc-link="separator">Separator</a></li><li><a href="#split" data-toc-link="split">Split</a></li><li><a href="#input" data-toc-link="input">Input</a></li><li><a href="#input-group" data-toc-link="input-group">Input Group</a></li><li><a href="#dropdown-menu" data-toc-link="dropdown-menu">Dropdown Menu</a></li><li><a href="#select" data-toc-link="select">Select</a></li><li><a href="#popover" data-toc-link="popover">Popover</a></li><li><a href="#text-as-child" data-toc-link="text-as-child">Text and asChild</a></li><li><a href="#link-buttons" data-toc-link="link-buttons">Link Buttons</a></li><li><a href="#rtl" data-toc-link="rtl">RTL</a></li></ul></li>
+            <li><a href="#accessibility" data-toc-link="accessibility">Accessibility</a></li>
+            <li><a href="#api-reference" data-toc-link="api-reference">API Reference</a><ul><li><a href="#root-api" data-toc-link="root-api">ButtonGroup</a></li><li><a href="#text-api" data-toc-link="text-api">ButtonGroup.Text</a></li><li><a href="#separator-api" data-toc-link="separator-api">ButtonGroup.Separator</a></li><li><a href="#exports" data-toc-link="exports">Exports</a></li></ul></li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+  </div>
+</DocsLayout>

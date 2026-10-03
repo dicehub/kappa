@@ -1,0 +1,94 @@
+.kappa-text {
+  min-inline-size: 0;
+  margin: 0;
+  color: var(--kappa-default, #17191f);
+  font-family: var(--kappa-font-sans, inherit);
+  font-weight: 400;
+  letter-spacing: 0;
+  overflow-wrap: break-word;
+}
+
+.kappa-text--heading {
+  font-size: 1rem;
+  font-weight: 650;
+  line-height: 1.25rem;
+}
+
+.kappa-text--heading.kappa-text--size-lg {
+  font-size: 1.25rem;
+  line-height: 1.75rem;
+}
+
+.kappa-text--heading1 {
+  font-size: 1.875rem;
+  font-weight: 650;
+  line-height: 2.25rem;
+}
+
+.kappa-text--heading2 {
+  font-size: 1.5rem;
+  font-weight: 650;
+  line-height: 2rem;
+}
+
+.kappa-text--heading3 {
+  font-size: 1rem;
+  font-weight: 650;
+  line-height: 1.25rem;
+}
+
+.kappa-text--secondary,
+.kappa-text--mono-secondary {
+  color: var(--kappa-subtle, #6c7480);
+}
+
+.kappa-text--success {
+  color: var(--kappa-success-text, #027a48);
+}
+
+.kappa-text--error {
+  color: var(--kappa-danger-text, var(--kappa-danger, #b42318));
+}
+
+.kappa-text--mono,
+.kappa-text--mono-secondary {
+  font-family: var(--kappa-font-mono, ui-monospace, "SFMono-Regular", "SF Mono", Consolas, monospace);
+  font-variant-numeric: tabular-nums;
+}
+
+.kappa-text--size-xs {
+  font-size: 0.75rem;
+  line-height: 1rem;
+}
+
+.kappa-text--size-sm {
+  font-size: 0.8125rem;
+  line-height: 1rem;
+}
+
+.kappa-text--size-base {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
+.kappa-text--size-lg {
+  font-size: 1rem;
+  line-height: 1.5rem;
+}
+
+.kappa-text--bold {
+  font-weight: 550;
+}
+
+.kappa-text--truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@media (forced-colors: active) {
+  .kappa-text--success,
+  .kappa-text--error {
+    color: CanvasText;
+  }
+}

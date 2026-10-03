@@ -1,0 +1,120 @@
+.kappa-progress-circle {
+  --kappa-progress-circle-range-color: var(--kappa-accent-solid, #247ab7);
+  --kappa-progress-circle-size: 4.5rem;
+  --kappa-progress-circle-thickness: 0.375rem;
+
+  display: inline-grid;
+  min-inline-size: 0;
+  grid-template-areas:
+    "circle"
+    "label";
+  gap: 0.625rem;
+  place-items: center;
+  color: var(--kappa-default, #17191f);
+  font-family: var(--kappa-font-sans, inherit);
+}
+
+.kappa-progress-circle__circle {
+  --size: var(--kappa-progress-circle-size);
+  --thickness: var(--kappa-progress-circle-thickness);
+
+  grid-area: circle;
+  overflow: visible;
+}
+
+.kappa-progress-circle__track,
+.kappa-progress-circle__range {
+  fill: none;
+  stroke-width: var(--kappa-progress-circle-thickness);
+}
+
+.kappa-progress-circle__track {
+  stroke: var(--kappa-tint, #f4f6f9);
+}
+
+.kappa-progress-circle__range {
+  stroke: var(--kappa-progress-circle-range-color);
+  stroke-linecap: round;
+  transition: stroke-dashoffset 180ms ease-out;
+}
+
+.kappa-progress-circle__value-text {
+  z-index: 1;
+  grid-area: circle;
+  font-family: var(--kappa-font-mono, ui-monospace, monospace);
+  font-size: 0.8125rem;
+  font-variant-numeric: tabular-nums;
+  font-weight: 650;
+  line-height: 1rem;
+  pointer-events: none;
+}
+
+.kappa-progress-circle__label {
+  grid-area: label;
+  max-inline-size: 10rem;
+  overflow: hidden;
+  color: var(--kappa-subtle, #6c7480);
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1rem;
+  text-align: center;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.kappa-progress-circle__circle[data-state="indeterminate"] {
+  animation: kappa-progress-circle-rotate 1s linear infinite;
+}
+
+.kappa-progress-circle__range[data-state="indeterminate"] {
+  animation: kappa-progress-circle-sweep 1.35s ease-in-out infinite;
+}
+
+.kappa-progress-circle__view[hidden] {
+  display: none;
+}
+
+@keyframes kappa-progress-circle-rotate {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes kappa-progress-circle-sweep {
+  0% {
+    stroke-dasharray: 1 100;
+    stroke-dashoffset: 0;
+  }
+
+  50% {
+    stroke-dasharray: 48 100;
+    stroke-dashoffset: -14;
+  }
+
+  100% {
+    stroke-dasharray: 1 100;
+    stroke-dashoffset: -62;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kappa-progress-circle__circle[data-state="indeterminate"],
+  .kappa-progress-circle__range[data-state="indeterminate"] {
+    animation: none;
+  }
+
+  .kappa-progress-circle__range {
+    transition: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .kappa-progress-circle__track {
+    stroke: CanvasText;
+    opacity: 0.35;
+  }
+
+  .kappa-progress-circle__range {
+    stroke: Highlight;
+  }
+}

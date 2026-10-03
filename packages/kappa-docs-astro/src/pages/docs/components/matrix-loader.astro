@@ -1,0 +1,165 @@
+---
+import CodeBlock from "../../../components/CodeBlock.astro";
+import CopyPageControls from "../../../components/CopyPageControls.vue";
+import DocsPageNavigation from "../../../components/DocsPageNavigation.astro";
+import MatrixLoaderDocsDemo from "../../../components/MatrixLoaderDocsDemo.vue";
+import {
+  barrelCode,
+  exportsList,
+  granularCode,
+  matrixLoaderProps,
+  motionsCode,
+  previewCode,
+  shapesCode,
+  sizesCode,
+  speedCode,
+  usageCode,
+} from "../../../data/matrix-loader-docs";
+import DocsLayout from "../../../layouts/DocsLayout.astro";
+import "../../../styles/docs-components.css";
+
+const currentPath = "/docs/components/matrix-loader";
+const description = "A compact dot matrix that signals work with an unknown duration.";
+---
+
+<DocsLayout title="Matrix Loader" description={description}>
+  <div class="docs-page docs-page--component">
+    <header class="docs-page-header">
+      <div class="docs-page-header__inner">
+        <div class="docs-page-header__content">
+          <div class="docs-page-header__mobile-actions">
+            <CopyPageControls client:only="vue" align="center" />
+          </div>
+          <div class="docs-page-header__title-row">
+            <h1>Matrix Loader</h1>
+            <div class="docs-page-header__navigation-actions">
+              <div class="docs-page-header__desktop-actions"><CopyPageControls client:only="vue" /></div>
+              <DocsPageNavigation currentPath={currentPath} variant="compact" />
+            </div>
+          </div>
+          <p class="docs-page-header__lede">{description}</p>
+        </div>
+      </div>
+    </header>
+
+    <div class="docs-page-body">
+      <article class="docs-article docs-article--component">
+        <section id="preview" class="docs-section">
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><MatrixLoaderDocsDemo variant="preview" /></div>
+            <CodeBlock code={previewCode} lang="vue" collapsible revealId="matrix-loader-preview-code" />
+          </div>
+        </section>
+
+        <section id="installation" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#installation">Installation</a></h2>
+          <p>
+            Matrix Loader is part of the main Kappa package. It uses Vue and CSS only and has no
+            runtime dependency or state machine.
+          </p>
+          <h3 id="barrel"><a class="docs-section-anchor" href="#barrel">Barrel</a></h3>
+          <CodeBlock code={barrelCode} lang="javascript" />
+          <h3 id="granular"><a class="docs-section-anchor" href="#granular">Granular</a></h3>
+          <CodeBlock code={granularCode} lang="javascript" />
+        </section>
+
+        <section id="usage" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#usage">Usage</a></h2>
+          <p>
+            Use Matrix Loader for compact technical states that benefit from more visual presence than
+            a circular spinner. Use <code>label</code> to describe the active operation.
+          </p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><MatrixLoaderDocsDemo variant="basic" /></div>
+            <CodeBlock code={usageCode} lang="vue" collapsible revealId="matrix-loader-usage-code" />
+          </div>
+        </section>
+
+        <section id="design" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#design">Design</a></h2>
+          <p>
+            Shape and motion are independent. Every option uses the same five-by-five matrix, so changing
+            the visual treatment does not change the component size or status semantics.
+          </p>
+          <p>
+            The dot phases are deterministic. Server rendering, hydration, tests, and repeated loaders
+            therefore produce stable output without random values.
+          </p>
+        </section>
+
+        <section id="examples" class="docs-section docs-section--component-examples">
+          <h2><a class="docs-section-anchor" href="#examples">Examples</a></h2>
+
+          <h3 id="shapes"><a class="docs-section-anchor" href="#shapes">Shapes</a></h3>
+          <p>Square, circle, diamond, and ring shapes select different positions in the same matrix.</p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><MatrixLoaderDocsDemo variant="shapes" /></div>
+            <CodeBlock code={shapesCode} lang="vue" collapsible revealId="matrix-loader-shapes-code" />
+          </div>
+
+          <h3 id="motions"><a class="docs-section-anchor" href="#motions">Motion Patterns</a></h3>
+          <p>Pulse expands from the center, scan crosses columns, twinkle uses a fixed irregular order, and orbit follows the field angle.</p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><MatrixLoaderDocsDemo variant="motions" /></div>
+            <CodeBlock code={motionsCode} lang="vue" collapsible revealId="matrix-loader-motions-code" />
+          </div>
+
+          <h3 id="sizes"><a class="docs-section-anchor" href="#sizes">Sizes</a></h3>
+          <p>Use the same compact size scale as Loader, or pass a positive pixel value.</p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><MatrixLoaderDocsDemo variant="sizes" /></div>
+            <CodeBlock code={sizesCode} lang="vue" collapsible revealId="matrix-loader-sizes-code" />
+          </div>
+
+          <h3 id="speed"><a class="docs-section-anchor" href="#speed">Cycle Duration</a></h3>
+          <p>Change the duration when the surrounding interface needs a faster or calmer loading signal.</p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><MatrixLoaderDocsDemo variant="speed" /></div>
+            <CodeBlock code={speedCode} lang="vue" collapsible revealId="matrix-loader-speed-code" />
+          </div>
+        </section>
+
+        <section id="accessibility" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#accessibility">Accessibility</a></h2>
+          <ul>
+            <li>The default component is a polite status with visually hidden text.</li>
+            <li>Use a short, translated label that identifies the active operation.</li>
+            <li>Set <code>decorative</code> when nearby visible text already reports the same state.</li>
+            <li>Set <code>aria-busy="true"</code> on the region or control that is updating.</li>
+            <li>Use Progress instead when the application knows the completion value.</li>
+            <li>Reduced-motion mode stops every dot and keeps the selected shape visible.</li>
+          </ul>
+        </section>
+
+        <section id="api-reference" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#api-reference">API Reference</a></h2>
+          <div class="docs-api-group">
+            <h3 id="matrix-loader-api"><a class="docs-section-anchor" href="#matrix-loader-api">MatrixLoader</a></h3>
+            <p>Renders a span and forwards native attributes and listeners to it.</p>
+            <div class="docs-api-table"><table><thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>{matrixLoaderProps.map((prop) => <tr><td><code>{prop.name}</code></td><td><code>{prop.type}</code></td><td><code>{prop.defaultValue}</code></td><td>{prop.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="exports"><a class="docs-section-anchor" href="#exports">Exports</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Export</th><th>Description</th></tr></thead><tbody>{exportsList.map((item) => <tr><td><code>{item.name}</code></td><td>{item.description}</td></tr>)}</tbody></table></div>
+          </div>
+        </section>
+
+        <DocsPageNavigation currentPath={currentPath} />
+      </article>
+
+      <aside class="docs-page-toc" aria-label="On this page">
+        <div class="docs-page-toc__inner">
+          <span class="docs-page-toc__title">On this page</span>
+          <ul>
+            <li><a href="#installation" data-toc-link="installation">Installation</a><ul><li><a href="#barrel" data-toc-link="barrel">Barrel</a></li><li><a href="#granular" data-toc-link="granular">Granular</a></li></ul></li>
+            <li><a href="#usage" data-toc-link="usage">Usage</a></li>
+            <li><a href="#design" data-toc-link="design">Design</a></li>
+            <li><a href="#examples" data-toc-link="examples">Examples</a><ul><li><a href="#shapes" data-toc-link="shapes">Shapes</a></li><li><a href="#motions" data-toc-link="motions">Motion Patterns</a></li><li><a href="#sizes" data-toc-link="sizes">Sizes</a></li><li><a href="#speed" data-toc-link="speed">Cycle Duration</a></li></ul></li>
+            <li><a href="#accessibility" data-toc-link="accessibility">Accessibility</a></li>
+            <li><a href="#api-reference" data-toc-link="api-reference">API Reference</a><ul><li><a href="#matrix-loader-api" data-toc-link="matrix-loader-api">MatrixLoader</a></li><li><a href="#exports" data-toc-link="exports">Exports</a></li></ul></li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+  </div>
+</DocsLayout>

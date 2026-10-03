@@ -1,0 +1,188 @@
+---
+import { ClientRouter } from "astro:transitions";
+import DocsSidebar from "../components/DocsSidebar.astro";
+import DocsSearchDialog from "../components/DocsSearchDialog.vue";
+import DocsTableOfContents from "../components/DocsTableOfContents.vue";
+import KappaMark from "../components/KappaMark.astro";
+import ThemeToggle from "../components/ThemeToggle.astro";
+import kappaPackage from "../../../kappa/package.json";
+import "../styles/docs.css";
+import "../styles/docs-shell.css";
+import "../styles/docs-content.css";
+import "../styles/docs-code.css";
+import "../styles/docs-copy-page.css";
+import "../styles/docs-pagination.css";
+import "../styles/docs-responsive.css";
+
+interface Props {
+  description?: string;
+  frontmatter?: {
+    description?: string;
+    title?: string;
+  };
+  title?: string;
+}
+
+const frontmatter = Astro.props.frontmatter ?? {};
+const title = Astro.props.title ?? frontmatter.title ?? "Home";
+const description =
+  Astro.props.description ??
+  frontmatter.description ??
+  "Vue components, APIs, and usage guidance for Kappa UI.";
+const pathname = Astro.url.pathname;
+const pageTitle = title === "Home" ? "Kappa" : `Kappa / ${title}`;
+const showHeaderTitle = title !== "Home";
+const useClientRouter = !import.meta.env.DEV;
+---
+
+<!doctype html>
+<html lang="en" class="kappa-docs-root">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <meta name="color-scheme" content="light dark" />
+    <title>{pageTitle}</title>
+    <link
+      rel="preload"
+      href="/fonts/geist/geist-variable.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin="anonymous"
+    />
+    <link rel="icon" type="image/svg+xml" href="/kappa-mark.svg" media="(prefers-color-scheme: light)" />
+    <link rel="icon" type="image/svg+xml" href="/kappa-mark-white.svg" media="(prefers-color-scheme: dark)" />
+    {useClientRouter && <ClientRouter />}
+    <script is:inline>
+      (function () {
+        document.documentElement.dataset.docsJs = "true";
+        const stored = localStorage.getItem("theme");
+        const mode = stored === "dark" || stored === "light" ? stored : "light";
+        document.documentElement.setAttribute("data-mode", mode);
+        document.documentElement.setAttribute("data-kappa-theme", mode);
+        document.documentElement.style.colorScheme = mode;
+      })();
+    </script>
+  </head>
+  <body>
+    <a class="docs-skip-link" href="#main-content">Skip to content</a>
+    <div
+      class="docs-app"
+      data-docs-app
+      data-shell-ready="false"
+      data-sidebar-open="true"
+      data-mobile-sidebar-open="false"
+    >
+      <div class="docs-navigation-shell" transition:persist>
+        <header class="docs-mobile-header">
+          <button
+            class="docs-icon-button"
+            type="button"
+            aria-label="Open menu"
+            aria-controls="mobile-navigation"
+            aria-expanded="false"
+            data-mobile-sidebar-toggle
+          >
+            <svg
+              class="docs-mobile-menu-icon"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              aria-hidden="true"
+              data-mobile-menu-icon
+            >
+              <path
+                d="M4 7H20M4 12H20M4 17H20"
+                stroke="currentColor"
+                stroke-width="1.8"
+                stroke-linecap="round"
+              />
+            </svg>
+          </button>
+          <span class="docs-mobile-header__title">Kappa</span>
+          <div class="docs-mobile-header__actions">
+            <button
+              class="docs-icon-button"
+              type="button"
+              aria-label="Search documentation"
+              aria-controls="docs-search-dialog"
+              aria-expanded="false"
+              data-docs-search-open
+            >
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <circle cx="11" cy="11" r="6.25" stroke="currentColor" stroke-width="1.8" />
+                <path d="M16 16L20 20" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+              </svg>
+            </button>
+            <ThemeToggle />
+          </div>
+        </header>
+
+        <DocsSidebar pathname={pathname} variant="mobile" />
+        <div class="docs-backdrop" aria-hidden="true" data-mobile-sidebar-close></div>
+        <DocsSidebar pathname={pathname} variant="desktop" />
+      </div>
+
+      <header class="docs-header">
+        <div class="docs-header__brand">
+          <button
+            class="docs-sidebar-collapse docs-header__sidebar-toggle"
+            type="button"
+            aria-label="Collapse navigation"
+            aria-controls="desktop-navigation"
+            aria-expanded="true"
+            aria-pressed="true"
+            data-sidebar-toggle
+          >
+            <KappaMark class="docs-mark docs-sidebar-toggle__mark" decorative />
+          </button>
+          <a class="docs-header__brand-link" href="/docs" aria-label="Kappa home">Kappa</a>
+        </div>
+        {
+          showHeaderTitle && (
+            <div class="docs-header__page-title" data-docs-scroll-title>
+              <span class="docs-header__page-title-text">{title}</span>
+            </div>
+          )
+        }
+        <div class="docs-header__meta">
+          <button
+            class="docs-search docs-header__search"
+            type="button"
+            aria-label="Search documentation"
+            aria-controls="docs-search-dialog"
+            aria-expanded="false"
+            data-docs-search-open
+          >
+            <svg class="docs-search__icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <circle cx="11" cy="11" r="6.25" stroke="currentColor" stroke-width="1.8" />
+              <path d="M16 16L20 20" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+            </svg>
+            <span>Search documentation</span>
+            <span class="docs-search__shortcut" aria-hidden="true">Ctrl K</span>
+          </button>
+          <span class="docs-header__package">{kappaPackage.name}</span>
+          <span class="docs-header__version">v{kappaPackage.version}</span>
+        </div>
+        <div class="docs-header__actions">
+          <ThemeToggle />
+        </div>
+      </header>
+
+      <div class="docs-main-shell">
+        <main id="main-content" class="docs-main">
+          <div class="docs-content-frame">
+            <slot />
+          </div>
+        </main>
+      </div>
+    </div>
+
+    <DocsTableOfContents client:only="vue" />
+    <DocsSearchDialog client:only="vue" />
+
+    <script>
+      import "../scripts/docs-shell";
+    </script>
+  </body>
+</html>

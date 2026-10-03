@@ -1,0 +1,252 @@
+---
+import ArkUiDocsLink from "../../../components/ArkUiDocsLink.astro";
+import CodeBlock from "../../../components/CodeBlock.astro";
+import CompositionTree from "../../../components/CompositionTree.astro";
+import CopyPageControls from "../../../components/CopyPageControls.vue";
+import DocsPageNavigation from "../../../components/DocsPageNavigation.astro";
+import FieldDocsDemo from "../../../components/FieldDocsDemo.vue";
+import {
+  barrelCode,
+  basicCode,
+  checkboxCode,
+  controlProps,
+  exportsList,
+  granularCode,
+  multipleCode,
+  orientationCode,
+  parts,
+  previewCode,
+  requiredCode,
+  rootProps,
+  selectCode,
+  statesCode,
+  textareaCode,
+  usageCode,
+  validationCode,
+} from "../../../data/field-docs";
+import DocsLayout from "../../../layouts/DocsLayout.astro";
+import "../../../styles/docs-components.css";
+
+const currentPath = "/docs/components/field";
+const description =
+  "Connects a label, native control, guidance, validation, and field state with one accessible contract.";
+---
+
+<DocsLayout title="Field" description={description}>
+  <div class="docs-page docs-page--component">
+    <header class="docs-page-header">
+      <div class="docs-page-header__inner">
+        <div class="docs-page-header__content">
+          <div class="docs-page-header__mobile-actions">
+            <CopyPageControls client:only="vue" align="center" />
+          </div>
+          <div class="docs-page-header__title-row">
+            <h1>Field</h1>
+            <ArkUiDocsLink />
+            <div class="docs-page-header__navigation-actions">
+              <div class="docs-page-header__desktop-actions"><CopyPageControls client:only="vue" /></div>
+              <DocsPageNavigation currentPath={currentPath} variant="compact" />
+            </div>
+          </div>
+          <p class="docs-page-header__lede">{description}</p>
+        </div>
+      </div>
+    </header>
+
+    <div class="docs-page-body">
+      <article class="docs-article docs-article--component">
+        <section id="preview" class="docs-section">
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><FieldDocsDemo client:load variant="preview" /></div>
+            <CodeBlock code={previewCode} lang="vue" collapsible revealId="field-preview-code" />
+          </div>
+        </section>
+
+        <section id="installation" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#installation">Installation</a></h2>
+          <p>
+            Field is part of the main Kappa package and uses the installed Ark UI Field primitive.
+            No additional dependency is required.
+          </p>
+          <h3 id="barrel"><a class="docs-section-anchor" href="#barrel">Barrel</a></h3>
+          <CodeBlock code={barrelCode} lang="javascript" />
+          <h3 id="granular"><a class="docs-section-anchor" href="#granular">Granular</a></h3>
+          <CodeBlock code={granularCode} lang="javascript" />
+        </section>
+
+        <section id="usage" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#usage">Usage</a></h2>
+          <p>
+            Put the state on <code>Field.Root</code>. Ark UI then connects the label, helper text,
+            error text, and native control through stable IDs and ARIA attributes. Keep the label
+            visible unless the surrounding interface already gives the control a clear name.
+          </p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><FieldDocsDemo client:load variant="usage" /></div>
+            <CodeBlock code={usageCode} lang="vue" collapsible revealId="field-usage-code" />
+          </div>
+        </section>
+
+        <section id="composition" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#composition">Composition</a></h2>
+          <CompositionTree component="field" />
+          <p>
+            <a href="https://ark-ui.com/docs/components/field">Ark UI Field</a> defines field state,
+            generated IDs, live error text, and native control attributes. Kappa adds the compound
+            export, dense control styling, and vertical, horizontal, and responsive layouts.
+          </p>
+          <p>
+            Guidance and error content stay explicit. Kappa does not
+            include fieldset or group semantics in this component because Ark UI treats a fieldset as a
+            separate primitive.
+          </p>
+          <ul>
+            <li><code>Root</code> owns required, invalid, disabled, and read-only state.</li>
+            <li><code>Label</code> and <code>RequiredIndicator</code> name and qualify the control.</li>
+            <li><code>Input</code>, <code>Textarea</code>, and <code>Select</code> are styled native controls.</li>
+            <li><code>HelperText</code> stays persistent; <code>ErrorText</code> renders only when invalid.</li>
+            <li><code>Item</code> creates unique control and label IDs inside a multi-control field.</li>
+          </ul>
+        </section>
+
+        <section id="examples" class="docs-section docs-section--component-examples">
+          <h2><a class="docs-section-anchor" href="#examples">Examples</a></h2>
+
+          <h3 id="basic"><a class="docs-section-anchor" href="#basic">Basic</a></h3>
+          <p>Use helper text for stable guidance. Ark UI adds its ID to the control automatically.</p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><FieldDocsDemo client:load variant="basic" /></div>
+            <CodeBlock code={basicCode} lang="vue" collapsible revealId="field-basic-code" />
+          </div>
+
+          <h3 id="textarea"><a class="docs-section-anchor" href="#textarea">Textarea</a></h3>
+          <p>
+            Set <code>autoresize</code> for content-driven height. Keep a row count as the initial height
+            and use nearby text for limits or format guidance.
+          </p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><FieldDocsDemo client:load variant="textarea" /></div>
+            <CodeBlock code={textareaCode} lang="vue" collapsible revealId="field-textarea-code" />
+          </div>
+
+          <h3 id="select"><a class="docs-section-anchor" href="#select">Select</a></h3>
+          <p>Use <code>Select</code> for a small native option list. Use the Kappa Select component for rich options.</p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><FieldDocsDemo client:load variant="select" /></div>
+            <CodeBlock code={selectCode} lang="vue" collapsible revealId="field-select-code" />
+          </div>
+
+          <h3 id="validation"><a class="docs-section-anchor" href="#validation">Validation</a></h3>
+          <p>
+            Derive <code>invalid</code> from application validation. ErrorText supports one message or a
+            list. It becomes a polite live region and the control receives <code>aria-errormessage</code>.
+          </p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><FieldDocsDemo client:load variant="validation" /></div>
+            <CodeBlock code={validationCode} lang="vue" collapsible revealId="field-validation-code" />
+          </div>
+
+          <h3 id="required-optional"><a class="docs-section-anchor" href="#required-optional">Required and Optional</a></h3>
+          <p>
+            RequiredIndicator renders an asterisk only when <code>required</code> is true. Use its
+            <code>fallback</code> slot when a form needs an explicit optional marker.
+          </p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><FieldDocsDemo client:load variant="required" /></div>
+            <CodeBlock code={requiredCode} lang="vue" collapsible revealId="field-required-code" />
+          </div>
+
+          <h3 id="checkbox"><a class="docs-section-anchor" href="#checkbox">Checkbox</a></h3>
+          <p>
+            Ark UI checkbox and switch controls consume the closest Field context. Their hidden native
+            controls receive the helper, invalid, disabled, and required attributes.
+          </p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><FieldDocsDemo client:load variant="checkbox" /></div>
+            <CodeBlock code={checkboxCode} lang="vue" collapsible revealId="field-checkbox-code" />
+          </div>
+
+          <h3 id="multiple-controls"><a class="docs-section-anchor" href="#multiple-controls">Multiple Controls</a></h3>
+          <p>
+            Wrap each native control in a renderless <code>Field.Item</code>. Set <code>target</code> on
+            Root when the main label must focus one item. Give every other item its own label.
+          </p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><FieldDocsDemo client:load variant="multiple" /></div>
+            <CodeBlock code={multipleCode} lang="vue" collapsible revealId="field-multiple-code" />
+          </div>
+
+          <h3 id="orientation"><a class="docs-section-anchor" href="#orientation">Orientation</a></h3>
+          <p>
+            Horizontal uses two columns. Responsive stays vertical below 40 rem and uses the same two
+            columns on wider surfaces. Vertical is the safe default for narrow or translated forms.
+          </p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><FieldDocsDemo client:load variant="orientation" /></div>
+            <CodeBlock code={orientationCode} lang="vue" collapsible revealId="field-orientation-code" />
+          </div>
+
+          <h3 id="states"><a class="docs-section-anchor" href="#states">Disabled and Read-only</a></h3>
+          <p>
+            Disabled controls cannot receive focus or submit a value. Read-only inputs remain focusable
+            and selectable. Native select does not support read-only state.
+          </p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><FieldDocsDemo client:load variant="states" /></div>
+            <CodeBlock code={statesCode} lang="vue" collapsible revealId="field-states-code" />
+          </div>
+        </section>
+
+        <section id="accessibility" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#accessibility">Accessibility</a></h2>
+          <ul>
+            <li>Use one visible label for each control. Do not use placeholder text as the only label.</li>
+            <li>HelperText is referenced with <code>aria-describedby</code> while it exists.</li>
+            <li>Invalid controls receive <code>aria-invalid</code> and reference ErrorText with <code>aria-errormessage</code>.</li>
+            <li>ErrorText uses <code>aria-live="polite"</code>. Do not also place it in another live region.</li>
+            <li>RequiredIndicator is visual and hidden from assistive technology; the native control has <code>required</code>.</li>
+            <li>Use <code>disabled</code> only when the user cannot act. Prefer read-only when they must inspect or copy a value.</li>
+            <li>For multiple controls, use Item and give each non-target control its own accessible label.</li>
+          </ul>
+        </section>
+
+        <section id="api-reference" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#api-reference">API Reference</a></h2>
+          <div class="docs-api-group">
+            <h3 id="root-api"><a class="docs-section-anchor" href="#root-api">Field.Root</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>{rootProps.map((prop) => <tr><td><code>{prop.name}</code></td><td><code>{prop.type}</code></td><td><code>{prop.defaultValue}</code></td><td>{prop.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="control-api"><a class="docs-section-anchor" href="#control-api">Native Controls</a></h3>
+            <p>Native input, textarea, and select attributes and listeners pass through to their elements.</p>
+            <div class="docs-api-table"><table><thead><tr><th>Part</th><th>Prop</th><th>Type</th><th>Description</th></tr></thead><tbody>{controlProps.map((prop) => <tr><td><code>{prop.part}</code></td><td><code>{prop.prop}</code></td><td><code>{prop.type}</code></td><td>{prop.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="parts"><a class="docs-section-anchor" href="#parts">Parts</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Part</th><th>Description</th></tr></thead><tbody>{parts.map((part) => <tr><td><code>Field.{part.name}</code></td><td>{part.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="exports"><a class="docs-section-anchor" href="#exports">Exports</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Export</th><th>Description</th></tr></thead><tbody>{exportsList.map((item) => <tr><td><code>{item.name}</code></td><td>{item.description}</td></tr>)}</tbody></table></div>
+          </div>
+        </section>
+
+        <DocsPageNavigation currentPath={currentPath} />
+      </article>
+
+      <aside class="docs-page-toc" aria-label="On this page">
+        <div class="docs-page-toc__inner">
+          <span class="docs-page-toc__title">On this page</span>
+          <ul>
+            <li><a href="#installation" data-toc-link="installation">Installation</a><ul><li><a href="#barrel" data-toc-link="barrel">Barrel</a></li><li><a href="#granular" data-toc-link="granular">Granular</a></li></ul></li>
+            <li><a href="#usage" data-toc-link="usage">Usage</a></li>
+            <li><a href="#composition" data-toc-link="composition">Composition</a></li>
+            <li><a href="#examples" data-toc-link="examples">Examples</a><ul><li><a href="#basic" data-toc-link="basic">Basic</a></li><li><a href="#textarea" data-toc-link="textarea">Textarea</a></li><li><a href="#select" data-toc-link="select">Select</a></li><li><a href="#validation" data-toc-link="validation">Validation</a></li><li><a href="#required-optional" data-toc-link="required-optional">Required and Optional</a></li><li><a href="#checkbox" data-toc-link="checkbox">Checkbox</a></li><li><a href="#multiple-controls" data-toc-link="multiple-controls">Multiple Controls</a></li><li><a href="#orientation" data-toc-link="orientation">Orientation</a></li><li><a href="#states" data-toc-link="states">Disabled and Read-only</a></li></ul></li>
+            <li><a href="#accessibility" data-toc-link="accessibility">Accessibility</a></li>
+            <li><a href="#api-reference" data-toc-link="api-reference">API Reference</a><ul><li><a href="#root-api" data-toc-link="root-api">Field.Root</a></li><li><a href="#control-api" data-toc-link="control-api">Native Controls</a></li><li><a href="#parts" data-toc-link="parts">Parts</a></li><li><a href="#exports" data-toc-link="exports">Exports</a></li></ul></li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+  </div>
+</DocsLayout>

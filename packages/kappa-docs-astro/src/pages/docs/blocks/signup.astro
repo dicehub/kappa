@@ -1,0 +1,84 @@
+---
+import CodeBlock from "../../../components/CodeBlock.astro";
+import CopyPageControls from "../../../components/CopyPageControls.vue";
+import DocsPageNavigation from "../../../components/DocsPageNavigation.astro";
+import SignupBlocksDocsDemo from "../../../components/SignupBlocksDocsDemo.vue";
+import { signupBlocks, signupBlockSource } from "../../../data/signup-blocks";
+import DocsLayout from "../../../layouts/DocsLayout.astro";
+import "../../../styles/docs-components.css";
+import "../../../styles/docs-blocks.css";
+
+const currentPath = "/docs/blocks/signup";
+const description = "Responsive account-creation layouts for dicehub-style identity, namespace, password, consent, and provider flows.";
+---
+
+<DocsLayout title="Signup" description={description}>
+  <div class="docs-page docs-page--component docs-page--blocks">
+    <header class="docs-page-header"><div class="docs-page-header__inner"><div class="docs-page-header__content">
+      <div class="docs-page-header__mobile-actions"><CopyPageControls client:only="vue" align="center" /></div>
+      <div class="docs-page-header__title-row"><h1>Signup</h1><div class="docs-page-header__navigation-actions">
+        <div class="docs-page-header__desktop-actions"><CopyPageControls client:only="vue" /></div>
+        <DocsPageNavigation currentPath={currentPath} variant="compact" />
+      </div></div>
+      <p class="docs-page-header__lede">{description}</p>
+    </div></div></header>
+
+    <div class="docs-page-body">
+      <article class="docs-article docs-article--component">
+        <section id="overview" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#overview">Overview</a></h2>
+          <p><code>LoginLayout</code> also provides the responsive page structure for account creation. The application supplies validation, account checks, provider actions, routing, and the signup service.</p>
+          <div class="docs-api-table"><table><thead><tr><th>Kappa component</th><th>Purpose</th></tr></thead><tbody>
+            <tr><td><code>LoginLayout</code></td><td>Centered, split, panel, and media-card authentication structures.</td></tr>
+            <tr><td><a href="/docs/components/field">Field</a></td><td>Names, email address, username, and password inputs.</td></tr>
+            <tr><td><a href="/docs/components/checkbox">Checkbox</a></td><td>Required agreement to account policies.</td></tr>
+            <tr><td><a href="/docs/components/button">Button</a></td><td>Submit and identity-provider actions.</td></tr>
+            <tr><td><a href="/docs/components/link">Link</a></td><td>Namespace previews, policies, and sign-in navigation.</td></tr>
+          </tbody></table></div>
+        </section>
+
+        <section id="layouts" class="docs-section docs-section--component-examples">
+          <h2><a class="docs-section-anchor" href="#layouts">Layouts</a></h2>
+          {signupBlocks.map(block => <>
+            <h3 id={block.id}><a class="docs-section-anchor" href={`#${block.id}`}>{block.title}</a></h3>
+            <p>{block.description}</p>
+            <div class="docs-component-example docs-block-example" data-block-example={block.id}>
+              <div class="docs-block-example__bar">
+                <span>Signup · {block.id}</span>
+                <a href={`/examples/signup/${block.id}`} target="_blank" rel="noopener noreferrer">Open full example <span aria-hidden="true">↗</span><span class="docs-block-example__sr-only"> (new tab)</span></a>
+              </div>
+              <div class="docs-component-preview docs-block-example__preview">
+                <SignupBlocksDocsDemo client:load variant={block.id} />
+              </div>
+              <CodeBlock code={signupBlockSource(block.id)} lang="vue" collapsible revealId={`signup-block-${block.id}-code`} />
+            </div>
+          </>)}
+        </section>
+
+        <section id="usage" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#usage">Usage and Composition</a></h2>
+          <p>Import <code>LoginLayout</code> and the form controls from <code>@dicehub/kappa</code>. Keep username availability, email uniqueness, password policy, consent records, and provider setup in the application.</p>
+          <p>The complete example uses one full-name field and a fluid form width, so it does not copy the fixed-width overflow of the existing application page.</p>
+        </section>
+
+        <section id="accessibility" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#accessibility">Accessibility and Security</a></h2>
+          <p>The examples use native forms, named fields, browser autocomplete values, required controls, visible focus, and polite status messages. The password visibility control has an explicit accessible name. Helper text explains how account data is used.</p>
+          <p>Validate every value on the server. Check email and username availability without exposing other accounts. Hash passwords with a current password-hashing function, apply rate limits, and send account data only over HTTPS.</p>
+        </section>
+
+        <DocsPageNavigation currentPath={currentPath} />
+      </article>
+
+      <aside class="docs-page-toc" aria-label="On this page"><div class="docs-page-toc__inner">
+        <span class="docs-page-toc__title">On this page</span>
+        <ul>
+          <li><a href="#overview" data-toc-link="overview">Overview</a></li>
+          <li><a href="#layouts" data-toc-link="layouts">Layouts</a><ul>{signupBlocks.map(block => <li><a href={`#${block.id}`} data-toc-link={block.id}>{block.title}</a></li>)}</ul></li>
+          <li><a href="#usage" data-toc-link="usage">Usage and Composition</a></li>
+          <li><a href="#accessibility" data-toc-link="accessibility">Accessibility and Security</a></li>
+        </ul>
+      </div></aside>
+    </div>
+  </div>
+</DocsLayout>

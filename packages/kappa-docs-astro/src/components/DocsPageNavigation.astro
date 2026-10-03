@@ -1,0 +1,56 @@
+---
+import { getAdjacentDocsPages } from "../lib/docs-page-navigation";
+
+interface Props {
+  currentPath: string;
+  variant?: "compact" | "footer";
+}
+
+const { currentPath, variant = "footer" } = Astro.props;
+const { next, previous } = getAdjacentDocsPages(currentPath);
+const label = variant === "compact" ? "Adjacent documentation pages" : "Documentation pagination";
+---
+
+{
+  (previous || next) && (
+    <nav
+      class:list={["docs-page-pagination", `docs-page-pagination--${variant}`]}
+      aria-label={label}
+      data-copy-ignore
+    >
+      {previous && (
+        <a
+          class="docs-page-pagination__link docs-page-pagination__link--previous"
+          href={previous.href}
+          rel="prev"
+          aria-label={variant === "compact" ? `Previous page: ${previous.label}` : undefined}
+          title={variant === "compact" ? `Previous: ${previous.label}` : undefined}
+        >
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M5 12h14" />
+            <path d="m5 12 6 6" />
+            <path d="m5 12 6-6" />
+          </svg>
+          {variant === "footer" && <span>{previous.label}</span>}
+        </a>
+      )}
+
+      {next && (
+        <a
+          class="docs-page-pagination__link docs-page-pagination__link--next"
+          href={next.href}
+          rel="next"
+          aria-label={variant === "compact" ? `Next page: ${next.label}` : undefined}
+          title={variant === "compact" ? `Next: ${next.label}` : undefined}
+        >
+          {variant === "footer" && <span>{next.label}</span>}
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M5 12h14" />
+            <path d="m13 18 6-6" />
+            <path d="m13 6 6 6" />
+          </svg>
+        </a>
+      )}
+    </nav>
+  )
+}

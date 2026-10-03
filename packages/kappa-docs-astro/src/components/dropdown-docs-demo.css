@@ -1,0 +1,51 @@
+.dropdown-demo {
+  display: flex;
+  inline-size: 100%;
+  min-inline-size: 0;
+  min-block-size: 7rem;
+  align-items: center;
+  justify-content: center;
+  color: var(--docs-default);
+  font-family: var(--docs-font-sans);
+}
+
+.dropdown-demo__stack {
+  display: grid;
+  justify-items: center;
+  gap: 0.625rem;
+}
+
+.dropdown-demo output {
+  color: var(--docs-subtle);
+  font-family: var(--docs-font-mono);
+  font-size: 0.75rem;
+}
+
+.dropdown-demo__context-zone {
+  display: grid;
+  inline-size: min(100%, 22rem);
+  min-block-size: 7.5rem;
+  place-items: center;
+  padding: 1rem;
+  border: 1px dashed var(--docs-border-strong);
+  border-radius: 0.625rem;
+  background:
+    linear-gradient(var(--docs-surface), var(--docs-surface)) padding-box,
+    repeating-linear-gradient(
+        135deg,
+        transparent 0,
+        transparent 8px,
+        color-mix(in srgb, var(--docs-accent) 5%, transparent) 8px,
+        color-mix(in srgb, var(--docs-accent) 5%, transparent) 16px
+      )
+      border-box;
+  color: var(--docs-subtle);
+  cursor: context-menu;
+  font: inherit;
+  font-size: 0.8125rem;
+}
+
+.dropdown-demo__context-zone:focus-visible {
+  outline: 2px solid var(--docs-focus);
+  outline-offset: 3px;
+}

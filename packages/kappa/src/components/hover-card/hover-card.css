@@ -1,0 +1,227 @@
+.kappa-hover-card__trigger {
+  display: inline-flex;
+  inline-size: max-content;
+  min-block-size: 0;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 0;
+  margin: 0;
+  background: transparent;
+  color: inherit;
+  cursor: help;
+  font: inherit;
+  line-height: inherit;
+}
+
+.kappa-hover-card__trigger:focus-visible {
+  border-radius: var(--kappa-radius-sm, 0.25rem);
+  outline: none;
+  box-shadow:
+    0 0 0 1px var(--kappa-focus, #4c63ff),
+    0 0 0 3px var(--kappa-focus-soft, rgba(76, 99, 255, 0.16));
+}
+
+.kappa-hover-card__trigger:disabled,
+.kappa-hover-card__trigger[data-disabled] {
+  cursor: not-allowed;
+  opacity: var(--kappa-disabled-opacity, 0.58);
+  pointer-events: none;
+}
+
+.kappa-hover-card__positioner {
+  /* Ark writes this variable inline, so Kappa must win the cascade here. */
+  --z-index: var(--kappa-popover-z-index, 1100) !important;
+
+  max-inline-size: min(var(--available-width, calc(100vw - 1.5rem)), calc(100vw - 1.5rem));
+}
+
+.kappa-hover-card__content {
+  --kappa-hover-card-enter-x: 0;
+  --kappa-hover-card-enter-y: -0.25rem;
+
+  box-sizing: border-box;
+  display: flex;
+  inline-size: max-content;
+  min-inline-size: min(
+    var(--kappa-popover-min-inline-size, 16rem),
+    var(--available-width, calc(100vw - 1.5rem)),
+    calc(100vw - 1.5rem)
+  );
+  max-inline-size: min(
+    var(--kappa-popover-max-inline-size, 28rem),
+    var(--available-width, calc(100vw - 1.5rem)),
+    calc(100vw - 1.5rem)
+  );
+  max-block-size: min(var(--available-height, 28rem), var(--kappa-popover-max-block-size, 28rem));
+  flex-direction: column;
+  gap: 0.625rem;
+  padding: var(--kappa-popover-padding, 1rem);
+  overflow: auto;
+  overscroll-behavior: contain;
+  border: 1px solid var(--kappa-line, #e3e6eb);
+  border-radius: var(--kappa-radius-lg, 0.625rem);
+  background: var(--kappa-control, #ffffff);
+  box-shadow: var(
+    --kappa-popover-shadow,
+    0 12px 32px -10px rgba(16, 24, 40, 0.2),
+    0 3px 8px -3px rgba(16, 24, 40, 0.12)
+  );
+  color: var(--kappa-default, #17191f);
+  font-family: var(--kappa-font-sans, inherit);
+  font-size: 0.8125rem;
+  line-height: 1.25rem;
+  outline: none;
+  scrollbar-color: var(--kappa-line, #e3e6eb) transparent;
+  scrollbar-width: thin;
+  transform-origin: var(--transform-origin);
+}
+
+.kappa-hover-card__content[data-side="top"] {
+  --kappa-hover-card-enter-y: 0.25rem;
+}
+
+.kappa-hover-card__content[data-side="left"] {
+  --kappa-hover-card-enter-x: 0.25rem;
+  --kappa-hover-card-enter-y: 0;
+}
+
+.kappa-hover-card__content[data-side="right"] {
+  --kappa-hover-card-enter-x: -0.25rem;
+  --kappa-hover-card-enter-y: 0;
+}
+
+.kappa-hover-card__content[data-state="open"] {
+  animation: kappa-hover-card-in 140ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.kappa-hover-card__content[data-state="closed"] {
+  opacity: 0;
+  pointer-events: none;
+  visibility: hidden;
+  animation: kappa-hover-card-out 90ms ease-out;
+}
+
+.kappa-hover-card__content :where(h2, h3, h4, p) {
+  margin: 0;
+}
+
+.kappa-hover-card__content :where(h2, h3, h4) {
+  color: var(--kappa-emphasis, #17191f);
+  font-size: 0.9375rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.25rem;
+}
+
+.kappa-hover-card__content :where(p) {
+  color: var(--kappa-subtle, #6c7480);
+}
+
+.kappa-hover-card__content :where(a) {
+  color: var(--kappa-link-color, var(--kappa-accent, #4c63ff));
+  text-decoration-thickness: 0.08em;
+  text-underline-offset: 0.15em;
+}
+
+.kappa-hover-card__content :where(a):focus-visible {
+  border-radius: var(--kappa-radius-sm, 0.25rem);
+  outline: 2px solid var(--kappa-focus, #4c63ff);
+  outline-offset: 2px;
+}
+
+.kappa-hover-card__arrow {
+  --arrow-background: var(--kappa-control, #ffffff);
+  --arrow-size: 0.625rem;
+
+  color: var(--kappa-line, #e3e6eb);
+  opacity: 0;
+  visibility: hidden;
+  z-index: 2;
+}
+
+.kappa-hover-card__positioner:has(> .kappa-hover-card__content[data-state="open"]) > .kappa-hover-card__arrow {
+  opacity: 1;
+  visibility: visible;
+  animation: kappa-hover-card-arrow-in 70ms ease-out 70ms both;
+}
+
+.kappa-hover-card__positioner:has(> .kappa-hover-card__content[data-side="bottom"])
+  > .kappa-hover-card__arrow {
+  transform: translateY(1px);
+}
+
+.kappa-hover-card__positioner:has(> .kappa-hover-card__content[data-side="top"])
+  > .kappa-hover-card__arrow {
+  transform: translateY(-1px);
+}
+
+.kappa-hover-card__positioner:has(> .kappa-hover-card__content[data-side="right"])
+  > .kappa-hover-card__arrow {
+  transform: translateX(1px);
+}
+
+.kappa-hover-card__positioner:has(> .kappa-hover-card__content[data-side="left"])
+  > .kappa-hover-card__arrow {
+  transform: translateX(-1px);
+}
+
+.kappa-hover-card__arrow-tip {
+  border: 0;
+  clip-path: polygon(0 0, 100% 0, 0 100%);
+  border-block-start: 1px solid currentColor;
+}
+
+.kappa-hover-card__arrow-tip[dir="ltr"] {
+  border-inline-start: 1px solid currentColor;
+}
+
+.kappa-hover-card__arrow-tip[dir="rtl"] {
+  border-inline-end: 1px solid currentColor;
+}
+
+@keyframes kappa-hover-card-in {
+  from {
+    opacity: 0;
+    transform: translate(var(--kappa-hover-card-enter-x), var(--kappa-hover-card-enter-y)) scale(0.985);
+  }
+}
+
+@keyframes kappa-hover-card-out {
+  to {
+    opacity: 0;
+    transform: translate(var(--kappa-hover-card-enter-x), var(--kappa-hover-card-enter-y)) scale(0.985);
+  }
+}
+
+@keyframes kappa-hover-card-arrow-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kappa-hover-card__content[data-state],
+  .kappa-hover-card__arrow {
+    animation: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .kappa-hover-card__content {
+    border-color: CanvasText;
+    background: Canvas;
+    box-shadow: none;
+    color: CanvasText;
+  }
+
+  .kappa-hover-card__content :where(h2, h3, h4, p, a) {
+    color: CanvasText;
+  }
+
+  .kappa-hover-card__arrow {
+    --arrow-background: Canvas;
+
+    color: CanvasText;
+  }
+}

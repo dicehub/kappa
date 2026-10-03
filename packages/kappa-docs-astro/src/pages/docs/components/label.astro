@@ -1,0 +1,223 @@
+---
+import CodeBlock from "../../../components/CodeBlock.astro";
+import CompositionTree from "../../../components/CompositionTree.astro";
+import CopyPageControls from "../../../components/CopyPageControls.vue";
+import DocsPageNavigation from "../../../components/DocsPageNavigation.astro";
+import LabelDocsDemo from "../../../components/LabelDocsDemo.vue";
+import {
+  associationCode,
+  barrelCode,
+  contentCode,
+  dataSlots,
+  disabledCode,
+  exportsList,
+  granularCode,
+  guidanceCode,
+  labelProps,
+  optionalCode,
+  previewCode,
+  rtlCode,
+  slots,
+  usageCode,
+  wrappedCode,
+} from "../../../data/label-docs";
+import DocsLayout from "../../../layouts/DocsLayout.astro";
+import "../../../styles/docs-components.css";
+
+const currentPath = "/docs/components/label";
+const description = "Names a native form control with clear association and compact Kappa typography.";
+---
+
+<DocsLayout title="Label" description={description}>
+  <div class="docs-page docs-page--component">
+    <header class="docs-page-header">
+      <div class="docs-page-header__inner">
+        <div class="docs-page-header__content">
+          <div class="docs-page-header__mobile-actions">
+            <CopyPageControls client:only="vue" align="center" />
+          </div>
+          <div class="docs-page-header__title-row">
+            <h1>Label</h1>
+            <div class="docs-page-header__navigation-actions">
+              <div class="docs-page-header__desktop-actions"><CopyPageControls client:only="vue" /></div>
+              <DocsPageNavigation currentPath={currentPath} variant="compact" />
+            </div>
+          </div>
+          <p class="docs-page-header__lede">{description}</p>
+        </div>
+      </div>
+    </header>
+
+    <div class="docs-page-body">
+      <article class="docs-article docs-article--component">
+        <section id="preview" class="docs-section">
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><LabelDocsDemo client:load variant="preview" /></div>
+            <CodeBlock code={previewCode} lang="vue" collapsible revealId="label-preview-code" />
+          </div>
+        </section>
+
+        <section id="installation" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#installation">Installation</a></h2>
+          <p>
+            Label is part of the main Kappa package. It renders native HTML and has no Ark UI state
+            machine or additional runtime dependency.
+          </p>
+          <h3 id="barrel"><a class="docs-section-anchor" href="#barrel">Barrel</a></h3>
+          <CodeBlock code={barrelCode} lang="javascript" />
+          <h3 id="granular"><a class="docs-section-anchor" href="#granular">Granular</a></h3>
+          <CodeBlock code={granularCode} lang="javascript" />
+        </section>
+
+        <section id="usage" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#usage">Usage</a></h2>
+          <p>
+            Match <code>for</code> to the control <code>id</code>. A click on the visible text then
+            focuses or activates the control. Label forwards native attributes, data attributes,
+            event listeners, and consumer classes to its root.
+          </p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><LabelDocsDemo client:load variant="basic" /></div>
+            <CodeBlock code={usageCode} lang="vue" collapsible revealId="label-usage-code" />
+          </div>
+        </section>
+
+        <section id="composition" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#composition">Composition</a></h2>
+          <CompositionTree component="label" label="Rendered structure" />
+          <p>
+            Ark UI has no separate Label primitive; its labels belong to components such as
+            <a href="https://ark-ui.com/docs/components/field">Field</a>.
+          </p>
+          <ul>
+            <li>Use standalone Label with a native control that already owns its state and messages.</li>
+            <li>Use <a href="/docs/components/field">Field.Label</a> for required, invalid, disabled, helper, or error state.</li>
+            <li>Use a compound control's connected label, such as <code>Checkbox.Label</code>, when one exists.</li>
+            <li><code>asContent</code> provides Kappa text inside that connected label without nesting labels.</li>
+          </ul>
+          <p>
+            Label does not include a tooltip prop. Do not place a focusable help trigger inside a
+            native label. Put persistent guidance after the control or compose a separate Tooltip trigger.
+          </p>
+        </section>
+
+        <section id="examples" class="docs-section docs-section--component-examples">
+          <h2><a class="docs-section-anchor" href="#examples">Examples</a></h2>
+
+          <h3 id="optional"><a class="docs-section-anchor" href="#optional">Optional Text</a></h3>
+          <p>
+            Use <code>showOptional</code> only when optional fields need explicit contrast. Translate
+            <code>optionalText</code> for the current locale.
+          </p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><LabelDocsDemo client:load variant="optional" /></div>
+            <CodeBlock code={optionalCode} lang="vue" collapsible revealId="label-optional-code" />
+          </div>
+
+          <h3 id="html-for"><a class="docs-section-anchor" href="#html-for">htmlFor Alias</a></h3>
+          <p>
+            Use native <code>for</code> in Vue templates. <code>htmlFor</code> is an alias for
+            generated prop objects.
+          </p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><LabelDocsDemo client:load variant="association" /></div>
+            <CodeBlock code={associationCode} lang="vue" collapsible revealId="label-association-code" />
+          </div>
+
+          <h3 id="wrapped-control"><a class="docs-section-anchor" href="#wrapped-control">Wrapped Control</a></h3>
+          <p>A native label can wrap a simple control when a separate id association is not useful.</p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><LabelDocsDemo client:load variant="wrapped" /></div>
+            <CodeBlock code={wrappedCode} lang="vue" collapsible revealId="label-wrapped-code" />
+          </div>
+
+          <h3 id="content-composition"><a class="docs-section-anchor" href="#content-composition">Content Composition</a></h3>
+          <p>
+            Use <code>asContent</code> inside a compound control label. It renders a span and inherits
+            the surrounding type treatment, so the document contains only one semantic label.
+          </p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><LabelDocsDemo client:load variant="content" /></div>
+            <CodeBlock code={contentCode} lang="vue" collapsible revealId="label-content-code" />
+          </div>
+
+          <h3 id="guidance"><a class="docs-section-anchor" href="#guidance">Persistent Guidance</a></h3>
+          <p>
+            Keep important instructions visible and connect them with <code>aria-describedby</code>.
+            Use Field when the application also needs shared validation or disabled state.
+          </p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><LabelDocsDemo client:load variant="guidance" /></div>
+            <CodeBlock code={guidanceCode} lang="vue" collapsible revealId="label-guidance-code" />
+          </div>
+
+          <h3 id="disabled"><a class="docs-section-anchor" href="#disabled">Disabled</a></h3>
+          <p>
+            Native labels have no disabled attribute. Disable the control and add
+            <code>data-disabled</code> or <code>aria-disabled="true"</code> to Label for matching presentation.
+          </p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><LabelDocsDemo client:load variant="disabled" /></div>
+            <CodeBlock code={disabledCode} lang="vue" collapsible revealId="label-disabled-code" />
+          </div>
+
+          <h3 id="right-to-left"><a class="docs-section-anchor" href="#right-to-left">Right to Left</a></h3>
+          <p>Logical layout and inline spacing follow the inherited writing direction.</p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><LabelDocsDemo client:load variant="rtl" /></div>
+            <CodeBlock code={rtlCode} lang="vue" collapsible revealId="label-rtl-code" />
+          </div>
+        </section>
+
+        <section id="accessibility" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#accessibility">Accessibility</a></h2>
+          <ul>
+            <li>Give every form control a concise accessible name. Keep visible labels whenever possible.</li>
+            <li>Match <code>for</code> and <code>id</code>, or wrap a simple native control.</li>
+            <li>Do not use a bare <code>span</code> as the only accessible label for a native control.</li>
+            <li>Optional text is visual guidance. The control's native <code>required</code> state remains authoritative.</li>
+            <li>Do not place buttons, links, or tooltip triggers inside a native label.</li>
+            <li>Translate both visible label text and <code>optionalText</code>.</li>
+          </ul>
+        </section>
+
+        <section id="api-reference" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#api-reference">API Reference</a></h2>
+          <div class="docs-api-group">
+            <h3 id="label-api"><a class="docs-section-anchor" href="#label-api">Label</a></h3>
+            <p>Renders a native label by default. Native attributes and listeners pass to the root.</p>
+            <div class="docs-api-table"><table><thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>{labelProps.map((prop) => <tr><td><code>{prop.name}</code></td><td><code>{prop.type}</code></td><td><code>{prop.defaultValue}</code></td><td>{prop.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="slots"><a class="docs-section-anchor" href="#slots">Slots</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Slot</th><th>Description</th></tr></thead><tbody>{slots.map((slot) => <tr><td><code>{slot.name}</code></td><td>{slot.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="data-slots"><a class="docs-section-anchor" href="#data-slots">Data Slots</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Slot</th><th>Element</th><th>Description</th></tr></thead><tbody>{dataSlots.map((part) => <tr><td><code>{part.name}</code></td><td><code>{part.element}</code></td><td>{part.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="exports"><a class="docs-section-anchor" href="#exports">Exports</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Export</th><th>Description</th></tr></thead><tbody>{exportsList.map((item) => <tr><td><code>{item.name}</code></td><td>{item.description}</td></tr>)}</tbody></table></div>
+          </div>
+        </section>
+
+        <DocsPageNavigation currentPath={currentPath} />
+      </article>
+
+      <aside class="docs-page-toc" aria-label="On this page">
+        <div class="docs-page-toc__inner">
+          <span class="docs-page-toc__title">On this page</span>
+          <ul>
+            <li><a href="#installation" data-toc-link="installation">Installation</a><ul><li><a href="#barrel" data-toc-link="barrel">Barrel</a></li><li><a href="#granular" data-toc-link="granular">Granular</a></li></ul></li>
+            <li><a href="#usage" data-toc-link="usage">Usage</a></li>
+            <li><a href="#composition" data-toc-link="composition">Composition</a></li>
+            <li><a href="#examples" data-toc-link="examples">Examples</a><ul><li><a href="#optional" data-toc-link="optional">Optional Text</a></li><li><a href="#html-for" data-toc-link="html-for">htmlFor Alias</a></li><li><a href="#wrapped-control" data-toc-link="wrapped-control">Wrapped Control</a></li><li><a href="#content-composition" data-toc-link="content-composition">Content Composition</a></li><li><a href="#guidance" data-toc-link="guidance">Persistent Guidance</a></li><li><a href="#disabled" data-toc-link="disabled">Disabled</a></li><li><a href="#right-to-left" data-toc-link="right-to-left">Right to Left</a></li></ul></li>
+            <li><a href="#accessibility" data-toc-link="accessibility">Accessibility</a></li>
+            <li><a href="#api-reference" data-toc-link="api-reference">API Reference</a><ul><li><a href="#label-api" data-toc-link="label-api">Label</a></li><li><a href="#slots" data-toc-link="slots">Slots</a></li><li><a href="#data-slots" data-toc-link="data-slots">Data Slots</a></li><li><a href="#exports" data-toc-link="exports">Exports</a></li></ul></li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+  </div>
+</DocsLayout>

@@ -1,0 +1,263 @@
+---
+import CodeBlock from "../../../components/CodeBlock.astro";
+import CopyPageControls from "../../../components/CopyPageControls.vue";
+import DocsPageNavigation from "../../../components/DocsPageNavigation.astro";
+import SkeletonLineDocsDemo from "../../../components/SkeletonLineDocsDemo.vue";
+import {
+  barrelCode,
+  blockHeightCode,
+  cardCode,
+  exportsList,
+  granularCode,
+  heightsCode,
+  previewCode,
+  skeletonLineProps,
+  staticCode,
+  tableCode,
+  usageCode,
+  widthsCode,
+} from "../../../data/skeleton-line-docs";
+import DocsLayout from "../../../layouts/DocsLayout.astro";
+import "../../../styles/docs-components.css";
+
+const currentPath = "/docs/components/skeleton-line";
+const description =
+  "A deterministic placeholder line that preserves layout while content loads.";
+---
+
+<DocsLayout title="Skeleton Line" description={description}>
+  <div class="docs-page docs-page--component">
+    <header class="docs-page-header">
+      <div class="docs-page-header__inner">
+        <div class="docs-page-header__content">
+          <div class="docs-page-header__mobile-actions">
+            <CopyPageControls client:only="vue" align="center" />
+          </div>
+          <div class="docs-page-header__title-row">
+            <h1>Skeleton Line</h1>
+            <div class="docs-page-header__navigation-actions">
+              <div class="docs-page-header__desktop-actions">
+                <CopyPageControls client:only="vue" />
+              </div>
+              <DocsPageNavigation currentPath={currentPath} variant="compact" />
+            </div>
+          </div>
+          <p class="docs-page-header__lede">{description}</p>
+        </div>
+      </div>
+    </header>
+
+    <div class="docs-page-body">
+      <article class="docs-article docs-article--component">
+        <section id="preview" class="docs-section">
+          <div class="docs-component-example">
+            <div class="docs-component-preview">
+              <SkeletonLineDocsDemo variant="preview" />
+            </div>
+            <CodeBlock
+              code={previewCode}
+              lang="vue"
+              collapsible
+              revealId="skeleton-line-preview-code"
+            />
+          </div>
+        </section>
+
+        <section id="installation" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#installation">Installation</a></h2>
+          <p>
+            Skeleton Line is part of the main Kappa package. It has no runtime state machine or
+            dependency beyond Vue.
+          </p>
+          <h3 id="barrel"><a class="docs-section-anchor" href="#barrel">Barrel</a></h3>
+          <CodeBlock code={barrelCode} lang="javascript" />
+          <h3 id="granular"><a class="docs-section-anchor" href="#granular">Granular</a></h3>
+          <CodeBlock code={granularCode} lang="javascript" />
+        </section>
+
+        <section id="usage" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#usage">Usage</a></h2>
+          <p>
+            Match each line to the content that will replace it. Put the loading status on the
+            surrounding region because every Skeleton Line is decorative.
+          </p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview">
+              <SkeletonLineDocsDemo variant="basic" />
+            </div>
+            <CodeBlock
+              code={usageCode}
+              lang="vue"
+              collapsible
+              revealId="skeleton-line-usage-code"
+            />
+          </div>
+        </section>
+
+        <section id="design" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#design">Design</a></h2>
+          <p>
+            Use width and height for exact placeholder dimensions.
+            The composition examples cover text, card, and table placeholders.
+          </p>
+          <p>
+            Kappa uses exact width and height values instead of random ranges. This keeps server
+            output, hydration, screenshots, and reserved layout stable. The scan uses one calm
+            motion pattern and stops when reduced motion is active.
+          </p>
+        </section>
+
+        <section id="examples" class="docs-section docs-section--component-examples">
+          <h2><a class="docs-section-anchor" href="#examples">Examples</a></h2>
+
+          <h3 id="widths"><a class="docs-section-anchor" href="#widths">Exact Widths</a></h3>
+          <p>Use CSS lengths or positive pixel numbers to reserve the expected line width.</p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview">
+              <SkeletonLineDocsDemo variant="widths" />
+            </div>
+            <CodeBlock
+              code={widthsCode}
+              lang="vue"
+              collapsible
+              revealId="skeleton-line-widths-code"
+            />
+          </div>
+
+          <h3 id="heights"><a class="docs-section-anchor" href="#heights">Heights</a></h3>
+          <p>Change the line thickness to match the text or control that is loading.</p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview">
+              <SkeletonLineDocsDemo variant="heights" />
+            </div>
+            <CodeBlock
+              code={heightsCode}
+              lang="vue"
+              collapsible
+              revealId="skeleton-line-heights-code"
+            />
+          </div>
+
+          <h3 id="block-height">
+            <a class="docs-section-anchor" href="#block-height">Block Height</a>
+          </h3>
+          <p>Reserve a taller row and keep the line vertically centered in that space.</p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview">
+              <SkeletonLineDocsDemo variant="block-height" />
+            </div>
+            <CodeBlock
+              code={blockHeightCode}
+              lang="vue"
+              collapsible
+              revealId="skeleton-line-block-height-code"
+            />
+          </div>
+
+          <h3 id="card"><a class="docs-section-anchor" href="#card">Card</a></h3>
+          <p>Combine fixed and flexible lines to keep a profile surface stable while it loads.</p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview">
+              <SkeletonLineDocsDemo variant="card" />
+            </div>
+            <CodeBlock
+              code={cardCode}
+              lang="vue"
+              collapsible
+              revealId="skeleton-line-card-code"
+            />
+          </div>
+
+          <h3 id="table"><a class="docs-section-anchor" href="#table">Table</a></h3>
+          <p>Repeat the expected column structure without inventing temporary data.</p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview">
+              <SkeletonLineDocsDemo variant="table" />
+            </div>
+            <CodeBlock
+              code={tableCode}
+              lang="vue"
+              collapsible
+              revealId="skeleton-line-table-code"
+            />
+          </div>
+
+          <h3 id="static"><a class="docs-section-anchor" href="#static">Static</a></h3>
+          <p>Disable the scan when motion does not add useful loading feedback.</p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview">
+              <SkeletonLineDocsDemo variant="static" />
+            </div>
+            <CodeBlock
+              code={staticCode}
+              lang="vue"
+              collapsible
+              revealId="skeleton-line-static-code"
+            />
+          </div>
+        </section>
+
+        <section id="accessibility" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#accessibility">Accessibility</a></h2>
+          <ul>
+            <li>Skeleton Line is always decorative and has <code>aria-hidden="true"</code>.</li>
+            <li>Set <code>aria-busy="true"</code> on the region that will receive the content.</li>
+            <li>Add one short status message for the whole loading region.</li>
+            <li>Replace the complete skeleton region when the content is ready.</li>
+            <li>Show an error or empty state if loading cannot finish.</li>
+            <li>Use a progress indicator when the application knows the completion value.</li>
+          </ul>
+        </section>
+
+        <section id="api-reference" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#api-reference">API Reference</a></h2>
+          <div class="docs-api-group">
+            <h3 id="skeleton-line-api">
+              <a class="docs-section-anchor" href="#skeleton-line-api">SkeletonLine</a>
+            </h3>
+            <p>Renders a decorative span and forwards native attributes to the visible line.</p>
+            <div class="docs-api-table">
+              <table>
+                <thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+                <tbody>
+                  {skeletonLineProps.map((prop) => (
+                    <tr><td><code>{prop.name}</code></td><td><code>{prop.type}</code></td><td><code>{prop.defaultValue}</code></td><td>{prop.description}</td></tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="exports"><a class="docs-section-anchor" href="#exports">Exports</a></h3>
+            <div class="docs-api-table">
+              <table>
+                <thead><tr><th>Export</th><th>Description</th></tr></thead>
+                <tbody>
+                  {exportsList.map((item) => (
+                    <tr><td><code>{item.name}</code></td><td>{item.description}</td></tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <DocsPageNavigation currentPath={currentPath} />
+      </article>
+
+      <aside class="docs-page-toc" aria-label="On this page">
+        <div class="docs-page-toc__inner">
+          <span class="docs-page-toc__title">On this page</span>
+          <ul>
+            <li><a href="#installation" data-toc-link="installation">Installation</a><ul><li><a href="#barrel" data-toc-link="barrel">Barrel</a></li><li><a href="#granular" data-toc-link="granular">Granular</a></li></ul></li>
+            <li><a href="#usage" data-toc-link="usage">Usage</a></li>
+            <li><a href="#design" data-toc-link="design">Design</a></li>
+            <li><a href="#examples" data-toc-link="examples">Examples</a><ul><li><a href="#widths" data-toc-link="widths">Exact Widths</a></li><li><a href="#heights" data-toc-link="heights">Heights</a></li><li><a href="#block-height" data-toc-link="block-height">Block Height</a></li><li><a href="#card" data-toc-link="card">Card</a></li><li><a href="#table" data-toc-link="table">Table</a></li><li><a href="#static" data-toc-link="static">Static</a></li></ul></li>
+            <li><a href="#accessibility" data-toc-link="accessibility">Accessibility</a></li>
+            <li><a href="#api-reference" data-toc-link="api-reference">API Reference</a><ul><li><a href="#skeleton-line-api" data-toc-link="skeleton-line-api">SkeletonLine</a></li><li><a href="#exports" data-toc-link="exports">Exports</a></li></ul></li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+  </div>
+</DocsLayout>

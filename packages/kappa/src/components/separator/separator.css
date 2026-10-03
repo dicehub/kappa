@@ -1,0 +1,27 @@
+.kappa-separator {
+  box-sizing: border-box;
+  flex: none;
+  margin: 0;
+  border: 0;
+  background: var(--kappa-line, #e3e6eb);
+  color: var(--kappa-line, #e3e6eb);
+  pointer-events: none;
+}
+
+.kappa-separator[data-orientation="horizontal"] {
+  inline-size: 100%;
+  block-size: 1px;
+}
+
+.kappa-separator[data-orientation="vertical"] {
+  inline-size: 1px;
+  min-block-size: 1rem;
+  align-self: stretch;
+}
+
+@media (forced-colors: active) {
+  .kappa-separator {
+    background: CanvasText;
+    color: CanvasText;
+  }
+}

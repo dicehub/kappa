@@ -1,0 +1,105 @@
+---
+import { navGroups, primaryNav } from "../data/docs-nav";
+
+const { pathname = "/", variant = "desktop" } = Astro.props;
+
+const normalizePath = (href: string) => {
+  if (href === "/") return "/";
+  return href.replace(/\/+$/, "");
+};
+
+const currentPath = normalizePath(pathname);
+const navHrefs = [...primaryNav, ...navGroups.flatMap((group) => group.links)].map((link) =>
+  normalizePath(link.href),
+);
+const activeHref =
+  currentPath === "/"
+    ? "/docs"
+    : navHrefs
+        .filter((href) => currentPath === href || currentPath.startsWith(`${href}/`))
+        .sort((first, second) => second.length - first.length)[0];
+const isCurrent = (href: string) => normalizePath(href) === activeHref;
+const navigationId = `${variant}-navigation`;
+const initiallyHidden = variant === "mobile";
+---
+
+<nav
+  id={navigationId}
+  class:list={{
+    "docs-sidebar-panel": true,
+    "docs-sidebar-panel--mobile": variant === "mobile",
+    "docs-sidebar-panel--desktop": variant === "desktop",
+  }}
+  aria-label={variant === "mobile" ? "Mobile navigation" : "Primary navigation"}
+  aria-hidden={initiallyHidden ? "true" : "false"}
+  inert={initiallyHidden}
+>
+  {
+    variant === "mobile" && (
+      <div class="docs-sidebar-panel__header">
+        <span class="docs-sidebar-panel__title">Kappa</span>
+        <button class="docs-icon-button" type="button" aria-label="Close menu" data-mobile-sidebar-close>
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M6 6L18 18M18 6L6 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+          </svg>
+        </button>
+      </div>
+    )
+  }
+
+  <div class="docs-sidebar-panel__scroll" data-sidebar-scroll={variant}>
+    <div class="docs-nav-group">
+      <div id={`${variant}-primary-label`} class="docs-nav-group__label">Sections</div>
+      <ul class="docs-nav-list" aria-labelledby={`${variant}-primary-label`}>
+        {
+          primaryNav.map((link) => (
+            <li>
+              <a
+                class:list={{ "docs-nav-link": true, "is-active": isCurrent(link.href) }}
+                href={link.href}
+                aria-current={isCurrent(link.href) ? "page" : undefined}
+                data-docs-nav-link
+              >
+                <span class="docs-nav-link__label">{link.label}</span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+
+    {
+      navGroups.map((group, index) => {
+        const labelId = `${variant}-group-${index}-label`;
+
+        return (
+          <div class="docs-nav-group">
+            <div id={labelId} class="docs-nav-group__label">{group.label}</div>
+            <ul class="docs-nav-list" aria-labelledby={labelId}>
+              {
+                group.links.map((link) => (
+                  <li>
+                    <a
+                      class:list={{
+                        "docs-nav-link": true,
+                        "is-active": isCurrent(link.href),
+                      }}
+                      href={link.href}
+                      aria-current={isCurrent(link.href) ? "page" : undefined}
+                      data-docs-nav-link
+                    >
+                      <span class="docs-nav-link__label">{link.label}</span>
+                    </a>
+                  </li>
+                ))
+              }
+            </ul>
+          </div>
+        );
+      })
+    }
+    <a class="docs-nav-link" href="/licenses.txt" data-astro-reload>
+      <span class="docs-nav-link__label">Licenses</span>
+    </a>
+  </div>
+</nav>

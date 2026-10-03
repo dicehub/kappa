@@ -1,0 +1,12 @@
+.sidebar-scroll-demo { inline-size: 100%; min-inline-size: 0; container-type: inline-size; text-align: start; }
+.sidebar-scroll-demo__layout.kappa-sidebar-provider { display: grid; grid-template-columns: minmax(0, 14rem) minmax(0, 1fr); grid-template-rows: minmax(0, 1fr); block-size: 26rem; overflow: hidden; border: 1px solid var(--kappa-line); border-radius: 0.5rem; background: var(--kappa-control); }
+.sidebar-scroll-demo__layout > .kappa-sidebar__shell { min-block-size: 0; }
+.sidebar-scroll-demo__actions { display: flex; flex-direction: column; justify-content: center; align-items: flex-start; min-inline-size: 0; padding: 1.25rem; gap: 0.75rem; }
+.sidebar-scroll-demo__actions strong { font-size: 0.875rem; font-weight: 550; }
+.sidebar-scroll-demo__actions p { margin: 0 !important; font-size: 0.8125rem !important; line-height: 1.5; color: var(--kappa-subtle); }
+.sidebar-scroll-demo__buttons { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.sidebar-scroll-demo__actions output { font-size: 0.75rem; color: var(--kappa-subtle); }
+@container (width < 30rem) {
+  .sidebar-scroll-demo__layout.kappa-sidebar-provider { grid-template-columns: minmax(0, 1fr); grid-template-rows: 17rem auto; block-size: auto; }
+  .sidebar-scroll-demo__layout > .kappa-sidebar__shell { border-block-end: 1px solid var(--kappa-line); }
+}

@@ -1,0 +1,41 @@
+---
+import ResourceListDocsDemo from "../../../components/ResourceListDocsDemo.vue";
+import { resourceListExamples } from "../../../data/resource-list-docs";
+import "../../../styles/docs.css";
+
+export function getStaticPaths() {
+  return resourceListExamples.map(example => ({
+    params: { variant: example.id },
+    props: { example },
+  }));
+}
+
+const { example } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en" class="kappa-docs-root">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="robots" content="noindex" />
+    <title>{example.title} Resource List — Kappa Blocks</title>
+    <script is:inline>
+      const mode = localStorage.getItem("theme") === "dark" ? "dark" : "light";
+      document.documentElement.dataset.mode = mode;
+      document.documentElement.dataset.kappaTheme = mode;
+      document.documentElement.style.colorScheme = mode;
+    </script>
+  </head>
+  <body>
+    <main>
+      <ResourceListDocsDemo client:load variant={example.id} standalone />
+    </main>
+  </body>
+</html>
+
+<style>
+  body { margin: 0; }
+  main { min-inline-size: 0; }
+</style>

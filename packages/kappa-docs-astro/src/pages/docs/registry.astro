@@ -1,0 +1,83 @@
+---
+import CodeBlock from "../../components/CodeBlock.astro";
+import CopyPageControls from "../../components/CopyPageControls.vue";
+import DocsPageNavigation from "../../components/DocsPageNavigation.astro";
+import DocsLayout from "../../layouts/DocsLayout.astro";
+
+const currentPath = "/docs/registry";
+const description = "Read the generated index of Kappa components, blocks, and public import paths.";
+const toc = [
+  { id: "use", label: "Use the Registry" },
+  { id: "data", label: "Data Shape" },
+  { id: "source", label: "Source and Updates" },
+];
+const usageCode = `import {
+  componentRegistry,
+  getRegistryComponent,
+  registryComponentNames,
+} from "@dicehub/kappa/registry";
+
+const button = getRegistryComponent("Button");
+console.log(button?.importPath);
+console.log(registryComponentNames.length);
+console.log(componentRegistry.search.byType.block);`;
+const jsonCode = `import registry from "@dicehub/kappa/registry/component-registry.json" with { type: "json" };
+
+console.log(registry.schemaVersion);`;
+---
+
+<DocsLayout title="Registry" description={description}>
+  <div class="docs-page">
+    <header class="docs-page-header"><div class="docs-page-header__inner"><div class="docs-page-header__content">
+      <div class="docs-page-header__mobile-actions"><CopyPageControls client:only="vue" align="center" /></div>
+      <div class="docs-page-header__title-row">
+        <h1>Registry</h1>
+        <div class="docs-page-header__navigation-actions">
+          <div class="docs-page-header__desktop-actions"><CopyPageControls client:only="vue" /></div>
+          <DocsPageNavigation currentPath={currentPath} variant="compact" />
+        </div>
+      </div>
+      <p class="docs-page-header__lede">{description}</p>
+    </div></div></header>
+
+    <div class="docs-page-body">
+      <article class="docs-article">
+        <section id="use" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#use">Use the Registry</a></h2>
+          <p>The package exports a typed registry module and a JSON file. Use the module when you need a name lookup or type information. Import the JSON file when you only need metadata.</p>
+          <CodeBlock code={usageCode} lang="typescript" />
+          <CodeBlock code={jsonCode} lang="typescript" />
+          <p><code>getRegistryComponent(name)</code> returns <code>undefined</code> when the name is not in the registry. Import a component from the returned <code>importPath</code> in your application source; the registry does not load it for you.</p>
+        </section>
+
+        <section id="data" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#data">Data Shape</a></h2>
+          <p>The current schema version is <code>1</code>. The top level has <code>package</code>, <code>components</code>, and <code>search</code> fields.</p>
+          <div class="docs-api-table"><table>
+            <thead><tr><th>Field</th><th>Content</th></tr></thead>
+            <tbody>
+              <tr><td><code>components[name]</code></td><td>Name, type, group, import path, source file, description, and optional part names.</td></tr>
+              <tr><td><code>search.byName</code></td><td>Component and block names.</td></tr>
+              <tr><td><code>search.byType</code></td><td>Names grouped as <code>component</code> or <code>block</code>.</td></tr>
+              <tr><td><code>search.byGroup</code></td><td>Names grouped by their module.</td></tr>
+            </tbody>
+          </table></div>
+          <p>This metadata lists public exports. It is not a runtime component loader or a source-code installer.</p>
+        </section>
+
+        <section id="source" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#source">Source and Updates</a></h2>
+          <p>The registry generator reads component and block barrels under <code>packages/kappa/src</code>. It writes <code>src/registry/generated.ts</code> and <code>src/registry/component-registry.json</code>. Do not edit those outputs by hand.</p>
+          <CodeBlock code={`pnpm --filter @dicehub/kappa codegen:registry
+pnpm --filter @dicehub/kappa check:registry`} lang="bash" />
+          <p>If a new export is missing, check its barrel and public package export first. See <a href="/docs/contributing">Contributing</a> for the other checks needed before handoff.</p>
+        </section>
+        <DocsPageNavigation currentPath={currentPath} />
+      </article>
+      <aside class="docs-page-toc" aria-label="On this page"><div class="docs-page-toc__inner">
+        <span class="docs-page-toc__title">On this page</span>
+        <ul>{toc.map((item) => <li><a href={`#${item.id}`} data-toc-link={item.id}>{item.label}</a></li>)}</ul>
+      </div></aside>
+    </div>
+  </div>
+</DocsLayout>

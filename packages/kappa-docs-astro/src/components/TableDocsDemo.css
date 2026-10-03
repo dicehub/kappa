@@ -1,0 +1,112 @@
+.table-demo {
+  display: grid;
+  width: min(100%, 48rem);
+  min-width: 0;
+  gap: 0.75rem;
+  color: var(--kappa-default, #17191f);
+  font-family: var(--kappa-font-sans, var(--docs-font-sans, sans-serif));
+}
+
+.table-demo__scroll {
+  min-width: 0;
+  overflow-x: auto;
+  border: 1px solid var(--kappa-line, #e3e6eb);
+  border-radius: 0.625rem;
+  background: var(--kappa-control, #ffffff);
+}
+
+.table-demo__scroll > .kappa-table {
+  min-width: 38rem;
+}
+
+.table-demo__scroll--compact > .kappa-table {
+  min-width: 26rem;
+}
+
+.table-demo__scroll--sticky {
+  max-height: 14rem;
+}
+
+.table-demo__scroll--sticky > .kappa-table {
+  min-width: 46rem;
+}
+
+.table-demo__numeric {
+  font-variant-numeric: tabular-nums;
+  text-align: end;
+}
+
+.table-demo__status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  vertical-align: middle;
+  color: var(--kappa-subtle, #6c7480);
+  font-size: inherit;
+}
+
+.table-demo__status::before {
+  inline-size: 0.4rem;
+  block-size: 0.4rem;
+  border-radius: 50%;
+  background: currentColor;
+  content: "";
+}
+
+.table-demo__status[data-status="Running"] {
+  color: var(--kappa-warning-text, #b54708);
+}
+
+.table-demo__status--ready,
+.table-demo__status[data-status="Ready"] {
+  color: var(--kappa-success-text, #027a48);
+}
+
+.table-demo__stack {
+  display: grid;
+  min-width: 0;
+  gap: 0.75rem;
+}
+
+.table-demo__selection-summary {
+  color: var(--kappa-subtle, #6c7480);
+  font-size: 0.75rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.table-demo__states {
+  display: grid;
+  min-width: 0;
+  gap: 1rem;
+}
+
+.table-demo__state-group {
+  display: grid;
+  min-width: 0;
+  gap: 0.4rem;
+}
+
+.table-demo__state-label {
+  color: var(--kappa-subtle, #6c7480);
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.table-demo__state-group > .kappa-table {
+  border: 1px solid var(--kappa-line, #e3e6eb);
+  border-radius: 0.625rem;
+}
+
+@media (max-width: 620px) {
+  .table-demo__scroll > .kappa-table {
+    min-width: 34rem;
+  }
+
+  .table-demo__scroll--sticky > .kappa-table {
+    min-width: 42rem;
+  }
+
+  .table-demo__scroll--compact > .kappa-table {
+    min-width: 26rem;
+  }
+}

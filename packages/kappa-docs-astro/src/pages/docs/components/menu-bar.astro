@@ -1,0 +1,37 @@
+---
+import ArkUiDocsLink from "../../../components/ArkUiDocsLink.astro";
+import CodeBlock from "../../../components/CodeBlock.astro";
+import CopyPageControls from "../../../components/CopyPageControls.vue";
+import DocsPageNavigation from "../../../components/DocsPageNavigation.astro";
+import MenuBarDocsDemo from "../../../components/MenuBarDocsDemo.vue";
+import { barrelCode, controlledCode, granularCode, nestedCode, optionsCode, previewCode } from "../../../data/menu-bar-docs";
+import DocsLayout from "../../../layouts/DocsLayout.astro";
+import "../../../styles/docs-components.css";
+
+const currentPath = "/docs/components/menu-bar";
+const description = "Groups application commands into a compact row of menus.";
+const examples = [
+  { id: "nested", title: "Nested Actions", description: "Use a submenu for a short set of related choices.", code: nestedCode },
+  { id: "options", title: "Persistent Options", description: "Checkbox and radio choices stay open while you change settings.", code: optionsCode },
+  { id: "controlled", title: "Controlled and Disabled", description: "Control the open menu with v-model and disable unavailable triggers.", code: controlledCode },
+] as const;
+---
+
+<DocsLayout title="Menu Bar" description={description}>
+  <div class="docs-page docs-page--component">
+    <header class="docs-page-header"><div class="docs-page-header__inner"><div class="docs-page-header__content">
+      <div class="docs-page-header__mobile-actions"><CopyPageControls client:only="vue" align="center" /></div>
+      <div class="docs-page-header__title-row"><h1>Menu Bar</h1><ArkUiDocsLink /><div class="docs-page-header__navigation-actions"><div class="docs-page-header__desktop-actions"><CopyPageControls client:only="vue" /></div><DocsPageNavigation currentPath={currentPath} variant="compact" /></div></div>
+      <p class="docs-page-header__lede">{description}</p>
+    </div></div></header>
+    <div class="docs-page-body"><article class="docs-article docs-article--component">
+      <section id="preview" class="docs-section"><div class="docs-component-example"><div class="docs-component-preview"><MenuBarDocsDemo client:load variant="preview" /></div><CodeBlock code={previewCode} lang="vue" collapsible revealId="menu-bar-preview-code" /></div></section>
+      <section id="installation" class="docs-section"><h2><a class="docs-section-anchor" href="#installation">Installation</a></h2><h3 id="barrel"><a class="docs-section-anchor" href="#barrel">Barrel</a></h3><CodeBlock code={barrelCode} lang="javascript" /><h3 id="granular"><a class="docs-section-anchor" href="#granular">Granular</a></h3><CodeBlock code={granularCode} lang="javascript" /></section>
+      <section id="usage" class="docs-section"><h2><a class="docs-section-anchor" href="#usage">Usage</a></h2><p>Use a menu bar for repeated application commands such as File, Edit, and View. Give each <code>Menu</code> a unique <code>value</code> and the root an accessible label. Handle selection on each <code>Menu</code>, and on <code>Sub</code> for nested actions. Use <a href="/docs/components/dropdown">Dropdown</a> for a single action menu.</p><p><code>MenuBar.Root</code> coordinates the open menu. <code>MenuBar.Menu</code> composes Kappa Dropdown, which uses <a href="https://ark-ui.com/docs/components/menu">Ark UI Menu</a> for each popup. Kappa adds horizontal focus and pointer switching. <code>SubTrigger</code> keeps a portalled child open while the pointer crosses into it; moving to another parent item still closes the child. Ark UI has no dedicated application Menu Bar primitive.</p></section>
+      <section id="keyboard" class="docs-section"><h2><a class="docs-section-anchor" href="#keyboard">Keyboard and Pointer</a></h2><ul><li>Tab enters the menu bar at one trigger. Left and Right arrows move between enabled triggers. Home and End move to the first or last trigger.</li><li>Enter, Space, or Down arrow opens a menu. Once open, Left and Right arrows switch top-level menus. Right arrow on a submenu trigger opens that submenu.</li><li>Escape closes the menu. When a menu is open, a brief hover over another trigger opens that menu. Crossing a trigger on the way to the current menu does not switch it.</li><li>Menu items, checkbox and radio state, typeahead, nested menus, and dismissal come from Kappa Dropdown and Ark UI Menu.</li></ul></section>
+      <section id="examples" class="docs-section docs-section--component-examples"><h2><a class="docs-section-anchor" href="#examples">Examples</a></h2>{examples.map((example) => <><h3 id={example.id}><a class="docs-section-anchor" href={`#${example.id}`}>{example.title}</a></h3><p>{example.description}</p><div class="docs-component-example"><div class="docs-component-preview"><MenuBarDocsDemo client:load variant={example.id} /></div><CodeBlock code={example.code} lang="vue" collapsible revealId={`menu-bar-${example.id}-code`} /></div></>)}</section>
+      <section id="api-reference" class="docs-section"><h2><a class="docs-section-anchor" href="#api-reference">API Reference</a></h2><div class="docs-api-table"><table><thead><tr><th>Part</th><th>Purpose</th></tr></thead><tbody><tr><td><code>MenuBar.Root</code></td><td>Menubar container. <code>v-model</code> controls the open menu value; <code>defaultValue</code> sets the initial value; <code>disabled</code> disables all triggers.</td></tr><tr><td><code>MenuBar.Menu</code></td><td>One top-level menu. Requires a unique <code>value</code>; emits <code>select</code> with the selected item value.</td></tr><tr><td><code>MenuBar.Trigger</code></td><td>Top-level menu trigger. Supports <code>disabled</code> and <code>asChild</code>.</td></tr><tr><td><code>MenuBar.Content</code></td><td>Popup surface. Supports <code>teleport</code>, <code>teleportTo</code>, and <code>asChild</code>.</td></tr><tr><td><code>MenuBar.Item</code> and other menu parts</td><td>Kappa Dropdown parts: LinkItem, CheckboxItem, RadioGroup, RadioItem, Group, Label, Separator, Shortcut, Sub, SubTrigger, and SubContent.</td></tr></tbody></table></div></section>
+      <DocsPageNavigation currentPath={currentPath} />
+    </article><aside class="docs-page-toc" aria-label="On this page"><div class="docs-page-toc__inner"><span class="docs-page-toc__title">On this page</span><ul><li><a href="#installation" data-toc-link="installation">Installation</a></li><li><a href="#usage" data-toc-link="usage">Usage</a></li><li><a href="#keyboard" data-toc-link="keyboard">Keyboard and Pointer</a></li><li><a href="#examples" data-toc-link="examples">Examples</a><ul>{examples.map((example) => <li><a href={`#${example.id}`} data-toc-link={example.id}>{example.title}</a></li>)}</ul></li><li><a href="#api-reference" data-toc-link="api-reference">API Reference</a></li></ul></div></aside></div>
+  </div>
+</DocsLayout>

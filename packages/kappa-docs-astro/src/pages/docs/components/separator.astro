@@ -1,0 +1,183 @@
+---
+import CodeBlock from "../../../components/CodeBlock.astro";
+import CompositionTree from "../../../components/CompositionTree.astro";
+import CopyPageControls from "../../../components/CopyPageControls.vue";
+import DocsPageNavigation from "../../../components/DocsPageNavigation.astro";
+import SeparatorDocsDemo from "../../../components/SeparatorDocsDemo.vue";
+import {
+  barrelCode,
+  dataAttributes,
+  dataSlots,
+  exportsList,
+  granularCode,
+  listCode,
+  previewCode,
+  semanticCode,
+  separatorProps,
+  usageCode,
+  verticalCode,
+} from "../../../data/separator-docs";
+import DocsLayout from "../../../layouts/DocsLayout.astro";
+import "../../../styles/docs-components.css";
+
+const currentPath = "/docs/components/separator";
+const description = "Visually or semantically separates related content along one axis.";
+---
+
+<DocsLayout title="Separator" description={description}>
+  <div class="docs-page docs-page--component">
+    <header class="docs-page-header">
+      <div class="docs-page-header__inner">
+        <div class="docs-page-header__content">
+          <div class="docs-page-header__mobile-actions">
+            <CopyPageControls client:only="vue" align="center" />
+          </div>
+          <div class="docs-page-header__title-row">
+            <h1>Separator</h1>
+            <div class="docs-page-header__navigation-actions">
+              <div class="docs-page-header__desktop-actions">
+                <CopyPageControls client:only="vue" />
+              </div>
+              <DocsPageNavigation currentPath={currentPath} variant="compact" />
+            </div>
+          </div>
+          <p class="docs-page-header__lede">{description}</p>
+        </div>
+      </div>
+    </header>
+
+    <div class="docs-page-body">
+      <article class="docs-article docs-article--component">
+        <section id="preview" class="docs-section">
+          <div class="docs-component-example">
+            <div class="docs-component-preview">
+              <SeparatorDocsDemo variant="preview" />
+            </div>
+            <CodeBlock code={previewCode} lang="vue" collapsible revealId="separator-preview-code" />
+          </div>
+        </section>
+
+        <section id="installation" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#installation">Installation</a></h2>
+          <p>
+            Separator is part of the main Kappa package. It uses native HTML and adds no runtime
+            dependency beyond Vue.
+          </p>
+          <h3 id="barrel"><a class="docs-section-anchor" href="#barrel">Barrel</a></h3>
+          <CodeBlock code={barrelCode} lang="javascript" />
+          <h3 id="granular"><a class="docs-section-anchor" href="#granular">Granular</a></h3>
+          <CodeBlock code={granularCode} lang="javascript" />
+        </section>
+
+        <section id="usage" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#usage">Usage</a></h2>
+          <p>
+            Separator is decorative by default. Add spacing on the surrounding layout so one line
+            can work in dense and spacious interfaces.
+          </p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview">
+              <SeparatorDocsDemo variant="basic" />
+            </div>
+            <CodeBlock code={usageCode} lang="vue" collapsible revealId="separator-usage-code" />
+          </div>
+        </section>
+
+        <section id="composition" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#composition">Composition</a></h2>
+          <CompositionTree component="separator" />
+          <p>
+            The compact orientation API follows
+            <a href="https://base-ui.com/react/components/separator">Base UI Separator</a>.
+            Decorative mode follows the
+            <a href="https://www.radix-ui.com/primitives/docs/components/separator">Radix Separator primitive</a>.
+            Ark UI does not provide a standalone equivalent. Kappa therefore renders a
+            native <code>hr</code> and owns its semantics and visual treatment.
+          </p>
+        </section>
+
+        <section id="examples" class="docs-section docs-section--component-examples">
+          <h2><a class="docs-section-anchor" href="#examples">Examples</a></h2>
+
+          <h3 id="vertical"><a class="docs-section-anchor" href="#vertical">Vertical</a></h3>
+          <p>Use a vertical line inside a layout with a defined block size.</p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview">
+              <SeparatorDocsDemo variant="vertical" />
+            </div>
+            <CodeBlock code={verticalCode} lang="vue" collapsible revealId="separator-vertical-code" />
+          </div>
+
+          <h3 id="list"><a class="docs-section-anchor" href="#list">List</a></h3>
+          <p>Use decorative lines when the list structure already describes the relationship.</p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview">
+              <SeparatorDocsDemo variant="list" />
+            </div>
+            <CodeBlock code={listCode} lang="vue" collapsible revealId="separator-list-code" />
+          </div>
+
+          <h3 id="semantic"><a class="docs-section-anchor" href="#semantic">Semantic Separator</a></h3>
+          <p>
+            Set <code>decorative</code> to <code>false</code> when the divider marks a meaningful
+            boundary. Add an accessible label when the boundary needs a specific name.
+          </p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview">
+              <SeparatorDocsDemo variant="semantic" />
+            </div>
+            <CodeBlock code={semanticCode} lang="vue" collapsible revealId="separator-semantic-code" />
+          </div>
+        </section>
+
+        <section id="accessibility" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#accessibility">Accessibility</a></h2>
+          <ul>
+            <li>Keep the default decorative mode when headings, lists, or navigation already define structure.</li>
+            <li>Use <code>decorative=false</code> only when the boundary adds useful document meaning.</li>
+            <li>Match <code>orientation</code> to the visible axis. Kappa forwards it to assistive technology for semantic separators.</li>
+            <li>Do not put text inside Separator. Use adjacent visible text or a labeled composition instead.</li>
+            <li>The line remains visible in forced-colors mode.</li>
+          </ul>
+        </section>
+
+        <section id="api-reference" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#api-reference">API Reference</a></h2>
+          <div class="docs-api-group">
+            <h3 id="separator-api"><a class="docs-section-anchor" href="#separator-api">Separator</a></h3>
+            <p>Renders a native <code>hr</code>. Native attributes, data attributes, and consumer classes pass to the root.</p>
+            <div class="docs-api-table"><table><thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>{separatorProps.map((prop) => <tr><td><code>{prop.name}</code></td><td><code>{prop.type}</code></td><td><code>{prop.defaultValue}</code></td><td>{prop.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="data-slots"><a class="docs-section-anchor" href="#data-slots">Data Slots</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Slot</th><th>Element</th><th>Description</th></tr></thead><tbody>{dataSlots.map((part) => <tr><td><code>{part.name}</code></td><td><code>{part.element}</code></td><td>{part.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="data-attributes"><a class="docs-section-anchor" href="#data-attributes">Data Attributes</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Attribute</th><th>Value</th><th>Description</th></tr></thead><tbody>{dataAttributes.map((attribute) => <tr><td><code>{attribute.name}</code></td><td><code>{attribute.value}</code></td><td>{attribute.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="exports"><a class="docs-section-anchor" href="#exports">Exports</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Export</th><th>Description</th></tr></thead><tbody>{exportsList.map((item) => <tr><td><code>{item.name}</code></td><td>{item.description}</td></tr>)}</tbody></table></div>
+          </div>
+        </section>
+
+        <DocsPageNavigation currentPath={currentPath} />
+      </article>
+
+      <aside class="docs-page-toc" aria-label="On this page">
+        <div class="docs-page-toc__inner">
+          <span class="docs-page-toc__title">On this page</span>
+          <ul>
+            <li><a href="#installation" data-toc-link="installation">Installation</a><ul><li><a href="#barrel" data-toc-link="barrel">Barrel</a></li><li><a href="#granular" data-toc-link="granular">Granular</a></li></ul></li>
+            <li><a href="#usage" data-toc-link="usage">Usage</a></li>
+            <li><a href="#composition" data-toc-link="composition">Composition</a></li>
+            <li><a href="#examples" data-toc-link="examples">Examples</a><ul><li><a href="#vertical" data-toc-link="vertical">Vertical</a></li><li><a href="#list" data-toc-link="list">List</a></li><li><a href="#semantic" data-toc-link="semantic">Semantic Separator</a></li></ul></li>
+            <li><a href="#accessibility" data-toc-link="accessibility">Accessibility</a></li>
+            <li><a href="#api-reference" data-toc-link="api-reference">API Reference</a><ul><li><a href="#separator-api" data-toc-link="separator-api">Separator</a></li><li><a href="#data-slots" data-toc-link="data-slots">Data Slots</a></li><li><a href="#data-attributes" data-toc-link="data-attributes">Data Attributes</a></li><li><a href="#exports" data-toc-link="exports">Exports</a></li></ul></li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+  </div>
+</DocsLayout>

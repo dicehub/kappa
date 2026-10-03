@@ -1,0 +1,156 @@
+.kappa-tooltip__trigger {
+  display: inline-flex;
+  inline-size: max-content;
+  min-block-size: 0;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 0;
+  margin: 0;
+  background: transparent;
+  color: inherit;
+  cursor: help;
+  font: inherit;
+  line-height: inherit;
+}
+
+.kappa-tooltip__trigger:focus-visible {
+  border-radius: var(--kappa-radius-sm, 0.25rem);
+  outline: none;
+  box-shadow:
+    0 0 0 1px var(--kappa-focus, #4c63ff),
+    0 0 0 3px var(--kappa-focus-soft, rgba(76, 99, 255, 0.16));
+}
+
+.kappa-tooltip__positioner {
+  /* Ark writes this variable inline, so Kappa must win the cascade here. */
+  --z-index: var(--kappa-tooltip-z-index, 1100) !important;
+
+  max-inline-size: min(var(--available-width, calc(100vw - 1.5rem)), calc(100vw - 1.5rem));
+  pointer-events: none;
+}
+
+.kappa-tooltip__content {
+  --kappa-tooltip-enter-x: 0;
+  --kappa-tooltip-enter-y: 0.1875rem;
+
+  box-sizing: border-box;
+  display: flex;
+  inline-size: max-content;
+  max-inline-size: min(
+    var(--kappa-tooltip-max-inline-size, 20rem),
+    var(--available-width, calc(100vw - 1.5rem)),
+    calc(100vw - 1.5rem)
+  );
+  align-items: center;
+  gap: 0.5rem;
+  padding-block: 0.375rem;
+  padding-inline: 0.625rem;
+  border: 1px solid var(--kappa-tooltip-border, rgba(255, 255, 255, 0.1));
+  border-radius: var(--kappa-radius-md, 0.375rem);
+  background: var(--kappa-emphasis, #17191f);
+  box-shadow: var(
+    --kappa-popover-shadow,
+    0 8px 24px -6px rgba(16, 24, 40, 0.2),
+    0 2px 4px -2px rgba(16, 24, 40, 0.12)
+  );
+  color: var(--kappa-accent-contrast, #ffffff);
+  font-family: var(--kappa-font-sans, inherit);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.005em;
+  line-height: 1rem;
+  outline: none;
+  overflow-wrap: anywhere;
+  text-align: start;
+  transform-origin: var(--transform-origin);
+}
+
+.kappa-tooltip__content[data-side="bottom"] {
+  --kappa-tooltip-enter-y: -0.1875rem;
+}
+
+.kappa-tooltip__content[data-side="left"] {
+  --kappa-tooltip-enter-x: 0.1875rem;
+  --kappa-tooltip-enter-y: 0;
+}
+
+.kappa-tooltip__content[data-side="right"] {
+  --kappa-tooltip-enter-x: -0.1875rem;
+  --kappa-tooltip-enter-y: 0;
+}
+
+.kappa-tooltip__content[data-state="open"] {
+  animation: kappa-tooltip-in 120ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.kappa-tooltip__content[data-state="closed"] {
+  opacity: 0;
+  pointer-events: none;
+  visibility: hidden;
+}
+
+.kappa-tooltip__content kbd {
+  display: inline-flex;
+  min-inline-size: 1.25rem;
+  min-block-size: 1.125rem;
+  align-items: center;
+  justify-content: center;
+  padding-inline: 0.25rem;
+  border: 1px solid var(--kappa-tooltip-shortcut-border, rgba(255, 255, 255, 0.18));
+  border-radius: 0.25rem;
+  background: var(--kappa-tooltip-shortcut-background, rgba(255, 255, 255, 0.1));
+  color: inherit;
+  font-family: var(--kappa-font-mono, ui-monospace, monospace);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.kappa-tooltip__arrow {
+  --arrow-background: var(--kappa-emphasis, #17191f);
+  --arrow-size: 0.5rem;
+
+  color: var(--kappa-emphasis, #17191f);
+  opacity: 0;
+  visibility: hidden;
+}
+
+.kappa-tooltip__positioner:has(> .kappa-tooltip__content[data-state="open"])
+  > .kappa-tooltip__arrow {
+  opacity: 1;
+  visibility: visible;
+}
+
+.kappa-tooltip__arrow-tip {
+  border-block-start: 1px solid var(--kappa-tooltip-border, rgba(255, 255, 255, 0.1));
+  border-inline-start: 1px solid var(--kappa-tooltip-border, rgba(255, 255, 255, 0.1));
+}
+
+@keyframes kappa-tooltip-in {
+  from {
+    opacity: 0;
+    transform: translate(var(--kappa-tooltip-enter-x), var(--kappa-tooltip-enter-y)) scale(0.96);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kappa-tooltip__content[data-state="open"] {
+    animation: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .kappa-tooltip__content {
+    border-color: CanvasText;
+    background: Canvas;
+    box-shadow: none;
+    color: CanvasText;
+  }
+
+  .kappa-tooltip__arrow {
+    --arrow-background: Canvas;
+
+    color: CanvasText;
+  }
+}

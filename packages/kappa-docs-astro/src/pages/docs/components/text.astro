@@ -1,0 +1,225 @@
+---
+import CodeBlock from "../../../components/CodeBlock.astro";
+import CompositionTree from "../../../components/CompositionTree.astro";
+import CopyPageControls from "../../../components/CopyPageControls.vue";
+import DocsPageNavigation from "../../../components/DocsPageNavigation.astro";
+import TextDocsDemo from "../../../components/TextDocsDemo.vue";
+import {
+  barrelCode,
+  dataSlots,
+  exportsList,
+  granularCode,
+  inlineCode,
+  monospaceCode,
+  overviewCode,
+  previewCode,
+  rtlCode,
+  semanticCode,
+  sizesCode,
+  slots,
+  textProps,
+  truncateCode,
+  usageCode,
+  variantsCode,
+} from "../../../data/text-docs";
+import DocsLayout from "../../../layouts/DocsLayout.astro";
+import "../../../styles/docs-components.css";
+
+const currentPath = "/docs/components/text";
+const description = "Renders compact interface copy with explicit visual treatment and native HTML semantics.";
+---
+
+<DocsLayout title="Text" description={description}>
+  <div class="docs-page docs-page--component">
+    <header class="docs-page-header">
+      <div class="docs-page-header__inner">
+        <div class="docs-page-header__content">
+          <div class="docs-page-header__mobile-actions">
+            <CopyPageControls client:only="vue" align="center" />
+          </div>
+          <div class="docs-page-header__title-row">
+            <h1>Text</h1>
+            <div class="docs-page-header__navigation-actions">
+              <div class="docs-page-header__desktop-actions"><CopyPageControls client:only="vue" /></div>
+              <DocsPageNavigation currentPath={currentPath} variant="compact" />
+            </div>
+          </div>
+          <p class="docs-page-header__lede">{description}</p>
+        </div>
+      </div>
+    </header>
+
+    <div class="docs-page-body">
+      <article class="docs-article docs-article--component">
+        <section id="preview" class="docs-section">
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><TextDocsDemo client:load variant="preview" /></div>
+            <CodeBlock code={previewCode} lang="vue" collapsible revealId="text-preview-code" />
+          </div>
+        </section>
+
+        <section id="installation" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#installation">Installation</a></h2>
+          <p>
+            Text is part of the main Kappa package. It renders guarded native HTML and has no Ark UI
+            state machine or additional runtime dependency.
+          </p>
+          <h3 id="barrel"><a class="docs-section-anchor" href="#barrel">Barrel</a></h3>
+          <CodeBlock code={barrelCode} lang="javascript" />
+          <h3 id="granular"><a class="docs-section-anchor" href="#granular">Granular</a></h3>
+          <CodeBlock code={granularCode} lang="javascript" />
+        </section>
+
+        <section id="usage" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#usage">Usage</a></h2>
+          <p>
+            Body copy renders as a paragraph by default. Text forwards native attributes, data
+            attributes, event listeners, consumer classes, and inline styles to the selected element.
+          </p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><TextDocsDemo client:load variant="usage" /></div>
+            <CodeBlock code={usageCode} lang="vue" collapsible revealId="text-usage-code" />
+          </div>
+        </section>
+
+        <section id="composition" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#composition">Composition</a></h2>
+          <CompositionTree component="text" />
+          <p>
+            Text supports semantic elements and uses Kappa's dense type scale and status tokens.
+            Ark UI has no Text primitive.
+          </p>
+          <p>
+            Text styles one interface string. It does not manage vertical prose rhythm. For articles,
+            rendered Markdown, or streaming content, use semantic HTML and set typography and spacing
+            on the container.
+          </p>
+        </section>
+
+        <section id="examples" class="docs-section docs-section--component-examples">
+          <h2><a class="docs-section-anchor" href="#examples">Examples</a></h2>
+
+          <h3 id="overview"><a class="docs-section-anchor" href="#overview">Overview</a></h3>
+          <p>
+            Compare every current treatment and size in one place. Each row shows the prop combination,
+            rendered result, font size, and weight.
+          </p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><TextDocsDemo client:load variant="overview" /></div>
+            <CodeBlock code={overviewCode} lang="vue" collapsible revealId="text-overview-code" />
+          </div>
+
+          <h3 id="variants"><a class="docs-section-anchor" href="#variants">Variants</a></h3>
+          <p>
+            Use heading for compact titles, secondary for supporting copy, and status variants only
+            when nearby text or semantics also state the result. Numbered heading variants remain as
+            deprecated migration aliases.
+          </p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><TextDocsDemo client:load variant="variants" /></div>
+            <CodeBlock code={variantsCode} lang="vue" collapsible revealId="text-variants-code" />
+          </div>
+
+          <h3 id="sizes"><a class="docs-section-anchor" href="#sizes">Sizes</a></h3>
+          <p>The compact 12–16 px scale supports dense application controls and metadata.</p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><TextDocsDemo client:load variant="sizes" /></div>
+            <CodeBlock code={sizesCode} lang="vue" collapsible revealId="text-sizes-code" />
+          </div>
+
+          <h3 id="semantic-html"><a class="docs-section-anchor" href="#semantic-html">Semantic HTML</a></h3>
+          <p>
+            Variant controls appearance only. Set <code>as</code> from the document outline and content
+            model. Heading and monospace variants default to a span so they never create an implicit heading.
+          </p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><TextDocsDemo client:load variant="semantic" /></div>
+            <CodeBlock code={semanticCode} lang="vue" collapsible revealId="text-semantic-code" />
+          </div>
+
+          <h3 id="inline-text"><a class="docs-section-anchor" href="#inline-text">Inline Text</a></h3>
+          <p>Render a span when Kappa treatment belongs inside an existing paragraph.</p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><TextDocsDemo client:load variant="inline" /></div>
+            <CodeBlock code={inlineCode} lang="vue" collapsible revealId="text-inline-code" />
+          </div>
+
+          <h3 id="monospace"><a class="docs-section-anchor" href="#monospace">Monospace</a></h3>
+          <p>
+            Use monospace for identifiers, timestamps, and short code values. The optical size is one
+            step smaller than body copy, and numerals align in tabular columns.
+          </p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><TextDocsDemo client:load variant="monospace" /></div>
+            <CodeBlock code={monospaceCode} lang="vue" collapsible revealId="text-monospace-code" />
+          </div>
+
+          <h3 id="truncate"><a class="docs-section-anchor" href="#truncate">Truncate</a></h3>
+          <p>
+            Truncation needs a constrained inline size. Keep the full value available through adjacent
+            detail, an accessible disclosure, or a suitable native title for non-critical copy.
+          </p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><TextDocsDemo client:load variant="truncate" /></div>
+            <CodeBlock code={truncateCode} lang="vue" collapsible revealId="text-truncate-code" />
+          </div>
+
+          <h3 id="right-to-left"><a class="docs-section-anchor" href="#right-to-left">Right to Left</a></h3>
+          <p>Text inherits language, writing direction, and logical layout from its document context.</p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><TextDocsDemo client:load variant="rtl" /></div>
+            <CodeBlock code={rtlCode} lang="vue" collapsible revealId="text-rtl-code" />
+          </div>
+        </section>
+
+        <section id="accessibility" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#accessibility">Accessibility</a></h2>
+          <ul>
+            <li>Choose the native element from content meaning, not visual size.</li>
+            <li>Keep heading levels ordered. Do not use a larger style to change the outline.</li>
+            <li>Do not communicate status by color alone.</li>
+            <li>Keep essential text readable without truncation or provide a clear full-value path.</li>
+            <li>Set <code>lang</code> and <code>dir</code> on the nearest suitable ancestor.</li>
+          </ul>
+        </section>
+
+        <section id="api-reference" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#api-reference">API Reference</a></h2>
+          <div class="docs-api-group">
+            <h3 id="text-api"><a class="docs-section-anchor" href="#text-api">Text</a></h3>
+            <p>Renders a guarded native text element. Native attributes and listeners pass to the root.</p>
+            <div class="docs-api-table"><table><thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>{textProps.map((prop) => <tr><td><code>{prop.name}</code></td><td><code>{prop.type}</code></td><td><code>{prop.defaultValue}</code></td><td>{prop.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="slots"><a class="docs-section-anchor" href="#slots">Slots</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Slot</th><th>Description</th></tr></thead><tbody>{slots.map((slot) => <tr><td><code>{slot.name}</code></td><td>{slot.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="data-slots"><a class="docs-section-anchor" href="#data-slots">Data Slots</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Slot</th><th>Element</th><th>Description</th></tr></thead><tbody>{dataSlots.map((part) => <tr><td><code>{part.name}</code></td><td><code>{part.element}</code></td><td>{part.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="exports"><a class="docs-section-anchor" href="#exports">Exports</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Export</th><th>Description</th></tr></thead><tbody>{exportsList.map((item) => <tr><td><code>{item.name}</code></td><td>{item.description}</td></tr>)}</tbody></table></div>
+          </div>
+        </section>
+
+        <DocsPageNavigation currentPath={currentPath} />
+      </article>
+
+      <aside class="docs-page-toc" aria-label="On this page">
+        <div class="docs-page-toc__inner">
+          <span class="docs-page-toc__title">On this page</span>
+          <ul>
+            <li><a href="#installation" data-toc-link="installation">Installation</a><ul><li><a href="#barrel" data-toc-link="barrel">Barrel</a></li><li><a href="#granular" data-toc-link="granular">Granular</a></li></ul></li>
+            <li><a href="#usage" data-toc-link="usage">Usage</a></li>
+            <li><a href="#composition" data-toc-link="composition">Composition</a></li>
+            <li><a href="#examples" data-toc-link="examples">Examples</a><ul><li><a href="#overview" data-toc-link="overview">Overview</a></li><li><a href="#variants" data-toc-link="variants">Variants</a></li><li><a href="#sizes" data-toc-link="sizes">Sizes</a></li><li><a href="#semantic-html" data-toc-link="semantic-html">Semantic HTML</a></li><li><a href="#inline-text" data-toc-link="inline-text">Inline Text</a></li><li><a href="#monospace" data-toc-link="monospace">Monospace</a></li><li><a href="#truncate" data-toc-link="truncate">Truncate</a></li><li><a href="#right-to-left" data-toc-link="right-to-left">Right to Left</a></li></ul></li>
+            <li><a href="#accessibility" data-toc-link="accessibility">Accessibility</a></li>
+            <li><a href="#api-reference" data-toc-link="api-reference">API Reference</a><ul><li><a href="#text-api" data-toc-link="text-api">Text</a></li><li><a href="#slots" data-toc-link="slots">Slots</a></li><li><a href="#data-slots" data-toc-link="data-slots">Data Slots</a></li><li><a href="#exports" data-toc-link="exports">Exports</a></li></ul></li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+  </div>
+</DocsLayout>

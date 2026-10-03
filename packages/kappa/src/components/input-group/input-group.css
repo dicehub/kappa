@@ -1,0 +1,292 @@
+.kappa-input-group {
+  --kappa-input-group-height: 2.25rem;
+  --kappa-input-group-padding: 0.625rem;
+  --kappa-input-group-radius: 0.5rem;
+  --kappa-input-group-font-size: 0.8125rem;
+  --kappa-input-group-addon-padding: 0.625rem;
+  --kappa-input-group-icon-size: 1rem;
+
+  box-sizing: border-box;
+  display: flex;
+  inline-size: 100%;
+  min-inline-size: 0;
+  min-block-size: var(--kappa-input-group-height);
+  align-items: stretch;
+  overflow: hidden;
+  border: 1px solid var(--kappa-line, #e3e6eb);
+  border-radius: var(--kappa-input-group-radius);
+  background: var(--kappa-control, #ffffff);
+  color: var(--kappa-default, #17191f);
+  font-family: var(--kappa-font-sans, inherit);
+  font-size: var(--kappa-input-group-font-size);
+  font-weight: 450;
+  line-height: 1.35;
+  transition:
+    background-color 120ms ease,
+    border-color 120ms ease,
+    box-shadow 120ms ease,
+    color 120ms ease;
+}
+
+.kappa-input-group[data-size="xs"] {
+  --kappa-input-group-height: 1.5rem;
+  --kappa-input-group-padding: 0.5rem;
+  --kappa-input-group-radius: 0.375rem;
+  --kappa-input-group-font-size: 0.75rem;
+  --kappa-input-group-addon-padding: 0.5rem;
+  --kappa-input-group-icon-size: 0.75rem;
+}
+
+.kappa-input-group[data-size="sm"] {
+  --kappa-input-group-height: 1.75rem;
+  --kappa-input-group-padding: 0.625rem;
+  --kappa-input-group-radius: 0.4375rem;
+  --kappa-input-group-font-size: 0.75rem;
+  --kappa-input-group-addon-padding: 0.5625rem;
+  --kappa-input-group-icon-size: 0.875rem;
+}
+
+.kappa-input-group[data-size="lg"] {
+  --kappa-input-group-height: 2.5rem;
+  --kappa-input-group-padding: 0.75rem;
+  --kappa-input-group-font-size: 0.875rem;
+  --kappa-input-group-addon-padding: 0.75rem;
+  --kappa-input-group-icon-size: 1.125rem;
+}
+
+.kappa-input-group:hover:not([data-disabled]) {
+  border-color: var(--kappa-subtle, #6c7480);
+}
+
+.kappa-input-group:focus-within {
+  border-color: var(--kappa-focus, #4c63ff);
+  box-shadow: 0 0 0 3px var(--kappa-focus-soft, rgba(76, 99, 255, 0.16));
+}
+
+.kappa-input-group[data-invalid],
+.kappa-input-group:has(
+    > [data-slot="input-group-control"][data-invalid],
+    > [data-slot="input-group-control"][aria-invalid="true"]
+  ) {
+  border-color: var(--kappa-danger, #b42318);
+}
+
+.kappa-input-group[data-invalid]:focus-within,
+.kappa-input-group:has(
+    > [data-slot="input-group-control"][data-invalid]:focus,
+    > [data-slot="input-group-control"][aria-invalid="true"]:focus
+  ) {
+  box-shadow: 0 0 0 3px var(--kappa-danger-soft, rgba(180, 35, 24, 0.16));
+}
+
+.kappa-input-group[data-disabled] {
+  border-color: var(--kappa-line, #e3e6eb);
+  background: var(--kappa-disabled-surface, var(--kappa-tint, #f4f6f9));
+  color: var(--kappa-subtle, #6c7480);
+}
+
+.kappa-input-group:has(> [data-align="block-start"], > [data-align="block-end"]) {
+  flex-direction: column;
+}
+
+.kappa-input-group__control {
+  box-sizing: border-box;
+  display: block;
+  flex: 1 1 auto;
+  inline-size: 100%;
+  min-inline-size: 0;
+  block-size: calc(var(--kappa-input-group-height) - 2px);
+  min-block-size: calc(var(--kappa-input-group-height) - 2px);
+  padding-block: 0;
+  padding-inline: var(--kappa-input-group-padding);
+  border: 0;
+  border-radius: 0;
+  outline: 0;
+  background: transparent;
+  box-shadow: none;
+  color: inherit;
+  font: inherit;
+  line-height: inherit;
+}
+
+.kappa-input-group__control::placeholder {
+  color: var(--kappa-muted, #9aa2ae);
+  opacity: 1;
+}
+
+.kappa-input-group__control::selection {
+  background: var(--kappa-accent, #2479b6);
+  color: var(--kappa-accent-contrast, #ffffff);
+}
+
+.kappa-input-group__control:focus-visible {
+  outline: 0;
+}
+
+.kappa-input-group__control:disabled {
+  cursor: not-allowed;
+  color: var(--kappa-subtle, #6c7480);
+  opacity: 0.62;
+}
+
+.kappa-input-group__control[readonly] {
+  cursor: default;
+}
+
+.kappa-input-group__control--textarea {
+  block-size: auto;
+  min-block-size: 5rem;
+  padding-block: 0.625rem;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+  resize: vertical;
+  scrollbar-color: var(--kappa-line, #e3e6eb) transparent;
+  scrollbar-width: thin;
+}
+
+.kappa-input-group[data-size="xs"] .kappa-input-group__control--textarea {
+  min-block-size: 3.5rem;
+  padding-block: 0.375rem;
+}
+
+.kappa-input-group[data-size="sm"] .kappa-input-group__control--textarea {
+  min-block-size: 4rem;
+  padding-block: 0.4375rem;
+}
+
+.kappa-input-group[data-size="lg"] .kappa-input-group__control--textarea {
+  min-block-size: 6rem;
+  padding-block: 0.75rem;
+}
+
+.kappa-input-group__addon {
+  z-index: 1;
+  display: flex;
+  flex: none;
+  min-inline-size: 0;
+  align-items: center;
+  gap: 0.375rem;
+  padding-block: 0;
+  padding-inline: var(--kappa-input-group-addon-padding);
+  color: var(--kappa-subtle, #6c7480);
+  font-size: inherit;
+  font-weight: 550;
+  line-height: 1;
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+.kappa-input-group__addon > * {
+  pointer-events: auto;
+}
+
+.kappa-input-group__addon[data-align="inline-start"] {
+  order: -1;
+  border-inline-end: 1px solid var(--kappa-line, #e3e6eb);
+}
+
+.kappa-input-group__addon[data-align="inline-end"] {
+  order: 1;
+  border-inline-start: 1px solid var(--kappa-line, #e3e6eb);
+}
+
+.kappa-input-group__addon[data-align="block-start"] {
+  order: -1;
+  min-block-size: 2rem;
+  border-block-end: 1px solid var(--kappa-line, #e3e6eb);
+}
+
+.kappa-input-group__addon[data-align="block-end"] {
+  order: 1;
+  min-block-size: 2rem;
+  border-block-start: 1px solid var(--kappa-line, #e3e6eb);
+}
+
+.kappa-input-group__addon :is(svg, [data-icon]) {
+  display: block;
+  inline-size: var(--kappa-button-icon-size, var(--kappa-input-group-icon-size));
+  block-size: var(--kappa-button-icon-size, var(--kappa-input-group-icon-size));
+  flex: none;
+  pointer-events: none;
+}
+
+.kappa-input-group__text {
+  display: inline-flex;
+  min-inline-size: 0;
+  align-items: center;
+  gap: 0.375rem;
+  color: inherit;
+  font: inherit;
+  line-height: inherit;
+  white-space: nowrap;
+}
+
+.kappa-input-group__text > :is(svg, [data-icon]) {
+  position: relative;
+  inset-block-start: -0.0625rem;
+}
+
+.kappa-input-group__button.kappa-button {
+  align-self: stretch;
+  block-size: auto;
+  min-block-size: calc(var(--kappa-input-group-height) - 2px);
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.kappa-input-group__button.kappa-button[data-variant="ghost"] {
+  --kappa-button-foreground: var(--kappa-subtle, #6c7480);
+  --kappa-button-hover-background: transparent;
+  --kappa-button-hover-foreground: var(--kappa-default, #17191f);
+  --kappa-button-active-background: transparent;
+}
+
+.kappa-input-group__button.kappa-button:focus-visible {
+  z-index: 2;
+  outline-offset: -3px;
+}
+
+.kappa-input-group__addon[data-align^="inline-"]
+  .kappa-input-group__button.kappa-button {
+  margin-block: -1px;
+}
+
+.kappa-input-group__addon[data-align^="block-"]
+  .kappa-input-group__button.kappa-button {
+  min-block-size: 1.75rem;
+  margin-inline-start: auto;
+}
+
+.kappa-input-group[data-disabled] .kappa-input-group__addon {
+  color: var(--kappa-subtle, #6c7480);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kappa-input-group {
+    transition: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .kappa-input-group {
+    border-color: ButtonText;
+  }
+
+  .kappa-input-group:focus-within {
+    border-color: Highlight;
+    box-shadow: 0 0 0 2px Highlight;
+  }
+
+  .kappa-input-group[data-invalid],
+  .kappa-input-group:has(
+      > [data-slot="input-group-control"][data-invalid],
+      > [data-slot="input-group-control"][aria-invalid="true"]
+    ) {
+    border-color: Mark;
+  }
+
+  .kappa-input-group[data-disabled] {
+    color: GrayText;
+  }
+}

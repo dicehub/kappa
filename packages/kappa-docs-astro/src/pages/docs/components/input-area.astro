@@ -1,0 +1,265 @@
+---
+import ArkUiDocsLink from "../../../components/ArkUiDocsLink.astro";
+import CodeBlock from "../../../components/CodeBlock.astro";
+import CompositionTree from "../../../components/CompositionTree.astro";
+import CopyPageControls from "../../../components/CopyPageControls.vue";
+import DocsPageNavigation from "../../../components/DocsPageNavigation.astro";
+import InputAreaDocsDemo from "../../../components/InputAreaDocsDemo.vue";
+import DocsLayout from "../../../layouts/DocsLayout.astro";
+import {
+  actionCode,
+  autoresizeCode,
+  barrelCode,
+  basicCode,
+  controlledCode,
+  dataAttributes,
+  events,
+  exportsList,
+  fieldCode,
+  granularCode,
+  inputAreaProps,
+  limitCode,
+  previewCode,
+  rtlCode,
+  sizesCode,
+  statesCode,
+} from "../../../data/input-area-docs";
+import "../../../styles/docs-components.css";
+
+const currentPath = "/docs/components/input-area";
+const description =
+  "A multi-line text control with native semantics, Kappa density, and optional Ark UI autoresize.";
+const examples = [
+  {
+    id: "field-composition",
+    title: "Field Composition",
+    description: "Place Input Area inside Field to connect its label, required state, and helper text.",
+    variant: "field",
+    code: fieldCode,
+  },
+  {
+    id: "sizes",
+    title: "Sizes",
+    description: "Use the same four density names as Input while preserving a practical writing area.",
+    variant: "sizes",
+    code: sizesCode,
+  },
+  {
+    id: "controlled",
+    title: "Controlled Value",
+    description: "Use v-model when application state owns the current text.",
+    variant: "controlled",
+    code: controlledCode,
+  },
+  {
+    id: "autoresize",
+    title: "Auto Resize",
+    description: "Enable Ark UI measurement to grow with content and disable the manual resize handle.",
+    variant: "autoresize",
+    code: autoresizeCode,
+  },
+  {
+    id: "states",
+    title: "Form States",
+    description: "Disabled, read-only, and invalid states remain distinct in both themes.",
+    variant: "states",
+    code: statesCode,
+  },
+  {
+    id: "character-limit",
+    title: "Character Limit",
+    description: "Pair native maxlength with a live counter when the limit helps the user.",
+    variant: "limit",
+    code: limitCode,
+  },
+  {
+    id: "with-button",
+    title: "With Button",
+    description: "Compose a native form and submit action without hiding textarea semantics.",
+    variant: "action",
+    code: actionCode,
+  },
+  {
+    id: "right-to-left",
+    title: "Right to Left",
+    description: "Logical sizing and padding follow the surrounding text direction.",
+    variant: "rtl",
+    code: rtlCode,
+  },
+] as const;
+---
+
+<DocsLayout title="Input Area" description={description}>
+  <div class="docs-page docs-page--component">
+    <header class="docs-page-header">
+      <div class="docs-page-header__inner">
+        <div class="docs-page-header__content">
+          <div class="docs-page-header__mobile-actions">
+            <CopyPageControls client:only="vue" align="center" />
+          </div>
+          <div class="docs-page-header__title-row">
+            <h1>Input Area</h1>
+            <ArkUiDocsLink />
+            <div class="docs-page-header__navigation-actions">
+              <div class="docs-page-header__desktop-actions"><CopyPageControls client:only="vue" /></div>
+              <DocsPageNavigation currentPath={currentPath} variant="compact" />
+            </div>
+          </div>
+          <p class="docs-page-header__lede">{description}</p>
+        </div>
+      </div>
+    </header>
+
+    <div class="docs-page-body">
+      <article class="docs-article docs-article--component">
+        <section id="preview" class="docs-section">
+          <div class="docs-component-example">
+            <div class="docs-component-preview">
+              <InputAreaDocsDemo client:load variant="preview" />
+            </div>
+            <CodeBlock code={previewCode} lang="vue" collapsible revealId="input-area-preview-code" />
+          </div>
+        </section>
+
+        <section id="installation" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#installation">Installation</a></h2>
+          <p>
+            Input Area is part of the main Kappa package. It composes Ark UI Field.Textarea so Ark
+            owns value updates, field context, attribute forwarding, and automatic resizing.
+          </p>
+          <h3 id="barrel"><a class="docs-section-anchor" href="#barrel">Barrel</a></h3>
+          <CodeBlock code={barrelCode} lang="javascript" />
+          <h3 id="granular"><a class="docs-section-anchor" href="#granular">Granular</a></h3>
+          <CodeBlock code={granularCode} lang="javascript" />
+        </section>
+
+        <section id="usage" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#usage">Usage</a></h2>
+          <p>
+            Input Area forwards native textarea attributes, classes, styles, and event listeners.
+            Use <code>v-model</code> for controlled text, and always provide an accessible name.
+          </p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview">
+              <InputAreaDocsDemo client:load variant="basic" />
+            </div>
+            <CodeBlock code={basicCode} lang="vue" collapsible revealId="input-area-basic-code" />
+          </div>
+        </section>
+
+        <section id="composition" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#composition">Composition</a></h2>
+          <CompositionTree component="inputArea" />
+          <p>
+            Labels, helper text, and validation messages belong to Kappa Field instead of Input Area.
+            The <code>autoresize</code> prop preserves
+            <a href="https://ark-ui.com/docs/components/field">Ark UI Field.Textarea</a> behavior.
+          </p>
+        </section>
+
+        <section id="examples" class="docs-section docs-section--component-examples">
+          <h2><a class="docs-section-anchor" href="#examples">Examples</a></h2>
+          {
+            examples.map((example) => (
+              <>
+                <h3 id={example.id}>
+                  <a class="docs-section-anchor" href={`#${example.id}`}>{example.title}</a>
+                </h3>
+                <p>{example.description}</p>
+                <div class="docs-component-example">
+                  <div class="docs-component-preview">
+                    <InputAreaDocsDemo client:load variant={example.variant} />
+                  </div>
+                  <CodeBlock
+                    code={example.code}
+                    lang="vue"
+                    collapsible
+                    revealId={`input-area-${example.id}-code`}
+                  />
+                </div>
+              </>
+            ))
+          }
+        </section>
+
+        <section id="accessibility" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#accessibility">Accessibility</a></h2>
+          <ul>
+            <li>Use a visible Label, Field.Label, <code>aria-label</code>, or <code>aria-labelledby</code>.</li>
+            <li>Native <code>required</code>, <code>maxlength</code>, disabled, and read-only behavior passes through.</li>
+            <li>The invalid prop adds <code>aria-invalid="true"</code>; connect error text with <code>aria-describedby</code>.</li>
+            <li>Field composition supplies the control id and description relationships through Ark UI context.</li>
+            <li>Focus remains visible, forced colors remain usable, and transitions honor reduced motion.</li>
+          </ul>
+        </section>
+
+        <section id="api-reference" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#api-reference">API Reference</a></h2>
+          <h3 id="input-area-api"><a class="docs-section-anchor" href="#input-area-api">InputArea</a></h3>
+          <div class="docs-api-table">
+            <table>
+              <thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+              <tbody>
+                {inputAreaProps.map((prop) => (
+                  <tr><td><code>{prop.name}</code></td><td><code>{prop.type}</code></td><td><code>{prop.defaultValue}</code></td><td>{prop.description}</td></tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          <h3 id="events"><a class="docs-section-anchor" href="#events">Events</a></h3>
+          <div class="docs-api-table">
+            <table>
+              <thead><tr><th>Event</th><th>Payload</th><th>Description</th></tr></thead>
+              <tbody>
+                {events.map((event) => (
+                  <tr><td><code>{event.name}</code></td><td><code>{event.payload}</code></td><td>{event.description}</td></tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          <h3 id="data-attributes"><a class="docs-section-anchor" href="#data-attributes">Data Attributes</a></h3>
+          <div class="docs-api-table">
+            <table>
+              <thead><tr><th>Attribute</th><th>Value</th><th>Description</th></tr></thead>
+              <tbody>
+                {dataAttributes.map((attribute) => (
+                  <tr><td><code>{attribute.name}</code></td><td><code>{attribute.value}</code></td><td>{attribute.description}</td></tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          <h3 id="exports"><a class="docs-section-anchor" href="#exports">Exports</a></h3>
+          <div class="docs-api-table">
+            <table>
+              <thead><tr><th>Export</th><th>Description</th></tr></thead>
+              <tbody>
+                {exportsList.map((entry) => (
+                  <tr><td><code>{entry.name}</code></td><td>{entry.description}</td></tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <DocsPageNavigation currentPath={currentPath} />
+      </article>
+
+      <aside class="docs-page-toc" aria-label="On this page">
+        <div class="docs-page-toc__inner">
+          <span class="docs-page-toc__title">On this page</span>
+          <ul>
+            <li><a href="#installation" data-toc-link="installation">Installation</a><ul><li><a href="#barrel" data-toc-link="barrel">Barrel</a></li><li><a href="#granular" data-toc-link="granular">Granular</a></li></ul></li>
+            <li><a href="#usage" data-toc-link="usage">Usage</a></li>
+            <li><a href="#composition" data-toc-link="composition">Composition</a></li>
+            <li><a href="#examples" data-toc-link="examples">Examples</a><ul>{examples.map((example) => <li><a href={`#${example.id}`} data-toc-link={example.id}>{example.title}</a></li>)}</ul></li>
+            <li><a href="#accessibility" data-toc-link="accessibility">Accessibility</a></li>
+            <li><a href="#api-reference" data-toc-link="api-reference">API Reference</a><ul><li><a href="#input-area-api" data-toc-link="input-area-api">InputArea</a></li><li><a href="#events" data-toc-link="events">Events</a></li><li><a href="#data-attributes" data-toc-link="data-attributes">Data Attributes</a></li><li><a href="#exports" data-toc-link="exports">Exports</a></li></ul></li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+  </div>
+</DocsLayout>

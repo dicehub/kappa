@@ -1,0 +1,175 @@
+---
+import CodeBlock from "./CodeBlock.astro";
+import CopyPageControls from "./CopyPageControls.vue";
+import DocsPageNavigation from "./DocsPageNavigation.astro";
+import { implementedComponentLinks } from "../data/docs-nav";
+import "../styles/docs-home.css";
+
+const currentPath = "/docs";
+const toc = [
+  { id: "why-kappa", label: "Why Kappa" },
+  { id: "principles", label: "Principles" },
+  { id: "start-building", label: "Start building" },
+  { id: "choose-a-layer", label: "Choose a layer" },
+];
+const principles = [
+  {
+    number: "01",
+    title: "Used at dicehub",
+    description: "Product work drives the library. We use these components in dicehub applications.",
+  },
+  {
+    number: "02",
+    title: "Informed by other libraries",
+    description:
+      "We study several UI libraries and adapt useful ideas to Kappa's API and visual language.",
+  },
+  {
+    number: "03",
+    title: "Opinionated components",
+    description:
+      "Each component has clear decisions about behavior, spacing, and states. Props, slots, and named parts provide the expected composition points.",
+  },
+  {
+    number: "04",
+    title: "Accessible behavior",
+    description:
+      "Keyboard use, focus, and state handling follow tested primitives.",
+  },
+];
+const startCode = `import { Button } from "@dicehub/kappa";
+import "@dicehub/kappa/styles/theme-kappa.css";`;
+---
+
+<div class="docs-page docs-home">
+  <header class="docs-page-header">
+    <div class="docs-page-header__inner">
+      <div class="docs-page-header__content">
+        <div class="docs-page-header__mobile-actions">
+          <CopyPageControls client:only="vue" align="center" markdownPath="/docs.md" />
+        </div>
+        <div class="docs-page-header__title-row">
+          <h1>Introduction</h1>
+          <div class="docs-page-header__navigation-actions">
+            <div class="docs-page-header__desktop-actions">
+              <CopyPageControls client:only="vue" markdownPath="/docs.md" />
+            </div>
+            <DocsPageNavigation currentPath={currentPath} variant="compact" />
+          </div>
+        </div>
+        <p class="docs-page-header__lede">
+          Vue components used across dicehub products.
+        </p>
+      </div>
+    </div>
+  </header>
+
+  <div class="docs-page-body">
+    <article class="docs-article docs-home__article">
+      <section id="why-kappa" class="docs-section docs-home__opening">
+        <h2><a class="docs-section-anchor" href="#why-kappa">Why Kappa</a></h2>
+        <p class="docs-home__lead">
+          Kappa is the component library we use at dicehub. It draws from a variety of UI libraries,
+          then adapts those ideas to our products. Its components are opinionated, with practical
+          defaults for dense technical interfaces.
+        </p>
+        <div class="docs-home__actions" aria-label="Get started" data-copy-ignore>
+          <a class="docs-home__action docs-home__action--primary" href="/docs/installation">
+            <span>Install Kappa</span>
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M5 12h14M13 6l6 6-6 6"></path>
+            </svg>
+          </a>
+          <a class="docs-home__action" href="/docs/components">Browse components</a>
+        </div>
+        <dl class="docs-home__facts">
+          <div>
+            <dt>{implementedComponentLinks.length}</dt>
+            <dd>Documented components</dd>
+          </div>
+          <div>
+            <dt>dicehub</dt>
+            <dd>Used in product applications</dd>
+          </div>
+          <div>
+            <dt>Vue 3</dt>
+            <dd>Typed ESM package</dd>
+          </div>
+        </dl>
+      </section>
+
+      <section id="principles" class="docs-section">
+        <h2><a class="docs-section-anchor" href="#principles">Principles</a></h2>
+        <p>Daily product work at dicehub shapes how Kappa is built.</p>
+        <div class="docs-home__principles">
+          {
+            principles.map((principle) => (
+              <article class="docs-home__principle">
+                <span class="docs-home__principle-number" aria-hidden="true">
+                  {principle.number}
+                </span>
+                <div>
+                  <h3>{principle.title}</h3>
+                  <p>{principle.description}</p>
+                </div>
+              </article>
+            ))
+          }
+        </div>
+      </section>
+
+      <section id="start-building" class="docs-section">
+        <h2><a class="docs-section-anchor" href="#start-building">Start building</a></h2>
+        <p>
+          Import components from the package root. Load the Kappa theme once in your application.
+        </p>
+        <CodeBlock code={startCode} lang="typescript" />
+        <p class="docs-home__note">
+          For a new project, follow the <a href="/docs/installation">installation guide</a>. The
+          <a href="/docs/colors">color system</a> explains the theme tokens.
+        </p>
+      </section>
+
+      <section id="choose-a-layer" class="docs-section">
+        <h2><a class="docs-section-anchor" href="#choose-a-layer">Choose a layer</a></h2>
+        <ul class="docs-home__layers" role="list">
+          <li>
+            <a class="docs-home__layer" href="/docs/components">
+              <span class="docs-home__layer-kind">Components</span>
+              <strong>Individual controls</strong>
+              <span>Controls for forms, navigation, feedback, and data display.</span>
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M5 12h14M13 6l6 6-6 6"></path>
+              </svg>
+            </a>
+          </li>
+          <li>
+            <a class="docs-home__layer" href="/docs/blocks">
+              <span class="docs-home__layer-kind">Blocks</span>
+              <strong>Complete layouts</strong>
+              <span>Larger structures made from Kappa components.</span>
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M5 12h14M13 6l6 6-6 6"></path>
+              </svg>
+            </a>
+          </li>
+        </ul>
+      </section>
+
+      <DocsPageNavigation currentPath={currentPath} />
+    </article>
+
+    <aside class="docs-page-toc" aria-label="On this page">
+      <div class="docs-page-toc__inner">
+        <span class="docs-page-toc__title">On this page</span>
+        <ul>
+          {
+            toc.map((item) => (
+              <li><a href={`#${item.id}`} data-toc-link={item.id}>{item.label}</a></li>
+            ))
+          }
+        </ul>
+      </div>
+    </aside>
+  </div>
+</div>

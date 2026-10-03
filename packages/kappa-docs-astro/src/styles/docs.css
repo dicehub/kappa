@@ -1,0 +1,274 @@
+@import "@dicehub/kappa/styles/theme-kappa.css";
+@import "@kappa-docs/component-styles.css";
+
+@font-face {
+  font-family: "Geist";
+  src: url("/fonts/geist/geist-variable.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+/*
+ * Documentation shell tokens. Colors read the published Kappa theme; typography,
+ * geometry, and the shell-only hairline alpha, header overlay, and success accent
+ * remain documentation-owned.
+ */
+:root {
+  --docs-canvas: var(--kappa-canvas);
+  --docs-base: var(--kappa-base);
+  --docs-control: var(--kappa-control);
+  --docs-tint: var(--kappa-tint);
+  --docs-nav-highlight: var(--kappa-overlay);
+  --docs-border: var(--kappa-hairline);
+  --docs-line: rgba(15, 23, 42, 0.1);
+  --docs-default: var(--kappa-default);
+  --docs-strong: var(--kappa-strong);
+  --docs-subtle: var(--kappa-subtle);
+  --docs-brand: var(--kappa-focus);
+  --docs-brand-soft: var(--kappa-focus-soft);
+  --docs-success: #16803a;
+  --docs-shadow: var(--kappa-shadow);
+  --docs-header-bg: rgba(250, 250, 250, 0.94);
+  --docs-radius: 12px;
+  --docs-font-sans: "Geist", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --docs-font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+  --docs-nav-font-size: 0.8rem;
+  --docs-nav-line-height: 1.125rem;
+  /* Documentation-only bridges that are not part of the published theme. */
+  --kappa-font-sans: var(--docs-font-sans);
+  /* Local dicehub reference composition; not the published Number Input theme. */
+  --kappa-dicehub-number-surface: #ebebeb;
+  --kappa-dicehub-number-text: #333333;
+  --kappa-dicehub-number-hover: rgb(136 136 136 / 20%);
+  --kappa-dicehub-number-trigger: rgb(136 136 136 / 30%);
+  --kappa-dicehub-number-trigger-hover: rgb(136 136 136 / 50%);
+  --kappa-dicehub-number-trigger-text: #e7e7e7;
+  --kappa-dicehub-number-trigger-active-text: #ffffff;
+  --kappa-dicehub-number-focus: #247ab7;
+  --kappa-dicehub-number-updated: rgb(39 168 229 / 30%);
+}
+
+html.kappa-docs-root[data-kappa-theme="dark"],
+html.kappa-docs-root[data-mode="dark"]:not([data-kappa-theme="light"]) {
+  --docs-line: #333333;
+  --docs-success: #4ade80;
+  --docs-header-bg: #030303f0;
+  --kappa-dicehub-number-surface: #333333;
+  --kappa-dicehub-number-text: #e7e7e7;
+  --kappa-dicehub-number-focus: #69b2e6;
+}
+
+* {
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html,
+body {
+  min-height: 100%;
+  margin: 0;
+  background: var(--docs-canvas);
+  color: var(--docs-default);
+  font-family: var(--docs-font-sans);
+}
+
+/* Mode, color-scheme, and color tokens come from the imported Kappa theme. */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  line-height: 1.5;
+  text-rendering: optimizeLegibility;
+  transition: background-color 160ms ease, color 160ms ease;
+}
+
+button,
+a,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+button {
+  border: 0;
+  background: none;
+  color: inherit;
+}
+
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+svg {
+  display: block;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+code,
+pre {
+  font-family: var(--docs-font-mono);
+  letter-spacing: normal;
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+}
+
+.docs-skip-link {
+  position: fixed;
+  top: 0.5rem;
+  left: 0.5rem;
+  z-index: 100;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.5rem;
+  background: var(--docs-default);
+  color: var(--docs-canvas);
+  font-size: 0.8125rem;
+  transform: translateY(-150%);
+  transition: transform 120ms ease;
+}
+
+.docs-skip-link:focus {
+  transform: translateY(0);
+}
+
+.docs-visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  clip-path: inset(50%);
+  border: 0;
+  white-space: nowrap;
+}
+
+.docs-icon-button,
+.docs-theme-toggle,
+.docs-sidebar-collapse {
+  display: inline-flex;
+  width: 36px;
+  height: 36px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.5rem;
+  color: var(--docs-default);
+  cursor: pointer;
+  transition: background-color 120ms ease, box-shadow 120ms ease, color 120ms ease, transform 120ms ease;
+}
+
+.docs-icon-button:hover,
+.docs-theme-toggle:hover,
+.docs-sidebar-collapse:hover {
+  background: var(--docs-tint);
+}
+
+.docs-icon-button:focus-visible,
+.docs-theme-toggle:focus-visible,
+.docs-sidebar-collapse:focus-visible {
+  outline: 2px solid var(--docs-brand);
+  outline-offset: 2px;
+  box-shadow: none;
+}
+
+.docs-icon-button svg,
+.docs-theme-toggle__icon {
+  width: 1.125rem;
+  height: 1.125rem;
+}
+
+.docs-theme-toggle,
+.docs-sidebar-collapse {
+  position: relative;
+}
+
+.docs-theme-toggle__icon {
+  position: absolute;
+  transition: opacity 160ms ease, transform 160ms ease;
+}
+
+.docs-theme-toggle__icon--sun {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.docs-theme-toggle__icon--moon {
+  opacity: 0;
+  transform: scale(0.8);
+}
+
+html.kappa-docs-root[data-kappa-theme="dark"] .docs-theme-toggle__icon--sun,
+html.kappa-docs-root[data-mode="dark"]:not([data-kappa-theme="light"]) .docs-theme-toggle__icon--sun {
+  opacity: 0;
+  transform: scale(0.8);
+}
+
+html.kappa-docs-root[data-kappa-theme="dark"] .docs-theme-toggle__icon--moon,
+html.kappa-docs-root[data-mode="dark"]:not([data-kappa-theme="light"]) .docs-theme-toggle__icon--moon {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.docs-header__sidebar-toggle .docs-mark__stem,
+.docs-header__sidebar-toggle .docs-mark__chevron,
+.docs-header__sidebar-toggle .docs-mark__node {
+  transform-box: fill-box;
+  transform-origin: center;
+  transition: opacity 320ms cubic-bezier(0.4, 0, 0.2, 1), transform 320ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.docs-header__sidebar-toggle:hover .docs-mark__stem,
+.docs-header__sidebar-toggle:focus-visible .docs-mark__stem {
+  opacity: 0;
+  transform: scaleY(0.15);
+}
+
+.docs-header__sidebar-toggle:hover .docs-mark__node,
+.docs-header__sidebar-toggle:focus-visible .docs-mark__node {
+  opacity: 0;
+  transform: scale(0.35);
+}
+
+[data-docs-app][data-sidebar-open="false"] .docs-header__sidebar-toggle:hover .docs-mark__chevron,
+[data-docs-app][data-sidebar-open="false"] .docs-header__sidebar-toggle:focus-visible .docs-mark__chevron {
+  transform: scaleX(-1);
+}
+
+.docs-mark {
+  color: var(--docs-default);
+}
+
+.docs-sidebar-toggle__mark {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

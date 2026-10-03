@@ -1,0 +1,58 @@
+.data-grid-demo {
+  inline-size: min(100%, 58rem);
+  min-inline-size: 0;
+}
+
+.data-grid-demo[data-data-grid-demo="virtual"] {
+  min-block-size: 25rem;
+}
+
+.data-grid-demo__states {
+  display: grid;
+  inline-size: 100%;
+  gap: 1rem;
+}
+
+.data-grid-demo__count {
+  margin-inline-start: auto;
+  color: var(--kappa-muted, #6c7480);
+  font-size: 0.75rem;
+  white-space: nowrap;
+}
+
+.data-grid-demo :deep(.kappa-input) {
+  inline-size: min(18rem, 42vw);
+}
+
+.data-grid-demo__score {
+  inline-size: 100%;
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  text-align: end;
+}
+
+.data-grid-demo__multiline {
+  display: grid;
+  gap: 0.125rem;
+  padding-block: 0.25rem;
+}
+
+.data-grid-demo__multiline span {
+  color: var(--kappa-muted, #6c7480);
+  font-size: 0.75rem;
+  line-height: 1.15rem;
+}
+
+@media (max-width: 42rem) {
+  .data-grid-demo :deep(.kappa-data-grid__toolbar) {
+    flex-wrap: wrap;
+  }
+
+  .data-grid-demo :deep(.kappa-input) {
+    inline-size: 100%;
+  }
+
+  .data-grid-demo__count {
+    margin-inline-start: 0;
+  }
+}

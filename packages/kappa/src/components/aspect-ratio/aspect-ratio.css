@@ -1,0 +1,9 @@
+.kappa-aspect-ratio {
+  --kappa-aspect-ratio: 1;
+
+  box-sizing: border-box;
+  display: block;
+  min-inline-size: 0;
+  min-block-size: 0;
+  aspect-ratio: var(--kappa-aspect-ratio, 1);
+}

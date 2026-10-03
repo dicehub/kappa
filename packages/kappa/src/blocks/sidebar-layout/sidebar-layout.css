@@ -1,0 +1,39 @@
+.kappa-sidebar-layout {
+  --kappa-sidebar-layout-gap: 0.5rem;
+  --kappa-sidebar-layout-radius: 0.625rem;
+  --kappa-sidebar-layout-primary-width: 9.5rem;
+  flex-direction: column;
+  block-size: 100%;
+  background: var(--kappa-control);
+  color: var(--kappa-default);
+  font-family: var(--kappa-font-sans, inherit);
+}
+.kappa-sidebar-layout, .kappa-sidebar-layout *, .kappa-sidebar-layout *::before, .kappa-sidebar-layout *::after { box-sizing: border-box; }
+.kappa-sidebar-layout__navigation > .kappa-sidebar__header { min-block-size: 4rem; padding-block: 0.25rem; }
+.kappa-sidebar-layout__body { display: flex; flex: 1; min-inline-size: 0; min-block-size: 0; }
+.kappa-sidebar-layout__main { display: flex; flex: 1; flex-direction: column; min-inline-size: 0; min-block-size: 0; background: var(--kappa-control); }
+.kappa-sidebar-layout__toolbar { display: flex; flex: none; align-items: center; gap: 0.75rem; min-block-size: 4rem; padding: 0.5rem 0.75rem; border-block-end: 1px solid var(--kappa-line); font-size: 0.8125rem; }
+.kappa-sidebar-layout__content { flex: 1; min-inline-size: 0; min-block-size: 0; overflow: auto; overscroll-behavior: contain; }
+.kappa-sidebar-layout__columns { display: flex; flex: 1; min-inline-size: 0; min-block-size: 0; }
+.kappa-sidebar-layout__secondary { border-inline-start: 1px solid var(--kappa-line); background: var(--kappa-tint); }
+.kappa-sidebar-layout__secondary[hidden] { display: none; }
+.kappa-sidebar-layout__navigation[data-layout="split"][data-state="expanded"] .kappa-sidebar-layout__primary { flex: 0 0 var(--kappa-sidebar-layout-primary-width); }
+
+/* These surfaces belong to the layout block, not the Sidebar primitive. */
+.kappa-sidebar-layout:is([data-variant="inset"], [data-variant="floating"]):not([data-mobile]) { background: var(--kappa-tint); }
+.kappa-sidebar-layout[data-variant="inset"]:not([data-mobile]) > .kappa-sidebar-layout__body { padding: var(--kappa-sidebar-layout-gap); padding-inline-start: 0; }
+.kappa-sidebar-layout[data-variant="inset"][data-side="end"]:not([data-mobile]) > .kappa-sidebar-layout__body { padding-inline-start: var(--kappa-sidebar-layout-gap); padding-inline-end: 0; }
+/* Match the inset panel's block borders without drawing a frame around navigation. */
+.kappa-sidebar-layout[data-variant="inset"]:not([data-mobile]) .kappa-sidebar-layout__navigation { border: 0; border-block: 1px solid transparent; background: var(--kappa-tint); }
+.kappa-sidebar-layout[data-variant="inset"]:not([data-mobile]) .kappa-sidebar-layout__main { border: 1px solid var(--kappa-line); border-radius: var(--kappa-sidebar-layout-radius); overflow: hidden; }
+.kappa-sidebar-layout[data-variant="floating"]:not([data-mobile]) > .kappa-sidebar-layout__body { padding: var(--kappa-sidebar-layout-gap); gap: var(--kappa-sidebar-layout-gap); }
+.kappa-sidebar-layout[data-variant="floating"]:not([data-mobile]) .kappa-sidebar-layout__navigation { border: 1px solid var(--kappa-line); border-radius: var(--kappa-sidebar-layout-radius); box-shadow: var(--kappa-shadow, none); }
+.kappa-sidebar-layout[data-variant="floating"]:not([data-mobile]) .kappa-sidebar-layout__main { border-radius: var(--kappa-sidebar-layout-radius); overflow: hidden; }
+.kappa-sidebar-layout__navigation[data-layout="floating"] > .kappa-sidebar__header { border-start-start-radius: inherit; border-start-end-radius: inherit; }
+.kappa-sidebar-layout__navigation[data-layout="floating"] > .kappa-sidebar__footer { border-end-start-radius: inherit; border-end-end-radius: inherit; }
+
+/* Use primitive mobile state, including custom breakpoints. Teleports retain data-layout. */
+.kappa-sidebar-layout__navigation[data-mobile][data-layout="split"] .kappa-sidebar-layout__columns { flex-direction: column; overflow: auto; }
+.kappa-sidebar-layout__navigation[data-mobile][data-layout="split"] :is(.kappa-sidebar-layout__primary, .kappa-sidebar-layout__secondary) { flex: none; overflow: visible; }
+.kappa-sidebar-layout__navigation[data-mobile] .kappa-sidebar-layout__secondary { border-inline-start: 0; border-block-start: 1px solid var(--kappa-line); }
+.kappa-sidebar-layout[data-mobile] .kappa-sidebar-layout__toolbar { min-block-size: 4rem; }

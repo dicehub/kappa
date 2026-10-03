@@ -1,0 +1,88 @@
+.kappa-dicehub-logo {
+  display: block;
+  width: 100%;
+  height: auto;
+  color: var(--kappa-default, #17191f);
+}
+
+.kappa-dicehub-logo--color {
+  color: var(--kappa-dicehub-logo-ink, #333333);
+}
+
+.kappa-dicehub-logo--black {
+  color: var(--kappa-dicehub-logo-black, #000000);
+}
+
+.kappa-dicehub-logo--white {
+  color: var(--kappa-dicehub-logo-white, #ffffff);
+}
+
+.kappa-powered-by-dicehub {
+  display: inline-flex;
+  width: max-content;
+  max-width: 100%;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem 0.5rem 0.625rem;
+  border-radius: 0.5rem;
+  background: var(--kappa-base, #ffffff);
+  box-shadow: inset 0 0 0 1px var(--kappa-hairline, rgba(16, 24, 40, 0.08));
+  color: var(--kappa-default, #17191f);
+  font-family: var(--kappa-font-sans, ui-sans-serif, system-ui, sans-serif);
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1.25rem;
+  text-decoration: none;
+  transition:
+    box-shadow 120ms ease,
+    transform 120ms ease;
+}
+
+.kappa-powered-by-dicehub:hover {
+  box-shadow:
+    inset 0 0 0 1px var(--kappa-line, #e3e6eb),
+    var(--kappa-shadow, 0 1px 2px rgba(16, 24, 40, 0.05));
+  transform: translateY(-1px);
+}
+
+.kappa-powered-by-dicehub--color {
+  color: var(--kappa-dicehub-logo-ink, #333333);
+}
+
+.kappa-powered-by-dicehub:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 1px var(--kappa-focus, rgba(76, 99, 255, 0.75)),
+    0 0 0 4px var(--kappa-focus-soft, rgba(76, 99, 255, 0.16));
+}
+
+.kappa-powered-by-dicehub--black {
+  background: var(--kappa-dicehub-logo-white, #ffffff);
+  box-shadow: inset 0 0 0 1px var(--kappa-dicehub-logo-black-border, rgba(0, 0, 0, 0.18));
+  color: var(--kappa-dicehub-logo-black, #000000);
+}
+
+.kappa-powered-by-dicehub--white {
+  background: var(--kappa-dicehub-logo-black, #000000);
+  box-shadow: inset 0 0 0 1px var(--kappa-dicehub-logo-white-border, rgba(255, 255, 255, 0.18));
+  color: var(--kappa-dicehub-logo-white, #ffffff);
+}
+
+.kappa-powered-by-dicehub__mark {
+  width: 1rem;
+  flex: none;
+}
+
+.kappa-powered-by-dicehub strong {
+  font-weight: 650;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kappa-powered-by-dicehub {
+    transition: none;
+  }
+
+  .kappa-powered-by-dicehub:hover {
+    transform: none;
+  }
+}

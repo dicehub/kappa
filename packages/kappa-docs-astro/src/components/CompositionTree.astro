@@ -1,0 +1,42 @@
+---
+import CodeBlock from "./CodeBlock.astro";
+import { componentCompositionTrees } from "../data/component-composition-trees";
+
+type ComponentName = keyof typeof componentCompositionTrees;
+
+interface Props {
+  component: ComponentName;
+  label?: string;
+}
+
+const { component, label = "Typical part hierarchy" } = Astro.props;
+---
+
+<figure class="docs-composition-tree" data-composition-tree={component}>
+  <figcaption>{label}</figcaption>
+  <CodeBlock code={componentCompositionTrees[component]} lang="plaintext" />
+</figure>
+
+<style>
+  .docs-composition-tree {
+    width: 100%;
+    min-width: 0;
+    margin: 0.875rem 0 1rem;
+  }
+
+  .docs-composition-tree figcaption {
+    margin: 0 0 0.5rem;
+    color: var(--docs-subtle);
+    font-size: 0.8125rem;
+    font-weight: 500;
+    line-height: 1.4;
+  }
+
+  .docs-composition-tree :global(.docs-code-block) {
+    margin-top: 0;
+  }
+
+  .docs-composition-tree :global(pre code) {
+    font-variant-ligatures: none;
+  }
+</style>

@@ -1,0 +1,229 @@
+.kappa-resizable {
+  --kappa-resizable-surface: var(--kappa-control, #ffffff);
+  --kappa-resizable-line: var(--kappa-line, #e3e6eb);
+  --kappa-resizable-line-strong: var(--kappa-line-strong, #c7cdd6);
+  --kappa-resizable-handle-size: 0.875rem;
+  --kappa-resizable-grip-size: 0.25rem;
+  --kappa-resizable-focus: var(--kappa-focus, #4c63ff);
+  --kappa-resizable-focus-soft: var(--kappa-focus-soft, rgba(76, 99, 255, 0.16));
+
+  box-sizing: border-box;
+  min-inline-size: 0;
+  min-block-size: 0;
+  overflow: hidden;
+  border: 1px solid var(--kappa-resizable-line);
+  border-radius: 0.625rem;
+  background: var(--kappa-resizable-surface);
+  color: var(--kappa-default, #17191f);
+  font-family: var(--kappa-font-sans, inherit);
+}
+
+.kappa-resizable *,
+.kappa-resizable *::before,
+.kappa-resizable *::after {
+  box-sizing: border-box;
+}
+
+.kappa-resizable__panel {
+  min-inline-size: 0;
+  min-block-size: 0;
+  /* Ark adds overflow:hidden inline to protect flex sizing; Kappa panels are scroll containers. */
+  overflow: auto !important;
+  scrollbar-color: var(--kappa-resizable-line-strong) transparent;
+  scrollbar-width: thin;
+}
+
+.kappa-resizable__panel:focus-visible {
+  outline: 2px solid var(--kappa-resizable-focus);
+  outline-offset: -2px;
+}
+
+.kappa-resizable__handle,
+.kappa-resizable__resize-trigger {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  flex: 0 0 auto;
+  place-items: center;
+  border: 0;
+  border-radius: 0.375rem;
+  padding: 0;
+  background: transparent;
+  color: var(--kappa-subtle, #6c7480);
+  outline: none;
+  touch-action: none;
+  user-select: none;
+  transition:
+    background-color 140ms ease,
+    color 140ms ease,
+    box-shadow 140ms ease;
+}
+
+.kappa-resizable[data-orientation="horizontal"]
+  > :is(.kappa-resizable__handle, .kappa-resizable__resize-trigger) {
+  inline-size: var(--kappa-resizable-handle-size);
+  min-block-size: 100%;
+  cursor: col-resize;
+}
+
+.kappa-resizable[data-orientation="vertical"]
+  > :is(.kappa-resizable__handle, .kappa-resizable__resize-trigger) {
+  inline-size: 100%;
+  block-size: var(--kappa-resizable-handle-size);
+  cursor: row-resize;
+}
+
+.kappa-resizable[data-orientation="horizontal"]
+  > :is(.kappa-resizable__handle, .kappa-resizable__resize-trigger)::before {
+  inline-size: 1px;
+  block-size: 100%;
+}
+
+.kappa-resizable[data-orientation="vertical"]
+  > :is(.kappa-resizable__handle, .kappa-resizable__resize-trigger)::before {
+  inline-size: 100%;
+  block-size: 1px;
+}
+
+.kappa-resizable
+  :is(.kappa-resizable__handle, .kappa-resizable__resize-trigger)::before {
+  position: absolute;
+  z-index: -1;
+  border-radius: inherit;
+  background: var(--kappa-resizable-line);
+  content: "";
+  transition: background-color 140ms ease;
+}
+
+.kappa-resizable
+  :is(.kappa-resizable__handle, .kappa-resizable__resize-trigger):hover::before,
+.kappa-resizable
+  :is(.kappa-resizable__handle, .kappa-resizable__resize-trigger)[data-dragging]::before {
+  background: var(--kappa-resizable-focus);
+}
+
+.kappa-resizable
+  :is(.kappa-resizable__handle, .kappa-resizable__resize-trigger):hover,
+.kappa-resizable
+  :is(.kappa-resizable__handle, .kappa-resizable__resize-trigger)[data-dragging] {
+  color: var(--kappa-resizable-focus);
+}
+
+.kappa-resizable
+  :is(.kappa-resizable__handle, .kappa-resizable__resize-trigger):focus-visible,
+.kappa-resizable
+  :is(.kappa-resizable__handle, .kappa-resizable__resize-trigger)[data-focus] {
+  background: var(--kappa-resizable-focus-soft);
+  box-shadow: 0 0 0 2px var(--kappa-resizable-focus);
+}
+
+.kappa-resizable
+  :is(.kappa-resizable__handle, .kappa-resizable__resize-trigger)[data-disabled],
+.kappa-resizable
+  :is(.kappa-resizable__handle, .kappa-resizable__resize-trigger):disabled {
+  cursor: not-allowed;
+  opacity: var(--kappa-disabled-opacity, 0.56);
+}
+
+.kappa-resizable__resize-trigger-indicator {
+  position: relative;
+  display: grid;
+  flex: none;
+  place-items: center;
+  border: 1px solid var(--kappa-resizable-line-strong);
+  border-radius: 0.25rem;
+  background: var(--kappa-resizable-surface);
+  color: var(--kappa-subtle, #6c7480);
+  box-shadow: 0 1px 3px color-mix(in srgb, var(--kappa-default, #17191f) 12%, transparent);
+  pointer-events: none;
+  transition:
+    border-color 140ms ease,
+    color 140ms ease,
+    box-shadow 140ms ease;
+}
+
+.kappa-resizable__resize-trigger-indicator::before {
+  inline-size: var(--kappa-resizable-grip-size);
+  block-size: 1.125rem;
+  border-radius: 999px;
+  background: currentColor;
+  box-shadow: 0 -0.3rem 0 currentColor, 0 0.3rem 0 currentColor;
+  content: "";
+}
+
+.kappa-resizable[data-orientation="horizontal"]
+  > :is(.kappa-resizable__handle, .kappa-resizable__resize-trigger)
+  > .kappa-resizable__resize-trigger-indicator {
+  inline-size: 0.6rem;
+  block-size: 2.25rem;
+}
+
+.kappa-resizable[data-orientation="vertical"]
+  > :is(.kappa-resizable__handle, .kappa-resizable__resize-trigger)
+  > .kappa-resizable__resize-trigger-indicator {
+  inline-size: 2.25rem;
+  block-size: 0.6rem;
+}
+
+.kappa-resizable[data-orientation="vertical"]
+  > :is(.kappa-resizable__handle, .kappa-resizable__resize-trigger)
+  > .kappa-resizable__resize-trigger-indicator::before {
+  inline-size: 1.125rem;
+  block-size: var(--kappa-resizable-grip-size);
+  box-shadow: -0.3rem 0 currentColor, 0.3rem 0 currentColor;
+}
+
+.kappa-resizable
+  :is(.kappa-resizable__handle, .kappa-resizable__resize-trigger):hover
+  .kappa-resizable__resize-trigger-indicator,
+.kappa-resizable
+  :is(.kappa-resizable__handle, .kappa-resizable__resize-trigger)[data-dragging]
+  .kappa-resizable__resize-trigger-indicator,
+.kappa-resizable
+  :is(.kappa-resizable__handle, .kappa-resizable__resize-trigger):focus-visible
+  .kappa-resizable__resize-trigger-indicator,
+.kappa-resizable
+  :is(.kappa-resizable__handle, .kappa-resizable__resize-trigger)[data-focus]
+  .kappa-resizable__resize-trigger-indicator {
+  border-color: var(--kappa-resizable-focus);
+  color: var(--kappa-resizable-focus);
+  box-shadow: 0 0 0 2px var(--kappa-resizable-focus-soft);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kappa-resizable
+    :is(.kappa-resizable__handle, .kappa-resizable__resize-trigger),
+  .kappa-resizable
+    :is(.kappa-resizable__handle, .kappa-resizable__resize-trigger)::before,
+  .kappa-resizable__resize-trigger-indicator {
+    transition: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .kappa-resizable {
+    border-color: CanvasText;
+  }
+
+  .kappa-resizable__panel {
+    scrollbar-color: ButtonText Canvas;
+  }
+
+  .kappa-resizable
+    :is(.kappa-resizable__handle, .kappa-resizable__resize-trigger)::before {
+    background: CanvasText;
+  }
+
+  .kappa-resizable
+    :is(.kappa-resizable__handle, .kappa-resizable__resize-trigger):focus-visible {
+    outline: 2px solid Highlight;
+    outline-offset: 2px;
+  }
+
+  .kappa-resizable__resize-trigger-indicator {
+    border-color: ButtonText;
+    background: Canvas;
+    color: ButtonText;
+    box-shadow: none;
+  }
+}

@@ -1,0 +1,59 @@
+.kappa-menu-bar {
+  box-sizing: border-box;
+  display: inline-flex;
+  max-inline-size: 100%;
+  align-items: center;
+  gap: 0.125rem;
+  padding: 0.1875rem;
+  border: 1px solid var(--kappa-line, #e3e6eb);
+  border-radius: 0.5rem;
+  background: var(--kappa-control, #ffffff);
+  color: var(--kappa-default, #17191f);
+  font-family: var(--kappa-font-sans, inherit);
+}
+
+.kappa-menu-bar__trigger {
+  box-sizing: border-box;
+  display: inline-flex;
+  min-block-size: 1.875rem;
+  align-items: center;
+  justify-content: center;
+  gap: 0.375rem;
+  padding-block: 0.3125rem;
+  padding-inline: 0.625rem;
+  border: 0;
+  border-radius: 0.3125rem;
+  background: transparent;
+  color: inherit;
+  cursor: default;
+  font: inherit;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  line-height: 1.25rem;
+  white-space: nowrap;
+}
+
+.kappa-menu-bar__trigger:hover,
+.kappa-menu-bar__trigger[data-state="open"] {
+  background: var(--kappa-overlay, #f3f4f6);
+}
+
+.kappa-menu-bar__trigger:focus-visible {
+  outline: 2px solid var(--kappa-focus, #247ab7);
+  outline-offset: -2px;
+}
+
+.kappa-menu-bar__trigger:disabled,
+.kappa-menu-bar__trigger[aria-disabled="true"] {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.kappa-menu-bar__content {
+  --kappa-dropdown-min-inline-size: 12rem;
+}
+
+@media (forced-colors: active) {
+  .kappa-menu-bar { border-color: CanvasText; }
+  .kappa-menu-bar__trigger:focus-visible { outline-color: Highlight; }
+}

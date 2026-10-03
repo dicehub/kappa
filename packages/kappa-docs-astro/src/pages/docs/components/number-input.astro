@@ -1,0 +1,344 @@
+---
+import ArkUiDocsLink from "../../../components/ArkUiDocsLink.astro";
+import NumberInputDocsDemo from "../../../components/NumberInputDocsDemo.vue";
+import NumberInputCompactDocsDemo from "../../../components/NumberInputCompactDocsDemo.vue";
+import compactCode from "../../../components/NumberInputCompactDocsDemo.vue?raw";
+import CodeBlock from "../../../components/CodeBlock.astro";
+import CompositionTree from "../../../components/CompositionTree.astro";
+import CopyPageControls from "../../../components/CopyPageControls.vue";
+import DocsPageNavigation from "../../../components/DocsPageNavigation.astro";
+import {
+  barrelCode,
+  basicCode,
+  controlledCode,
+  events,
+  exportsList,
+  granularCode,
+  localeCode,
+  mouseWheelCode,
+  parts,
+  precisionCode,
+  previewCode,
+  rangeCode,
+  rootProps,
+  rtlCode,
+  scrubbableInputCode,
+  scrubbableInputProps,
+  scrubbingCode,
+  sizesCode,
+  statesCode,
+  unitsCode,
+  usageCode,
+} from "../../../data/number-input-docs";
+import DocsLayout from "../../../layouts/DocsLayout.astro";
+import "../../../styles/docs-components.css";
+
+const currentPath = "/docs/components/number-input";
+const description =
+  "Edits numeric values with direct entry, step controls, keyboard commands, and horizontal scrubbing.";
+---
+
+<DocsLayout title="Number Input" description={description}>
+  <div class="docs-page docs-page--component">
+    <header class="docs-page-header">
+      <div class="docs-page-header__inner">
+        <div class="docs-page-header__content">
+          <div class="docs-page-header__mobile-actions">
+            <CopyPageControls client:only="vue" align="center" />
+          </div>
+          <div class="docs-page-header__title-row">
+            <h1>Number Input</h1>
+            <ArkUiDocsLink />
+            <div class="docs-page-header__navigation-actions">
+              <div class="docs-page-header__desktop-actions"><CopyPageControls client:only="vue" /></div>
+              <DocsPageNavigation currentPath={currentPath} variant="compact" />
+            </div>
+          </div>
+          <p class="docs-page-header__lede">{description}</p>
+        </div>
+      </div>
+    </header>
+
+    <div class="docs-page-body">
+      <article class="docs-article docs-article--component">
+        <section id="preview" class="docs-section">
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><NumberInputDocsDemo client:load variant="preview" /></div>
+            <CodeBlock code={previewCode} lang="vue" collapsible revealId="number-input-preview-code" />
+          </div>
+        </section>
+
+        <section id="installation" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#installation">Installation</a></h2>
+          <h3 id="barrel"><a class="docs-section-anchor" href="#barrel">Barrel</a></h3>
+          <CodeBlock code={barrelCode} lang="javascript" />
+          <h3 id="granular"><a class="docs-section-anchor" href="#granular">Granular</a></h3>
+          <CodeBlock code={granularCode} lang="javascript" />
+        </section>
+
+        <section id="usage" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#usage">Usage</a></h2>
+          <p>
+            Keep controlled values as strings. This preserves intermediate input and locale-specific
+            formatting. Use <code>valueAsNumber</code> from event details or context only at a numeric
+            application boundary.
+          </p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><NumberInputDocsDemo client:load variant="usage" /></div>
+            <CodeBlock code={usageCode} lang="vue" collapsible revealId="number-input-usage-code" />
+          </div>
+        </section>
+
+        <section id="composition" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#composition">Composition</a></h2>
+          <CompositionTree component="numberInput" />
+          <p>
+            Ark UI owns the number machine, spinbutton semantics, locale parsing, Pointer Lock
+            behavior for the separate <code>Scrubber</code>, and press-and-hold triggers. Kappa owns
+            the whole-field click, edit, and drag interaction in <code>ScrubbableInput</code>, plus
+            the compound API, dense control geometry, states, and semantic tokens.
+          </p>
+          <ul>
+            <li><code>Root</code> owns the string value, range, steps, locale, and state.</li>
+            <li><code>Label</code> names the input. Include the physical unit in this text.</li>
+            <li><code>Control</code> contains the input, optional unit, and optional triggers.</li>
+            <li><code>ScrubbableInput</code> combines a quiet value display, whole-field drag, and direct editing.</li>
+            <li><code>Scrubber</code> is an optional pointer target. Keep the input for keyboard access.</li>
+          </ul>
+          <p>
+            See the <a href="https://ark-ui.com/docs/components/number-input">Ark UI Number Input</a>
+            guide for the primitive behavior contract.
+          </p>
+          <p>
+            When you compose an external machine with <code>RootProvider</code>, repeat
+            <code>step</code>, <code>smallStep</code>, <code>largeStep</code>, and
+            <code>allowMouseWheel</code> on the provider. These values configure Kappa's
+            whole-field scrub and hover-wheel enhancements; the Ark machine still owns the value.
+          </p>
+        </section>
+
+        <section id="examples" class="docs-section docs-section--component-examples">
+          <h2><a class="docs-section-anchor" href="#examples">Examples</a></h2>
+
+          <h3 id="basic"><a class="docs-section-anchor" href="#basic">Basic</a></h3>
+          <p>Direct entry, arrow keys, and explicit step triggers share one string value.</p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><NumberInputDocsDemo client:load variant="basic" /></div>
+            <CodeBlock code={basicCode} lang="vue" collapsible revealId="number-input-basic-code" />
+          </div>
+
+          <h3 id="scrubbable-input"><a class="docs-section-anchor" href="#scrubbable-input">Scrubbable Input</a></h3>
+          <p>
+            Use <code>ScrubbableInput</code> for the whole-field drag-and-edit pattern common in 3D
+            applications. Its quiet display becomes a selected text editor on click. The first example
+            uses only the scrubbable field. The second adds decrement and increment triggers on its left
+            and right. It sets <code>focusInputOnChange</code> to <code>false</code>, so a step button keeps
+            the center in display mode. Its <code>editAlignment="center"</code> option also keeps the
+            number centered during direct editing. A horizontal drag starts after 10 pixels. Ctrl or Alt
+            uses <code>smallStep</code>, Shift uses <code>largeStep</code>, and Escape restores the value
+            from the start of the drag.
+          </p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><NumberInputDocsDemo client:load variant="scrubbable" /></div>
+            <CodeBlock code={scrubbableInputCode} lang="vue" collapsible revealId="number-input-scrubbable-code" />
+          </div>
+
+          <span id="dicehub-cards" aria-hidden="true"></span>
+          <h3 id="compact-use"><a class="docs-section-anchor" href="#compact-use">Compact Use</a></h3>
+          <p>
+            One 20px-high input field. Click to edit, drag to adjust, or hover to show the arrow buttons.
+          </p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><NumberInputCompactDocsDemo client:load /></div>
+            <CodeBlock code={compactCode} lang="vue" collapsible revealId="number-input-compact-code" />
+          </div>
+          <p>
+            <code>NumberInputField</code> is a local docs helper, not a published Kappa component.
+            This example keeps the compact field's existing edit and drag behavior, with no card or linked values.
+          </p>
+          <details>
+            <summary>Example behavior</summary>
+            <ul>
+              <li>Drag after 10px. Ctrl ×100, Shift ×0.02, Alt ×10; the first active modifier wins. Escape cancels a drag.</li>
+              <li>Arrow buttons step on release and repeat after a 400ms hold, through Ark's context API.</li>
+              <li>Typed edits save on blur, Enter, or Escape. Empty or invalid text restores the previous value; decimal commas are accepted. The minimum is zero.</li>
+              <li>Hover shows the complete value after 500ms. The reference font and compatibility rules apply only to this example, not the default Number Input.</li>
+            </ul>
+          </details>
+
+          <h3 id="scrubbing"><a class="docs-section-anchor" href="#scrubbing">Separate Scrubber Handle</a></h3>
+          <p>
+            Use <code>Scrubber</code> when the design needs a separate drag handle. Click or focus the
+            input to type an exact value. This lower-level Ark interaction uses <code>step</code>.
+          </p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><NumberInputDocsDemo client:load variant="scrubbing" /></div>
+            <CodeBlock code={scrubbingCode} lang="vue" collapsible revealId="number-input-scrubbing-code" />
+          </div>
+
+          <h3 id="min-max"><a class="docs-section-anchor" href="#min-max">Min and Max</a></h3>
+          <p>
+            Set a valid range with <code>min</code> and <code>max</code>. Kappa restricts changes to
+            the range by default. <code>allowOverflow</code> also disables the default blur clamp;
+            set <code>clampValueOnBlur</code> explicitly when both behaviors are required.
+          </p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><NumberInputDocsDemo client:load variant="range" /></div>
+            <CodeBlock code={rangeCode} lang="vue" collapsible revealId="number-input-range-code" />
+          </div>
+
+          <h3 id="precision"><a class="docs-section-anchor" href="#precision">Precision</a></h3>
+          <p>Pair a decimal step with Intl fraction-digit options for stable engineering precision.</p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><NumberInputDocsDemo client:load variant="precision" /></div>
+            <CodeBlock code={precisionCode} lang="vue" collapsible revealId="number-input-precision-code" />
+          </div>
+
+          <h3 id="units"><a class="docs-section-anchor" href="#units">Units</a></h3>
+          <p>
+            Use <code>Unit</code> for a short visual suffix, or use Intl unit formatting when it fits.
+            A suffix does not name the quantity. Put the unit in <code>Label</code> and mark a repeated
+            suffix as decorative.
+          </p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><NumberInputDocsDemo client:load variant="units" /></div>
+            <CodeBlock code={unitsCode} lang="vue" collapsible revealId="number-input-units-code" />
+          </div>
+
+          <h3 id="controlled"><a class="docs-section-anchor" href="#controlled">Controlled and Commit</a></h3>
+          <p>
+            Use <code>v-model</code> for live state and <code>valueCommit</code> for work that must wait
+            for blur or Enter, such as an expensive solver update.
+          </p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><NumberInputDocsDemo client:load variant="controlled" /></div>
+            <CodeBlock code={controlledCode} lang="vue" collapsible revealId="number-input-controlled-code" />
+          </div>
+
+          <h3 id="states"><a class="docs-section-anchor" href="#states">States</a></h3>
+          <p>
+            Disabled blocks focus and changes. Read-only permits focus and selection but blocks
+            triggers and scrubbing. Invalid needs a clear text description.
+          </p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><NumberInputDocsDemo client:load variant="states" /></div>
+            <CodeBlock code={statesCode} lang="vue" collapsible revealId="number-input-states-code" />
+          </div>
+
+          <h3 id="sizes"><a class="docs-section-anchor" href="#sizes">Sizes</a></h3>
+          <p>Use <code>xs</code> for compact dicehub property fields: 20px high with 3px input padding and a 2px corner radius. The other sizes are 28px (<code>sm</code>), 32px (<code>default</code>), and 36px (<code>lg</code>) at a 16px root font size. All sizes also support <code>NumberInput.ScrubbableInput</code>.</p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><NumberInputDocsDemo client:load variant="sizes" /></div>
+            <CodeBlock code={sizesCode} lang="vue" collapsible revealId="number-input-sizes-code" />
+          </div>
+
+          <h3 id="locale"><a class="docs-section-anchor" href="#locale">Locale and Formatting</a></h3>
+          <p><code>locale</code> controls grouping and decimal separators. Intl options control display precision.</p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><NumberInputDocsDemo client:load variant="locale" /></div>
+            <CodeBlock code={localeCode} lang="vue" collapsible revealId="number-input-locale-code" />
+          </div>
+
+          <h3 id="mouse-wheel"><a class="docs-section-anchor" href="#mouse-wheel">Mouse Wheel</a></h3>
+          <p>
+            Wheel changes are opt-in. With <code>allowMouseWheel</code>, hover or focus the input,
+            then scroll to apply one <code>step</code> per wheel event. The default remains off to
+            prevent accidental changes during page scrolling. Kappa intentionally extends Ark UI's
+            focus-only wheel behavior to the hovered input when this option is enabled.
+          </p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><NumberInputDocsDemo client:load variant="mouse-wheel" /></div>
+            <CodeBlock code={mouseWheelCode} lang="vue" collapsible revealId="number-input-wheel-code" />
+          </div>
+
+          <h3 id="right-to-left"><a class="docs-section-anchor" href="#right-to-left">Right-to-left</a></h3>
+          <p>
+            Direction controls layout, trigger order, and scrub direction. Numeric parsing stays
+            with <code>locale</code>, so the two settings can be chosen independently.
+          </p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><NumberInputDocsDemo client:load variant="rtl" /></div>
+            <CodeBlock code={rtlCode} lang="vue" collapsible revealId="number-input-rtl-code" />
+          </div>
+        </section>
+
+        <section id="accessibility" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#accessibility">Accessibility</a></h2>
+          <ul>
+            <li>The input follows the WAI-ARIA spinbutton pattern and exposes its value and range.</li>
+            <li>ArrowUp and ArrowDown use <code>step</code>. Shift uses <code>largeStep</code>; Alt uses <code>smallStep</code>.</li>
+            <li>Home sets the minimum, End sets the maximum, and Enter commits the current value.</li>
+            <li>Every visible field needs <code>Label</code>. Connect help or error text with <code>aria-describedby</code>.</li>
+            <li>Give icon-only triggers concise names if custom trigger content changes the supplied translation.</li>
+            <li>Whole-field scrubbing starts only after 10 pixels, so a click remains a reliable route to direct entry.</li>
+            <li>Scrubbing needs a pointing device. Direct entry and spinbutton keyboard commands remain available.</li>
+            <li>Disabled and read-only fields do not start a scrub. Read-only input can still receive focus for selection.</li>
+            <li>Use <code>name</code> and <code>form</code> for native form association. Read <code>valueAsNumber</code> from context when a numeric payload is required.</li>
+          </ul>
+        </section>
+
+        <section id="api-reference" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#api-reference">API Reference</a></h2>
+          <div class="docs-api-group">
+            <h3 id="root-api"><a class="docs-section-anchor" href="#root-api">NumberInput.Root</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>{rootProps.map((prop) => <tr><td><code>{prop.name}</code></td><td><code>{prop.type}</code></td><td><code>{prop.defaultValue}</code></td><td>{prop.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="scrubbable-input-api"><a class="docs-section-anchor" href="#scrubbable-input-api">NumberInput.ScrubbableInput</a></h3>
+            <p>
+              Replaces <code>Input</code> inside <code>Control</code>. It forwards native input
+              attributes and listeners. Range, formatting, <code>step</code>, <code>smallStep</code>,
+              and <code>largeStep</code> come from <code>Root</code>.
+            </p>
+            <div class="docs-api-table"><table><thead><tr><th>Prop or slot</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>{scrubbableInputProps.map((prop) => <tr><td><code>{prop.name}</code></td><td><code>{prop.type}</code></td><td><code>{prop.defaultValue}</code></td><td>{prop.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="parts-api"><a class="docs-section-anchor" href="#parts-api">Parts</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Part</th><th>Element</th><th>Description</th></tr></thead><tbody>{parts.map((part) => <tr><td><code>NumberInput.{part.name}</code></td><td><code>{part.element}</code></td><td>{part.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="events-api"><a class="docs-section-anchor" href="#events-api">Events</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Event</th><th>Payload</th><th>Description</th></tr></thead><tbody>{events.map((event) => <tr><td><code>{event.name}</code></td><td><code>{event.payload}</code></td><td>{event.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="exports"><a class="docs-section-anchor" href="#exports">Exports</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Export</th><th>Description</th></tr></thead><tbody>{exportsList.map((item) => <tr><td><code>{item.name}</code></td><td>{item.description}</td></tr>)}</tbody></table></div>
+          </div>
+        </section>
+
+        <DocsPageNavigation currentPath={currentPath} />
+      </article>
+
+      <aside class="docs-page-toc" aria-label="On this page">
+        <div class="docs-page-toc__inner">
+          <span class="docs-page-toc__title">On this page</span>
+          <ul>
+            <li><a href="#installation" data-toc-link="installation">Installation</a><ul><li><a href="#barrel" data-toc-link="barrel">Barrel</a></li><li><a href="#granular" data-toc-link="granular">Granular</a></li></ul></li>
+            <li><a href="#usage" data-toc-link="usage">Usage</a></li>
+            <li><a href="#composition" data-toc-link="composition">Composition</a></li>
+            <li>
+              <a href="#examples" data-toc-link="examples">Examples</a>
+              <ul>
+                <li><a href="#basic" data-toc-link="basic">Basic</a></li>
+                <li><a href="#scrubbable-input" data-toc-link="scrubbable-input">Scrubbable Input</a></li>
+                <li><a href="#compact-use" data-toc-link="compact-use">Compact Use</a></li>
+                <li><a href="#scrubbing" data-toc-link="scrubbing">Separate Scrubber Handle</a></li>
+                <li><a href="#min-max" data-toc-link="min-max">Min and Max</a></li>
+                <li><a href="#precision" data-toc-link="precision">Precision</a></li>
+                <li><a href="#units" data-toc-link="units">Units</a></li>
+                <li><a href="#controlled" data-toc-link="controlled">Controlled and Commit</a></li>
+                <li><a href="#states" data-toc-link="states">States</a></li>
+                <li><a href="#sizes" data-toc-link="sizes">Sizes</a></li>
+                <li><a href="#locale" data-toc-link="locale">Locale and Formatting</a></li>
+                <li><a href="#mouse-wheel" data-toc-link="mouse-wheel">Mouse Wheel</a></li>
+                <li><a href="#right-to-left" data-toc-link="right-to-left">Right-to-left</a></li>
+              </ul>
+            </li>
+            <li><a href="#accessibility" data-toc-link="accessibility">Accessibility</a></li>
+            <li><a href="#api-reference" data-toc-link="api-reference">API Reference</a><ul><li><a href="#root-api" data-toc-link="root-api">NumberInput.Root</a></li><li><a href="#scrubbable-input-api" data-toc-link="scrubbable-input-api">NumberInput.ScrubbableInput</a></li><li><a href="#parts-api" data-toc-link="parts-api">Parts</a></li><li><a href="#events-api" data-toc-link="events-api">Events</a></li><li><a href="#exports" data-toc-link="exports">Exports</a></li></ul></li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+  </div>
+</DocsLayout>

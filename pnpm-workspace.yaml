@@ -1,0 +1,11 @@
+packages:
+  - "packages/*"
+
+onlyBuiltDependencies:
+  - esbuild
+
+overrides:
+  "js-yaml@>=3.0.0 <3.15.2": "3.15.2"
+  "js-yaml@>=4.0.0 <4.3.2": "4.3.2"
+  "devalue@<5.9.2": "5.9.2"
+  "fast-uri@>=3.0.0 <3.1.8": "3.1.8"

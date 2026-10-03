@@ -1,0 +1,188 @@
+---
+import ArkUiDocsLink from "../../../components/ArkUiDocsLink.astro";
+import CodeBlock from "../../../components/CodeBlock.astro";
+import CompositionTree from "../../../components/CompositionTree.astro";
+import CopyPageControls from "../../../components/CopyPageControls.vue";
+import DialogDocsDemo from "../../../components/DialogDocsDemo.vue";
+import DocsPageNavigation from "../../../components/DocsPageNavigation.astro";
+import {
+  barrelCode,
+  compositionCode,
+  contentProps,
+  events,
+  examples,
+  exportsList,
+  granularCode,
+  parts,
+  previewCode,
+  rootProps,
+  usageCode,
+} from "../../../data/dialog-docs";
+import DocsLayout from "../../../layouts/DocsLayout.astro";
+import "../../../styles/docs-components.css";
+
+const currentPath = "/docs/components/dialog";
+const description =
+  "Presents a focused task or decision in an accessible modal or alert-dialog layer.";
+---
+
+<DocsLayout title="Dialog" description={description}>
+  <div class="docs-page docs-page--component">
+    <header class="docs-page-header">
+      <div class="docs-page-header__inner">
+        <div class="docs-page-header__content">
+          <div class="docs-page-header__mobile-actions">
+            <CopyPageControls client:only="vue" align="center" />
+          </div>
+          <div class="docs-page-header__title-row">
+            <h1>Dialog</h1>
+            <ArkUiDocsLink />
+            <div class="docs-page-header__navigation-actions">
+              <div class="docs-page-header__desktop-actions"><CopyPageControls client:only="vue" /></div>
+              <DocsPageNavigation currentPath={currentPath} variant="compact" />
+            </div>
+          </div>
+          <p class="docs-page-header__lede">{description}</p>
+        </div>
+      </div>
+    </header>
+
+    <div class="docs-page-body">
+      <article class="docs-article docs-article--component">
+        <section id="preview" class="docs-section">
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><DialogDocsDemo client:load variant="preview" /></div>
+            <CodeBlock code={previewCode} lang="vue" collapsible revealId="dialog-preview-code" />
+          </div>
+        </section>
+
+        <section id="installation" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#installation">Installation</a></h2>
+          <h3 id="barrel"><a class="docs-section-anchor" href="#barrel">Barrel</a></h3>
+          <CodeBlock code={barrelCode} lang="javascript" />
+          <h3 id="granular"><a class="docs-section-anchor" href="#granular">Granular</a></h3>
+          <CodeBlock code={granularCode} lang="javascript" />
+        </section>
+
+        <section id="usage" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#usage">Usage</a></h2>
+          <p>
+            Put <code>Trigger</code> and <code>Content</code> inside <code>Dialog.Root</code>.
+            <code>Content</code> supplies the portal layers and close control. Use
+            <code>Header</code> and <code>Footer</code> for stable title and action regions.
+          </p>
+          <div class="docs-component-example">
+            <CodeBlock code={usageCode} lang="vue" collapsible revealId="dialog-usage-code" />
+          </div>
+        </section>
+
+        <section id="composition" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#composition">Composition</a></h2>
+          <CompositionTree component="dialog" />
+          <p>
+            <a href="https://ark-ui.com/docs/components/dialog">Ark UI Dialog</a> owns open state,
+            modality, focus trapping, dismissal, aria relationships, presence, and nested layers.
+            Kappa owns the compound API, composed portal surface, close control, layout, sizing,
+            semantic tokens, and motion.
+          </p>
+          <ul>
+            <li><code>Dialog</code> and <code>Dialog.Root</code> are the same root component, matching other Kappa compound APIs.</li>
+            <li><code>Content</code> teleports to <code>body</code>; pass <code>:teleport="false"</code> for an in-place test or constrained integration.</li>
+            <li><code>Backdrop</code> and <code>Positioner</code> remain public for selectors and advanced styling, while <code>Content</code> composes them.</li>
+            <li>Use <code>as-child</code> on Trigger and Close when a Kappa Button owns the visual element.</li>
+          </ul>
+          <div class="docs-component-example">
+            <CodeBlock code={compositionCode} lang="vue" collapsible revealId="dialog-composition-code" />
+          </div>
+
+          <h3 id="reference-differences"><a class="docs-section-anchor" href="#reference-differences">Reference Differences</a></h3>
+          <p>
+            The main <code>Dialog</code> export is the root, not the content surface. It supports
+            header, footer, custom-close, no-close, fixed-action, scrolling, and RTL composition patterns.
+            The Kappa close label is configurable for localization.
+          </p>
+        </section>
+
+        <section id="behavior-and-focus" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#behavior-and-focus">Behavior and Focus</a></h2>
+          <ul>
+            <li>The first focusable element receives focus. Use <code>initialFocusEl</code> when the safest target is not first.</li>
+            <li>Escape and allowed outside interactions close a normal dialog. Focus returns to the opening trigger.</li>
+            <li><code>role="alertdialog"</code> disables outside dismissal by default. Put focus on the least destructive action.</li>
+            <li><code>disablePointerDismissal</code> protects a confirmation without changing its role.</li>
+            <li>Keep <code>Dialog.Root</code> mounted. Use controlled state plus the default lazy mount and exit unmount behavior.</li>
+            <li>For a child popup that teleports to <code>body</code>, use its lazy mount and exit unmount options. This keeps the popup in the active modal accessibility tree.</li>
+            <li>For a non-modal surface, set <code>:modal="false"</code>, <code>:trap-focus="false"</code>, and <code>:show-backdrop="false"</code>.</li>
+          </ul>
+        </section>
+
+        <section id="examples" class="docs-section docs-section--component-examples">
+          <h2><a class="docs-section-anchor" href="#examples">Examples</a></h2>
+          {examples.map((example) => (
+            <>
+              <h3 id={example.id}><a class="docs-section-anchor" href={`#${example.id}`}>{example.title}</a></h3>
+              <p>{example.description}</p>
+              <div class="docs-component-example">
+                <div class="docs-component-preview"><DialogDocsDemo client:load variant={example.id} /></div>
+                <CodeBlock code={example.code} lang="vue" collapsible revealId={`dialog-${example.id}-code`} />
+              </div>
+            </>
+          ))}
+        </section>
+
+        <section id="accessibility" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#accessibility">Accessibility</a></h2>
+          <ul>
+            <li>Render a visible <code>Title</code> and normally a <code>Description</code>. Use <code>ariaLabel</code> only when no title is visible.</li>
+            <li>Every icon-only close control needs an accessible label. <code>closeLabel</code> localizes the built-in control.</li>
+            <li>Tab and Shift+Tab stay inside a modal dialog. Escape closes it when enabled.</li>
+            <li>Do not use an alert dialog for ordinary information. Reserve it for an urgent decision or acknowledgement.</li>
+            <li>Give long scroll regions <code>tabindex="0"</code> when keyboard users must scroll them independently.</li>
+            <li>All focus indicators remain visible. Open and close motion stops under reduced-motion preferences.</li>
+          </ul>
+        </section>
+
+        <section id="api-reference" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#api-reference">API Reference</a></h2>
+          <div class="docs-api-group">
+            <h3 id="root-api"><a class="docs-section-anchor" href="#root-api">Dialog.Root</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>{rootProps.map((prop) => <tr><td><code>{prop.name}</code></td><td><code>{prop.type}</code></td><td><code>{prop.defaultValue}</code></td><td>{prop.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="content-api"><a class="docs-section-anchor" href="#content-api">Dialog.Content</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>{contentProps.map((prop) => <tr><td><code>{prop.name}</code></td><td><code>{prop.type}</code></td><td><code>{prop.defaultValue}</code></td><td>{prop.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="parts-api"><a class="docs-section-anchor" href="#parts-api">Parts</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Part</th><th>Element</th><th>Description</th></tr></thead><tbody>{parts.map((part) => <tr><td><code>Dialog.{part.name}</code></td><td><code>{part.element}</code></td><td>{part.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="events-api"><a class="docs-section-anchor" href="#events-api">Events</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Event</th><th>Payload</th><th>Description</th></tr></thead><tbody>{events.map((event) => <tr><td><code>{event.name}</code></td><td><code>{event.payload}</code></td><td>{event.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="exports"><a class="docs-section-anchor" href="#exports">Exports</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Export</th><th>Description</th></tr></thead><tbody>{exportsList.map((item) => <tr><td><code>{item.name}</code></td><td>{item.description}</td></tr>)}</tbody></table></div>
+          </div>
+        </section>
+
+        <DocsPageNavigation currentPath={currentPath} />
+      </article>
+
+      <aside class="docs-page-toc" aria-label="On this page">
+        <div class="docs-page-toc__inner">
+          <span class="docs-page-toc__title">On this page</span>
+          <ul>
+            <li><a href="#installation" data-toc-link="installation">Installation</a><ul><li><a href="#barrel" data-toc-link="barrel">Barrel</a></li><li><a href="#granular" data-toc-link="granular">Granular</a></li></ul></li>
+            <li><a href="#usage" data-toc-link="usage">Usage</a></li>
+            <li><a href="#composition" data-toc-link="composition">Composition</a><ul><li><a href="#reference-differences" data-toc-link="reference-differences">Reference Differences</a></li></ul></li>
+            <li><a href="#behavior-and-focus" data-toc-link="behavior-and-focus">Behavior and Focus</a></li>
+            <li><a href="#examples" data-toc-link="examples">Examples</a><ul>{examples.map((example) => <li><a href={`#${example.id}`} data-toc-link={example.id}>{example.title}</a></li>)}</ul></li>
+            <li><a href="#accessibility" data-toc-link="accessibility">Accessibility</a></li>
+            <li><a href="#api-reference" data-toc-link="api-reference">API Reference</a><ul><li><a href="#root-api" data-toc-link="root-api">Dialog.Root</a></li><li><a href="#content-api" data-toc-link="content-api">Dialog.Content</a></li><li><a href="#parts-api" data-toc-link="parts-api">Parts</a></li><li><a href="#events-api" data-toc-link="events-api">Events</a></li><li><a href="#exports" data-toc-link="exports">Exports</a></li></ul></li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+  </div>
+</DocsLayout>

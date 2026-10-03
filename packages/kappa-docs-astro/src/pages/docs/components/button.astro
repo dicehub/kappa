@@ -1,0 +1,253 @@
+---
+import ButtonDocsDemo from "../../../components/ButtonDocsDemo.vue";
+import CodeBlock from "../../../components/CodeBlock.astro";
+import CopyPageControls from "../../../components/CopyPageControls.vue";
+import DocsPageNavigation from "../../../components/DocsPageNavigation.astro";
+import {
+  barrelCode,
+  basicCode,
+  buttonProps,
+  disabledCode,
+  exportsList,
+  formCode,
+  fullWidthCode,
+  granularCode,
+  iconOnlyCode,
+  iconsCode,
+  linkButtonProps,
+  linksCode,
+  loadingCode,
+  lucideInstallCode,
+  previewCode,
+  rtlCode,
+  sizesCode,
+  usageCode,
+  variantExamples,
+  variants,
+} from "../../../data/button-docs";
+import DocsLayout from "../../../layouts/DocsLayout.astro";
+import "../../../styles/docs-components.css";
+
+const currentPath = "/docs/components/button";
+const description = "Triggers an action or presents a link with consistent Kappa control styling.";
+---
+
+<DocsLayout title="Button" description={description}>
+  <div class="docs-page docs-page--component">
+    <header class="docs-page-header">
+      <div class="docs-page-header__inner">
+        <div class="docs-page-header__content">
+          <div class="docs-page-header__mobile-actions">
+            <CopyPageControls client:only="vue" align="center" />
+          </div>
+          <div class="docs-page-header__title-row">
+            <h1>Button</h1>
+            <div class="docs-page-header__navigation-actions">
+              <div class="docs-page-header__desktop-actions"><CopyPageControls client:only="vue" /></div>
+              <DocsPageNavigation currentPath={currentPath} variant="compact" />
+            </div>
+          </div>
+          <p class="docs-page-header__lede">{description}</p>
+        </div>
+      </div>
+    </header>
+
+    <div class="docs-page-body">
+      <article class="docs-article docs-article--component">
+        <section id="preview" class="docs-section">
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><ButtonDocsDemo client:load variant="preview" /></div>
+            <CodeBlock code={previewCode} lang="vue" collapsible revealId="button-preview-code" />
+          </div>
+        </section>
+
+        <section id="installation" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#installation">Installation</a></h2>
+          <h3 id="barrel"><a class="docs-section-anchor" href="#barrel">Barrel</a></h3>
+          <CodeBlock code={barrelCode} lang="javascript" />
+          <h3 id="granular"><a class="docs-section-anchor" href="#granular">Granular</a></h3>
+          <CodeBlock code={granularCode} lang="javascript" />
+        </section>
+
+        <section id="usage" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#usage">Usage</a></h2>
+          <p>
+            Use <code>Button</code> for actions and <code>LinkButton</code> for navigation. Button defaults
+            to <code>type="button"</code>, preventing accidental form submission.
+          </p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><ButtonDocsDemo client:load variant="usage" /></div>
+            <CodeBlock code={usageCode} lang="vue" collapsible revealId="button-usage-code" />
+          </div>
+        </section>
+
+        <section id="examples" class="docs-section docs-section--component-examples">
+          <h2><a class="docs-section-anchor" href="#examples">Examples</a></h2>
+
+          <h3 id="basic"><a class="docs-section-anchor" href="#basic">Basic</a></h3>
+          <p>The quiet secondary treatment is the default for dense technical workflows.</p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><ButtonDocsDemo client:load variant="basic" /></div>
+            <CodeBlock code={basicCode} lang="vue" collapsible revealId="button-basic-code" />
+          </div>
+
+          <h3 id="variants"><a class="docs-section-anchor" href="#variants">Variants</a></h3>
+          <p>
+            Choose emphasis from the action’s meaning and local hierarchy. A view should rarely need
+            more than one primary action.
+          </p>
+          <div data-button-variant-examples>
+            {variantExamples.map((example) => (
+              <section aria-labelledby={example.name}>
+                <h4 id={example.name}>
+                  <a class="docs-section-anchor" href={`#${example.name}`}>{example.title}</a>
+                </h4>
+                <p>{example.purpose}</p>
+                <div class="docs-component-example">
+                  <div class="docs-component-preview">
+                    <ButtonDocsDemo variant={example.name} />
+                  </div>
+                  <CodeBlock
+                    code={example.code}
+                    lang="vue"
+                    collapsible
+                    revealId={`button-${example.name}-code`}
+                  />
+                </div>
+              </section>
+            ))}
+          </div>
+
+          <h3 id="sizes"><a class="docs-section-anchor" href="#sizes">Sizes</a></h3>
+          <p>Use compact sizes in toolbars and data-dense controls; use base for standard forms.</p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><ButtonDocsDemo variant="sizes" /></div>
+            <CodeBlock code={sizesCode} lang="vue" collapsible revealId="button-sizes-code" />
+          </div>
+
+          <h3 id="with-icons"><a class="docs-section-anchor" href="#with-icons">With Icons</a></h3>
+          <p>
+            These examples use <code>@lucide/vue</code>, but <code>icon</code> accepts any Vue component.
+            Set <code>iconPosition</code> with logical values so placement follows the reading direction.
+          </p>
+          <CodeBlock code={lucideInstallCode} lang="bash" />
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><ButtonDocsDemo variant="icons" /></div>
+            <CodeBlock code={iconsCode} lang="vue" collapsible revealId="button-icons-code" />
+          </div>
+
+          <h3 id="icon-only"><a class="docs-section-anchor" href="#icon-only">Icon-only</a></h3>
+          <p>
+            Use square or circle geometry and provide <code>aria-label</code> or
+            <code>aria-labelledby</code>; the decorative icon is hidden from assistive technology.
+          </p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><ButtonDocsDemo variant="icon-only" /></div>
+            <CodeBlock code={iconOnlyCode} lang="vue" collapsible revealId="button-icon-only-code" />
+          </div>
+
+          <h3 id="loading"><a class="docs-section-anchor" href="#loading">Loading</a></h3>
+          <p>
+            Loading preserves the visible label, adds a spinner and <code>aria-busy="true"</code>, and
+            blocks duplicate activation.
+          </p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><ButtonDocsDemo client:load variant="loading" /></div>
+            <CodeBlock code={loadingCode} lang="vue" collapsible revealId="button-loading-code" />
+          </div>
+
+          <h3 id="disabled"><a class="docs-section-anchor" href="#disabled">Disabled</a></h3>
+          <p>
+            Disabled Button uses native disabled semantics. Disabled LinkButton renders a disabled
+            native button so it cannot remain an apparently actionable anchor.
+          </p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><ButtonDocsDemo client:load variant="disabled" /></div>
+            <CodeBlock code={disabledCode} lang="vue" collapsible revealId="button-disabled-code" />
+          </div>
+
+          <h3 id="full-width"><a class="docs-section-anchor" href="#full-width">Full Width</a></h3>
+          <p>Use <code>fullWidth</code> for stacked mobile forms and narrow confirmation panels.</p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><ButtonDocsDemo variant="full-width" /></div>
+            <CodeBlock code={fullWidthCode} lang="vue" collapsible revealId="button-full-width-code" />
+          </div>
+
+          <h3 id="links"><a class="docs-section-anchor" href="#links">Links and asChild</a></h3>
+          <p>
+            LinkButton renders a real anchor. Use <code>external</code> for safe new-tab links and
+            <code>asChild</code> to compose a router link without coupling Kappa to a router. The child owns
+            its icon markup; when disabled, Kappa unwraps its label into a native disabled button.
+          </p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><ButtonDocsDemo client:load variant="links" /></div>
+            <CodeBlock code={linksCode} lang="vue" collapsible revealId="button-links-code" />
+          </div>
+
+          <h3 id="native-forms"><a class="docs-section-anchor" href="#native-forms">Native Forms</a></h3>
+          <p>Opt into native submit or reset behavior with the <code>type</code> prop.</p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><ButtonDocsDemo client:load variant="form" /></div>
+            <CodeBlock code={formCode} lang="vue" collapsible revealId="button-form-code" />
+          </div>
+
+          <h3 id="right-to-left"><a class="docs-section-anchor" href="#right-to-left">Right-to-left</a></h3>
+          <p>Logical icon positions preserve the intended leading and trailing relationships in RTL.</p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><ButtonDocsDemo variant="rtl" /></div>
+            <CodeBlock code={rtlCode} lang="vue" collapsible revealId="button-rtl-code" />
+          </div>
+        </section>
+
+        <section id="accessibility" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#accessibility">Accessibility</a></h2>
+          <ul>
+            <li>Use Button for actions and LinkButton for navigation; styling does not replace semantics.</li>
+            <li>Icon-only controls need a concise accessible name describing the action.</li>
+            <li>Loading retains its label, exposes <code>aria-busy</code>, and prevents repeated activation.</li>
+            <li>Do not use only color to distinguish destructive, warning, success, or disabled actions.</li>
+            <li>Keep visible focus indicators. Native buttons activate with Enter and Space; links activate with Enter.</li>
+            <li>A title supplements a concise label; it is not a replacement for an accessible name.</li>
+          </ul>
+        </section>
+
+        <section id="api-reference" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#api-reference">API Reference</a></h2>
+          <div class="docs-api-group">
+            <h3 id="button-api"><a class="docs-section-anchor" href="#button-api">Button</a></h3>
+            <p>Renders a native button and forwards native attributes, ARIA properties, classes, and listeners.</p>
+            <div class="docs-api-table"><table><thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>{buttonProps.map((prop) => <tr><td><code>{prop.name}</code></td><td><code>{prop.type}</code></td><td><code>{prop.defaultValue}</code></td><td>{prop.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="link-button-api"><a class="docs-section-anchor" href="#link-button-api">LinkButton</a></h3>
+            <p>Renders an anchor when enabled, a disabled button when unavailable, or merges onto one semantic child when composed.</p>
+            <div class="docs-api-table"><table><thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>{linkButtonProps.map((prop) => <tr><td><code>{prop.name}</code></td><td><code>{prop.type}</code></td><td><code>{prop.defaultValue}</code></td><td>{prop.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="variant-reference"><a class="docs-section-anchor" href="#variant-reference">Variant Reference</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Variant</th><th>Purpose</th></tr></thead><tbody>{variants.map((variant) => <tr><td><code>{variant.name}</code></td><td>{variant.purpose}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="exports-api"><a class="docs-section-anchor" href="#exports-api">Exports</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Export</th><th>Description</th></tr></thead><tbody>{exportsList.map((item) => <tr><td><code>{item.name}</code></td><td>{item.description}</td></tr>)}</tbody></table></div>
+          </div>
+        </section>
+
+        <DocsPageNavigation currentPath={currentPath} />
+      </article>
+
+      <aside class="docs-page-toc" aria-label="On this page">
+        <div class="docs-page-toc__inner">
+          <span class="docs-page-toc__title">On this page</span>
+          <ul>
+            <li><a href="#installation" data-toc-link="installation">Installation</a><ul><li><a href="#barrel" data-toc-link="barrel">Barrel</a></li><li><a href="#granular" data-toc-link="granular">Granular</a></li></ul></li>
+            <li><a href="#usage" data-toc-link="usage">Usage</a></li>
+            <li><a href="#examples" data-toc-link="examples">Examples</a><ul><li><a href="#basic" data-toc-link="basic">Basic</a></li><li><a href="#variants" data-toc-link="variants">Variants</a></li><li><a href="#sizes" data-toc-link="sizes">Sizes</a></li><li><a href="#with-icons" data-toc-link="with-icons">With Icons</a></li><li><a href="#icon-only" data-toc-link="icon-only">Icon-only</a></li><li><a href="#loading" data-toc-link="loading">Loading</a></li><li><a href="#disabled" data-toc-link="disabled">Disabled</a></li><li><a href="#full-width" data-toc-link="full-width">Full Width</a></li><li><a href="#links" data-toc-link="links">Links and asChild</a></li><li><a href="#native-forms" data-toc-link="native-forms">Native Forms</a></li><li><a href="#right-to-left" data-toc-link="right-to-left">Right-to-left</a></li></ul></li>
+            <li><a href="#accessibility" data-toc-link="accessibility">Accessibility</a></li>
+            <li><a href="#api-reference" data-toc-link="api-reference">API Reference</a><ul><li><a href="#button-api" data-toc-link="button-api">Button</a></li><li><a href="#link-button-api" data-toc-link="link-button-api">LinkButton</a></li><li><a href="#variant-reference" data-toc-link="variant-reference">Variant Reference</a></li><li><a href="#exports-api" data-toc-link="exports-api">Exports</a></li></ul></li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+  </div>
+</DocsLayout>

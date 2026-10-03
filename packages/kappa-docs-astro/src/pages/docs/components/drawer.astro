@@ -1,0 +1,185 @@
+---
+import ArkUiDocsLink from "../../../components/ArkUiDocsLink.astro";
+import CodeBlock from "../../../components/CodeBlock.astro";
+import CompositionTree from "../../../components/CompositionTree.astro";
+import CopyPageControls from "../../../components/CopyPageControls.vue";
+import DrawerDocsDemo from "../../../components/DrawerDocsDemo.vue";
+import DocsPageNavigation from "../../../components/DocsPageNavigation.astro";
+import {
+  barrelCode,
+  compositionCode,
+  contentProps,
+  events,
+  examples,
+  exportsList,
+  granularCode,
+  parts,
+  previewCode,
+  rootProps,
+  usageCode,
+} from "../../../data/drawer-docs";
+import DocsLayout from "../../../layouts/DocsLayout.astro";
+import "../../../styles/docs-components.css";
+
+const currentPath = "/docs/components/drawer";
+const description =
+  "Presents a focused workflow from a viewport edge with accessible focus, dismissal, drag, and snap behavior.";
+---
+
+<DocsLayout title="Drawer" description={description}>
+  <div class="docs-page docs-page--component">
+    <header class="docs-page-header">
+      <div class="docs-page-header__inner">
+        <div class="docs-page-header__content">
+          <div class="docs-page-header__mobile-actions">
+            <CopyPageControls client:only="vue" align="center" />
+          </div>
+          <div class="docs-page-header__title-row">
+            <h1>Drawer</h1>
+            <ArkUiDocsLink />
+            <div class="docs-page-header__navigation-actions">
+              <div class="docs-page-header__desktop-actions"><CopyPageControls client:only="vue" /></div>
+              <DocsPageNavigation currentPath={currentPath} variant="compact" />
+            </div>
+          </div>
+          <p class="docs-page-header__lede">{description}</p>
+        </div>
+      </div>
+    </header>
+
+    <div class="docs-page-body">
+      <article class="docs-article docs-article--component">
+        <section id="preview" class="docs-section">
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><DrawerDocsDemo client:load variant="preview" /></div>
+            <CodeBlock code={previewCode} lang="vue" collapsible revealId="drawer-preview-code" />
+          </div>
+        </section>
+
+        <section id="installation" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#installation">Installation</a></h2>
+          <h3 id="barrel"><a class="docs-section-anchor" href="#barrel">Barrel</a></h3>
+          <CodeBlock code={barrelCode} lang="javascript" />
+          <h3 id="granular"><a class="docs-section-anchor" href="#granular">Granular</a></h3>
+          <CodeBlock code={granularCode} lang="javascript" />
+        </section>
+
+        <section id="usage" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#usage">Usage</a></h2>
+          <p>
+            Put <code>Trigger</code> and <code>Content</code> inside <code>Drawer.Root</code>.
+            <code>Content</code> supplies the portal layers and drag handle. Add a visible
+            <code>Close</code> action in the footer, or enable the built-in close button.
+          </p>
+          <CodeBlock code={usageCode} lang="vue" collapsible revealId="drawer-usage-code" />
+        </section>
+
+        <section id="composition" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#composition">Composition</a></h2>
+          <CompositionTree component="drawer" />
+          <p>
+            <a href="https://ark-ui.com/docs/components/drawer">Ark UI Drawer</a> owns open state,
+            gestures, snap points, modality, focus trapping, dismissal, aria relationships, presence,
+            trigger values, and nested stacks. Kappa owns the compound API, composed portal surface,
+            logical edge geometry, semantic tokens, and motion.
+          </p>
+          <ul>
+            <li><code>Drawer</code> and <code>Drawer.Root</code> are the same root component.</li>
+            <li><code>Content</code> teleports to <code>body</code>. Pass <code>:teleport="false"</code> for an in-place test or constrained integration.</li>
+            <li><code>Backdrop</code>, <code>Positioner</code>, <code>Grabber</code>, and <code>GrabberIndicator</code> remain public for lower-level compositions.</li>
+            <li>Use <code>as-child</code> on Trigger and Close when a Kappa Button owns the visual element.</li>
+            <li>Use <code>Drawer.Stack</code> around nested roots. Indent parts are available when the application page must react to the stack.</li>
+          </ul>
+          <CodeBlock code={compositionCode} lang="vue" collapsible revealId="drawer-composition-code" />
+
+          <h3 id="reference-differences"><a class="docs-section-anchor" href="#reference-differences">Reference Differences</a></h3>
+          <p>
+            Kappa supports sizing, position, handle, nesting, non-modal use, snap points, and responsive Dialog composition.
+            Kappa uses Ark UI's logical <code>start</code> and <code>end</code> directions instead of physical
+            <code>left</code> and <code>right</code> props.
+          </p>
+        </section>
+
+        <section id="sizing-and-gestures" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#sizing-and-gestures">Sizing and Gestures</a></h2>
+          <ul>
+            <li>A vertical drawer sizes to content and is capped by the dynamic viewport. Set <code>block-size</code> for a fixed or proportional panel.</li>
+            <li>A side drawer defaults to 24rem. Override <code>--kappa-drawer-inline-size</code>; the three-rem viewport remainder remains.</li>
+            <li>The full content surface is draggable by default. Set <code>:draggable="false"</code> to limit dragging to Grabber.</li>
+            <li>Add <code>data-no-drag</code> to fields, charts, editors, and custom scroll regions that must own pointer gestures.</li>
+            <li>Snap points support viewport fractions, pixel numbers, and CSS lengths. Use them only for vertical drawers.</li>
+            <li>SwipeArea can open a closed drawer from the viewport edge. Keep that invisible gesture area narrow so it does not block page controls.</li>
+          </ul>
+        </section>
+
+        <section id="examples" class="docs-section docs-section--component-examples">
+          <h2><a class="docs-section-anchor" href="#examples">Examples</a></h2>
+          {examples.map((example) => (
+            <>
+              <h3 id={example.id}><a class="docs-section-anchor" href={`#${example.id}`}>{example.title}</a></h3>
+              <p>{example.description}</p>
+              <div class="docs-component-example">
+                <div class="docs-component-preview"><DrawerDocsDemo client:load variant={example.id} /></div>
+                <CodeBlock code={example.code} lang="vue" collapsible revealId={`drawer-${example.id}-code`} />
+              </div>
+            </>
+          ))}
+        </section>
+
+        <section id="accessibility" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#accessibility">Accessibility</a></h2>
+          <ul>
+            <li>Render a visible <code>Title</code> and normally a <code>Description</code>. They label and describe the dialog surface.</li>
+            <li>Tab and Shift+Tab stay inside a modal drawer. Escape closes it when enabled. Focus then returns to the opening trigger.</li>
+            <li>Do not depend on swiping. Always provide a keyboard-operable Close action.</li>
+            <li>Keep controls at least clear and reachable near the handle. The Grabber is a pointer target, not the only dismissal control.</li>
+            <li>Use non-modal behavior only when users must continue to interact with the page. Disable the backdrop and focus trap together.</li>
+            <li>Scrollable regions need a visible focus indicator and <code>tabindex="0"</code> when keyboard users must scroll them independently.</li>
+            <li>Logical start and end positions support RTL. Open and close motion stops under reduced-motion preferences.</li>
+          </ul>
+        </section>
+
+        <section id="api-reference" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#api-reference">API Reference</a></h2>
+          <div class="docs-api-group">
+            <h3 id="root-api"><a class="docs-section-anchor" href="#root-api">Drawer.Root</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>{rootProps.map((prop) => <tr><td><code>{prop.name}</code></td><td><code>{prop.type}</code></td><td><code>{prop.defaultValue}</code></td><td>{prop.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="content-api"><a class="docs-section-anchor" href="#content-api">Drawer.Content</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>{contentProps.map((prop) => <tr><td><code>{prop.name}</code></td><td><code>{prop.type}</code></td><td><code>{prop.defaultValue}</code></td><td>{prop.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="parts-api"><a class="docs-section-anchor" href="#parts-api">Parts</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Part</th><th>Element</th><th>Description</th></tr></thead><tbody>{parts.map((part) => <tr><td><code>Drawer.{part.name}</code></td><td><code>{part.element}</code></td><td>{part.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="events-api"><a class="docs-section-anchor" href="#events-api">Events</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Event</th><th>Payload</th><th>Description</th></tr></thead><tbody>{events.map((event) => <tr><td><code>{event.name}</code></td><td><code>{event.payload}</code></td><td>{event.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="exports"><a class="docs-section-anchor" href="#exports">Exports</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Export</th><th>Description</th></tr></thead><tbody>{exportsList.map((item) => <tr><td><code>{item.name}</code></td><td>{item.description}</td></tr>)}</tbody></table></div>
+          </div>
+        </section>
+
+        <DocsPageNavigation currentPath={currentPath} />
+      </article>
+
+      <aside class="docs-page-toc" aria-label="On this page">
+        <div class="docs-page-toc__inner">
+          <span class="docs-page-toc__title">On this page</span>
+          <ul>
+            <li><a href="#installation" data-toc-link="installation">Installation</a><ul><li><a href="#barrel" data-toc-link="barrel">Barrel</a></li><li><a href="#granular" data-toc-link="granular">Granular</a></li></ul></li>
+            <li><a href="#usage" data-toc-link="usage">Usage</a></li>
+            <li><a href="#composition" data-toc-link="composition">Composition</a><ul><li><a href="#reference-differences" data-toc-link="reference-differences">Reference Differences</a></li></ul></li>
+            <li><a href="#sizing-and-gestures" data-toc-link="sizing-and-gestures">Sizing and Gestures</a></li>
+            <li><a href="#examples" data-toc-link="examples">Examples</a><ul>{examples.map((example) => <li><a href={`#${example.id}`} data-toc-link={example.id}>{example.title}</a></li>)}</ul></li>
+            <li><a href="#accessibility" data-toc-link="accessibility">Accessibility</a></li>
+            <li><a href="#api-reference" data-toc-link="api-reference">API Reference</a><ul><li><a href="#root-api" data-toc-link="root-api">Drawer.Root</a></li><li><a href="#content-api" data-toc-link="content-api">Drawer.Content</a></li><li><a href="#parts-api" data-toc-link="parts-api">Parts</a></li><li><a href="#events-api" data-toc-link="events-api">Events</a></li><li><a href="#exports" data-toc-link="exports">Exports</a></li></ul></li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+  </div>
+</DocsLayout>

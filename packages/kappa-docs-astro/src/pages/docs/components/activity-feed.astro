@@ -1,0 +1,194 @@
+---
+import ActivityFeedDocsDemo from "../../../components/ActivityFeedDocsDemo.vue";
+import CodeBlock from "../../../components/CodeBlock.astro";
+import CopyPageControls from "../../../components/CopyPageControls.vue";
+import DocsPageNavigation from "../../../components/DocsPageNavigation.astro";
+import {
+  barrelCode,
+  compositionCode,
+  examples,
+  exportsList,
+  granularCode,
+  itemProps,
+  markerProps,
+  parts,
+  previewCode,
+  rootProps,
+  semanticProps,
+  usageCode,
+} from "../../../data/activity-feed-docs";
+import DocsLayout from "../../../layouts/DocsLayout.astro";
+import "../../../styles/docs-components.css";
+
+const currentPath = "/docs/components/activity-feed";
+const description = "Presents chronological application events with clear actors, time, status, and actions.";
+---
+
+<DocsLayout title="Activity Feed" description={description}>
+  <div class="docs-page docs-page--component">
+    <header class="docs-page-header">
+      <div class="docs-page-header__inner">
+        <div class="docs-page-header__content">
+          <div class="docs-page-header__mobile-actions">
+            <CopyPageControls client:only="vue" align="center" />
+          </div>
+          <div class="docs-page-header__title-row">
+            <h1>Activity Feed</h1>
+            <div class="docs-page-header__navigation-actions">
+              <div class="docs-page-header__desktop-actions"><CopyPageControls client:only="vue" /></div>
+              <DocsPageNavigation currentPath={currentPath} variant="compact" />
+            </div>
+          </div>
+          <p class="docs-page-header__lede">{description}</p>
+        </div>
+      </div>
+    </header>
+
+    <div class="docs-page-body">
+      <article class="docs-article docs-article--component">
+        <section id="preview" class="docs-section">
+          <div class="docs-component-example">
+            <div class="docs-component-preview">
+              <ActivityFeedDocsDemo client:load variant="preview" />
+            </div>
+            <CodeBlock code={previewCode} lang="vue" collapsible revealId="activity-feed-preview-code" />
+          </div>
+        </section>
+
+        <section id="installation" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#installation">Installation</a></h2>
+          <p>
+            Activity Feed is part of the main Kappa package. It uses native list and time elements
+            and has no state-machine dependency.
+          </p>
+          <h3 id="barrel"><a class="docs-section-anchor" href="#barrel">Barrel</a></h3>
+          <CodeBlock code={barrelCode} lang="javascript" />
+          <h3 id="granular"><a class="docs-section-anchor" href="#granular">Granular</a></h3>
+          <CodeBlock code={granularCode} lang="javascript" />
+        </section>
+
+        <section id="usage" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#usage">Usage</a></h2>
+          <p>
+            Use Activity Feed for ordered events such as run changes, project history, audit
+            records, and review actions. Supply application data through slots.
+          </p>
+          <p>
+            Keep the actor or event name in Title and the event details in Description. Time
+            aligns with the end of the header and wraps on narrow panels. Description links use
+            the accent color and retain a visible keyboard focus ring.
+          </p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview docs-component-preview--compact">
+              <ActivityFeedDocsDemo client:load variant="usage" />
+            </div>
+            <CodeBlock code={usageCode} lang="vue" collapsible revealId="activity-feed-usage-code" />
+          </div>
+        </section>
+
+        <section id="composition" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#composition">Composition</a></h2>
+          <figure class="docs-composition-tree" data-composition-tree="activity-feed">
+            <figcaption>Typical part hierarchy</figcaption>
+            <CodeBlock code={compositionCode} lang="plaintext" />
+          </figure>
+          <p>
+            Kappa owns this native semantic composition because Ark UI has no Activity Feed
+            primitive. Activity Feed does not fetch data, format events, or depend on an application
+            store.
+          </p>
+          <ul>
+            <li>Use Group and GroupLabel when events are divided by date or category.</li>
+            <li>Use one List for each group and preserve a meaningful event order.</li>
+            <li>Use dot markers for neutral system events, icons for typed events, and avatars for people.</li>
+            <li>Use Actions only for controls that act on the associated event.</li>
+            <li>Compose with <a href="/docs/components/collapsible">Collapsible</a> to reveal long event details.</li>
+          </ul>
+        </section>
+
+        <section id="examples" class="docs-section docs-section--component-examples">
+          <h2><a class="docs-section-anchor" href="#examples">Examples</a></h2>
+          {
+            examples.map((example) => (
+              <>
+                <h3 id={example.id}>
+                  <a class="docs-section-anchor" href={`#${example.id}`}>{example.title}</a>
+                </h3>
+                <p>{example.description}</p>
+                <div class="docs-component-example">
+                  <div class="docs-component-preview">
+                    <ActivityFeedDocsDemo client:load variant={example.variant} />
+                  </div>
+                  <CodeBlock
+                    code={example.code}
+                    lang="vue"
+                    collapsible
+                    revealId={`activity-feed-${example.id}-code`}
+                  />
+                </div>
+              </>
+            ))
+          }
+        </section>
+
+        <section id="accessibility" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#accessibility">Accessibility</a></h2>
+          <ul>
+            <li>List renders a native ordered list and Item renders a native list item.</li>
+            <li>Place <code>aria-label</code> or <code>aria-labelledby</code> on List to name the event history.</li>
+            <li>Time renders a native <code>time</code> element. Supply <code>datetime</code> whenever the value is known.</li>
+            <li>Connect each Group to its GroupLabel with <code>aria-labelledby</code>.</li>
+            <li>Decorative marker icons need <code>aria-hidden="true"</code>. Meaningful images need alternative text.</li>
+            <li>For live events, set <code>aria-live="polite"</code> on a small changing region. Do not announce the full history again.</li>
+            <li>HTML, ARIA, data attributes, and event listeners pass to every part.</li>
+            <li>The long activity example uses a named disclosure button with <code>aria-expanded</code> and <code>aria-controls</code>. Its height animation respects reduced motion.</li>
+          </ul>
+        </section>
+
+        <section id="api-reference" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#api-reference">API Reference</a></h2>
+          <div class="docs-api-group">
+            <h3 id="root-api"><a class="docs-section-anchor" href="#root-api">ActivityFeed.Root</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>{rootProps.map((prop) => <tr><td><code>{prop.name}</code></td><td><code>{prop.type}</code></td><td><code>{prop.defaultValue}</code></td><td>{prop.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="item-api"><a class="docs-section-anchor" href="#item-api">ActivityFeed.Item</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>{itemProps.map((prop) => <tr><td><code>{prop.name}</code></td><td><code>{prop.type}</code></td><td><code>{prop.defaultValue}</code></td><td>{prop.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="marker-api"><a class="docs-section-anchor" href="#marker-api">ActivityFeed.Marker</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>{markerProps.map((prop) => <tr><td><code>{prop.name}</code></td><td><code>{prop.type}</code></td><td><code>{prop.defaultValue}</code></td><td>{prop.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="semantic-api"><a class="docs-section-anchor" href="#semantic-api">Semantic Parts</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Part</th><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>{semanticProps.map((prop) => <tr><td><code>{prop.part}</code></td><td><code>{prop.name}</code></td><td><code>{prop.type}</code></td><td><code>{prop.defaultValue}</code></td><td>{prop.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="parts"><a class="docs-section-anchor" href="#parts">Parts</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Part</th><th>Element</th><th>Description</th></tr></thead><tbody>{parts.map(([name, element, partDescription]) => <tr><td><code>{name}</code></td><td><code>{element}</code></td><td>{partDescription}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="exports"><a class="docs-section-anchor" href="#exports">Exports</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Export</th><th>Description</th></tr></thead><tbody>{exportsList.map(([name, exportDescription]) => <tr><td><code>{name}</code></td><td>{exportDescription}</td></tr>)}</tbody></table></div>
+          </div>
+        </section>
+
+        <DocsPageNavigation currentPath={currentPath} />
+      </article>
+
+      <aside class="docs-page-toc" aria-label="On this page">
+        <div class="docs-page-toc__inner">
+          <span class="docs-page-toc__title">On this page</span>
+          <ul>
+            <li><a href="#installation" data-toc-link="installation">Installation</a></li>
+            <li><a href="#usage" data-toc-link="usage">Usage</a></li>
+            <li><a href="#composition" data-toc-link="composition">Composition</a></li>
+            <li><a href="#examples" data-toc-link="examples">Examples</a><ul>{examples.map((example) => <li><a href={`#${example.id}`} data-toc-link={example.id}>{example.title}</a></li>)}</ul></li>
+            <li><a href="#accessibility" data-toc-link="accessibility">Accessibility</a></li>
+            <li><a href="#api-reference" data-toc-link="api-reference">API Reference</a></li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+  </div>
+</DocsLayout>

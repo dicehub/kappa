@@ -1,0 +1,391 @@
+---
+import ArkUiDocsLink from "../../../components/ArkUiDocsLink.astro";
+import AutocompleteDocsDemo from "../../../components/AutocompleteDocsDemo.vue";
+import CodeBlock from "../../../components/CodeBlock.astro";
+import CompositionTree from "../../../components/CompositionTree.astro";
+import CopyPageControls from "../../../components/CopyPageControls.vue";
+import DocsPageNavigation from "../../../components/DocsPageNavigation.astro";
+import {
+  barrelCode,
+  contentProps,
+  controlledCode,
+  events,
+  exportsList,
+  fieldCode,
+  filteringCode,
+  granularCode,
+  groupedCode,
+  invalidCode,
+  previewCode,
+  rootProps,
+  sizesCode,
+  statesCode,
+  usageCode,
+} from "../../../data/autocomplete-docs";
+import DocsLayout from "../../../layouts/DocsLayout.astro";
+import "../../../styles/docs-components.css";
+
+const currentPath = "/docs/components/autocomplete";
+const description = "A free-form text input with an accessible, filtered suggestion list.";
+---
+
+<DocsLayout title="Autocomplete" description={description}>
+  <div class="docs-page docs-page--component">
+    <header class="docs-page-header">
+      <div class="docs-page-header__inner">
+        <div class="docs-page-header__content">
+          <div class="docs-page-header__mobile-actions">
+            <CopyPageControls client:only="vue" align="center" />
+          </div>
+          <div class="docs-page-header__title-row">
+            <h1>Autocomplete</h1>
+            <ArkUiDocsLink />
+            <div class="docs-page-header__navigation-actions">
+              <div class="docs-page-header__desktop-actions">
+                <CopyPageControls client:only="vue" />
+              </div>
+              <DocsPageNavigation currentPath={currentPath} variant="compact" />
+            </div>
+          </div>
+          <p class="docs-page-header__lede">{description}</p>
+        </div>
+      </div>
+    </header>
+
+    <div class="docs-page-body">
+      <article class="docs-article docs-article--component">
+        <section id="preview" class="docs-section">
+          <div class="docs-component-example">
+            <div class="docs-component-preview docs-component-preview--open-space">
+              <AutocompleteDocsDemo client:load variant="preview" />
+            </div>
+            <CodeBlock
+              code={previewCode}
+              lang="vue"
+              collapsible
+              revealId="autocomplete-preview-code"
+            />
+          </div>
+        </section>
+
+        <section id="installation" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#installation">Installation</a></h2>
+
+          <h3 id="barrel"><a class="docs-section-anchor" href="#barrel">Barrel</a></h3>
+          <CodeBlock code={barrelCode} lang="javascript" />
+
+          <h3 id="granular"><a class="docs-section-anchor" href="#granular">Granular</a></h3>
+          <CodeBlock code={granularCode} lang="javascript" />
+        </section>
+
+        <section id="usage" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#usage">Usage</a></h2>
+          <p>
+            Pass <code>items</code> for the compact default UI, or compose the attached parts when
+            suggestion markup needs more structure.
+          </p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview docs-component-preview--open-space">
+              <AutocompleteDocsDemo client:load variant="usage" />
+            </div>
+            <CodeBlock
+              code={usageCode}
+              lang="vue"
+              collapsible
+              revealId="autocomplete-usage-code"
+            />
+          </div>
+          <div class="docs-component-note">
+            Autocomplete accepts custom text by default. Use a Combobox or Select when the submitted
+            value must come from a fixed list.
+          </div>
+        </section>
+
+        <section id="composition" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#composition">Composition</a></h2>
+          <CompositionTree component="autocomplete" />
+          <p>
+            <code>InputGroup</code> supplies the editable control and clear action. Compose
+            <code>Content</code>, <code>List</code>, groups, and items when suggestions need custom
+            structure. Ark UI owns filtering state, keyboard navigation, focus, and ARIA relationships.
+          </p>
+        </section>
+
+        <section id="examples" class="docs-section docs-section--component-examples">
+          <h2><a class="docs-section-anchor" href="#examples">Examples</a></h2>
+
+          <h3 id="controlled-clear">
+            <a class="docs-section-anchor" href="#controlled-clear">Controlled and Clearable</a>
+          </h3>
+          <p>
+            Bind <code>v-model:input-value</code> when surrounding UI needs the current text. The clear
+            trigger appears only while text is present.
+          </p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview">
+              <AutocompleteDocsDemo client:load variant="controlled" />
+            </div>
+            <CodeBlock
+              code={controlledCode}
+              lang="vue"
+              collapsible
+              revealId="autocomplete-controlled-code"
+            />
+          </div>
+
+          <h3 id="field-help">
+            <a class="docs-section-anchor" href="#field-help">Field and Help Text</a>
+          </h3>
+          <p>
+            Use a visible label and forward <code>aria-describedby</code> through <code>inputAttrs</code>
+            so assistive technology reaches the supporting text.
+          </p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview">
+              <AutocompleteDocsDemo client:load variant="field" />
+            </div>
+            <CodeBlock
+              code={fieldCode}
+              lang="vue"
+              collapsible
+              revealId="autocomplete-field-code"
+            />
+          </div>
+
+          <h3 id="invalid-state">
+            <a class="docs-section-anchor" href="#invalid-state">Invalid</a>
+          </h3>
+          <p>
+            Pair <code>invalid</code> with specific, visible error text. The state and relationship are
+            forwarded to the Ark UI input.
+          </p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview">
+              <AutocompleteDocsDemo client:load variant="invalid" />
+            </div>
+            <CodeBlock
+              code={invalidCode}
+              lang="vue"
+              collapsible
+              revealId="autocomplete-invalid-code"
+            />
+          </div>
+
+          <h3 id="grouped-suggestions">
+            <a class="docs-section-anchor" href="#grouped-suggestions">Grouped Suggestions</a>
+          </h3>
+          <p>
+            Group an advanced collection, then render each section from <code>collection.group()</code>.
+            Filtering stays under application control.
+          </p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview docs-component-preview--open-space">
+              <AutocompleteDocsDemo client:load variant="grouped" />
+            </div>
+            <CodeBlock
+              code={groupedCode}
+              lang="vue"
+              collapsible
+              revealId="autocomplete-grouped-code"
+            />
+          </div>
+
+          <h3 id="sizes"><a class="docs-section-anchor" href="#sizes">Sizes</a></h3>
+          <p>Choose a density from <code>xs</code>, <code>sm</code>, <code>base</code>, or <code>lg</code>.</p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview">
+              <AutocompleteDocsDemo client:load variant="sizes" />
+            </div>
+            <CodeBlock
+              code={sizesCode}
+              lang="vue"
+              collapsible
+              revealId="autocomplete-sizes-code"
+            />
+          </div>
+
+          <h3 id="custom-filtering">
+            <a class="docs-section-anchor" href="#custom-filtering">Custom Filtering</a>
+          </h3>
+          <p>
+            Supply a local predicate for domain-specific matching. This example also exposes the
+            optional trigger and suggestions before typing.
+          </p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview docs-component-preview--open-space">
+              <AutocompleteDocsDemo client:load variant="filtering" />
+            </div>
+            <CodeBlock
+              code={filteringCode}
+              lang="vue"
+              collapsible
+              revealId="autocomplete-filtering-code"
+            />
+          </div>
+
+          <h3 id="disabled-read-only">
+            <a class="docs-section-anchor" href="#disabled-read-only">Disabled and Read-only</a>
+          </h3>
+          <p>
+            Disabled controls are unavailable. Read-only controls preserve a value and remain
+            perceivable without accepting edits.
+          </p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview">
+              <AutocompleteDocsDemo client:load variant="states" />
+            </div>
+            <CodeBlock
+              code={statesCode}
+              lang="vue"
+              collapsible
+              revealId="autocomplete-states-code"
+            />
+          </div>
+        </section>
+
+        <section id="accessibility" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#accessibility">Accessibility</a></h2>
+          <ul>
+            <li>Ark UI supplies combobox semantics, active-descendant focus, and live option state.</li>
+            <li><kbd>Arrow Down</kbd> and <kbd>Arrow Up</kbd> move through enabled suggestions.</li>
+            <li><kbd>Enter</kbd> selects the highlighted suggestion; <kbd>Escape</kbd> closes the surface.</li>
+            <li>Disabled suggestions are announced but skipped during keyboard navigation.</li>
+            <li>Use a visible label and connect help or error text with <code>inputAttrs</code>.</li>
+          </ul>
+          <p>
+            The behavior layer follows the
+            <a href="https://ark-ui.com/vue/docs/components/combobox">Ark UI Combobox</a> primitive.
+          </p>
+        </section>
+
+        <section id="api-reference" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#api-reference">API Reference</a></h2>
+
+          <div class="docs-api-group">
+            <h3 id="autocomplete-api">
+              <a class="docs-section-anchor" href="#autocomplete-api">Autocomplete</a>
+            </h3>
+            <p>Forwards remaining Ark UI root props, events, attributes, and listeners.</p>
+            <div class="docs-api-table">
+              <table>
+                <thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+                <tbody>
+                  {rootProps.map((prop) => (
+                    <tr>
+                      <td><code>{prop.name}</code></td>
+                      <td><code>{prop.type}</code></td>
+                      <td><code>{prop.defaultValue}</code></td>
+                      <td>{prop.description}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="docs-api-group">
+            <h3 id="autocomplete-content-api">
+              <a class="docs-section-anchor" href="#autocomplete-content-api">Autocomplete.Content</a>
+            </h3>
+            <div class="docs-api-table">
+              <table>
+                <thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+                <tbody>
+                  {contentProps.map((prop) => (
+                    <tr>
+                      <td><code>{prop.name}</code></td>
+                      <td><code>{prop.type}</code></td>
+                      <td><code>{prop.defaultValue}</code></td>
+                      <td>{prop.description}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="docs-api-group">
+            <h3 id="autocomplete-events">
+              <a class="docs-section-anchor" href="#autocomplete-events">Events</a>
+            </h3>
+            <div class="docs-api-table">
+              <table>
+                <thead><tr><th>Event</th><th>Details</th><th>Description</th></tr></thead>
+                <tbody>
+                  {events.map((event) => (
+                    <tr>
+                      <td><code>{event.name}</code></td>
+                      <td><code>{event.type}</code></td>
+                      <td>{event.description}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <p>
+              Highlight, selection, focus-outside, interaction-outside, pointer-outside, and
+              exit-complete events are forwarded from Ark UI as well.
+            </p>
+          </div>
+
+          <div class="docs-api-group">
+            <h3 id="autocomplete-exports">
+              <a class="docs-section-anchor" href="#autocomplete-exports">Exports</a>
+            </h3>
+            <div class="docs-api-table">
+              <table>
+                <thead><tr><th>Export</th><th>Description</th></tr></thead>
+                <tbody>
+                  {exportsList.map((item) => (
+                    <tr><td><code>{item.name}</code></td><td>{item.description}</td></tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <DocsPageNavigation currentPath={currentPath} />
+      </article>
+
+      <aside class="docs-page-toc" aria-label="On this page">
+        <div class="docs-page-toc__inner">
+          <span class="docs-page-toc__title">On this page</span>
+          <ul>
+            <li>
+              <a href="#installation" data-toc-link="installation">Installation</a>
+              <ul>
+                <li><a href="#barrel" data-toc-link="barrel">Barrel</a></li>
+                <li><a href="#granular" data-toc-link="granular">Granular</a></li>
+              </ul>
+            </li>
+            <li><a href="#usage" data-toc-link="usage">Usage</a></li>
+            <li><a href="#composition" data-toc-link="composition">Composition</a></li>
+            <li>
+              <a href="#examples" data-toc-link="examples">Examples</a>
+              <ul>
+                <li><a href="#controlled-clear" data-toc-link="controlled-clear">Controlled and Clearable</a></li>
+                <li><a href="#field-help" data-toc-link="field-help">Field and Help Text</a></li>
+                <li><a href="#invalid-state" data-toc-link="invalid-state">Invalid</a></li>
+                <li><a href="#grouped-suggestions" data-toc-link="grouped-suggestions">Grouped Suggestions</a></li>
+                <li><a href="#sizes" data-toc-link="sizes">Sizes</a></li>
+                <li><a href="#custom-filtering" data-toc-link="custom-filtering">Custom Filtering</a></li>
+                <li><a href="#disabled-read-only" data-toc-link="disabled-read-only">Disabled and Read-only</a></li>
+              </ul>
+            </li>
+            <li><a href="#accessibility" data-toc-link="accessibility">Accessibility</a></li>
+            <li>
+              <a href="#api-reference" data-toc-link="api-reference">API Reference</a>
+              <ul>
+                <li><a href="#autocomplete-api" data-toc-link="autocomplete-api">Autocomplete</a></li>
+                <li><a href="#autocomplete-content-api" data-toc-link="autocomplete-content-api">Autocomplete.Content</a></li>
+                <li><a href="#autocomplete-events" data-toc-link="autocomplete-events">Events</a></li>
+                <li><a href="#autocomplete-exports" data-toc-link="autocomplete-exports">Exports</a></li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+  </div>
+</DocsLayout>

@@ -1,0 +1,211 @@
+---
+import CodeBlock from "../../../components/CodeBlock.astro";
+import CompositionTree from "../../../components/CompositionTree.astro";
+import CopyPageControls from "../../../components/CopyPageControls.vue";
+import DocsPageNavigation from "../../../components/DocsPageNavigation.astro";
+import GridDocsDemo from "../../../components/GridDocsDemo.vue";
+import {
+  asymmetricCode,
+  barrelCode,
+  dataAttributes,
+  dataSlots,
+  exportsList,
+  gapsCode,
+  granularCode,
+  gridItemProps,
+  gridProps,
+  gridVariantRows,
+  mobileDividerCode,
+  previewCode,
+  semanticCode,
+  usageCode,
+  variantsCode,
+} from "../../../data/grid-docs";
+import DocsLayout from "../../../layouts/DocsLayout.astro";
+import "../../../styles/docs-components.css";
+
+const currentPath = "/docs/components/grid";
+const description = "Organizes related content with responsive, min-width-safe CSS Grid presets.";
+---
+
+<DocsLayout title="Grid" description={description}>
+  <div class="docs-page docs-page--component">
+    <header class="docs-page-header">
+      <div class="docs-page-header__inner">
+        <div class="docs-page-header__content">
+          <div class="docs-page-header__mobile-actions">
+            <CopyPageControls client:only="vue" align="center" />
+          </div>
+          <div class="docs-page-header__title-row">
+            <h1>Grid</h1>
+            <div class="docs-page-header__navigation-actions">
+              <div class="docs-page-header__desktop-actions">
+                <CopyPageControls client:only="vue" />
+              </div>
+              <DocsPageNavigation currentPath={currentPath} variant="compact" />
+            </div>
+          </div>
+          <p class="docs-page-header__lede">{description}</p>
+        </div>
+      </div>
+    </header>
+
+    <div class="docs-page-body">
+      <article class="docs-article docs-article--component">
+        <section id="preview" class="docs-section">
+          <div class="docs-component-example">
+            <div class="docs-component-preview">
+              <GridDocsDemo variant="preview" />
+            </div>
+            <CodeBlock code={previewCode} lang="vue" collapsible revealId="grid-preview-code" />
+          </div>
+        </section>
+
+        <section id="installation" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#installation">Installation</a></h2>
+          <p>
+            Grid is part of the main Kappa package. It uses native CSS Grid and adds no runtime
+            dependency beyond Vue.
+          </p>
+          <h3 id="barrel"><a class="docs-section-anchor" href="#barrel">Barrel</a></h3>
+          <CodeBlock code={barrelCode} lang="javascript" />
+          <h3 id="granular"><a class="docs-section-anchor" href="#granular">Granular</a></h3>
+          <CodeBlock code={granularCode} lang="javascript" />
+        </section>
+
+        <section id="usage" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#usage">Usage</a></h2>
+          <p>
+            Select a preset for a known responsive column pattern. Every track uses
+            <code>minmax(0, 1fr)</code>, and every item has a zero logical minimum size, so long
+            content does not force the grid beyond its container.
+          </p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview docs-component-preview--compact">
+              <GridDocsDemo variant="usage" />
+            </div>
+            <CodeBlock code={usageCode} lang="vue" collapsible revealId="grid-usage-code" />
+          </div>
+        </section>
+
+        <section id="composition" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#composition">Composition</a></h2>
+          <CompositionTree component="grid" />
+          <p>
+            Ark UI does not provide a general layout Grid primitive. Kappa therefore owns
+            the native layout, semantic elements, and visual spacing.
+          </p>
+        </section>
+
+        <section id="examples" class="docs-section docs-section--component-examples">
+          <h2><a class="docs-section-anchor" href="#examples">Examples</a></h2>
+
+          <h3 id="responsive-variants"><a class="docs-section-anchor" href="#responsive-variants">Responsive Variants</a></h3>
+          <p>Use progressive presets for equal-width content that gains columns as space allows.</p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><GridDocsDemo variant="variants" /></div>
+            <CodeBlock code={variantsCode} lang="vue" collapsible revealId="grid-variants-code" />
+          </div>
+
+          <h3 id="asymmetric-layouts"><a class="docs-section-anchor" href="#asymmetric-layouts">Asymmetric Layouts</a></h3>
+          <p>Use a two-to-one preset when one region has clear visual priority.</p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><GridDocsDemo variant="asymmetric" /></div>
+            <CodeBlock code={asymmetricCode} lang="vue" collapsible revealId="grid-asymmetric-code" />
+          </div>
+
+          <h3 id="gap-sizes"><a class="docs-section-anchor" href="#gap-sizes">Gap Sizes</a></h3>
+          <p>The base gap grows from compact mobile spacing to a spacious desktop rhythm.</p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><GridDocsDemo variant="gaps" /></div>
+            <CodeBlock code={gapsCode} lang="vue" collapsible revealId="grid-gaps-code" />
+          </div>
+
+          <h3 id="mobile-dividers"><a class="docs-section-anchor" href="#mobile-dividers">Mobile Dividers</a></h3>
+          <p>
+            Add <code>mobile-divider</code> to a <code>4up</code> grid when stacked items need a
+            stronger small-screen boundary. The final item has no trailing line.
+          </p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><GridDocsDemo variant="mobile-divider" /></div>
+            <CodeBlock code={mobileDividerCode} lang="vue" collapsible revealId="grid-divider-code" />
+          </div>
+
+          <h3 id="semantic-list"><a class="docs-section-anchor" href="#semantic-list">Semantic List</a></h3>
+          <p>Render the root as a list and each item as a list item when the content is a collection.</p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><GridDocsDemo variant="semantic" /></div>
+            <CodeBlock code={semanticCode} lang="vue" collapsible revealId="grid-semantic-code" />
+          </div>
+        </section>
+
+        <section id="all-variants" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#all-variants">All Variants</a></h2>
+          <p>Arrows show how the column count changes from the smallest to the largest breakpoint.</p>
+          <div class="docs-api-table">
+            <table>
+              <thead><tr><th>Variant</th><th>Layout</th><th>Use</th></tr></thead>
+              <tbody>
+                {gridVariantRows.map((row) => <tr><td><code>{row.variant}</code></td><td><code>{row.layout}</code></td><td>{row.description}</td></tr>)}
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section id="accessibility" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#accessibility">Accessibility</a></h2>
+          <ul>
+            <li>Grid controls visual layout only. It does not add a widget role or keyboard behavior.</li>
+            <li>Use <code>as="ul"</code> or <code>as="ol"</code> with <code>GridItem as="li"</code> for list content.</li>
+            <li>Use <code>section</code> or <code>article</code> only when the content meets native HTML sectioning rules.</li>
+            <li>Keep the DOM order meaningful. Responsive columns do not change reading or keyboard order.</li>
+            <li>Mobile divider lines remain visible in forced-colors mode.</li>
+          </ul>
+        </section>
+
+        <section id="api-reference" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#api-reference">API Reference</a></h2>
+          <div class="docs-api-group">
+            <h3 id="grid-api"><a class="docs-section-anchor" href="#grid-api">Grid</a></h3>
+            <p>Responsive container. Native attributes, data attributes, and consumer classes pass to the rendered root.</p>
+            <div class="docs-api-table"><table><thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>{gridProps.map((prop) => <tr><td><code>{prop.name}</code></td><td><code>{prop.type}</code></td><td><code>{prop.defaultValue}</code></td><td>{prop.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="grid-item-api"><a class="docs-section-anchor" href="#grid-item-api">GridItem</a></h3>
+            <p>Min-width-safe item that consumes mobile-divider state from its nearest Grid root.</p>
+            <div class="docs-api-table"><table><thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>{gridItemProps.map((prop) => <tr><td><code>{prop.name}</code></td><td><code>{prop.type}</code></td><td><code>{prop.defaultValue}</code></td><td>{prop.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="data-slots"><a class="docs-section-anchor" href="#data-slots">Data Slots</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Slot</th><th>Element</th><th>Description</th></tr></thead><tbody>{dataSlots.map((part) => <tr><td><code>{part.name}</code></td><td><code>{part.element}</code></td><td>{part.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="data-attributes"><a class="docs-section-anchor" href="#data-attributes">Data Attributes</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Attribute</th><th>Value</th><th>Description</th></tr></thead><tbody>{dataAttributes.map((attribute) => <tr><td><code>{attribute.name}</code></td><td><code>{attribute.value}</code></td><td>{attribute.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="exports"><a class="docs-section-anchor" href="#exports">Exports</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Export</th><th>Description</th></tr></thead><tbody>{exportsList.map((item) => <tr><td><code>{item.name}</code></td><td>{item.description}</td></tr>)}</tbody></table></div>
+          </div>
+        </section>
+
+        <DocsPageNavigation currentPath={currentPath} />
+      </article>
+
+      <aside class="docs-page-toc" aria-label="On this page">
+        <div class="docs-page-toc__inner">
+          <span class="docs-page-toc__title">On this page</span>
+          <ul>
+            <li><a href="#installation" data-toc-link="installation">Installation</a><ul><li><a href="#barrel" data-toc-link="barrel">Barrel</a></li><li><a href="#granular" data-toc-link="granular">Granular</a></li></ul></li>
+            <li><a href="#usage" data-toc-link="usage">Usage</a></li>
+            <li><a href="#composition" data-toc-link="composition">Composition</a></li>
+            <li><a href="#examples" data-toc-link="examples">Examples</a><ul><li><a href="#responsive-variants" data-toc-link="responsive-variants">Responsive Variants</a></li><li><a href="#asymmetric-layouts" data-toc-link="asymmetric-layouts">Asymmetric Layouts</a></li><li><a href="#gap-sizes" data-toc-link="gap-sizes">Gap Sizes</a></li><li><a href="#mobile-dividers" data-toc-link="mobile-dividers">Mobile Dividers</a></li><li><a href="#semantic-list" data-toc-link="semantic-list">Semantic List</a></li></ul></li>
+            <li><a href="#all-variants" data-toc-link="all-variants">All Variants</a></li>
+            <li><a href="#accessibility" data-toc-link="accessibility">Accessibility</a></li>
+            <li><a href="#api-reference" data-toc-link="api-reference">API Reference</a><ul><li><a href="#grid-api" data-toc-link="grid-api">Grid</a></li><li><a href="#grid-item-api" data-toc-link="grid-item-api">GridItem</a></li><li><a href="#data-slots" data-toc-link="data-slots">Data Slots</a></li><li><a href="#data-attributes" data-toc-link="data-attributes">Data Attributes</a></li><li><a href="#exports" data-toc-link="exports">Exports</a></li></ul></li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+  </div>
+</DocsLayout>

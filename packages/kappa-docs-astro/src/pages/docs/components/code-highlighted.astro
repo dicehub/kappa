@@ -1,0 +1,210 @@
+---
+import ArkUiDocsLink from "../../../components/ArkUiDocsLink.astro";
+import CodeHighlightedDocsDemo from "../../../components/CodeHighlightedDocsDemo.vue";
+import CodeBlock from "../../../components/CodeBlock.astro";
+import CompositionTree from "../../../components/CompositionTree.astro";
+import CopyPageControls from "../../../components/CopyPageControls.vue";
+import DocsPageNavigation from "../../../components/DocsPageNavigation.astro";
+import {
+  codeHighlightedProps,
+  copyButtonCode,
+  exportsList,
+  installationCode,
+  highlightColorCode,
+  highlightLinesCode,
+  labelsCode,
+  languagesCode,
+  lineNumbersCode,
+  previewCode,
+  shikiProviderProps,
+  titleCode,
+  usageCode,
+} from "../../../data/code-highlighted-docs";
+import DocsLayout from "../../../layouts/DocsLayout.astro";
+import "../../../styles/docs-components.css";
+
+const currentPath = "/docs/components/code-highlighted";
+const description =
+  "Displays syntax-highlighted code with line numbers, line highlights, and a copy affordance.";
+---
+
+<DocsLayout title="Code Highlighted" description={description}>
+  <div class="docs-page docs-page--component">
+    <header class="docs-page-header">
+      <div class="docs-page-header__inner">
+        <div class="docs-page-header__content">
+          <div class="docs-page-header__mobile-actions">
+            <CopyPageControls client:only="vue" align="center" />
+          </div>
+          <div class="docs-page-header__title-row">
+            <h1>Code Highlighted</h1>
+            <ArkUiDocsLink />
+            <div class="docs-page-header__navigation-actions">
+              <div class="docs-page-header__desktop-actions"><CopyPageControls client:only="vue" /></div>
+              <DocsPageNavigation currentPath={currentPath} variant="compact" />
+            </div>
+          </div>
+          <p class="docs-page-header__lede">{description}</p>
+        </div>
+      </div>
+    </header>
+
+    <div class="docs-page-body">
+      <article class="docs-article docs-article--component">
+        <section id="preview" class="docs-section">
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><CodeHighlightedDocsDemo client:load variant="preview" /></div>
+            <CodeBlock code={previewCode} lang="vue" collapsible revealId="code-highlighted-preview-code" />
+          </div>
+        </section>
+
+        <section id="installation" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#installation">Installation</a></h2>
+          <p>
+            The component lazy-loads <code>shiki</code>, <code>@shikijs/langs</code>, and
+            <code>@shikijs/themes</code> on first render. Install them alongside
+            <code>@dicehub/kappa</code>; they are optional peers, so applications without code
+            display pay nothing.
+          </p>
+          <p>
+            Import this optional feature only through its dedicated entry point. The root
+            <code>@dicehub/kappa</code> barrel does not export it.
+          </p>
+          <h3 id="dedicated-entry-point"><a class="docs-section-anchor" href="#dedicated-entry-point">Dedicated Entry Point</a></h3>
+          <CodeBlock code={installationCode} lang="javascript" />
+        </section>
+
+        <section id="usage" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#usage">Usage</a></h2>
+          <p>
+            Wrap code blocks in one <code>ShikiProvider</code> per application or subtree. It
+            creates a single shared highlighter and loads only the listed languages. Until the
+            highlighter is ready, blocks render plain text.
+          </p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><CodeHighlightedDocsDemo client:load variant="usage" /></div>
+            <CodeBlock code={usageCode} lang="vue" collapsible revealId="code-highlighted-usage-code" />
+          </div>
+        </section>
+
+        <section id="composition" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#composition">Composition</a></h2>
+          <CompositionTree component="codeHighlighted" />
+          <p>
+            Shiki owns tokenization with TextMate grammars. Kappa owns the provider lifecycle
+            (lazy load, disposal, language sets), the fixed light and dark themes, the display
+            geometry, and semantic tokens. Themes are fixed — <code>github-light</code> and
+            <code>vesper</code> — for consistent rendering in both modes.
+          </p>
+          <ul>
+            <li><code>ShikiProvider</code> loads the engine, themes, and languages once, then shares them.</li>
+            <li><code>CodeHighlighted</code> renders one block; unknown languages degrade to plain text with a warning.</li>
+            <li><code>useShikiHighlighter</code> exposes the shared highlighter for custom blocks.</li>
+          </ul>
+        </section>
+
+        <section id="examples" class="docs-section docs-section--component-examples">
+          <h2><a class="docs-section-anchor" href="#examples">Examples</a></h2>
+
+          <h3 id="title"><a class="docs-section-anchor" href="#title">Title</a></h3>
+          <p>Add a short file name or label with <code>title</code>. The copy control stays visible in the header.</p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><CodeHighlightedDocsDemo client:load variant="title" /></div>
+            <CodeBlock code={titleCode} lang="vue" collapsible revealId="code-highlighted-title-code" />
+          </div>
+
+          <h3 id="languages"><a class="docs-section-anchor" href="#languages">Languages</a></h3>
+          <p>Load exactly the languages an application needs; aliases such as <code>ts</code> or <code>sh</code> resolve automatically.</p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><CodeHighlightedDocsDemo client:load variant="languages" /></div>
+            <CodeBlock code={languagesCode} lang="vue" collapsible revealId="code-highlighted-languages-code" />
+          </div>
+
+          <h3 id="highlight-lines"><a class="docs-section-anchor" href="#highlight-lines">Highlight Lines</a></h3>
+          <p>Emphasize 1-indexed lines with <code>highlightLines</code>.</p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><CodeHighlightedDocsDemo client:load variant="highlight-lines" /></div>
+            <CodeBlock code={highlightLinesCode} lang="vue" collapsible revealId="code-highlighted-highlight-lines-code" />
+          </div>
+
+          <h3 id="custom-highlight-color"><a class="docs-section-anchor" href="#custom-highlight-color">Custom Highlight Color</a></h3>
+          <p>Override the <code>--kappa-code-highlight-bg</code> token to recolor highlighted lines.</p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><CodeHighlightedDocsDemo client:load variant="highlight-color" /></div>
+            <CodeBlock code={highlightColorCode} lang="vue" collapsible revealId="code-highlighted-highlight-color-code" />
+          </div>
+
+          <h3 id="line-numbers"><a class="docs-section-anchor" href="#line-numbers">Line Numbers</a></h3>
+          <p>Line numbers render for multi-line blocks and stay out of the selection.</p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><CodeHighlightedDocsDemo client:load variant="line-numbers" /></div>
+            <CodeBlock code={lineNumbersCode} lang="vue" collapsible revealId="code-highlighted-line-numbers-code" />
+          </div>
+
+          <h3 id="copy-button"><a class="docs-section-anchor" href="#copy-button">Copy Button</a></h3>
+          <p>
+            <code>showCopyButton</code> adds the copy affordance. Single-line blocks keep the
+            button visible inline instead of floating it on hover.
+          </p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><CodeHighlightedDocsDemo client:load variant="copy-button" /></div>
+            <CodeBlock code={copyButtonCode} lang="vue" collapsible revealId="code-highlighted-copy-button-code" />
+          </div>
+
+          <h3 id="copy-button-labels"><a class="docs-section-anchor" href="#copy-button-labels">Copy Button Labels</a></h3>
+          <p>
+            The copy button text comes from the provider <code>labels</code>; a block can
+            override them through its own <code>labels</code> prop.
+          </p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><CodeHighlightedDocsDemo client:load variant="labels" /></div>
+            <CodeBlock code={labelsCode} lang="vue" collapsible revealId="code-highlighted-labels-code" />
+          </div>
+        </section>
+
+        <section id="accessibility" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#accessibility">Accessibility</a></h2>
+          <ul>
+            <li>Code renders as a <code>pre</code>/<code>code</code> region; plain text remains available while the highlighter loads.</li>
+            <li>The optional title renders as a semantic <code>figcaption</code>.</li>
+            <li>Line numbers are decorative and hidden from assistive technology.</li>
+            <li>The Ark UI copy button has an accessible name and a polite status announcement.</li>
+            <li>The button stays visible on touch devices and remains reachable with the keyboard.</li>
+          </ul>
+        </section>
+
+        <section id="api-reference" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#api-reference">API Reference</a></h2>
+          <div class="docs-api-group">
+            <h3 id="provider-api"><a class="docs-section-anchor" href="#provider-api">ShikiProvider</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>{shikiProviderProps.map((prop) => <tr><td><code>{prop.name}</code></td><td><code>{prop.type}</code></td><td><code>{prop.defaultValue}</code></td><td>{prop.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="component-api"><a class="docs-section-anchor" href="#component-api">CodeHighlighted</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>{codeHighlightedProps.map((prop) => <tr><td><code>{prop.name}</code></td><td><code>{prop.type}</code></td><td><code>{prop.defaultValue}</code></td><td>{prop.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="exports"><a class="docs-section-anchor" href="#exports">Exports</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Export</th><th>Description</th></tr></thead><tbody>{exportsList.map((item) => <tr><td><code>{item.name}</code></td><td>{item.description}</td></tr>)}</tbody></table></div>
+          </div>
+        </section>
+
+        <DocsPageNavigation currentPath={currentPath} />
+      </article>
+
+      <aside class="docs-page-toc" aria-label="On this page">
+        <div class="docs-page-toc__inner">
+          <span class="docs-page-toc__title">On this page</span>
+          <ul>
+            <li><a href="#installation" data-toc-link="installation">Installation</a><ul><li><a href="#dedicated-entry-point" data-toc-link="dedicated-entry-point">Dedicated Entry Point</a></li></ul></li>
+            <li><a href="#usage" data-toc-link="usage">Usage</a></li>
+            <li><a href="#composition" data-toc-link="composition">Composition</a></li>
+            <li><a href="#examples" data-toc-link="examples">Examples</a><ul><li><a href="#title" data-toc-link="title">Title</a></li><li><a href="#languages" data-toc-link="languages">Languages</a></li><li><a href="#highlight-lines" data-toc-link="highlight-lines">Highlight Lines</a></li><li><a href="#custom-highlight-color" data-toc-link="custom-highlight-color">Custom Highlight Color</a></li><li><a href="#line-numbers" data-toc-link="line-numbers">Line Numbers</a></li><li><a href="#copy-button" data-toc-link="copy-button">Copy Button</a></li><li><a href="#copy-button-labels" data-toc-link="copy-button-labels">Copy Button Labels</a></li></ul></li>
+            <li><a href="#accessibility" data-toc-link="accessibility">Accessibility</a></li>
+            <li><a href="#api-reference" data-toc-link="api-reference">API Reference</a><ul><li><a href="#provider-api" data-toc-link="provider-api">ShikiProvider</a></li><li><a href="#component-api" data-toc-link="component-api">CodeHighlighted</a></li><li><a href="#exports" data-toc-link="exports">Exports</a></li></ul></li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+  </div>
+</DocsLayout>

@@ -1,0 +1,293 @@
+---
+import ArkUiDocsLink from "../../../components/ArkUiDocsLink.astro";
+import AvatarDocsDemo from "../../../components/AvatarDocsDemo.vue";
+import CodeBlock from "../../../components/CodeBlock.astro";
+import CompositionTree from "../../../components/CompositionTree.astro";
+import CopyPageControls from "../../../components/CopyPageControls.vue";
+import DocsPageNavigation from "../../../components/DocsPageNavigation.astro";
+import {
+  badgeCode,
+  barrelCode,
+  compositionCode,
+  dropdownCode,
+  exportsList,
+  fallbackCode,
+  granularCode,
+  groupCode,
+  previewCode,
+  primitiveParts,
+  rootEvents,
+  rootProps,
+  rtlCode,
+  sizesCode,
+  usageCode,
+} from "../../../data/avatar-docs";
+import DocsLayout from "../../../layouts/DocsLayout.astro";
+import "../../../styles/docs-components.css";
+
+const currentPath = "/docs/components/avatar";
+const description = "Represents a person or entity with a portrait, resilient fallback, status marker, and compact group composition.";
+---
+
+<DocsLayout title="Avatar" description={description}>
+  <div class="docs-page docs-page--component">
+    <header class="docs-page-header">
+      <div class="docs-page-header__inner">
+        <div class="docs-page-header__content">
+          <div class="docs-page-header__mobile-actions">
+            <CopyPageControls client:only="vue" align="center" />
+          </div>
+          <div class="docs-page-header__title-row">
+            <h1>Avatar</h1>
+            <ArkUiDocsLink />
+            <div class="docs-page-header__navigation-actions">
+              <div class="docs-page-header__desktop-actions">
+                <CopyPageControls client:only="vue" />
+              </div>
+              <DocsPageNavigation currentPath={currentPath} variant="compact" />
+            </div>
+          </div>
+          <p class="docs-page-header__lede">{description}</p>
+        </div>
+      </div>
+    </header>
+
+    <div class="docs-page-body">
+      <article class="docs-article docs-article--component">
+        <section id="preview" class="docs-section">
+          <div class="docs-component-example">
+            <div class="docs-component-preview">
+              <AvatarDocsDemo client:load variant="preview" />
+            </div>
+            <CodeBlock code={previewCode} lang="vue" collapsible revealId="avatar-preview-code" />
+          </div>
+        </section>
+
+        <section id="installation" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#installation">Installation</a></h2>
+          <h3 id="barrel"><a class="docs-section-anchor" href="#barrel">Barrel</a></h3>
+          <CodeBlock code={barrelCode} lang="javascript" />
+          <h3 id="granular"><a class="docs-section-anchor" href="#granular">Granular</a></h3>
+          <CodeBlock code={granularCode} lang="javascript" />
+        </section>
+
+        <section id="usage" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#usage">Usage</a></h2>
+          <p>
+            Compose Image and Fallback inside Root. The fallback is rendered during loading and after
+            an image error, so it should communicate the same identity as the image.
+          </p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview">
+              <AvatarDocsDemo client:load variant="usage" />
+            </div>
+            <CodeBlock code={usageCode} lang="vue" collapsible revealId="avatar-usage-code" />
+          </div>
+        </section>
+
+        <section id="composition" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#composition">Composition</a></h2>
+          <CompositionTree component="avatar" />
+          <p>
+            The compound API and named exports are equivalent. Badge, Group, and GroupCount are
+            attribute-transparent Kappa parts around
+            <a href="https://ark-ui.com/docs/components/avatar">Ark UI Avatar</a>, which owns the
+            image-loading behavior and accessibility state.
+          </p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview">
+              <AvatarDocsDemo client:load variant="composition" />
+            </div>
+            <CodeBlock code={compositionCode} lang="vue" collapsible revealId="avatar-composition-code" />
+          </div>
+        </section>
+
+        <section id="examples" class="docs-section docs-section--component-examples">
+          <h2><a class="docs-section-anchor" href="#examples">Examples</a></h2>
+
+          <h3 id="image-fallback">
+            <a class="docs-section-anchor" href="#image-fallback">Image and Fallback</a>
+          </h3>
+          <p>
+            Ark UI keeps Fallback visible while Image loads and whenever loading fails. The
+            <code>statusChange</code> detail is <code>loaded</code> or <code>error</code>; it reports image
+            state, not a person's online presence.
+          </p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview">
+              <AvatarDocsDemo client:load variant="fallback" />
+            </div>
+            <CodeBlock code={fallbackCode} lang="vue" collapsible revealId="avatar-fallback-code" />
+          </div>
+
+          <h3 id="sizes"><a class="docs-section-anchor" href="#sizes">Sizes</a></h3>
+          <p>
+            Use <code>sm</code> for dense lists and groups, the default size for most identity rows,
+            and <code>lg</code> where identity leads the composition.
+          </p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview">
+              <AvatarDocsDemo client:load variant="sizes" />
+            </div>
+            <CodeBlock code={sizesCode} lang="vue" collapsible revealId="avatar-sizes-code" />
+          </div>
+
+          <h3 id="status-badge"><a class="docs-section-anchor" href="#status-badge">Status Badge</a></h3>
+          <p>
+            Badge provides placement only. Give a meaningful marker a role and accessible name, then
+            repeat essential status in text so meaning never relies on color alone. Do not add a live
+            region unless the application needs to announce a change.
+          </p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview">
+              <AvatarDocsDemo client:load variant="badge" />
+            </div>
+            <CodeBlock code={badgeCode} lang="vue" collapsible revealId="avatar-badge-code" />
+          </div>
+
+          <h3 id="avatar-group"><a class="docs-section-anchor" href="#avatar-group">Avatar Group</a></h3>
+          <p>
+            Group controls overlap but adds no semantics. Connect it to visible context with
+            <code>role="group"</code> and <code>aria-labelledby</code> when the collection is meaningful.
+            GroupCount displays consumer-provided content; include contextual accessible text such as
+            “3 more reviewers.”
+          </p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview">
+              <AvatarDocsDemo client:load variant="group" />
+            </div>
+            <CodeBlock code={groupCode} lang="vue" collapsible revealId="avatar-group-code" />
+          </div>
+
+          <h3 id="account-menu"><a class="docs-section-anchor" href="#account-menu">Account Menu Trigger</a></h3>
+          <p>
+            Avatar is non-interactive. Place it inside a semantic button when it opens a menu and
+            label that button with the action and identity. An empty image alt and hidden fallback
+            avoid repeating a name already supplied by the button label.
+          </p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview">
+              <AvatarDocsDemo client:load variant="dropdown" />
+            </div>
+            <CodeBlock code={dropdownCode} lang="vue" collapsible revealId="avatar-dropdown-code" />
+          </div>
+
+          <h3 id="right-to-left"><a class="docs-section-anchor" href="#right-to-left">Right-to-left</a></h3>
+          <p>
+            Set <code>dir="rtl"</code> on each Root so Ark UI applies direction to Image and Fallback.
+            Group and Badge use logical positioning and preserve the expected overlap order.
+          </p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview">
+              <AvatarDocsDemo client:load variant="rtl" />
+            </div>
+            <CodeBlock code={rtlCode} lang="vue" collapsible revealId="avatar-rtl-code" />
+          </div>
+        </section>
+
+        <section id="accessibility" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#accessibility">Accessibility</a></h2>
+          <ul>
+            <li>For a standalone identity, give Image meaningful alt text and make Fallback communicate the same person or entity.</li>
+            <li>When adjacent text or a labelled control already names the identity, use <code>alt=""</code> and hide redundant fallback text from assistive technology.</li>
+            <li>Never omit <code>alt</code>. A missing image description and an intentionally decorative image are different states.</li>
+            <li>Fallback appears while loading as well as after an error. Keep it stable during server rendering and hydration.</li>
+            <li><code>statusChange</code> reports image loading only. Presence needs separate application data and visible or programmatic text.</li>
+            <li>Badge has no implicit role or live-region behavior. Do not rely on color alone for status.</li>
+            <li>Group is neutral. Add collection semantics only when they help, and connect them to visible or visually hidden context.</li>
+            <li>GroupCount is not calculated. Render the correct count and include what it counts as real visible or visually hidden text.</li>
+            <li>Wrap Avatar in a labelled native link or button for navigation and actions; Avatar itself is not a trigger.</li>
+          </ul>
+          <p>
+            Kappa preserves Ark UI image-loading behavior. See the
+            <a href="https://ark-ui.com/docs/components/avatar">official Ark UI Avatar documentation</a>
+            for the primitive contract.
+          </p>
+        </section>
+
+        <section id="api-reference" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#api-reference">API Reference</a></h2>
+
+          <div class="docs-api-group">
+            <h3 id="root-api"><a class="docs-section-anchor" href="#root-api">Avatar.Root</a></h3>
+            <p>Renders the Ark UI root and forwards remaining attributes and listeners.</p>
+            <div class="docs-api-table">
+              <table>
+                <thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+                <tbody>
+                  {rootProps.map((prop) => (
+                    <tr><td><code>{prop.name}</code></td><td><code>{prop.type}</code></td><td><code>{prop.defaultValue}</code></td><td>{prop.description}</td></tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <div class="docs-api-table">
+              <table>
+                <thead><tr><th>Event</th><th>Detail</th><th>Description</th></tr></thead>
+                <tbody>
+                  {rootEvents.map((event) => (
+                    <tr><td><code>{event.name}</code></td><td><code>{event.type}</code></td><td>{event.description}</td></tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="docs-api-group">
+            <h3 id="parts-api"><a class="docs-section-anchor" href="#parts-api">Parts</a></h3>
+            <div class="docs-api-table">
+              <table>
+                <thead><tr><th>Part</th><th>Element</th><th>Description</th></tr></thead>
+                <tbody>
+                  {primitiveParts.map((part) => (
+                    <tr><td><code>{part.name}</code></td><td><code>{part.element}</code></td><td>{part.description}</td></tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="docs-api-group">
+            <h3 id="exports"><a class="docs-section-anchor" href="#exports">Exports</a></h3>
+            <div class="docs-api-table">
+              <table>
+                <thead><tr><th>Export</th><th>Description</th></tr></thead>
+                <tbody>
+                  {exportsList.map((item) => (
+                    <tr><td><code>{item.name}</code></td><td>{item.description}</td></tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <DocsPageNavigation currentPath={currentPath} />
+      </article>
+
+      <aside class="docs-page-toc" aria-label="On this page">
+        <div class="docs-page-toc__inner">
+          <span class="docs-page-toc__title">On this page</span>
+          <ul>
+            <li><a href="#installation" data-toc-link="installation">Installation</a><ul><li><a href="#barrel" data-toc-link="barrel">Barrel</a></li><li><a href="#granular" data-toc-link="granular">Granular</a></li></ul></li>
+            <li><a href="#usage" data-toc-link="usage">Usage</a></li>
+            <li><a href="#composition" data-toc-link="composition">Composition</a></li>
+            <li>
+              <a href="#examples" data-toc-link="examples">Examples</a>
+              <ul>
+                <li><a href="#image-fallback" data-toc-link="image-fallback">Image and Fallback</a></li>
+                <li><a href="#sizes" data-toc-link="sizes">Sizes</a></li>
+                <li><a href="#status-badge" data-toc-link="status-badge">Status Badge</a></li>
+                <li><a href="#avatar-group" data-toc-link="avatar-group">Avatar Group</a></li>
+                <li><a href="#account-menu" data-toc-link="account-menu">Account Menu Trigger</a></li>
+                <li><a href="#right-to-left" data-toc-link="right-to-left">Right-to-left</a></li>
+              </ul>
+            </li>
+            <li><a href="#accessibility" data-toc-link="accessibility">Accessibility</a></li>
+            <li><a href="#api-reference" data-toc-link="api-reference">API Reference</a><ul><li><a href="#root-api" data-toc-link="root-api">Avatar.Root</a></li><li><a href="#parts-api" data-toc-link="parts-api">Parts</a></li><li><a href="#exports" data-toc-link="exports">Exports</a></li></ul></li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+  </div>
+</DocsLayout>

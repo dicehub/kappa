@@ -1,0 +1,108 @@
+image: node:24.19.0-bookworm-slim
+
+stages:
+  - verify
+  - deploy
+  - publish
+  - release
+
+variables:
+  PNPM_STORE_DIR: "$CI_PROJECT_DIR/.pnpm-store"
+
+cache:
+  key:
+    files:
+      - pnpm-lock.yaml
+  paths:
+    - .pnpm-store/
+
+default:
+  tags:
+    - dicehub-com-docker-power
+  before_script:
+    - corepack enable
+    - corepack prepare pnpm@10.26.0 --activate
+    - pnpm config set store-dir "$PNPM_STORE_DIR"
+    - pnpm install --frozen-lockfile
+
+verify:
+  stage: verify
+  script:
+    - apt-get update
+    - apt-get install --no-install-recommends --yes ca-certificates git
+    - git fetch --depth=100 origin dev
+    - node scripts/check-release-state.mjs FETCH_HEAD
+    - pnpm typecheck
+    - pnpm build
+    - pnpm --filter @dicehub/kappa validate:package
+    - pnpm --filter @dicehub/kappa-docs-astro exec playwright install --with-deps chromium
+    - KAPPA_E2E_SKIP_BUILD=1 pnpm test
+  artifacts:
+    when: always
+    reports:
+      junit: packages/kappa-docs-astro/test-results/e2e-junit.xml
+    paths:
+      - packages/kappa-docs-astro/test-results/
+      - packages/kappa-docs-astro/dist/
+    expire_in: 1 week
+
+deploy-docs:
+  stage: deploy
+  needs:
+    - job: verify
+      artifacts: true
+  resource_group: docs-production
+  variables:
+    CLOUDFLARE_PAGES_PROJECT: dicehub-kappa-ui
+    CLOUDFLARE_PAGES_BRANCH: dev
+    CLOUDFLARE_PAGES_DOMAIN: kappa-ui.dh.fo
+    ACCESS_APP_DOMAIN: kappa-ui.dh.fo
+    ACCESS_ALLOWED_EMAIL_DOMAIN: dicehub.com
+  script:
+    - node scripts/cloudflare-pages.mjs ensure
+    - npx --yes wrangler@4.114.0 pages deploy packages/kappa-docs-astro/dist --project-name="$CLOUDFLARE_PAGES_PROJECT" --branch="$CLOUDFLARE_PAGES_BRANCH" --force
+    - node scripts/cloudflare-pages.mjs verify
+    - node scripts/cloudflare-pages.mjs domain
+    - node scripts/cloudflare-pages.mjs dns
+    - node scripts/cloudflare-pages.mjs wait-domain
+    - node scripts/cloudflare-access.mjs ensure
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "dev"'
+  environment:
+    name: docs-production
+    url: https://kappa-ui.dh.fo
+
+publish-package:
+  stage: publish
+  needs:
+    - verify
+  resource_group: kappa-package-release
+  script:
+    - export PACKAGE_VERSION="$(node -p "require('./packages/kappa/package.json').version")"
+    - test "$CI_COMMIT_TAG" = "@dicehub/kappa@$PACKAGE_VERSION"
+    - pnpm --filter @dicehub/kappa build
+    - pnpm --filter @dicehub/kappa validate:package
+    - node scripts/release-notes.mjs "$PACKAGE_VERSION" release-notes.md
+    - pnpm config set --location=project "@dicehub:registry" "$CI_API_V4_URL/projects/$CI_PROJECT_ID/packages/npm/"
+    - pnpm config set --location=project "//$CI_SERVER_HOST/api/v4/projects/$CI_PROJECT_ID/packages/npm/:_authToken" "$CI_JOB_TOKEN"
+    - if pnpm view "@dicehub/kappa@$PACKAGE_VERSION" version --registry "$CI_API_V4_URL/projects/$CI_PROJECT_ID/packages/npm/" >/dev/null 2>&1; then echo "@dicehub/kappa@$PACKAGE_VERSION is already published."; else pnpm --filter @dicehub/kappa publish --no-git-checks --access restricted; fi
+  artifacts:
+    paths:
+      - release-notes.md
+    expire_in: 1 week
+  rules:
+    - if: '$CI_COMMIT_TAG =~ /^@dicehub\/kappa@\d+\.\d+\.\d+$/ && $CI_COMMIT_REF_PROTECTED == "true"'
+    - when: never
+
+create-release:
+  stage: release
+  needs:
+    - job: publish-package
+      artifacts: true
+  before_script: []
+  script:
+    - export PACKAGE_VERSION="$(node -p "require('./packages/kappa/package.json').version")"
+    - node scripts/create-gitlab-release.mjs release-notes.md
+  rules:
+    - if: '$CI_COMMIT_TAG =~ /^@dicehub\/kappa@\d+\.\d+\.\d+$/ && $CI_COMMIT_REF_PROTECTED == "true"'
+    - when: never

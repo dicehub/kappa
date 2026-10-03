@@ -1,0 +1,86 @@
+---
+import CodeBlock from "../../../components/CodeBlock.astro";
+import CopyPageControls from "../../../components/CopyPageControls.vue";
+import DeleteResourceDocsDemo from "../../../components/DeleteResourceDocsDemo.vue";
+import DocsPageNavigation from "../../../components/DocsPageNavigation.astro";
+import { deleteResourceExamples } from "../../../data/delete-resource-docs";
+import DocsLayout from "../../../layouts/DocsLayout.astro";
+import "../../../styles/docs-components.css";
+
+const currentPath = "/docs/blocks/delete-resource";
+const description = "Confirm resource deletion with optional name entry, a pending state, and retry after errors.";
+---
+
+<DocsLayout title="Delete Resource" description={description}>
+  <div class="docs-page docs-page--component">
+    <header class="docs-page-header"><div class="docs-page-header__inner"><div class="docs-page-header__content">
+      <div class="docs-page-header__mobile-actions"><CopyPageControls client:only="vue" align="center" /></div>
+      <div class="docs-page-header__title-row">
+        <h1>Delete Resource</h1>
+        <div class="docs-page-header__navigation-actions">
+          <div class="docs-page-header__desktop-actions"><CopyPageControls client:only="vue" /></div>
+          <DocsPageNavigation currentPath={currentPath} variant="compact" />
+        </div>
+      </div>
+      <p class="docs-page-header__lede">{description}</p>
+    </div></div></header>
+    <div class="docs-page-body">
+      <article class="docs-article docs-article--component">
+        <section id="overview" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#overview">Overview</a></h2>
+          <p><code>DeleteResource</code> combines <a href="/docs/components/dialog-layout">Dialog Layout</a>, <a href="/docs/components/input">Input</a>, <a href="/docs/components/button">Button</a>, and <a href="/docs/components/banner">Banner</a>. Your application owns the request and closes the dialog after success.</p>
+        </section>
+        <section id="examples" class="docs-section docs-section--component-examples">
+          <h2><a class="docs-section-anchor" href="#examples">Examples</a></h2>
+          {deleteResourceExamples.map(example => <>
+            <h3 id={example.id}><a class="docs-section-anchor" href={`#${example.id}`}>{example.title}</a></h3>
+            <p>{example.description}</p>
+            <div class="docs-component-example">
+              <div class="docs-component-preview"><DeleteResourceDocsDemo client:load variant={example.id} /></div>
+              <CodeBlock code={example.code} lang="vue" collapsible revealId={`delete-resource-${example.id}-code`} />
+            </div>
+          </>)}
+        </section>
+        <section id="installation" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#installation">Installation</a></h2>
+          <CodeBlock lang="typescript" code={`import { DeleteResource } from "@dicehub/kappa/blocks/delete-resource"
+import "@dicehub/kappa/styles/theme-kappa.css"`} />
+          <p>The root package also exports the block and its public types.</p>
+        </section>
+        <section id="api" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#api">API</a></h2>
+          <div class="docs-api-table"><table>
+            <thead><tr><th>Prop</th><th>Default</th><th>Purpose</th></tr></thead>
+            <tbody>
+              <tr><td><code>resourceName</code></td><td>Required</td><td>Name shown in the dialog and used for exact-name confirmation.</td></tr>
+              <tr><td><code>open / defaultOpen</code></td><td>Closed</td><td>Controlled visibility or initial uncontrolled visibility. Use <code>v-model:open</code> to close after success.</td></tr>
+              <tr><td><code>requireName</code></td><td><code>false</code></td><td>Enables case-sensitive name confirmation. Spaces must also match.</td></tr>
+              <tr><td><code>deleting</code></td><td><code>false</code></td><td>Shows progress, makes the input read-only, and blocks user dismissal and confirmation.</td></tr>
+              <tr><td><code>disabled</code></td><td><code>false</code></td><td>Disables confirmation. Cancel remains available.</td></tr>
+              <tr><td><code>error</code></td><td>—</td><td>Request error announced in a banner. Clear it before retrying or opening another resource.</td></tr>
+              <tr><td><code>title / description</code></td><td>Delete resource? / This action cannot be undone.</td><td>Accessible title and description.</td></tr>
+              <tr><td><code>confirmLabel / deletingLabel / cancelLabel</code></td><td>Delete resource / Deleting… / Cancel</td><td>Translate the action text for your application.</td></tr>
+              <tr><td><code>confirmationLabel</code></td><td>Type the resource name to confirm</td><td>Visible label for the confirmation input.</td></tr>
+              <tr><td><code>finalFocusEl</code></td><td>Trigger</td><td>Optional focus destination after close, for example when deletion removes the trigger.</td></tr>
+            </tbody>
+          </table></div>
+          <p><code>confirm</code> requests deletion. It does not close the dialog or call a service. <code>update:open</code> and <code>openChange</code> report user visibility changes. The <code>trigger</code> slot accepts one button; the default slot adds context below the resource name. Attributes and DOM listeners pass to the dialog content.</p>
+          <p>Name entry clears when the dialog closes, opens, or targets a different resource. It remains available after an error. An empty resource name cannot pass exact-name confirmation.</p>
+        </section>
+        <section id="accessibility" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#accessibility">Accessibility</a></h2>
+          <p>The block uses the alert-dialog behavior of Kappa Dialog Layout. Focus starts on Cancel or the name input. Outside clicks never dismiss it. Escape cancels while idle and has no effect during a pending request. The dialog traps focus and restores it after close.</p>
+          <p>Describe the effect of deletion, including shared resources. Do not use name confirmation for every minor action. Set <code>deleting</code> when the request starts, clear it in a <code>finally</code> handler, and provide an error message when the request fails. The parent can still close or unmount the dialog; prevent that in the application while the request is pending.</p>
+        </section>
+        <DocsPageNavigation currentPath={currentPath} />
+      </article>
+      <aside class="docs-page-toc" aria-label="On this page"><div class="docs-page-toc__inner"><span class="docs-page-toc__title">On this page</span><ul>
+        <li><a href="#overview" data-toc-link="overview">Overview</a></li>
+        <li><a href="#examples" data-toc-link="examples">Examples</a><ul>{deleteResourceExamples.map(example => <li><a href={`#${example.id}`} data-toc-link={example.id}>{example.title}</a></li>)}</ul></li>
+        <li><a href="#installation" data-toc-link="installation">Installation</a></li>
+        <li><a href="#api" data-toc-link="api">API</a></li>
+        <li><a href="#accessibility" data-toc-link="accessibility">Accessibility</a></li>
+      </ul></div></aside>
+    </div>
+  </div>
+</DocsLayout>

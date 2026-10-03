@@ -1,0 +1,187 @@
+---
+import ItemDocsDemo from "../../../components/ItemDocsDemo.vue";
+import CodeBlock from "../../../components/CodeBlock.astro";
+import CopyPageControls from "../../../components/CopyPageControls.vue";
+import DocsPageNavigation from "../../../components/DocsPageNavigation.astro";
+import {
+  barrelCode,
+  compositionCode,
+  dataSlots,
+  examples,
+  exportsList,
+  granularCode,
+  mediaProps,
+  parts,
+  previewCode,
+  rootProps,
+  titleProps,
+  usageCode,
+} from "../../../data/item-docs";
+import DocsLayout from "../../../layouts/DocsLayout.astro";
+import "../../../styles/docs-components.css";
+
+const currentPath = "/docs/components/item";
+const description = "Presents media, context, and actions in one compact application row.";
+---
+
+<DocsLayout title="Item" description={description}>
+  <div class="docs-page docs-page--component">
+    <header class="docs-page-header">
+      <div class="docs-page-header__inner">
+        <div class="docs-page-header__content">
+          <div class="docs-page-header__mobile-actions">
+            <CopyPageControls client:only="vue" align="center" />
+          </div>
+          <div class="docs-page-header__title-row">
+            <h1>Item</h1>
+            <div class="docs-page-header__navigation-actions">
+              <div class="docs-page-header__desktop-actions"><CopyPageControls client:only="vue" /></div>
+              <DocsPageNavigation currentPath={currentPath} variant="compact" />
+            </div>
+          </div>
+          <p class="docs-page-header__lede">{description}</p>
+        </div>
+      </div>
+    </header>
+
+    <div class="docs-page-body">
+      <article class="docs-article docs-article--component">
+        <section id="preview" class="docs-section">
+          <div class="docs-component-example">
+            <div class="docs-component-preview">
+              <ItemDocsDemo variant="preview" />
+            </div>
+            <CodeBlock code={previewCode} lang="vue" collapsible revealId="item-preview-code" />
+          </div>
+        </section>
+
+        <section id="installation" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#installation">Installation</a></h2>
+          <p>
+            Item is part of the main Kappa package. It is a presentational compound component with
+            native HTML parts and no state-machine dependency.
+          </p>
+          <h3 id="barrel"><a class="docs-section-anchor" href="#barrel">Barrel</a></h3>
+          <CodeBlock code={barrelCode} lang="javascript" />
+          <h3 id="granular"><a class="docs-section-anchor" href="#granular">Granular</a></h3>
+          <CodeBlock code={granularCode} lang="javascript" />
+        </section>
+
+        <section id="usage" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#usage">Usage</a></h2>
+          <p>
+            Use Item for content rows with a clear title, supporting description, leading media,
+            and trailing status or action. Use Field for form controls.
+          </p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview docs-component-preview--compact">
+              <ItemDocsDemo variant="usage" />
+            </div>
+            <CodeBlock code={usageCode} lang="vue" collapsible revealId="item-usage-code" />
+          </div>
+        </section>
+
+        <section id="composition" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#composition">Composition</a></h2>
+          <figure class="docs-composition-tree" data-composition-tree="item">
+            <figcaption>Typical part hierarchy</figcaption>
+            <CodeBlock code={compositionCode} lang="plaintext" />
+          </figure>
+          <p>
+            Kappa uses <code>as</code> for safe native element selection; use
+            <code>as="a"</code> only when the complete row has one destination. The current Ark UI
+            Vue package has no Item primitive, so Kappa owns this semantic native composition.
+          </p>
+          <ul>
+            <li>Use Item.Group for related rows. It renders <code>role="list"</code>; give each Item.Root <code>role="listitem"</code>.</li>
+            <li>Use Item.Media for a visual. Use Item.Content for title and description.</li>
+            <li>Keep interactive controls out of an anchor item. Put actions on a non-link item when needed.</li>
+            <li>Use Item.Header and Item.Footer for full-width metadata regions.</li>
+          </ul>
+        </section>
+
+        <section id="examples" class="docs-section docs-section--component-examples">
+          <h2><a class="docs-section-anchor" href="#examples">Examples</a></h2>
+          {
+            examples.map((example) => (
+              <>
+                <h3 id={example.id}>
+                  <a class="docs-section-anchor" href={`#${example.id}`}>{example.title}</a>
+                </h3>
+                <p>{example.description}</p>
+                <div class="docs-component-example">
+                  <div class="docs-component-preview">
+                    <ItemDocsDemo variant={example.variant} />
+                  </div>
+                  <CodeBlock
+                    code={example.code}
+                    lang="vue"
+                    collapsible
+                    revealId={`item-${example.id}-code`}
+                  />
+                </div>
+              </>
+            ))
+          }
+        </section>
+
+        <section id="accessibility" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#accessibility">Accessibility</a></h2>
+          <ul>
+            <li>Item adds no widget role or keyboard behavior.</li>
+            <li>Item.Group provides a list container. Give each child Item.Root <code>role="listitem"</code> and name the group when context needs it.</li>
+            <li>Choose a heading element with Item.Title's <code>as</code> prop when the item names a document section.</li>
+            <li>Use a complete native anchor for a linked item. Do not nest buttons or other controls in it.</li>
+            <li>ItemSeparator is a horizontal native separator. Supply visible labels or descriptions through the surrounding content.</li>
+            <li>HTML, ARIA, data attributes, and event listeners pass to every part.</li>
+          </ul>
+        </section>
+
+        <section id="api-reference" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#api-reference">API Reference</a></h2>
+          <div class="docs-api-group">
+            <h3 id="item-api"><a class="docs-section-anchor" href="#item-api">Item</a></h3>
+            <p>Outer row surface for media, content, actions, and optional metadata regions.</p>
+            <div class="docs-api-table"><table><thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>{rootProps.map((prop) => <tr><td><code>{prop.name}</code></td><td><code>{prop.type}</code></td><td><code>{prop.defaultValue}</code></td><td>{prop.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="media-api"><a class="docs-section-anchor" href="#media-api">Item.Media</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>{mediaProps.map((prop) => <tr><td><code>{prop.name}</code></td><td><code>{prop.type}</code></td><td><code>{prop.defaultValue}</code></td><td>{prop.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="title-api"><a class="docs-section-anchor" href="#title-api">Item.Title</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>{titleProps.map((prop) => <tr><td><code>{prop.name}</code></td><td><code>{prop.type}</code></td><td><code>{prop.defaultValue}</code></td><td>{prop.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="parts"><a class="docs-section-anchor" href="#parts">Parts</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Part</th><th>Element</th><th>Description</th></tr></thead><tbody>{parts.map((part) => <tr><td><code>{part.name}</code></td><td><code>{part.element}</code></td><td>{part.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="data-slots"><a class="docs-section-anchor" href="#data-slots">Data Slots</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Slot</th><th>Description</th></tr></thead><tbody>{dataSlots.map(([name, slotDescription]) => <tr><td><code>{name}</code></td><td>{slotDescription}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="exports"><a class="docs-section-anchor" href="#exports">Exports</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Export</th><th>Description</th></tr></thead><tbody>{exportsList.map((item) => <tr><td><code>{item.name}</code></td><td>{item.description}</td></tr>)}</tbody></table></div>
+          </div>
+        </section>
+
+        <DocsPageNavigation currentPath={currentPath} />
+      </article>
+
+      <aside class="docs-page-toc" aria-label="On this page">
+        <div class="docs-page-toc__inner">
+          <span class="docs-page-toc__title">On this page</span>
+          <ul>
+            <li><a href="#installation" data-toc-link="installation">Installation</a><ul><li><a href="#barrel" data-toc-link="barrel">Barrel</a></li><li><a href="#granular" data-toc-link="granular">Granular</a></li></ul></li>
+            <li><a href="#usage" data-toc-link="usage">Usage</a></li>
+            <li><a href="#composition" data-toc-link="composition">Composition</a></li>
+            <li><a href="#examples" data-toc-link="examples">Examples</a><ul>{examples.map((example) => <li><a href={`#${example.id}`} data-toc-link={example.id}>{example.title}</a></li>)}</ul></li>
+            <li><a href="#accessibility" data-toc-link="accessibility">Accessibility</a></li>
+            <li><a href="#api-reference" data-toc-link="api-reference">API Reference</a><ul><li><a href="#item-api" data-toc-link="item-api">Item</a></li><li><a href="#media-api" data-toc-link="media-api">Item.Media</a></li><li><a href="#title-api" data-toc-link="title-api">Item.Title</a></li><li><a href="#parts" data-toc-link="parts">Parts</a></li><li><a href="#data-slots" data-toc-link="data-slots">Data Slots</a></li><li><a href="#exports" data-toc-link="exports">Exports</a></li></ul></li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+  </div>
+</DocsLayout>

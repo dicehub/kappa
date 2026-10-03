@@ -1,0 +1,21 @@
+export { default as XYPlot } from "./XYPlot.vue";
+export {
+  XY_PLOT_DEFAULT_MAX_POINTS,
+  appendXYPlotData,
+  countXYPlotPoints,
+  formatXYPlotValue,
+  resolveXYPlotMaxPoints,
+  validateXYPlotData,
+  xyPlotErrorMessage,
+  type XYPlotAppendOptions,
+  type XYPlotData,
+  type XYPlotEmits,
+  type XYPlotInstance,
+  type XYPlotNativeOptions,
+  type XYPlotProps,
+  type XYPlotScale,
+  type XYPlotSeries,
+  type XYPlotSeriesPath,
+  type XYPlotSlots,
+  type XYPlotZoom,
+} from "./xy-plot";

@@ -1,0 +1,151 @@
+.kappa-badge {
+  --kappa-badge-background: var(--kappa-badge-inverted, #101217);
+  --kappa-badge-border: transparent;
+  --kappa-badge-foreground: var(--kappa-badge-inverted-contrast, #ffffff);
+  --kappa-badge-hover-background: var(--kappa-badge-background);
+
+  box-sizing: border-box;
+  display: inline-flex;
+  inline-size: fit-content;
+  block-size: 1.25rem;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+  padding-block: 0;
+  padding-inline: 0.5rem;
+  border: 1px solid var(--kappa-badge-border);
+  border-radius: 999px;
+  background: var(--kappa-badge-background);
+  color: var(--kappa-badge-foreground);
+  font-family: var(--kappa-font-sans, inherit);
+  font-size: 0.75rem;
+  font-weight: 500;
+  line-height: 1rem;
+  text-decoration: none;
+  vertical-align: middle;
+  white-space: nowrap;
+  transition:
+    background-color 120ms ease,
+    border-color 120ms ease,
+    color 120ms ease;
+}
+
+.kappa-badge > [data-icon] {
+  inline-size: 0.75rem;
+  block-size: 0.75rem;
+  flex: none;
+  pointer-events: none;
+}
+
+.kappa-badge:has(> [data-icon]:first-child) {
+  padding-inline-start: 0.375rem;
+}
+
+.kappa-badge:has(> [data-icon]:last-child) {
+  padding-inline-end: 0.375rem;
+}
+
+.kappa-badge--secondary {
+  --kappa-badge-background: var(--kappa-tint, #f4f6f9);
+  --kappa-badge-foreground: var(--kappa-default, #17191f);
+  --kappa-badge-hover-background: var(--kappa-overlay, #e9edf2);
+}
+
+.kappa-badge--error {
+  --kappa-badge-background: var(--kappa-danger-tint, #fee4e2);
+  --kappa-badge-foreground: var(--kappa-danger-text, #b42318);
+}
+
+.kappa-badge--warning {
+  --kappa-badge-background: var(--kappa-warning-tint, #fef0c7);
+  --kappa-badge-foreground: var(--kappa-warning-text, #b54708);
+}
+
+.kappa-badge--success {
+  --kappa-badge-background: var(--kappa-success-tint, #d1fadf);
+  --kappa-badge-foreground: var(--kappa-success-text, #027a48);
+}
+
+.kappa-badge--info {
+  --kappa-badge-background: var(--kappa-info-tint, #dbeafe);
+  --kappa-badge-foreground: var(--kappa-info-text, #175cd3);
+}
+
+.kappa-badge--beta {
+  --kappa-badge-background: transparent;
+  --kappa-badge-border: var(--kappa-badge-beta, var(--kappa-accent, #2479b6));
+  --kappa-badge-foreground: var(--kappa-badge-beta, var(--kappa-accent, #2479b6));
+  --kappa-badge-hover-background: transparent;
+
+  border-style: dashed;
+}
+
+.kappa-badge--outline {
+  --kappa-badge-background: transparent;
+  --kappa-badge-border: var(--kappa-line, #e3e6eb);
+  --kappa-badge-foreground: var(--kappa-default, #17191f);
+  --kappa-badge-hover-background: var(--kappa-tint, #f4f6f9);
+}
+
+.kappa-badge--red,
+.kappa-badge--destructive {
+  --kappa-badge-background: var(--kappa-badge-red, #dc2626);
+  --kappa-badge-foreground: var(--kappa-badge-solid-contrast, #ffffff);
+}
+
+.kappa-badge--orange {
+  --kappa-badge-background: var(--kappa-badge-orange, #f59e0b);
+  --kappa-badge-foreground: var(--kappa-badge-orange-contrast, #111827);
+}
+
+.kappa-badge--green {
+  --kappa-badge-background: var(--kappa-badge-green, #047857);
+  --kappa-badge-foreground: var(--kappa-badge-solid-contrast, #ffffff);
+}
+
+.kappa-badge--teal {
+  --kappa-badge-background: var(--kappa-badge-teal, #0f766e);
+  --kappa-badge-foreground: var(--kappa-badge-solid-contrast, #ffffff);
+}
+
+.kappa-badge--teal-subtle {
+  --kappa-badge-background: var(--kappa-badge-teal-subtle, #ccfbf1);
+  --kappa-badge-foreground: var(--kappa-badge-teal-subtle-text, #115e59);
+}
+
+.kappa-badge--blue {
+  --kappa-badge-background: var(--kappa-badge-blue, #2563eb);
+  --kappa-badge-foreground: var(--kappa-badge-solid-contrast, #ffffff);
+}
+
+.kappa-badge--purple {
+  --kappa-badge-background: var(--kappa-badge-purple, #7c3aed);
+  --kappa-badge-foreground: var(--kappa-badge-solid-contrast, #ffffff);
+}
+
+.kappa-badge--neutral {
+  --kappa-badge-background: var(--kappa-badge-neutral, #52525b);
+  --kappa-badge-foreground: var(--kappa-badge-solid-contrast, #ffffff);
+}
+
+a.kappa-badge {
+  cursor: pointer;
+}
+
+a.kappa-badge:hover {
+  background: var(--kappa-badge-hover-background);
+  text-decoration: underline;
+  text-underline-offset: 0.125rem;
+}
+
+a.kappa-badge:focus-visible {
+  outline: 2px solid var(--kappa-focus, #4c63ff);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kappa-badge {
+    transition: none;
+  }
+}

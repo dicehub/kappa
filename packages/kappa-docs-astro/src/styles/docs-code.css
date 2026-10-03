@@ -1,0 +1,224 @@
+.docs-code-block {
+  --docs-code-surface: #ffffff;
+
+  position: relative;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  margin-top: 1rem;
+}
+
+html.kappa-docs-root[data-kappa-theme="dark"] .docs-code-block,
+html.kappa-docs-root[data-mode="dark"]:not([data-kappa-theme="light"]) .docs-code-block {
+  --docs-code-surface: #24292e;
+}
+
+.docs-code-full {
+  position: relative;
+}
+
+.docs-code-reveal {
+  display: none;
+}
+
+html.kappa-docs-root[data-docs-js="true"]
+  .docs-code-block[data-code-expanded="false"]
+  .docs-code-full {
+  max-height: calc((var(--docs-code-preview-lines, 3) * 1.3125rem) + 1.75rem + 2px);
+  overflow: hidden;
+}
+
+html.kappa-docs-root[data-docs-js="true"]
+  .docs-code-block[data-code-expanded="false"]
+  .docs-code-reveal {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-bottom: 1rem;
+}
+
+html.kappa-docs-root[data-docs-js="true"]
+  .docs-code-block[data-code-expanded="false"]
+  .docs-code-full pre,
+html.kappa-docs-root[data-docs-js="true"]
+  .docs-code-block[data-code-expanded="false"]
+  .docs-code-full .astro-code {
+  overflow: hidden !important;
+  scrollbar-width: none;
+}
+
+.docs-code-block[data-code-expanded="false"] .docs-code-full pre::-webkit-scrollbar {
+  display: none;
+}
+
+html.kappa-docs-root[data-docs-js="true"]
+  .docs-code-block[data-code-expanded="true"]
+  .docs-code-full pre {
+  scrollbar-color: var(--docs-subtle) var(--docs-code-surface);
+  scrollbar-width: thin;
+}
+
+.docs-code-block[data-code-expanded="true"] .docs-code-full pre::-webkit-scrollbar {
+  width: 0.625rem;
+  height: 0.625rem;
+}
+
+.docs-code-block[data-code-expanded="true"] .docs-code-full pre::-webkit-scrollbar-track {
+  background: var(--docs-code-surface);
+}
+
+.docs-code-block[data-code-expanded="true"] .docs-code-full pre::-webkit-scrollbar-thumb {
+  border: 0.1875rem solid var(--docs-code-surface);
+  border-radius: 999px;
+  background: var(--docs-subtle);
+}
+
+.docs-code-reveal__gradient {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    var(--docs-code-surface),
+    color-mix(in oklab, var(--docs-code-surface) 60%, transparent),
+    transparent
+  );
+}
+
+.docs-code-reveal__button {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  height: 2rem;
+  align-items: center;
+  justify-content: center;
+  padding: 0 0.75rem;
+  border: 1px solid var(--docs-border);
+  border-radius: 0.625rem;
+  background: var(--docs-base);
+  color: var(--docs-default);
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1.25rem;
+}
+
+.docs-code-reveal__button:hover {
+  background: var(--docs-tint);
+}
+
+.docs-code-reveal__button:focus-visible {
+  outline: 2px solid var(--docs-brand);
+  outline-offset: 2px;
+}
+
+.docs-code-block pre,
+.docs-code-block .astro-code {
+  max-width: 100%;
+  margin: 0;
+  padding: 0.875rem 3rem 0.875rem 1rem;
+  overflow-x: auto;
+  border: 1px solid var(--docs-border);
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  box-shadow: var(--docs-shadow);
+}
+
+.docs-code-block pre code {
+  font-family: var(--docs-font-mono);
+}
+
+.docs-code-block[data-code-expanded="true"] pre,
+.docs-code-block[data-code-expanded="true"] .astro-code {
+  max-height: 18rem;
+  overflow: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: none;
+}
+
+.docs-code-full pre:focus-visible {
+  outline: 2px solid var(--docs-brand);
+  outline-offset: -2px;
+}
+
+.docs-code-block .astro-code,
+.docs-code-block .astro-code span {
+  color: var(--shiki-light) !important;
+  background-color: var(--shiki-light-bg) !important;
+}
+
+html.kappa-docs-root[data-kappa-theme="dark"] .docs-code-block .astro-code,
+html.kappa-docs-root[data-kappa-theme="dark"] .docs-code-block .astro-code span,
+html.kappa-docs-root[data-mode="dark"]:not([data-kappa-theme="light"]) .docs-code-block .astro-code,
+html.kappa-docs-root[data-mode="dark"]:not([data-kappa-theme="light"]) .docs-code-block .astro-code span {
+  color: var(--shiki-dark) !important;
+  background-color: var(--shiki-dark-bg) !important;
+}
+
+.docs-code-copy {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  display: inline-flex;
+  width: 2rem;
+  height: 2rem;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 0;
+  border-radius: 0.375rem;
+  background: transparent;
+  color: var(--docs-subtle);
+  cursor: pointer;
+  pointer-events: none;
+  transition: background-color 120ms ease, color 120ms ease;
+  visibility: hidden;
+}
+
+html.kappa-docs-root[data-docs-js="true"]
+  .docs-code-block:not([data-code-expanded="false"])
+  .docs-code-copy {
+  pointer-events: auto;
+  visibility: visible;
+}
+
+.docs-code-copy:hover {
+  background: var(--docs-tint);
+  color: var(--docs-default);
+}
+
+.docs-code-copy:focus-visible {
+  outline: 2px solid var(--docs-brand);
+  outline-offset: 2px;
+}
+
+.docs-code-copy__icon {
+  width: 1rem;
+  height: 1rem;
+}
+
+.docs-code-copy__icon--done {
+  display: none;
+}
+
+.docs-code-copy--done,
+.docs-code-copy--done:hover {
+  color: var(--docs-success);
+}
+
+.docs-code-copy--done .docs-code-copy__icon--copy {
+  display: none;
+}
+
+.docs-code-copy--done .docs-code-copy__icon--done {
+  display: block;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .docs-code-copy {
+    transition: none;
+  }
+}

@@ -1,0 +1,256 @@
+---
+import BreadcrumbsDocsDemo from "../../../components/BreadcrumbsDocsDemo.vue";
+import CodeBlock from "../../../components/CodeBlock.astro";
+import CompositionTree from "../../../components/CompositionTree.astro";
+import CopyPageControls from "../../../components/CopyPageControls.vue";
+import DocsPageNavigation from "../../../components/DocsPageNavigation.astro";
+import {
+  barrelCode,
+  basicCode,
+  ellipsisCode,
+  exportsList,
+  granularCode,
+  iconsCode,
+  linkProps,
+  menuCode,
+  parts,
+  previewCode,
+  rootProps,
+  routerCode,
+  rtlCode,
+  separatorCode,
+  sizesCode,
+  wrappingCode,
+} from "../../../data/breadcrumbs-docs";
+import DocsLayout from "../../../layouts/DocsLayout.astro";
+import "../../../styles/docs-components.css";
+
+const currentPath = "/docs/components/breadcrumbs";
+const description = "Shows the current resource inside an ordered hierarchy of ancestor links.";
+---
+
+<DocsLayout title="Breadcrumbs" description={description}>
+  <div class="docs-page docs-page--component">
+    <header class="docs-page-header">
+      <div class="docs-page-header__inner">
+        <div class="docs-page-header__content">
+          <div class="docs-page-header__mobile-actions">
+            <CopyPageControls client:only="vue" align="center" />
+          </div>
+          <div class="docs-page-header__title-row">
+            <h1>Breadcrumbs</h1>
+            <div class="docs-page-header__navigation-actions">
+              <div class="docs-page-header__desktop-actions">
+                <CopyPageControls client:only="vue" />
+              </div>
+              <DocsPageNavigation currentPath={currentPath} variant="compact" />
+            </div>
+          </div>
+          <p class="docs-page-header__lede">{description}</p>
+        </div>
+      </div>
+    </header>
+
+    <div class="docs-page-body">
+      <article class="docs-article docs-article--component">
+        <section id="preview" class="docs-section">
+          <div class="docs-component-example">
+            <div class="docs-component-preview">
+              <BreadcrumbsDocsDemo variant="preview" />
+            </div>
+            <CodeBlock code={previewCode} lang="vue" collapsible revealId="breadcrumbs-preview-code" />
+          </div>
+        </section>
+
+        <section id="installation" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#installation">Installation</a></h2>
+          <h3 id="barrel"><a class="docs-section-anchor" href="#barrel">Barrel</a></h3>
+          <CodeBlock code={barrelCode} lang="javascript" />
+          <h3 id="granular"><a class="docs-section-anchor" href="#granular">Granular</a></h3>
+          <CodeBlock code={granularCode} lang="javascript" />
+        </section>
+
+        <section id="usage" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#usage">Usage</a></h2>
+          <p>
+            Root renders a labelled navigation landmark, List preserves hierarchy as an ordered list,
+            and Current is an alias of the noninteractive Page part.
+          </p>
+        </section>
+
+        <section id="composition" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#composition">Composition</a></h2>
+          <CompositionTree component="breadcrumbs" />
+          <p>
+            Root creates the navigation landmark. List and Item preserve the ordered hierarchy.
+            Alternate linked ancestors with decorative separators, then end with Page or its Current
+            alias for the active location.
+          </p>
+        </section>
+
+        <section id="examples" class="docs-section docs-section--component-examples">
+          <h2><a class="docs-section-anchor" href="#examples">Examples</a></h2>
+
+          <h3 id="basic"><a class="docs-section-anchor" href="#basic">Basic</a></h3>
+          <p>Link each ancestor and render the current page as the final, noninteractive item.</p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><BreadcrumbsDocsDemo variant="basic" /></div>
+            <CodeBlock code={basicCode} lang="vue" collapsible revealId="breadcrumbs-basic-code" />
+          </div>
+
+          <h3 id="custom-separator">
+            <a class="docs-section-anchor" href="#custom-separator">Custom Separator</a>
+          </h3>
+          <p>Replace the default direction-aware chevron through Separator's default slot.</p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><BreadcrumbsDocsDemo variant="separator" /></div>
+            <CodeBlock code={separatorCode} lang="vue" collapsible revealId="breadcrumbs-separator-code" />
+          </div>
+
+          <h3 id="sizes"><a class="docs-section-anchor" href="#sizes">Sizes</a></h3>
+          <p>Use <code>sm</code> in dense toolbars and <code>base</code> for standard page context.</p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><BreadcrumbsDocsDemo variant="sizes" /></div>
+            <CodeBlock code={sizesCode} lang="vue" collapsible revealId="breadcrumbs-sizes-code" />
+          </div>
+
+          <h3 id="with-icons"><a class="docs-section-anchor" href="#with-icons">With Icons</a></h3>
+          <p>Place decorative SVG beside visible labels. Do not replace every label with an icon.</p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><BreadcrumbsDocsDemo variant="icons" /></div>
+            <CodeBlock code={iconsCode} lang="vue" collapsible revealId="breadcrumbs-icons-code" />
+          </div>
+
+          <h3 id="long-path"><a class="docs-section-anchor" href="#long-path">Long and Wrapping</a></h3>
+          <p>
+            Trails wrap without horizontal overflow. Preserve the full current location; collapse
+            known ancestors when the surrounding layout requires a shorter trail.
+          </p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><BreadcrumbsDocsDemo variant="wrapping" /></div>
+            <CodeBlock code={wrappingCode} lang="vue" collapsible revealId="breadcrumbs-wrapping-code" />
+          </div>
+
+          <h3 id="collapsed"><a class="docs-section-anchor" href="#collapsed">Collapsed</a></h3>
+          <p>
+            Ellipsis is a decorative indicator only. It does not measure, hide, or automatically
+            collapse items; application code chooses which known ancestors to omit.
+          </p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><BreadcrumbsDocsDemo variant="ellipsis" /></div>
+            <CodeBlock code={ellipsisCode} lang="vue" collapsible revealId="breadcrumbs-ellipsis-code" />
+          </div>
+
+          <h3 id="collapsed-menu">
+            <a class="docs-section-anchor" href="#collapsed-menu">Collapsed Ancestor Menu</a>
+          </h3>
+          <p>
+            Compose the indicator inside a labelled Ark Menu trigger when omitted ancestors must
+            remain navigable. Render menu destinations as the menu items themselves.
+          </p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview docs-component-preview--open-space">
+              <BreadcrumbsDocsDemo client:load variant="menu" />
+            </div>
+            <CodeBlock code={menuCode} lang="vue" collapsible revealId="breadcrumbs-menu-code" />
+          </div>
+
+          <h3 id="router-link"><a class="docs-section-anchor" href="#router-link">Router Link</a></h3>
+          <p>
+            Use <code>asChild</code> so Link styles and attributes merge onto a router's semantic anchor.
+          </p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><BreadcrumbsDocsDemo variant="router" /></div>
+            <CodeBlock code={routerCode} lang="vue" collapsible revealId="breadcrumbs-router-code" />
+          </div>
+
+          <h3 id="right-to-left">
+            <a class="docs-section-anchor" href="#right-to-left">Right-to-left</a>
+          </h3>
+          <p>Logical flow reverses the trail and the default directional separator.</p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><BreadcrumbsDocsDemo variant="rtl" /></div>
+            <CodeBlock code={rtlCode} lang="vue" collapsible revealId="breadcrumbs-rtl-code" />
+          </div>
+        </section>
+
+        <section id="accessibility" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#accessibility">Accessibility</a></h2>
+          <ul>
+            <li>Give each trail a concise <code>aria-label</code> or <code>aria-labelledby</code>; Root defaults to “Breadcrumb”.</li>
+            <li>Keep ancestor destinations as links and the final Page or Current as a noninteractive span with <code>aria-current="page"</code>.</li>
+            <li>Separators and Ellipsis are decorative and hidden from assistive technology.</li>
+            <li>Breadcrumbs add no arrow-key model. Native links use the normal Tab order and Enter activation.</li>
+            <li>A collapsed ancestor trigger needs an accessible name and a real Menu with managed focus, Escape, and outside-dismiss behavior.</li>
+            <li>Keep a visible focus indicator and do not depend on separator shape or color to communicate hierarchy.</li>
+          </ul>
+          <p>
+            See the <a href="https://www.w3.org/WAI/ARIA/apg/patterns/breadcrumb/">WAI-ARIA Breadcrumb Pattern</a>
+            and <a href="https://ark-ui.com/docs/components/menu">Ark UI Menu guidance</a>.
+          </p>
+        </section>
+
+        <section id="api-reference" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#api-reference">API Reference</a></h2>
+          <div class="docs-api-group">
+            <h3 id="root-api"><a class="docs-section-anchor" href="#root-api">Root</a></h3>
+            <p>Forwards native navigation attributes, listeners, ARIA properties, and data attributes.</p>
+            <div class="docs-api-table">
+              <table>
+                <thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+                <tbody>{rootProps.map((prop) => <tr><td><code>{prop.name}</code></td><td><code>{prop.type}</code></td><td><code>{prop.defaultValue}</code></td><td>{prop.description}</td></tr>)}</tbody>
+              </table>
+            </div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="link-api"><a class="docs-section-anchor" href="#link-api">Link</a></h3>
+            <p>
+              Forwards native anchor attributes and listeners. Use <code>href</code> for a native anchor
+              or <code>asChild</code> with a router component that renders one anchor.
+            </p>
+            <div class="docs-api-table">
+              <table>
+                <thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+                <tbody>{linkProps.map((prop) => <tr><td><code>{prop.name}</code></td><td><code>{prop.type}</code></td><td><code>{prop.defaultValue}</code></td><td>{prop.description}</td></tr>)}</tbody>
+              </table>
+            </div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="parts-api"><a class="docs-section-anchor" href="#parts-api">Parts</a></h3>
+            <div class="docs-api-table">
+              <table>
+                <thead><tr><th>Part</th><th>Element</th><th>Description</th></tr></thead>
+                <tbody>{parts.map((part) => <tr><td><code>{part.name}</code></td><td><code>{part.element}</code></td><td>{part.description}</td></tr>)}</tbody>
+              </table>
+            </div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="exports-api"><a class="docs-section-anchor" href="#exports-api">Exports</a></h3>
+            <div class="docs-api-table">
+              <table>
+                <thead><tr><th>Export</th><th>Description</th></tr></thead>
+                <tbody>{exportsList.map((item) => <tr><td><code>{item.name}</code></td><td>{item.description}</td></tr>)}</tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <DocsPageNavigation currentPath={currentPath} />
+      </article>
+
+      <aside class="docs-page-toc" aria-label="On this page">
+        <div class="docs-page-toc__inner">
+          <span class="docs-page-toc__title">On this page</span>
+          <ul>
+            <li><a href="#installation" data-toc-link="installation">Installation</a><ul><li><a href="#barrel" data-toc-link="barrel">Barrel</a></li><li><a href="#granular" data-toc-link="granular">Granular</a></li></ul></li>
+            <li><a href="#usage" data-toc-link="usage">Usage</a></li>
+            <li><a href="#composition" data-toc-link="composition">Composition</a></li>
+            <li><a href="#examples" data-toc-link="examples">Examples</a><ul><li><a href="#basic" data-toc-link="basic">Basic</a></li><li><a href="#custom-separator" data-toc-link="custom-separator">Custom Separator</a></li><li><a href="#sizes" data-toc-link="sizes">Sizes</a></li><li><a href="#with-icons" data-toc-link="with-icons">With Icons</a></li><li><a href="#long-path" data-toc-link="long-path">Long and Wrapping</a></li><li><a href="#collapsed" data-toc-link="collapsed">Collapsed</a></li><li><a href="#collapsed-menu" data-toc-link="collapsed-menu">Collapsed Ancestor Menu</a></li><li><a href="#router-link" data-toc-link="router-link">Router Link</a></li><li><a href="#right-to-left" data-toc-link="right-to-left">Right-to-left</a></li></ul></li>
+            <li><a href="#accessibility" data-toc-link="accessibility">Accessibility</a></li>
+            <li><a href="#api-reference" data-toc-link="api-reference">API Reference</a><ul><li><a href="#root-api" data-toc-link="root-api">Root</a></li><li><a href="#link-api" data-toc-link="link-api">Link</a></li><li><a href="#parts-api" data-toc-link="parts-api">Parts</a></li><li><a href="#exports-api" data-toc-link="exports-api">Exports</a></li></ul></li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+  </div>
+</DocsLayout>

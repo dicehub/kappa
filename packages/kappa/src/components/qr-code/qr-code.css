@@ -1,0 +1,49 @@
+.kappa-qr-code {
+  box-sizing: border-box;
+  display: grid;
+  inline-size: fit-content;
+  max-inline-size: 100%;
+  justify-items: center;
+  gap: 0.75rem;
+  color: var(--kappa-default, #17191f);
+  font-family: var(--kappa-font-sans, inherit);
+}
+
+.kappa-qr-code__frame {
+  box-sizing: border-box;
+  display: block;
+  inline-size: min(100%, var(--qrcode-width));
+  block-size: auto;
+  /* Whitespace is part of the encoded matrix, not CSS padding. */
+  padding: 0;
+  outline: 1px solid var(--kappa-line, #e3e6eb);
+  background: var(--kappa-qr-code-background, #ffffff);
+  color: var(--kappa-qr-code-foreground, #111318);
+  fill: currentcolor;
+  shape-rendering: crispEdges;
+}
+
+.kappa-qr-code__pattern {
+  fill: currentcolor;
+}
+
+.kappa-qr-code__overlay {
+  display: grid;
+  inline-size: 18%;
+  box-sizing: border-box;
+  aspect-ratio: 1;
+  place-items: center;
+  border: 0.1875rem solid var(--kappa-qr-code-background, #ffffff);
+  border-radius: 0.3125rem;
+  background: var(--kappa-qr-code-background, #ffffff);
+  color: var(--kappa-qr-code-foreground, #111318);
+  font-size: 0.6875rem;
+  font-weight: 750;
+  line-height: 1;
+}
+
+@media (forced-colors: active) {
+  .kappa-qr-code__frame {
+    outline-color: CanvasText;
+  }
+}

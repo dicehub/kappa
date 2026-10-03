@@ -1,0 +1,166 @@
+.kappa-table-of-contents {
+  --kappa-table-of-contents-rail: var(--kappa-hairline, var(--kappa-line, #e3e6eb));
+  --kappa-table-of-contents-muted: var(--kappa-subtle, #6c7480);
+  --kappa-table-of-contents-foreground: var(--kappa-default, #17191f);
+  --kappa-table-of-contents-accent: var(--kappa-accent, #2479b6);
+  --kappa-table-of-contents-hover-rail: color-mix(
+    in oklab,
+    var(--kappa-line, #e3e6eb) 82%,
+    var(--kappa-default, #17191f) 18%
+  );
+
+  box-sizing: border-box;
+  display: block;
+  min-inline-size: 0;
+  color: var(--kappa-table-of-contents-foreground);
+  font-family: var(--kappa-font-sans, inherit);
+}
+
+.kappa-table-of-contents__content {
+  display: block;
+  min-inline-size: 0;
+}
+
+.kappa-table-of-contents__nav {
+  position: relative;
+  min-inline-size: 0;
+  color: inherit;
+}
+
+.kappa-table-of-contents__title {
+  margin: 0 0 0.75rem;
+  color: var(--kappa-table-of-contents-muted);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.025em;
+  line-height: 1rem;
+  text-transform: uppercase;
+}
+
+.kappa-table-of-contents__list {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+  border-inline-start: 2px solid var(--kappa-table-of-contents-rail);
+  list-style: none;
+}
+
+.kappa-table-of-contents__item {
+  --kappa-table-of-contents-depth: max(
+    0rem,
+    calc((var(--depth, 2) - 2) * 0.75rem)
+  );
+
+  position: relative;
+  min-inline-size: 0;
+  margin: 0;
+  margin-inline-start: -2px;
+  padding: 0;
+  list-style: none;
+}
+
+.kappa-table-of-contents__item[data-depth] {
+  scroll-margin-block: 0.25rem;
+}
+
+.kappa-table-of-contents [data-part="item"] {
+  min-inline-size: 0;
+}
+
+.kappa-table-of-contents__link {
+  appearance: none;
+  box-sizing: border-box;
+  display: block;
+  inline-size: 100%;
+  min-inline-size: 0;
+  overflow: hidden;
+  border-block: 0;
+  border-inline-end: 0;
+  border-inline-start: 2px solid transparent;
+  border-radius: 0;
+  padding-block: 0.125rem;
+  padding-inline-end: 0;
+  padding-inline-start: calc(1rem + var(--kappa-table-of-contents-depth));
+  background: transparent;
+  color: var(--kappa-table-of-contents-muted);
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.8125rem;
+  font-weight: 400;
+  line-height: 1.25rem;
+  text-align: start;
+  text-decoration: none;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  transition:
+    border-color 120ms ease,
+    color 120ms ease;
+}
+
+.kappa-table-of-contents__link:hover {
+  border-inline-start-color: var(--kappa-table-of-contents-hover-rail);
+  color: var(--kappa-table-of-contents-foreground);
+  font-weight: 500;
+}
+
+.kappa-table-of-contents__link:focus-visible {
+  z-index: 1;
+  outline: 2px solid var(--kappa-focus, #4c63ff);
+  outline-offset: -2px;
+}
+
+.kappa-table-of-contents__link[data-active] {
+  border-inline-start-color: var(--kappa-table-of-contents-accent);
+  color: var(--kappa-table-of-contents-foreground);
+  font-weight: 500;
+}
+
+.kappa-table-of-contents [data-part="link"][data-active] {
+  color: var(--kappa-table-of-contents-foreground);
+}
+
+.kappa-table-of-contents__indicator {
+  inset-block-start: var(--top, 0px);
+  inset-inline-start: -2px;
+  z-index: 1;
+  inline-size: 2px;
+  block-size: var(--height, 0px);
+  border-radius: 0;
+  background: var(--kappa-table-of-contents-accent);
+  pointer-events: none;
+  transition:
+    inset 150ms ease,
+    block-size 150ms ease;
+}
+
+.kappa-table-of-contents__indicator[hidden] {
+  display: none;
+}
+
+@media (forced-colors: active) {
+  .kappa-table-of-contents__list {
+    border-color: CanvasText;
+  }
+
+  .kappa-table-of-contents__link[data-active],
+  .kappa-table-of-contents__indicator {
+    border-color: Highlight;
+    background: Highlight;
+    color: HighlightText;
+  }
+
+  .kappa-table-of-contents__link:focus-visible {
+    outline-color: Highlight;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kappa-table-of-contents__link,
+  .kappa-table-of-contents__indicator {
+    scroll-behavior: auto;
+    transition-duration: 0.01ms;
+  }
+}

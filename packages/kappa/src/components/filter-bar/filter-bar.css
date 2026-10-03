@@ -1,0 +1,88 @@
+.kappa-filter-bar {
+  box-sizing: border-box;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+  inline-size: 100%;
+  min-inline-size: 0;
+  color: var(--kappa-default, #171717);
+  font-family: var(--kappa-font-sans, inherit);
+}
+
+.kappa-filter-bar__search {
+  position: relative;
+  flex: 1 1 12rem;
+  max-inline-size: 20rem;
+  min-inline-size: 0;
+}
+
+.kappa-filter-bar__search > svg {
+  position: absolute;
+  z-index: 1;
+  inset-inline-start: 0.625rem;
+  inset-block-start: 50%;
+  transform: translateY(-50%);
+  color: var(--kappa-subtle, #696969);
+  pointer-events: none;
+}
+
+.kappa-filter-bar__search > .kappa-input {
+  padding-inline-start: 2rem;
+}
+
+.kappa-filter-bar :is(.kappa-filter-bar__search, .kappa-filter-bar__sort, .kappa-filter-bar__view) svg {
+  inline-size: 1rem;
+  block-size: 1rem;
+  flex: none;
+  stroke: currentColor;
+  stroke-width: 1.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.kappa-filter-bar__sort,
+.kappa-filter-bar__filters,
+.kappa-filter-bar__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  min-inline-size: 0;
+  max-inline-size: 100%;
+}
+
+.kappa-filter-bar__sort { gap: 0.375rem; }
+
+.kappa-filter-bar__sort-trigger {
+  min-inline-size: 8.25rem;
+  max-inline-size: 100%;
+  justify-content: space-between;
+}
+
+.kappa-filter-bar__sort-trigger > .kappa-button__label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  inline-size: 100%;
+  min-inline-size: 0;
+}
+
+.kappa-filter-bar__sort-trigger .kappa-button__label > span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.kappa-filter-bar__actions { margin-inline-start: auto; }
+
+.kappa-filter-bar__view .kappa-toggle-group__item {
+  inline-size: 1.75rem;
+  padding-inline: 0;
+  border-radius: 0.125rem;
+}
+
+.kappa-filter-bar__view .kappa-toggle-group__item[data-state="on"] {
+  background: var(--kappa-overlay, #e9ebef);
+  border-color: var(--kappa-line, #e7eaef);
+}

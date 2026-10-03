@@ -1,0 +1,23 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "declaration": true,
+    "declarationMap": false,
+    "emitDeclarationOnly": true,
+    "noEmit": false,
+    "outDir": "./dist",
+    "paths": {
+      "@floating-ui/*": ["node_modules/@floating-ui/*"],
+      "@internationalized/date": ["node_modules/@internationalized/date"],
+      "@zag-js/*": ["node_modules/@zag-js/*"],
+      "csstype": ["node_modules/csstype"]
+    },
+    "rootDir": "./src"
+  },
+  "include": ["src"],
+  "exclude": ["src/**/*.test.mjs"],
+  "vueCompilerOptions": {
+    "skipTemplateCodegen": true
+  }
+}

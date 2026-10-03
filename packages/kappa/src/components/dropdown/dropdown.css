@@ -1,0 +1,365 @@
+.kappa-dropdown__trigger,
+.kappa-dropdown__context-trigger {
+  box-sizing: border-box;
+  color: inherit;
+  font: inherit;
+}
+
+.kappa-dropdown__indicator {
+  display: inline-flex;
+  inline-size: 0.875rem;
+  block-size: 0.875rem;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  margin-inline-start: var(--kappa-dropdown-indicator-gap, 0.375rem);
+  transition: transform 120ms ease;
+}
+
+.kappa-dropdown__indicator svg,
+.kappa-dropdown__sub-caret,
+.kappa-dropdown__selected-indicator svg,
+.kappa-dropdown__item-indicator svg {
+  display: block;
+  inline-size: 100%;
+  block-size: 100%;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.75;
+}
+
+.kappa-dropdown__indicator[data-state="open"] {
+  transform: rotate(180deg);
+}
+
+.kappa-dropdown__positioner {
+  /* Ark writes this variable inline, so Kappa must win the cascade here. */
+  --z-index: var(--kappa-dropdown-z-index, 1000) !important;
+
+  max-inline-size: calc(100vw - 1rem);
+}
+
+.kappa-dropdown__positioner--sub {
+  --z-index: var(
+    --kappa-dropdown-sub-z-index,
+    calc(var(--kappa-dropdown-z-index, 1000) + 1)
+  ) !important;
+}
+
+.kappa-dropdown__content {
+  --kappa-dropdown-enter-x: 0;
+  --kappa-dropdown-enter-y: -0.25rem;
+
+  box-sizing: border-box;
+  inline-size: max-content;
+  min-inline-size: min(
+    var(--kappa-dropdown-min-inline-size, 11rem),
+    var(--available-width, calc(100vw - 1rem)),
+    calc(100vw - 1rem)
+  );
+  max-inline-size: min(
+    var(--kappa-dropdown-max-inline-size, 20rem),
+    var(--available-width, calc(100vw - 1rem)),
+    calc(100vw - 1rem)
+  );
+  max-block-size: min(var(--available-height, 24rem), var(--kappa-dropdown-max-block-size, 24rem));
+  padding: 0.375rem;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scroll-padding-block: 0.375rem;
+  border: 1px solid var(--kappa-line, #e3e6eb);
+  border-radius: 0.5rem;
+  background: var(--kappa-control, #ffffff);
+  box-shadow: var(
+    --kappa-popover-shadow,
+    0 10px 28px -8px rgba(16, 24, 40, 0.2),
+    0 2px 6px -3px rgba(16, 24, 40, 0.12)
+  );
+  color: var(--kappa-default, #17191f);
+  font-family: var(--kappa-font-sans, inherit);
+  font-size: 0.8125rem;
+  line-height: 1.25rem;
+  outline: none;
+  scrollbar-color: var(--kappa-line, #e3e6eb) transparent;
+  scrollbar-width: thin;
+  transform-origin: var(--transform-origin);
+}
+
+.kappa-dropdown__content--sub {
+  --kappa-dropdown-min-inline-size: 10rem;
+}
+
+.kappa-dropdown__content[data-side="top"] {
+  --kappa-dropdown-enter-y: 0.25rem;
+}
+
+.kappa-dropdown__content[data-side="left"] {
+  --kappa-dropdown-enter-x: 0.25rem;
+  --kappa-dropdown-enter-y: 0;
+}
+
+.kappa-dropdown__content[data-side="right"] {
+  --kappa-dropdown-enter-x: -0.25rem;
+  --kappa-dropdown-enter-y: 0;
+}
+
+.kappa-dropdown__content[data-state="open"] {
+  animation: kappa-dropdown-in 120ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.kappa-dropdown__content[data-state="closed"] {
+  opacity: 0;
+  pointer-events: none;
+  visibility: hidden;
+  animation: kappa-dropdown-out 80ms ease-out;
+}
+
+.kappa-dropdown__content > *,
+.kappa-dropdown__item,
+.kappa-dropdown__label,
+.kappa-dropdown__separator,
+.kappa-dropdown__shortcut {
+  box-sizing: border-box;
+}
+
+.kappa-dropdown__item {
+  position: relative;
+  display: flex;
+  min-inline-size: 0;
+  min-block-size: 2rem;
+  align-items: center;
+  gap: 0.5rem;
+  padding-block: 0.375rem;
+  padding-inline: 0.5rem;
+  border: 0;
+  border-radius: 0.375rem;
+  background: transparent;
+  color: var(--kappa-default, #17191f);
+  cursor: pointer;
+  font: inherit;
+  line-height: 1.25rem;
+  outline: none;
+  text-align: start;
+  text-decoration: none;
+  user-select: none;
+  white-space: nowrap;
+  transition:
+    background-color 80ms ease,
+    color 80ms ease;
+}
+
+.kappa-dropdown__item[data-highlighted],
+.kappa-dropdown__sub-trigger[data-state="open"] {
+  background: var(--kappa-overlay, rgba(16, 24, 40, 0.06));
+}
+
+.kappa-dropdown__item:focus-visible {
+  box-shadow:
+    inset 0 0 0 1px var(--kappa-focus, #4c63ff),
+    0 0 0 2px var(--kappa-focus-soft, rgba(76, 99, 255, 0.16));
+}
+
+.kappa-dropdown__item[data-variant="destructive"] {
+  color: var(--kappa-danger-text, var(--kappa-danger, #b42318));
+}
+
+.kappa-dropdown__item[data-variant="destructive"][data-highlighted] {
+  background: var(--kappa-danger-tint, rgba(180, 35, 24, 0.08));
+  color: var(--kappa-danger-text, var(--kappa-danger, #b42318));
+}
+
+.kappa-dropdown__item[data-disabled] {
+  color: var(--kappa-muted, #9aa2ae);
+  cursor: not-allowed;
+  opacity: var(--kappa-disabled-opacity, 0.58);
+  pointer-events: none;
+}
+
+.kappa-dropdown__item[data-inset] {
+  padding-inline-start: 2rem;
+}
+
+.kappa-dropdown__item-icon {
+  inline-size: 0.9375rem;
+  block-size: 0.9375rem;
+  flex: none;
+  color: currentColor;
+  pointer-events: none;
+}
+
+.kappa-dropdown__item > svg:not(.kappa-dropdown__sub-caret),
+.kappa-dropdown__item > [data-icon] {
+  inline-size: 0.9375rem;
+  block-size: 0.9375rem;
+  flex: none;
+  pointer-events: none;
+}
+
+.kappa-dropdown__item-text {
+  min-inline-size: 0;
+  flex: 1 1 auto;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.kappa-dropdown__link-item:hover {
+  text-decoration: none;
+}
+
+.kappa-dropdown__selected-indicator {
+  display: inline-flex;
+  inline-size: 0.875rem;
+  block-size: 0.875rem;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  margin-inline-start: auto;
+}
+
+.kappa-dropdown__option-item {
+  padding-inline-start: 2rem;
+}
+
+.kappa-dropdown__option-item[data-inset] {
+  padding-inline-start: 2.5rem;
+}
+
+.kappa-dropdown__item-indicator {
+  position: absolute;
+  inset-inline-start: 0.5rem;
+  display: inline-flex;
+  inline-size: 0.875rem;
+  block-size: 0.875rem;
+  align-items: center;
+  justify-content: center;
+  color: currentColor;
+}
+
+.kappa-dropdown__item-indicator[hidden] {
+  display: none;
+}
+
+.kappa-dropdown__group,
+.kappa-dropdown__radio-group {
+  display: block;
+}
+
+.kappa-dropdown__label {
+  display: block;
+  padding-block: 0.375rem 0.25rem;
+  padding-inline: 0.5rem;
+  color: var(--kappa-subtle, #6c7480);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  line-height: 1rem;
+  text-transform: uppercase;
+}
+
+.kappa-dropdown__label[data-inset] {
+  padding-inline-start: 2rem;
+}
+
+.kappa-dropdown__separator {
+  block-size: 1px;
+  margin-block: 0.25rem;
+  margin-inline: -0.125rem;
+  border: 0;
+  background: var(--kappa-hairline, rgba(16, 24, 40, 0.08));
+}
+
+.kappa-dropdown__shortcut {
+  flex: none;
+  margin-inline-start: auto;
+  color: var(--kappa-subtle, #6c7480);
+  font-family: var(--kappa-font-mono, ui-monospace, monospace);
+  font-size: 0.6875rem;
+  letter-spacing: 0.01em;
+  line-height: 1rem;
+}
+
+.kappa-dropdown__sub-caret {
+  inline-size: 0.875rem;
+  block-size: 0.875rem;
+  flex: none;
+  margin-inline-start: auto;
+}
+
+.kappa-dropdown__sub-caret:dir(rtl) {
+  transform: rotate(180deg);
+}
+
+.kappa-dropdown__arrow {
+  --arrow-size: 0.5rem;
+  --arrow-background: var(--kappa-control, #ffffff);
+
+  color: var(--kappa-line, #e3e6eb);
+}
+
+.kappa-dropdown__arrow-tip {
+  border-block-start: 1px solid currentColor;
+  border-inline-start: 1px solid currentColor;
+}
+
+@keyframes kappa-dropdown-in {
+  from {
+    opacity: 0;
+    transform: translate(var(--kappa-dropdown-enter-x), var(--kappa-dropdown-enter-y))
+      scale(0.985);
+  }
+}
+
+@keyframes kappa-dropdown-out {
+  to {
+    opacity: 0;
+    transform: translate(var(--kappa-dropdown-enter-x), var(--kappa-dropdown-enter-y))
+      scale(0.985);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kappa-dropdown__indicator,
+  .kappa-dropdown__item {
+    transition: none;
+  }
+
+  .kappa-dropdown__content[data-state] {
+    animation: none;
+  }
+}
+
+@media (pointer: coarse) {
+  .kappa-dropdown__item {
+    min-block-size: 2.25rem;
+  }
+}
+
+@media (forced-colors: active) {
+  .kappa-dropdown__content {
+    border-color: CanvasText;
+  }
+
+  .kappa-dropdown__item[data-highlighted],
+  .kappa-dropdown__sub-trigger[data-state="open"] {
+    outline: 1px solid Highlight;
+    outline-offset: -1px;
+  }
+
+  .kappa-dropdown__item[data-variant="destructive"] {
+    color: CanvasText;
+  }
+
+  .kappa-dropdown__item[data-disabled] {
+    color: GrayText;
+    opacity: 1;
+  }
+
+  .kappa-dropdown__item-indicator,
+  .kappa-dropdown__selected-indicator {
+    color: Highlight;
+  }
+}

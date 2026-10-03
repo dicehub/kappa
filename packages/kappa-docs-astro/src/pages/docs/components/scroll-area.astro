@@ -1,0 +1,229 @@
+---
+import ArkUiDocsLink from "../../../components/ArkUiDocsLink.astro";
+import CodeBlock from "../../../components/CodeBlock.astro";
+import CompositionTree from "../../../components/CompositionTree.astro";
+import CopyPageControls from "../../../components/CopyPageControls.vue";
+import DocsPageNavigation from "../../../components/DocsPageNavigation.astro";
+import ScrollAreaDocsDemo from "../../../components/ScrollAreaDocsDemo.vue";
+import {
+  barrelCode,
+  bothCode,
+  controlsCode,
+  exportsList,
+  granularCode,
+  horizontalCode,
+  nestedCode,
+  noOverflowCode,
+  parts,
+  previewCode,
+  rootProps,
+  rtlCode,
+  scrollbarProps,
+  usageCode,
+} from "../../../data/scroll-area-docs";
+import DocsLayout from "../../../layouts/DocsLayout.astro";
+import "../../../styles/docs-components.css";
+
+const currentPath = "/docs/components/scroll-area";
+const description =
+  "Adds precise, visible scroll controls to content that exceeds a fixed viewport.";
+
+const examples = [
+  {
+    id: "horizontal",
+    title: "Horizontal",
+    description: "Add one horizontal Scrollbar when content grows along the inline axis.",
+    variant: "horizontal",
+    code: horizontalCode,
+  },
+  {
+    id: "both-directions",
+    title: "Both directions",
+    description: "Add both scrollbars and Corner for wide, tall data such as a result matrix.",
+    variant: "both",
+    code: bothCode,
+  },
+  {
+    id: "nested",
+    title: "Nested",
+    description: "Each nested area owns its viewport and axis. Keep nested scrolling uncommon and deliberate.",
+    variant: "nested",
+    code: nestedCode,
+  },
+  {
+    id: "programmatic-controls",
+    title: "Programmatic controls",
+    description: "Use Context for edge state and focused controls that move the viewport.",
+    variant: "controls",
+    code: controlsCode,
+  },
+  {
+    id: "without-overflow",
+    title: "Without overflow",
+    description: "Ark UI hides the custom scrollbar when the content already fits.",
+    variant: "no-overflow",
+    code: noOverflowCode,
+  },
+  {
+    id: "right-to-left",
+    title: "Right to left",
+    description: "Logical positioning keeps the horizontal control correct in a right-to-left root.",
+    variant: "rtl",
+    code: rtlCode,
+  },
+] as const;
+---
+
+<DocsLayout title="Scroll Area" description={description}>
+  <div class="docs-page docs-page--component">
+    <header class="docs-page-header">
+      <div class="docs-page-header__inner">
+        <div class="docs-page-header__content">
+          <div class="docs-page-header__mobile-actions">
+            <CopyPageControls client:only="vue" align="center" />
+          </div>
+          <div class="docs-page-header__title-row">
+            <h1>Scroll Area</h1>
+            <ArkUiDocsLink href="https://ark-ui.com/docs/components/scroll-area" />
+            <div class="docs-page-header__navigation-actions">
+              <div class="docs-page-header__desktop-actions"><CopyPageControls client:only="vue" /></div>
+              <DocsPageNavigation currentPath={currentPath} variant="compact" />
+            </div>
+          </div>
+          <p class="docs-page-header__lede">{description}</p>
+        </div>
+      </div>
+    </header>
+
+    <div class="docs-page-body">
+      <article class="docs-article docs-article--component">
+        <section id="preview" class="docs-section">
+          <div class="docs-component-example">
+            <div class="docs-component-preview">
+              <ScrollAreaDocsDemo client:load variant="preview" />
+            </div>
+            <CodeBlock code={previewCode} lang="vue" collapsible revealId="scroll-area-preview-code" />
+          </div>
+        </section>
+
+        <section id="installation" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#installation">Installation</a></h2>
+          <p>
+            Scroll Area is part of the main Kappa package. Ark UI measures overflow, maps pointer
+            and touch input, keeps native scrolling, and reports edge state.
+          </p>
+          <h3 id="barrel"><a class="docs-section-anchor" href="#barrel">Barrel</a></h3>
+          <CodeBlock code={barrelCode} lang="javascript" />
+          <h3 id="granular"><a class="docs-section-anchor" href="#granular">Granular</a></h3>
+          <CodeBlock code={granularCode} lang="javascript" />
+        </section>
+
+        <section id="usage" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#usage">Usage</a></h2>
+          <p>
+            Give Root a fixed block size. Put the full content in Viewport and Content, then add
+            one Scrollbar for each overflow axis. The vertical orientation is Kappa's convenience default.
+          </p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview">
+              <ScrollAreaDocsDemo client:load variant="usage" />
+            </div>
+            <CodeBlock code={usageCode} lang="vue" collapsible revealId="scroll-area-usage-code" />
+          </div>
+        </section>
+
+        <section id="composition" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#composition">Composition</a></h2>
+          <CompositionTree component="scrollArea" />
+          <p>
+            Ark UI owns native scrolling, overflow detection, drag behavior, and scroll progress.
+            Kappa owns the quiet tracks, visible thumbs, focus treatment, logical placement, and compound exports.
+          </p>
+          <p>
+            The examples cover vertical, horizontal, and right-to-left scrolling.
+            The two-axis, nested, and context examples expose the wider Ark UI contract.
+          </p>
+          <ul>
+            <li><code>Viewport</code> remains the native scroll container.</li>
+            <li><code>Content</code> gives Ark UI one element to measure.</li>
+            <li>Each <code>Scrollbar</code> needs one <code>Thumb</code>.</li>
+            <li>Add <code>Corner</code> only when both axes can overflow.</li>
+          </ul>
+        </section>
+
+        <section id="examples" class="docs-section docs-section--component-examples">
+          <h2><a class="docs-section-anchor" href="#examples">Examples</a></h2>
+          {
+            examples.map((example) => (
+              <>
+                <h3 id={example.id}>
+                  <a class="docs-section-anchor" href={`#${example.id}`}>{example.title}</a>
+                </h3>
+                <p>{example.description}</p>
+                <div class="docs-component-example">
+                  <div class="docs-component-preview">
+                    <ScrollAreaDocsDemo client:load variant={example.variant} />
+                  </div>
+                  <CodeBlock
+                    code={example.code}
+                    lang="vue"
+                    collapsible
+                    revealId={`scroll-area-${example.id}-code`}
+                  />
+                </div>
+              </>
+            ))
+          }
+        </section>
+
+        <section id="accessibility" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#accessibility">Accessibility</a></h2>
+          <ul>
+            <li>Keep native wheel, touch, trackpad, and keyboard scrolling available.</li>
+            <li>Add <code>tabindex=0</code> when keyboard users need to enter a non-interactive viewport.</li>
+            <li>Give a focusable viewport a concise accessible name.</li>
+            <li>Do not hide essential actions outside the initial viewport without a visible overflow cue.</li>
+            <li>The thumb has a larger invisible hit target for precise pointer and touch input.</li>
+            <li>Forced colors keep the track and thumb visible. Reduced motion removes transitions.</li>
+          </ul>
+        </section>
+
+        <section id="api-reference" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#api-reference">API Reference</a></h2>
+          <div class="docs-api-group">
+            <h3 id="root-api"><a class="docs-section-anchor" href="#root-api">ScrollArea.Root</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>{rootProps.map((prop) => <tr><td><code>{prop.name}</code></td><td><code>{prop.type}</code></td><td><code>{prop.defaultValue}</code></td><td>{prop.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="scrollbar-api"><a class="docs-section-anchor" href="#scrollbar-api">ScrollArea.Scrollbar</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>{scrollbarProps.map((prop) => <tr><td><code>{prop.name}</code></td><td><code>{prop.type}</code></td><td><code>{prop.defaultValue}</code></td><td>{prop.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="parts-api"><a class="docs-section-anchor" href="#parts-api">Parts</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Part</th><th>Element</th><th>Description</th></tr></thead><tbody>{parts.map((part) => <tr><td><code>ScrollArea.{part.name}</code></td><td><code>{part.element}</code></td><td>{part.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="exports"><a class="docs-section-anchor" href="#exports">Exports</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Export</th><th>Description</th></tr></thead><tbody>{exportsList.map((item) => <tr><td><code>{item.name}</code></td><td>{item.description}</td></tr>)}</tbody></table></div>
+          </div>
+        </section>
+
+        <DocsPageNavigation currentPath={currentPath} />
+      </article>
+
+      <aside class="docs-page-toc" aria-label="On this page">
+        <div class="docs-page-toc__inner">
+          <span class="docs-page-toc__title">On this page</span>
+          <ul>
+            <li><a href="#installation" data-toc-link="installation">Installation</a><ul><li><a href="#barrel" data-toc-link="barrel">Barrel</a></li><li><a href="#granular" data-toc-link="granular">Granular</a></li></ul></li>
+            <li><a href="#usage" data-toc-link="usage">Usage</a></li>
+            <li><a href="#composition" data-toc-link="composition">Composition</a></li>
+            <li><a href="#examples" data-toc-link="examples">Examples</a><ul>{examples.map((example) => <li><a href={`#${example.id}`} data-toc-link={example.id}>{example.title}</a></li>)}</ul></li>
+            <li><a href="#accessibility" data-toc-link="accessibility">Accessibility</a></li>
+            <li><a href="#api-reference" data-toc-link="api-reference">API Reference</a><ul><li><a href="#root-api" data-toc-link="root-api">ScrollArea.Root</a></li><li><a href="#scrollbar-api" data-toc-link="scrollbar-api">ScrollArea.Scrollbar</a></li><li><a href="#parts-api" data-toc-link="parts-api">Parts</a></li><li><a href="#exports" data-toc-link="exports">Exports</a></li></ul></li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+  </div>
+</DocsLayout>

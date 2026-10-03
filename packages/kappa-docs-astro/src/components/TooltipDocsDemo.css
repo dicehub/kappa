@@ -1,0 +1,63 @@
+.tooltip-demo {
+  display: flex;
+  inline-size: 100%;
+  min-inline-size: 0;
+  min-block-size: 4rem;
+  align-items: center;
+  justify-content: center;
+  color: var(--kappa-default);
+  font-family: var(--kappa-font-sans);
+}
+
+.tooltip-demo__group {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+}
+
+.tooltip-demo__disabled-trigger {
+  display: inline-flex;
+  border-radius: var(--kappa-radius-md, 0.375rem);
+  cursor: not-allowed;
+}
+
+.tooltip-demo__disabled-trigger:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 1px var(--kappa-focus),
+    0 0 0 3px var(--kappa-focus-soft);
+}
+
+.tooltip-demo__disabled-trigger :deep(.kappa-button) {
+  pointer-events: none;
+}
+
+.tooltip-demo__edge-row {
+  display: flex;
+  inline-size: 100%;
+  min-inline-size: 0;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.tooltip-demo__controlled {
+  display: grid;
+  justify-items: center;
+  gap: 0.75rem;
+}
+
+.tooltip-demo__controlled output {
+  color: var(--kappa-subtle);
+  font-family: var(--kappa-font-mono);
+  font-size: 0.75rem;
+  line-height: 1rem;
+}
+
+@media (max-width: 38rem) {
+  .tooltip-demo__edge-row {
+    flex-direction: column;
+  }
+}

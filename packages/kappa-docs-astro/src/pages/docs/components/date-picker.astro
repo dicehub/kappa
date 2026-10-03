@@ -1,0 +1,242 @@
+---
+import DatePickerDocsDemo from "../../../components/DatePickerDocsDemo.vue";
+import ArkUiDocsLink from "../../../components/ArkUiDocsLink.astro";
+import CodeBlock from "../../../components/CodeBlock.astro";
+import CompositionTree from "../../../components/CompositionTree.astro";
+import CopyPageControls from "../../../components/CopyPageControls.vue";
+import DocsPageNavigation from "../../../components/DocsPageNavigation.astro";
+import {
+  barrelCode,
+  compositionCode,
+  events,
+  exportsList,
+  granularCode,
+  inlineCode,
+  localeCode,
+  minMaxCode,
+  parts,
+  presetsCode,
+  previewCode,
+  rangeCode,
+  rangeConstraintsCode,
+  rootProps,
+  selectsCode,
+  statesCode,
+  usageCode,
+  weekNumbersCode,
+} from "../../../data/date-picker-docs";
+import DocsLayout from "../../../layouts/DocsLayout.astro";
+import "../../../styles/docs-components.css";
+
+const currentPath = "/docs/components/date-picker";
+const description =
+  "Selects a single date, multiple dates, or a range with an editable input and a calendar popover.";
+---
+
+<DocsLayout title="Date Picker" description={description}>
+  <div class="docs-page docs-page--component">
+    <header class="docs-page-header">
+      <div class="docs-page-header__inner">
+        <div class="docs-page-header__content">
+          <div class="docs-page-header__mobile-actions">
+            <CopyPageControls client:only="vue" align="center" />
+          </div>
+          <div class="docs-page-header__title-row">
+            <h1>Date Picker</h1>
+            <ArkUiDocsLink />
+            <div class="docs-page-header__navigation-actions">
+              <div class="docs-page-header__desktop-actions"><CopyPageControls client:only="vue" /></div>
+              <DocsPageNavigation currentPath={currentPath} variant="compact" />
+            </div>
+          </div>
+          <p class="docs-page-header__lede">{description}</p>
+        </div>
+      </div>
+    </header>
+
+    <div class="docs-page-body">
+      <article class="docs-article docs-article--component">
+        <section id="preview" class="docs-section">
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><DatePickerDocsDemo client:load variant="preview" /></div>
+            <CodeBlock code={previewCode} lang="vue" collapsible revealId="date-picker-preview-code" />
+          </div>
+        </section>
+
+        <section id="installation" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#installation">Installation</a></h2>
+          <h3 id="barrel"><a class="docs-section-anchor" href="#barrel">Barrel</a></h3>
+          <CodeBlock code={barrelCode} lang="javascript" />
+          <h3 id="granular"><a class="docs-section-anchor" href="#granular">Granular</a></h3>
+          <CodeBlock code={granularCode} lang="javascript" />
+        </section>
+
+        <section id="usage" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#usage">Usage</a></h2>
+          <p>
+            A popover date picker needs a <code>Control</code> with an <code>Input</code>, a
+            <code>Trigger</code>, and a <code>Content</code> holding the calendar. Values are
+            <code>DateValue</code> objects from <code>@internationalized/date</code>; create them
+            with <code>CalendarDate</code>, <code>today()</code>, or the exported
+            <code>parseDate</code> helper.
+          </p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><DatePickerDocsDemo client:load variant="usage" /></div>
+            <CodeBlock code={usageCode} lang="vue" collapsible revealId="date-picker-usage-code" />
+          </div>
+        </section>
+
+        <section id="composition" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#composition">Composition</a></h2>
+          <CompositionTree component="datePicker" />
+          <p>
+            Ark UI owns the calendar state machine, keyboard grid navigation, input parsing,
+            visible-range logic, and the popover layer. Kappa owns the compound API, the composed
+            <code>Calendar</code> part, default icons, dense geometry, states, and semantic tokens.
+          </p>
+          <ul>
+            <li><code>Root</code> owns selection, view, open state, locale, and constraints.</li>
+            <li><code>Content</code> teleports the popover to the body; pass <code>:teleport="false"</code> to render in place.</li>
+            <li><code>Calendar</code> renders the full day view: prev/next navigation, month titles, weekday header, and day cells. Multi-month and week numbers come from <code>Root</code>.</li>
+            <li>Table parts stay public for fully custom grids; <code>MonthSelect</code> and <code>YearSelect</code> handle long jumps.</li>
+          </ul>
+          <p>
+            See the <a href="https://ark-ui.com/docs/components/date-picker">Ark UI Date Picker</a>
+            guide for the primitive behavior contract. Month and year grid views are available
+            through the <code>View</code>, <code>ViewControl</code>, and table parts; the composed
+            <code>Calendar</code> intentionally ships the day view only.
+          </p>
+          <div class="docs-component-example">
+            <CodeBlock code={compositionCode} lang="vue" collapsible revealId="date-picker-composition-code" />
+          </div>
+        </section>
+
+        <section id="examples" class="docs-section docs-section--component-examples">
+          <h2><a class="docs-section-anchor" href="#examples">Examples</a></h2>
+
+          <h3 id="inline"><a class="docs-section-anchor" href="#inline">Inline</a></h3>
+          <p>With <code>inline</code>, the calendar renders in place without a popover.</p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><DatePickerDocsDemo client:load variant="inline" /></div>
+            <CodeBlock code={inlineCode} lang="vue" collapsible revealId="date-picker-inline-code" />
+          </div>
+
+          <h3 id="date-range"><a class="docs-section-anchor" href="#date-range">Date Range</a></h3>
+          <p>
+            <code>selectionMode="range"</code> selects a start and an end. Two months keep the
+            whole window visible while picking.
+          </p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><DatePickerDocsDemo client:load variant="range" /></div>
+            <CodeBlock code={rangeCode} lang="vue" collapsible revealId="date-picker-range-code" />
+          </div>
+
+          <h3 id="range-constraints"><a class="docs-section-anchor" href="#range-constraints">Range Constraints</a></h3>
+          <p>
+            Limit the range length with <code>isDateUnavailable</code>. While a range start is
+            pending — the controlled value holds one date — mark days too close or too far as
+            unavailable. The pattern needs no wrapper state and keeps the Ark machine authoritative.
+          </p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><DatePickerDocsDemo client:load variant="range-constraints" /></div>
+            <CodeBlock code={rangeConstraintsCode} lang="vue" collapsible revealId="date-picker-range-constraints-code" />
+          </div>
+
+          <h3 id="presets"><a class="docs-section-anchor" href="#presets">Presets</a></h3>
+          <p><code>PresetTrigger</code> applies a prepared value in one click.</p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><DatePickerDocsDemo client:load variant="presets" /></div>
+            <CodeBlock code={presetsCode} lang="vue" collapsible revealId="date-picker-presets-code" />
+          </div>
+
+          <h3 id="month-year-selects"><a class="docs-section-anchor" href="#month-year-selects">Month and Year Selects</a></h3>
+          <p>Native dropdowns for long jumps sit above the composed calendar.</p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><DatePickerDocsDemo client:load variant="selects" /></div>
+            <CodeBlock code={selectsCode} lang="vue" collapsible revealId="date-picker-selects-code" />
+          </div>
+
+          <h3 id="min-max"><a class="docs-section-anchor" href="#min-max">Min, Max, and Unavailable</a></h3>
+          <p>
+            <code>min</code> and <code>max</code> bound the selectable range;
+            <code>isDateUnavailable</code> blocks specific days such as weekends.
+          </p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><DatePickerDocsDemo client:load variant="min-max" /></div>
+            <CodeBlock code={minMaxCode} lang="vue" collapsible revealId="date-picker-min-max-code" />
+          </div>
+
+          <h3 id="week-numbers"><a class="docs-section-anchor" href="#week-numbers">Week Numbers</a></h3>
+          <p><code>showWeekNumbers</code> adds the ISO week column to the day view.</p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><DatePickerDocsDemo client:load variant="week-numbers" /></div>
+            <CodeBlock code={weekNumbersCode} lang="vue" collapsible revealId="date-picker-week-numbers-code" />
+          </div>
+
+          <h3 id="locale"><a class="docs-section-anchor" href="#locale">Locale</a></h3>
+          <p><code>locale</code> localizes month names, weekday order, and input formatting.</p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><DatePickerDocsDemo client:load variant="locale" /></div>
+            <CodeBlock code={localeCode} lang="vue" collapsible revealId="date-picker-locale-code" />
+          </div>
+
+          <h3 id="states"><a class="docs-section-anchor" href="#states">States</a></h3>
+          <p>Disabled blocks the field; invalid marks the control and needs a text description.</p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><DatePickerDocsDemo client:load variant="states" /></div>
+            <CodeBlock code={statesCode} lang="vue" collapsible revealId="date-picker-states-code" />
+          </div>
+        </section>
+
+        <section id="accessibility" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#accessibility">Accessibility</a></h2>
+          <ul>
+            <li>The input is the primary control: type a date, or open the calendar with the trigger button.</li>
+            <li>Arrow keys move the focused date; PageUp and PageDown move between months; Home and End move within a week.</li>
+            <li>Every icon-only trigger needs an accessible name; the defaults document the pattern.</li>
+            <li>The month title announces changes through a polite live region.</li>
+            <li>Connect error text with <code>aria-describedby</code> on the input.</li>
+            <li>Unavailable dates stay focusable with an unavailable announcement, matching the primitive contract.</li>
+            <li>Keyboard focus remains visible on every interactive element.</li>
+          </ul>
+        </section>
+
+        <section id="api-reference" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#api-reference">API Reference</a></h2>
+          <div class="docs-api-group">
+            <h3 id="root-api"><a class="docs-section-anchor" href="#root-api">DatePicker.Root</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>{rootProps.map((prop) => <tr><td><code>{prop.name}</code></td><td><code>{prop.type}</code></td><td><code>{prop.defaultValue}</code></td><td>{prop.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="parts-api"><a class="docs-section-anchor" href="#parts-api">Parts</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Part</th><th>Element</th><th>Description</th></tr></thead><tbody>{parts.map((part) => <tr><td><code>DatePicker.{part.name}</code></td><td><code>{part.element}</code></td><td>{part.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="events-api"><a class="docs-section-anchor" href="#events-api">Events</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Event</th><th>Payload</th><th>Description</th></tr></thead><tbody>{events.map((event) => <tr><td><code>{event.name}</code></td><td><code>{event.payload}</code></td><td>{event.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="exports"><a class="docs-section-anchor" href="#exports">Exports</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Export</th><th>Description</th></tr></thead><tbody>{exportsList.map((item) => <tr><td><code>{item.name}</code></td><td>{item.description}</td></tr>)}</tbody></table></div>
+          </div>
+        </section>
+
+        <DocsPageNavigation currentPath={currentPath} />
+      </article>
+
+      <aside class="docs-page-toc" aria-label="On this page">
+        <div class="docs-page-toc__inner">
+          <span class="docs-page-toc__title">On this page</span>
+          <ul>
+            <li><a href="#installation" data-toc-link="installation">Installation</a><ul><li><a href="#barrel" data-toc-link="barrel">Barrel</a></li><li><a href="#granular" data-toc-link="granular">Granular</a></li></ul></li>
+            <li><a href="#usage" data-toc-link="usage">Usage</a></li>
+            <li><a href="#composition" data-toc-link="composition">Composition</a></li>
+            <li><a href="#examples" data-toc-link="examples">Examples</a><ul><li><a href="#inline" data-toc-link="inline">Inline</a></li><li><a href="#date-range" data-toc-link="date-range">Date Range</a></li><li><a href="#range-constraints" data-toc-link="range-constraints">Range Constraints</a></li><li><a href="#presets" data-toc-link="presets">Presets</a></li><li><a href="#month-year-selects" data-toc-link="month-year-selects">Month and Year Selects</a></li><li><a href="#min-max" data-toc-link="min-max">Min, Max, and Unavailable</a></li><li><a href="#week-numbers" data-toc-link="week-numbers">Week Numbers</a></li><li><a href="#locale" data-toc-link="locale">Locale</a></li><li><a href="#states" data-toc-link="states">States</a></li></ul></li>
+            <li><a href="#accessibility" data-toc-link="accessibility">Accessibility</a></li>
+            <li><a href="#api-reference" data-toc-link="api-reference">API Reference</a><ul><li><a href="#root-api" data-toc-link="root-api">DatePicker.Root</a></li><li><a href="#parts-api" data-toc-link="parts-api">Parts</a></li><li><a href="#events-api" data-toc-link="events-api">Events</a></li><li><a href="#exports" data-toc-link="exports">Exports</a></li></ul></li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+  </div>
+</DocsLayout>

@@ -1,0 +1,164 @@
+---
+import CodeBlock from "../../../components/CodeBlock.astro";
+import CopyPageControls from "../../../components/CopyPageControls.vue";
+import DocsPageNavigation from "../../../components/DocsPageNavigation.astro";
+import MapsDocsDemo from "../../../components/MapsDocsDemo.vue";
+import {
+  basicCode,
+  geometryCode,
+  installCode,
+  mapViewEvents,
+  mapViewMethods,
+  mapViewProps,
+  markersCode,
+  searchCode,
+  statesCode,
+} from "../../../data/maps-docs";
+import DocsLayout from "../../../layouts/DocsLayout.astro";
+import "../../../styles/docs-components.css";
+import "../../../styles/docs-blocks.css";
+
+const description = "Build interactive location maps with Kappa controls and MapLibre rendering.";
+const currentPath = "/docs/charts/maps";
+const examples = [
+  { id: "search", title: "Find an Address", description: "Type at least three characters to get address suggestions, then select one to move the map. This example uses the public Photon service.", variant: "search", code: searchCode },
+  { id: "markers", title: "Locations", description: "Keep location data declarative while Kappa owns marker focus, selection, safe text popups, and visual tones.", variant: "markers", code: markersCode },
+  { id: "geometry", title: "Routes and Areas", description: "Use the ready event for advanced MapLibre sources and layers. Kappa keeps the frame and controls stable.", variant: "geometry", code: geometryCode },
+  { id: "states", title: "Data States", description: "Reserve one stable map region while location data or the map service changes state.", variant: "states", code: statesCode },
+] as const;
+---
+
+<DocsLayout title="Maps" description={description}>
+  <div class="docs-page docs-page--component">
+    <header class="docs-page-header">
+      <div class="docs-page-header__inner">
+        <div class="docs-page-header__content">
+          <div class="docs-page-header__mobile-actions"><CopyPageControls client:only="vue" align="center" /></div>
+          <div class="docs-page-header__title-row">
+            <h1>Maps</h1>
+            <div class="docs-page-header__navigation-actions">
+              <div class="docs-page-header__desktop-actions"><CopyPageControls client:only="vue" /></div>
+              <DocsPageNavigation currentPath={currentPath} variant="compact" />
+            </div>
+          </div>
+          <p class="docs-page-header__lede">{description}</p>
+        </div>
+      </div>
+    </header>
+
+    <div class="docs-page-body">
+      <article class="docs-article docs-article--component">
+        <section id="preview" class="docs-section">
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><MapsDocsDemo client:only="vue" variant="preview" /></div>
+            <CodeBlock code={basicCode} lang="vue" collapsible revealId="maps-preview-code" />
+          </div>
+        </section>
+
+        <section id="installation" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#installation">Installation</a></h2>
+          <p>
+            <code>MapView</code> uses MapLibre GL JS as an optional peer dependency. Import the component from its isolated path and load MapLibre's required stylesheet once in the application.
+          </p>
+          <CodeBlock code={installCode} lang="bash" />
+        </section>
+
+        <section id="usage" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#usage">Usage</a></h2>
+          <p>
+            Pass the imported MapLibre namespace and standard MapLibre options. Kappa supplies the container, resize and disposal lifecycle, controls, markers, states, and accessibility boundary.
+          </p>
+          <CodeBlock code={basicCode} lang="vue" collapsible revealId="maps-usage-code" />
+        </section>
+
+        <section id="engine-boundary" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#engine-boundary">Engine Boundary</a></h2>
+          <p>
+            Kappa does not bundle a tile service, style, or access token. Select a provider that meets the application's licensing, privacy, attribution, and availability requirements. The examples use the public OpenFreeMap Liberty style; production applications should supply their own style URL or style object.
+          </p>
+          <ul>
+            <li>Use <code>markers</code> for normal labeled locations and application selection.</li>
+            <li>Use <code>ready</code> or <code>getMap()</code> for GeoJSON, vector sources, routes, polygons, terrain, and custom layers.</li>
+            <li>Replace the options object or change <code>revision</code> only when the map must be recreated.</li>
+            <li>Keep attribution enabled when the selected data or tile provider requires it.</li>
+          </ul>
+        </section>
+
+        <section id="examples" class="docs-section docs-section--component-examples">
+          <h2><a class="docs-section-anchor" href="#examples">Examples</a></h2>
+          {examples.map((example) => (
+            <>
+              <h3 id={example.id}><a class="docs-section-anchor" href={`#${example.id}`}>{example.title}</a></h3>
+              <p>{example.description}</p>
+              <div class:list={["docs-component-example", { "docs-block-example": example.id === "search" }]}>
+                {example.id === "search" && (
+                  <div class="docs-block-example__bar">
+                    <span>Maps · address search</span>
+                    <a href="/examples/maps/search" target="_blank" rel="noopener noreferrer">
+                      Open full example <span aria-hidden="true">↗</span><span class="docs-block-example__sr-only"> (new tab)</span>
+                    </a>
+                  </div>
+                )}
+                <div class:list={["docs-component-preview", { "docs-block-example__preview": example.id === "search" }]}>
+                  <MapsDocsDemo client:only="vue" variant={example.variant} />
+                </div>
+                <CodeBlock code={example.code} lang="vue" collapsible revealId={`maps-${example.id}-code`} />
+              </div>
+            </>
+          ))}
+        </section>
+
+        <section id="accessibility" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#accessibility">Accessibility</a></h2>
+          <ul>
+            <li>Give every map a specific <code>ariaLabel</code> and a concise text summary in <code>ariaDescription</code>.</li>
+            <li>Each Kappa marker is a keyboard-focusable button. Marker labels become accessible names.</li>
+            <li>Address suggestions use Kappa Autocomplete. Arrow keys move through results, Enter selects one, and Escape closes the list.</li>
+            <li>Do not make the map the only way to reach essential locations or values. Provide a linked list or table for critical data.</li>
+            <li>Translate the control and state labels when the application supports more than one language.</li>
+          </ul>
+        </section>
+
+        <section id="security" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#security">Security and Data</a></h2>
+          <ul>
+            <li>Kappa marker labels and descriptions use DOM text nodes. They do not accept HTML.</li>
+            <li>Treat style URLs, tile endpoints, GeoJSON, and custom MapLibre callbacks as application-controlled input.</li>
+            <li>Do not expose private coordinates to a third-party tile service without an approved data policy.</li>
+            <li>Address queries may contain personal data. Review the selected geocoding provider's privacy policy, limits, and production terms.</li>
+            <li>Restrict remote map hosts with the application's Content Security Policy.</li>
+          </ul>
+        </section>
+
+        <section id="api-reference" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#api-reference">API Reference</a></h2>
+          <div class="docs-api-table"><table><thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>{mapViewProps.map((prop) => <tr><td><code>{prop.name}</code></td><td><code>{prop.type}</code></td><td><code>{prop.defaultValue}</code></td><td>{prop.description}</td></tr>)}</tbody></table></div>
+          <h3 id="events"><a class="docs-section-anchor" href="#events">Events</a></h3>
+          <div class="docs-api-table"><table><thead><tr><th>Event</th><th>Payload</th><th>Description</th></tr></thead><tbody>{mapViewEvents.map((event) => <tr><td><code>{event.name}</code></td><td><code>{event.payload}</code></td><td>{event.description}</td></tr>)}</tbody></table></div>
+          <h3 id="methods"><a class="docs-section-anchor" href="#methods">Exposed Methods</a></h3>
+          <div class="docs-api-table"><table><thead><tr><th>Method</th><th>Description</th></tr></thead><tbody>{mapViewMethods.map((method) => <tr><td><code>{method.name}</code></td><td>{method.description}</td></tr>)}</tbody></table></div>
+          <p>
+            Import the component and public types from <code>@dicehub/kappa/components/map-view</code>. See the <a href="https://maplibre.org/maplibre-gl-js/docs/" target="_blank" rel="noreferrer">MapLibre GL JS documentation</a> for engine options, sources, and layers.
+          </p>
+        </section>
+
+        <DocsPageNavigation currentPath={currentPath} />
+      </article>
+
+      <aside class="docs-page-toc" aria-label="On this page">
+        <div class="docs-page-toc__inner">
+          <span class="docs-page-toc__title">On this page</span>
+          <ul>
+            <li><a href="#installation" data-toc-link="installation">Installation</a></li>
+            <li><a href="#usage" data-toc-link="usage">Usage</a></li>
+            <li><a href="#engine-boundary" data-toc-link="engine-boundary">Engine Boundary</a></li>
+            <li><a href="#examples" data-toc-link="examples">Examples</a><ul>{examples.map((example) => <li><a href={`#${example.id}`} data-toc-link={example.id}>{example.title}</a></li>)}</ul></li>
+            <li><a href="#accessibility" data-toc-link="accessibility">Accessibility</a></li>
+            <li><a href="#security" data-toc-link="security">Security and Data</a></li>
+            <li><a href="#api-reference" data-toc-link="api-reference">API Reference</a><ul><li><a href="#events" data-toc-link="events">Events</a></li><li><a href="#methods" data-toc-link="methods">Exposed Methods</a></li></ul></li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+  </div>
+</DocsLayout>

@@ -1,0 +1,84 @@
+.kappa-dialog-layout__content {
+  min-block-size: 0;
+  gap: 0;
+  overflow: hidden;
+  padding: 0;
+}
+
+.kappa-dialog-layout__content[hidden] {
+  display: none;
+}
+
+.kappa-dialog-layout__content[data-vertical-align="top"] {
+  align-self: start;
+  margin-block-start: clamp(1rem, 7dvb, 4rem);
+}
+
+.kappa-dialog-layout__header {
+  box-sizing: border-box;
+  display: flex;
+  min-inline-size: 0;
+  flex: none;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 1rem 3.25rem 0.875rem 1.125rem;
+  border-block-end: 1px solid var(--kappa-hairline, #edf0f3);
+  background: var(--kappa-control, #ffffff);
+}
+
+.kappa-dialog-layout__body {
+  box-sizing: border-box;
+  min-block-size: 0;
+  flex: 1 1 auto;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 1rem 1.125rem;
+  scrollbar-gutter: stable;
+}
+
+.kappa-dialog-layout__actions {
+  box-sizing: border-box;
+  display: flex;
+  min-inline-size: 0;
+  flex: none;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  border-block-start: 1px solid var(--kappa-hairline, #edf0f3);
+  background: var(--kappa-elevated, #f8f9fb);
+}
+
+.kappa-dialog-layout__primary {
+  display: flex;
+  min-inline-size: 0;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+@media (max-width: 30rem) {
+  .kappa-dialog-layout__content[data-vertical-align] {
+    align-self: end;
+    margin-block-start: 0;
+  }
+
+  .kappa-dialog-layout__header {
+    padding: 0.875rem 3rem 0.75rem 1rem;
+  }
+
+  .kappa-dialog-layout__body {
+    padding: 0.875rem 1rem;
+  }
+
+  .kappa-dialog-layout__actions {
+    padding: 0.75rem;
+  }
+}
+
+@media (forced-colors: active) {
+  .kappa-dialog-layout__header,
+  .kappa-dialog-layout__actions {
+    border-color: CanvasText;
+  }
+}

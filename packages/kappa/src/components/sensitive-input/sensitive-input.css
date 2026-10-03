@@ -1,0 +1,345 @@
+.kappa-sensitive-input {
+  --kappa-sensitive-input-height: 2.25rem;
+  --kappa-sensitive-input-padding: 0.625rem;
+  --kappa-sensitive-input-radius: 0.5rem;
+  --kappa-sensitive-input-font-size: 0.8125rem;
+  --kappa-sensitive-input-action-size: 2.25rem;
+
+  box-sizing: border-box;
+  display: grid;
+  inline-size: 100%;
+  min-inline-size: 0;
+  gap: 0.4375rem;
+  color: var(--kappa-default, #17191f);
+  font-family: var(--kappa-font-sans, inherit);
+}
+
+.kappa-sensitive-input[data-size="xs"] {
+  --kappa-sensitive-input-height: 1.5rem;
+  --kappa-sensitive-input-padding: 0.5rem;
+  --kappa-sensitive-input-radius: 0.375rem;
+  --kappa-sensitive-input-font-size: 0.75rem;
+  --kappa-sensitive-input-action-size: 1.5rem;
+}
+
+.kappa-sensitive-input[data-size="sm"] {
+  --kappa-sensitive-input-height: 1.75rem;
+  --kappa-sensitive-input-padding: 0.625rem;
+  --kappa-sensitive-input-radius: 0.4375rem;
+  --kappa-sensitive-input-font-size: 0.75rem;
+  --kappa-sensitive-input-action-size: 1.75rem;
+}
+
+.kappa-sensitive-input[data-size="lg"] {
+  --kappa-sensitive-input-height: 2.5rem;
+  --kappa-sensitive-input-padding: 0.75rem;
+  --kappa-sensitive-input-radius: 0.5rem;
+  --kappa-sensitive-input-font-size: 0.875rem;
+  --kappa-sensitive-input-action-size: 2.5rem;
+}
+
+.kappa-sensitive-input__label {
+  display: inline-flex;
+  inline-size: fit-content;
+  max-inline-size: 100%;
+  align-items: baseline;
+  color: var(--kappa-default, #17191f);
+  cursor: default;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+.kappa-sensitive-input__control {
+  box-sizing: border-box;
+  position: relative;
+  display: flex;
+  inline-size: 100%;
+  min-inline-size: 0;
+  min-block-size: var(--kappa-sensitive-input-height);
+  align-items: center;
+  overflow: visible;
+  border: 1px solid var(--kappa-line, #e3e6eb);
+  border-radius: var(--kappa-sensitive-input-radius);
+  background: var(--kappa-control, #ffffff);
+  color: var(--kappa-default, #17191f);
+  transition:
+    background-color 120ms ease,
+    border-color 120ms ease,
+    box-shadow 120ms ease;
+}
+
+.kappa-sensitive-input__control[data-state="masked"]:not([data-disabled]) {
+  cursor: pointer;
+}
+
+.kappa-sensitive-input__control:hover:not([data-disabled], [data-readonly]) {
+  border-color: var(--kappa-subtle, #6c7480);
+}
+
+.kappa-sensitive-input__control:focus-within {
+  border-color: var(--kappa-focus, #4c63ff);
+  outline: 2px solid var(--kappa-focus, #4c63ff);
+  outline-offset: 1px;
+}
+
+.kappa-sensitive-input__control[data-invalid] {
+  border-color: var(--kappa-danger, #b42318);
+}
+
+.kappa-sensitive-input__control[data-invalid]:focus-within {
+  outline-color: var(--kappa-danger, #b42318);
+}
+
+.kappa-sensitive-input__control[data-disabled] {
+  background: var(--kappa-disabled-surface, var(--kappa-tint, #f4f6f9));
+  cursor: not-allowed;
+  opacity: var(--kappa-disabled-opacity, 0.58);
+}
+
+.kappa-sensitive-input__control[data-readonly]:not([data-disabled]) {
+  background: var(--kappa-readonly-surface, var(--kappa-tint, #f4f6f9));
+}
+
+.kappa-sensitive-input__input {
+  box-sizing: border-box;
+  display: block;
+  min-inline-size: 0;
+  block-size: calc(var(--kappa-sensitive-input-height) - 2px);
+  flex: 1 1 auto;
+  padding-block: 0;
+  padding-inline: var(--kappa-sensitive-input-padding);
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-size: var(--kappa-sensitive-input-font-size);
+  line-height: 1.35;
+  outline: none;
+}
+
+.kappa-sensitive-input__input::placeholder {
+  color: var(--kappa-muted, #9aa2ae);
+  opacity: 1;
+}
+
+.kappa-sensitive-input__input:disabled {
+  cursor: not-allowed;
+}
+
+.kappa-sensitive-input__input:read-only {
+  cursor: default;
+}
+
+.kappa-sensitive-input__control[data-masked] .kappa-sensitive-input__input {
+  caret-color: transparent;
+  color: transparent;
+}
+
+.kappa-sensitive-input__mask {
+  position: absolute;
+  inset-block: 0;
+  inset-inline: 0 var(--kappa-sensitive-input-action-size);
+  display: flex;
+  align-items: center;
+  padding-inline: var(--kappa-sensitive-input-padding);
+  overflow: hidden;
+  pointer-events: none;
+  user-select: none;
+}
+
+.kappa-sensitive-input__mask-stack {
+  position: relative;
+  display: inline-flex;
+  min-inline-size: 0;
+}
+
+.kappa-sensitive-input__mask-bullets,
+.kappa-sensitive-input__mask-reveal {
+  display: inline-flex;
+  white-space: nowrap;
+  transition: opacity 120ms ease;
+}
+
+.kappa-sensitive-input__mask-bullets {
+  color: var(--kappa-default, #17191f);
+}
+
+.kappa-sensitive-input__mask-reveal {
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-start: 0;
+  color: var(--kappa-subtle, #6c7480);
+  opacity: 0;
+}
+
+.kappa-sensitive-input__control[data-masked]:not([data-disabled]):is(:hover, :focus-within)
+  .kappa-sensitive-input__mask-bullets {
+  opacity: 0;
+}
+
+.kappa-sensitive-input__control[data-masked]:not([data-disabled]):is(:hover, :focus-within)
+  .kappa-sensitive-input__mask-reveal {
+  opacity: 1;
+}
+
+.kappa-sensitive-input__action {
+  box-sizing: border-box;
+  display: inline-flex;
+  inline-size: var(--kappa-sensitive-input-action-size);
+  min-inline-size: var(--kappa-sensitive-input-action-size);
+  block-size: calc(var(--kappa-sensitive-input-height) - 2px);
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding: 0.125rem;
+  border: 0;
+  border-inline-start: 1px solid var(--kappa-line, #e3e6eb);
+  border-radius: 0;
+  background: transparent;
+  color: var(--kappa-subtle, #6c7480);
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  line-height: 1;
+  transition:
+    background-color 120ms ease,
+    color 120ms ease;
+}
+
+.kappa-sensitive-input__action:hover {
+  background: var(--kappa-overlay, #e9edf2);
+  color: var(--kappa-default, #17191f);
+}
+
+.kappa-sensitive-input__action:focus-visible {
+  position: relative;
+  z-index: 1;
+  outline: 2px solid var(--kappa-focus, #4c63ff);
+  outline-offset: -2px;
+}
+
+.kappa-sensitive-input__copy {
+  position: absolute;
+  inset-block-start: -1px;
+  inset-inline-end: 0.5rem;
+  z-index: 2;
+  box-sizing: border-box;
+  display: inline-flex;
+  inline-size: auto;
+  min-inline-size: 4.25rem;
+  min-block-size: 1.25rem;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding-block: 0.125rem;
+  padding-inline: 0.625rem;
+  border: 0;
+  border-radius: 0.375rem 0.375rem 0 0;
+  background: var(--kappa-accent, #4c63ff);
+  color: var(--kappa-accent-contrast, #ffffff);
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  line-height: 1rem;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-100%);
+  transition:
+    filter 120ms ease,
+    opacity 120ms ease;
+}
+
+.kappa-sensitive-input__control:is(:hover, :focus-within) > .kappa-sensitive-input__copy {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.kappa-sensitive-input__copy:hover {
+  filter: brightness(1.12);
+}
+
+.kappa-sensitive-input__copy:focus-visible {
+  outline: 2px solid var(--kappa-focus, #4c63ff);
+  outline-offset: 1px;
+}
+
+.kappa-sensitive-input__toggle svg {
+  display: block;
+  inline-size: 1rem;
+  block-size: 1rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.35;
+}
+
+.kappa-sensitive-input[data-size="xs"] .kappa-sensitive-input__toggle svg,
+.kappa-sensitive-input[data-size="sm"] .kappa-sensitive-input__toggle svg {
+  inline-size: 0.875rem;
+  block-size: 0.875rem;
+}
+
+.kappa-sensitive-input__message {
+  margin: 0;
+  color: var(--kappa-subtle, #6c7480);
+  font-size: 0.75rem;
+  line-height: 1.4;
+}
+
+.kappa-sensitive-input__error {
+  color: var(--kappa-danger-text, var(--kappa-danger, #b42318));
+}
+
+.kappa-visually-hidden {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  border: 0;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kappa-sensitive-input__control,
+  .kappa-sensitive-input__action,
+  .kappa-sensitive-input__copy,
+  .kappa-sensitive-input__mask-bullets,
+  .kappa-sensitive-input__mask-reveal {
+    transition: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .kappa-sensitive-input__control {
+    border-color: ButtonText;
+  }
+
+  .kappa-sensitive-input__control:focus-within,
+  .kappa-sensitive-input__action:focus-visible {
+    outline-color: Highlight;
+  }
+
+  .kappa-sensitive-input__control[data-invalid] {
+    border-color: Mark;
+  }
+
+  .kappa-sensitive-input__control[data-disabled] {
+    color: GrayText;
+    opacity: 1;
+  }
+
+  .kappa-sensitive-input__copy {
+    border: 1px solid ButtonText;
+    background: ButtonFace;
+    color: ButtonText;
+  }
+}

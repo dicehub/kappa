@@ -1,0 +1,74 @@
+@keyframes kappa-skeleton-line-scan {
+  from {
+    transform: translateX(-100%);
+  }
+
+  to {
+    transform: translateX(100%);
+  }
+}
+
+.kappa-skeleton-line__block {
+  display: flex;
+  inline-size: 100%;
+  min-inline-size: 0;
+  align-items: center;
+}
+
+.kappa-skeleton-line {
+  --kappa-skeleton-line-width: 100%;
+  --kappa-skeleton-line-height: 0.5rem;
+  --kappa-skeleton-line-radius: 0.125rem;
+  --kappa-skeleton-line-background: var(--kappa-tint, #f4f6f9);
+  --kappa-skeleton-line-highlight: color-mix(
+    in srgb,
+    var(--kappa-default, #17191f) 9%,
+    transparent
+  );
+
+  position: relative;
+  display: block;
+  inline-size: var(--kappa-skeleton-line-width);
+  max-inline-size: 100%;
+  block-size: var(--kappa-skeleton-line-height);
+  flex: none;
+  overflow: hidden;
+  border-radius: var(--kappa-skeleton-line-radius);
+  background: var(--kappa-skeleton-line-background);
+  contain: paint;
+}
+
+.kappa-skeleton-line::after {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--kappa-skeleton-line-highlight) 50%,
+    transparent 100%
+  );
+  content: "";
+  transform: translateX(-100%);
+}
+
+.kappa-skeleton-line[data-animated="true"]::after {
+  animation: kappa-skeleton-line-scan 1.7s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kappa-skeleton-line[data-animated="true"]::after {
+    display: none;
+    animation: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .kappa-skeleton-line {
+    background: CanvasText;
+    opacity: 0.2;
+  }
+
+  .kappa-skeleton-line::after {
+    display: none;
+  }
+}

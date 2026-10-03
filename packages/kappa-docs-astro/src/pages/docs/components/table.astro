@@ -1,0 +1,198 @@
+---
+import CodeBlock from "../../../components/CodeBlock.astro";
+import CompositionTree from "../../../components/CompositionTree.astro";
+import CopyPageControls from "../../../components/CopyPageControls.vue";
+import DocsPageNavigation from "../../../components/DocsPageNavigation.astro";
+import TableDocsDemo from "../../../components/TableDocsDemo.vue";
+import {
+  barrelCode,
+  cellProps,
+  dataAttributes,
+  dataSlots,
+  examples,
+  exportsList,
+  granularCode,
+  headerProps,
+  previewCode,
+  rowProps,
+  selectionProps,
+  tableProps,
+  usageCode,
+} from "../../../data/table-docs";
+import DocsLayout from "../../../layouts/DocsLayout.astro";
+import "../../../styles/docs-components.css";
+
+const currentPath = "/docs/components/table";
+const description = "Semantic tabular data with dense states, selection, and scroll-aware columns.";
+---
+
+<DocsLayout title="Table" description={description}>
+  <div class="docs-page docs-page--component">
+    <header class="docs-page-header">
+      <div class="docs-page-header__inner">
+        <div class="docs-page-header__content">
+          <div class="docs-page-header__mobile-actions">
+            <CopyPageControls client:only="vue" align="center" />
+          </div>
+          <div class="docs-page-header__title-row">
+            <h1>Table</h1>
+            <div class="docs-page-header__navigation-actions">
+              <div class="docs-page-header__desktop-actions">
+                <CopyPageControls client:only="vue" />
+              </div>
+              <DocsPageNavigation currentPath={currentPath} variant="compact" />
+            </div>
+          </div>
+          <p class="docs-page-header__lede">{description}</p>
+        </div>
+      </div>
+    </header>
+
+    <div class="docs-page-body">
+      <article class="docs-article docs-article--component">
+        <section id="preview" class="docs-section">
+          <div class="docs-component-example">
+            <div class="docs-component-preview docs-component-preview--table">
+              <TableDocsDemo client:load variant="preview" />
+            </div>
+            <CodeBlock code={previewCode} lang="vue" collapsible revealId="table-preview-code" />
+          </div>
+        </section>
+
+        <section id="installation" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#installation">Installation</a></h2>
+          <p>
+            Table is part of the main Kappa package. It uses native table semantics and adds no
+            behavior primitive dependency.
+          </p>
+          <h3 id="barrel"><a class="docs-section-anchor" href="#barrel">Barrel</a></h3>
+          <CodeBlock code={barrelCode} lang="javascript" />
+          <h3 id="granular"><a class="docs-section-anchor" href="#granular">Granular</a></h3>
+          <CodeBlock code={granularCode} lang="javascript" />
+        </section>
+
+        <section id="usage" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#usage">Usage</a></h2>
+          <p>
+            Start with Header, Row, Head, and Cell. Add a caption when the table needs a visible
+            context or a screen-reader description. Captions appear below the rows. Headers use
+            sentence case and the same text size as cells; compact headers reduce vertical padding
+            and add a subtle surface. Default rows alternate softly, while selected rows use a stronger tint.
+          </p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview docs-component-preview--compact docs-component-preview--table">
+              <TableDocsDemo client:load variant="usage" />
+            </div>
+            <CodeBlock code={usageCode} lang="vue" collapsible revealId="table-usage-code" />
+          </div>
+        </section>
+
+        <section id="composition" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#composition">Composition</a></h2>
+          <CompositionTree component="table" />
+          <p>
+            The compound parts follow the native HTML table structure.
+            The layout supports selected rows, sticky columns, checkbox cells, and resize handles.
+            Ark UI has no table behavior primitive, so Kappa keeps the native HTML model.
+          </p>
+          <ul>
+            <li>Use a real <code>caption</code>, <code>scope</code>, and header structure for data tables.</li>
+            <li>Wrap wide tables in an overflow container. Use <code>sticky</code> only inside a constrained scrolling parent.</li>
+            <li>Use <code>layout="fixed"</code> with <code>colgroup</code> when column widths are part of the contract.</li>
+            <li>Keep sorting, filtering, pagination, and data fetching in the application or a headless table adapter.</li>
+          </ul>
+        </section>
+
+        <section id="examples" class="docs-section docs-section--component-examples">
+          <h2><a class="docs-section-anchor" href="#examples">Examples</a></h2>
+          {
+            examples.map((example) => (
+              <>
+                <h3 id={example.id}>
+                  <a class="docs-section-anchor" href={`#${example.id}`}>{example.title}</a>
+                </h3>
+                <p>{example.description}</p>
+                <div class="docs-component-example">
+                  <div class="docs-component-preview docs-component-preview--table">
+                    <TableDocsDemo client:load variant={example.variant} />
+                  </div>
+                  <CodeBlock
+                    code={example.code}
+                    lang="vue"
+                    collapsible
+                    revealId={`table-${example.id}-code`}
+                  />
+                </div>
+              </>
+            ))
+          }
+        </section>
+
+        <section id="accessibility" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#accessibility">Accessibility</a></h2>
+          <ul>
+            <li>Use <code>scope="col"</code> or <code>scope="row"</code> when header relationships are not obvious.</li>
+            <li>Give each table an accessible name with a caption, <code>aria-label</code>, or <code>aria-labelledby</code>.</li>
+            <li>Checkbox parts provide a default label, but use <code>label</code> or <code>aria-label</code> for row-specific names.</li>
+            <li>Keep keyboard focus visible on nested controls. ResizeHandle is a button and does not implement a resize algorithm.</li>
+            <li>Use <code>aria-selected</code>, <code>aria-busy</code>, and <code>aria-invalid</code> when those states have semantic meaning.</li>
+          </ul>
+        </section>
+
+        <section id="api-reference" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#api-reference">API Reference</a></h2>
+          <div class="docs-api-group">
+            <h3 id="table-api"><a class="docs-section-anchor" href="#table-api">Table</a></h3>
+            <p>Native table root. Attributes and events pass to the <code>table</code> element.</p>
+            <div class="docs-api-table"><table><thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>{tableProps.map((prop) => <tr><td><code>{prop.name}</code></td><td><code>{prop.type}</code></td><td><code>{prop.defaultValue}</code></td><td>{prop.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="header-api"><a class="docs-section-anchor" href="#header-api">Table.Header</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>{headerProps.map((prop) => <tr><td><code>{prop.name}</code></td><td><code>{prop.type}</code></td><td><code>{prop.defaultValue}</code></td><td>{prop.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="row-api"><a class="docs-section-anchor" href="#row-api">Table.Row</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>{rowProps.map((prop) => <tr><td><code>{prop.name}</code></td><td><code>{prop.type}</code></td><td><code>{prop.defaultValue}</code></td><td>{prop.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="cell-api"><a class="docs-section-anchor" href="#cell-api">Table.Head / Table.Cell</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>{cellProps.map((prop) => <tr><td><code>{prop.name}</code></td><td><code>{prop.type}</code></td><td><code>{prop.defaultValue}</code></td><td>{prop.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="selection-api"><a class="docs-section-anchor" href="#selection-api">Table.CheckHead / Table.CheckCell</a></h3>
+            <p>Checkbox selection parts. Both emit <code>checkedChange</code>, <code>update:checked</code>, and legacy <code>valueChange</code>.</p>
+            <div class="docs-api-table"><table><thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>{selectionProps.map((prop) => <tr><td><code>{prop.name}</code></td><td><code>{prop.type}</code></td><td><code>{prop.defaultValue}</code></td><td>{prop.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="data-slots"><a class="docs-section-anchor" href="#data-slots">Data Slots</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Slot</th><th>Element</th><th>Description</th></tr></thead><tbody>{dataSlots.map(([name, element, slotDescription]) => <tr><td><code>{name}</code></td><td><code>{element}</code></td><td>{slotDescription}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="data-attributes"><a class="docs-section-anchor" href="#data-attributes">Data Attributes</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Attribute</th><th>Value</th><th>Description</th></tr></thead><tbody>{dataAttributes.map(([name, value, attributeDescription]) => <tr><td><code>{name}</code></td><td><code>{value}</code></td><td>{attributeDescription}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="exports"><a class="docs-section-anchor" href="#exports">Exports</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Export</th><th>Description</th></tr></thead><tbody>{exportsList.map((item) => <tr><td><code>{item.name}</code></td><td>{item.description}</td></tr>)}</tbody></table></div>
+          </div>
+        </section>
+
+        <DocsPageNavigation currentPath={currentPath} />
+      </article>
+
+      <aside class="docs-page-toc" aria-label="On this page">
+        <div class="docs-page-toc__inner">
+          <span class="docs-page-toc__title">On this page</span>
+          <ul>
+            <li><a href="#installation" data-toc-link="installation">Installation</a><ul><li><a href="#barrel" data-toc-link="barrel">Barrel</a></li><li><a href="#granular" data-toc-link="granular">Granular</a></li></ul></li>
+            <li><a href="#usage" data-toc-link="usage">Usage</a></li>
+            <li><a href="#composition" data-toc-link="composition">Composition</a></li>
+            <li><a href="#examples" data-toc-link="examples">Examples</a><ul>{examples.map((example) => <li><a href={`#${example.id}`} data-toc-link={example.id}>{example.title}</a></li>)}</ul></li>
+            <li><a href="#accessibility" data-toc-link="accessibility">Accessibility</a></li>
+            <li><a href="#api-reference" data-toc-link="api-reference">API Reference</a><ul><li><a href="#table-api" data-toc-link="table-api">Table</a></li><li><a href="#header-api" data-toc-link="header-api">Table.Header</a></li><li><a href="#row-api" data-toc-link="row-api">Table.Row</a></li><li><a href="#cell-api" data-toc-link="cell-api">Table.Head / Table.Cell</a></li><li><a href="#selection-api" data-toc-link="selection-api">Selection</a></li><li><a href="#data-slots" data-toc-link="data-slots">Data Slots</a></li><li><a href="#data-attributes" data-toc-link="data-attributes">Data Attributes</a></li><li><a href="#exports" data-toc-link="exports">Exports</a></li></ul></li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+  </div>
+</DocsLayout>

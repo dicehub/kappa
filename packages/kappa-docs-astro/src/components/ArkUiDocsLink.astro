@@ -1,0 +1,92 @@
+---
+const ARK_UI_COMPONENTS_BY_PATH: Record<string, string> = {
+  "/docs/components/accordion": "accordion",
+  "/docs/components/autocomplete": "combobox",
+  "/docs/components/avatar": "avatar",
+  "/docs/components/checkbox": "checkbox",
+  "/docs/components/clipboard-text": "clipboard",
+  "/docs/components/code-highlighted": "clipboard",
+  "/docs/components/collapsible": "collapsible",
+  "/docs/components/combobox": "combobox",
+  "/docs/components/context-menu": "menu",
+  "/docs/components/date-picker": "date-picker",
+  "/docs/components/dialog": "dialog",
+  "/docs/components/drawer": "drawer",
+  "/docs/components/dropdown": "menu",
+  "/docs/components/editable": "editable",
+  "/docs/components/expandable-text": "collapsible",
+  "/docs/components/field": "field",
+  "/docs/components/fieldset": "fieldset",
+  "/docs/components/file-upload": "file-upload",
+  "/docs/components/floating-panel": "floating-panel",
+  "/docs/components/highlight": "highlight",
+  "/docs/components/hover-card": "hover-card",
+  "/docs/components/input": "field",
+  "/docs/components/input-area": "field",
+  "/docs/components/input-otp": "pin-input",
+  "/docs/components/menu-bar": "menu",
+  "/docs/components/native-select": "field",
+  "/docs/components/number-input": "number-input",
+  "/docs/components/progress": "progress-linear",
+  "/docs/components/progress-circle": "progress-circular",
+  "/docs/components/popover": "popover",
+  "/docs/components/radio": "radio-group",
+  "/docs/components/rating": "rating-group",
+  "/docs/components/resizable": "splitter",
+  "/docs/components/scroll-area": "scroll-area",
+  "/docs/components/select": "select",
+  "/docs/components/selection-list": "listbox",
+  "/docs/components/slider": "slider",
+  "/docs/components/steps": "steps",
+  "/docs/components/tabs": "tabs",
+  "/docs/components/table-of-contents": "toc",
+  "/docs/components/tag-input": "tags-input",
+  "/docs/components/timer": "timer",
+  "/docs/components/toggle-group": "toggle-group",
+  "/docs/components/tooltip": "tooltip",
+  "/docs/components/toast": "toast",
+  "/docs/components/tree-view": "tree-view",
+};
+
+const currentPath = Astro.url.pathname.replace(/\/+$/, "");
+const arkUiComponent = ARK_UI_COMPONENTS_BY_PATH[currentPath];
+const hasLabel = Astro.slots.has("default");
+const arkUiUrl =
+  Astro.props.href ??
+  (arkUiComponent ? `https://ark-ui.com/docs/components/${arkUiComponent}` : null);
+const className =
+  Astro.props.className ??
+  (hasLabel ? "docs-page-header__reference-link" : "docs-page-header__primitive-link");
+const label = Astro.props.label ?? "View Ark UI documentation";
+const size = Astro.props.size ?? (hasLabel ? 16 : 28);
+---
+
+{
+  arkUiUrl && (
+    <a
+      href={arkUiUrl}
+      target="_blank"
+      rel="noopener noreferrer"
+      class={className}
+      title={label}
+      aria-label={label}
+    >
+      <svg
+        width={size}
+        height={size}
+        viewBox="0 0 28 28"
+        fill="none"
+        aria-hidden="true"
+        focusable="false"
+      >
+        <path
+          fill="currentColor"
+          fill-rule="evenodd"
+          clip-rule="evenodd"
+          d="M14 2.25 25 8.42v12.16L14 26.75 3 20.58V8.42l11-6.17Zm0 3.12L5.75 10v9l8.25 4.63L22.25 19v-9L14 5.37Zm-2.1 11.55h4.2l.78 2.23h2.42L15.18 7.9h-2.36L8.7 19.15h2.42l.78-2.23Zm.68-1.98L14 10.68l1.42 4.26h-2.84Z"
+        />
+      </svg>
+      {hasLabel && <span><slot /></span>}
+    </a>
+  )
+}

@@ -1,0 +1,154 @@
+---
+import ArkUiDocsLink from "../../../components/ArkUiDocsLink.astro";
+import CodeBlock from "../../../components/CodeBlock.astro";
+import CompositionTree from "../../../components/CompositionTree.astro";
+import CopyPageControls from "../../../components/CopyPageControls.vue";
+import DocsPageNavigation from "../../../components/DocsPageNavigation.astro";
+import FieldsetDocsDemo from "../../../components/FieldsetDocsDemo.vue";
+import {
+  barrelCode,
+  compositionCode,
+  exportsList,
+  granularCode,
+  orientationCode,
+  partProps,
+  parts,
+  previewCode,
+  rootProps,
+  statesCode,
+  usageCode,
+} from "../../../data/fieldset-docs";
+import DocsLayout from "../../../layouts/DocsLayout.astro";
+import "../../../styles/docs-components.css";
+
+const currentPath = "/docs/components/fieldset";
+const description =
+  "Groups related controls with native fieldset semantics, shared state, and precise vertical or horizontal layouts.";
+---
+
+<DocsLayout title="Fieldset" description={description}>
+  <div class="docs-page docs-page--component">
+    <header class="docs-page-header">
+      <div class="docs-page-header__inner">
+        <div class="docs-page-header__content">
+          <div class="docs-page-header__mobile-actions"><CopyPageControls client:only="vue" align="center" /></div>
+          <div class="docs-page-header__title-row">
+            <h1>Fieldset</h1>
+            <ArkUiDocsLink />
+            <div class="docs-page-header__navigation-actions">
+              <div class="docs-page-header__desktop-actions"><CopyPageControls client:only="vue" /></div>
+              <DocsPageNavigation currentPath={currentPath} variant="compact" />
+            </div>
+          </div>
+          <p class="docs-page-header__lede">{description}</p>
+        </div>
+      </div>
+    </header>
+
+    <div class="docs-page-body">
+      <article class="docs-article docs-article--component">
+        <section id="preview" class="docs-section">
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><FieldsetDocsDemo client:load variant="preview" /></div>
+            <CodeBlock code={previewCode} lang="vue" collapsible revealId="fieldset-preview-code" />
+          </div>
+        </section>
+
+        <section id="installation" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#installation">Installation</a></h2>
+          <p>Fieldset is part of the main Kappa package and uses the installed Ark UI Fieldset primitive.</p>
+          <h3 id="barrel"><a class="docs-section-anchor" href="#barrel">Barrel</a></h3>
+          <CodeBlock code={barrelCode} lang="javascript" />
+          <h3 id="granular"><a class="docs-section-anchor" href="#granular">Granular</a></h3>
+          <CodeBlock code={granularCode} lang="javascript" />
+        </section>
+
+        <section id="usage" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#usage">Usage</a></h2>
+          <p>Place one Legend first, then the related controls. Helper and error text describe the complete group.</p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><FieldsetDocsDemo client:load variant="basic" /></div>
+            <CodeBlock code={usageCode} lang="vue" collapsible revealId="fieldset-usage-code" />
+          </div>
+        </section>
+
+        <section id="composition" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#composition">Composition</a></h2>
+          <CompositionTree component="fieldset" />
+          <p>
+            Ark UI owns native fieldset and legend semantics, generated IDs, disabled propagation, and polite error messaging.
+            Kappa adds the compound exports, shared styling, and the orientation layout layer.
+          </p>
+          <CodeBlock code={compositionCode} lang="vue" />
+          <p>
+            Kappa keeps Fieldset standalone so Checkbox and Radio can compose it without owning the group state.
+          </p>
+        </section>
+
+        <section id="examples" class="docs-section docs-section--component-examples">
+          <h2><a class="docs-section-anchor" href="#examples">Examples</a></h2>
+          <h3 id="orientation"><a class="docs-section-anchor" href="#orientation">Orientation</a></h3>
+          <p>Vertical stacks direct children. Horizontal uses responsive columns and keeps the legend and messages full width.</p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><FieldsetDocsDemo client:load variant="orientation" /></div>
+            <CodeBlock code={orientationCode} lang="vue" collapsible revealId="fieldset-orientation-code" />
+          </div>
+
+          <h3 id="states"><a class="docs-section-anchor" href="#states">Validation and Disabled</a></h3>
+          <p>Invalid renders ErrorText and references it from the group. Native disabled fieldsets disable their descendant controls.</p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><FieldsetDocsDemo client:load variant="states" /></div>
+            <CodeBlock code={statesCode} lang="vue" collapsible revealId="fieldset-states-code" />
+          </div>
+        </section>
+
+        <section id="accessibility" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#accessibility">Accessibility</a></h2>
+          <ul>
+            <li>Use one visible <code>Legend</code> to name each group. Do not use a fieldset as a generic layout wrapper.</li>
+            <li>Keep related controls inside the native fieldset so disabled propagation and group announcement work.</li>
+            <li>HelperText and ErrorText receive generated IDs and are connected to the fieldset by <code>aria-describedby</code>.</li>
+            <li>Use <code>invalid</code> with a corrective ErrorText message. ErrorText is a polite live region.</li>
+            <li>Use <code>disabled</code> when every descendant control is unavailable; native browser behavior remains authoritative.</li>
+          </ul>
+        </section>
+
+        <section id="api-reference" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#api-reference">API Reference</a></h2>
+          <div class="docs-api-group">
+            <h3 id="root-api"><a class="docs-section-anchor" href="#root-api">Fieldset.Root</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>{rootProps.map((prop) => <tr><td><code>{prop.name}</code></td><td><code>{prop.type}</code></td><td><code>{prop.defaultValue}</code></td><td>{prop.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="part-api"><a class="docs-section-anchor" href="#part-api">Parts</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Part</th><th>Prop</th><th>Type</th><th>Description</th></tr></thead><tbody>{partProps.map((prop) => <tr><td><code>{prop.part}</code></td><td><code>{prop.prop}</code></td><td><code>{prop.type}</code></td><td>{prop.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="parts"><a class="docs-section-anchor" href="#parts">Composition Parts</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Part</th><th>Description</th></tr></thead><tbody>{parts.map((part) => <tr><td><code>Fieldset.{part.name}</code></td><td>{part.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="exports"><a class="docs-section-anchor" href="#exports">Exports</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Export</th><th>Description</th></tr></thead><tbody>{exportsList.map((item) => <tr><td><code>{item.name}</code></td><td>{item.description}</td></tr>)}</tbody></table></div>
+          </div>
+        </section>
+
+        <DocsPageNavigation currentPath={currentPath} />
+      </article>
+
+      <aside class="docs-page-toc" aria-label="On this page">
+        <div class="docs-page-toc__inner">
+          <span class="docs-page-toc__title">On this page</span>
+          <ul>
+            <li><a href="#installation" data-toc-link="installation">Installation</a><ul><li><a href="#barrel" data-toc-link="barrel">Barrel</a></li><li><a href="#granular" data-toc-link="granular">Granular</a></li></ul></li>
+            <li><a href="#usage" data-toc-link="usage">Usage</a></li>
+            <li><a href="#composition" data-toc-link="composition">Composition</a></li>
+            <li><a href="#examples" data-toc-link="examples">Examples</a><ul><li><a href="#orientation" data-toc-link="orientation">Orientation</a></li><li><a href="#states" data-toc-link="states">Validation and Disabled</a></li></ul></li>
+            <li><a href="#accessibility" data-toc-link="accessibility">Accessibility</a></li>
+            <li><a href="#api-reference" data-toc-link="api-reference">API Reference</a><ul><li><a href="#root-api" data-toc-link="root-api">Fieldset.Root</a></li><li><a href="#part-api" data-toc-link="part-api">Parts</a></li><li><a href="#parts" data-toc-link="parts">Composition Parts</a></li><li><a href="#exports" data-toc-link="exports">Exports</a></li></ul></li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+  </div>
+</DocsLayout>

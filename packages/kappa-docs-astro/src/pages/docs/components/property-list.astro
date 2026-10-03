@@ -1,0 +1,70 @@
+---
+import CodeBlock from "../../../components/CodeBlock.astro";
+import CopyPageControls from "../../../components/CopyPageControls.vue";
+import DocsPageNavigation from "../../../components/DocsPageNavigation.astro";
+import PropertyListDocsDemo from "../../../components/PropertyListDocsDemo.vue";
+import { previewCode, examples } from "../../../data/property-list-docs";
+import DocsLayout from "../../../layouts/DocsLayout.astro";
+import "../../../styles/docs-components.css";
+const currentPath = "/docs/components/property-list";
+const description = "Compact label-and-value rows for run details, resource metadata, and technical summaries.";
+---
+
+<DocsLayout title="Property List" description={description}>
+  <div class="docs-page docs-page--component">
+    <header class="docs-page-header"><div class="docs-page-header__inner"><div class="docs-page-header__content">
+      <div class="docs-page-header__title-row"><h1>Property List</h1><div class="docs-page-header__navigation-actions"><CopyPageControls client:only="vue" /><DocsPageNavigation currentPath={currentPath} variant="compact" /></div></div>
+      <p class="docs-page-header__lede">{description}</p>
+    </div></div></header>
+    <div class="docs-page-body">
+      <article class="docs-article docs-article--component">
+        <section id="preview" class="docs-section">
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><PropertyListDocsDemo client:load /></div>
+            <CodeBlock code={previewCode} lang="vue" />
+          </div>
+        </section>
+        <section id="installation" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#installation">Installation</a></h2>
+          <CodeBlock code={'import { PropertyList } from "@dicehub/kappa";\n// Or: "@dicehub/kappa/components/property-list"'} lang="typescript" />
+        </section>
+        <section id="composition" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#composition">Composition</a></h2>
+          <p>The root renders a native <code>dl</code>. Each Item groups a term and value with a <code>div</code>. Set <code>label</code> for the short form, or use Term and Value for custom content. No interactive primitive is required.</p>
+          <p>Use this for properties of one resource. Use Table to compare several resources.</p>
+        </section>
+        <section id="examples" class="docs-section docs-section--component-examples">
+          <h2><a class="docs-section-anchor" href="#examples">Examples</a></h2>
+          {examples.map(example => <Fragment>
+            <h3 id={example.id}><a class="docs-section-anchor" href={`#${example.id}`}>{example.title}</a></h3>
+            <p>{example.description}</p>
+            <div class="docs-component-example">
+              <div class="docs-component-preview"><PropertyListDocsDemo client:load variant={example.id} /></div>
+              <CodeBlock code={example.code} lang="vue" />
+            </div>
+          </Fragment>)}
+        </section>
+        <section id="accessibility" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#accessibility">Accessibility</a></h2>
+          <p>Native definition-list markup preserves each label and value relationship. Add <code>aria-label</code> or <code>aria-labelledby</code> to name the list. Custom controls keep their own keyboard and focus behavior. Text follows the document direction and wraps without truncation.</p>
+        </section>
+        <section id="api-reference" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#api-reference">API Reference</a></h2>
+          <p><code>PropertyList</code> and <code>PropertyList.Root</code> accept <code>size="sm | base"</code> (base), <code>layout="horizontal | stacked"</code> (horizontal), and <code>divided</code> (false). Native attributes and listeners reach the definition list.</p>
+          <p><code>PropertyList.Item</code> accepts <code>label?: string</code> and a <code>label</code> slot. With either, its default slot is the value. Without them, provide Term and Value explicitly. All parts forward native attributes.</p>
+          <p>Set <code>--kappa-property-list-label-width</code> on the root to change the label column (default 10rem). Horizontal rows stack inside containers narrower than 24rem.</p>
+          <p>Named exports: <code>PropertyListRoot</code>, <code>PropertyListItem</code>, <code>PropertyListTerm</code>, <code>PropertyListValue</code>. Public types: <code>PropertyListProps</code>, <code>PropertyListItemProps</code>, <code>PropertyListSize</code>, and <code>PropertyListLayout</code>.</p>
+        </section>
+        <DocsPageNavigation currentPath={currentPath} />
+      </article>
+      <aside class="docs-page-toc" aria-label="On this page"><div class="docs-page-toc__inner"><span class="docs-page-toc__title">On this page</span><ul>
+        <li><a href="#installation" data-toc-link="installation">Installation</a></li>
+        <li><a href="#composition" data-toc-link="composition">Composition</a></li>
+        <li><a href="#examples" data-toc-link="examples">Examples</a></li>
+        {examples.map(example => <li><a href={`#${example.id}`} data-toc-link={example.id}>{example.title}</a></li>)}
+        <li><a href="#accessibility" data-toc-link="accessibility">Accessibility</a></li>
+        <li><a href="#api-reference" data-toc-link="api-reference">API Reference</a></li>
+      </ul></div></aside>
+    </div>
+  </div>
+</DocsLayout>

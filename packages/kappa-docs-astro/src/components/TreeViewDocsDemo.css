@@ -1,0 +1,109 @@
+.tree-view-demo {
+  inline-size: min(100%, 34rem);
+  color: var(--kappa-default);
+  font-family: var(--kappa-font-sans);
+}
+
+.tree-view-demo__header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.tree-view-demo__header output {
+  color: var(--kappa-subtle);
+  font-size: 0.75rem;
+}
+
+.tree-view-demo :is(.kappa-tree-view__branch-content, .kappa-tree-view__branch) {
+  position: relative;
+}
+
+.tree-view-demo__node-icon {
+  display: inline-flex;
+  inline-size: 1rem;
+  block-size: 1rem;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  color: var(--kappa-subtle);
+}
+
+.tree-view-demo__node-icon[data-kind="case"] {
+  color: var(--kappa-accent);
+}
+
+.tree-view-demo__node-icon[data-kind="result"] {
+  color: var(--kappa-success, #16815f);
+}
+
+.tree-view-demo__node-icon svg {
+  inline-size: 0.875rem;
+  block-size: 0.875rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.35;
+}
+
+.tree-view-demo__leaf-space {
+  inline-size: 1rem;
+  flex: none;
+}
+
+.tree-view-demo__meta {
+  flex: none;
+  margin-inline-start: auto;
+  color: var(--kappa-muted);
+  font-size: 0.6875rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.tree-view-demo__virtual-label {
+  min-inline-size: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.tree-view-demo__status {
+  inline-size: 0.4375rem;
+  block-size: 0.4375rem;
+  flex: none;
+  border-radius: 999px;
+  background: var(--kappa-accent-solid);
+}
+
+.tree-view-demo__status[data-type="boundary"] {
+  background: var(--kappa-success, #16815f);
+}
+
+.tree-view-demo__action {
+  min-block-size: 1.375rem;
+  margin-inline-start: auto;
+  padding-inline: 0.4375rem;
+  border: 1px solid var(--kappa-line);
+  border-radius: var(--kappa-radius-sm);
+  background: transparent;
+  color: var(--kappa-subtle);
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.6875rem;
+}
+
+.tree-view-demo__action:hover {
+  border-color: var(--kappa-line-strong);
+  color: var(--kappa-default);
+}
+
+.tree-view-demo__action:focus-visible {
+  outline: 2px solid var(--kappa-focus);
+  outline-offset: 1px;
+}
+
+@media (forced-colors: active) {
+  .tree-view-demo__status {
+    background: Highlight;
+  }
+}

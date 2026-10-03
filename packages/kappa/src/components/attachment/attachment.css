@@ -1,0 +1,422 @@
+.kappa-attachment {
+  --kappa-attachment-accent: var(
+    --kappa-info-text,
+    var(--kappa-info-solid, var(--kappa-info, #175cd3))
+  );
+  --kappa-attachment-background: var(--kappa-control, #ffffff);
+  --kappa-attachment-border: var(--kappa-line, #e3e6eb);
+  --kappa-attachment-foreground: var(--kappa-default, #17191f);
+  --kappa-attachment-muted: var(--kappa-subtle, #6c7480);
+  --kappa-attachment-media-background: var(--kappa-tint, #f4f6f9);
+  --kappa-attachment-media-border: var(--kappa-line, #e3e6eb);
+  --kappa-attachment-focus: var(--kappa-focus, #4c63ff);
+  --kappa-attachment-gap: 0.5rem;
+  --kappa-attachment-padding-block: 0.5rem;
+  --kappa-attachment-padding-inline: 0.5rem;
+  --kappa-attachment-radius: 0.875rem;
+  --kappa-attachment-media-size: 2.5rem;
+  --kappa-attachment-title-size: 0.875rem;
+  --kappa-attachment-description-size: 0.75rem;
+  --kappa-attachment-action-size: 1.5rem;
+  --kappa-attachment-icon-size: 1rem;
+
+  box-sizing: border-box;
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  inline-size: fit-content;
+  max-inline-size: 100%;
+  min-inline-size: 10rem;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--kappa-attachment-gap);
+  overflow: visible;
+  padding-block: var(--kappa-attachment-padding-block);
+  padding-inline: var(--kappa-attachment-padding-inline);
+  border: 1px solid var(--kappa-attachment-border);
+  border-radius: var(--kappa-attachment-radius);
+  background: var(--kappa-attachment-background);
+  color: var(--kappa-attachment-foreground);
+  font-family: var(--kappa-font-sans, inherit);
+  line-height: 1.35;
+  text-align: start;
+  transition:
+    background-color 120ms ease,
+    border-color 120ms ease,
+    box-shadow 120ms ease;
+}
+
+.kappa-attachment--sm {
+  --kappa-attachment-gap: 0.625rem;
+  --kappa-attachment-padding-block: 0.375rem;
+  --kappa-attachment-padding-inline: 0.375rem;
+  --kappa-attachment-radius: 0.75rem;
+  --kappa-attachment-media-size: 2rem;
+  --kappa-attachment-title-size: 0.8125rem;
+  --kappa-attachment-description-size: 0.75rem;
+  --kappa-attachment-action-size: 1.5rem;
+  --kappa-attachment-icon-size: 0.875rem;
+}
+
+.kappa-attachment--xs {
+  --kappa-attachment-gap: 0.375rem;
+  --kappa-attachment-padding-block: 0.25rem;
+  --kappa-attachment-padding-inline: 0.25rem;
+  --kappa-attachment-radius: 0.5rem;
+  --kappa-attachment-media-size: 1.75rem;
+  --kappa-attachment-title-size: 0.75rem;
+  --kappa-attachment-description-size: 0.6875rem;
+  --kappa-attachment-action-size: 1.5rem;
+  --kappa-attachment-icon-size: 0.875rem;
+}
+
+.kappa-attachment[data-orientation="vertical"] {
+  inline-size: 7.5rem;
+  min-inline-size: 0;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.kappa-attachment[data-state="idle"] {
+  border-style: dashed;
+}
+
+.kappa-attachment[data-state="error"] {
+  --kappa-attachment-accent: var(--kappa-danger-text, #b42318);
+  --kappa-attachment-border: color-mix(
+    in srgb,
+    var(--kappa-danger-text, #b42318) 30%,
+    var(--kappa-line, #e3e6eb)
+  );
+  --kappa-attachment-media-background: color-mix(
+    in srgb,
+    var(--kappa-danger-text, #b42318) 8%,
+    transparent
+  );
+  --kappa-attachment-media-border: color-mix(
+    in srgb,
+    var(--kappa-danger-text, #b42318) 24%,
+    transparent
+  );
+}
+
+.kappa-attachment[data-state="error"] .kappa-attachment__media {
+  color: var(--kappa-danger-text, #b42318);
+}
+
+.kappa-attachment:has(> .kappa-attachment__trigger:hover) {
+  --kappa-attachment-border: color-mix(
+    in srgb,
+    var(--kappa-attachment-accent) 45%,
+    var(--kappa-line, #e3e6eb)
+  );
+
+  background: color-mix(
+    in srgb,
+    var(--kappa-attachment-background) 96%,
+    var(--kappa-attachment-accent)
+  );
+}
+
+.kappa-attachment:has(> .kappa-attachment__trigger:active) {
+  background: color-mix(
+    in srgb,
+    var(--kappa-attachment-background) 91%,
+    var(--kappa-attachment-accent)
+  );
+}
+
+.kappa-attachment:has(> .kappa-attachment__trigger:focus-visible) {
+  box-shadow: inset 0 0 0 2px var(--kappa-attachment-focus);
+}
+
+.kappa-attachment__media {
+  box-sizing: border-box;
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  color: var(--kappa-attachment-muted);
+}
+
+.kappa-attachment__media--icon {
+  inline-size: var(--kappa-attachment-media-size);
+  block-size: var(--kappa-attachment-media-size);
+  border-radius: calc(var(--kappa-attachment-radius) - 0.125rem);
+  background: var(--kappa-attachment-media-background);
+}
+
+.kappa-attachment__media--image {
+  inline-size: var(--kappa-attachment-media-size);
+  block-size: var(--kappa-attachment-media-size);
+  border-radius: calc(var(--kappa-attachment-radius) - 0.125rem);
+  background: var(--kappa-attachment-media-background);
+}
+
+.kappa-attachment[data-orientation="vertical"] > .kappa-attachment__media {
+  inline-size: 100%;
+  block-size: auto;
+  aspect-ratio: 1;
+}
+
+.kappa-attachment[data-orientation="vertical"] > .kappa-attachment__media svg,
+.kappa-attachment[data-orientation="vertical"] > .kappa-attachment__media > [data-icon] {
+  inline-size: 1.5rem;
+  block-size: 1.5rem;
+}
+
+.kappa-attachment__media > img,
+.kappa-attachment__media > picture,
+.kappa-attachment__media > video {
+  display: block;
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+}
+
+.kappa-attachment__media > picture > img {
+  display: block;
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+}
+
+.kappa-attachment__media svg,
+.kappa-attachment__media > [data-icon] {
+  inline-size: var(--kappa-attachment-icon-size);
+  block-size: var(--kappa-attachment-icon-size);
+  flex: none;
+}
+
+.kappa-attachment__content {
+  display: grid;
+  min-inline-size: 0;
+  flex: 1 1 auto;
+  align-content: center;
+  gap: 0.125rem;
+}
+
+.kappa-attachment__title,
+.kappa-attachment__description {
+  min-inline-size: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.kappa-attachment__title {
+  color: var(--kappa-attachment-foreground);
+  font-size: var(--kappa-attachment-title-size);
+  font-weight: 500;
+  line-height: 1.25;
+  letter-spacing: -0.006em;
+}
+
+.kappa-attachment__description {
+  margin-block-start: 0.125rem;
+  color: var(--kappa-attachment-muted);
+  font-size: var(--kappa-attachment-description-size);
+  font-weight: 400;
+  line-height: 1rem;
+}
+
+.kappa-attachment[data-state="error"] .kappa-attachment__description {
+  color: var(--kappa-danger-text, #b42318);
+}
+
+.kappa-attachment[data-state="uploading"] .kappa-attachment__title,
+.kappa-attachment[data-state="processing"] .kappa-attachment__title {
+  background-image: linear-gradient(
+    100deg,
+    var(--kappa-attachment-foreground) 20%,
+    var(--kappa-attachment-foreground) 38%,
+    var(--kappa-attachment-accent) 50%,
+    var(--kappa-attachment-foreground) 62%,
+    var(--kappa-attachment-foreground) 80%
+  );
+  background-position: 100% 0;
+  background-size: 250% 100%;
+  color: transparent;
+  -webkit-background-clip: text;
+  background-clip: text;
+  animation: kappa-attachment-title-shimmer 1.8s linear infinite;
+}
+
+.kappa-attachment__actions {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  min-inline-size: 0;
+  flex: none;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.25rem;
+  pointer-events: none;
+}
+
+.kappa-attachment__actions > * {
+  pointer-events: auto;
+}
+
+.kappa-attachment[data-orientation="vertical"] > .kappa-attachment__actions {
+  position: absolute;
+  inset-block-start: 0.75rem;
+  inset-inline-end: 0.75rem;
+}
+
+.kappa-attachment__action {
+  box-sizing: border-box;
+  display: inline-flex;
+  inline-size: var(--kappa-attachment-action-size);
+  block-size: var(--kappa-attachment-action-size);
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: calc(var(--kappa-attachment-radius) - 0.1875rem);
+  appearance: none;
+  background: transparent;
+  color: var(--kappa-attachment-muted);
+  font: inherit;
+  cursor: pointer;
+  transition:
+    background-color 120ms ease,
+    border-color 120ms ease,
+    color 120ms ease;
+}
+
+.kappa-attachment__action > [data-icon],
+.kappa-attachment__action > svg {
+  inline-size: var(--kappa-attachment-icon-size);
+  block-size: var(--kappa-attachment-icon-size);
+  pointer-events: none;
+}
+
+.kappa-attachment__action:hover:not(:disabled) {
+  border-color: var(--kappa-attachment-border);
+  background: var(--kappa-overlay, #e9edf2);
+  color: var(--kappa-attachment-foreground);
+}
+
+.kappa-attachment__action:focus-visible {
+  outline: 2px solid var(--kappa-attachment-focus);
+  outline-offset: 1px;
+}
+
+.kappa-attachment__action:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+.kappa-attachment__trigger {
+  box-sizing: border-box;
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  display: block;
+  inline-size: 100%;
+  block-size: 100%;
+  padding: 0;
+  border: 0;
+  border-radius: inherit;
+  appearance: none;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: start;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.kappa-attachment__trigger:focus-visible {
+  outline: 2px solid transparent;
+  outline-offset: -2px;
+}
+
+.kappa-attachment__trigger-label {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.kappa-attachment-group {
+  box-sizing: border-box;
+  display: flex;
+  inline-size: 100%;
+  max-inline-size: 100%;
+  min-inline-size: 0;
+  gap: 0.75rem;
+  overflow-x: auto;
+  overscroll-behavior-inline: contain;
+  padding-block: 0.25rem;
+  scroll-padding-inline: 0.25rem;
+  scroll-snap-type: inline mandatory;
+  scrollbar-width: none;
+  touch-action: pan-x pan-y;
+  -webkit-overflow-scrolling: touch;
+}
+
+.kappa-attachment-group:focus-visible {
+  outline: 2px solid var(--kappa-focus, #4c63ff);
+  outline-offset: 2px;
+}
+
+.kappa-attachment-group > .kappa-attachment {
+  flex: none;
+  scroll-snap-align: start;
+}
+
+.kappa-attachment-group::-webkit-scrollbar {
+  display: none;
+}
+
+@keyframes kappa-attachment-title-shimmer {
+  to {
+    background-position: -150% 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kappa-attachment,
+  .kappa-attachment__action {
+    transition: none;
+  }
+
+  .kappa-attachment[data-state="uploading"] .kappa-attachment__title,
+  .kappa-attachment[data-state="processing"] .kappa-attachment__title {
+    background: none;
+    color: var(--kappa-attachment-foreground);
+    animation: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .kappa-attachment,
+  .kappa-attachment__action {
+    border-color: CanvasText;
+  }
+
+  .kappa-attachment__media--icon {
+    border: 1px solid CanvasText;
+  }
+
+  .kappa-attachment[data-state="uploading"] .kappa-attachment__title,
+  .kappa-attachment[data-state="processing"] .kappa-attachment__title {
+    background: none;
+    color: CanvasText;
+    animation: none;
+  }
+
+  .kappa-attachment:has(> .kappa-attachment__trigger:focus-visible),
+  .kappa-attachment__action:focus-visible,
+  .kappa-attachment-group:focus-visible {
+    outline: 2px solid Highlight;
+    outline-offset: 2px;
+  }
+}

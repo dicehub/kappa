@@ -1,0 +1,73 @@
+---
+import CopyPageControls from "../../components/CopyPageControls.vue";
+import DocsPageNavigation from "../../components/DocsPageNavigation.astro";
+import DocsLayout from "../../layouts/DocsLayout.astro";
+
+const currentPath = "/docs/accessibility";
+const description = "Use Kappa controls with clear names, keyboard access, and visible state.";
+const toc = [
+  { id: "behavior", label: "Behavior" },
+  { id: "forms", label: "Forms" },
+  { id: "layers", label: "Layers and Focus" },
+  { id: "visual-state", label: "Visual State" },
+  { id: "check", label: "Check Your Work" },
+];
+---
+
+<DocsLayout title="Accessibility" description={description}>
+  <div class="docs-page">
+    <header class="docs-page-header"><div class="docs-page-header__inner"><div class="docs-page-header__content">
+      <div class="docs-page-header__mobile-actions"><CopyPageControls client:only="vue" align="center" /></div>
+      <div class="docs-page-header__title-row">
+        <h1>Accessibility</h1>
+        <div class="docs-page-header__navigation-actions">
+          <div class="docs-page-header__desktop-actions"><CopyPageControls client:only="vue" /></div>
+          <DocsPageNavigation currentPath={currentPath} variant="compact" />
+        </div>
+      </div>
+      <p class="docs-page-header__lede">{description}</p>
+    </div></div></header>
+
+    <div class="docs-page-body">
+      <article class="docs-article">
+        <section id="behavior" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#behavior">Behavior</a></h2>
+          <p>Kappa uses Ark UI Vue primitives for supported interactions. They manage the base keyboard, focus, and ARIA behavior. Use the documented Kappa parts together, and pass labels and state to the correct part. An application still needs to test its completed flow.</p>
+          <p>For custom controls, keep the semantic element and forward ARIA attributes and event listeners. Do not remove the visible keyboard focus indicator.</p>
+        </section>
+
+        <section id="forms" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#forms">Forms</a></h2>
+          <p>Use <a href="/docs/components/field">Field</a> to connect a label, control, helper text, and error text. Its helper text is linked with <code>aria-describedby</code>. When a field is invalid, its control receives <code>aria-invalid</code> and <code>aria-errormessage</code>; error text uses a polite live region.</p>
+          <p>Keep a visible label when possible. Show a clear error message and do not add a second live region for the same error.</p>
+        </section>
+
+        <section id="layers" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#layers">Layers and Focus</a></h2>
+          <p><a href="/docs/components/dialog">Dialog</a> manages focus, Escape dismissal, and focus return through its Ark UI primitive. Give the dialog a clear title. Choose an initial focus target when the default first focusable element is not the safest action.</p>
+          <p>If a dialog contains a long scroll region, make that region keyboard-focusable when needed. Check nested popups in the actual application flow.</p>
+        </section>
+
+        <section id="visual-state" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#visual-state">Visual State</a></h2>
+          <p>Keep focus, selected, disabled, invalid, and loading states clear in light and dark modes. Use Kappa semantic tokens, not a separate palette in each component. The <a href="/docs/colors#contrast">Colors contrast reference</a> lists token pairs and measured contrast.</p>
+          <p>Respect <code>prefers-reduced-motion</code> when you add transitions. Do not use color alone to explain a state or an error.</p>
+        </section>
+
+        <section id="check" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#check">Check Your Work</a></h2>
+          <ul class="docs-section-list">
+            <li>Move through the full flow with only the keyboard. Check focus order, visible focus, Escape, and focus return.</li>
+            <li>Check control names, helper text, and errors with a screen reader.</li>
+            <li>Check light, dark, and reduced-motion settings at the sizes your application supports.</li>
+          </ul>
+        </section>
+        <DocsPageNavigation currentPath={currentPath} />
+      </article>
+      <aside class="docs-page-toc" aria-label="On this page"><div class="docs-page-toc__inner">
+        <span class="docs-page-toc__title">On this page</span>
+        <ul>{toc.map((item) => <li><a href={`#${item.id}`} data-toc-link={item.id}>{item.label}</a></li>)}</ul>
+      </div></aside>
+    </div>
+  </div>
+</DocsLayout>

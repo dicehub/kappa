@@ -1,0 +1,46 @@
+.kappa-presence {
+  --kappa-presence-duration: 160ms;
+  --kappa-presence-distance: 0.375rem;
+
+  transform-origin: center top;
+  will-change: opacity, transform;
+}
+
+.kappa-presence[data-state="open"] {
+  animation: kappa-presence-enter var(--kappa-presence-duration) cubic-bezier(0.16, 1, 0.3, 1)
+    both;
+}
+
+.kappa-presence[data-state="closed"] {
+  animation: kappa-presence-exit var(--kappa-presence-duration) cubic-bezier(0.7, 0, 0.84, 0) both;
+}
+
+@keyframes kappa-presence-enter {
+  from {
+    opacity: 0;
+    transform: translateY(calc(var(--kappa-presence-distance) * -1)) scale(0.985);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes kappa-presence-exit {
+  from {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+
+  to {
+    opacity: 0;
+    transform: translateY(calc(var(--kappa-presence-distance) * -1)) scale(0.985);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kappa-presence[data-state] {
+    animation-duration: 1ms;
+  }
+}

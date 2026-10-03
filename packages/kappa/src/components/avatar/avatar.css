@@ -1,0 +1,194 @@
+.kappa-avatar {
+  --kappa-avatar-size: 2rem;
+  --kappa-avatar-background: var(--kappa-tint, #f4f6f9);
+  --kappa-avatar-foreground: var(--kappa-default, #17191f);
+  --kappa-avatar-border: var(--kappa-line, #e3e6eb);
+  --kappa-avatar-separator: var(--kappa-base, var(--kappa-control, #ffffff));
+  --kappa-avatar-badge-background: var(--kappa-success-text, #027a48);
+  --kappa-avatar-badge-foreground: var(--kappa-accent-contrast, #ffffff);
+  position: relative;
+  display: inline-flex;
+  flex: none;
+  inline-size: var(--kappa-avatar-size);
+  block-size: var(--kappa-avatar-size);
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  vertical-align: middle;
+  isolation: isolate;
+  user-select: none;
+}
+
+.kappa-avatar::after {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  border: 1px solid var(--kappa-avatar-border);
+  border-radius: inherit;
+  pointer-events: none;
+  content: "";
+}
+
+.kappa-avatar[data-size="sm"] {
+  --kappa-avatar-size: 1.5rem;
+}
+
+.kappa-avatar[data-size="lg"] {
+  --kappa-avatar-size: 2.5rem;
+}
+
+.kappa-avatar__image,
+.kappa-avatar__fallback {
+  inline-size: 100%;
+  block-size: 100%;
+  border-radius: inherit;
+}
+
+.kappa-avatar__image {
+  display: block;
+  object-fit: cover;
+}
+
+.kappa-avatar__fallback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: var(--kappa-avatar-background);
+  color: var(--kappa-avatar-foreground);
+  font-family: var(--kappa-font-sans, inherit);
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.kappa-avatar[data-size="sm"] .kappa-avatar__fallback {
+  font-size: 0.625rem;
+}
+
+.kappa-avatar[data-size="lg"] .kappa-avatar__fallback {
+  font-size: 0.875rem;
+}
+
+.kappa-avatar__image[hidden],
+.kappa-avatar__fallback[hidden] {
+  display: none;
+}
+
+.kappa-avatar__badge {
+  position: absolute;
+  z-index: 2;
+  inset-block-end: 0;
+  inset-inline-end: 0;
+  display: inline-flex;
+  inline-size: 0.625rem;
+  block-size: 0.625rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--kappa-avatar-badge-background);
+  box-shadow: 0 0 0 2px var(--kappa-avatar-separator);
+  color: var(--kappa-avatar-badge-foreground);
+  font-size: 0;
+}
+
+.kappa-avatar[data-size="sm"] .kappa-avatar__badge {
+  inline-size: 0.5rem;
+  block-size: 0.5rem;
+}
+
+.kappa-avatar[data-size="lg"] .kappa-avatar__badge {
+  inline-size: 0.75rem;
+  block-size: 0.75rem;
+}
+
+.kappa-avatar__badge > svg {
+  inline-size: 0.5rem;
+  block-size: 0.5rem;
+  pointer-events: none;
+}
+
+.kappa-avatar[data-size="sm"] .kappa-avatar__badge > svg {
+  display: none;
+}
+
+.kappa-avatar:focus-visible {
+  outline: 2px solid var(--kappa-focus, #4c63ff);
+  outline-offset: 2px;
+}
+
+.kappa-avatar-group {
+  display: flex;
+  inline-size: max-content;
+  max-inline-size: 100%;
+  align-items: center;
+}
+
+.kappa-avatar-group > :is([data-slot="avatar"], [data-slot="avatar-group-count"]) {
+  flex: none;
+  box-shadow: 0 0 0 2px var(--kappa-base, var(--kappa-control, #ffffff));
+}
+
+.kappa-avatar-group > :is([data-slot="avatar"], [data-slot="avatar-group-count"]):not(:first-child) {
+  margin-inline-start: -0.5rem;
+}
+
+.kappa-avatar-group > :is([data-slot="avatar"], [data-slot="avatar-group-count"]):is(:focus-visible, :focus-within) {
+  z-index: 3;
+}
+
+.kappa-avatar-group__count {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  inline-size: 2rem;
+  block-size: 2rem;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--kappa-tint, #f4f6f9);
+  color: var(--kappa-default, #17191f);
+  font-family: var(--kappa-font-sans, inherit);
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.kappa-avatar-group:has(> [data-slot="avatar"][data-size="sm"]) .kappa-avatar-group__count {
+  inline-size: 1.5rem;
+  block-size: 1.5rem;
+  font-size: 0.625rem;
+}
+
+.kappa-avatar-group:has(> [data-slot="avatar"][data-size="lg"]) .kappa-avatar-group__count {
+  inline-size: 2.5rem;
+  block-size: 2.5rem;
+  font-size: 0.875rem;
+}
+
+@media (forced-colors: active) {
+  .kappa-avatar::after {
+    border-color: CanvasText;
+  }
+
+  .kappa-avatar-group > :is([data-slot="avatar"], [data-slot="avatar-group-count"]) {
+    box-shadow: none;
+  }
+
+  .kappa-avatar__badge {
+    border: 2px solid Canvas;
+    background: Highlight !important;
+    box-shadow: none;
+    color: HighlightText !important;
+    forced-color-adjust: none;
+  }
+
+  .kappa-avatar:focus-visible {
+    outline-color: Highlight;
+  }
+
+  .kappa-avatar-group__count {
+    outline: 1px solid CanvasText;
+  }
+}

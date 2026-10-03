@@ -1,0 +1,134 @@
+.kappa-scroll-area {
+  --kappa-scroll-area-size: 0.625rem;
+  --kappa-scroll-area-track: transparent;
+  --kappa-scroll-area-thumb: var(--kappa-line-strong, #c7cdd6);
+  --kappa-scroll-area-thumb-hover: var(--kappa-subtle, #6c7480);
+
+  position: relative;
+  box-sizing: border-box;
+  min-inline-size: 0;
+  min-block-size: 0;
+  overflow: hidden;
+  color: var(--kappa-default, #17191f);
+  font-family: var(--kappa-font-sans, inherit);
+}
+
+.kappa-scroll-area__viewport {
+  box-sizing: border-box;
+  inline-size: 100%;
+  block-size: 100%;
+  overscroll-behavior: contain;
+  scrollbar-width: none;
+}
+
+.kappa-scroll-area__viewport::-webkit-scrollbar {
+  display: none;
+}
+
+.kappa-scroll-area__viewport:focus-visible {
+  outline: 2px solid var(--kappa-focus, #4c63ff);
+  outline-offset: -2px;
+}
+
+.kappa-scroll-area__content {
+  min-inline-size: 100%;
+  min-block-size: 100%;
+}
+
+.kappa-scroll-area__scrollbar {
+  position: absolute;
+  z-index: 1;
+  box-sizing: border-box;
+  display: flex;
+  touch-action: none;
+  user-select: none;
+  background: var(--kappa-scroll-area-track);
+  opacity: 0.62;
+  transition:
+    background-color 120ms ease,
+    opacity 120ms ease;
+}
+
+.kappa-scroll-area__scrollbar[data-orientation="vertical"] {
+  inset-block: 0 var(--corner-height, 0);
+  inset-inline-end: 0;
+  inline-size: var(--kappa-scroll-area-size);
+  flex-direction: column;
+  padding-block: 0.125rem;
+  padding-inline: 0.1875rem;
+}
+
+.kappa-scroll-area__scrollbar[data-orientation="horizontal"] {
+  inset-block-end: 0;
+  inset-inline: 0 var(--corner-width, 0);
+  block-size: var(--kappa-scroll-area-size);
+  flex-direction: row;
+  padding-block: 0.1875rem;
+  padding-inline: 0.125rem;
+}
+
+.kappa-scroll-area__scrollbar:is([data-hover], [data-scrolling], [data-dragging]) {
+  background: color-mix(in srgb, var(--kappa-overlay, #e9edf2) 58%, transparent);
+  opacity: 1;
+}
+
+.kappa-scroll-area__scrollbar[data-orientation="vertical"]:not([data-overflow-y]),
+.kappa-scroll-area__scrollbar[data-orientation="horizontal"]:not([data-overflow-x]) {
+  pointer-events: none;
+  opacity: 0;
+}
+
+.kappa-scroll-area__thumb {
+  position: relative;
+  flex: none;
+  border-radius: 999px;
+  background: var(--kappa-scroll-area-thumb);
+  transition: background-color 120ms ease;
+}
+
+.kappa-scroll-area__thumb::before {
+  position: absolute;
+  inset: -0.25rem;
+  content: "";
+}
+
+.kappa-scroll-area__scrollbar:is([data-hover], [data-dragging]) .kappa-scroll-area__thumb {
+  background: var(--kappa-scroll-area-thumb-hover);
+}
+
+.kappa-scroll-area__corner {
+  position: absolute;
+  inset-block-end: 0;
+  inset-inline-end: 0;
+  inline-size: var(--corner-width, 0);
+  block-size: var(--corner-height, 0);
+  background: var(--kappa-control, #ffffff);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kappa-scroll-area__scrollbar,
+  .kappa-scroll-area__thumb {
+    transition: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .kappa-scroll-area__viewport:focus-visible {
+    outline-color: Highlight;
+  }
+
+  .kappa-scroll-area__scrollbar {
+    forced-color-adjust: none;
+    background: Canvas;
+    opacity: 1;
+  }
+
+  .kappa-scroll-area__thumb {
+    border: 1px solid Canvas;
+    background: ButtonText;
+  }
+
+  .kappa-scroll-area__corner {
+    background: Canvas;
+  }
+}

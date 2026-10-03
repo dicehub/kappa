@@ -1,0 +1,4 @@
+.docs-block-example__bar { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 0.5rem; padding: 0.625rem 0.875rem; border-block-end: 1px solid var(--docs-border); font-size: 0.75rem; }
+.docs-block-example__bar > span { color: var(--docs-subtle); }
+.docs-block-example__preview { padding: 0.5rem; }
+.docs-block-example__sr-only { position: absolute; inline-size: 1px; block-size: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }

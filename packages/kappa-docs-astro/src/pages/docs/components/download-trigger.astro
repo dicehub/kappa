@@ -1,0 +1,192 @@
+---
+import ArkUiDocsLink from "../../../components/ArkUiDocsLink.astro";
+import CodeBlock from "../../../components/CodeBlock.astro";
+import CompositionTree from "../../../components/CompositionTree.astro";
+import CopyPageControls from "../../../components/CopyPageControls.vue";
+import DocsPageNavigation from "../../../components/DocsPageNavigation.astro";
+import DownloadTriggerDocsDemo from "../../../components/DownloadTriggerDocsDemo.vue";
+import {
+  asChildCode,
+  asyncCode,
+  barrelCode,
+  dataAttributes,
+  exportsList,
+  generatedCode,
+  granularCode,
+  previewCode,
+  slots,
+  statesCode,
+  triggerProps,
+  usageCode,
+} from "../../../data/download-trigger-docs";
+import DocsLayout from "../../../layouts/DocsLayout.astro";
+import "../../../styles/docs-components.css";
+
+const currentPath = "/docs/components/download-trigger";
+const description = "Starts browser downloads from text, files, blobs, or asynchronous data.";
+---
+
+<DocsLayout title="Download Trigger" description={description}>
+  <div class="docs-page docs-page--component">
+    <header class="docs-page-header">
+      <div class="docs-page-header__inner">
+        <div class="docs-page-header__content">
+          <div class="docs-page-header__mobile-actions">
+            <CopyPageControls client:only="vue" align="center" />
+          </div>
+          <div class="docs-page-header__title-row">
+            <h1>Download Trigger</h1>
+            <ArkUiDocsLink href="https://ark-ui.com/docs/utilities/download-trigger" />
+            <div class="docs-page-header__navigation-actions">
+              <div class="docs-page-header__desktop-actions">
+                <CopyPageControls client:only="vue" />
+              </div>
+              <DocsPageNavigation currentPath={currentPath} variant="compact" />
+            </div>
+          </div>
+          <p class="docs-page-header__lede">{description}</p>
+        </div>
+      </div>
+    </header>
+
+    <div class="docs-page-body">
+      <article class="docs-article docs-article--component">
+        <section id="preview" class="docs-section">
+          <div class="docs-component-example">
+            <div class="docs-component-preview">
+              <DownloadTriggerDocsDemo client:load variant="preview" />
+            </div>
+            <CodeBlock code={previewCode} lang="vue" collapsible revealId="download-trigger-preview-code" />
+          </div>
+        </section>
+
+        <section id="installation" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#installation">Installation</a></h2>
+          <p>
+            Download Trigger is part of the main Kappa package. It uses Ark UI's download utility
+            and the shared Kappa Button visual contract.
+          </p>
+          <h3 id="barrel"><a class="docs-section-anchor" href="#barrel">Barrel</a></h3>
+          <CodeBlock code={barrelCode} lang="javascript" />
+          <h3 id="granular"><a class="docs-section-anchor" href="#granular">Granular</a></h3>
+          <CodeBlock code={granularCode} lang="javascript" />
+        </section>
+
+        <section id="usage" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#usage">Usage</a></h2>
+          <p>Provide the content, the file name, and the media type. Activation starts one native browser download.</p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview">
+              <DownloadTriggerDocsDemo client:load variant="usage" />
+            </div>
+            <CodeBlock code={usageCode} lang="vue" collapsible revealId="download-trigger-usage-code" />
+          </div>
+        </section>
+
+        <section id="composition" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#composition">Composition</a></h2>
+          <CompositionTree component="downloadTrigger" label="Download composition" />
+          <p>
+            The component renders one native button. Ark UI converts the supplied value into a
+            downloadable file only after user activation. Kappa supplies Button sizing, variants,
+            focus, disabled, and busy states.
+          </p>
+          <p>
+            Labels align by capital height and baseline where CSS text-box trimming is supported.
+            Other browsers keep the standard centered line box. Text is not clipped.
+          </p>
+          <h3 id="reference-behavior">
+            <a class="docs-section-anchor" href="#reference-behavior">Reference Behavior</a>
+          </h3>
+          <p>
+            Kappa follows Ark UI Download Trigger. A data function may return a value immediately
+            or return a promise. Use the controlled loading prop when external preparation must be visible.
+          </p>
+        </section>
+
+        <section id="examples" class="docs-section docs-section--component-examples">
+          <h2><a class="docs-section-anchor" href="#examples">Examples</a></h2>
+
+          <h3 id="generated-data"><a class="docs-section-anchor" href="#generated-data">Generated Data</a></h3>
+          <p>Serialize current application data before you pass it to the trigger.</p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><DownloadTriggerDocsDemo client:load variant="generated" /></div>
+            <CodeBlock code={generatedCode} lang="vue" collapsible revealId="download-trigger-generated-code" />
+          </div>
+
+          <h3 id="async-data"><a class="docs-section-anchor" href="#async-data">Async Data</a></h3>
+          <p>Pass a function when the file must be built at activation time.</p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><DownloadTriggerDocsDemo client:load variant="async" /></div>
+            <CodeBlock code={asyncCode} lang="vue" collapsible revealId="download-trigger-async-code" />
+          </div>
+
+          <h3 id="states"><a class="docs-section-anchor" href="#states">States</a></h3>
+          <p>Disabled and loading triggers cannot start a download.</p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><DownloadTriggerDocsDemo client:load variant="states" /></div>
+            <CodeBlock code={statesCode} lang="vue" collapsible revealId="download-trigger-states-code" />
+          </div>
+
+          <h3 id="custom-child"><a class="docs-section-anchor" href="#custom-child">Custom Child</a></h3>
+          <p>Use asChild to merge the download behavior onto one custom button.</p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><DownloadTriggerDocsDemo client:load variant="as-child" /></div>
+            <CodeBlock code={asChildCode} lang="vue" collapsible revealId="download-trigger-child-code" />
+          </div>
+        </section>
+
+        <section id="accessibility" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#accessibility">Accessibility</a></h2>
+          <ul>
+            <li>Use a clear label that identifies the downloaded content or format.</li>
+            <li>Keep the required file name extension consistent with the media type.</li>
+            <li>Use loading while external work is active, and announce longer preparation elsewhere.</li>
+            <li>Do not use the trigger for navigation. Use Link for a stable remote file URL.</li>
+          </ul>
+        </section>
+
+        <section id="api-reference" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#api-reference">API Reference</a></h2>
+          <div class="docs-api-group">
+            <h3 id="download-trigger-api"><a class="docs-section-anchor" href="#download-trigger-api">DownloadTrigger</a></h3>
+            <div class="docs-api-table">
+              <table>
+                <thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+                <tbody>{triggerProps.map((prop) => <tr><td><code>{prop.name}</code></td><td><code>{prop.type}</code></td><td><code>{prop.defaultValue}</code></td><td>{prop.description}</td></tr>)}</tbody>
+              </table>
+            </div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="slots"><a class="docs-section-anchor" href="#slots">Slots</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Slot</th><th>Description</th></tr></thead><tbody>{slots.map((slot) => <tr><td><code>{slot.name}</code></td><td>{slot.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="data-attributes"><a class="docs-section-anchor" href="#data-attributes">Data Attributes</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Attribute</th><th>Value</th><th>Description</th></tr></thead><tbody>{dataAttributes.map((item) => <tr><td><code>{item.name}</code></td><td><code>{item.value}</code></td><td>{item.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="exports"><a class="docs-section-anchor" href="#exports">Exports</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Export</th><th>Description</th></tr></thead><tbody>{exportsList.map((item) => <tr><td><code>{item.name}</code></td><td>{item.description}</td></tr>)}</tbody></table></div>
+          </div>
+        </section>
+
+        <DocsPageNavigation currentPath={currentPath} />
+      </article>
+
+      <aside class="docs-page-toc" aria-label="On this page">
+        <div class="docs-page-toc__inner">
+          <span class="docs-page-toc__title">On this page</span>
+          <ul>
+            <li><a href="#installation" data-toc-link="installation">Installation</a><ul><li><a href="#barrel" data-toc-link="barrel">Barrel</a></li><li><a href="#granular" data-toc-link="granular">Granular</a></li></ul></li>
+            <li><a href="#usage" data-toc-link="usage">Usage</a></li>
+            <li><a href="#composition" data-toc-link="composition">Composition</a><ul><li><a href="#reference-behavior" data-toc-link="reference-behavior">Reference Behavior</a></li></ul></li>
+            <li><a href="#examples" data-toc-link="examples">Examples</a><ul><li><a href="#generated-data" data-toc-link="generated-data">Generated Data</a></li><li><a href="#async-data" data-toc-link="async-data">Async Data</a></li><li><a href="#states" data-toc-link="states">States</a></li><li><a href="#custom-child" data-toc-link="custom-child">Custom Child</a></li></ul></li>
+            <li><a href="#accessibility" data-toc-link="accessibility">Accessibility</a></li>
+            <li><a href="#api-reference" data-toc-link="api-reference">API Reference</a><ul><li><a href="#download-trigger-api" data-toc-link="download-trigger-api">DownloadTrigger</a></li><li><a href="#slots" data-toc-link="slots">Slots</a></li><li><a href="#data-attributes" data-toc-link="data-attributes">Data Attributes</a></li><li><a href="#exports" data-toc-link="exports">Exports</a></li></ul></li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+  </div>
+</DocsLayout>

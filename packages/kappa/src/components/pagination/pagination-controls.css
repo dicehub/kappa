@@ -1,0 +1,53 @@
+.kappa-pagination__controls {
+  display: inline-flex;
+  max-inline-size: 100%;
+  align-items: stretch;
+  flex-wrap: wrap;
+  border: 1px solid var(--kappa-pagination-line);
+  border-radius: var(--kappa-pagination-control-radius);
+  background: var(--kappa-pagination-control);
+}
+
+.kappa-pagination .kappa-pagination__controls > :is(button, input) {
+  min-block-size: var(--kappa-pagination-control-size);
+  border: 0;
+  border-radius: 0;
+}
+
+.kappa-pagination .kappa-pagination__controls > :first-child {
+  border-start-start-radius: calc(var(--kappa-pagination-control-radius) - 1px);
+  border-end-start-radius: calc(var(--kappa-pagination-control-radius) - 1px);
+}
+
+.kappa-pagination .kappa-pagination__controls > :last-child {
+  border-start-end-radius: calc(var(--kappa-pagination-control-radius) - 1px);
+  border-end-end-radius: calc(var(--kappa-pagination-control-radius) - 1px);
+}
+
+.kappa-pagination .kappa-pagination__controls > :is(button, input) + :is(button, input) {
+  border-inline-start: 1px solid var(--kappa-pagination-line);
+}
+
+.kappa-pagination__page-input {
+  box-sizing: border-box;
+  inline-size: 3.125rem;
+  min-inline-size: 0;
+  padding: 0 0.375rem;
+  background: var(--kappa-pagination-control);
+  color: var(--kappa-pagination-strong);
+  font: inherit;
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+}
+
+.kappa-pagination__page-input:focus-visible {
+  position: relative;
+  z-index: 1;
+  outline: 2px solid var(--kappa-pagination-focus);
+  outline-offset: 2px;
+}
+
+.kappa-pagination__page-input:disabled {
+  cursor: not-allowed;
+  opacity: var(--kappa-disabled-opacity, 0.56);
+}

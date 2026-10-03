@@ -1,0 +1,84 @@
+---
+import DocsLayout from "../../../layouts/DocsLayout.astro";
+import DocsPageNavigation from "../../../components/DocsPageNavigation.astro";
+import CopyPageControls from "../../../components/CopyPageControls.vue";
+import { loginBlocks } from "../../../data/login-blocks";
+import { signupBlocks } from "../../../data/signup-blocks";
+import { sidebarBlocks } from "../../../data/sidebar-blocks";
+import { resourceListExamples } from "../../../data/resource-list-docs";
+import "../../../styles/docs-components.css";
+const description = "Ready-to-use layouts built from Kappa components. Working examples, source code, and library exports.";
+---
+
+<DocsLayout title="Blocks" description={description}>
+  <div class="docs-page">
+    <header class="docs-page-header"><div class="docs-page-header__inner"><div class="docs-page-header__content">
+      <div class="docs-page-header__title-row"><h1>Blocks</h1><div class="docs-page-header__desktop-actions"><CopyPageControls client:only="vue" /></div></div>
+      <p class="docs-page-header__lede">{description}</p>
+    </div></div></header>
+    <div class="docs-page-body">
+      <article class="docs-article">
+        <section id="sidebar-layouts" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#sidebar-layouts">Application Shell</a></h2>
+          <p>Application layouts with namespace selection, profile menus, Quick search, and mobile navigation. Use the published SidebarLayout block and keep your data and routing in the application.</p>
+          <div class="docs-api-table"><table>
+            <thead><tr><th>Layout</th><th>Purpose</th></tr></thead>
+            <tbody>{sidebarBlocks.map(block => <tr><td><a href={`/docs/blocks/sidebar#${block.id}`}>{block.title}</a></td><td>{block.description}</td></tr>)}</tbody>
+          </table></div>
+          <p><a href="/docs/blocks/sidebar">Browse Application Shell layouts →</a></p>
+        </section>
+        <section id="login-layouts" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#login-layouts">Login</a></h2>
+          <p>Responsive sign-in structures for credentials, passwordless email, identity providers, and contextual media. Authentication remains in your application.</p>
+          <div class="docs-api-table"><table>
+            <thead><tr><th>Layout</th><th>Purpose</th></tr></thead>
+            <tbody>{loginBlocks.map(block => <tr><td><a href={`/docs/blocks/login#${block.id}`}>{block.title}</a></td><td>{block.description}</td></tr>)}</tbody>
+          </table></div>
+          <p><a href="/docs/blocks/login">Browse Login layouts →</a></p>
+        </section>
+        <section id="signup-layouts" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#signup-layouts">Signup</a></h2>
+          <p>Responsive account-creation structures for profile details, personal namespaces, passwords, consent, and identity providers. Account services remain in your application.</p>
+          <div class="docs-api-table"><table>
+            <thead><tr><th>Layout</th><th>Purpose</th></tr></thead>
+            <tbody>{signupBlocks.map(block => <tr><td><a href={`/docs/blocks/signup#${block.id}`}>{block.title}</a></td><td>{block.description}</td></tr>)}</tbody>
+          </table></div>
+          <p><a href="/docs/blocks/signup">Browse Signup layouts →</a></p>
+        </section>
+        <section id="resource-list-layouts" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#resource-list-layouts">Resource List</a></h2>
+          <p>Responsive resource pages with optional controls and contextual information. Data loading, filtering, pagination, and routing remain in the application.</p>
+          <div class="docs-api-table"><table>
+            <thead><tr><th>Layout</th><th>Purpose</th></tr></thead>
+            <tbody>{resourceListExamples.map(example => <tr><td><a href={`/docs/blocks/resource-list#${example.id}`}>{example.title}</a></td><td>{example.description}</td></tr>)}</tbody>
+          </table></div>
+          <p><a href="/docs/blocks/resource-list">Browse Resource List layouts →</a></p>
+        </section>
+        <section id="components-and-blocks" class="docs-section">
+          <h2 id="resource-actions"><a class="docs-section-anchor" href="#resource-actions">Resource Actions</a></h2>
+          <div class="docs-api-table"><table>
+            <thead><tr><th>Block</th><th>Purpose</th></tr></thead>
+            <tbody>
+              <tr><td><a href="/docs/blocks/file-browser">File Browser</a></td><td>Browse folders and files in list or card view, with selection and actions.</td></tr>
+              <tr><td><a href="/docs/blocks/resource-picker">Resource Picker</a></td><td>Search and select resources with a confirmation step.</td></tr>
+              <tr><td><a href="/docs/blocks/delete-resource">Delete Resource</a></td><td>Confirm deletion with optional exact-name entry and async progress.</td></tr>
+              <tr><td><a href="/docs/blocks/message-composer">Message Composer</a></td><td>Write a message, add attachments, and submit it.</td></tr>
+            </tbody>
+          </table></div>
+          <h2><a class="docs-section-anchor" href="#components-and-blocks">Components and Blocks</a></h2>
+          <p>Components provide focused controls and interactions. Blocks combine them into reusable page structures. Sidebar remains under Components; Application Shell combines it with a header and page content.</p>
+          <p>Blocks are exported from <code>@dicehub/kappa</code> and their documented <code>@dicehub/kappa/blocks/*</code> paths. They use Kappa tokens and existing component behavior. No extra dependencies are required.</p>
+        </section>
+        <DocsPageNavigation currentPath="/docs/blocks" />
+      </article>
+      <aside class="docs-page-toc" aria-label="On this page"><div class="docs-page-toc__inner"><span class="docs-page-toc__title">On this page</span><ul>
+        <li><a href="#sidebar-layouts" data-toc-link="sidebar-layouts">Application Shell</a></li>
+        <li><a href="#login-layouts" data-toc-link="login-layouts">Login</a></li>
+        <li><a href="#signup-layouts" data-toc-link="signup-layouts">Signup</a></li>
+        <li><a href="#resource-list-layouts" data-toc-link="resource-list-layouts">Resource List</a></li>
+        <li><a href="#components-and-blocks" data-toc-link="components-and-blocks">Components and Blocks</a></li>
+        <li><a href="#resource-actions" data-toc-link="resource-actions">Resource Actions</a></li>
+      </ul></div></aside>
+    </div>
+  </div>
+</DocsLayout>

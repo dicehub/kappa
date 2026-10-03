@@ -1,0 +1,312 @@
+.kappa-table {
+  --kappa-table-cell-padding-block: 0.75rem;
+  --kappa-table-cell-padding-inline: 0.75rem;
+  --kappa-table-checkbox-target-padding: 0.625rem;
+  --kappa-table-background: var(--kappa-control, #ffffff);
+  --kappa-table-elevated: var(--kappa-elevated, var(--kappa-tint, #f4f6f9));
+  --kappa-table-border: var(--kappa-line, #e3e6eb);
+  --kappa-table-hairline: var(--kappa-hairline, var(--kappa-line, #e3e6eb));
+  --kappa-table-foreground: var(--kappa-default, #17191f);
+  --kappa-table-muted: var(--kappa-subtle, #6c7480);
+  --kappa-table-focus: var(--kappa-focus, #4c63ff);
+  --kappa-table-focus-soft: var(--kappa-focus-soft, rgba(76, 99, 255, 0.16));
+  --kappa-table-selected: var(--kappa-tint, #f4f6f9);
+  --kappa-table-stripe: color-mix(in srgb, var(--kappa-table-elevated) 55%, var(--kappa-table-background));
+  --kappa-table-compact-background: var(--kappa-table-elevated);
+  --kappa-table-hover: color-mix(
+    in srgb,
+    var(--kappa-table-selected) 72%,
+    var(--kappa-table-background)
+  );
+  --kappa-table-danger: var(--kappa-danger-tint, #fee4e2);
+  --kappa-table-danger-foreground: var(--kappa-danger-text, #b42318);
+  --kappa-table-row-background: var(--kappa-table-background);
+  --kappa-table-sticky-background: var(--kappa-table-row-background);
+
+  box-sizing: border-box;
+  inline-size: 100%;
+  min-inline-size: 100%;
+  border-collapse: collapse;
+  border-spacing: 0;
+  background: var(--kappa-table-background);
+  color: var(--kappa-table-foreground);
+  font-family: var(--kappa-font-sans, inherit);
+  font-size: 0.875rem;
+  isolation: isolate;
+  line-height: 1.25rem;
+  table-layout: auto;
+  text-align: start;
+}
+
+.kappa-table[data-layout="fixed"] {
+  table-layout: fixed;
+}
+
+.kappa-table[data-compact] {
+  --kappa-table-cell-padding-block: 0.25rem;
+  --kappa-table-cell-padding-inline: 0.5rem;
+  --kappa-table-checkbox-target-padding: 0.25rem;
+
+  font-size: 0.75rem;
+  line-height: 1rem;
+}
+
+.kappa-table__caption {
+  caption-side: bottom;
+  padding-block: min(0.625rem, var(--kappa-table-cell-padding-block));
+  padding-inline: var(--kappa-table-cell-padding-inline);
+  border-block-start: 1px solid var(--kappa-table-border);
+  color: var(--kappa-table-muted);
+  font-size: 0.75rem;
+  line-height: inherit;
+  text-align: start;
+}
+
+.kappa-table__head,
+.kappa-table__cell {
+  position: relative;
+  padding-block: var(--kappa-table-cell-padding-block);
+  padding-inline: var(--kappa-table-cell-padding-inline);
+  text-align: inherit;
+  vertical-align: middle;
+}
+
+.kappa-table__head {
+  border-block-end: 1px solid var(--kappa-table-border);
+  background: var(--kappa-table-background);
+  color: var(--kappa-table-foreground);
+  font-size: inherit;
+  font-weight: 600;
+  line-height: inherit;
+  white-space: nowrap;
+}
+
+.kappa-table__header[data-variant="compact"] .kappa-table__head {
+  padding-block: min(0.5rem, var(--kappa-table-cell-padding-block));
+  background: var(--kappa-table-compact-background);
+  color: var(--kappa-table-foreground);
+}
+
+.kappa-table__header[data-variant="compact"] {
+  --kappa-table-sticky-background: var(--kappa-table-compact-background);
+}
+
+.kappa-table__header[data-sticky] .kappa-table__head {
+  position: sticky;
+  inset-block-start: 0;
+  z-index: 3;
+}
+
+.kappa-table__row[data-variant="default"] {
+  --kappa-table-row-background: var(--kappa-table-background);
+}
+
+.kappa-table__body .kappa-table__row[data-variant="default"]:nth-child(even) {
+  --kappa-table-row-background: var(--kappa-table-stripe);
+}
+
+.kappa-table__row[data-variant="selected"],
+.kappa-table__row[data-selected],
+.kappa-table__row[aria-selected="true"] {
+  --kappa-table-row-background: var(--kappa-table-selected);
+}
+
+.kappa-table__body .kappa-table__row:hover:not([data-disabled]):not([aria-disabled="true"]),
+.kappa-table__body .kappa-table__row[data-hover]:not([data-disabled]):not([aria-disabled="true"]),
+.kappa-table__body .kappa-table__row:focus-within:not([data-disabled]):not([aria-disabled="true"]) {
+  --kappa-table-row-background: var(--kappa-table-hover);
+}
+
+.kappa-table__row[data-variant="selected"]:hover,
+.kappa-table__row[data-selected]:hover,
+.kappa-table__row[aria-selected="true"]:hover {
+  --kappa-table-row-background: color-mix(
+    in srgb,
+    var(--kappa-table-selected) 86%,
+    var(--kappa-table-foreground)
+  );
+}
+
+.kappa-table__row[data-invalid],
+.kappa-table__row[aria-invalid="true"] {
+  --kappa-table-row-background: var(--kappa-table-danger);
+
+  color: var(--kappa-table-danger-foreground);
+}
+
+.kappa-table__row[data-loading],
+.kappa-table__row[aria-busy="true"] {
+  --kappa-table-row-background: var(--kappa-table-elevated);
+
+  opacity: 0.68;
+}
+
+.kappa-table__row[data-disabled],
+.kappa-table__row[aria-disabled="true"] {
+  --kappa-table-row-background: var(--kappa-table-elevated);
+
+  color: var(--kappa-table-muted);
+  cursor: not-allowed;
+  opacity: 0.58;
+}
+
+.kappa-table__row[data-empty] {
+  --kappa-table-row-background: transparent;
+
+  color: var(--kappa-table-muted);
+  text-align: center;
+}
+
+.kappa-table__row:focus-within {
+  outline: 2px solid var(--kappa-table-focus);
+  outline-offset: -2px;
+}
+
+.kappa-table__row[data-focus-visible] {
+  outline: 2px solid var(--kappa-table-focus);
+  outline-offset: -2px;
+}
+
+.kappa-table__cell {
+  background: var(--kappa-table-row-background);
+  overflow-wrap: anywhere;
+}
+
+.kappa-table__footer .kappa-table__cell,
+.kappa-table__footer .kappa-table__head {
+  border-block-start: 1px solid var(--kappa-table-border);
+  color: var(--kappa-table-muted);
+  font-size: 0.75rem;
+  font-weight: 550;
+}
+
+.kappa-table__head[data-sticky],
+.kappa-table__cell[data-sticky] {
+  background: var(--kappa-table-sticky-background);
+  isolation: isolate;
+  position: sticky;
+}
+
+.kappa-table__head[data-sticky="left"],
+.kappa-table__cell[data-sticky="left"] {
+  inset-inline-start: 0;
+}
+
+.kappa-table__head[data-sticky="right"],
+.kappa-table__cell[data-sticky="right"] {
+  inset-inline-end: 0;
+}
+
+.kappa-table__head[data-sticky="left"]::after,
+.kappa-table__cell[data-sticky="left"]::after,
+.kappa-table__head[data-sticky="right"]::before,
+.kappa-table__cell[data-sticky="right"]::before {
+  position: absolute;
+  inset-block: 0;
+  inline-size: 1.5rem;
+  pointer-events: none;
+  content: "";
+}
+
+.kappa-table__head[data-sticky="left"]::after,
+.kappa-table__cell[data-sticky="left"]::after {
+  inset-inline-start: 100%;
+  background: linear-gradient(to right, var(--kappa-table-sticky-background), transparent);
+}
+
+.kappa-table__head[data-sticky="right"]::before,
+.kappa-table__cell[data-sticky="right"]::before {
+  inset-inline-end: 100%;
+  background: linear-gradient(to left, var(--kappa-table-sticky-background), transparent);
+}
+
+.kappa-table__head[data-sticky] {
+  z-index: 4;
+}
+
+.kappa-table__cell[data-sticky] {
+  --kappa-table-sticky-background: var(--kappa-table-row-background);
+
+  z-index: 2;
+}
+
+.kappa-table__check-head,
+.kappa-table__check-cell {
+  inline-size: 2.75rem;
+  padding-inline: var(--kappa-table-cell-padding-inline);
+  line-height: 1;
+}
+
+.kappa-table[data-compact] :is(.kappa-table__check-head, .kappa-table__check-cell) {
+  inline-size: 2rem;
+}
+
+.kappa-table__checkbox {
+  position: relative;
+}
+
+.kappa-table__checkbox::before {
+  position: absolute;
+  inset: calc(-1 * var(--kappa-table-checkbox-target-padding));
+  content: "";
+}
+
+.kappa-table__resize-handle {
+  position: absolute;
+  inset-block: 0;
+  inset-inline-end: 0;
+  display: inline-flex;
+  inline-size: 0.75rem;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 0;
+  margin: 0;
+  background: transparent;
+  color: inherit;
+  cursor: col-resize;
+  opacity: 0;
+  touch-action: none;
+  transition: opacity 120ms ease;
+  user-select: none;
+}
+
+.kappa-table__head:hover .kappa-table__resize-handle,
+.kappa-table__resize-handle:focus-visible {
+  opacity: 1;
+}
+
+.kappa-table__resize-handle:focus-visible {
+  outline: 2px solid var(--kappa-table-focus);
+  outline-offset: -2px;
+  box-shadow: 0 0 0 3px var(--kappa-table-focus-soft);
+}
+
+.kappa-table__resize-bar {
+  inline-size: 0.125rem;
+  block-size: 1.25rem;
+  border-radius: 999px;
+  background: var(--kappa-table-hairline);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kappa-table__resize-handle {
+    transition: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .kappa-table__head {
+    border-block-end-color: CanvasText;
+  }
+
+  .kappa-table__row:focus-within,
+  .kappa-table__resize-handle:focus-visible {
+    outline-color: Highlight;
+    box-shadow: none;
+  }
+
+  .kappa-table__resize-bar {
+    background: CanvasText;
+  }
+}

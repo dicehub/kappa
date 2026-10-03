@@ -1,0 +1,235 @@
+---
+import ArkUiDocsLink from "../../../components/ArkUiDocsLink.astro";
+import CodeBlock from "../../../components/CodeBlock.astro";
+import CompositionTree from "../../../components/CompositionTree.astro";
+import CopyPageControls from "../../../components/CopyPageControls.vue";
+import DocsPageNavigation from "../../../components/DocsPageNavigation.astro";
+import PaginationDocsDemo from "../../../components/PaginationDocsDemo.vue";
+import {
+  barrelCode,
+  compositionCode,
+  controlledCode,
+  controlsProps,
+  triggerProps,
+  labelsCode,
+  simpleCode,
+  rtlCode,
+  dataAttributes,
+  events,
+  exportsList,
+  granularCode,
+  itemProps,
+  keyboardRows,
+  linkCode,
+  parts,
+  previewCode,
+  rootProps,
+  siblingCode,
+  slots,
+  statesCode,
+  usageCode,
+} from "../../../data/pagination-docs";
+import DocsLayout from "../../../layouts/DocsLayout.astro";
+import "../../../styles/docs-components.css";
+
+const currentPath = "/docs/components/pagination";
+const description =
+  "A compact, accessible page navigator for data-heavy dicehub workflows.";
+
+const examples = [
+  {
+    id: "text-labels",
+    title: "Text Labels",
+    description: "Use showLabels for short First, Previous, Next, and Last labels. Accessible names keep the word page. Custom root translations are preserved; individual triggers accept a label prop for custom visible text.",
+    variant: "labels",
+    code: labelsCode,
+  },
+  {
+    id: "simple-controls",
+    title: "Simple Controls",
+    description: "Use only previous and next arrows when direct page entry is not needed.",
+    variant: "simple",
+    code: simpleCode,
+  },
+  {
+    id: "rtl",
+    title: "Right-to-left",
+    description: "DirectionProvider mirrors the arrows and control order for right-to-left layouts. Set pageLabel and root translations for your language.",
+    variant: "rtl",
+    code: rtlCode,
+  },
+  {
+    id: "link-mode",
+    title: "Link Mode",
+    description: "Use link mode when each page should be addressable and support normal browser navigation.",
+    variant: "link",
+    code: linkCode,
+  },
+  {
+    id: "controlled",
+    title: "Controlled",
+    description: "Use v-model:page when the current page belongs to application state or a router adapter.",
+    variant: "controlled",
+    code: controlledCode,
+  },
+  {
+    id: "siblings",
+    title: "Sibling Pages",
+    description: "Increase siblingCount when users need more nearby page landmarks in a large result set.",
+    variant: "sibling",
+    code: siblingCode,
+  },
+  {
+    id: "boundary-states",
+    title: "Boundary States",
+    description: "Ark disables first and previous at page one, and next and last at the final page.",
+    variant: "states",
+    code: statesCode,
+  },
+] as const;
+---
+
+<DocsLayout title="Pagination" description={description}>
+  <div class="docs-page docs-page--component">
+    <header class="docs-page-header">
+      <div class="docs-page-header__inner">
+        <div class="docs-page-header__content">
+          <div class="docs-page-header__mobile-actions">
+            <CopyPageControls client:only="vue" align="center" />
+          </div>
+          <div class="docs-page-header__title-row">
+            <h1>Pagination</h1>
+            <ArkUiDocsLink />
+            <div class="docs-page-header__navigation-actions">
+              <div class="docs-page-header__desktop-actions"><CopyPageControls client:only="vue" /></div>
+              <DocsPageNavigation currentPath={currentPath} variant="compact" />
+            </div>
+          </div>
+          <p class="docs-page-header__lede">{description}</p>
+        </div>
+      </div>
+    </header>
+
+    <div class="docs-page-body">
+      <article class="docs-article docs-article--component">
+        <section id="preview" class="docs-section">
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><PaginationDocsDemo client:load variant="preview" /></div>
+            <CodeBlock code={previewCode} lang="vue" collapsible revealId="pagination-preview-code" />
+          </div>
+        </section>
+
+        <section id="installation" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#installation">Installation</a></h2>
+          <p>Pagination is part of the main Kappa package. Ark UI owns page calculation, current-page state, link or button semantics, and boundary disabling.</p>
+          <h3 id="barrel"><a class="docs-section-anchor" href="#barrel">Barrel</a></h3>
+          <CodeBlock code={barrelCode} lang="javascript" />
+          <h3 id="granular"><a class="docs-section-anchor" href="#granular">Granular</a></h3>
+          <CodeBlock code={granularCode} lang="javascript" />
+        </section>
+
+        <section id="usage" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#usage">Usage</a></h2>
+          <p>Compose the root with a native list, boundary triggers, and a renderless Context. Context supplies page and ellipsis entries so the list stays synchronized with the Ark machine.</p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><PaginationDocsDemo client:load variant="usage" /></div>
+            <CodeBlock code={usageCode} lang="vue" collapsible revealId="pagination-usage-code" />
+          </div>
+          <p>Use <code>type="link"</code> with <code>getPageUrl</code> and <code>as-child</code> anchors when pages need stable URLs. Keep router-specific behavior in the URL callback or an application adapter.</p>
+        </section>
+
+        <section id="composition" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#composition">Composition</a></h2>
+          <CompositionTree component="pagination" />
+          <CodeBlock code={compositionCode} lang="plaintext" />
+          <p><code>Pagination.Root</code> renders the navigation landmark. The native list belongs in the root slot. <code>Pagination.Context</code> exposes <code>pages</code>, where each entry is a page or an ellipsis.</p>
+          <p>Kappa adds compact token-based controls and focus states. Ark UI remains the behavior authority for controlled and uncontrolled pages, link generation, accessible labels, current-page state, and disabled boundary triggers.</p>
+          <p><code>Pagination.Controls</code> groups single Previous/Next arrows, double First/Last arrows, and a page input in a compact layout. Use it inside a button-mode root. The input saves on Enter or blur, clamps to the page range, and restores invalid text; Escape restores the current page. Use the individual parts below for numbered pages or links.</p>
+        </section>
+
+        <section id="examples" class="docs-section docs-section--component-examples">
+          <h2><a class="docs-section-anchor" href="#examples">Examples</a></h2>
+          {examples.map((example) => (
+            <>
+              <h3 id={example.id}><a class="docs-section-anchor" href={`#${example.id}`}>{example.title}</a></h3>
+              <p>{example.description}</p>
+              <div class="docs-component-example">
+                <div class="docs-component-preview"><PaginationDocsDemo client:load variant={example.variant} /></div>
+                <CodeBlock code={example.code} lang="vue" collapsible revealId={`pagination-${example.id}-code`} />
+              </div>
+            </>
+          ))}
+        </section>
+
+        <section id="accessibility" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#accessibility">Accessibility</a></h2>
+          <ul>
+            <li>Give the root a concise accessible name with <code>aria-label</code> or <code>aria-labelledby</code>.</li>
+            <li>Ark marks the active item with <code>aria-current="page"</code> and disables triggers at the first and last pages.</li>
+            <li>Default arrows are decorative; Ark supplies each trigger's accessible name. Customize names with root translations or an explicit aria-label.</li>
+            <li>Link mode preserves normal browser navigation. Button mode is useful when page state is controlled by an application view.</li>
+            <li>Focus-visible, forced-colors, reduced-motion, and narrow-layout styles remain distinct.</li>
+          </ul>
+          <h3 id="keyboard-support"><a class="docs-section-anchor" href="#keyboard-support">Keyboard Support</a></h3>
+          <div class="docs-api-table"><table><thead><tr><th>Key</th><th>Behavior</th></tr></thead><tbody>{keyboardRows.map((row) => <tr><td><code>{row.key}</code></td><td>{row.description}</td></tr>)}</tbody></table></div>
+        </section>
+
+        <section id="api-reference" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#api-reference">API Reference</a></h2>
+          <div class="docs-api-group">
+            <h3 id="root-api"><a class="docs-section-anchor" href="#root-api">Pagination.Root</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>{rootProps.map((prop) => <tr><td><code>{prop.name}</code></td><td><code>{prop.type}</code></td><td><code>{prop.defaultValue}</code></td><td>{prop.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="item-api"><a class="docs-section-anchor" href="#item-api">Pagination.Item</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>{itemProps.map((prop) => <tr><td><code>{prop.name}</code></td><td><code>{prop.type}</code></td><td><code>{prop.defaultValue}</code></td><td>{prop.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="controls-api"><a class="docs-section-anchor" href="#controls-api">Pagination.Controls</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>{controlsProps.map((prop) => <tr><td><code>{prop.name}</code></td><td><code>{prop.type}</code></td><td>{prop.defaultValue}</td><td>{prop.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="trigger-api"><a class="docs-section-anchor" href="#trigger-api">Navigation Triggers</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>{triggerProps.map((prop) => <tr><td><code>{prop.name}</code></td><td><code>{prop.type}</code></td><td>{prop.defaultValue}</td><td>{prop.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="parts-api"><a class="docs-section-anchor" href="#parts-api">Parts</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Part</th><th>Element</th><th>Description</th></tr></thead><tbody>{parts.map((part) => <tr><td><code>Pagination.{part.name}</code></td><td><code>{part.element}</code></td><td>{part.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="events-api"><a class="docs-section-anchor" href="#events-api">Events</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Event</th><th>Payload</th><th>Description</th></tr></thead><tbody>{events.map((event) => <tr><td><code>{event.name}</code></td><td><code>{event.payload}</code></td><td>{event.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="slots"><a class="docs-section-anchor" href="#slots">Slots</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Slot</th><th>Description</th></tr></thead><tbody>{slots.map((slot) => <tr><td><code>{slot.name}</code></td><td>{slot.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="data-attributes"><a class="docs-section-anchor" href="#data-attributes">Data Attributes</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Attribute</th><th>Value</th><th>Description</th></tr></thead><tbody>{dataAttributes.map((attribute) => <tr><td><code>{attribute.name}</code></td><td><code>{attribute.value}</code></td><td>{attribute.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="exports"><a class="docs-section-anchor" href="#exports">Exports</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Export</th><th>Description</th></tr></thead><tbody>{exportsList.map((item) => <tr><td><code>{item.name}</code></td><td>{item.description}</td></tr>)}</tbody></table></div>
+          </div>
+        </section>
+
+        <DocsPageNavigation currentPath={currentPath} />
+      </article>
+
+      <aside class="docs-page-toc" aria-label="On this page">
+        <div class="docs-page-toc__inner">
+          <span class="docs-page-toc__title">On this page</span>
+          <ul>
+            <li><a href="#installation" data-toc-link="installation">Installation</a><ul><li><a href="#barrel" data-toc-link="barrel">Barrel</a></li><li><a href="#granular" data-toc-link="granular">Granular</a></li></ul></li>
+            <li><a href="#usage" data-toc-link="usage">Usage</a></li>
+            <li><a href="#composition" data-toc-link="composition">Composition</a></li>
+            <li><a href="#examples" data-toc-link="examples">Examples</a><ul>{examples.map((example) => <li><a href={`#${example.id}`} data-toc-link={example.id}>{example.title}</a></li>)}</ul></li>
+            <li><a href="#accessibility" data-toc-link="accessibility">Accessibility</a><ul><li><a href="#keyboard-support" data-toc-link="keyboard-support">Keyboard Support</a></li></ul></li>
+            <li><a href="#api-reference" data-toc-link="api-reference">API Reference</a><ul><li><a href="#root-api" data-toc-link="root-api">Pagination.Root</a></li><li><a href="#item-api" data-toc-link="item-api">Pagination.Item</a></li><li><a href="#controls-api" data-toc-link="controls-api">Pagination.Controls</a></li><li><a href="#trigger-api" data-toc-link="trigger-api">Navigation Triggers</a></li><li><a href="#parts-api" data-toc-link="parts-api">Parts</a></li><li><a href="#events-api" data-toc-link="events-api">Events</a></li><li><a href="#slots" data-toc-link="slots">Slots</a></li><li><a href="#data-attributes" data-toc-link="data-attributes">Data Attributes</a></li><li><a href="#exports" data-toc-link="exports">Exports</a></li></ul></li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+  </div>
+</DocsLayout>

@@ -1,0 +1,88 @@
+---
+import CodeBlock from "../../../components/CodeBlock.astro";
+import CopyPageControls from "../../../components/CopyPageControls.vue";
+import DocsPageNavigation from "../../../components/DocsPageNavigation.astro";
+import DiffViewerDocsDemo from "../../../components/DiffViewerDocsDemo.vue";
+import { compactCode, multipleCode, parserCode, previewCode, props, scrollingCode, splitCode, statesCode } from "../../../data/diff-viewer-docs";
+import DocsLayout from "../../../layouts/DocsLayout.astro";
+import "../../../styles/docs-components.css";
+
+const currentPath = "/docs/components/diff-viewer";
+const description = "Review unified text patches with line numbers, change counts, and inline emphasis.";
+const examples = [
+  { id: "split", title: "Split view", description: "Compare Before and After columns. Adjacent removal and addition blocks pair by line order; unmatched lines leave an empty cell.", code: splitCode },
+  { id: "multiple", title: "Multiple files", description: "File headers separate each change. The title shows total counts, and each file shows its own counts.", code: multipleCode },
+  { id: "states", title: "Empty and invalid patches", description: "Empty text shows no changes. Invalid or unsupported input shows a clear message and no partial diff. Change the patch prop to update the view.", code: statesCode },
+  { id: "compact", title: "Compact review", description: "Hide line numbers, inline emphasis, or the copy control when the surrounding workflow supplies them.", code: compactCode },
+  { id: "scrolling", title: "Long lines and safe text", description: "Long lines scroll inside the viewer. Source markup remains plain text. Set the maximum height with the component CSS variable.", code: scrollingCode },
+] as const;
+---
+
+<DocsLayout title="Diff Viewer" description={description}>
+  <div class="docs-page docs-page--component">
+    <header class="docs-page-header"><div class="docs-page-header__inner"><div class="docs-page-header__content">
+      <div class="docs-page-header__mobile-actions"><CopyPageControls client:only="vue" align="center" /></div>
+      <div class="docs-page-header__title-row">
+        <h1>Diff Viewer</h1>
+        <div class="docs-page-header__navigation-actions"><div class="docs-page-header__desktop-actions"><CopyPageControls client:only="vue" /></div><DocsPageNavigation currentPath={currentPath} variant="compact" /></div>
+      </div>
+      <p class="docs-page-header__lede">{description}</p>
+    </div></div></header>
+    <div class="docs-page-body">
+      <article class="docs-article docs-article--component">
+        <section id="preview" class="docs-section">
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><DiffViewerDocsDemo client:load variant="preview" /></div>
+            <CodeBlock code={previewCode} lang="vue" collapsible revealId="diff-viewer-preview-code" />
+          </div>
+        </section>
+        <section id="installation" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#installation">Installation</a></h2>
+          <p>Diff Viewer is part of Kappa. Import the shared styles and theme once in your application.</p>
+          <CodeBlock code={'import "@dicehub/kappa/styles/kappa.css";\nimport "@dicehub/kappa/styles/theme-kappa.css";\nimport { DiffViewer } from "@dicehub/kappa";'} lang="javascript" />
+          <p>A dedicated entry point also exports the parser and public types.</p>
+          <CodeBlock code={'import { DiffViewer, parseUnifiedDiff } from "@dicehub/kappa/components/diff-viewer";'} lang="javascript" />
+        </section>
+        <section id="usage" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#usage">Usage</a></h2>
+          <p>Pass a complete unified patch with file headers and hunk ranges. The viewer is read-only; it does not load files, generate patches, or apply changes. Copy returns the original patch, including its headers and line endings.</p>
+          <p>Text Git patches, multiple files, multiple hunks, creation, deletion, and no-newline markers are supported. Binary patches, combined merge diffs, and metadata-only changes are unsupported. Quoted Git paths remain as supplied.</p>
+          <p>Changed characters use a shared prefix and suffix within paired replacement lines. This emphasis is language independent; syntax highlighting and virtual scrolling are not included. Load a selected file or bounded patch for large reviews.</p>
+        </section>
+        <section id="examples" class="docs-section docs-section--component-examples">
+          <h2><a class="docs-section-anchor" href="#examples">Examples</a></h2>
+          {examples.map((example) => <>
+            <h3 id={example.id}><a class="docs-section-anchor" href={`#${example.id}`}>{example.title}</a></h3>
+            <p>{example.description}</p>
+            <div class="docs-component-example">
+              <div class="docs-component-preview"><DiffViewerDocsDemo client:load variant={example.id} /></div>
+              <CodeBlock code={example.code} lang="vue" collapsible revealId={`diff-viewer-${example.id}-code`} />
+            </div>
+          </>)}
+        </section>
+        <section id="parser" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#parser">Parser</a></h2>
+          <p>Use <code>parseUnifiedDiff(patch)</code> for counts or application summaries. It returns a <code>DiffDocument</code> with files, hunks, lines, and total counts. Malformed counts, incomplete hunks, overlapping ranges, and unsupported formats throw an Error. The component converts these errors into its invalid state.</p>
+          <CodeBlock code={parserCode} lang="javascript" />
+        </section>
+        <section id="accessibility" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#accessibility">Accessibility</a></h2>
+          <p>Each file uses a labeled table. Added and removed lines have signs and text labels as well as color. The scroll region is keyboard focusable and keeps a visible focus outline. Source code uses left-to-right text in both page directions.</p>
+          <p>The copy control follows <a href="https://ark-ui.com/docs/components/clipboard">Ark UI Clipboard</a> behavior through Kappa Clipboard Text. Copy requires browser clipboard access. An accessible status reports the copied state. Kappa supplies the static diff layout because Ark UI has no diff primitive.</p>
+          <p>Use <code>labels</code> to translate <code>empty</code>, <code>invalid</code>, <code>copy</code>, <code>copied</code>, <code>before</code>, <code>after</code>, <code>content</code>, <code>added</code>, <code>removed</code>, <code>unchanged</code>, and <code>noNewline</code>. Use <code>label</code> for the title.</p>
+        </section>
+        <section id="api-reference" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#api-reference">API Reference</a></h2>
+          <div class="docs-api-table"><table><thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>{props.map((row) => <tr>{row.map((cell, index) => <td>{index < 3 ? <code>{cell}</code> : cell}</td>)}</tr>)}</tbody></table></div>
+          <p><code>DiffViewer</code> and <code>DiffViewer.Root</code> are equivalent. <code>DiffViewerRoot</code>, <code>parseUnifiedDiff</code>, <code>DIFF_VIEWER_DEFAULT_LABELS</code>, and the <code>DiffDocument</code>, <code>DiffFile</code>, <code>DiffHunk</code>, <code>DiffLine</code>, <code>DiffLineKind</code>, <code>DiffViewerProps</code>, <code>DiffViewerView</code>, and <code>DiffViewerLabels</code> types are public exports.</p>
+          <p>HTML attributes and listeners pass to the root section. The root exposes <code>data-slot="diff-viewer"</code>, <code>data-state="ready|empty|invalid"</code>, and <code>data-view="unified|split"</code>. Set <code>--kappa-diff-viewer-max-height</code> to change the default <code>32rem</code> scroll height. Added and removed surfaces use the shared success and danger theme tokens in both modes. Inline emphasis mixes the corresponding text token at 18% over its surface.</p>
+        </section>
+        <DocsPageNavigation currentPath={currentPath} />
+      </article>
+      <aside class="docs-page-toc" aria-label="On this page"><div class="docs-page-toc__inner">
+        <span class="docs-page-toc__title">On this page</span>
+        <ul>{["Installation", "Usage", "Examples", "Parser", "Accessibility", "API Reference"].map((title) => <li><a href={`#${title.toLowerCase().replaceAll(" ", "-")}`} data-toc-link={title.toLowerCase().replaceAll(" ", "-")}>{title}</a></li>)}</ul>
+      </div></aside>
+    </div>
+  </div>
+</DocsLayout>

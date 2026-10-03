@@ -1,0 +1,252 @@
+---
+import ArkUiDocsLink from "../../../components/ArkUiDocsLink.astro";
+import CollapsibleDocsDemo from "../../../components/CollapsibleDocsDemo.vue";
+import CodeBlock from "../../../components/CodeBlock.astro";
+import CompositionTree from "../../../components/CompositionTree.astro";
+import CopyPageControls from "../../../components/CopyPageControls.vue";
+import DocsPageNavigation from "../../../components/DocsPageNavigation.astro";
+import {
+  barrelCode,
+  basicCode,
+  compositionCode,
+  controlledCode,
+  customTriggerCode,
+  disabledCode,
+  events,
+  exportsList,
+  granularCode,
+  lazyCode,
+  multipleCode,
+  partProps,
+  partialCode,
+  previewCode,
+  rootProps,
+  rtlCode,
+  usageCode,
+} from "../../../data/collapsible-docs";
+import DocsLayout from "../../../layouts/DocsLayout.astro";
+import "../../../styles/docs-components.css";
+
+const currentPath = "/docs/components/collapsible";
+const description =
+  "Reveals optional technical detail while keeping the surrounding workflow compact.";
+---
+
+<DocsLayout title="Collapsible" description={description}>
+  <div class="docs-page docs-page--component">
+    <header class="docs-page-header">
+      <div class="docs-page-header__inner">
+        <div class="docs-page-header__content">
+          <div class="docs-page-header__mobile-actions">
+            <CopyPageControls client:only="vue" align="center" />
+          </div>
+          <div class="docs-page-header__title-row">
+            <h1>Collapsible</h1>
+            <ArkUiDocsLink />
+            <div class="docs-page-header__navigation-actions">
+              <div class="docs-page-header__desktop-actions"><CopyPageControls client:only="vue" /></div>
+              <DocsPageNavigation currentPath={currentPath} variant="compact" />
+            </div>
+          </div>
+          <p class="docs-page-header__lede">{description}</p>
+        </div>
+      </div>
+    </header>
+
+    <div class="docs-page-body">
+      <article class="docs-article docs-article--component">
+        <section id="preview" class="docs-section">
+          <div class="docs-component-example">
+            <div class="docs-component-preview">
+              <CollapsibleDocsDemo client:only="vue" variant="preview" />
+            </div>
+            <CodeBlock code={previewCode} lang="vue" collapsible revealId="collapsible-preview-code" />
+          </div>
+        </section>
+
+        <section id="installation" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#installation">Installation</a></h2>
+          <p>
+            Collapsible is part of the main Kappa package and uses Ark UI for disclosure state,
+            ARIA relationships, presence, and measurement.
+          </p>
+          <h3 id="barrel"><a class="docs-section-anchor" href="#barrel">Barrel</a></h3>
+          <CodeBlock code={barrelCode} lang="javascript" />
+          <h3 id="granular"><a class="docs-section-anchor" href="#granular">Granular</a></h3>
+          <CodeBlock code={granularCode} lang="javascript" />
+        </section>
+
+        <section id="usage" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#usage">Usage</a></h2>
+          <p>
+            Use one Collapsible for one optional section. The content stays mounted by default,
+            so form values and local component state survive close and reopen cycles.
+          </p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview">
+              <CollapsibleDocsDemo client:only="vue" variant="basic" />
+            </div>
+            <CodeBlock code={usageCode} lang="vue" collapsible revealId="collapsible-usage-code" />
+          </div>
+        </section>
+
+        <section id="composition" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#composition">Composition</a></h2>
+          <CompositionTree component="collapsible" />
+          <p>
+            Kappa follows Ark UI part names. <code>Trigger</code> supplies the default indicator,
+            and <code>Content</code> supplies an inner spacing wrapper. Use named exports when a
+            template or build rule prefers unaugmented components.
+          </p>
+          <p>
+            When <code>Trigger</code> uses <code>asChild</code>, the child owns all visible content;
+            Kappa does not append its default indicator because Ark UI requires one merge target.
+          </p>
+          <CodeBlock code={compositionCode} lang="vue" />
+        </section>
+
+        <section id="examples" class="docs-section docs-section--component-examples">
+          <h2><a class="docs-section-anchor" href="#examples">Examples</a></h2>
+
+          <h3 id="basic"><a class="docs-section-anchor" href="#basic">Basic</a></h3>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><CollapsibleDocsDemo client:only="vue" variant="basic" /></div>
+            <CodeBlock code={basicCode} lang="vue" collapsible revealId="collapsible-basic-code" />
+          </div>
+
+          <h3 id="multiple-items"><a class="docs-section-anchor" href="#multiple-items">Multiple Items</a></h3>
+          <p>Place independent Collapsible roots in a stack when more than one section can stay open.</p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><CollapsibleDocsDemo client:only="vue" variant="multiple" /></div>
+            <CodeBlock code={multipleCode} lang="vue" collapsible revealId="collapsible-multiple-code" />
+          </div>
+
+          <h3 id="custom-trigger-example"><a class="docs-section-anchor" href="#custom-trigger-example">Custom Trigger Example</a></h3>
+          <p>Use <code>asChild</code> to merge trigger behavior into a Button or another single child.</p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><CollapsibleDocsDemo client:only="vue" variant="custom-trigger" /></div>
+            <CodeBlock code={customTriggerCode} lang="vue" collapsible revealId="collapsible-custom-trigger-code" />
+          </div>
+
+          <h3 id="controlled"><a class="docs-section-anchor" href="#controlled">Controlled</a></h3>
+          <p>Use <code>v-model:open</code> when application state must observe or control disclosure.</p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><CollapsibleDocsDemo client:only="vue" variant="controlled" /></div>
+            <CodeBlock code={controlledCode} lang="vue" collapsible revealId="collapsible-controlled-code" />
+          </div>
+
+          <h3 id="partial-collapse"><a class="docs-section-anchor" href="#partial-collapse">Partial Collapse</a></h3>
+          <p>
+            Set <code>collapsedHeight</code> or <code>collapsedWidth</code> to leave a measured preview
+            visible while the disclosure is closed.
+          </p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><CollapsibleDocsDemo client:only="vue" variant="partial" /></div>
+            <CodeBlock code={partialCode} lang="vue" collapsible revealId="collapsible-partial-code" />
+          </div>
+
+          <h3 id="lazy-mount"><a class="docs-section-anchor" href="#lazy-mount">Lazy Mount</a></h3>
+          <p>
+            Add <code>lazyMount</code> and <code>unmountOnExit</code> for expensive charts, editors,
+            or observers that should exist only while open.
+          </p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><CollapsibleDocsDemo client:only="vue" variant="lazy" /></div>
+            <CodeBlock code={lazyCode} lang="vue" collapsible revealId="collapsible-lazy-code" />
+          </div>
+
+          <h3 id="disabled"><a class="docs-section-anchor" href="#disabled">Disabled</a></h3>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><CollapsibleDocsDemo client:only="vue" variant="disabled" /></div>
+            <CodeBlock code={disabledCode} lang="vue" collapsible revealId="collapsible-disabled-code" />
+          </div>
+
+          <h3 id="right-to-left"><a class="docs-section-anchor" href="#right-to-left">Right-to-left</a></h3>
+          <p>Logical spacing and the closed indicator follow the inherited text direction.</p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><CollapsibleDocsDemo client:only="vue" variant="rtl" /></div>
+            <CodeBlock code={rtlCode} lang="vue" collapsible revealId="collapsible-rtl-code" />
+          </div>
+        </section>
+
+        <section id="accessibility" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#accessibility">Accessibility</a></h2>
+          <ul>
+            <li>The trigger is a native button with managed <code>aria-expanded</code> and <code>aria-controls</code>.</li>
+            <li>Enter and Space toggle the focused trigger. Tab follows normal document order.</li>
+            <li>The indicator is decorative; the trigger label must describe the hidden content.</li>
+            <li>Disabled state prevents changes and remains visually distinct in both themes.</li>
+            <li>Expansion and indicator motion honor <code>prefers-reduced-motion</code>.</li>
+            <li>Partial collapse must not hide information that users need to understand the trigger.</li>
+          </ul>
+          <p>
+            Kappa preserves Ark UI behavior. See the
+            <a href="https://ark-ui.com/vue/docs/components/collapsible">official Ark UI Collapsible documentation</a>
+            for the primitive contract.
+          </p>
+        </section>
+
+        <section id="api-reference" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#api-reference">API Reference</a></h2>
+
+          <div class="docs-api-group">
+            <h3 id="root-api"><a class="docs-section-anchor" href="#root-api">Collapsible.Root</a></h3>
+            <p>Forwards remaining attributes and listeners to Ark UI's root element.</p>
+            <div class="docs-api-table">
+              <table>
+                <thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+                <tbody>{rootProps.map((prop) => <tr><td><code>{prop.name}</code></td><td><code>{prop.type}</code></td><td><code>{prop.defaultValue}</code></td><td>{prop.description}</td></tr>)}</tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="docs-api-group">
+            <h3 id="parts-api"><a class="docs-section-anchor" href="#parts-api">Parts</a></h3>
+            <div class="docs-api-table">
+              <table>
+                <thead><tr><th>Part</th><th>Element</th><th>Description</th></tr></thead>
+                <tbody>{partProps.map((part) => <tr><td><code>{part.name}</code></td><td><code>{part.element}</code></td><td>{part.description}</td></tr>)}</tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="docs-api-group">
+            <h3 id="events-api"><a class="docs-section-anchor" href="#events-api">Events</a></h3>
+            <div class="docs-api-table">
+              <table>
+                <thead><tr><th>Event</th><th>Payload</th><th>Description</th></tr></thead>
+                <tbody>{events.map((event) => <tr><td><code>{event.name}</code></td><td><code>{event.payload}</code></td><td>{event.description}</td></tr>)}</tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="docs-api-group">
+            <h3 id="exports"><a class="docs-section-anchor" href="#exports">Exports</a></h3>
+            <div class="docs-api-table">
+              <table>
+                <thead><tr><th>Export</th><th>Description</th></tr></thead>
+                <tbody>{exportsList.map((item) => <tr><td><code>{item.name}</code></td><td>{item.description}</td></tr>)}</tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <DocsPageNavigation currentPath={currentPath} />
+      </article>
+
+      <aside class="docs-page-toc" aria-label="On this page">
+        <div class="docs-page-toc__inner">
+          <span class="docs-page-toc__title">On this page</span>
+          <ul>
+            <li><a href="#installation" data-toc-link="installation">Installation</a><ul><li><a href="#barrel" data-toc-link="barrel">Barrel</a></li><li><a href="#granular" data-toc-link="granular">Granular</a></li></ul></li>
+            <li><a href="#usage" data-toc-link="usage">Usage</a></li>
+            <li><a href="#composition" data-toc-link="composition">Composition</a></li>
+            <li><a href="#examples" data-toc-link="examples">Examples</a><ul><li><a href="#basic" data-toc-link="basic">Basic</a></li><li><a href="#multiple-items" data-toc-link="multiple-items">Multiple Items</a></li><li><a href="#custom-trigger-example" data-toc-link="custom-trigger-example">Custom Trigger Example</a></li><li><a href="#controlled" data-toc-link="controlled">Controlled</a></li><li><a href="#partial-collapse" data-toc-link="partial-collapse">Partial Collapse</a></li><li><a href="#lazy-mount" data-toc-link="lazy-mount">Lazy Mount</a></li><li><a href="#disabled" data-toc-link="disabled">Disabled</a></li><li><a href="#right-to-left" data-toc-link="right-to-left">Right-to-left</a></li></ul></li>
+            <li><a href="#accessibility" data-toc-link="accessibility">Accessibility</a></li>
+            <li><a href="#api-reference" data-toc-link="api-reference">API Reference</a><ul><li><a href="#root-api" data-toc-link="root-api">Collapsible.Root</a></li><li><a href="#parts-api" data-toc-link="parts-api">Parts</a></li><li><a href="#events-api" data-toc-link="events-api">Events</a></li><li><a href="#exports" data-toc-link="exports">Exports</a></li></ul></li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+  </div>
+</DocsLayout>

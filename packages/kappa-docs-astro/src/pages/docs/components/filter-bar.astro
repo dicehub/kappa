@@ -1,0 +1,85 @@
+---
+import CodeBlock from "../../../components/CodeBlock.astro";
+import CopyPageControls from "../../../components/CopyPageControls.vue";
+import DocsPageNavigation from "../../../components/DocsPageNavigation.astro";
+import FilterBarDocsDemo from "../../../components/FilterBarDocsDemo.vue";
+import { previewCode, searchCode, slotsCode, disabledCode, uncontrolledCode, filterBarProps, events } from "../../../data/filter-bar-docs";
+import DocsLayout from "../../../layouts/DocsLayout.astro";
+import "../../../styles/docs-components.css";
+
+const currentPath = "/docs/components/filter-bar";
+const description = "Search, sort, and switch the view of a resource list in one compact row.";
+const examples = [
+  { id: "search-only", name: "Search only", variant: "search", description: "Use the search input on its own. Sorting and view controls appear only when requested.", code: searchCode },
+  { id: "uncontrolled", name: "Uncontrolled", variant: "uncontrolled", description: "Set initial values and receive changes. The controls keep their own current values.", code: uncontrolledCode },
+  { id: "filters-and-actions", name: "Filters and actions", variant: "slots", description: "Add domain filters and primary actions through slots. These controls filter the list and add a project.", code: slotsCode },
+  { id: "disabled", name: "Disabled", variant: "disabled", description: "Disable built-in controls while an operation is in progress. Pass the slot's disabled value to custom controls.", code: disabledCode },
+] as const;
+---
+
+<DocsLayout title="Filter Bar" description={description}>
+  <div class="docs-page docs-page--component">
+    <header class="docs-page-header">
+      <div class="docs-page-header__inner"><div class="docs-page-header__content">
+        <div class="docs-page-header__mobile-actions"><CopyPageControls client:only="vue" align="center" /></div>
+        <div class="docs-page-header__title-row">
+          <h1>Filter Bar</h1>
+          <div class="docs-page-header__navigation-actions"><div class="docs-page-header__desktop-actions"><CopyPageControls client:only="vue" /></div><DocsPageNavigation currentPath={currentPath} variant="compact" /></div>
+        </div>
+        <p class="docs-page-header__lede">{description}</p>
+      </div></div>
+    </header>
+    <div class="docs-page-body">
+      <article class="docs-article docs-article--component">
+        <section id="preview" class="docs-section">
+          <div class="docs-component-example"><div class="docs-component-preview"><FilterBarDocsDemo client:load /></div><CodeBlock code={previewCode} lang="vue" collapsible revealId="filter-bar-preview-code" /></div>
+        </section>
+        <section id="installation" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#installation">Installation</a></h2>
+          <CodeBlock code={'import { FilterBar } from "@dicehub/kappa";\n// Or use the component entry point:\nimport { FilterBar } from "@dicehub/kappa/components/filter-bar";'} lang="javascript" />
+        </section>
+        <section id="usage" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#usage">Usage</a></h2>
+          <p>Filter Bar manages control values. Your application filters, sorts, loads, and renders the data. Search updates are immediate; debounce network requests in the application when needed.</p>
+          <p>Use <code>v-model</code> for the search text and named models for sorting and the view. Omit a controlled prop to let the component store that value. The matching <code>default*</code> prop sets its initial value only.</p>
+          <CodeBlock code={uncontrolledCode} lang="vue" />
+          <p>Place Filter Bar in the <code>toolbar</code> slot of <a href="/docs/blocks/resource-list">Resource List</a>, or above any list or table. The bar wraps to fit narrow containers.</p>
+        </section>
+        <section id="composition" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#composition">Composition</a></h2>
+          <p>Built from Kappa <a href="/docs/components/input">Input</a>, <a href="/docs/components/button">Button</a>, <a href="/docs/components/dropdown">Dropdown</a>, and <a href="/docs/components/toggle-group">Toggle Group</a>. Dropdown and Toggle Group retain their <a href="https://ark-ui.com/vue/docs/components/menu">Ark UI menu</a> and <a href="https://ark-ui.com/vue/docs/components/toggle-group">toggle group</a> behavior.</p>
+        </section>
+        <section id="examples" class="docs-section docs-section--component-examples">
+          <h2><a class="docs-section-anchor" href="#examples">Examples</a></h2>
+          {examples.map(example => <>
+            <h3 id={example.id}><a class="docs-section-anchor" href={`#${example.id}`}>{example.name}</a></h3>
+            <p>{example.description}</p>
+            <div class="docs-component-example"><div class="docs-component-preview"><FilterBarDocsDemo client:load variant={example.variant} /></div><CodeBlock code={example.code} lang="vue" collapsible revealId={`filter-bar-${example.id}-code`} /></div>
+          </>)}
+        </section>
+        <section id="accessibility" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#accessibility">Accessibility</a></h2>
+          <p>The bar is a labeled group. Each icon button has an accessible name. The sort menu supports arrow keys, typeahead, and Escape. The view toggle uses arrow-key navigation and always keeps one view selected. Normal Tab order connects the search, sorting, custom filters, and actions.</p>
+          <p>Override the <code>labels</code> object to translate all built-in labels. Use a different <code>root</code> label when a page has several filter bars. Additional attributes and listeners are forwarded to the root group.</p>
+        </section>
+        <section id="api-reference" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#api-reference">API Reference</a></h2>
+          <h3>FilterBar</h3>
+          <div class="docs-api-table"><table><thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>{filterBarProps.map(([name, type, value, detail]) => <tr><td><code>{name}</code></td><td><code>{type}</code></td><td><code>{value}</code></td><td>{detail}</td></tr>)}</tbody></table></div>
+          <h3>Events</h3>
+          <div class="docs-api-table"><table><thead><tr><th>Event</th><th>Payload</th><th>Description</th></tr></thead><tbody>{events.map(([name, type, detail]) => <tr><td><code>{name}</code></td><td><code>{type}</code></td><td>{detail}</td></tr>)}</tbody></table></div>
+          <h3>Slots</h3>
+          <p><code>filters</code> appears after sorting. <code>actions</code> appears after the view toggle and aligns to the end. Both receive <code>{"{ disabled: boolean }"}</code>.</p>
+          <h3>Exports</h3>
+          <p><code>FilterBar</code>, <code>FILTER_BAR_DEFAULT_LABELS</code>, and the types <code>FilterBarProps</code>, <code>FilterBarEmits</code>, <code>FilterBarSlots</code>, <code>FilterBarLabels</code>, <code>FilterBarSortOption</code>, <code>FilterBarSortDirection</code>, and <code>FilterBarView</code>.</p>
+          <h3>Data slots</h3>
+          <p><code>filter-bar</code>, <code>filter-bar-search</code>, <code>filter-bar-sort</code>, <code>filter-bar-sort-direction</code>, <code>filter-bar-filters</code>, and <code>filter-bar-actions</code>.</p>
+        </section>
+        <DocsPageNavigation currentPath={currentPath} />
+      </article>
+      <aside class="docs-page-toc" aria-label="On this page"><div class="docs-page-toc__inner"><span class="docs-page-toc__title">On this page</span><ul>
+        {[ ["installation", "Installation"], ["usage", "Usage"], ["composition", "Composition"], ["examples", "Examples"], ...examples.map(example => [example.id, example.name]), ["accessibility", "Accessibility"], ["api-reference", "API Reference"] ].map(([id, label]) => <li><a href={`#${id}`} data-toc-link={id}>{label}</a></li>)}
+      </ul></div></aside>
+    </div>
+  </div>
+</DocsLayout>

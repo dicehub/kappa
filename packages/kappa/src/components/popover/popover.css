@@ -1,0 +1,257 @@
+.kappa-popover__trigger {
+  display: inline-flex;
+  inline-size: max-content;
+  min-block-size: 0;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 0;
+  margin: 0;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  font: inherit;
+  line-height: inherit;
+}
+
+.kappa-popover__trigger:focus-visible {
+  border-radius: var(--kappa-radius-sm, 0.25rem);
+  outline: none;
+  box-shadow:
+    0 0 0 1px var(--kappa-focus, #4c63ff),
+    0 0 0 3px var(--kappa-focus-soft, rgba(76, 99, 255, 0.16));
+}
+
+.kappa-popover__trigger:disabled,
+.kappa-popover__trigger[data-disabled] {
+  cursor: not-allowed;
+  opacity: var(--kappa-disabled-opacity, 0.58);
+  pointer-events: none;
+}
+
+.kappa-popover__anchor {
+  display: inline-flex;
+  max-inline-size: 100%;
+  align-items: center;
+}
+
+.kappa-popover__positioner {
+  /* Ark writes this variable inline, so Kappa must win the cascade here. */
+  --z-index: var(--kappa-popover-z-index, 1100) !important;
+
+  max-inline-size: min(var(--available-width, calc(100vw - 1.5rem)), calc(100vw - 1.5rem));
+}
+
+.kappa-popover__content {
+  --kappa-popover-enter-x: 0;
+  --kappa-popover-enter-y: -0.25rem;
+
+  box-sizing: border-box;
+  display: flex;
+  inline-size: max-content;
+  min-inline-size: min(
+    var(--kappa-popover-min-inline-size, 16rem),
+    var(--available-width, calc(100vw - 1.5rem)),
+    calc(100vw - 1.5rem)
+  );
+  max-inline-size: min(
+    var(--kappa-popover-max-inline-size, 28rem),
+    var(--available-width, calc(100vw - 1.5rem)),
+    calc(100vw - 1.5rem)
+  );
+  max-block-size: min(var(--available-height, 28rem), var(--kappa-popover-max-block-size, 28rem));
+  flex-direction: column;
+  gap: 0.625rem;
+  padding: var(--kappa-popover-padding, 1rem);
+  overflow: auto;
+  overscroll-behavior: contain;
+  border: 1px solid var(--kappa-line, #e3e6eb);
+  border-radius: var(--kappa-radius-lg, 0.625rem);
+  background: var(--kappa-control, #ffffff);
+  box-shadow: var(
+    --kappa-popover-shadow,
+    0 12px 32px -10px rgba(16, 24, 40, 0.2),
+    0 3px 8px -3px rgba(16, 24, 40, 0.12)
+  );
+  color: var(--kappa-default, #17191f);
+  font-family: var(--kappa-font-sans, inherit);
+  font-size: 0.8125rem;
+  line-height: 1.25rem;
+  outline: none;
+  scrollbar-color: var(--kappa-line, #e3e6eb) transparent;
+  scrollbar-width: thin;
+  transform-origin: var(--transform-origin);
+}
+
+.kappa-popover__content[data-side="top"] {
+  --kappa-popover-enter-y: 0.25rem;
+}
+
+.kappa-popover__content[data-side="left"] {
+  --kappa-popover-enter-x: 0.25rem;
+  --kappa-popover-enter-y: 0;
+}
+
+.kappa-popover__content[data-side="right"] {
+  --kappa-popover-enter-x: -0.25rem;
+  --kappa-popover-enter-y: 0;
+}
+
+.kappa-popover__content[data-state="open"] {
+  animation: kappa-popover-in 140ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.kappa-popover__content[data-state="closed"] {
+  opacity: 0;
+  pointer-events: none;
+  visibility: hidden;
+  animation: kappa-popover-out 90ms ease-out;
+}
+
+.kappa-popover__title {
+  margin: 0;
+  color: var(--kappa-emphasis, #17191f);
+  font-size: 0.9375rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.25rem;
+}
+
+.kappa-popover__description {
+  margin: -0.25rem 0 0;
+  color: var(--kappa-subtle, #6c7480);
+  font-size: 0.75rem;
+  line-height: 1.125rem;
+}
+
+.kappa-popover__indicator {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  transition: transform 120ms ease;
+}
+
+.kappa-popover__indicator[data-state="open"] {
+  transform: rotate(180deg);
+}
+
+.kappa-popover__indicator:dir(rtl)[data-state="open"] {
+  transform: rotate(-180deg);
+}
+
+.kappa-popover__close-trigger {
+  color: inherit;
+  font: inherit;
+}
+
+.kappa-popover__close {
+  position: absolute;
+  inset-block-start: 0.625rem;
+  inset-inline-end: 0.625rem;
+  display: inline-flex;
+  inline-size: 1.75rem;
+  block-size: 1.75rem;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: var(--kappa-radius-sm, 0.375rem);
+  background: transparent;
+  color: var(--kappa-subtle, #6c7480);
+  cursor: pointer;
+  font: inherit;
+  outline: none;
+  transition:
+    background-color 100ms ease,
+    color 100ms ease,
+    border-color 100ms ease;
+}
+
+.kappa-popover__close:hover {
+  border-color: var(--kappa-line, #e3e6eb);
+  background: var(--kappa-overlay, rgba(16, 24, 40, 0.06));
+  color: var(--kappa-default, #17191f);
+}
+
+.kappa-popover__close:focus-visible,
+.kappa-popover__close-trigger:focus-visible {
+  border-color: var(--kappa-focus, #4c63ff);
+  outline: 2px solid var(--kappa-focus-soft, rgba(76, 99, 255, 0.16));
+  outline-offset: 1px;
+}
+
+.kappa-popover__close svg {
+  inline-size: 1rem;
+  block-size: 1rem;
+}
+
+.kappa-popover__arrow {
+  --arrow-background: var(--kappa-control, #ffffff);
+  --arrow-size: 0.625rem;
+
+  color: var(--kappa-line, #e3e6eb);
+  opacity: 0;
+  visibility: hidden;
+}
+
+.kappa-popover__positioner:has(> .kappa-popover__content[data-state="open"]) > .kappa-popover__arrow {
+  opacity: 1;
+  visibility: visible;
+}
+
+.kappa-popover__arrow-tip {
+  border-block-start: 1px solid currentColor;
+  border-inline-start: 1px solid currentColor;
+}
+
+@keyframes kappa-popover-in {
+  from {
+    opacity: 0;
+    transform: translate(var(--kappa-popover-enter-x), var(--kappa-popover-enter-y)) scale(0.985);
+  }
+}
+
+@keyframes kappa-popover-out {
+  to {
+    opacity: 0;
+    transform: translate(var(--kappa-popover-enter-x), var(--kappa-popover-enter-y)) scale(0.985);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kappa-popover__content[data-state],
+  .kappa-popover__indicator,
+  .kappa-popover__close {
+    animation: none;
+    transition: none;
+  }
+}
+
+@media (pointer: coarse) {
+  .kappa-popover__close {
+    inline-size: 2rem;
+    block-size: 2rem;
+  }
+}
+
+@media (forced-colors: active) {
+  .kappa-popover__content {
+    border-color: CanvasText;
+    background: Canvas;
+    box-shadow: none;
+    color: CanvasText;
+  }
+
+  .kappa-popover__title,
+  .kappa-popover__description,
+  .kappa-popover__close {
+    color: CanvasText;
+  }
+
+  .kappa-popover__arrow {
+    --arrow-background: Canvas;
+
+    color: CanvasText;
+  }
+}

@@ -1,0 +1,379 @@
+.kappa-number-input {
+  --kappa-number-input-height: 2rem;
+  --kappa-number-input-font-size: 0.8125rem;
+  --kappa-number-input-icon-size: 0.875rem;
+  --kappa-number-input-trigger-size: 1.875rem;
+  --kappa-number-input-padding: 0.625rem;
+  --kappa-number-input-radius: 0.5rem;
+
+  box-sizing: border-box;
+  display: inline-grid;
+  inline-size: 100%;
+  min-inline-size: 0;
+  gap: 0.375rem;
+  color: var(--kappa-default, #17191f);
+  font-family: var(--kappa-font-sans, inherit);
+}
+
+.kappa-number-input[data-size="xs"] {
+  --kappa-number-input-height: 1.25rem;
+  --kappa-number-input-icon-size: 0.75rem;
+  --kappa-number-input-trigger-size: 1.125rem;
+  --kappa-number-input-padding: 0.1875rem;
+  --kappa-number-input-radius: 0.125rem;
+}
+
+.kappa-number-input[data-size="sm"] {
+  --kappa-number-input-height: 1.75rem;
+  --kappa-number-input-font-size: 0.75rem;
+  --kappa-number-input-icon-size: 0.75rem;
+  --kappa-number-input-trigger-size: 1.625rem;
+}
+
+.kappa-number-input[data-size="lg"] {
+  --kappa-number-input-height: 2.25rem;
+  --kappa-number-input-font-size: 0.875rem;
+  --kappa-number-input-icon-size: 1rem;
+  --kappa-number-input-trigger-size: 2.125rem;
+}
+
+.kappa-number-input__label {
+  display: inline-flex;
+  inline-size: fit-content;
+  align-items: center;
+  gap: 0.25rem;
+  color: var(--kappa-default, #17191f);
+  cursor: default;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+.kappa-number-input__value-text {
+  color: var(--kappa-subtle, #5f6875);
+  font-size: 0.75rem;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.25;
+}
+
+.kappa-number-input__control {
+  box-sizing: border-box;
+  display: flex;
+  inline-size: 100%;
+  min-inline-size: 0;
+  min-block-size: var(--kappa-number-input-height);
+  align-items: stretch;
+  overflow: hidden;
+  border: 1px solid var(--kappa-line, #e3e6eb);
+  border-radius: var(--kappa-number-input-radius);
+  background: var(--kappa-control, #ffffff);
+  color: var(--kappa-default, #17191f);
+  transition:
+    background-color 120ms ease,
+    border-color 120ms ease,
+    outline-color 120ms ease;
+}
+
+.kappa-number-input__control[data-focus],
+.kappa-number-input__control:focus-within {
+  border-color: var(--kappa-focus, #4c63ff);
+  outline: 2px solid var(--kappa-focus, #4c63ff);
+  outline-offset: 1px;
+}
+
+.kappa-number-input[data-invalid] .kappa-number-input__control,
+.kappa-number-input__control[data-invalid] {
+  border-color: var(--kappa-danger, #b42318);
+}
+
+.kappa-number-input[data-invalid] .kappa-number-input__control[data-focus],
+.kappa-number-input[data-invalid] .kappa-number-input__control:focus-within,
+.kappa-number-input__control[data-invalid][data-focus],
+.kappa-number-input__control[data-invalid]:focus-within {
+  outline-color: var(--kappa-danger, #b42318);
+}
+
+.kappa-number-input[data-disabled] .kappa-number-input__control,
+.kappa-number-input__control[data-disabled] {
+  background: var(--kappa-disabled-surface, var(--kappa-tint, #f4f6f9));
+  cursor: not-allowed;
+  opacity: 0.62;
+}
+
+.kappa-number-input[data-readonly] .kappa-number-input__control {
+  background: var(--kappa-readonly-surface, var(--kappa-tint, #f4f6f9));
+}
+
+.kappa-number-input__input {
+  box-sizing: border-box;
+  min-inline-size: 0;
+  block-size: calc(var(--kappa-number-input-height) - 2px);
+  flex: 1 1 auto;
+  padding-block: 0;
+  padding-inline: var(--kappa-number-input-padding);
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font-family: inherit;
+  font-size: var(--kappa-number-input-font-size);
+  font-variant-numeric: tabular-nums;
+  font-weight: 500;
+  line-height: 1;
+  outline: none;
+}
+
+.kappa-number-input__input::placeholder {
+  color: var(--kappa-muted, #9aa2ae);
+}
+
+.kappa-number-input__input:disabled {
+  cursor: not-allowed;
+}
+
+.kappa-number-input__input:read-only {
+  cursor: default;
+}
+
+.kappa-number-input__scrubbable-input {
+  position: relative;
+  display: flex;
+  min-inline-size: 0;
+  block-size: calc(var(--kappa-number-input-height) - 2px);
+  flex: 1 1 auto;
+  align-items: stretch;
+  overflow: hidden;
+  background: var(--kappa-tint, #f4f6f9);
+  cursor: ew-resize;
+  touch-action: manipulation;
+  user-select: none;
+  transition: background-color 100ms ease;
+}
+
+.kappa-number-input__scrubbable-editor {
+  position: absolute;
+  inset: 0;
+  inline-size: 100%;
+  opacity: 0;
+  pointer-events: none;
+  text-align: start;
+}
+
+.kappa-number-input__scrubbable-input[data-edit-alignment="center"]
+  .kappa-number-input__scrubbable-editor {
+  text-align: center;
+}
+
+.kappa-number-input__scrubbable-display {
+  display: flex;
+  min-inline-size: 0;
+  flex: 1 1 auto;
+  align-items: center;
+  justify-content: center;
+  padding-inline: var(--kappa-number-input-padding);
+  color: var(--kappa-default, #17191f);
+  font-size: var(--kappa-number-input-font-size);
+  font-variant-numeric: tabular-nums;
+  font-weight: 500;
+  line-height: 1;
+  overflow: hidden;
+  pointer-events: none;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.kappa-number-input__scrubbable-input:hover:not(
+    [data-disabled],
+    [data-readonly],
+    [data-editing]
+  ),
+.kappa-number-input__scrubbable-input[data-dragging] {
+  background: var(--kappa-overlay, #e9edf2);
+}
+
+.kappa-number-input__scrubbable-input[data-editing] {
+  background: var(--kappa-control, #ffffff);
+  cursor: text;
+  user-select: text;
+}
+
+.kappa-number-input__scrubbable-input[data-editing] .kappa-number-input__scrubbable-editor {
+  position: relative;
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.kappa-number-input__scrubbable-input[data-editing] .kappa-number-input__scrubbable-display {
+  display: none;
+}
+
+.kappa-number-input__scrubbable-input[data-disabled] {
+  cursor: not-allowed;
+  opacity: 0.62;
+}
+
+.kappa-number-input__scrubbable-input[data-readonly] {
+  cursor: default;
+}
+
+.kappa-number-input__unit {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  padding-inline: 0.375rem;
+  color: var(--kappa-subtle, #5f6875);
+  font-size: calc(var(--kappa-number-input-font-size) - 0.0625rem);
+  font-weight: 550;
+  line-height: 1;
+  pointer-events: none;
+  user-select: none;
+  white-space: nowrap;
+}
+
+.kappa-number-input__trigger {
+  box-sizing: border-box;
+  display: inline-flex;
+  inline-size: var(--kappa-number-input-trigger-size);
+  min-inline-size: var(--kappa-number-input-trigger-size);
+  min-block-size: calc(var(--kappa-number-input-height) - 2px);
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: var(--kappa-control, #ffffff);
+  color: var(--kappa-subtle, #5f6875);
+  cursor: pointer;
+  transition:
+    background-color 100ms ease,
+    color 100ms ease;
+}
+
+.kappa-number-input__trigger--decrement {
+  border-inline-end: 1px solid var(--kappa-line, #e3e6eb);
+}
+
+.kappa-number-input__trigger--increment {
+  border-inline-start: 1px solid var(--kappa-line, #e3e6eb);
+}
+
+.kappa-number-input__trigger:hover:not(:disabled) {
+  background: var(--kappa-overlay, #e9edf2);
+  color: var(--kappa-default, #17191f);
+}
+
+.kappa-number-input__trigger:active:not(:disabled) {
+  background: var(--kappa-tint, #f4f6f9);
+}
+
+.kappa-number-input__trigger:focus-visible {
+  position: relative;
+  z-index: 1;
+  outline: 2px solid var(--kappa-focus, #4c63ff);
+  outline-offset: -2px;
+}
+
+.kappa-number-input__trigger:disabled,
+.kappa-number-input__trigger[data-disabled] {
+  color: var(--kappa-muted, #9aa2ae);
+  cursor: not-allowed;
+  opacity: 0.58;
+}
+
+.kappa-number-input__trigger-icon {
+  display: block;
+  inline-size: var(--kappa-number-input-icon-size);
+  block-size: var(--kappa-number-input-icon-size);
+  pointer-events: none;
+}
+
+.kappa-number-input__scrubber {
+  display: inline-flex;
+  inline-size: 1.75rem;
+  block-size: 1.75rem;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.375rem;
+  background: transparent;
+  color: var(--kappa-subtle, #5f6875);
+  cursor: ew-resize;
+  touch-action: none;
+  transition:
+    background-color 100ms ease,
+    color 100ms ease;
+  user-select: none;
+}
+
+.kappa-number-input__scrubber:hover:not([data-disabled], [data-readonly]) {
+  background: var(--kappa-overlay, #e9edf2);
+  color: var(--kappa-default, #17191f);
+}
+
+.kappa-number-input__scrubber[data-disabled],
+.kappa-number-input__scrubber[data-readonly] {
+  color: var(--kappa-muted, #9aa2ae);
+  cursor: default;
+  opacity: 0.58;
+}
+
+.kappa-number-input__control > .kappa-number-input__scrubber {
+  align-self: stretch;
+  block-size: auto;
+  border-inline-end: 1px solid var(--kappa-line, #e3e6eb);
+  border-radius: 0;
+}
+
+.kappa-number-input__scrubber-icon {
+  display: block;
+  inline-size: var(--kappa-number-input-icon-size);
+  block-size: var(--kappa-number-input-icon-size);
+  pointer-events: none;
+}
+
+.kappa-number-input[data-scrubbing] .kappa-number-input__control {
+  border-color: var(--kappa-focus, #4c63ff);
+}
+
+.kappa-number-input[data-scrubbing] .kappa-number-input__scrubber {
+  background: var(--kappa-overlay, #e9edf2);
+  color: var(--kappa-default, #17191f);
+}
+
+@media (max-width: 47.99rem) {
+  .kappa-number-input__input {
+    font-size: 1rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kappa-number-input__control,
+  .kappa-number-input__trigger,
+  .kappa-number-input__scrubber,
+  .kappa-number-input__scrubbable-input {
+    transition: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .kappa-number-input__control,
+  .kappa-number-input__trigger,
+  .kappa-number-input__control > .kappa-number-input__scrubber,
+  .kappa-number-input__scrubbable-input {
+    border-color: ButtonText;
+  }
+
+  .kappa-number-input__control[data-focus],
+  .kappa-number-input__control:focus-within,
+  .kappa-number-input__trigger:focus-visible {
+    outline-color: Highlight;
+  }
+
+  .kappa-number-input[data-disabled],
+  .kappa-number-input__trigger:disabled,
+  .kappa-number-input__scrubber[data-disabled],
+  .kappa-number-input__scrubber[data-readonly] {
+    color: GrayText;
+    opacity: 1;
+  }
+}

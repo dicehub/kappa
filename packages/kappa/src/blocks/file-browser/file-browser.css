@@ -1,0 +1,70 @@
+.kappa-file-browser {
+  box-sizing: border-box;
+  min-inline-size: 0;
+  border: 1px solid var(--kappa-line);
+  border-radius: 0.625rem;
+  background: var(--kappa-base);
+  color: var(--kappa-default);
+  font: 0.8125rem/1.5 var(--kappa-font-sans, inherit);
+}
+.kappa-file-browser *, .kappa-file-browser *::before, .kappa-file-browser *::after { box-sizing: border-box; }
+.kappa-file-browser__header { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; padding: 1.25rem; }
+.kappa-file-browser__identity { min-inline-size: 0; }
+.kappa-file-browser__title { margin: 0; font-size: 1rem; font-weight: 600; line-height: 1.5; overflow-wrap: anywhere; }
+.kappa-file-browser__description { margin: 0.25rem 0 0; color: var(--kappa-subtle); font-size: 0.8125rem; }
+.kappa-file-browser__actions { display: flex; align-items: center; flex-wrap: wrap; gap: 0.5rem; }
+.kappa-file-browser__location { display: flex; align-items: center; justify-content: space-between; gap: 1rem; min-block-size: 2.75rem; padding: 0.5rem 1.25rem; border-block: 1px solid var(--kappa-line); background: var(--kappa-canvas); }
+.kappa-file-browser__location nav { min-inline-size: 0; }
+.kappa-file-browser__location button.kappa-breadcrumbs__link { padding: 0; border: 0; background: transparent; font: inherit; cursor: pointer; }
+.kappa-file-browser__filters { padding: 0.75rem 1.25rem; }
+.kappa-file-browser__body { min-inline-size: 0; border-block-start: 1px solid var(--kappa-line); }
+.kappa-file-browser__scroll { max-block-size: var(--kappa-file-browser-max-height, 28rem); overflow: auto; overscroll-behavior: contain; }
+.kappa-file-browser__scroll:focus-visible, .kappa-file-browser__body:focus-visible { outline: 2px solid var(--kappa-focus); outline-offset: -2px; }
+.kappa-file-browser__table { min-inline-size: 32rem; }
+.kappa-file-browser__name-cell { inline-size: 100%; }
+.kappa-file-browser__open { display: flex; align-items: center; gap: 0.625rem; inline-size: 100%; min-inline-size: 10rem; padding: 0.125rem 0; border: 0; background: transparent; color: var(--kappa-default); font: inherit; text-align: start; cursor: pointer; }
+.kappa-file-browser__open:hover:not(:disabled) .kappa-file-browser__name { text-decoration: underline; text-underline-offset: 0.2em; }
+.kappa-file-browser__open:focus-visible { outline: 2px solid var(--kappa-focus); outline-offset: 2px; border-radius: 0.125rem; }
+.kappa-file-browser__name { overflow-wrap: anywhere; }
+.kappa-file-browser__media { display: inline-flex; flex: none; color: var(--kappa-subtle); }
+.kappa-file-browser__icon { inline-size: 1.125rem; block-size: 1.125rem; flex: none; stroke: currentColor; stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; }
+.kappa-file-browser__size, .kappa-file-browser__modified { white-space: nowrap; color: var(--kappa-subtle); font-variant-numeric: tabular-nums; }
+.kappa-file-browser__menu-cell { inline-size: 2.5rem; }
+.kappa-file-browser__item-actions { display: flex; justify-content: end; }
+.kappa-file-browser__grid-scroll { padding: 1rem 1.25rem 1.25rem; }
+.kappa-file-browser__grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(10.5rem, 100%), 1fr)); gap: 0.75rem; }
+.kappa-file-browser__card { position: relative; display: grid; grid-template-rows: auto minmax(0, 1fr) auto; min-inline-size: 0; min-block-size: 10rem; overflow: hidden; border: 1px solid var(--kappa-line); border-radius: 0.5rem; background: var(--kappa-control); transition: border-color 120ms ease, background-color 120ms ease, box-shadow 120ms ease; }
+.kappa-file-browser__card:hover:not([data-disabled]) { border-color: var(--kappa-line-strong); background: var(--kappa-hover); }
+.kappa-file-browser__card[data-selected] { border-color: var(--kappa-accent); background: var(--kappa-selected-background); box-shadow: inset 0 0 0 1px var(--kappa-accent); }
+.kappa-file-browser__card-controls { display: flex; min-block-size: 2.25rem; align-items: center; justify-content: space-between; padding: 0.375rem 0.375rem 0; }
+.kappa-file-browser__card-controls > .kappa-file-browser__item-actions:only-child { margin-inline-start: auto; }
+.kappa-file-browser__card-open { min-inline-size: 0; align-items: flex-start; flex-direction: column; justify-content: center; gap: 0.375rem; padding: 0.25rem 0.875rem 0.75rem; text-decoration: none; }
+.kappa-file-browser__card-open:hover:not(:disabled) .kappa-file-browser__name { text-decoration: none; }
+.kappa-file-browser__card-open .kappa-file-browser__media { color: var(--kappa-accent-text); }
+.kappa-file-browser__card-open .kappa-file-browser__icon { inline-size: 2.25rem; block-size: 2.25rem; stroke-width: 1.2; }
+.kappa-file-browser__card-open .kappa-file-browser__name { max-inline-size: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 600; }
+.kappa-file-browser__card-meta, .kappa-file-browser__card-date { color: var(--kappa-subtle); font-size: 0.75rem; font-variant-numeric: tabular-nums; }
+.kappa-file-browser__card-date { padding: 0 0.875rem 0.75rem; }
+.kappa-file-browser__state { display: flex; min-block-size: 13rem; padding: 2rem; align-items: center; justify-content: center; flex-direction: column; gap: 0.75rem; text-align: center; color: var(--kappa-subtle); }
+.kappa-file-browser__footer { display: flex; min-block-size: 2.75rem; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem; padding: 0.375rem 1.25rem; border-block-start: 1px solid var(--kappa-line); color: var(--kappa-subtle); font-size: 0.75rem; }
+.kappa-file-browser__action-error { display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; padding: 0.75rem 1.25rem; background: var(--kappa-danger-tint); color: var(--kappa-danger-text); }
+.kappa-file-browser__name-field { display: grid; gap: 0.5rem; }
+.kappa-file-browser__name-field label { font-size: 0.8125rem; font-weight: 500; }
+.kappa-file-browser__form-error { margin: 0; font-size: 0.8125rem; color: var(--kappa-danger-text); }
+.kappa-file-browser [data-disabled] .kappa-file-browser__open { color: var(--kappa-subtle); cursor: not-allowed; }
+.kappa-file-browser__sr { position: absolute; inline-size: 1px; block-size: 1px; margin: -1px; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0; }
+
+@media (max-width: 40rem) {
+  .kappa-file-browser__header { padding: 1rem; }
+  .kappa-file-browser__location, .kappa-file-browser__filters, .kappa-file-browser__footer { padding-inline: 1rem; }
+  .kappa-file-browser__grid-scroll { padding: 0.75rem 1rem 1rem; }
+  .kappa-file-browser__grid { grid-template-columns: repeat(auto-fill, minmax(min(8.75rem, 100%), 1fr)); }
+  .kappa-file-browser__modified { display: none; }
+  .kappa-file-browser__table { min-inline-size: 24rem; }
+}
+@media (forced-colors: active) {
+  .kappa-file-browser, .kappa-file-browser__location, .kappa-file-browser__body, .kappa-file-browser__footer { border-color: CanvasText; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .kappa-file-browser__card { transition: none; }
+}

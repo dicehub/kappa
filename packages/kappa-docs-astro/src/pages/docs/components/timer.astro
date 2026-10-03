@@ -1,0 +1,186 @@
+---
+import ArkUiDocsLink from "../../../components/ArkUiDocsLink.astro";
+import CodeBlock from "../../../components/CodeBlock.astro";
+import CompositionTree from "../../../components/CompositionTree.astro";
+import CopyPageControls from "../../../components/CopyPageControls.vue";
+import DocsPageNavigation from "../../../components/DocsPageNavigation.astro";
+import TimerDocsDemo from "../../../components/TimerDocsDemo.vue";
+import {
+  barrelCode,
+  countdownCode,
+  elapsedCode,
+  events,
+  exportsList,
+  granularCode,
+  itemProps,
+  parts,
+  precisionCode,
+  previewCode,
+  rootProps,
+  sizesCode,
+} from "../../../data/timer-docs";
+import DocsLayout from "../../../layouts/DocsLayout.astro";
+import "../../../styles/docs-components.css";
+
+const currentPath = "/docs/components/timer";
+const description = "Records elapsed time or counts down to a target.";
+---
+
+<DocsLayout title="Timer" description={description}>
+  <div class="docs-page docs-page--component">
+    <header class="docs-page-header">
+      <div class="docs-page-header__inner">
+        <div class="docs-page-header__content">
+          <div class="docs-page-header__mobile-actions">
+            <CopyPageControls client:only="vue" align="center" />
+          </div>
+          <div class="docs-page-header__title-row">
+            <h1>Timer</h1>
+            <ArkUiDocsLink />
+            <div class="docs-page-header__navigation-actions">
+              <div class="docs-page-header__desktop-actions"><CopyPageControls client:only="vue" /></div>
+              <DocsPageNavigation currentPath={currentPath} variant="compact" />
+            </div>
+          </div>
+          <p class="docs-page-header__lede">{description}</p>
+        </div>
+      </div>
+    </header>
+
+    <div class="docs-page-body">
+      <article class="docs-article docs-article--component">
+        <section id="preview" class="docs-section">
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><TimerDocsDemo client:load variant="preview" /></div>
+            <CodeBlock code={previewCode} lang="vue" collapsible revealId="timer-preview-code" />
+          </div>
+        </section>
+
+        <section id="installation" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#installation">Installation</a></h2>
+          <p>Timer is part of the main Kappa package. Ark UI owns its clock, actions, completion state, and timer semantics.</p>
+          <h3 id="barrel"><a class="docs-section-anchor" href="#barrel">Barrel</a></h3>
+          <CodeBlock code={barrelCode} lang="javascript" />
+          <h3 id="granular"><a class="docs-section-anchor" href="#granular">Granular</a></h3>
+          <CodeBlock code={granularCode} lang="javascript" />
+        </section>
+
+        <section id="usage" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#usage">Usage</a></h2>
+          <p>
+            Set <code>countdown</code> for a decreasing timer. Set <code>startMs</code> and
+            <code>targetMs</code> in milliseconds. Action triggers hide when their action is not valid.
+          </p>
+          <ul>
+            <li>Use elapsed timers for operations, sessions, and run duration.</li>
+            <li>Use countdown timers for deadlines and time-limited resources.</li>
+            <li>Use <code>interval</code> only as often as the visible precision requires.</li>
+          </ul>
+        </section>
+
+        <section id="composition" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#composition">Composition</a></h2>
+          <CompositionTree component="timer" />
+          <p>
+            Ark UI controls elapsed time, formatted units, available actions, ticks, and completion.
+            Kappa provides the compact display, sizes, controls, and value-change motion.
+          </p>
+        </section>
+
+        <section id="examples" class="docs-section docs-section--component-examples">
+          <h2><a class="docs-section-anchor" href="#examples">Examples</a></h2>
+
+          <h3 id="elapsed"><a class="docs-section-anchor" href="#elapsed">Elapsed Time</a></h3>
+          <p>Start at zero and provide a target when the timer must complete at a fixed duration.</p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><TimerDocsDemo client:load variant="elapsed" /></div>
+            <CodeBlock code={elapsedCode} lang="vue" collapsible revealId="timer-elapsed-code" />
+          </div>
+
+          <h3 id="countdown"><a class="docs-section-anchor" href="#countdown">Countdown</a></h3>
+          <p>The <code>complete</code> event fires when the value reaches the target.</p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><TimerDocsDemo client:load variant="countdown" /></div>
+            <CodeBlock code={countdownCode} lang="vue" collapsible revealId="timer-countdown-code" />
+          </div>
+
+          <h3 id="precision"><a class="docs-section-anchor" href="#precision">Milliseconds</a></h3>
+          <p>Use a shorter interval for short operations. Disable animation on fast-changing units to keep the value clear.</p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><TimerDocsDemo client:load variant="precision" /></div>
+            <CodeBlock code={precisionCode} lang="vue" collapsible revealId="timer-precision-code" />
+          </div>
+
+          <h3 id="sizes"><a class="docs-section-anchor" href="#sizes">Sizes</a></h3>
+          <p>Use the small size in dense controls and the large size for a primary elapsed-time display.</p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><TimerDocsDemo client:load variant="sizes" /></div>
+            <CodeBlock code={sizesCode} lang="vue" collapsible revealId="timer-sizes-code" />
+          </div>
+        </section>
+
+        <section id="motion" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#motion">Motion</a></h2>
+          <p>
+            Changed units use a short number-pop transition inspired by
+            <a href="https://transitions.dev/detail.html?t=number-pop-in" target="_blank" rel="noopener noreferrer">Transitions.dev</a>.
+            Set <code>animate=false</code> on an item when rapid changes would be distracting.
+            Kappa disables the effect when the user requests reduced motion.
+          </p>
+        </section>
+
+        <section id="accessibility" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#accessibility">Accessibility</a></h2>
+          <ul>
+            <li><code>Area</code> exposes an atomic <code>timer</code> region with a formatted accessible label.</li>
+            <li>Separators are hidden from assistive technology.</li>
+            <li>Action triggers are native buttons and hide when their action is unavailable.</li>
+            <li>Use a separate polite status only when completion needs an announcement.</li>
+            <li>Do not use a short interval unless the additional precision is useful.</li>
+          </ul>
+        </section>
+
+        <section id="api-reference" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#api-reference">API Reference</a></h2>
+          <div class="docs-api-group">
+            <h3 id="root-api"><a class="docs-section-anchor" href="#root-api">Timer.Root</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>{rootProps.map((prop) => <tr><td><code>{prop.name}</code></td><td><code>{prop.type}</code></td><td><code>{prop.defaultValue}</code></td><td>{prop.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="item-api"><a class="docs-section-anchor" href="#item-api">Timer.Item</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>{itemProps.map((prop) => <tr><td><code>{prop.name}</code></td><td><code>{prop.type}</code></td><td><code>{prop.defaultValue}</code></td><td>{prop.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="parts-api"><a class="docs-section-anchor" href="#parts-api">Parts</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Part</th><th>Element</th><th>Description</th></tr></thead><tbody>{parts.map((part) => <tr><td><code>Timer.{part.name}</code></td><td><code>{part.element}</code></td><td>{part.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="events-api"><a class="docs-section-anchor" href="#events-api">Events</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Event</th><th>Payload</th><th>Description</th></tr></thead><tbody>{events.map((event) => <tr><td><code>{event.name}</code></td><td><code>{event.payload}</code></td><td>{event.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="exports"><a class="docs-section-anchor" href="#exports">Exports</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Export</th><th>Description</th></tr></thead><tbody>{exportsList.map((item) => <tr><td><code>{item.name}</code></td><td>{item.description}</td></tr>)}</tbody></table></div>
+          </div>
+        </section>
+
+        <DocsPageNavigation currentPath={currentPath} />
+      </article>
+
+      <aside class="docs-page-toc" aria-label="On this page">
+        <div class="docs-page-toc__inner">
+          <span class="docs-page-toc__title">On this page</span>
+          <ul>
+            <li><a href="#installation" data-toc-link="installation">Installation</a><ul><li><a href="#barrel" data-toc-link="barrel">Barrel</a></li><li><a href="#granular" data-toc-link="granular">Granular</a></li></ul></li>
+            <li><a href="#usage" data-toc-link="usage">Usage</a></li>
+            <li><a href="#composition" data-toc-link="composition">Composition</a></li>
+            <li><a href="#examples" data-toc-link="examples">Examples</a><ul><li><a href="#elapsed" data-toc-link="elapsed">Elapsed Time</a></li><li><a href="#countdown" data-toc-link="countdown">Countdown</a></li><li><a href="#precision" data-toc-link="precision">Milliseconds</a></li><li><a href="#sizes" data-toc-link="sizes">Sizes</a></li></ul></li>
+            <li><a href="#motion" data-toc-link="motion">Motion</a></li>
+            <li><a href="#accessibility" data-toc-link="accessibility">Accessibility</a></li>
+            <li><a href="#api-reference" data-toc-link="api-reference">API Reference</a><ul><li><a href="#root-api" data-toc-link="root-api">Timer.Root</a></li><li><a href="#item-api" data-toc-link="item-api">Timer.Item</a></li><li><a href="#parts-api" data-toc-link="parts-api">Parts</a></li><li><a href="#events-api" data-toc-link="events-api">Events</a></li><li><a href="#exports" data-toc-link="exports">Exports</a></li></ul></li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+  </div>
+</DocsLayout>

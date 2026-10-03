@@ -1,0 +1,206 @@
+.kappa-chart-frame {
+  box-sizing: border-box;
+  display: grid;
+  inline-size: 100%;
+  min-inline-size: 0;
+  padding: 0;
+  border: 1px solid var(--kappa-line, #e7eaef);
+  border-radius: var(--kappa-radius-md, 0.625rem);
+  margin: 0;
+  overflow: hidden;
+  background: var(--kappa-base, #ffffff);
+  color: var(--kappa-default, #171717);
+  font-family: var(--kappa-font-sans, inherit);
+}
+
+.kappa-chart-frame *,
+.kappa-chart-frame *::before,
+.kappa-chart-frame *::after {
+  box-sizing: border-box;
+}
+
+.kappa-chart-frame__header {
+  display: flex;
+  min-block-size: 3.25rem;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-block: 0.625rem;
+  padding-inline: 0.875rem;
+  border-block-end: 1px solid var(--kappa-line, #e7eaef);
+}
+
+.kappa-chart-frame__heading {
+  display: grid;
+  min-inline-size: 0;
+  gap: 0.125rem;
+}
+
+.kappa-chart-frame__title,
+.kappa-chart-frame__description {
+  padding: 0;
+  margin: 0;
+}
+
+.kappa-chart-frame__title {
+  overflow: hidden;
+  color: var(--kappa-strong, #0a0a0a);
+  font-size: 0.8125rem;
+  font-weight: 650;
+  line-height: 1rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.kappa-chart-frame__description {
+  overflow: hidden;
+  color: var(--kappa-subtle, #696969);
+  font-size: 0.6875rem;
+  line-height: 0.875rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.kappa-chart-frame__toolbar {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.kappa-chart-frame__toolbar :where(button, [data-chart-action]) {
+  display: inline-flex;
+  min-block-size: 1.75rem;
+  align-items: center;
+  justify-content: center;
+  gap: 0.375rem;
+  padding-block: 0;
+  padding-inline: 0.5rem;
+  border: 1px solid var(--kappa-line, #e7eaef);
+  border-radius: var(--kappa-radius-sm, 0.375rem);
+  background: var(--kappa-control, #ffffff);
+  color: var(--kappa-subtle, #696969);
+  font: inherit;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.kappa-chart-frame__toolbar :where(button, [data-chart-action]):hover {
+  background: var(--kappa-tint, #f2f3f5);
+  color: var(--kappa-default, #171717);
+}
+
+.kappa-chart-frame__toolbar :where(button, [data-chart-action]):focus-visible {
+  outline: 2px solid var(--kappa-focus, #4c63ff);
+  outline-offset: 2px;
+}
+
+.kappa-chart-frame__body {
+  position: relative;
+  min-block-size: 12rem;
+  block-size: var(--kappa-chart-height, 20rem);
+  min-inline-size: 0;
+  overflow: hidden;
+}
+
+.kappa-chart-frame__viewport {
+  inline-size: 100%;
+  block-size: 100%;
+  min-inline-size: 0;
+}
+
+.kappa-chart-frame__viewport[aria-hidden="true"] {
+  visibility: hidden;
+}
+
+.kappa-chart-frame__state {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  gap: 0.625rem;
+  padding: 1.5rem;
+  background:
+    linear-gradient(var(--kappa-base, #ffffff), var(--kappa-base, #ffffff)) padding-box,
+    repeating-linear-gradient(
+      -45deg,
+      transparent 0 0.5rem,
+      var(--kappa-tint, #f2f3f5) 0.5rem 0.5625rem
+    );
+  color: var(--kappa-subtle, #696969);
+  font-size: 0.75rem;
+  line-height: 1rem;
+  text-align: center;
+}
+
+.kappa-chart-frame__state[data-state="error"] {
+  color: var(--kappa-danger-text, #b42318);
+}
+
+.kappa-chart-frame__state > svg {
+  inline-size: 1.25rem;
+  block-size: 1.25rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.4;
+}
+
+.kappa-chart-frame__loader {
+  inline-size: 1.25rem;
+  block-size: 1.25rem;
+  border: 2px solid var(--kappa-line, #e7eaef);
+  border-block-start-color: var(--kappa-accent, #2479b6);
+  border-radius: 50%;
+  animation: kappa-chart-frame-spin 800ms linear infinite;
+}
+
+.kappa-chart-frame__accessible-description {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  padding: 0;
+  border: 0;
+  margin: -1px;
+  clip-path: inset(50%);
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.kappa-chart-frame__footer {
+  padding-block: 0.5rem;
+  padding-inline: 0.875rem;
+  border-block-start: 1px solid var(--kappa-line, #e7eaef);
+  color: var(--kappa-subtle, #696969);
+  font-size: 0.6875rem;
+  line-height: 0.875rem;
+}
+
+@keyframes kappa-chart-frame-spin {
+  to {
+    transform: rotate(1turn);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kappa-chart-frame__loader {
+    animation: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .kappa-chart-frame,
+  .kappa-chart-frame__header,
+  .kappa-chart-frame__footer,
+  .kappa-chart-frame__toolbar :where(button, [data-chart-action]) {
+    border-color: CanvasText;
+  }
+
+  .kappa-chart-frame__loader {
+    border-color: GrayText;
+    border-block-start-color: Highlight;
+  }
+}

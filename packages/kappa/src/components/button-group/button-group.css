@@ -1,0 +1,185 @@
+.kappa-button-group {
+  box-sizing: border-box;
+  display: inline-flex;
+  inline-size: fit-content;
+  max-inline-size: 100%;
+  align-items: stretch;
+  isolation: isolate;
+}
+
+.kappa-button-group[data-orientation="horizontal"] {
+  flex-direction: row;
+}
+
+.kappa-button-group[data-orientation="vertical"] {
+  flex-direction: column;
+}
+
+.kappa-button-group:has(> [data-slot="button-group"]) {
+  gap: 0.5rem;
+}
+
+.kappa-button-group > [data-slot]:not([data-slot="button-group"]) {
+  position: relative;
+  margin: 0;
+}
+
+.kappa-button-group > input[data-slot] {
+  min-inline-size: 0;
+  flex: 1 1 auto;
+}
+
+.kappa-button-group > [data-slot]:not([data-slot="button-group"]):focus-visible,
+.kappa-button-group > [data-slot]:not([data-slot="button-group"]):focus-within,
+.kappa-button-group > [data-slot][aria-invalid="true"] {
+  z-index: 2;
+}
+
+.kappa-button-group > .kappa-button:active {
+  transform: none;
+}
+
+.kappa-button-group[data-orientation="horizontal"]
+  > [data-slot]:not(
+    [data-slot="button-group"],
+    [data-slot="button-group-separator"]
+  ) {
+  border-start-end-radius: 0;
+  border-end-end-radius: 0;
+}
+
+.kappa-button-group[data-orientation="horizontal"]
+  > [data-slot]
+  ~ [data-slot]:not(
+    [data-slot="button-group"],
+    [data-slot="button-group-separator"]
+  ) {
+  border-inline-start-width: 0;
+  border-start-start-radius: 0;
+  border-end-start-radius: 0;
+}
+
+.kappa-button-group[data-orientation="horizontal"]
+  > [data-slot]:has(
+    + .kappa-button-group__separator[data-orientation="vertical"]
+  ) {
+  border-inline-end-width: 0;
+}
+
+.kappa-button-group[data-orientation="horizontal"]
+  > [data-slot]:not([data-slot="button-group"]):last-child {
+  border-start-end-radius: var(
+    --kappa-button-radius,
+    var(--kappa-button-group-radius, 0.5rem)
+  );
+  border-end-end-radius: var(
+    --kappa-button-radius,
+    var(--kappa-button-group-radius, 0.5rem)
+  );
+}
+
+.kappa-button-group[data-orientation="vertical"]
+  > [data-slot]:not(
+    [data-slot="button-group"],
+    [data-slot="button-group-separator"]
+  ) {
+  border-end-start-radius: 0;
+  border-end-end-radius: 0;
+}
+
+.kappa-button-group[data-orientation="vertical"]
+  > [data-slot]
+  ~ [data-slot]:not(
+    [data-slot="button-group"],
+    [data-slot="button-group-separator"]
+  ) {
+  inline-size: 100%;
+  border-block-start-width: 0;
+  border-start-start-radius: 0;
+  border-start-end-radius: 0;
+}
+
+.kappa-button-group[data-orientation="vertical"]
+  > [data-slot]:has(
+    + .kappa-button-group__separator[data-orientation="horizontal"]
+  ) {
+  border-block-end-width: 0;
+}
+
+.kappa-button-group[data-orientation="vertical"]
+  > [data-slot]:not([data-slot="button-group"]):first-child {
+  inline-size: 100%;
+}
+
+.kappa-button-group[data-orientation="vertical"]
+  > [data-slot]:not([data-slot="button-group"]):last-child {
+  border-end-start-radius: var(
+    --kappa-button-radius,
+    var(--kappa-button-group-radius, 0.5rem)
+  );
+  border-end-end-radius: var(
+    --kappa-button-radius,
+    var(--kappa-button-group-radius, 0.5rem)
+  );
+}
+
+.kappa-button-group__text {
+  box-sizing: border-box;
+  display: flex;
+  min-block-size: 2rem;
+  min-inline-size: 0;
+  align-items: center;
+  justify-content: center;
+  gap: 0.375rem;
+  padding-block: 0;
+  padding-inline: 0.625rem;
+  border: 1px solid var(--kappa-line, #e3e6eb);
+  border-radius: 0.5rem;
+  background: var(--kappa-tint, #f4f6f9);
+  color: var(--kappa-default, #17191f);
+  font-family: var(--kappa-font-sans, inherit);
+  font-size: 0.8125rem;
+  font-weight: 550;
+  line-height: 1rem;
+  white-space: nowrap;
+}
+
+.kappa-button-group__text > svg,
+.kappa-button-group__text > [data-icon] {
+  inline-size: 1rem;
+  block-size: 1rem;
+  flex: none;
+  pointer-events: none;
+}
+
+.kappa-button-group__separator {
+  box-sizing: border-box;
+  flex: none;
+  align-self: stretch;
+  border: 0;
+  background: var(--kappa-line, #e3e6eb);
+  color: var(--kappa-subtle, #5f6875);
+  pointer-events: none;
+}
+
+.kappa-button-group__separator[data-orientation="vertical"] {
+  inline-size: 1px;
+  min-block-size: 1rem;
+  margin-block: 0.375rem;
+}
+
+.kappa-button-group__separator[data-orientation="horizontal"] {
+  block-size: 1px;
+  min-inline-size: 1rem;
+  margin-inline: 0.375rem;
+}
+
+@media (forced-colors: active) {
+  .kappa-button-group__text {
+    border-color: ButtonText;
+  }
+
+  .kappa-button-group__separator {
+    background: CanvasText;
+  }
+}

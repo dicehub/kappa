@@ -1,0 +1,174 @@
+---
+import ArkUiDocsLink from "../../../components/ArkUiDocsLink.astro";
+import CodeBlock from "../../../components/CodeBlock.astro";
+import CompositionTree from "../../../components/CompositionTree.astro";
+import CopyPageControls from "../../../components/CopyPageControls.vue";
+import DocsPageNavigation from "../../../components/DocsPageNavigation.astro";
+import ExpandableTextDocsDemo from "../../../components/ExpandableTextDocsDemo.vue";
+import {
+  barrelCode,
+  controlledCode,
+  customTriggerCode,
+  dataSlots,
+  events,
+  expandableTextProps,
+  exportsList,
+  granularCode,
+  linesCode,
+  previewCode,
+  shortContentCode,
+  slots,
+} from "../../../data/expandable-text-docs";
+import DocsLayout from "../../../layouts/DocsLayout.astro";
+import "../../../styles/docs-components.css";
+
+const currentPath = "/docs/components/expandable-text";
+const description = "Truncates long prose to a measured line count and reveals it with an accessible disclosure control.";
+---
+
+<DocsLayout title="Expandable Text" description={description}>
+  <div class="docs-page docs-page--component">
+    <header class="docs-page-header">
+      <div class="docs-page-header__inner">
+        <div class="docs-page-header__content">
+          <div class="docs-page-header__mobile-actions">
+            <CopyPageControls client:only="vue" align="center" />
+          </div>
+          <div class="docs-page-header__title-row">
+            <h1>Expandable Text</h1>
+            <ArkUiDocsLink />
+            <div class="docs-page-header__navigation-actions">
+              <div class="docs-page-header__desktop-actions"><CopyPageControls client:only="vue" /></div>
+              <DocsPageNavigation currentPath={currentPath} variant="compact" />
+            </div>
+          </div>
+          <p class="docs-page-header__lede">{description}</p>
+        </div>
+      </div>
+    </header>
+
+    <div class="docs-page-body">
+      <article class="docs-article docs-article--component">
+        <section id="preview" class="docs-section">
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><ExpandableTextDocsDemo client:load variant="preview" /></div>
+            <CodeBlock code={previewCode} lang="vue" collapsible revealId="expandable-text-preview-code" />
+          </div>
+        </section>
+
+        <section id="installation" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#installation">Installation</a></h2>
+          <p>
+            Expandable Text is part of the main Kappa package. Use the barrel import for application
+            code or the component entry point for a granular import.
+          </p>
+          <h3 id="barrel"><a class="docs-section-anchor" href="#barrel">Barrel</a></h3>
+          <CodeBlock code={barrelCode} lang="javascript" />
+          <h3 id="granular"><a class="docs-section-anchor" href="#granular">Granular</a></h3>
+          <CodeBlock code={granularCode} lang="javascript" />
+        </section>
+
+        <section id="usage" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#usage">Usage</a></h2>
+          <p>
+            Put one block of prose in the default slot and set the collapsed line count with
+            <code>lines</code>. The trigger appears only when the rendered text exceeds that limit.
+            Use Collapsible instead when the hidden content contains controls or several sections.
+          </p>
+        </section>
+
+        <section id="composition" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#composition">Composition</a></h2>
+          <CompositionTree component="expandableText" />
+          <p>
+            Ark UI Collapsible owns the disclosure state, button relationship, keyboard activation,
+            and hidden-control handling. Kappa measures the prose, sets the partial collapsed height,
+            and removes the trigger when all content already fits.
+          </p>
+        </section>
+
+        <section id="examples" class="docs-section docs-section--component-examples">
+          <h2><a class="docs-section-anchor" href="#examples">Examples</a></h2>
+
+          <h3 id="line-count"><a class="docs-section-anchor" href="#line-count">Line Count</a></h3>
+          <p>Set the number of visible lines to match the available space.</p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><ExpandableTextDocsDemo client:load variant="lines" /></div>
+            <CodeBlock code={linesCode} lang="vue" collapsible revealId="expandable-text-lines-code" />
+          </div>
+
+          <h3 id="controlled"><a class="docs-section-anchor" href="#controlled">Controlled</a></h3>
+          <p>Use <code>v-model:open</code> when another control or application state owns expansion.</p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><ExpandableTextDocsDemo client:load variant="controlled" /></div>
+            <CodeBlock code={controlledCode} lang="vue" collapsible revealId="expandable-text-controlled-code" />
+          </div>
+
+          <h3 id="custom-trigger"><a class="docs-section-anchor" href="#custom-trigger">Custom Trigger</a></h3>
+          <p>Localize the labels with props and replace the visible trigger copy with the scoped slot.</p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview docs-component-preview--dynamic-height"><ExpandableTextDocsDemo client:load variant="custom-trigger" /></div>
+            <CodeBlock code={customTriggerCode} lang="vue" collapsible revealId="expandable-text-custom-trigger-code" />
+          </div>
+
+          <h3 id="short-content"><a class="docs-section-anchor" href="#short-content">Short Content</a></h3>
+          <p>Content that fits remains fully visible and does not render an unnecessary trigger.</p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><ExpandableTextDocsDemo client:load variant="short" /></div>
+            <CodeBlock code={shortContentCode} lang="vue" collapsible revealId="expandable-text-short-code" />
+          </div>
+        </section>
+
+        <section id="accessibility" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#accessibility">Accessibility</a></h2>
+          <ul>
+            <li>The native button exposes <code>aria-expanded</code> and <code>aria-controls</code>.</li>
+            <li>Enter and Space toggle the content while focus stays on the trigger.</li>
+            <li>Provide translated expand and collapse labels for the current interface language.</li>
+            <li>Reduced-motion mode removes the height and indicator transitions.</li>
+          </ul>
+        </section>
+
+        <section id="api-reference" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#api-reference">API Reference</a></h2>
+          <div class="docs-api-group">
+            <h3 id="expandable-text-api"><a class="docs-section-anchor" href="#expandable-text-api">ExpandableText</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>{expandableTextProps.map((prop) => <tr><td><code>{prop.name}</code></td><td><code>{prop.type}</code></td><td><code>{prop.defaultValue}</code></td><td>{prop.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="slots"><a class="docs-section-anchor" href="#slots">Slots</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Slot</th><th>Description</th></tr></thead><tbody>{slots.map(([name, detail]) => <tr><td><code>{name}</code></td><td>{detail}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="data-slots"><a class="docs-section-anchor" href="#data-slots">Data Slots</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Slot</th><th>Element</th><th>Description</th></tr></thead><tbody>{dataSlots.map(([name, element, detail]) => <tr><td><code>{name}</code></td><td><code>{element}</code></td><td>{detail}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="events"><a class="docs-section-anchor" href="#events">Events</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Event</th><th>Payload</th><th>Description</th></tr></thead><tbody>{events.map(([name, payload, detail]) => <tr><td><code>{name}</code></td><td><code>{payload}</code></td><td>{detail}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="exports"><a class="docs-section-anchor" href="#exports">Exports</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Export</th><th>Description</th></tr></thead><tbody>{exportsList.map(([name, detail]) => <tr><td><code>{name}</code></td><td>{detail}</td></tr>)}</tbody></table></div>
+          </div>
+        </section>
+
+        <DocsPageNavigation currentPath={currentPath} />
+      </article>
+
+      <aside class="docs-page-toc" aria-label="On this page">
+        <div class="docs-page-toc__inner">
+          <span class="docs-page-toc__title">On this page</span>
+          <ul>
+            <li><a href="#installation" data-toc-link="installation">Installation</a><ul><li><a href="#barrel" data-toc-link="barrel">Barrel</a></li><li><a href="#granular" data-toc-link="granular">Granular</a></li></ul></li>
+            <li><a href="#usage" data-toc-link="usage">Usage</a></li>
+            <li><a href="#composition" data-toc-link="composition">Composition</a></li>
+            <li><a href="#examples" data-toc-link="examples">Examples</a><ul><li><a href="#line-count" data-toc-link="line-count">Line Count</a></li><li><a href="#controlled" data-toc-link="controlled">Controlled</a></li><li><a href="#custom-trigger" data-toc-link="custom-trigger">Custom Trigger</a></li><li><a href="#short-content" data-toc-link="short-content">Short Content</a></li></ul></li>
+            <li><a href="#accessibility" data-toc-link="accessibility">Accessibility</a></li>
+            <li><a href="#api-reference" data-toc-link="api-reference">API Reference</a><ul><li><a href="#expandable-text-api" data-toc-link="expandable-text-api">ExpandableText</a></li><li><a href="#slots" data-toc-link="slots">Slots</a></li><li><a href="#data-slots" data-toc-link="data-slots">Data Slots</a></li><li><a href="#events" data-toc-link="events">Events</a></li><li><a href="#exports" data-toc-link="exports">Exports</a></li></ul></li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+  </div>
+</DocsLayout>

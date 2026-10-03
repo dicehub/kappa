@@ -1,0 +1,9 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "allowImportingTsExtensions": true,
+    "customConditions": ["kappa-source"],
+    "resolveJsonModule": true,
+    "types": ["astro/client", "node"]
+  }
+}

@@ -1,0 +1,18 @@
+---
+import MessageComposerDocsDemo from "../../../components/MessageComposerDocsDemo.vue";
+import "../../../styles/docs.css";
+---
+
+<!doctype html>
+<html lang="en" class="kappa-docs-root"><head><meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" /><meta name="color-scheme" content="light dark" /><meta name="robots" content="noindex" /><title>Message Composer — Kappa Blocks</title>
+<script is:inline>const mode = localStorage.getItem("theme") === "dark" ? "dark" : "light"; document.documentElement.dataset.kappaTheme = mode; document.documentElement.dataset.mode = mode;</script></head>
+<body><nav aria-label="Example navigation"><a href="/docs/blocks/message-composer">← Message Composer documentation</a><span>dicehub / Kappa</span></nav><main><MessageComposerDocsDemo client:load standalone /></main></body></html>
+
+<style>
+body { margin: 0; min-inline-size: 0; background: var(--kappa-canvas); }
+nav { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.75rem; padding: 1rem 1.5rem; border-block-end: 1px solid var(--kappa-line); color: var(--kappa-subtle); font-size: 0.75rem; }
+nav a { color: var(--kappa-accent); text-decoration: none; }
+nav a:focus-visible { outline: 2px solid var(--kappa-focus); outline-offset: 3px; }
+main { padding: 1.5rem; }
+@media (max-width: 36rem) { main, nav { padding: 1rem; } }
+</style>

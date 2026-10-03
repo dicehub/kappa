@@ -1,0 +1,202 @@
+---
+import ArkUiDocsLink from "../../../components/ArkUiDocsLink.astro";
+import CodeBlock from "../../../components/CodeBlock.astro";
+import CompositionTree from "../../../components/CompositionTree.astro";
+import CopyPageControls from "../../../components/CopyPageControls.vue";
+import DocsPageNavigation from "../../../components/DocsPageNavigation.astro";
+import TreeViewDocsDemo from "../../../components/TreeViewDocsDemo.vue";
+import {
+  barrelCode,
+  correspondence,
+  customDataCode,
+  events,
+  granularCode,
+  lazyCode,
+  multipleCode,
+  standardCode,
+  treeViewProps,
+  virtualCode,
+  virtualTreeMethods,
+  virtualTreeProps,
+} from "../../../data/tree-view-docs";
+import DocsLayout from "../../../layouts/DocsLayout.astro";
+import "../../../styles/docs-components.css";
+
+const currentPath = "/docs/components/tree-view";
+const description = "Shows hierarchical data with an accessible standard tree or a windowed tree for 100,000 or more nodes.";
+const examples = [
+  {
+    id: "multiple-selection",
+    title: "Multiple Selection",
+    description: "Use Ark UI selection behavior for a small or medium tree.",
+    variant: "multiple",
+    code: multipleCode,
+  },
+  {
+    id: "async-loading",
+    title: "Async Loading",
+    description: "Load each branch independently. A loading request does not lock the rest of the tree.",
+    variant: "lazy",
+    code: lazyCode,
+  },
+  {
+    id: "custom-data",
+    title: "Custom Data",
+    description: "Map existing data without copying every source node. Row actions stay separate from tree selection.",
+    variant: "custom-data",
+    code: customDataCode,
+  },
+] as const;
+---
+
+<DocsLayout title="Tree View" description={description}>
+  <div class="docs-page docs-page--component">
+    <header class="docs-page-header">
+      <div class="docs-page-header__inner">
+        <div class="docs-page-header__content">
+          <div class="docs-page-header__mobile-actions"><CopyPageControls client:only="vue" align="center" /></div>
+          <div class="docs-page-header__title-row">
+            <h1>Tree View</h1>
+            <ArkUiDocsLink />
+            <div class="docs-page-header__navigation-actions">
+              <div class="docs-page-header__desktop-actions"><CopyPageControls client:only="vue" /></div>
+              <DocsPageNavigation currentPath={currentPath} variant="compact" />
+            </div>
+          </div>
+          <p class="docs-page-header__lede">{description}</p>
+        </div>
+      </div>
+    </header>
+
+    <div class="docs-page-body">
+      <article class="docs-article docs-article--component">
+        <section id="preview" class="docs-section">
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><TreeViewDocsDemo client:load variant="preview" /></div>
+            <CodeBlock code={standardCode} lang="vue" collapsible revealId="tree-view-preview-code" />
+          </div>
+        </section>
+
+        <section id="choose" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#choose">Choose a Tree</a></h2>
+          <div class="docs-api-table">
+            <table>
+              <thead><tr><th>Component</th><th>Use</th><th>Engine</th></tr></thead>
+              <tbody>
+                <tr><td><code>TreeView</code></td><td>Small and medium trees with full compound composition.</td><td>Ark UI Tree View</td></tr>
+                <tr><td><code>VirtualTree</code></td><td>Large and dense trees, including 100,000 or more nodes.</td><td>Kappa indexed fixed-row engine</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p>Choose the component explicitly. Kappa does not change rendering engines after the tree mounts.</p>
+        </section>
+
+        <section id="installation" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#installation">Installation</a></h2>
+          <p>Both components are part of the main Kappa package. Granular imports keep the large-tree engine separate.</p>
+          <h3 id="barrel"><a class="docs-section-anchor" href="#barrel">Barrel</a></h3>
+          <CodeBlock code={barrelCode} lang="javascript" />
+          <h3 id="granular"><a class="docs-section-anchor" href="#granular">Granular</a></h3>
+          <CodeBlock code={granularCode} lang="javascript" />
+        </section>
+
+        <section id="standard-tree" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#standard-tree">Standard Tree</a></h2>
+          <CompositionTree component="treeView" />
+          <p><code>TreeView</code> keeps Ark UI controlled state, lazy loading, selection, checking, typeahead, rename, focus, and keyboard behavior.</p>
+          <p>Render one <code>NodeProvider</code> for each node. Its <code>indexPath</code> must match the collection position.</p>
+        </section>
+
+        <section id="large-data" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#large-data">Large Data</a></h2>
+          <p><code>VirtualTree</code> indexes all source nodes once. It renders only the viewport and overscan rows.</p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><TreeViewDocsDemo client:visible variant="virtual" /></div>
+            <CodeBlock code={virtualCode} lang="vue" collapsible revealId="virtual-tree-code" />
+          </div>
+        </section>
+
+        <section id="examples" class="docs-section docs-section--component-examples">
+          <h2><a class="docs-section-anchor" href="#examples">Examples</a></h2>
+          {examples.map((example) => (
+            <>
+              <h3 id={example.id}><a class="docs-section-anchor" href={`#${example.id}`}>{example.title}</a></h3>
+              <p>{example.description}</p>
+              <div class="docs-component-example">
+                <div class="docs-component-preview"><TreeViewDocsDemo client:load variant={example.variant} /></div>
+                <CodeBlock code={example.code} lang="vue" collapsible revealId={`tree-view-${example.id}-code`} />
+              </div>
+            </>
+          ))}
+        </section>
+
+        <section id="performance" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#performance">Performance Contract</a></h2>
+          <ul>
+            <li><code>VirtualTree</code> requires stable, unique string values and a fixed row height.</li>
+            <li>Node lookup is indexed. Adjacent keyboard movement uses visible indexes.</li>
+            <li>Expand and collapse update the visible range. Ordinary scrolling never flattens the source tree.</li>
+            <li>Replace <code>items</code> only when source structure changes. Keep large node objects outside deep Vue reactivity.</li>
+          </ul>
+          <p>Run <code>pnpm --filter @dicehub/kappa benchmark:virtual-tree</code> to measure both 100,000-node shapes on the current machine.</p>
+        </section>
+
+        <section id="correspondence" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#correspondence">Correspondence</a></h2>
+          <div class="docs-api-table"><table><thead><tr><th>Reference</th><th>Corresponding component</th><th>Role in Kappa</th></tr></thead><tbody>{correspondence.map((item) => <tr><td>{item.reference}</td><td><code>{item.component}</code></td><td>{item.role}</td></tr>)}</tbody></table></div>
+        </section>
+
+        <section id="accessibility" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#accessibility">Accessibility</a></h2>
+          <ul>
+            <li>Both components use <code>tree</code> and <code>treeitem</code> semantics.</li>
+            <li><code>VirtualTree</code> adds <code>aria-level</code>, <code>aria-posinset</code>, and <code>aria-setsize</code> because most rows are not mounted.</li>
+            <li>Arrow keys, Home, End, Page Up, Page Down, selection, and typeahead work from the tree focus target.</li>
+            <li>Use <code>data-kappa-tree-interactive</code> on a custom row action. Its click will not select or expand the row.</li>
+            <li>Selection and focus are separate states. Keep both states visible.</li>
+          </ul>
+          <p><a href="https://ark-ui.com/docs/components/tree-view">Official Ark UI Tree View documentation</a></p>
+        </section>
+
+        <section id="api-reference" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#api-reference">API Reference</a></h2>
+          <div class="docs-api-group">
+            <h3 id="tree-view-api"><a class="docs-section-anchor" href="#tree-view-api">TreeView.Root</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>{treeViewProps.map((prop) => <tr><td><code>{prop.name}</code></td><td><code>{prop.type}</code></td><td><code>{prop.defaultValue}</code></td><td>{prop.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="virtual-tree-api"><a class="docs-section-anchor" href="#virtual-tree-api">VirtualTree</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>{virtualTreeProps.map((prop) => <tr><td><code>{prop.name}</code></td><td><code>{prop.type}</code></td><td><code>{prop.defaultValue}</code></td><td>{prop.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="virtual-tree-methods"><a class="docs-section-anchor" href="#virtual-tree-methods">VirtualTree Methods</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Method</th><th>Description</th></tr></thead><tbody>{virtualTreeMethods.map((method) => <tr><td><code>{method.name}</code></td><td>{method.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="events"><a class="docs-section-anchor" href="#events">Shared Events</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Event</th><th>Description</th></tr></thead><tbody>{events.map((event) => <tr><td><code>{event.name}</code></td><td>{event.description}</td></tr>)}</tbody></table></div>
+          </div>
+        </section>
+
+        <DocsPageNavigation currentPath={currentPath} />
+      </article>
+
+      <aside class="docs-page-toc" aria-label="On this page">
+        <div class="docs-page-toc__inner">
+          <span class="docs-page-toc__title">On this page</span>
+          <ul>
+            <li><a href="#choose" data-toc-link="choose">Choose a Tree</a></li>
+            <li><a href="#installation" data-toc-link="installation">Installation</a></li>
+            <li><a href="#standard-tree" data-toc-link="standard-tree">Standard Tree</a></li>
+            <li><a href="#large-data" data-toc-link="large-data">Large Data</a></li>
+            <li><a href="#examples" data-toc-link="examples">Examples</a></li>
+            <li><a href="#performance" data-toc-link="performance">Performance Contract</a></li>
+            <li><a href="#correspondence" data-toc-link="correspondence">Correspondence</a></li>
+            <li><a href="#accessibility" data-toc-link="accessibility">Accessibility</a></li>
+            <li><a href="#api-reference" data-toc-link="api-reference">API Reference</a></li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+  </div>
+</DocsLayout>

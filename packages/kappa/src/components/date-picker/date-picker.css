@@ -1,0 +1,383 @@
+.kappa-date-picker {
+  box-sizing: border-box;
+  display: grid;
+  inline-size: 100%;
+  gap: 0.375rem;
+  color: var(--kappa-default, #17191f);
+  font-family: var(--kappa-font-sans, inherit);
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
+.kappa-date-picker *,
+.kappa-date-picker *::before,
+.kappa-date-picker *::after {
+  box-sizing: border-box;
+}
+
+.kappa-date-picker[data-inline] {
+  inline-size: max-content;
+  max-inline-size: 100%;
+}
+
+.kappa-date-picker__label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  color: var(--kappa-default, #17191f);
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1.25rem;
+}
+
+.kappa-date-picker__control {
+  display: flex;
+  inline-size: 100%;
+  min-inline-size: 0;
+  min-block-size: 2rem;
+  align-items: center;
+  gap: 0.125rem;
+  padding-inline: 0.5rem 0.25rem;
+  border: 1px solid var(--kappa-line, #e3e6eb);
+  border-radius: 0.5rem;
+  background: var(--kappa-control, #ffffff);
+  color: var(--kappa-default, #17191f);
+  transition:
+    border-color 120ms ease,
+    box-shadow 120ms ease;
+}
+
+.kappa-date-picker__control:focus-within {
+  border-color: var(--kappa-focus, #4c63ff);
+  box-shadow: 0 0 0 1px var(--kappa-focus, #4c63ff);
+}
+
+.kappa-date-picker__control:has(.kappa-date-picker__input[data-invalid]) {
+  border-color: var(--kappa-danger, #b42318);
+}
+
+.kappa-date-picker[data-disabled] .kappa-date-picker__control {
+  cursor: not-allowed;
+  opacity: var(--kappa-disabled-opacity, 0.58);
+}
+
+.kappa-date-picker__input {
+  min-inline-size: 0;
+  flex: 1 1 auto;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  outline: none;
+}
+
+.kappa-date-picker__input::placeholder {
+  color: var(--kappa-muted, #9aa2ae);
+}
+
+.kappa-date-picker__trigger,
+.kappa-date-picker__clear-trigger,
+.kappa-date-picker__nav-trigger,
+.kappa-date-picker__view-trigger,
+.kappa-date-picker__preset-trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: 0.375rem;
+  background: transparent;
+  color: var(--kappa-subtle, #6c7480);
+  cursor: pointer;
+  font: inherit;
+  transition:
+    background-color 120ms ease,
+    color 120ms ease;
+}
+
+.kappa-date-picker__trigger,
+.kappa-date-picker__clear-trigger {
+  inline-size: 1.5rem;
+  block-size: 1.5rem;
+  flex: none;
+}
+
+.kappa-date-picker__trigger:hover:not(:disabled),
+.kappa-date-picker__clear-trigger:hover:not(:disabled),
+.kappa-date-picker__nav-trigger:hover:not(:disabled),
+.kappa-date-picker__view-trigger:hover:not(:disabled),
+.kappa-date-picker__preset-trigger:hover:not(:disabled) {
+  background: var(--kappa-tint, #f4f6f9);
+  color: var(--kappa-default, #17191f);
+}
+
+.kappa-date-picker__trigger:focus-visible,
+.kappa-date-picker__clear-trigger:focus-visible,
+.kappa-date-picker__nav-trigger:focus-visible,
+.kappa-date-picker__view-trigger:focus-visible,
+.kappa-date-picker__preset-trigger:focus-visible,
+.kappa-date-picker__cell-trigger:focus-visible {
+  outline: 2px solid var(--kappa-focus, #4c63ff);
+  outline-offset: 1px;
+}
+
+.kappa-date-picker__icon {
+  display: block;
+  inline-size: 0.875rem;
+  block-size: 0.875rem;
+}
+
+.kappa-date-picker__positioner {
+  min-inline-size: max-content;
+}
+
+.kappa-date-picker__content {
+  z-index: var(--kappa-date-picker-z-index, 1000);
+  inline-size: max-content;
+  max-inline-size: min(100vw - 2rem, 42rem);
+  padding: 0.625rem;
+  border: 1px solid var(--kappa-line, #e3e6eb);
+  border-radius: 0.625rem;
+  background: var(--kappa-control, #ffffff);
+  box-shadow: var(--kappa-shadow, 0 8px 24px rgba(16, 18, 23, 0.12));
+  color: var(--kappa-default, #17191f);
+  outline: none;
+}
+
+.kappa-date-picker[data-inline] .kappa-date-picker__calendar {
+  padding: 0.625rem;
+  border: 1px solid var(--kappa-line, #e3e6eb);
+  border-radius: 0.625rem;
+  background: var(--kappa-control, #ffffff);
+}
+
+.kappa-date-picker__calendar {
+  display: grid;
+  position: relative;
+  gap: 0.5rem;
+  color: var(--kappa-default, #17191f);
+  font-family: var(--kappa-font-sans, inherit);
+}
+
+.kappa-date-picker__view[hidden] {
+  display: none;
+}
+
+.kappa-date-picker__nav {
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-end: 0;
+  display: flex;
+  block-size: 1.625rem;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.kappa-date-picker__nav-trigger {
+  inline-size: 1.5rem;
+  block-size: 1.5rem;
+}
+
+.kappa-date-picker__nav-trigger:disabled,
+.kappa-date-picker__cell-trigger:disabled,
+.kappa-date-picker__preset-trigger:disabled {
+  cursor: not-allowed;
+  opacity: 0.42;
+}
+
+.kappa-date-picker__view-trigger {
+  min-block-size: 1.75rem;
+  padding-inline: 0.5rem;
+  color: var(--kappa-default, #17191f);
+  font-weight: 600;
+}
+
+.kappa-date-picker__months {
+  display: grid;
+  gap: 1rem;
+}
+
+.kappa-date-picker__months[data-month-count="2"] {
+  grid-template-columns: repeat(2, max-content);
+}
+
+.kappa-date-picker__months[data-month-count="3"] {
+  grid-template-columns: repeat(3, max-content);
+}
+
+.kappa-date-picker__month {
+  display: grid;
+  gap: 0.375rem;
+}
+
+.kappa-date-picker__month-title {
+  display: flex;
+  min-block-size: 1.625rem;
+  align-items: center;
+  margin: 0;
+  padding-inline-end: 3.5rem;
+  color: var(--kappa-default, #17191f);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  line-height: 1.25rem;
+}
+
+.kappa-date-picker__table {
+  inline-size: max-content;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.kappa-date-picker__table-header,
+.kappa-date-picker__week-number-header-cell {
+  inline-size: 2rem;
+  block-size: 1.5rem;
+  color: var(--kappa-subtle, #6c7480);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  text-align: center;
+}
+
+.kappa-date-picker__table-cell,
+.kappa-date-picker__week-number-cell {
+  inline-size: 2rem;
+  block-size: 2rem;
+  padding: 0.125rem;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.kappa-date-picker__week-number-cell {
+  color: var(--kappa-muted, #9aa2ae);
+  font-size: 0.6875rem;
+}
+
+.kappa-date-picker__cell-trigger {
+  display: flex;
+  inline-size: 100%;
+  min-inline-size: 1.875rem;
+  block-size: 1.875rem;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: 0.375rem;
+  background: transparent;
+  color: var(--kappa-default, #17191f);
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.8125rem;
+  line-height: 1;
+  transition: background-color 120ms ease;
+}
+
+.kappa-date-picker__cell-trigger:hover:not(:disabled):not([data-disabled]):not([data-unavailable]):not([data-selected]):not([data-range-start]):not([data-range-end]):not([data-in-range]):not([data-in-hover-range]) {
+  background: var(--kappa-tint, #f4f6f9);
+}
+
+.kappa-date-picker__cell-trigger[data-today] {
+  color: var(--kappa-accent, #2479b6);
+  font-weight: 600;
+}
+
+.kappa-date-picker__cell-trigger[data-selected],
+.kappa-date-picker__cell-trigger[data-range-start],
+.kappa-date-picker__cell-trigger[data-range-end] {
+  background: var(--kappa-selected, var(--kappa-selected-background, #0a0a0a));
+  color: var(--kappa-selected-contrast, var(--kappa-base, #ffffff));
+  font-weight: 500;
+}
+
+.kappa-date-picker__cell-trigger[data-in-range],
+.kappa-date-picker__cell-trigger[data-in-hover-range] {
+  border-radius: 0;
+  background: var(--kappa-tint, #f4f6f9);
+  color: var(--kappa-default, #17191f);
+}
+
+.kappa-date-picker__cell-trigger[data-range-start] {
+  border-start-start-radius: 0.375rem;
+  border-end-start-radius: 0.375rem;
+}
+
+.kappa-date-picker__cell-trigger[data-range-end] {
+  border-start-end-radius: 0.375rem;
+  border-end-end-radius: 0.375rem;
+}
+
+.kappa-date-picker__cell-trigger[data-unavailable],
+.kappa-date-picker__cell-trigger[data-disabled] {
+  color: var(--kappa-muted, #9aa2ae);
+  cursor: not-allowed;
+  font-weight: 400;
+  opacity: 0.42;
+}
+
+.kappa-date-picker__cell-trigger[data-outside-range] {
+  color: var(--kappa-muted, #9aa2ae);
+  opacity: 0.4;
+}
+
+.kappa-date-picker__preset-trigger {
+  min-block-size: 1.625rem;
+  padding-inline: 0.625rem;
+  border: 1px solid var(--kappa-line, #e3e6eb);
+  background: var(--kappa-control, #ffffff);
+  color: var(--kappa-default, #17191f);
+  font-size: 0.8125rem;
+}
+
+.kappa-date-picker__select {
+  min-block-size: 1.75rem;
+  padding-inline: 0.375rem;
+  border: 1px solid var(--kappa-line, #e3e6eb);
+  border-radius: 0.375rem;
+  background: var(--kappa-control, #ffffff);
+  color: var(--kappa-default, #17191f);
+  font: inherit;
+  font-size: 0.8125rem;
+}
+
+.kappa-date-picker__value-text,
+.kappa-date-picker__range-text {
+  color: var(--kappa-default, #17191f);
+  font-size: 0.875rem;
+}
+
+.kappa-date-picker__range-text {
+  color: var(--kappa-subtle, #6c7480);
+  font-size: 0.75rem;
+}
+
+@media (max-width: 720px) {
+  .kappa-date-picker__months[data-month-count="2"],
+  .kappa-date-picker__months[data-month-count="3"] {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kappa-date-picker__control,
+  .kappa-date-picker__trigger,
+  .kappa-date-picker__clear-trigger,
+  .kappa-date-picker__nav-trigger,
+  .kappa-date-picker__view-trigger,
+  .kappa-date-picker__preset-trigger,
+  .kappa-date-picker__cell-trigger {
+    transition: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .kappa-date-picker__control,
+  .kappa-date-picker__content,
+  .kappa-date-picker__preset-trigger,
+  .kappa-date-picker__select {
+    border-color: ButtonText;
+  }
+
+  .kappa-date-picker__cell-trigger[data-selected],
+  .kappa-date-picker__cell-trigger[data-range-start],
+  .kappa-date-picker__cell-trigger[data-range-end] {
+    background: Highlight;
+    color: HighlightText;
+  }
+}

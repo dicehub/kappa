@@ -1,0 +1,21 @@
+.kappa-timeseries-chart .kappa-chart-frame__body {
+  background:
+    linear-gradient(
+      to bottom,
+      color-mix(in srgb, var(--kappa-tint, #f2f3f5) 36%, transparent),
+      transparent 3.5rem
+    ),
+    var(--kappa-base, #ffffff);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kappa-timeseries-chart .kappa-chart-frame__body {
+    scroll-behavior: auto;
+  }
+}
+
+@media (forced-colors: active) {
+  .kappa-timeseries-chart .kappa-chart-frame__body {
+    background: Canvas;
+  }
+}

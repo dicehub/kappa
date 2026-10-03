@@ -1,0 +1,179 @@
+---
+import ArkUiDocsLink from "../../../components/ArkUiDocsLink.astro";
+import CodeBlock from "../../../components/CodeBlock.astro";
+import CompositionTree from "../../../components/CompositionTree.astro";
+import CopyPageControls from "../../../components/CopyPageControls.vue";
+import DocsPageNavigation from "../../../components/DocsPageNavigation.astro";
+import SelectionListDocsDemo from "../../../components/SelectionListDocsDemo.vue";
+import {
+  barrelCode,
+  dataAttributes,
+  events,
+  exportsList,
+  filterCode,
+  granularCode,
+  groupsCode,
+  multipleCode,
+  parts,
+  providerCode,
+  rootProps,
+  sizesCode,
+  usageCode,
+} from "../../../data/selection-list-docs";
+import DocsLayout from "../../../layouts/DocsLayout.astro";
+import "../../../styles/docs-components.css";
+
+const currentPath = "/docs/components/selection-list";
+const description = "Selects one or more items from a visible, keyboard-accessible collection.";
+const examples = [
+  { id: "multiple", title: "Multiple Selection", description: "Select independent result fields without modifier keys.", variant: "multiple", code: multipleCode },
+  { id: "filter", title: "Filtering", description: "Filter the collection while the input and list share keyboard navigation.", variant: "filter", code: filterCode },
+  { id: "groups", title: "Groups and Disabled Items", description: "Organize related targets and keep unavailable options visible.", variant: "groups", code: groupsCode },
+  { id: "sizes", title: "Sizes", description: "Use the base density for rich choices or the small density for compact tools.", variant: "sizes", code: sizesCode },
+] as const;
+---
+
+<DocsLayout title="Selection List" description={description}>
+  <div class="docs-page docs-page--component">
+    <header class="docs-page-header">
+      <div class="docs-page-header__inner">
+        <div class="docs-page-header__content">
+          <div class="docs-page-header__mobile-actions"><CopyPageControls client:only="vue" align="center" /></div>
+          <div class="docs-page-header__title-row">
+            <h1>Selection List</h1>
+            <ArkUiDocsLink />
+            <div class="docs-page-header__navigation-actions">
+              <div class="docs-page-header__desktop-actions"><CopyPageControls client:only="vue" /></div>
+              <DocsPageNavigation currentPath={currentPath} variant="compact" />
+            </div>
+          </div>
+          <p class="docs-page-header__lede">{description}</p>
+        </div>
+      </div>
+    </header>
+
+    <div class="docs-page-body">
+      <article class="docs-article docs-article--component">
+        <section id="preview" class="docs-section">
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><SelectionListDocsDemo client:load variant="preview" /></div>
+            <CodeBlock code={usageCode} lang="vue" collapsible revealId="selection-list-preview-code" />
+          </div>
+        </section>
+
+        <section id="installation" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#installation">Installation</a></h2>
+          <p>
+            Selection List is part of the main Kappa package. It uses Ark UI Listbox for focus,
+            selection, and accessibility. Kappa adds compact styling and parts for rich item content.
+          </p>
+          <h3 id="barrel"><a class="docs-section-anchor" href="#barrel">Barrel</a></h3>
+          <CodeBlock code={barrelCode} lang="javascript" />
+          <h3 id="granular"><a class="docs-section-anchor" href="#granular">Granular</a></h3>
+          <CodeBlock code={granularCode} lang="javascript" />
+        </section>
+
+        <section id="usage" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#usage">Usage</a></h2>
+          <p>
+            Create one collection and pass each item from that collection to <code>Item</code>.
+            The selected value is always a string array, including single selection.
+          </p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><SelectionListDocsDemo client:load variant="usage" /></div>
+            <CodeBlock code={usageCode} lang="vue" collapsible revealId="selection-list-usage-code" />
+          </div>
+        </section>
+
+        <section id="composition" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#composition">Composition</a></h2>
+          <CompositionTree component="selectionList" />
+          <p>
+            Ark UI owns option roles, typeahead, focus movement, disabled items, range selection,
+            and controlled state. Kappa does not copy this behavior.
+          </p>
+          <ul>
+            <li><code>Content</code> is the focusable and scrollable listbox surface.</li>
+            <li><code>ItemText</code> supplies the searchable text. Rich layout parts remain optional.</li>
+            <li><code>Input</code> provides connected keyboard behavior. The application filters the collection.</li>
+            <li><code>RootProvider</code> accepts a machine from <code>useSelectionList</code>.</li>
+          </ul>
+          <div class="docs-component-example">
+            <CodeBlock code={providerCode} lang="vue" collapsible revealId="selection-list-provider-code" />
+          </div>
+        </section>
+
+        <section id="examples" class="docs-section docs-section--component-examples">
+          <h2><a class="docs-section-anchor" href="#examples">Examples</a></h2>
+          {examples.map((example) => (
+            <>
+              <h3 id={example.id}><a class="docs-section-anchor" href={`#${example.id}`}>{example.title}</a></h3>
+              <p>{example.description}</p>
+              <div class="docs-component-example">
+                <div class="docs-component-preview"><SelectionListDocsDemo client:load variant={example.variant} /></div>
+                <CodeBlock code={example.code} lang="vue" collapsible revealId={`selection-list-${example.id}-code`} />
+              </div>
+            </>
+          ))}
+        </section>
+
+        <section id="accessibility" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#accessibility">Accessibility</a></h2>
+          <ul>
+            <li>Use a visible <code>Label</code> or add an accessible name to the root.</li>
+            <li>Arrow keys move focus. <kbd>Enter</kbd> or <kbd>Space</kbd> selects the focused item.</li>
+            <li>In multiple mode, <kbd>Control</kbd> or <kbd>Command</kbd> + <kbd>A</kbd> selects all enabled items.</li>
+            <li>Extended mode supports modifier-key and range selection.</li>
+            <li>Disabled, selected, hover, and keyboard-focus states remain distinct in both themes.</li>
+            <li>Use <code>scrollToIndexFn</code> when a virtual scroller owns item movement.</li>
+          </ul>
+          <p>
+            See the <a href="https://ark-ui.com/docs/components/listbox">official Ark UI Listbox documentation</a>
+            for the complete behavior and accessibility contract.
+          </p>
+        </section>
+
+        <section id="api-reference" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#api-reference">API Reference</a></h2>
+          <div class="docs-api-group">
+            <h3 id="root-api"><a class="docs-section-anchor" href="#root-api">SelectionList.Root</a></h3>
+            <p>The root accepts Ark UI Listbox props plus Kappa's visual <code>size</code>.</p>
+            <div class="docs-api-table"><table><thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>{rootProps.map((prop) => <tr><td><code>{prop.name}</code></td><td><code>{prop.type}</code></td><td><code>{prop.defaultValue}</code></td><td>{prop.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="parts-api"><a class="docs-section-anchor" href="#parts-api">Parts</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Part</th><th>Element</th><th>Description</th></tr></thead><tbody>{parts.map((part) => <tr><td><code>SelectionList.{part.name}</code></td><td><code>{part.element}</code></td><td>{part.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="events-api"><a class="docs-section-anchor" href="#events-api">Events</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Event</th><th>Payload</th><th>Description</th></tr></thead><tbody>{events.map((event) => <tr><td><code>{event.name}</code></td><td><code>{event.payload}</code></td><td>{event.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="data-attributes"><a class="docs-section-anchor" href="#data-attributes">Data Attributes</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Attribute</th><th>Value</th><th>Description</th></tr></thead><tbody>{dataAttributes.map((attribute) => <tr><td><code>{attribute.name}</code></td><td><code>{attribute.value}</code></td><td>{attribute.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="exports"><a class="docs-section-anchor" href="#exports">Exports</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Export</th><th>Description</th></tr></thead><tbody>{exportsList.map((item) => <tr><td><code>{item.name}</code></td><td>{item.description}</td></tr>)}</tbody></table></div>
+          </div>
+        </section>
+
+        <DocsPageNavigation currentPath={currentPath} />
+      </article>
+
+      <aside class="docs-page-toc" aria-label="On this page">
+        <div class="docs-page-toc__inner">
+          <span class="docs-page-toc__title">On this page</span>
+          <ul>
+            <li><a href="#installation" data-toc-link="installation">Installation</a><ul><li><a href="#barrel" data-toc-link="barrel">Barrel</a></li><li><a href="#granular" data-toc-link="granular">Granular</a></li></ul></li>
+            <li><a href="#usage" data-toc-link="usage">Usage</a></li>
+            <li><a href="#composition" data-toc-link="composition">Composition</a></li>
+            <li><a href="#examples" data-toc-link="examples">Examples</a><ul>{examples.map((example) => <li><a href={`#${example.id}`} data-toc-link={example.id}>{example.title}</a></li>)}</ul></li>
+            <li><a href="#accessibility" data-toc-link="accessibility">Accessibility</a></li>
+            <li><a href="#api-reference" data-toc-link="api-reference">API Reference</a><ul><li><a href="#root-api" data-toc-link="root-api">SelectionList.Root</a></li><li><a href="#parts-api" data-toc-link="parts-api">Parts</a></li><li><a href="#events-api" data-toc-link="events-api">Events</a></li><li><a href="#data-attributes" data-toc-link="data-attributes">Data Attributes</a></li><li><a href="#exports" data-toc-link="exports">Exports</a></li></ul></li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+  </div>
+</DocsLayout>

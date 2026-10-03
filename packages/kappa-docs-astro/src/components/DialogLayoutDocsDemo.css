@@ -1,0 +1,105 @@
+.dialog-layout-demo {
+  display: flex;
+  min-block-size: 7rem;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.dialog-layout-demo__fields {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.dialog-layout-demo__fields > label {
+  color: var(--kappa-strong);
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.dialog-layout-demo__facts {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0;
+  margin: 0.875rem 0 0;
+  border-block: 1px solid var(--kappa-hairline);
+}
+
+.dialog-layout-demo__facts div {
+  min-inline-size: 0;
+  padding: 0.625rem 0.5rem;
+}
+
+.dialog-layout-demo__facts div + div {
+  border-inline-start: 1px solid var(--kappa-hairline);
+}
+
+.dialog-layout-demo__facts dt,
+.dialog-layout-demo__facts dd {
+  margin: 0;
+}
+
+.dialog-layout-demo__facts dt,
+.dialog-layout-demo__count {
+  color: var(--kappa-subtle);
+  font-size: 0.6875rem;
+}
+
+.dialog-layout-demo__facts dd {
+  margin-block-start: 0.1875rem;
+  color: var(--kappa-default);
+  font-size: 0.8125rem;
+  font-weight: 600;
+}
+
+.dialog-layout-demo__copy {
+  margin: 0;
+  color: var(--kappa-strong);
+  font-size: 0.8125rem;
+  line-height: 1.35rem;
+}
+
+.dialog-layout-demo__events {
+  display: grid;
+  gap: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.dialog-layout-demo__events li {
+  display: grid;
+  grid-template-columns: 4.25rem minmax(0, 1fr) 2.5rem;
+  gap: 0.75rem;
+  align-items: baseline;
+  padding: 0.55rem 0;
+  border-block-end: 1px solid var(--kappa-hairline);
+  font-size: 0.75rem;
+}
+
+.dialog-layout-demo__events span,
+.dialog-layout-demo__events time {
+  color: var(--kappa-subtle);
+  font-family: var(--kappa-font-mono);
+  font-size: 0.6875rem;
+}
+
+.dialog-layout-demo__events strong {
+  min-inline-size: 0;
+  overflow: hidden;
+  color: var(--kappa-strong);
+  font-weight: 500;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@media (max-width: 30rem) {
+  .dialog-layout-demo__facts {
+    grid-template-columns: 1fr;
+  }
+
+  .dialog-layout-demo__facts div + div {
+    border-block-start: 1px solid var(--kappa-hairline);
+    border-inline-start: 0;
+  }
+}

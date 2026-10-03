@@ -1,0 +1,200 @@
+.kappa-flow {
+  --kappa-flow-node-background: var(--kappa-control, #ffffff);
+  --kappa-flow-node-border: var(--kappa-line, #e3e6eb);
+  --kappa-flow-node-foreground: var(--kappa-default, #17191f);
+  --kappa-flow-node-muted: var(--kappa-subtle, #6c7480);
+  --kappa-flow-connector: color-mix(
+    in srgb,
+    var(--kappa-subtle, #6c7480) 58%,
+    transparent
+  );
+
+  box-sizing: border-box;
+  position: relative;
+  isolation: isolate;
+  min-block-size: 11rem;
+  overflow: hidden;
+  padding-block: var(--kappa-flow-padding-y, 64px);
+  padding-inline: var(--kappa-flow-padding-x, 16px);
+  color: var(--kappa-flow-node-foreground);
+  font-family: var(--kappa-font-sans, inherit);
+}
+
+.kappa-flow--canvas {
+  overscroll-behavior: contain;
+  touch-action: none;
+}
+
+.kappa-flow--can-pan {
+  cursor: grab;
+}
+
+.kappa-flow--panning {
+  cursor: grabbing;
+  user-select: none;
+}
+
+.kappa-flow--can-pan:focus-visible {
+  outline: 2px solid var(--kappa-focus, #4c63ff);
+  outline-offset: -2px;
+}
+
+.kappa-flow__content {
+  position: relative;
+  z-index: 0;
+  margin-inline: auto;
+  will-change: transform;
+}
+
+.kappa-flow__list,
+.kappa-flow__parallel-list {
+  display: contents;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.kappa-flow .kappa-flow-node {
+  position: relative;
+  z-index: 2;
+  box-sizing: border-box;
+  display: block;
+  flex: none;
+  padding-block: 0.5rem;
+  padding-inline: 0.75rem;
+  border: 0;
+  border-radius: var(--kappa-radius-md, 0.375rem);
+  background: var(--kappa-flow-node-background);
+  box-shadow:
+    0 0 0 1px var(--kappa-flow-node-border),
+    var(--kappa-shadow, 0 1px 2px rgba(16, 24, 40, 0.05));
+  color: var(--kappa-flow-node-foreground);
+  cursor: default;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  line-height: 1.25rem;
+  white-space: nowrap;
+}
+
+.kappa-flow .kappa-flow__content .kappa-flow-node {
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  visibility: hidden;
+}
+
+.kappa-flow .kappa-flow__content .kappa-flow-node[data-flow-positioned="true"] {
+  opacity: 1;
+  visibility: visible;
+}
+
+.kappa-flow .kappa-flow-node--disabled {
+  color: var(--kappa-flow-node-muted);
+}
+
+.kappa-flow .kappa-flow-node--unstyled {
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  color: inherit;
+}
+
+.kappa-flow-parallel,
+.kappa-flow-sequence {
+  position: relative;
+  z-index: 2;
+  display: contents;
+  list-style: none;
+}
+
+.kappa-flow-anchor {
+  position: relative;
+}
+
+.kappa-flow__connectors {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: visible;
+  color: var(--kappa-flow-connector);
+  pointer-events: none;
+}
+
+.kappa-flow__connector-path {
+  vector-effect: non-scaling-stroke;
+}
+
+.kappa-flow__connector--disabled {
+  opacity: 0.38;
+}
+
+.kappa-flow__scrollbar {
+  position: absolute;
+  z-index: 4;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--kappa-line, #e3e6eb) 64%, transparent);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 160ms ease;
+}
+
+.kappa-flow:hover .kappa-flow__scrollbar,
+.kappa-flow--panning .kappa-flow__scrollbar {
+  opacity: 1;
+}
+
+.kappa-flow__scrollbar span {
+  position: absolute;
+  display: block;
+  border-radius: inherit;
+  background: var(--kappa-fill, rgba(17, 24, 39, 0.2));
+}
+
+.kappa-flow__scrollbar--x {
+  right: 0.25rem;
+  bottom: 0.25rem;
+  left: 0.25rem;
+  block-size: 0.375rem;
+}
+
+.kappa-flow__scrollbar--x span {
+  inset-block: 0;
+}
+
+.kappa-flow__scrollbar--y {
+  top: 0.25rem;
+  right: 0.25rem;
+  bottom: 0.25rem;
+  inline-size: 0.375rem;
+}
+
+.kappa-flow__scrollbar--y span {
+  inset-inline: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kappa-flow__scrollbar {
+    transition: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .kappa-flow .kappa-flow-node:not(.kappa-flow-node--unstyled) {
+    border: 1px solid CanvasText;
+    background: Canvas;
+    box-shadow: none;
+    color: CanvasText;
+  }
+
+  .kappa-flow__connectors {
+    color: CanvasText;
+  }
+
+  .kappa-flow__scrollbar,
+  .kappa-flow__scrollbar span {
+    background: CanvasText;
+  }
+}

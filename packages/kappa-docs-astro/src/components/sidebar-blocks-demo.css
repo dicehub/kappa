@@ -1,0 +1,71 @@
+.sidebar-block-demo { inline-size: 100%; block-size: 33rem; min-inline-size: 0; text-align: start; }
+.sidebar-block-demo[data-sidebar-block="collapsible-icons"] { block-size: 38rem; }
+.sidebar-block-demo[data-sidebar-block="inset-navigation"] { block-size: 42rem; }
+.sidebar-block-demo[data-standalone] { block-size: 100svh; }
+.sidebar-block-demo .kappa-sidebar-layout { border: 1px solid var(--kappa-line); border-radius: 0.625rem; overflow: hidden; }
+.sidebar-block-demo[data-standalone] .kappa-sidebar-layout { border: 0; border-radius: 0; }
+.sidebar-block-demo__identity-button { padding-block: 0.25rem; }
+.sidebar-block-demo__identity-button .kappa-sidebar__menu-label { position: relative; padding-inline-end: 1.25rem; }
+.sidebar-block-demo__identity { display: flex; flex-direction: column; min-inline-size: 0; gap: 0.125rem; }
+.sidebar-block-demo__identity strong { font-size: 0.8125rem; line-height: 1.125rem; font-weight: 550; overflow: hidden; text-overflow: ellipsis; }
+.sidebar-block-demo__identity small { font-size: 0.6875rem; line-height: 1rem; color: var(--kappa-subtle); overflow: hidden; text-overflow: ellipsis; }
+.sidebar-block-demo__chevrons { position: absolute; inset-inline-end: 0; inset-block-start: 50%; transform: translateY(-50%); inline-size: 0.875rem; block-size: 0.875rem; color: var(--kappa-subtle); }
+.sidebar-block-demo__namespace.kappa-sidebar__menu-button { block-size: 3rem; min-block-size: 3rem; padding: 0.5rem; gap: 0.5rem; }
+.sidebar-block-demo__namespace > .kappa-sidebar__menu-icon { inline-size: 2rem; block-size: 2rem; }
+.sidebar-block-demo__namespace-icon { display: grid; place-items: center; inline-size: 2rem; block-size: 2rem; border-radius: 0.5rem; background: var(--kappa-accent-solid); color: var(--kappa-accent-contrast); }
+.sidebar-block-demo__namespace-icon svg { inline-size: 1rem; block-size: 1rem; }
+.sidebar-block-demo__namespace .kappa-sidebar__menu-label { padding-inline-end: 1.5rem; }
+.sidebar-block-demo__namespace .sidebar-block-demo__identity strong { font-size: 0.875rem; line-height: 1rem; }
+.sidebar-block-demo__namespace .sidebar-block-demo__identity small { font-size: 0.75rem; line-height: 0.875rem; }
+.sidebar-block-demo__namespace .sidebar-block-demo__chevrons { inline-size: 1rem; block-size: 1rem; }
+.sidebar-block-demo__namespace[data-state="open"] { background: var(--kappa-tint); }
+.sidebar-block-demo__namespace.kappa-sidebar__menu-button:focus-visible { outline-offset: 2px; }
+.kappa-sidebar[data-state="collapsed"][data-collapsible="icon"] .sidebar-block-demo__namespace { block-size: 2rem; min-block-size: 2rem; padding: 0; }
+.sidebar-block-demo__avatar.kappa-avatar { --kappa-avatar-size: 2rem; border-radius: 0.5rem; overflow: hidden; }
+.sidebar-block-demo__profile > .kappa-sidebar__menu-icon { inline-size: 2rem; block-size: 2rem; }
+.sidebar-block-demo__profile.kappa-sidebar__menu-button { block-size: 3rem; min-block-size: 3rem; padding: 0.5rem; gap: 0.5rem; }
+.sidebar-block-demo__profile .sidebar-block-demo__identity, .sidebar-block-demo__profile-summary .sidebar-block-demo__identity { gap: 0; }
+.sidebar-block-demo__profile .sidebar-block-demo__identity strong, .sidebar-block-demo__profile-summary .sidebar-block-demo__identity strong { font-size: 0.875rem; line-height: 1.125rem; }
+.sidebar-block-demo__profile .sidebar-block-demo__identity small, .sidebar-block-demo__profile-summary .sidebar-block-demo__identity small { font-size: 0.75rem; line-height: 0.875rem; }
+.sidebar-block-demo__profile .sidebar-block-demo__chevrons { inline-size: 1rem; block-size: 1rem; }
+.sidebar-block-demo__profile[data-state="open"] { background: var(--kappa-overlay); }
+.kappa-sidebar[data-state="collapsed"][data-collapsible="icon"] .sidebar-block-demo__profile { block-size: 2rem; min-block-size: 2rem; padding: 0; }
+.sidebar-block-demo__profile-menu.kappa-dropdown__content { inline-size: max(14rem, var(--reference-width, 14rem)); border-radius: 0.5rem; }
+.sidebar-block-demo__profile-summary { display: flex; align-items: center; gap: 0.5rem; padding: 0.375rem 0.25rem; }
+.sidebar-block-demo__profile-summary .sidebar-block-demo__identity { flex: 1; }
+.sidebar-block-demo__profile-menu[data-mobile] .kappa-dropdown__item { min-block-size: 2.75rem; }
+.sidebar-block-demo__secondary { margin-block-end: 0.5rem; }
+.kappa-sidebar__footer:has(> .sidebar-block-demo__secondary) { flex-direction: column; align-items: stretch; }
+.sidebar-block-demo__search { margin-block-end: 0.5rem; }
+.sidebar-block-demo__group-trigger .kappa-sidebar__menu-label { display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; }
+.sidebar-block-demo__search-button.kappa-sidebar__menu-button { min-block-size: 2rem; border: 1px solid var(--kappa-line); border-radius: 0.375rem; background: color-mix(in srgb, var(--kappa-control) 25%, var(--kappa-tint)); color: var(--kappa-default); }
+.sidebar-block-demo__search-button > .kappa-sidebar__menu-icon { color: var(--kappa-subtle); }
+.sidebar-block-demo__search-button.kappa-sidebar__menu-button:hover { border-color: var(--kappa-subtle); background: var(--kappa-tint); }
+.sidebar-block-demo__search-button.kappa-sidebar__menu-button:focus-visible { border-color: var(--kappa-focus); outline-offset: 2px; }
+.sidebar-block-demo__breadcrumb { display: flex; align-items: center; gap: 0.5rem; min-inline-size: 0; font-size: 0.75rem; }
+.sidebar-block-demo__breadcrumb span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.sidebar-block-demo__breadcrumb span:first-child { color: var(--kappa-subtle); }
+.sidebar-block-demo__page { padding: 1.5rem; max-inline-size: 62rem; margin-inline: auto; }
+.sidebar-block-demo__page-heading { display: flex; align-items: center; flex-wrap: wrap; justify-content: space-between; gap: 1rem; }
+.sidebar-block-demo__page-heading h2 { margin: 0.375rem 0 0 !important; color: var(--kappa-default); font-size: 1.25rem !important; line-height: 1.5rem !important; letter-spacing: -0.025em; font-weight: 550; }
+.sidebar-block-demo__page-heading button svg { inline-size: 0.875rem; block-size: 0.875rem; }
+.sidebar-block-demo__eyebrow { font-size: 0.6875rem; color: var(--kappa-subtle); }
+.sidebar-block-demo__description { margin: 0.75rem 0 1.5rem !important; font-size: 0.8125rem !important; line-height: 1.4; color: var(--kappa-subtle); }
+.sidebar-block-demo__section-heading { display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; margin-block-end: 0.625rem; }
+.sidebar-block-demo__section-heading h3 { margin: 0 !important; font-size: 0.8125rem !important; line-height: 1.25rem !important; font-weight: 550; }
+.sidebar-block-demo__section-heading > span { font-size: 0.6875rem; color: var(--kappa-subtle); }
+.sidebar-block-demo__project-link { display: block; margin: 0; padding: 0; border: 0; background: transparent; color: var(--kappa-default); cursor: pointer; font: inherit; text-align: start; }
+.sidebar-block-demo__project-link:hover { text-decoration: underline; text-underline-offset: 0.2em; }
+.sidebar-block-demo__project-link:focus-visible { outline: 2px solid var(--kappa-focus); outline-offset: 3px; }
+.sidebar-block-demo__project-code { display: block; font-size: 0.625rem; line-height: 1rem; color: var(--kappa-subtle); }
+.sidebar-block-demo__status { display: inline-flex; align-items: center; gap: 0.375rem; font-size: 0.6875rem; white-space: nowrap; }
+.sidebar-block-demo__status::before { content: ""; inline-size: 0.3125rem; block-size: 0.3125rem; border-radius: 50%; background: var(--kappa-subtle); }
+.sidebar-block-demo__status[data-ready]::before { background: var(--kappa-success-text); }
+.sidebar-block-demo__note { margin: 1rem 0 0 !important; font-size: 0.6875rem !important; color: var(--kappa-subtle); }
+.sidebar-block-demo__sr-only { position: absolute; inline-size: 1px; block-size: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+@media (max-width: 767px) {
+  .sidebar-block-demo:not([data-standalone]) { block-size: 30rem; }
+  .sidebar-block-demo__page { padding: 1rem; }
+  .sidebar-block-demo__site-name + .sidebar-block-demo__breadcrumb > :first-child,
+  .sidebar-block-demo__site-name + .sidebar-block-demo__breadcrumb > :nth-child(2) { display: none; }
+}

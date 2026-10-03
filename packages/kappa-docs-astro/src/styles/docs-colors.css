@@ -1,0 +1,372 @@
+/*
+ * Colors reference page. Color tokens come from the Kappa theme imported by
+ * docs.css; only page layout and the compact reference typography live here.
+ * Selectors use `.docs-article--colors` plus two descendant classes so the
+ * page stays compact without touching the shared docs prose rules, and so the
+ * overrides survive the shared `.docs-section` rules for paragraphs and code.
+ */
+
+.docs-article--colors {
+  width: 100%;
+  min-width: 0;
+}
+
+.docs-colors-preview {
+  margin-top: 1rem;
+  min-width: 0;
+}
+
+/*
+ * The preview pair owns its colors. The shared inline-code chip paints
+ * --docs-base and --docs-default from the page mode, which reads as a dark chip
+ * in the light preview while the page is dark.
+ */
+.docs-article--colors .docs-colors-preview .colors-preview__attribute {
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: var(--kappa-subtle);
+  font-size: 0.6875rem;
+}
+
+.docs-article--colors .docs-section .docs-colors-note {
+  color: var(--docs-subtle);
+  font-size: 0.8125rem;
+}
+
+/* Search and result count */
+.docs-colors-search {
+  display: flex;
+  min-width: 0;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.375rem 0.75rem;
+  margin-top: 1rem;
+}
+
+.docs-colors-search__input {
+  inline-size: min(100%, 22rem);
+}
+
+.docs-article--colors .docs-colors-reference .docs-colors-search__count {
+  margin: 0;
+  color: var(--docs-subtle);
+  font-size: 0.75rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.docs-article--colors .docs-colors-reference .docs-colors-search__note {
+  flex-basis: 100%;
+  margin: 0;
+  color: var(--docs-subtle);
+  font-size: 0.6875rem;
+  line-height: 1.45;
+}
+
+.docs-colors-search__clear {
+  flex: none;
+}
+
+/* Token groups */
+.docs-colors-group {
+  min-width: 0;
+  margin-top: 1.75rem;
+}
+
+.docs-article--colors .docs-colors-reference .docs-colors-group__title {
+  margin: 0;
+  color: var(--docs-default);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.docs-article--colors .docs-colors-reference .docs-colors-group__description {
+  margin: 0.25rem 0 0;
+  color: var(--docs-subtle);
+  font-size: 0.8125rem;
+  line-height: 1.5;
+}
+
+.docs-colors-rows {
+  display: grid;
+  min-width: 0;
+  margin-top: 0.5rem;
+}
+
+/* Token rows */
+.docs-colors-token {
+  display: grid;
+  min-width: 0;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 25rem);
+  gap: 0.5rem 1rem;
+  padding: 0.75rem 0;
+  border-top: 1px solid var(--docs-border);
+}
+
+.docs-colors-token__identity {
+  min-width: 0;
+}
+
+.docs-colors-token__name-row {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+}
+
+.docs-article--colors .docs-colors-token .docs-colors-token__name {
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: var(--docs-default);
+  font-size: 0.75rem;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.docs-article--colors .docs-colors-token .docs-colors-token__description {
+  margin: 0.25rem 0 0;
+  color: var(--docs-subtle);
+  font-size: 0.75rem;
+  line-height: 1.45;
+}
+
+.docs-article--colors .docs-colors-token .docs-colors-token__compatibility {
+  margin: 0.375rem 0 0;
+  padding-inline-start: 0.5rem;
+  border-inline-start: 2px solid var(--docs-line);
+  color: var(--docs-subtle);
+  font-size: 0.6875rem;
+  line-height: 1.45;
+}
+
+.docs-colors-token__modes {
+  display: grid;
+  min-width: 0;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.5rem;
+}
+
+.docs-colors-token__mode {
+  display: grid;
+  min-width: 0;
+  grid-template-columns: auto auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.docs-colors-token__mode-label {
+  color: var(--docs-subtle);
+  font-size: 0.625rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.docs-colors-token__swatch {
+  display: inline-flex;
+  inline-size: 1.5rem;
+  block-size: 1.5rem;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--kappa-hairline);
+  border-radius: 0.375rem;
+  background: var(--docs-colors-value);
+  font-size: 0.625rem;
+  font-weight: 700;
+}
+
+.docs-colors-token__swatch[data-colors-swatch="text"] {
+  background: var(--docs-colors-swatch-background);
+  color: var(--docs-colors-value);
+}
+
+.docs-colors-token__swatch[data-colors-swatch="shadow"] {
+  border-color: transparent;
+  background: var(--kappa-base);
+  box-shadow: var(--docs-colors-value);
+}
+
+.docs-colors-token__values {
+  display: grid;
+  min-width: 0;
+  gap: 0.1rem;
+}
+
+.docs-article--colors .docs-colors-token .docs-colors-token__value {
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: var(--docs-default);
+  font-size: 0.6875rem;
+  overflow-wrap: anywhere;
+}
+
+.docs-article--colors .docs-colors-token .docs-colors-token__resolved {
+  color: var(--docs-subtle);
+  font-size: 0.625rem;
+  overflow-wrap: anywhere;
+}
+
+/* Copy controls: ClipboardText triggers reduced to compact icon buttons. */
+.docs-article--colors .docs-colors-token .kappa-clipboard-text {
+  display: contents;
+}
+
+.docs-article--colors .docs-colors-token .docs-colors-copy {
+  display: inline-flex;
+  inline-size: 1.25rem;
+  block-size: 1.25rem;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  align-self: center;
+  padding: 0;
+  border: 0;
+  border-radius: 0.25rem;
+  background: transparent;
+  color: var(--docs-subtle);
+  cursor: pointer;
+  transition: background-color 120ms ease, color 120ms ease;
+}
+
+.docs-article--colors .docs-colors-token .docs-colors-copy:hover:not(:disabled) {
+  background: var(--docs-tint);
+  color: var(--docs-default);
+}
+
+.docs-article--colors .docs-colors-token .docs-colors-copy:focus-visible {
+  outline: 2px solid var(--docs-brand);
+  outline-offset: 1px;
+}
+
+.docs-article--colors .docs-colors-token .docs-colors-copy[data-copied] {
+  color: var(--docs-success);
+}
+
+.docs-article--colors .docs-colors-token .docs-colors-copy .kappa-clipboard-text__icon {
+  inline-size: 0.75rem;
+  block-size: 0.75rem;
+}
+
+.docs-article--colors .docs-colors-reference .docs-colors-empty {
+  margin: 1rem 0 0;
+  padding: 0.75rem 0.875rem;
+  border: 1px dashed var(--docs-border);
+  border-radius: 0.5rem;
+  color: var(--docs-subtle);
+  font-size: 0.8125rem;
+}
+
+/* Contrast table */
+.docs-colors-contrast-scroll {
+  margin-top: 1rem;
+  overflow-x: auto;
+}
+
+.docs-colors-contrast {
+  width: 100%;
+  min-width: 46rem;
+  border-collapse: collapse;
+  font-size: 0.75rem;
+}
+
+.docs-colors-contrast th,
+.docs-colors-contrast td {
+  padding: 0.5rem 0.625rem;
+  border-bottom: 1px solid var(--docs-border);
+  text-align: start;
+  vertical-align: top;
+}
+
+.docs-colors-contrast thead th {
+  color: var(--docs-subtle);
+  font-size: 0.625rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.docs-colors-contrast tbody th {
+  color: var(--docs-default);
+  font-weight: 600;
+}
+
+.docs-colors-contrast__note {
+  display: block;
+  margin-top: 0.15rem;
+  color: var(--docs-subtle);
+  font-size: 0.6875rem;
+  font-weight: 400;
+}
+
+.docs-article--colors .docs-colors-contrast .docs-colors-contrast__token {
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: var(--docs-default);
+  font-size: 0.6875rem;
+}
+
+.docs-colors-contrast__cell {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.docs-colors-contrast__specimen {
+  display: inline-flex;
+  inline-size: 2.25rem;
+  block-size: 1.75rem;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.25rem;
+  background: var(--docs-colors-contrast-background);
+  color: var(--docs-colors-contrast-foreground);
+  font-size: 0.8125rem;
+  font-weight: 600;
+}
+
+.docs-colors-contrast__specimen--nontext {
+  box-sizing: border-box;
+  border: 0.1875rem solid var(--docs-colors-contrast-foreground);
+}
+
+.docs-colors-contrast__ratio {
+  color: var(--docs-default);
+  font-family: var(--docs-font-mono);
+  font-size: 0.6875rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.docs-colors-contrast__ratio[data-contrast-status="below"] {
+  color: var(--kappa-danger-text);
+}
+
+@media (max-width: 62rem) {
+  .docs-colors-token {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 34rem) {
+  .docs-colors-token__modes {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .docs-colors-search__input {
+    inline-size: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .docs-colors-copy {
+    transition: none;
+  }
+}

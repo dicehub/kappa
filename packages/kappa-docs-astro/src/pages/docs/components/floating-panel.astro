@@ -1,0 +1,201 @@
+---
+import ArkUiDocsLink from "../../../components/ArkUiDocsLink.astro";
+import CodeBlock from "../../../components/CodeBlock.astro";
+import CompositionTree from "../../../components/CompositionTree.astro";
+import CopyPageControls from "../../../components/CopyPageControls.vue";
+import DocsPageNavigation from "../../../components/DocsPageNavigation.astro";
+import FloatingPanelDocsDemo from "../../../components/FloatingPanelDocsDemo.vue";
+import {
+  barrelCode,
+  boundedCode,
+  controlledCode,
+  events,
+  exportsList,
+  fixedCode,
+  granularCode,
+  keyboardRows,
+  multipleCode,
+  parts,
+  previewCode,
+  rootProps,
+  rootProviderCode,
+  stagesCode,
+  transformCode,
+} from "../../../data/floating-panel-docs";
+import DocsLayout from "../../../layouts/DocsLayout.astro";
+import "../../../styles/docs-components.css";
+
+const currentPath = "/docs/components/floating-panel";
+const description = "A draggable, resizable non-modal window for tools that must remain visible over an application workspace.";
+
+const examples = [
+  {
+    id: "transform-tool",
+    title: "Transform tool",
+    description: "A compact technical window with editable content and a persistent action footer.",
+    variant: "transform",
+    code: transformCode,
+  },
+  {
+    id: "controlled-geometry",
+    title: "Controlled geometry",
+    description: "Bind position and size when application state must observe or restore panel geometry.",
+    variant: "controlled",
+    code: controlledCode,
+  },
+  {
+    id: "window-stages",
+    title: "Window stages",
+    description: "Stage triggers minimize, maximize, and restore without adding a second window-state implementation.",
+    variant: "stages",
+    code: stagesCode,
+  },
+  {
+    id: "multiple-windows",
+    title: "Multiple windows",
+    description: "Interaction raises a panel above its siblings while preserving the rest of the workspace.",
+    variant: "multiple",
+    code: multipleCode,
+  },
+  {
+    id: "bounded-workspace",
+    title: "Bounded workspace",
+    description: "Keep the default fixed strategy and constrain the panel to a stable application work area.",
+    variant: "bounded",
+    code: boundedCode,
+  },
+  {
+    id: "fixed-window",
+    title: "Without drag or resize",
+    description: "Disable gestures while retaining the non-modal window, focus, and close contracts.",
+    variant: "fixed",
+    code: fixedCode,
+  },
+] as const;
+---
+
+<DocsLayout title="Floating Panel" description={description}>
+  <div class="docs-page docs-page--component">
+    <header class="docs-page-header">
+      <div class="docs-page-header__inner">
+        <div class="docs-page-header__content">
+          <div class="docs-page-header__mobile-actions"><CopyPageControls client:only="vue" align="center" /></div>
+          <div class="docs-page-header__title-row">
+            <h1>Floating Panel</h1>
+            <ArkUiDocsLink />
+            <div class="docs-page-header__navigation-actions">
+              <div class="docs-page-header__desktop-actions"><CopyPageControls client:only="vue" /></div>
+              <DocsPageNavigation currentPath={currentPath} variant="compact" />
+            </div>
+          </div>
+          <p class="docs-page-header__lede">{description}</p>
+        </div>
+      </div>
+    </header>
+
+    <div class="docs-page-body">
+      <article class="docs-article docs-article--component">
+        <section id="preview" class="docs-section">
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><FloatingPanelDocsDemo client:load variant="preview" /></div>
+            <CodeBlock code={previewCode} lang="vue" collapsible revealId="floating-panel-preview-code" />
+          </div>
+          <p><a href="/examples/components/floating-panel" target="_blank" rel="noopener noreferrer">Open full example <span aria-hidden="true">↗</span><span class="docs-block-example__sr-only"> (new tab)</span></a></p>
+        </section>
+
+        <section id="installation" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#installation">Installation</a></h2>
+          <p>Floating Panel is included in Kappa. Ark UI owns movement, resizing, bounds, focus restoration, stages, and panel stacking. Kappa provides the compound Vue API, compact window treatment, safe defaults, and optional Teleport.</p>
+          <h3 id="barrel"><a class="docs-section-anchor" href="#barrel">Barrel</a></h3>
+          <CodeBlock code={barrelCode} lang="javascript" />
+          <h3 id="granular"><a class="docs-section-anchor" href="#granular">Granular</a></h3>
+          <CodeBlock code={granularCode} lang="javascript" />
+        </section>
+
+        <section id="usage" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#usage">Usage</a></h2>
+          <p>Use Floating Panel for tools that must stay visible while the page behind them remains interactive. Use Dialog when work must stop until the user responds, Drawer for an edge-attached surface, and Resizable for panels that remain part of the document layout.</p>
+          <ul>
+            <li>The Kappa root keeps dragged windows within their boundary and closes on Escape by default.</li>
+            <li>Its minimum size is 240 × 160 pixels. Ark retains the initial 320 × 240 size when no size is supplied.</li>
+            <li>Content stays mounted after close unless <code>unmountOnExit</code> is enabled. Set <code>persistRect</code> to preserve geometry across reopen.</li>
+            <li>Place interactive header content in Control or add <code>data-no-drag</code>.</li>
+          </ul>
+        </section>
+
+        <section id="composition" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#composition">Composition</a></h2>
+          <CompositionTree component="floatingPanel" />
+          <p>Positioner owns the optional Teleport. This differs from Dialog and Drawer, where Content also creates the positioner. Keep the default Teleport and fixed strategy for viewport or application-work-area bounds. Disable Teleport only when the integration provides a matching positioning and boundary coordinate space.</p>
+          <p>Ark does not expose a controlled stage model. Use StageTrigger, the context methods, and <code>stageChange</code> to observe minimize, maximize, and restore operations.</p>
+          <p><code>useFloatingPanel</code> is the raw Ark hook. Set the Kappa root defaults explicitly when its machine is passed to RootProvider, as shown below.</p>
+          <CodeBlock code={rootProviderCode} lang="vue" />
+        </section>
+
+        <section id="examples" class="docs-section docs-section--component-examples">
+          <h2><a class="docs-section-anchor" href="#examples">Examples</a></h2>
+          {examples.map((example) => (
+            <>
+              <h3 id={example.id}><a class="docs-section-anchor" href={`#${example.id}`}>{example.title}</a></h3>
+              <p>{example.description}</p>
+              <div class="docs-component-example">
+                <div class="docs-component-preview"><FloatingPanelDocsDemo client:load variant={example.variant} /></div>
+                <CodeBlock code={example.code} lang="vue" collapsible revealId={`floating-panel-${example.id}-code`} />
+              </div>
+            </>
+          ))}
+        </section>
+
+        <section id="accessibility" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#accessibility">Accessibility</a></h2>
+          <ul>
+            <li>Always render Title or provide an accessible name on Content.</li>
+            <li>Floating Panel is non-modal. It does not make the page inert or trap focus.</li>
+            <li>Content is the default focus target. Arrow keys move it when it has focus.</li>
+            <li>ResizeTrigger supports pointer input. Provide application controls that call <code>setSize</code> when keyboard resizing is required.</li>
+            <li>Stage and close controls include default accessible labels. Supply translated labels when the interface locale changes.</li>
+            <li>A nested Select or Popover should receive Escape before the containing panel.</li>
+          </ul>
+          <h3 id="keyboard-support"><a class="docs-section-anchor" href="#keyboard-support">Keyboard Support</a></h3>
+          <div class="docs-api-table"><table><thead><tr><th>Key</th><th>Behavior</th></tr></thead><tbody>{keyboardRows.map((row) => <tr><td><code>{row.key}</code></td><td>{row.description}</td></tr>)}</tbody></table></div>
+        </section>
+
+        <section id="api-reference" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#api-reference">API Reference</a></h2>
+          <div class="docs-api-group">
+            <h3 id="root-api"><a class="docs-section-anchor" href="#root-api">FloatingPanel.Root</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>{rootProps.map((prop) => <tr><td><code>{prop.name}</code></td><td><code>{prop.type}</code></td><td><code>{prop.defaultValue}</code></td><td>{prop.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="parts-api"><a class="docs-section-anchor" href="#parts-api">Parts</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Part</th><th>Element</th><th>Description</th></tr></thead><tbody>{parts.map((part) => <tr><td><code>FloatingPanel.{part.name}</code></td><td><code>{part.element}</code></td><td>{part.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="events-api"><a class="docs-section-anchor" href="#events-api">Events</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Event</th><th>Payload</th><th>Description</th></tr></thead><tbody>{events.map((event) => <tr><td><code>{event.name}</code></td><td><code>{event.payload}</code></td><td>{event.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="exports"><a class="docs-section-anchor" href="#exports">Exports</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Export</th><th>Description</th></tr></thead><tbody>{exportsList.map((item) => <tr><td><code>{item.name}</code></td><td>{item.description}</td></tr>)}</tbody></table></div>
+          </div>
+        </section>
+
+        <DocsPageNavigation currentPath={currentPath} />
+      </article>
+
+      <aside class="docs-page-toc" aria-label="On this page">
+        <div class="docs-page-toc__inner">
+          <span class="docs-page-toc__title">On this page</span>
+          <ul>
+            <li><a href="#installation" data-toc-link="installation">Installation</a><ul><li><a href="#barrel" data-toc-link="barrel">Barrel</a></li><li><a href="#granular" data-toc-link="granular">Granular</a></li></ul></li>
+            <li><a href="#usage" data-toc-link="usage">Usage</a></li>
+            <li><a href="#composition" data-toc-link="composition">Composition</a></li>
+            <li><a href="#examples" data-toc-link="examples">Examples</a><ul>{examples.map((example) => <li><a href={`#${example.id}`} data-toc-link={example.id}>{example.title}</a></li>)}</ul></li>
+            <li><a href="#accessibility" data-toc-link="accessibility">Accessibility</a><ul><li><a href="#keyboard-support" data-toc-link="keyboard-support">Keyboard Support</a></li></ul></li>
+            <li><a href="#api-reference" data-toc-link="api-reference">API Reference</a><ul><li><a href="#root-api" data-toc-link="root-api">FloatingPanel.Root</a></li><li><a href="#parts-api" data-toc-link="parts-api">Parts</a></li><li><a href="#events-api" data-toc-link="events-api">Events</a></li><li><a href="#exports" data-toc-link="exports">Exports</a></li></ul></li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+  </div>
+</DocsLayout>

@@ -1,0 +1,52 @@
+---
+import CopyPageControls from "../../components/CopyPageControls.vue";
+import CodeBlock from "../../components/CodeBlock.astro";
+import DocsPageNavigation from "../../components/DocsPageNavigation.astro";
+import { placeholderPages } from "../../data/docs-nav";
+import DocsLayout from "../../layouts/DocsLayout.astro";
+
+export function getStaticPaths() {
+  return placeholderPages.map((page) => ({
+    params: { slug: page.href.replace(/^\/docs\/?/, "") },
+    props: { page },
+  }));
+}
+
+const { page } = Astro.props;
+const sectionLabel = page.section ?? "Docs";
+---
+
+<DocsLayout title={page.label} description={page.description}>
+  <div class="docs-page">
+    <header class="docs-page-header">
+      <div class="docs-page-header__inner">
+        <div class="docs-page-header__content">
+          <div class="docs-page-header__mobile-actions">
+            <CopyPageControls client:only="vue" align="center" />
+          </div>
+          <div class="docs-page-header__title-row">
+            <h1>{page.label}</h1>
+            <div class="docs-page-header__navigation-actions">
+              <div class="docs-page-header__desktop-actions">
+                <CopyPageControls client:only="vue" />
+              </div>
+              <DocsPageNavigation currentPath={page.href} variant="compact" />
+            </div>
+          </div>
+          <p class="docs-page-header__lede">{page.description}</p>
+        </div>
+      </div>
+    </header>
+
+    <div class="docs-page-body">
+      <article class="docs-article">
+        <section class="docs-section">
+          <h2>Planned documentation</h2>
+          <p>This route reserves the final documentation structure for {sectionLabel}.</p>
+          <CodeBlock code={page.href} lang="plaintext" />
+        </section>
+        <DocsPageNavigation currentPath={page.href} />
+      </article>
+    </div>
+  </div>
+</DocsLayout>

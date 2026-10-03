@@ -1,0 +1,107 @@
+.kappa-toaster {
+  --kappa-toast-width: 22rem;
+  font-family: var(--kappa-font-sans, inherit);
+  outline: none;
+}
+
+/* Ark 5.39 resolves physical alignment and then applies it as a logical inset.
+   Keep RTL placement logical, including asymmetric physical safe-area offsets. */
+.kappa-toaster[dir="rtl"][data-align="start"] {
+  inset-inline-start: calc(env(safe-area-inset-right, 0px) + var(--viewport-offset-right, 1rem)) !important;
+  inset-inline-end: auto !important;
+  align-items: flex-start !important;
+}
+.kappa-toaster[dir="rtl"][data-align="end"] {
+  inset-inline-start: auto !important;
+  inset-inline-end: calc(env(safe-area-inset-left, 0px) + var(--viewport-offset-left, 1rem)) !important;
+  align-items: flex-end !important;
+}
+.kappa-toaster[dir="rtl"][data-align="center"] {
+  inset-inline-start: calc(env(safe-area-inset-right, 0px) + var(--viewport-offset-right, 1rem)) !important;
+  inset-inline-end: calc(env(safe-area-inset-left, 0px) + var(--viewport-offset-left, 1rem)) !important;
+}
+
+.kappa-toast {
+  --kappa-toast-accent: var(--kappa-info-text, #175cd3);
+  --kappa-toast-offset: calc(var(--kappa-toast-height-before, 0px) + var(--index, 0) * var(--gap, 8px));
+  box-sizing: border-box;
+  inline-size: min(var(--kappa-toast-width, 22rem), calc(100vw - var(--viewport-offset-left, 1rem) - var(--viewport-offset-right, 1rem)));
+  min-inline-size: 0;
+  height: var(--height, var(--initial-height, auto));
+  padding: 0.75rem;
+  border: 1px solid var(--kappa-line, #e3e6eb);
+  border-radius: 0.625rem;
+  background: var(--kappa-control, #ffffff);
+  color: var(--kappa-default, #17191f);
+  box-shadow: var(--kappa-popover-shadow, 0 12px 28px rgb(16 24 40 / 14%));
+  font-family: var(--kappa-font-sans, inherit);
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  text-align: start;
+  overflow-wrap: anywhere;
+  translate: var(--x, 0) var(--y, 0);
+  scale: 1;
+  opacity: var(--opacity, 1);
+  z-index: var(--z-index, 1);
+  transform-origin: bottom center;
+  transition: translate 200ms ease, scale 200ms ease, opacity 200ms ease, height 200ms ease;
+}
+
+.kappa-toast[data-side="top"] { transform-origin: top center; }
+.kappa-toast[data-type="success"] { --kappa-toast-accent: var(--kappa-success-text, #027a48); }
+.kappa-toast[data-type="error"] { --kappa-toast-accent: var(--kappa-danger-text, #b42318); }
+.kappa-toast[data-type="warning"] { --kappa-toast-accent: var(--kappa-warning-text, #b54708); }
+.kappa-toast[data-type="loading"] { --kappa-toast-accent: var(--kappa-subtle, #6c7480); }
+.kappa-toast[data-mounted][data-stack][data-state="open"] { translate: var(--x, 0) calc(var(--lift) * var(--kappa-toast-offset)); }
+.kappa-toast[data-stack][data-sibling][data-state="closed"] { translate: var(--x, 0) calc(var(--lift) * (var(--kappa-toast-offset) - 100%)); }
+.kappa-toast[data-overlap][data-sibling] {
+  --kappa-toast-scale: max(0.5, calc(1 - var(--index, 0) * 0.05));
+  height: var(--kappa-toast-front-height, var(--first-height));
+  scale: var(--kappa-toast-scale);
+  translate: var(--x, 0) calc(var(--y, 0px) + var(--lift) * (1 - var(--kappa-toast-scale)) * var(--kappa-toast-front-height, var(--first-height)));
+}
+.kappa-toast[data-overlap][data-sibling] > :not([data-ghost]) { opacity: 0; pointer-events: none; }
+.kappa-toast[data-limited] { opacity: 0; pointer-events: none !important; }
+.kappa-toast[data-side="top"] > [data-ghost="after"] { top: 100%; bottom: auto !important; }
+.kappa-toast[data-state="closed"] { transition-duration: var(--remove-delay, 200ms); }
+
+.kappa-toast__body { display: flex; min-inline-size: 0; align-items: start; gap: 0.625rem; }
+.kappa-toast__copy { display: grid; flex: 1; min-inline-size: 0; gap: 0.125rem; }
+.kappa-toast .kappa-toast__title { margin: 0; color: var(--kappa-default, #17191f); font-size: 0.8125rem; font-weight: 500; line-height: 1.5; }
+.kappa-toast .kappa-toast__description { margin: 0; color: var(--kappa-subtle, #6c7480); font-size: 0.8125rem; line-height: 1.5; }
+.kappa-toast__indicator { display: inline-flex; flex: none; inline-size: 1rem; block-size: 1.25rem; align-items: center; color: var(--kappa-toast-accent); }
+.kappa-toast__indicator > svg { inline-size: 1rem; block-size: 1rem; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+
+.kappa-toast__action,
+.kappa-toast__close {
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  border: 1px solid transparent;
+  border-radius: 0.25rem;
+  background: transparent;
+  color: var(--kappa-default, #17191f);
+  font: inherit;
+  cursor: pointer;
+  transition: background-color 120ms ease;
+}
+.kappa-toast__action { justify-self: start; min-block-size: 1.5rem; margin-block-start: 0.375rem; padding: 0.125rem 0.5rem; border-color: var(--kappa-line, #e3e6eb); font-size: 0.75rem; font-weight: 500; }
+.kappa-toast__close { inline-size: 1.5rem; block-size: 1.5rem; margin-block-start: -0.125rem; margin-inline-end: -0.125rem; padding: 0.25rem; color: var(--kappa-subtle, #6c7480); }
+.kappa-toast__close > svg { inline-size: 1rem; block-size: 1rem; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; }
+.kappa-toast__action:hover,
+.kappa-toast__close:hover { background: var(--kappa-tint, #f4f6f9); color: var(--kappa-default, #17191f); }
+.kappa-toast:focus-visible,
+.kappa-toast__action:focus-visible,
+.kappa-toast__close:focus-visible { outline: 2px solid var(--kappa-focus, #4c63ff); outline-offset: 2px; }
+.kappa-toast__action:disabled,
+.kappa-toast__close:disabled { opacity: 0.5; cursor: not-allowed; }
+
+@media (prefers-reduced-motion: reduce) {
+  .kappa-toast, .kappa-toast__action, .kappa-toast__close { transition: none; }
+}
+
+@media (forced-colors: active) {
+  .kappa-toast { border: 1px solid CanvasText; }
+}

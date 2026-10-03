@@ -1,0 +1,109 @@
+.kappa-banner-action {
+  box-sizing: border-box;
+  display: inline-flex;
+  max-inline-size: 100%;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid transparent;
+  border-radius: 0.375rem;
+  appearance: none;
+  font: inherit;
+  font-weight: 600;
+  line-height: 1.2;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    background-color 120ms ease,
+    border-color 120ms ease,
+    box-shadow 120ms ease,
+    color 120ms ease;
+}
+
+.kappa-banner-action--sm {
+  min-block-size: 2rem;
+  padding-block: 0.375rem;
+  padding-inline: 0.75rem;
+  font-size: 0.8125rem;
+}
+
+.kappa-banner-action--xs {
+  min-block-size: 1.75rem;
+  padding-block: 0.3125rem;
+  padding-inline: 0.625rem;
+  font-size: 0.75rem;
+}
+
+.kappa-banner-action--primary {
+  border-color: var(
+    --kappa-banner-action-accent,
+    var(--kappa-info-solid, var(--kappa-info, #175cd3))
+  );
+  background: var(
+    --kappa-banner-action-accent,
+    var(--kappa-info-solid, var(--kappa-info, #175cd3))
+  );
+  color: var(--kappa-banner-action-contrast, #ffffff);
+}
+
+.kappa-banner-action--primary:hover:not(:disabled) {
+  background: color-mix(
+    in srgb,
+    var(
+        --kappa-banner-action-accent,
+        var(--kappa-info-solid, var(--kappa-info, #175cd3))
+      )
+      88%,
+    var(--kappa-black, #000000)
+  );
+}
+
+.kappa-banner-action--secondary {
+  border-color: color-mix(
+    in srgb,
+    var(
+        --kappa-banner-action-accent,
+        var(--kappa-info-solid, var(--kappa-info, #175cd3))
+      )
+      50%,
+    transparent
+  );
+  background: transparent;
+  color: inherit;
+}
+
+.kappa-banner-action--ghost {
+  border-color: transparent;
+  background: transparent;
+  color: inherit;
+}
+
+.kappa-banner-action--secondary:hover:not(:disabled),
+.kappa-banner-action--ghost:hover:not(:disabled) {
+  background: color-mix(
+    in srgb,
+    var(
+        --kappa-banner-action-accent,
+        var(--kappa-info-solid, var(--kappa-info, #175cd3))
+      )
+      12%,
+    transparent
+  );
+  color: inherit;
+}
+
+.kappa-banner-action:focus-visible {
+  outline: 2px solid var(--kappa-banner-focus, var(--kappa-focus, #4c63ff));
+  outline-offset: 2px;
+}
+
+.kappa-banner-action:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kappa-banner-action {
+    transition: none;
+  }
+}

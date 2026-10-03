@@ -1,0 +1,185 @@
+---
+import CodeBlock from "../../../components/CodeBlock.astro";
+import CompositionTree from "../../../components/CompositionTree.astro";
+import CopyPageControls from "../../../components/CopyPageControls.vue";
+import DocsPageNavigation from "../../../components/DocsPageNavigation.astro";
+import KbdDocsDemo from "../../../components/KbdDocsDemo.vue";
+import {
+  barrelCode,
+  buttonCode,
+  dataSlots,
+  exportsList,
+  granularCode,
+  groupCode,
+  inlineCode,
+  previewCode,
+  rtlCode,
+  slots,
+  tooltipCode,
+  usageCode,
+} from "../../../data/kbd-docs";
+import DocsLayout from "../../../layouts/DocsLayout.astro";
+import "../../../styles/docs-components.css";
+
+const currentPath = "/docs/components/kbd";
+const description = "Displays keyboard keys and shortcuts with semantic HTML and compact Kappa styling.";
+---
+
+<DocsLayout title="Kbd" description={description}>
+  <div class="docs-page docs-page--component">
+    <header class="docs-page-header">
+      <div class="docs-page-header__inner">
+        <div class="docs-page-header__content">
+          <div class="docs-page-header__mobile-actions">
+            <CopyPageControls client:only="vue" align="center" />
+          </div>
+          <div class="docs-page-header__title-row">
+            <h1>Kbd</h1>
+            <div class="docs-page-header__navigation-actions">
+              <div class="docs-page-header__desktop-actions"><CopyPageControls client:only="vue" /></div>
+              <DocsPageNavigation currentPath={currentPath} variant="compact" />
+            </div>
+          </div>
+          <p class="docs-page-header__lede">{description}</p>
+        </div>
+      </div>
+    </header>
+
+    <div class="docs-page-body">
+      <article class="docs-article docs-article--component">
+        <section id="preview" class="docs-section">
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><KbdDocsDemo client:load variant="preview" /></div>
+            <CodeBlock code={previewCode} lang="vue" collapsible revealId="kbd-preview-code" />
+          </div>
+        </section>
+
+        <section id="installation" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#installation">Installation</a></h2>
+          <p>
+            Kbd is part of the main Kappa package. It uses native HTML and adds no state machine or
+            runtime dependency beyond Vue.
+          </p>
+          <h3 id="barrel"><a class="docs-section-anchor" href="#barrel">Barrel</a></h3>
+          <CodeBlock code={barrelCode} lang="javascript" />
+          <h3 id="granular"><a class="docs-section-anchor" href="#granular">Granular</a></h3>
+          <CodeBlock code={granularCode} lang="javascript" />
+        </section>
+
+        <section id="usage" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#usage">Usage</a></h2>
+          <p>
+            Use Kbd for text that represents user input. It renders the native <code>kbd</code>
+            element and forwards native attributes, data attributes, and consumer classes.
+          </p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><KbdDocsDemo client:load variant="usage" /></div>
+            <CodeBlock code={usageCode} lang="vue" collapsible revealId="kbd-usage-code" />
+          </div>
+        </section>
+
+        <section id="composition" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#composition">Composition</a></h2>
+          <CompositionTree component="kbd" label="Rendered structure" />
+          <p>
+            Use <code>Kbd</code> for a key and <code>KbdGroup</code> for a key combination.
+            Ark UI has no matching stateful primitive,
+            so Kappa uses the native
+            <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/kbd">HTML element</a>.
+          </p>
+        </section>
+
+        <section id="examples" class="docs-section docs-section--component-examples">
+          <h2><a class="docs-section-anchor" href="#examples">Examples</a></h2>
+
+          <h3 id="group"><a class="docs-section-anchor" href="#group">Group</a></h3>
+          <p>Use KbdGroup to keep every key and visible separator together on one line.</p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><KbdDocsDemo client:load variant="group" /></div>
+            <CodeBlock code={groupCode} lang="vue" collapsible revealId="kbd-group-code" />
+          </div>
+
+          <h3 id="button"><a class="docs-section-anchor" href="#button">Button</a></h3>
+          <p>Place Kbd inside a button when a keyboard shortcut activates the same action.</p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><KbdDocsDemo client:load variant="button" /></div>
+            <CodeBlock code={buttonCode} lang="vue" collapsible revealId="kbd-button-code" />
+          </div>
+
+          <h3 id="tooltip"><a class="docs-section-anchor" href="#tooltip">Tooltip</a></h3>
+          <p>Pair a short action description with its shortcut. Keep the tooltip content concise.</p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><KbdDocsDemo client:load variant="tooltip" /></div>
+            <CodeBlock code={tooltipCode} lang="vue" collapsible revealId="kbd-tooltip-code" />
+          </div>
+
+          <h3 id="inline-text"><a class="docs-section-anchor" href="#inline-text">Inline Text</a></h3>
+          <p>Kbd aligns with surrounding text without changing the meaning of the sentence.</p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><KbdDocsDemo client:load variant="inline" /></div>
+            <CodeBlock code={inlineCode} lang="vue" collapsible revealId="kbd-inline-code" />
+          </div>
+
+          <h3 id="right-to-left"><a class="docs-section-anchor" href="#right-to-left">Right to Left</a></h3>
+          <p>Keep Latin shortcuts left to right inside text that uses a right-to-left language.</p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><KbdDocsDemo client:load variant="rtl" /></div>
+            <CodeBlock code={rtlCode} lang="vue" collapsible revealId="kbd-rtl-code" />
+          </div>
+        </section>
+
+        <section id="accessibility" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#accessibility">Accessibility</a></h2>
+          <ul>
+            <li>Use Kbd only for user input, not for generic code, status, or decorative text.</li>
+            <li>Write familiar key names such as <code>Enter</code>, <code>Esc</code>, and <code>Ctrl</code>.</li>
+            <li>Add visually hidden text when a symbol alone may not have a clear spoken name.</li>
+            <li>Keep visible separators such as <code>+</code> available to assistive technology.</li>
+            <li>Kbd is not interactive. Use Button when the user can activate an action by pointer.</li>
+            <li>Localize prose and key names when the target platform or language needs it.</li>
+          </ul>
+        </section>
+
+        <section id="api-reference" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#api-reference">API Reference</a></h2>
+          <div class="docs-api-group">
+            <h3 id="kbd-api"><a class="docs-section-anchor" href="#kbd-api">Kbd</a></h3>
+            <p>Renders a native <code>kbd</code>. It has no component-specific props.</p>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="kbd-group-api"><a class="docs-section-anchor" href="#kbd-group-api">KbdGroup</a></h3>
+            <p>Renders an inline <code>span</code>. It has no component-specific props.</p>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="slots"><a class="docs-section-anchor" href="#slots">Slots</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Component</th><th>Slot</th><th>Description</th></tr></thead><tbody>{slots.map((slot) => <tr><td><code>{slot.component}</code></td><td><code>{slot.name}</code></td><td>{slot.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="data-slots"><a class="docs-section-anchor" href="#data-slots">Data Slots</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Slot</th><th>Element</th><th>Description</th></tr></thead><tbody>{dataSlots.map((part) => <tr><td><code>{part.name}</code></td><td><code>{part.element}</code></td><td>{part.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="exports"><a class="docs-section-anchor" href="#exports">Exports</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Export</th><th>Description</th></tr></thead><tbody>{exportsList.map((item) => <tr><td><code>{item.name}</code></td><td>{item.description}</td></tr>)}</tbody></table></div>
+          </div>
+        </section>
+
+        <DocsPageNavigation currentPath={currentPath} />
+      </article>
+
+      <aside class="docs-page-toc" aria-label="On this page">
+        <div class="docs-page-toc__inner">
+          <span class="docs-page-toc__title">On this page</span>
+          <ul>
+            <li><a href="#installation" data-toc-link="installation">Installation</a><ul><li><a href="#barrel" data-toc-link="barrel">Barrel</a></li><li><a href="#granular" data-toc-link="granular">Granular</a></li></ul></li>
+            <li><a href="#usage" data-toc-link="usage">Usage</a></li>
+            <li><a href="#composition" data-toc-link="composition">Composition</a></li>
+            <li><a href="#examples" data-toc-link="examples">Examples</a><ul><li><a href="#group" data-toc-link="group">Group</a></li><li><a href="#button" data-toc-link="button">Button</a></li><li><a href="#tooltip" data-toc-link="tooltip">Tooltip</a></li><li><a href="#inline-text" data-toc-link="inline-text">Inline Text</a></li><li><a href="#right-to-left" data-toc-link="right-to-left">Right to Left</a></li></ul></li>
+            <li><a href="#accessibility" data-toc-link="accessibility">Accessibility</a></li>
+            <li><a href="#api-reference" data-toc-link="api-reference">API Reference</a><ul><li><a href="#kbd-api" data-toc-link="kbd-api">Kbd</a></li><li><a href="#kbd-group-api" data-toc-link="kbd-group-api">KbdGroup</a></li><li><a href="#slots" data-toc-link="slots">Slots</a></li><li><a href="#data-slots" data-toc-link="data-slots">Data Slots</a></li><li><a href="#exports" data-toc-link="exports">Exports</a></li></ul></li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+  </div>
+</DocsLayout>

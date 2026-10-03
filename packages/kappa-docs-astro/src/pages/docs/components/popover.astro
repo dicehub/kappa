@@ -1,0 +1,189 @@
+---
+import ArkUiDocsLink from "../../../components/ArkUiDocsLink.astro";
+import CodeBlock from "../../../components/CodeBlock.astro";
+import CompositionTree from "../../../components/CompositionTree.astro";
+import CopyPageControls from "../../../components/CopyPageControls.vue";
+import DocsPageNavigation from "../../../components/DocsPageNavigation.astro";
+import PopoverDocsDemo from "../../../components/PopoverDocsDemo.vue";
+import {
+  barrelCode,
+  closeProps,
+  compositionCode,
+  contentProps,
+  events,
+  examples,
+  exportsList,
+  granularCode,
+  parts,
+  previewCode,
+  rootProps,
+  usageCode,
+} from "../../../data/popover-docs";
+import DocsLayout from "../../../layouts/DocsLayout.astro";
+import "../../../styles/docs-components.css";
+
+const currentPath = "/docs/components/popover";
+const description =
+  "Presents focused, interactive content near a trigger without leaving the current workflow.";
+---
+
+<DocsLayout title="Popover" description={description}>
+  <div class="docs-page docs-page--component">
+    <header class="docs-page-header">
+      <div class="docs-page-header__inner">
+        <div class="docs-page-header__content">
+          <div class="docs-page-header__mobile-actions">
+            <CopyPageControls client:only="vue" align="center" />
+          </div>
+          <div class="docs-page-header__title-row">
+            <h1>Popover</h1>
+            <ArkUiDocsLink />
+            <div class="docs-page-header__navigation-actions">
+              <div class="docs-page-header__desktop-actions"><CopyPageControls client:only="vue" /></div>
+              <DocsPageNavigation currentPath={currentPath} variant="compact" />
+            </div>
+          </div>
+          <p class="docs-page-header__lede">{description}</p>
+        </div>
+      </div>
+    </header>
+
+    <div class="docs-page-body">
+      <article class="docs-article docs-article--component">
+        <section id="preview" class="docs-section">
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><PopoverDocsDemo client:only="vue" variant="preview" /></div>
+            <CodeBlock code={previewCode} lang="vue" collapsible revealId="popover-preview-code" />
+          </div>
+        </section>
+
+        <section id="installation" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#installation">Installation</a></h2>
+          <p>
+            Popover is part of the main Kappa package. Ark UI owns state, focus management,
+            outside dismissal, collision handling, modality, and accessible relationships.
+          </p>
+          <h3 id="barrel"><a class="docs-section-anchor" href="#barrel">Barrel</a></h3>
+          <CodeBlock code={barrelCode} lang="javascript" />
+          <h3 id="granular"><a class="docs-section-anchor" href="#granular">Granular</a></h3>
+          <CodeBlock code={granularCode} lang="javascript" />
+        </section>
+
+        <section id="usage" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#usage">Usage</a></h2>
+          <p>
+            Put <code>Trigger</code> and <code>Content</code> inside <code>Popover.Root</code>.
+            Content adds a safe Vue Teleport, positioner, surface, and arrow. Use
+            <code>as-child</code> to merge behavior into one Kappa Button.
+          </p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><PopoverDocsDemo client:only="vue" variant="usage" /></div>
+            <CodeBlock code={usageCode} lang="vue" collapsible revealId="popover-usage-code" />
+          </div>
+        </section>
+
+        <section id="composition" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#composition">Composition</a></h2>
+          <CompositionTree component="popover" />
+          <p>
+            Kappa follows the <a href="https://ark-ui.com/docs/components/popover">Ark UI Popover</a>
+            state and part contract. <code>Popover.Content</code> composes the common
+            <code>Positioner</code> and Teleport path; use the public <code>Positioner</code> when
+            you need a manual advanced composition.
+          </p>
+          <ul>
+            <li><code>Popover</code> and <code>Popover.Root</code> are the same root component.</li>
+            <li>Content defaults to <code>body</code> Teleport. Set <code>:teleport="false"</code> for an in-place integration.</li>
+            <li>Use <code>Anchor</code> when the surface should measure a reference element other than Trigger.</li>
+            <li>Use <code>Close</code> or <code>CloseTrigger</code> so Ark UI restores focus after dismissal.</li>
+          </ul>
+          <CodeBlock code={compositionCode} lang="vue" collapsible revealId="popover-composition-code" />
+        </section>
+
+        <section id="examples" class="docs-section docs-section--component-examples">
+          <h2><a class="docs-section-anchor" href="#examples">Examples</a></h2>
+          {
+            examples.map((example) => (
+              <>
+                <h3 id={example.id}><a class="docs-section-anchor" href={`#${example.id}`}>{example.title}</a></h3>
+                <p>{example.description}</p>
+                <div class="docs-component-example">
+                  <div class="docs-component-preview"><PopoverDocsDemo client:only="vue" variant={example.variant} /></div>
+                  <CodeBlock code={example.code} lang="vue" collapsible revealId={`popover-${example.id}-code`} />
+                </div>
+              </>
+            ))
+          }
+        </section>
+
+        <section id="accessibility" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#accessibility">Accessibility</a></h2>
+          <ul>
+            <li>Render a visible <code>Title</code> and normally a <code>Description</code>. Use an explicit <code>aria-label</code> only when no visible title exists.</li>
+            <li>Keyboard users can open with Enter or Space, move through content with Tab, and close with Escape.</li>
+            <li>Focus returns to the opening Trigger after Escape, outside dismissal, or Close. Set <code>initialFocusEl</code> or <code>finalFocusEl</code> for a safer target.</li>
+            <li>Use <code>modal</code> for a short task that must block outside interaction. Keep the default non-modal mode for contextual content.</li>
+            <li>Disabled controls cannot receive focus. Do not use a disabled Trigger as the only way to discover essential information.</li>
+            <li>Set <code>dir="rtl"</code> on <code>Popover.Root</code> for right-to-left positioning and directional behavior; the inherited Ark locale is used when <code>dir</code> is omitted.</li>
+            <li>Open and close motion stops under <code>prefers-reduced-motion</code>; forced colors retain a visible boundary.</li>
+          </ul>
+        </section>
+
+        <section id="markdown" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#markdown">Markdown sibling</a></h2>
+          <p>
+            Every rendered docs page has a sibling <code>.md</code> URL for copy and automation:
+            <a href="/docs/components/popover.md">/docs/components/popover.md</a>. The sibling
+            contains the same headings, examples, API tables, and Ark UI link without interactive
+            controls or the page table of contents.
+          </p>
+        </section>
+
+        <section id="api-reference" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#api-reference">API Reference</a></h2>
+          <div class="docs-api-group">
+            <h3 id="root-api"><a class="docs-section-anchor" href="#root-api">Popover.Root</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>{rootProps.map((prop) => <tr><td><code>{prop.name}</code></td><td><code>{prop.type}</code></td><td><code>{prop.defaultValue}</code></td><td>{prop.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="content-api"><a class="docs-section-anchor" href="#content-api">Popover.Content</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>{contentProps.map((prop) => <tr><td><code>{prop.name}</code></td><td><code>{prop.type}</code></td><td><code>{prop.defaultValue}</code></td><td>{prop.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="close-api"><a class="docs-section-anchor" href="#close-api">Popover.Close</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>{closeProps.map((prop) => <tr><td><code>{prop.name}</code></td><td><code>{prop.type}</code></td><td><code>{prop.defaultValue}</code></td><td>{prop.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="parts-api"><a class="docs-section-anchor" href="#parts-api">Parts</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Part</th><th>Element</th><th>Description</th></tr></thead><tbody>{parts.map((part) => <tr><td><code>{part.name}</code></td><td><code>{part.element}</code></td><td>{part.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="events-api"><a class="docs-section-anchor" href="#events-api">Events</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Event</th><th>Payload</th><th>Description</th></tr></thead><tbody>{events.map((event) => <tr><td><code>{event.name}</code></td><td><code>{event.payload}</code></td><td>{event.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="exports"><a class="docs-section-anchor" href="#exports">Exports</a></h3>
+            <div class="docs-api-table"><table><thead><tr><th>Export</th><th>Description</th></tr></thead><tbody>{exportsList.map((item) => <tr><td><code>{item.name}</code></td><td>{item.description}</td></tr>)}</tbody></table></div>
+          </div>
+        </section>
+
+        <DocsPageNavigation currentPath={currentPath} />
+      </article>
+
+      <aside class="docs-page-toc" aria-label="On this page">
+        <div class="docs-page-toc__inner">
+          <span class="docs-page-toc__title">On this page</span>
+          <ul>
+            <li><a href="#installation" data-toc-link="installation">Installation</a><ul><li><a href="#barrel" data-toc-link="barrel">Barrel</a></li><li><a href="#granular" data-toc-link="granular">Granular</a></li></ul></li>
+            <li><a href="#usage" data-toc-link="usage">Usage</a></li>
+            <li><a href="#composition" data-toc-link="composition">Composition</a></li>
+            <li><a href="#examples" data-toc-link="examples">Examples</a><ul>{examples.map((example) => <li><a href={`#${example.id}`} data-toc-link={example.id}>{example.title}</a></li>)}</ul></li>
+            <li><a href="#accessibility" data-toc-link="accessibility">Accessibility</a></li>
+            <li><a href="#markdown" data-toc-link="markdown">Markdown sibling</a></li>
+            <li><a href="#api-reference" data-toc-link="api-reference">API Reference</a><ul><li><a href="#root-api" data-toc-link="root-api">Popover.Root</a></li><li><a href="#content-api" data-toc-link="content-api">Popover.Content</a></li><li><a href="#close-api" data-toc-link="close-api">Popover.Close</a></li><li><a href="#parts-api" data-toc-link="parts-api">Parts</a></li><li><a href="#events-api" data-toc-link="events-api">Events</a></li><li><a href="#exports" data-toc-link="exports">Exports</a></li></ul></li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+  </div>
+</DocsLayout>
