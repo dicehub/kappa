@@ -1,5 +1,11 @@
 # @dicehub/kappa
 
+## 0.5.0
+
+### Minor Changes
+
+- b82bfa3: Add InlineCopyText for copying short values from text and table rows. Supports custom display text, hover and focus icons, localized feedback, truncation, and disabled controls.
+
 ## 0.4.2
 
 ### Patch Changes
