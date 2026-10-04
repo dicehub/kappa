@@ -8,6 +8,7 @@ const root = (scope: Locator) => scope.locator('[data-slot="breadcrumbs"]');
 test.describe("Breadcrumbs documentation", () => {
   test.beforeEach(async ({ page }) => {
     await page.goto("/docs/components/breadcrumbs");
+    await expect(page.locator('astro-island[ssr]:has([data-breadcrumbs-demo="menu"])')).toHaveCount(0);
   });
 
   test("renders the implemented route, public snippets, navigation, TOC, and Markdown", async ({

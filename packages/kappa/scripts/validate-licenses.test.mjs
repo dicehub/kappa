@@ -20,6 +20,8 @@ const fixture = (t) => {
     return readFileSync(resolve(packageRoot, licenseFile), "utf8").trim();
   });
   licenses.push(readFileSync(resolve(packageRoot, "node_modules/@ark-ui/vue/LICENSE"), "utf8").trim());
+  mkdirSync(resolve(packedRoot, "dist/_vendor/ark-ui-vue"), { recursive: true });
+  cpSync(resolve(packageRoot, "node_modules/@ark-ui/vue/LICENSE"), resolve(packedRoot, "dist/_vendor/ark-ui-vue/LICENSE"));
   writeFileSync(resolve(packedRoot, "THIRD_PARTY_NOTICES.md"), licenses.join("\n\n"));
   return packedRoot;
 };
@@ -44,6 +46,12 @@ test("rejects altered adapted-source license files", (t) => {
   const packedRoot = fixture(t);
   writeFileSync(resolve(packedRoot, adaptedSources[0].licenseFile), "Altered license\n");
   assert.throws(() => validateLicenses(manifest, packedRoot, packageRoot), /Kumo's original license unchanged/);
+});
+
+test("rejects a missing license beside the private Ark declarations", (t) => {
+  const packedRoot = fixture(t);
+  rmSync(resolve(packedRoot, "dist/_vendor/ark-ui-vue/LICENSE"));
+  assert.throws(() => validateLicenses(manifest, packedRoot, packageRoot), /Ark UI's declaration license unchanged/);
 });
 
 test("rejects notices that omit an upstream copyright or license", (t) => {

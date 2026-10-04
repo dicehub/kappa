@@ -12,6 +12,7 @@ const numericValue = async (field: Locator) =>
 test.describe("Number Input documentation", () => {
   test.beforeEach(async ({ page }) => {
     await page.goto("/docs/components/number-input");
+    await expect(page.locator("astro-island[ssr]:has([data-number-input-demo])")).toHaveCount(0);
   });
 
   test("renders public examples, navigation, TOC, and Markdown", async ({ page, request }) => {

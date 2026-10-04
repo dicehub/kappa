@@ -12,6 +12,7 @@ const control = (radio: Locator) =>
 test.describe("Radio documentation", () => {
   test.beforeEach(async ({ page }) => {
     await page.goto("/docs/components/radio");
+    await expect(page.locator("astro-island[ssr]:has([data-radio-demo])")).toHaveCount(0);
   });
 
   test("renders the public examples, references, navigation, and Markdown", async ({ page, request }) => {

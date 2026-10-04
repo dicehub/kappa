@@ -25,6 +25,7 @@ const expectPositionerOutsideGroup = async (
 test.describe("Button Group composition examples", () => {
   test.beforeEach(async ({ page }) => {
     await page.goto("/docs/components/button-group");
+    await expect(page.locator("astro-island[ssr]:has([data-button-group-composition-demo])")).toHaveCount(0);
   });
 
   test("labels the nested composer and keeps its native tab sequence", async ({ page }) => {

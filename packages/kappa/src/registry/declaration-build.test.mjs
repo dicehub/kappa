@@ -2,7 +2,6 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import ts from "typescript";
 import { preserveCompoundDeclarations } from "../../scripts/declaration-barrels.mjs";
-import { isKnownArkDeclarationError } from "../../scripts/check-consumer-declarations.mjs";
 
 test("compound declarations keep root and part references, named exports, and hooks", () => {
   const source = `
@@ -51,14 +50,4 @@ test("declaration generation leaves ordinary exports and unsupported expressions
   const declaration = "export declare const Value: string;";
   assert.equal(preserveCompoundDeclarations('export const Value = "value";', declaration), declaration);
   assert.equal(preserveCompoundDeclarations('export const Value = Object.assign({}, { value: "value" });', declaration), declaration);
-});
-
-test("only the exact known Ark diagnostics are reported without failing validation", () => {
-  const slot = { code: 2304, messageText: "Cannot find name '__VLS_Slots'.", file: { fileName: "/deps/@ark-ui/vue/dist/components/select/select-value-text.vue.d.ts" } };
-  assert.equal(isKnownArkDeclarationError(slot), true);
-  assert.equal(isKnownArkDeclarationError({ ...slot, file: { fileName: "/deps/@dicehub/kappa/dist/select.d.ts" } }), false);
-  assert.equal(isKnownArkDeclarationError({ ...slot, messageText: "Cannot find name 'MissingType'." }), false);
-  assert.equal(isKnownArkDeclarationError({ ...slot, file: { fileName: "/deps/@ark-ui/vue/dist/components/new-component/new-component.vue.d.ts" } }), false);
-  assert.equal(isKnownArkDeclarationError({ code: 2300, messageText: "Duplicate identifier 'HighlightChunk'.", file: { fileName: "/deps/@ark-ui/vue/dist/components/highlight/use-highlight.d.ts" } }), true);
-  assert.equal(isKnownArkDeclarationError({ ...slot, code: 2344 }), false);
 });

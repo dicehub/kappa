@@ -6,6 +6,7 @@ const cells = (container: Locator) => container.locator('[data-slot="input-otp-i
 test.describe("Input OTP documentation", () => {
   test.beforeEach(async ({ page }) => {
     await page.goto("/docs/components/input-otp");
+    await expect(page.locator("astro-island[ssr]:has([data-input-otp-demo])")).toHaveCount(0);
   });
 
   test("renders compound examples, API, Ark link, navigation, and Markdown", async ({ page, request }) => {

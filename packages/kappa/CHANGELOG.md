@@ -1,5 +1,11 @@
 # @dicehub/kappa
 
+## 0.4.2
+
+### Patch Changes
+
+- Fix TypeScript declaration errors when checking Kappa imports with `skipLibCheck: false`. Keep the existing Ark UI runtime and public component API. Optional chart, map, plot, and syntax highlighting packages remain separate imports.
+
 ## 0.4.1
 
 ### Patch Changes

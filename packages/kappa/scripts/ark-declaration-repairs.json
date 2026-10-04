@@ -1,0 +1,41 @@
+{
+  "color-picker/color-picker-channel-slider-value-text": {
+    "declaration": "6eed8b858615068a8b77e91de7f3846338ebd68e08cc67c382870fb5308bb522",
+    "runtime": "ddf9f16915e7064e8fccaf9701235f6c8b470d420b9ba209caeabb8386e861bf"
+  },
+  "color-picker/color-picker-value-text": {
+    "declaration": "2361a5a1a1f3e8eb75c212c13ccc12fabc2270415a066daf7ea7d792ab603f0f",
+    "runtime": "062f0db47105bd93be1e2c210d30dc0c63478101842cf97d4b7531026aab116a"
+  },
+  "file-upload/file-upload-item-name": {
+    "declaration": "1d2d75d454e4812f67032d7839008085302b3be1f69ba66052c38781ca86b9ff",
+    "runtime": "38eb2e5b21dcf63d6431064b5f2642b5c9350fc0c9a5380f51a4901739fe2a98"
+  },
+  "file-upload/file-upload-item-size-text": {
+    "declaration": "37e7018c5f4b2d90d201906a64d214a32689f4eb9da63e04d09df6f320c349c6",
+    "runtime": "76d89b99a725f2d20fe6d440202befd85d27ab90cdfc250313d0995aa02d3242"
+  },
+  "listbox/listbox-value-text": {
+    "declaration": "ede900a45e285b3a16973d0319a12806de3cfe8b55f7896d1ee429156e547ae3",
+    "runtime": "c3832c34edac8cc5a8af8ef83be5709568345f6f9d345acc0a7c12d17d93d5c6"
+  },
+  "progress/progress-value-text": {
+    "declaration": "37c18e1a198ec66b46c2b2d6c2c27862451b2039eae8d742a7debfa0a3fe6168",
+    "runtime": "9bd923bbf9c02ad53ef62dae8186409ac24bb22a109c559777b0548586255993"
+  },
+  "select/select-value-text": {
+    "declaration": "fb5ef95dea6e2db203bbf607bffd72f7b26453015510835893e519e28bc08da4",
+    "runtime": "dee5d0b6ea3f01838f14b1d81d1ddd4a45986370274b9a077a40b66330ef81a6"
+  },
+  "slider/slider-dragging-indicator": {
+    "declaration": "cdb50461616bb92eaf56061e797ef1e4153001bc904f006c240544d6bb69d820",
+    "runtime": "03688d8475cd58050ee6894dbf2b9e884123fd17bb4afa101c1a8bebdf423354"
+  },
+  "slider/slider-value-text": {
+    "declaration": "d347665e923607b0a53932b34f5d80efa3ea4400decd7fac579c91b1ce08f33a",
+    "runtime": "e0b271178fe63f98992fd0d672ebd8aaf53f71e4461c7da2dcbfd16ef59f9118"
+  },
+  "highlight/use-highlight": {
+    "declaration": "27abfcbcb196c20d2477b321a10f012a9ca2a34a3186c3e37069b1f60f7e0485"
+  }
+}

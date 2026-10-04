@@ -80,6 +80,9 @@ test("mobile namespace menu stays inside the drawer and its add action returns t
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto("/examples/components/sidebar/full-screen-mobile");
   const demo = page.locator('[data-sidebar-demo="full-screen-mobile"]');
+  await expect.poll(() => demo.evaluate(
+    element => element.closest("astro-island")?.hasAttribute("ssr"),
+  )).toBe(false);
   const opener = demo.getByRole("button", { name: "Open navigation", exact: true });
   await opener.click();
   const sheet = page.getByRole("dialog", { name: "full-screen-mobile navigation", exact: true });

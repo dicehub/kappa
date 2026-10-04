@@ -44,6 +44,13 @@ provides the license notice used by the notice generator. Preserve that exact
 notice when updating Ark; current upstream repository wording can differ from
 the installed version.
 
+The package also includes generated private declarations from Ark UI 5.39.2 for
+color-picker, file-upload, listbox, progress, select, slider, and highlight, plus
+their declaration dependencies. Kappa restores missing default-slot types and
+removes a duplicate type import. `scripts/ark-declarations.mjs` checks the exact
+upstream inputs and copies Ark's license beside these declarations. The runtime
+continues to use the external Ark package.
+
 ## Maintain notices
 
 Add adapted source to `packages/kappa/scripts/third-party-sources.mjs`. Preserve

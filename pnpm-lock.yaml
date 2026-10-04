@@ -35,6 +35,45 @@ importers:
       '@types/geojson':
         specifier: 7946.0.16
         version: 7946.0.16
+      '@zag-js/anatomy':
+        specifier: 1.43.3
+        version: 1.43.3
+      '@zag-js/async-list':
+        specifier: 1.43.3
+        version: 1.43.3
+      '@zag-js/collection':
+        specifier: 1.43.3
+        version: 1.43.3
+      '@zag-js/color-picker':
+        specifier: 1.43.3
+        version: 1.43.3
+      '@zag-js/color-utils':
+        specifier: 1.43.3
+        version: 1.43.3
+      '@zag-js/drawer':
+        specifier: 1.43.3
+        version: 1.43.3
+      '@zag-js/file-upload':
+        specifier: 1.43.3
+        version: 1.43.3
+      '@zag-js/listbox':
+        specifier: 1.43.3
+        version: 1.43.3
+      '@zag-js/presence':
+        specifier: 1.43.3
+        version: 1.43.3
+      '@zag-js/progress':
+        specifier: 1.43.3
+        version: 1.43.3
+      '@zag-js/select':
+        specifier: 1.43.3
+        version: 1.43.3
+      '@zag-js/slider':
+        specifier: 1.43.3
+        version: 1.43.3
+      '@zag-js/vue':
+        specifier: 1.43.3
+        version: 1.43.3(vue@3.5.32(typescript@5.9.3))
     devDependencies:
       '@floating-ui/dom':
         specifier: 1.8.0
@@ -69,19 +108,10 @@ importers:
       '@zag-js/date-picker':
         specifier: 1.43.3
         version: 1.43.3(@internationalized/date@3.12.3)
-      '@zag-js/drawer':
-        specifier: 1.43.3
-        version: 1.43.3
       '@zag-js/editable':
         specifier: 1.43.3
         version: 1.43.3
-      '@zag-js/file-upload':
-        specifier: 1.43.3
-        version: 1.43.3
       '@zag-js/i18n-utils':
-        specifier: 1.43.3
-        version: 1.43.3
-      '@zag-js/listbox':
         specifier: 1.43.3
         version: 1.43.3
       '@zag-js/menu':
@@ -102,9 +132,6 @@ importers:
       '@zag-js/popper':
         specifier: 1.43.3
         version: 1.43.3
-      '@zag-js/progress':
-        specifier: 1.43.3
-        version: 1.43.3
       '@zag-js/qr-code':
         specifier: 1.43.3
         version: 1.43.3
@@ -112,12 +139,6 @@ importers:
         specifier: 1.43.3
         version: 1.43.3
       '@zag-js/rect-utils':
-        specifier: 1.43.3
-        version: 1.43.3
-      '@zag-js/select':
-        specifier: 1.43.3
-        version: 1.43.3
-      '@zag-js/slider':
         specifier: 1.43.3
         version: 1.43.3
       '@zag-js/splitter':
@@ -141,9 +162,6 @@ importers:
       '@zag-js/types':
         specifier: 1.43.3
         version: 1.43.3
-      '@zag-js/vue':
-        specifier: 1.43.3
-        version: 1.43.3(vue@3.5.32(typescript@5.9.3))
       csstype:
         specifier: 3.2.3
         version: 3.2.3

@@ -186,6 +186,9 @@ test("sliding navigation hides inactive links, retains state, and restores the p
 test("full-screen mobile supports namespace, profile and nested search without losing focus", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto("/examples/components/sidebar/full-screen-mobile");
+  await expect.poll(() => demo(page, "full-screen-mobile").evaluate(
+    element => element.closest("astro-island")?.hasAttribute("ssr"),
+  )).toBe(false);
   const opener = trigger(page, "full-screen-mobile");
   await opener.click();
   const sheet = page.getByRole("dialog", { name: "full-screen-mobile navigation", exact: true });

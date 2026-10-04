@@ -48,11 +48,18 @@ see the [npm announcement](https://github.blog/changelog/2026-09-18-stage-only-n
 6. Review the package version and `packages/kappa/CHANGELOG.md`. Merge the release MR into `dev` only when CI is green.
 
 Package validation extracts the tarball outside the workspace and checks every
-public module with `skipLibCheck: false`. It also builds a consumer application.
-The check must pass with only declared dependencies and peers available. Ark UI
-5.39.2 has known `__VLS_Slots` and `HighlightChunk` declaration defects. Validation
-reports these exact upstream errors and rejects every other diagnostic. Consumers
-must currently keep `skipLibCheck: true` until Ark UI fixes its declarations.
+public module with `skipLibCheck: false`. It builds consumers with and without
+optional peers. All declarations must pass without diagnostic exceptions, using
+only declared dependencies and peers.
+
+Kappa's build repairs the missing slot types and duplicate `HighlightChunk` import
+in seven Ark UI 5.39.2 declaration entrypoints. The generated private declarations
+retain Ark's MIT notice and use exact Zag dependencies. Runtime imports stay on
+Ark UI. The generator checks the upstream version and hashes of repaired files
+and their slot implementations. Review or remove the repair when updating Ark;
+do not update the hashes without checking the upstream types and slot contracts.
+Direct consumer imports from affected `@ark-ui/vue` entrypoints still use Ark's
+original declarations.
 
 ## Publish
 

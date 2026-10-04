@@ -12,6 +12,19 @@ Kappa includes adapted third-party source covered by the full notices below. Run
 | `@tanstack/vue-table` | `9.2.4` | Runtime dependency | MIT |
 | `@tanstack/vue-virtual` | `3.13.39` | Runtime dependency | MIT |
 | `@types/geojson` | `7946.0.16` | Runtime dependency | MIT |
+| `@zag-js/anatomy` | `1.43.3` | Runtime dependency | MIT |
+| `@zag-js/async-list` | `1.43.3` | Runtime dependency | MIT |
+| `@zag-js/collection` | `1.43.3` | Runtime dependency | MIT |
+| `@zag-js/color-picker` | `1.43.3` | Runtime dependency | MIT |
+| `@zag-js/color-utils` | `1.43.3` | Runtime dependency | MIT |
+| `@zag-js/drawer` | `1.43.3` | Runtime dependency | MIT |
+| `@zag-js/file-upload` | `1.43.3` | Runtime dependency | MIT |
+| `@zag-js/listbox` | `1.43.3` | Runtime dependency | MIT |
+| `@zag-js/presence` | `1.43.3` | Runtime dependency | MIT |
+| `@zag-js/progress` | `1.43.3` | Runtime dependency | MIT |
+| `@zag-js/select` | `1.43.3` | Runtime dependency | MIT |
+| `@zag-js/slider` | `1.43.3` | Runtime dependency | MIT |
+| `@zag-js/vue` | `1.43.3` | Runtime dependency | MIT |
 | `echarts` | `^6.1.0` | Optional peer | Apache-2.0 |
 | `maplibre-gl` | `^6.11.2` | Optional peer | BSD-3-Clause |
 | `shiki` | `^4.4.3` | Optional peer | MIT |
@@ -79,6 +92,7 @@ SOFTWARE.
 ## Ark UI Vue
 
 External runtime dependency: `@ark-ui/vue` 5.39.2. The notice below is copied from that installed package.
+The package includes private Ark declarations for color-picker, file-upload, listbox, progress, select, slider, and highlight, plus their declaration dependencies. Kappa repairs missing default-slot types and a duplicate type import. The JavaScript runtime remains external.
 
 MIT License
 

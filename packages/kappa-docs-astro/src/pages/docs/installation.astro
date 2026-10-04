@@ -74,14 +74,20 @@ import "@dicehub/kappa/styles/theme-kappa.css";`}
         <section id="typescript" class="docs-section">
           <h2><a class="docs-section-anchor" href="#typescript">TypeScript</a></h2>
           <p>
-            Ark UI 5.39.2 has upstream declaration errors. Set <code>skipLibCheck</code> to
-            <code>true</code> in your application's TypeScript configuration until those errors are fixed.
+            Kappa imports support strict declaration checks. For a Vite application,
+            use these TypeScript settings:
           </p>
           <CodeBlock code={`{
   "compilerOptions": {
-    "skipLibCheck": true
+    "strict": true,
+    "moduleResolution": "Bundler",
+    "skipLibCheck": false
   }
 }`} lang="json" />
+          <p>
+            Kappa includes corrected types for affected Ark UI components. Direct imports
+            from <code>@ark-ui/vue</code> still use Ark's own declarations.
+          </p>
         </section>
 
         <section id="next-steps" class="docs-section">

@@ -4,5 +4,6 @@
     "allowImportingTsExtensions": true,
     "types": ["node"]
   },
-  "include": ["src", "scripts", "vite.config.ts"]
+  "include": ["src", "scripts", "vite.config.ts"],
+  "exclude": ["scripts/fixtures"]
 }

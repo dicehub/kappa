@@ -413,6 +413,7 @@ test.describe("Dropdown documentation", () => {
 
     await page.setViewportSize({ width: 390, height: 844 });
     await page.reload();
+    await expect(page.locator('astro-island[ssr]:has([data-dropdown-demo="preview"])')).toHaveCount(0);
     const mobileTrigger = demo(page, "preview").getByRole("button", { name: "Run actions" });
     await mobileTrigger.click();
     const mobileSurface = surface(page, "preview");
