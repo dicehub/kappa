@@ -1,0 +1,141 @@
+---
+import ArkUiDocsLink from "../../../components/ArkUiDocsLink.astro";
+import CodeBlock from "../../../components/CodeBlock.astro";
+import CopyPageControls from "../../../components/CopyPageControls.vue";
+import DocsPageNavigation from "../../../components/DocsPageNavigation.astro";
+import InlineCopyTextDocsDemo from "../../../components/InlineCopyTextDocsDemo.vue";
+import { barrelCode, examples, granularCode, previewCode, props } from "../../../data/inline-copy-text-docs";
+import DocsLayout from "../../../layouts/DocsLayout.astro";
+import "../../../styles/docs-components.css";
+
+const currentPath = "/docs/components/inline-copy-text";
+const description = "Copy an ID or a short value directly from text or a table row.";
+---
+
+<DocsLayout title="Inline Copy Text" description={description}>
+  <div class="docs-page docs-page--component">
+    <header class="docs-page-header">
+      <div class="docs-page-header__inner">
+        <div class="docs-page-header__content">
+          <div class="docs-page-header__mobile-actions">
+            <CopyPageControls client:only="vue" align="center" />
+          </div>
+          <div class="docs-page-header__title-row">
+            <h1>Inline Copy Text</h1>
+            <ArkUiDocsLink />
+            <div class="docs-page-header__navigation-actions">
+              <div class="docs-page-header__desktop-actions"><CopyPageControls client:only="vue" /></div>
+              <DocsPageNavigation currentPath={currentPath} variant="compact" />
+            </div>
+          </div>
+          <p class="docs-page-header__lede">{description}</p>
+        </div>
+      </div>
+    </header>
+
+    <div class="docs-page-body">
+      <article class="docs-article docs-article--component">
+        <section id="preview" class="docs-section">
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><InlineCopyTextDocsDemo client:load /></div>
+            <CodeBlock code={previewCode} lang="vue" collapsible revealId="inline-copy-text-preview-code" />
+          </div>
+        </section>
+
+        <section id="installation" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#installation">Installation</a></h2>
+          <p>Install Kappa using the <a href="/docs/installation">installation guide</a>, then import the component.</p>
+          <h3 id="barrel"><a class="docs-section-anchor" href="#barrel">Barrel</a></h3>
+          <CodeBlock code={barrelCode} lang="javascript" />
+          <h3 id="granular"><a class="docs-section-anchor" href="#granular">Granular</a></h3>
+          <CodeBlock code={granularCode} lang="javascript" />
+        </section>
+
+        <section id="usage" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#usage">Usage</a></h2>
+          <p>
+            Set <code>value</code> to the exact text to copy. Click the text or its icon to copy it.
+            The icon appears on hover or keyboard focus, then changes to a check during copied feedback.
+            Its space stays reserved so the text does not move.
+          </p>
+          <p>
+            Use <a href="/docs/components/clipboard-text">Clipboard Text</a> for a labeled,
+            selectable input. Inline Copy Text is a single button for compact layouts.
+          </p>
+          <p>
+            The component uses <a href="https://ark-ui.com/docs/components/clipboard">Ark UI Clipboard</a>
+            for the clipboard value, copy action, and feedback timeout, and Kappa Tooltip for the action label.
+            The required <code>value</code> prop replaces the primitive's editable value API.
+            Native attributes, classes, styles, and event listeners go to the button.
+          </p>
+        </section>
+
+        <section id="examples" class="docs-section docs-section--component-examples">
+          <h2><a class="docs-section-anchor" href="#examples">Examples</a></h2>
+          {examples.map((example) => (
+            <>
+              <h3 id={example.id}><a class="docs-section-anchor" href={`#${example.id}`}>{example.title}</a></h3>
+              <p>{example.description}</p>
+              <div class="docs-component-example">
+                <div class="docs-component-preview"><InlineCopyTextDocsDemo client:load variant={example.variant} /></div>
+                <CodeBlock code={example.code} lang="vue" collapsible revealId={`inline-copy-text-${example.id}-code`} />
+              </div>
+            </>
+          ))}
+        </section>
+
+        <section id="accessibility" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#accessibility">Accessibility</a></h2>
+          <ul>
+            <li>Tab focuses the button. Enter and Space copy its value. Focus has a visible outline.</li>
+            <li>Use <code>copyLabel</code> to name the action, such as “Copy workspace ID”. The button's accessible name also contains its visible text, including custom slot text.</li>
+            <li>The tooltip and a polite live region provide copied feedback. Icons are hidden from assistive technology.</li>
+            <li>Keep links, buttons, and inputs outside the default slot. Do not place the component inside another button or link.</li>
+            <li>Touch devices show the copy icon at all times. Reduced motion disables its fade.</li>
+          </ul>
+          <p>
+            Clipboard access depends on browser permissions. Use HTTPS in production.
+            Ark UI starts copied feedback when the action runs; <code>statusChange</code>
+            is not a browser write-success or error event.
+          </p>
+        </section>
+
+        <section id="api-reference" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#api-reference">API Reference</a></h2>
+          <div class="docs-api-group">
+            <h3 id="props"><a class="docs-section-anchor" href="#props">Props</a></h3>
+            <div class="docs-api-table">
+              <table>
+                <thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+                <tbody>{props.map((prop) => <tr><td><code>{prop.name}</code></td><td><code>{prop.type}</code></td><td><code>{prop.defaultValue}</code></td><td>{prop.description}</td></tr>)}</tbody>
+              </table>
+            </div>
+          </div>
+          <h3 id="events-and-slots"><a class="docs-section-anchor" href="#events-and-slots">Events and slots</a></h3>
+          <p><code>statusChange</code> forwards Ark UI's <code>{"{ copied: boolean }"}</code> detail when copying is requested. It does not fire when the feedback timeout ends.</p>
+          <p>The default slot accepts custom inline display content. It does not change the copied <code>value</code>.</p>
+          <h3 id="exports"><a class="docs-section-anchor" href="#exports">Exports</a></h3>
+          <p>
+            Both imports export <code>InlineCopyText</code> and the types <code>InlineCopyTextProps</code>,
+            <code>InlineCopyTextEmits</code>, <code>InlineCopyTextSlots</code>, <code>InlineCopyTextVariant</code>,
+            and <code>InlineCopyTextSize</code>.
+          </p>
+        </section>
+        <DocsPageNavigation currentPath={currentPath} />
+      </article>
+
+      <aside class="docs-page-toc" aria-label="On this page">
+        <div class="docs-page-toc__inner">
+          <span class="docs-page-toc__title">On this page</span>
+          <ul>
+            <li><a href="#installation" data-toc-link="installation">Installation</a><ul><li><a href="#barrel" data-toc-link="barrel">Barrel</a></li><li><a href="#granular" data-toc-link="granular">Granular</a></li></ul></li>
+            <li><a href="#usage" data-toc-link="usage">Usage</a></li>
+            <li><a href="#examples" data-toc-link="examples">Examples</a><ul>{examples.map((example) => <li><a href={`#${example.id}`} data-toc-link={example.id}>{example.title}</a></li>)}</ul></li>
+            <li><a href="#accessibility" data-toc-link="accessibility">Accessibility</a></li>
+            <li><a href="#api-reference" data-toc-link="api-reference">API Reference</a><ul><li><a href="#props" data-toc-link="props">Props</a></li><li><a href="#events-and-slots" data-toc-link="events-and-slots">Events and slots</a></li><li><a href="#exports" data-toc-link="exports">Exports</a></li></ul></li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+  </div>
+</DocsLayout>

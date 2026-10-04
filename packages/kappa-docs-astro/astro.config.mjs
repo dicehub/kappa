@@ -10,7 +10,7 @@ import { licenseNotices } from "./src/lib/astro-license-notices";
 const useKappaSource = process.env.KAPPA_SOURCE === "1";
 
 export default defineConfig({
-  site: "https://kappa-ui.dh.fo",
+  site: "https://kappa-ui.com",
   integrations: [
     mdx(),
     vue(),

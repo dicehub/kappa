@@ -45,6 +45,7 @@ export * from "./grid";
 export * from "./highlight";
 export * from "./hover-card";
 export * from "./image-cropper";
+export * from "./inline-copy-text";
 export * from "./input";
 export * from "./input-area";
 export * from "./input-group";

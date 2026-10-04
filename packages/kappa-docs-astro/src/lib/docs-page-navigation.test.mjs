@@ -132,6 +132,10 @@ describe("docs page navigation", () => {
     });
     assert.deepEqual(adjacentLabels("/docs/components/image-cropper"), {
       previous: "Hover Card",
+      next: "Inline Copy Text",
+    });
+    assert.deepEqual(adjacentLabels("/docs/components/inline-copy-text"), {
+      previous: "Image Cropper",
       next: "Input",
     });
     assert.deepEqual(adjacentLabels("/docs/components/highlight"), {
@@ -288,7 +292,7 @@ describe("docs page navigation", () => {
   it("contains every documentation page exactly once", () => {
     const hrefs = docsPageSequences.flatMap((sequence) => sequence.map((link) => link.href));
     assert.equal(docsPageSequences.length, 4);
-    assert.equal(hrefs.length, 115);
+    assert.equal(hrefs.length, 116);
     assert.equal(new Set(hrefs).size, hrefs.length);
   });
 

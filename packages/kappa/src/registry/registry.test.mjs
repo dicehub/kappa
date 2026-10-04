@@ -480,6 +480,7 @@ const hoverCardComponentNames = [
   "HoverCardRootProvider",
   "HoverCardTrigger",
 ];
+const inlineCopyTextComponentNames = ["InlineCopyText"];
 const inputComponentNames = ["Input"];
 const inputAreaComponentNames = ["InputArea"];
 const inputGroupComponentNames = [
@@ -936,6 +937,7 @@ const componentNames = [
   ...gridComponentNames,
   ...highlightComponentNames,
   ...hoverCardComponentNames,
+  ...inlineCopyTextComponentNames,
   ...inputComponentNames,
   ...inputAreaComponentNames,
   ...inputGroupComponentNames,
@@ -2659,6 +2661,7 @@ test("generates deterministic search indexes", () => {
     grid: gridComponentNames,
     highlight: highlightComponentNames,
     "hover-card": hoverCardComponentNames,
+    "inline-copy-text": inlineCopyTextComponentNames,
     input: inputComponentNames,
     "input-area": inputAreaComponentNames,
     "input-group": inputGroupComponentNames,
