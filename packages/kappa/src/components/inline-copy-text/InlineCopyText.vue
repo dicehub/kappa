@@ -59,10 +59,10 @@ const clipboard = useClipboard(computed(() => ({
               stroke-linecap="round"
               stroke-linejoin="round"
             />
-            <template v-else>
+            <g v-else transform="translate(16 0) scale(-1 1)">
               <rect x="5" y="5" width="9" height="9" rx="1.5" stroke="currentColor" stroke-width="1.5" />
               <path d="M11 5V3.5A1.5 1.5 0 0 0 9.5 2h-6A1.5 1.5 0 0 0 2 3.5v6A1.5 1.5 0 0 0 3.5 11H5" stroke="currentColor" stroke-width="1.5" />
-            </template>
+            </g>
           </svg>
         </span>
       </button>
