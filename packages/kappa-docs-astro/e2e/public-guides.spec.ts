@@ -10,13 +10,13 @@ test("installation documents package use without private access instructions", a
   expect(response.ok()).toBe(true);
   const markdown = await response.text();
   for (const text of [
-    "Public npm publication is pending",
-    "pnpm add /path/to/kappa-ui/dist/kappa.tgz vue",
+    "Install Kappa and Vue from npm",
+    "pnpm add @dicehub/kappa vue@^3.5.0",
     '@dicehub/kappa/styles/kappa.css',
     '@dicehub/kappa/styles/theme-kappa.css',
     'skipLibCheck',
   ]) expect(markdown).toContain(text);
-  for (const text of ["gitlab.dicehub.org", "CI_JOB_TOKEN", "NPM_TOKEN", "playwright install", "codegen:themes"])
+  for (const text of ["gitlab.dicehub.org", "CI_JOB_TOKEN", "NPM_TOKEN", "playwright install", "codegen:themes", "publication is pending", "/path/to/kappa-ui/"])
     expect(markdown).not.toContain(text);
 });
 

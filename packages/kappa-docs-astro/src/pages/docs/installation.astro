@@ -49,18 +49,8 @@ const toc = [
 
         <section id="install-package" class="docs-section">
           <h2><a class="docs-section-anchor" href="#install-package">Install Package</a></h2>
-          <p>Public npm publication is pending. Build and pack Kappa from the repository root.</p>
-          <CodeBlock
-            code={`pnpm install
-pnpm --filter @dicehub/kappa build
-pnpm --filter @dicehub/kappa pack --out dist/kappa.tgz`}
-            lang="bash"
-          />
-          <p>
-            From your Vue project, install the generated tarball and Vue. Replace the example path
-            with the absolute path to <code>dist/kappa.tgz</code>.
-          </p>
-          <CodeBlock code="pnpm add /path/to/kappa-ui/dist/kappa.tgz vue" lang="bash" />
+          <p>Install Kappa and Vue from npm in your application.</p>
+          <CodeBlock code="pnpm add @dicehub/kappa vue@^3.5.0" lang="bash" />
         </section>
 
         <section id="theme" class="docs-section">

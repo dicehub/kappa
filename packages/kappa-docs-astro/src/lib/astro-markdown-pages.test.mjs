@@ -72,7 +72,7 @@ describe("Markdown build output", () => {
     assert.match(components, /\[Button\]\(\/docs\/components\/button\)/);
     assert.doesNotMatch(components, /Copy page|On this page/);
     assert.match(installation, /^# Installation\b/);
-    assert.match(installation, /```bash\npnpm install\npnpm --filter @dicehub\/kappa build\npnpm --filter @dicehub\/kappa pack --out dist\/kappa\.tgz/);
+    assert.match(installation, /```bash\npnpm add @dicehub\/kappa vue@\^3\.5\.0\n```/);
     assert.doesNotMatch(installation, /astro-code|--shiki-/);
   });
 

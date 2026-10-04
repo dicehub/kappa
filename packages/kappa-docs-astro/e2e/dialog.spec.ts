@@ -24,6 +24,7 @@ const clickBackdrop = async (page: Page) => {
 test.describe("Dialog documentation", () => {
   test.beforeEach(async ({ page }) => {
     await page.goto("/docs/components/dialog");
+    await expect(page.locator("astro-island[ssr]:has([data-dialog-demo])")).toHaveCount(0);
   });
 
   test("renders all examples, explanations, navigation, TOC, and Markdown", async ({
