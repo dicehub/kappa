@@ -43,8 +43,7 @@ Kappa imports support strict TypeScript checks with `skipLibCheck: false` and
 
 ## Documentation
 
-See the [component guides](packages/kappa-docs-astro/src/pages/docs/components/)
-and [block guides](packages/kappa-docs-astro/src/pages/docs/blocks/) for APIs and
+Read the [documentation](https://kappa-ui.com) for component APIs, blocks, and
 examples. The [package guide](packages/kappa/README.md) covers package usage.
 
 ## License

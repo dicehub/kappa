@@ -69,7 +69,7 @@ test("creates an Access app and allow policy for every Kappa Pages domain", asyn
   });
 });
 
-test("migrates the existing Pages Access app to the canonical custom domain", async () => {
+async function checkExistingApplicationMigration(protectProduction) {
   const requests = [];
   const fetchFn = async (url, init = {}) => {
     const parsed = new URL(url);
@@ -79,6 +79,11 @@ test("migrates the existing Pages Access app to the canonical custom domain", as
     }
     if (parsed.pathname.endsWith("/access/apps") && !init.method) {
       return cloudflareResponse([
+        {
+          id: "public-app",
+          domain: "kappa-ui.com",
+          self_hosted_domains: ["kappa-ui.com"],
+        },
         {
           id: "app-1",
           domain: "kapp-ui.dh.fo",
@@ -109,7 +114,11 @@ test("migrates the existing Pages Access app to the canonical custom domain", as
     throw new Error(`Unexpected request: ${init.method ?? "GET"} ${parsed}`);
   };
 
-  await ensureAccess({ env: ENV, fetchFn, logger: { log() {} } });
+  await ensureAccess({
+    env: { ...ENV, ACCESS_PROTECT_PAGES_PRODUCTION: String(protectProduction) },
+    fetchFn,
+    logger: { log() {} },
+  });
 
   const createRequest = requests.find(
     ({ init, url }) => url.pathname.endsWith("/access/apps") && init.method === "POST",
@@ -125,9 +134,17 @@ test("migrates the existing Pages Access app to the canonical custom domain", as
     domain: "kappa-ui.dh.fo",
     self_hosted_domains: [
       "kappa-ui.dh.fo",
-      "dicehub-kappa-ui.pages.dev",
+      ...(protectProduction ? ["dicehub-kappa-ui.pages.dev"] : []),
       "*.dicehub-kappa-ui.pages.dev",
     ],
     session_duration: "730h",
   });
+}
+
+test("migrates the existing Pages Access app to the internal custom domain", async () => {
+  await checkExistingApplicationMigration(true);
+});
+
+test("opens production only when opted out and keeps internal and preview hosts protected", async () => {
+  await checkExistingApplicationMigration(false);
 });

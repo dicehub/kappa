@@ -1,5 +1,6 @@
 // Ensures a Cloudflare Access one-time-PIN application protects Kappa docs,
-// including the custom domain, Pages production domain, and preview domains.
+// including the internal custom domain and preview domains. The Pages production
+// domain stays protected unless ACCESS_PROTECT_PAGES_PRODUCTION is "false".
 // Idempotent and safe to run after every deployment.
 //
 // Usage: node scripts/cloudflare-access.mjs ensure
@@ -50,6 +51,7 @@ function requiredEnvironment(env) {
     emailDomain,
     emails,
     project,
+    protectPagesProduction: env.ACCESS_PROTECT_PAGES_PRODUCTION !== "false",
     secrets: [env.CLOUDFLARE_ACCOUNT_ID, env.CLOUDFLARE_API_TOKEN],
   };
 }
@@ -142,8 +144,12 @@ async function ensureOneTimePin({ accountId, apiToken, fetchFn, logger, secrets 
   }
 }
 
-function desiredDomains({ domain, project }) {
-  return [domain, `${project}.pages.dev`, `*.${project}.pages.dev`];
+function desiredDomains({ domain, project, protectPagesProduction }) {
+  return [
+    domain,
+    ...(protectPagesProduction ? [`${project}.pages.dev`] : []),
+    `*.${project}.pages.dev`,
+  ];
 }
 
 function desiredInclude({ emailDomain, emails }) {
