@@ -88,6 +88,7 @@ const output = [
   "## Ark UI Vue",
   "",
   `External runtime dependency: \`@ark-ui/vue\` ${manifest.dependencies["@ark-ui/vue"]}. The notice below is copied from that installed package.`,
+  "The package includes private Ark declarations for color-picker, file-upload, listbox, progress, select, slider, and highlight, plus their declaration dependencies. Kappa repairs missing default-slot types and a duplicate type import. The JavaScript runtime remains external.",
   "",
   readFileSync(resolve(packageRoot, "node_modules/@ark-ui/vue/LICENSE"), "utf8").trim(),
   "",

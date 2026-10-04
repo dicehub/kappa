@@ -129,73 +129,79 @@ try {
     assertPackedPath(packedRoot, exportTarget(manifest.exports, subpath, "default"), subpath);
   }
 
-  const consumerRoot = resolve(temporaryRoot, "consumer");
-  const installedPackage = resolve(consumerRoot, "node_modules/@dicehub/kappa");
-  mkdirSync(dirname(installedPackage), { recursive: true });
-  cpSync(packedRoot, installedPackage, { recursive: true });
-
-  const dependencies = new Set([
-    ...Object.keys(manifest.dependencies ?? {}),
-    ...Object.keys(manifest.peerDependencies ?? {}),
+  const optionalModules = new Set([
+    "./components/chart", "./components/timeseries-chart", "./components/map-view",
+    "./components/xy-plot", "./components/code-highlighted",
   ]);
-  for (const dependency of dependencies) linkDependency(consumerRoot, dependency);
+  for (const full of [false, true]) {
+    const consumerRoot = resolve(temporaryRoot, full ? "full-consumer" : "core-consumer");
+    const installedPackage = resolve(consumerRoot, "node_modules/@dicehub/kappa");
+    mkdirSync(dirname(installedPackage), { recursive: true });
+    cpSync(packedRoot, installedPackage, { recursive: true });
 
-  mkdirSync(resolve(consumerRoot, "src"), { recursive: true });
-  writeFileSync(
-    resolve(consumerRoot, "package.json"),
-    JSON.stringify({ name: "kappa-packed-consumer", private: true, type: "module" }, null, 2),
-  );
-  writeFileSync(
-    resolve(consumerRoot, "tsconfig.json"),
-    JSON.stringify(
-      {
-        compilerOptions: {
-          module: "ESNext",
-          moduleResolution: "Bundler",
-          noEmit: true,
-          resolveJsonModule: true,
-          skipLibCheck: true,
-          lib: ["ES2022", "DOM", "DOM.Iterable"],
-          types: [],
-          strict: true,
-          target: "ES2022",
+    const dependencies = new Set([
+      ...Object.keys(manifest.dependencies ?? {}),
+      ...Object.keys(manifest.peerDependencies ?? {}).filter((name) => full || !manifest.peerDependenciesMeta?.[name]?.optional),
+    ]);
+    for (const dependency of dependencies) linkDependency(consumerRoot, dependency);
+
+    mkdirSync(resolve(consumerRoot, "src"), { recursive: true });
+    writeFileSync(
+      resolve(consumerRoot, "package.json"),
+      JSON.stringify({ name: "kappa-packed-consumer", private: true, type: "module" }, null, 2),
+    );
+    writeFileSync(
+      resolve(consumerRoot, "tsconfig.json"),
+      JSON.stringify(
+        {
+          compilerOptions: {
+            module: "ESNext",
+            moduleResolution: "Bundler",
+            noEmit: true,
+            resolveJsonModule: true,
+            skipLibCheck: false,
+            lib: ["ES2022", "DOM", "DOM.Iterable"],
+            types: [],
+            strict: true,
+            target: "ES2022",
+          },
+          include: ["src"],
         },
-        include: ["src"],
-      },
-      null,
-      2,
-    ),
-  );
-  writeFileSync(
-    resolve(consumerRoot, "src/exports.ts"),
-    moduleSubpaths.map((subpath, index) => `import * as export${index} from "${manifest.name}${subpath === "." ? "" : subpath.slice(1)}";\nvoid export${index};`).join("\n"),
-  );
-  writeFileSync(
-    resolve(consumerRoot, "index.html"),
-    '<!doctype html><html><body><div id="app"></div><script type="module" src="/src/main.ts"></script></body></html>\n',
-  );
-  writeFileSync(
-    resolve(consumerRoot, "src/main.ts"),
-    [
-      'import { Button as RootButton } from "@dicehub/kappa";',
-      'import { Button, type ButtonProps } from "@dicehub/kappa/components/button";',
-      'import registry from "@dicehub/kappa/registry/component-registry.json";',
-      'import "@dicehub/kappa/styles/kappa.css";',
-      'import "@dicehub/kappa/styles/theme-kappa.css";',
-      'import { createApp, h } from "vue";',
-      "",
-      'const props: ButtonProps = { variant: "primary" };',
-      'if (RootButton !== Button || registry.package.name !== "@dicehub/kappa") throw new Error("invalid package");',
-      'createApp({ render: () => h(Button, props, () => "Kappa") }).mount("#app");',
-      "",
-    ].join("\n"),
-  );
+        null,
+        2,
+      ),
+    );
+    writeFileSync(
+      resolve(consumerRoot, "src/exports.ts"),
+      moduleSubpaths.filter((subpath) => full || !optionalModules.has(subpath)).map((subpath, index) => `import * as export${index} from "${manifest.name}${subpath === "." ? "" : subpath.slice(1)}";\nvoid export${index};`).join("\n"),
+    );
+    writeFileSync(
+      resolve(consumerRoot, "index.html"),
+      '<!doctype html><html><body><div id="app"></div><script type="module" src="/src/main.ts"></script></body></html>\n',
+    );
+    writeFileSync(
+      resolve(consumerRoot, "src/main.ts"),
+      [
+        'import { Button as RootButton } from "@dicehub/kappa";',
+        'import { Button, type ButtonProps } from "@dicehub/kappa/components/button";',
+        'import registry from "@dicehub/kappa/registry/component-registry.json";',
+        'import "@dicehub/kappa/styles/kappa.css";',
+        'import "@dicehub/kappa/styles/theme-kappa.css";',
+        'import { createApp, h } from "vue";',
+        "",
+        'const props: ButtonProps = { variant: "primary" };',
+        'if (RootButton !== Button || registry.package.name !== "@dicehub/kappa") throw new Error("invalid package");',
+        'createApp({ render: () => h(Button, props, () => "Kappa") }).mount("#app");',
+        "",
+      ].join("\n"),
+    );
 
-  checkConsumerDeclarations(consumerRoot);
-  run("node", [resolve(packageRoot, "node_modules/typescript/bin/tsc"), "--project", "tsconfig.json"], { cwd: consumerRoot });
-  run("node", [resolve(packageRoot, "node_modules/vite/bin/vite.js"), "build"], { cwd: consumerRoot });
+    cpSync(resolve(packageRoot, "scripts/fixtures/consumer-types.ts"), resolve(consumerRoot, "src/consumer-types.ts"));
+    checkConsumerDeclarations(consumerRoot);
+    run("node", [resolve(packageRoot, "node_modules/vite/bin/vite.js"), "build"], { cwd: consumerRoot });
 
-  console.log(`Validated ${moduleSubpaths.length} module exports and a packed consumer build.`);
+    console.log(`Validated ${full ? "all module exports" : "core exports without optional peers"} with strict declarations and a consumer build.`);
+  }
 } finally {
   if (process.env.KEEP_PACKAGE_VALIDATION) {
     console.error(`Kept validation files at ${temporaryRoot}`);

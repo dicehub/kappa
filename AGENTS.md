@@ -96,6 +96,7 @@ Current repository locations:
 | Blocks (exported)    | `packages/kappa/src/blocks/{name}/`                            | Higher-level dicehub compositions exported by the library                        |
 | Semantic tokens      | `packages/kappa/src/styles/theme-kappa.css`                    | AUTO-GENERATED with `tokens.json`; edit the `theme-generator` entry point and its token, pair, and deprecation modules |
 | Registry generator   | `packages/kappa/scripts/component-registry/`                   | Discovers component and block barrels; regenerates the JSON and TypeScript index |
+| Declaration compatibility | `packages/kappa/scripts/ark-declarations.mjs` + `ark-declaration-repairs.json` | Generates private Ark declarations with version and input checks; review when upgrading Ark |
 | License notices      | `packages/kappa/licenses/` + `packages/kappa/scripts/third-party-sources.mjs` | Preserved adapted-source licenses; generated package notices and `/licenses.txt` docs output |
 | Demo examples        | `packages/kappa-docs-astro/src/components/*DocsDemo.vue`       | Rendered by docs pages and exercised by end-to-end tests                         |
 | Documentation pages  | `packages/kappa-docs-astro/src/pages/docs/`                    | Guides, component pages, block pages, and routes                                 |

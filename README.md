@@ -38,8 +38,8 @@ import { Button } from "@dicehub/kappa/components/button";
 Set `data-kappa-theme="light"` or `data-kappa-theme="dark"` on an ancestor of your
 components. Light is the default.
 
-For TypeScript projects, set `skipLibCheck` to `true` in your application's
-`tsconfig.json`. Ark UI 5.39.2 has declaration errors that require this setting.
+Kappa imports support strict TypeScript checks with `skipLibCheck: false` and
+`moduleResolution: "Bundler"`.
 
 ## Documentation
 

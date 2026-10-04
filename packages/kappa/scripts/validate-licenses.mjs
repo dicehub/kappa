@@ -30,4 +30,9 @@ export function validateLicenses(manifest, packedRoot, packageRoot) {
 
   const arkLicense = readFileSync(resolve(packageRoot, "node_modules/@ark-ui/vue/LICENSE"), "utf8").trim();
   if (!notices.includes(arkLicense)) throw new Error("Third-party notices must retain Ark UI's full license.");
+  assertUnchanged(
+    resolve(packedRoot, "dist/_vendor/ark-ui-vue/LICENSE"),
+    resolve(packageRoot, "node_modules/@ark-ui/vue/LICENSE"),
+    "Ark UI's declaration license",
+  );
 }

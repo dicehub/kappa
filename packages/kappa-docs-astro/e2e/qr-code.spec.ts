@@ -5,6 +5,7 @@ const demo = (page: Page, variant: string) => page.locator(`[data-qr-code-demo="
 test.describe("QR Code documentation", () => {
   test.beforeEach(async ({ page }) => {
     await page.goto("/docs/components/qr-code");
+    await expect(page.locator("astro-island[ssr]:has([data-qr-code-demo])")).toHaveCount(0);
   });
 
   test("renders documentation, examples, composition, and Markdown", async ({ page, request }) => {

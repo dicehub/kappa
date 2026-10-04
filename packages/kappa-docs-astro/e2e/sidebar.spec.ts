@@ -127,6 +127,9 @@ test("non-collapsible mode stays expanded on desktop", async ({ page }) => {
 
 test("mobile traps focus, handles all dismissal paths and restores the opener", async ({ page }) => {
   await page.goto("/examples/components/sidebar/mobile");
+  await expect.poll(() => demo(page, "mobile").evaluate(
+    element => element.closest("astro-island")?.hasAttribute("ssr"),
+  )).toBe(false);
   const opener = trigger(page, "mobile");
   await opener.click();
   const sheet = dialog(page);
@@ -152,6 +155,9 @@ test("mobile traps focus, handles all dismissal paths and restores the opener", 
 
 test("mobile link selection closes through the application and updates content", async ({ page }) => {
   await page.goto("/examples/components/sidebar/mobile");
+  await expect.poll(() => demo(page, "mobile").evaluate(
+    element => element.closest("astro-island")?.hasAttribute("ssr"),
+  )).toBe(false);
   await trigger(page, "mobile").click();
   await dialog(page).getByRole("link", { name: "Projects", exact: true }).click();
   await expect(dialog(page)).toBeHidden();
@@ -200,6 +206,9 @@ test("compact rows remain compact on desktop and reachable on small screens", as
 test("full-screen mobile fills the viewport and has a visible close control", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto("/examples/components/sidebar/full-screen-mobile");
+  await expect.poll(() => demo(page, "full-screen-mobile").evaluate(
+    element => element.closest("astro-island")?.hasAttribute("ssr"),
+  )).toBe(false);
   await trigger(page, "full-screen-mobile").click();
   const sheet = dialog(page, "full-screen-mobile");
   await expect(sheet).toHaveCSS("width", "390px");

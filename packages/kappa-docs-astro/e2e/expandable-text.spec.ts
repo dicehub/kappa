@@ -137,11 +137,11 @@ test.describe("Expandable Text documentation", () => {
     const initialTop = (await customRoot.boundingBox())!.y;
     await custom.getByRole("button", { name: "Read run note" }).click();
     await expect(custom.getByRole("button", { name: "Close run note" })).toContainText("Close run note");
-    await customRoot
+    await expect.poll(() => customRoot
       .locator('[data-slot="expandable-text-content"]')
-      .evaluate(async (element) => {
-        await Promise.all(element.getAnimations().map((animation) => animation.finished));
-      });
+      .evaluate((element) => element.getAnimations().filter((animation) =>
+        animation.playState === "running" || animation.pending).length),
+    ).toBe(0);
     expect(Math.abs((await customRoot.boundingBox())!.y - initialTop)).toBeLessThan(1);
 
     const short = demo(page, "short");

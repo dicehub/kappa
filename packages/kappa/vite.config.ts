@@ -4,6 +4,7 @@ import vue from "@vitejs/plugin-vue";
 import dts from "unplugin-dts/vite";
 import { defineConfig, type Plugin } from "vite";
 import { preserveCompoundDeclarations } from "./scripts/declaration-barrels.mjs";
+import { generateArkDeclarations, rewriteArkDeclarationImports } from "./scripts/ark-declarations.mjs";
 
 const source = (...parts: string[]) => resolve(import.meta.dirname, "src", ...parts);
 const output = (...parts: string[]) => resolve(import.meta.dirname, "dist", ...parts);
@@ -72,7 +73,10 @@ export default defineConfig({
               ? `${prefix}${specifier}/index${suffix}`
               : match,
         );
-        return { content };
+        return { content: rewriteArkDeclarationImports(content, filePath, output()) };
+      },
+      afterBuild() {
+        generateArkDeclarations(import.meta.dirname, output());
       },
       entryRoot: source(),
       outDirs: output(),
