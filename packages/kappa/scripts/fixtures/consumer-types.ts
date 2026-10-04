@@ -1,5 +1,7 @@
 import { Button, Dialog, Slider, TableOfContents, useHighlight } from "@dicehub/kappa";
 import { DialogRoot } from "@dicehub/kappa/components/dialog";
+import { InlineCopyText } from "@dicehub/kappa";
+import type { InlineCopyText as GranularInlineCopyText, InlineCopyTextProps } from "@dicehub/kappa/components/inline-copy-text";
 import type { SelectProps } from "@dicehub/kappa/components/select";
 import type { TableOfContentsRoot } from "@dicehub/kappa/components/table-of-contents";
 
@@ -18,6 +20,16 @@ const activeIds: TocProps["activeIds"] = ["installation"];
 const slot: SliderSlots["default"] = () => "42";
 const chunks = useHighlight({ text: "Kappa", query: "Kap" });
 const match: boolean | undefined = chunks.value[0]?.match;
+const inlineCopy: typeof GranularInlineCopyText = InlineCopyText;
+const inlineCopyProps: InlineCopyTextProps = { value: "run_0842", size: "sm", truncate: true };
+const inlineCopySlot: InstanceType<typeof InlineCopyText>["$slots"]["default"] = () => "Run 0842";
+
+// @ts-expect-error A copy value is required, including when using custom display text.
+const missingCopyValue: InlineCopyTextProps = {};
+// @ts-expect-error Copy values must be strings.
+const invalidCopyValue: InlineCopyTextProps = { value: 42 };
+// @ts-expect-error Heading variants are not supported by an inline copy button.
+const invalidCopyVariant: InlineCopyTextProps = { value: "run_0842", variant: "heading" };
 
 // @ts-expect-error Button sizes must be strings.
 const invalidSize: ButtonProps["size"] = 42;
@@ -32,3 +44,4 @@ const invalidSlot: SliderSlots["default"] = (props: { value: number }) => props.
 
 void [dialogRoot, dialog, tocRoot, size, open, disabled, activeIds, slot, match];
 void [invalidSize, invalidOpen, invalidDisabled, invalidIds, invalidSlot];
+void [inlineCopy, inlineCopyProps, inlineCopySlot, missingCopyValue, invalidCopyValue, invalidCopyVariant];

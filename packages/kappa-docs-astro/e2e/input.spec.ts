@@ -38,15 +38,15 @@ test.describe("Input documentation", () => {
     const compact = page.getByRole("navigation", { name: "Adjacent documentation pages" });
     const footer = page.getByRole("navigation", { name: "Documentation pagination" });
     await expect(sidebar).toHaveAttribute("aria-current", "page");
-    await expect(compact.getByRole("link", { name: "Previous page: Image Cropper" })).toHaveAttribute(
+    await expect(compact.getByRole("link", { name: "Previous page: Inline Copy Text" })).toHaveAttribute(
       "href",
-      "/docs/components/image-cropper",
+      "/docs/components/inline-copy-text",
     );
     await expect(compact.getByRole("link", { name: "Next page: Input Area" })).toHaveAttribute(
       "href",
       "/docs/components/input-area",
     );
-    await expect(footer.getByRole("link", { name: "Image Cropper", exact: true })).toBeVisible();
+    await expect(footer.getByRole("link", { name: "Inline Copy Text", exact: true })).toBeVisible();
     await expect(footer.getByRole("link", { name: "Input Area", exact: true })).toBeVisible();
 
     const toc = page.getByRole("complementary", { name: "On this page" });
