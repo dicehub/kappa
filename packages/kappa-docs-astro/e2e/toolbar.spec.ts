@@ -146,6 +146,7 @@ test.describe("Toolbar documentation", () => {
 
   test("preserves RTL text editing and native select/range arrows", async ({ page }) => {
     const preview = demo(page, "preview");
+    await waitForHydration(preview);
     const toolbar = preview.getByRole("toolbar", { name: "Record tools" });
     await toolbar.evaluate((root) => {
       root.setAttribute("dir", "rtl");

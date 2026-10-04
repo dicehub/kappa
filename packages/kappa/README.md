@@ -7,19 +7,10 @@ Vue components and application blocks for dicehub products. Kappa is ESM-only.
 Use Vue `^3.5.0` and Node.js `>=24.19.0 <25`. The commands below use pnpm
 `10.26.0`.
 
-Public npm publication is pending. Build and pack Kappa from the repository root:
+Install Kappa and Vue from npm:
 
 ```bash
-pnpm install
-pnpm --filter @dicehub/kappa build
-pnpm --filter @dicehub/kappa pack --out dist/kappa.tgz
-```
-
-From your Vue project, install the tarball and Vue. Replace the example path with
-the absolute path to the generated `dist/kappa.tgz` file:
-
-```bash
-pnpm add /path/to/kappa-ui/dist/kappa.tgz vue@^3.5.0
+pnpm add @dicehub/kappa vue@^3.5.0
 ```
 
 ## Use

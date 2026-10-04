@@ -1,6 +1,6 @@
 {
   "name": "@dicehub/kappa",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "Vue components and application blocks for dicehub products.",
   "license": "MIT",
   "type": "module",
@@ -21,8 +21,8 @@
     "node": ">=24.19.0 <25"
   },
   "publishConfig": {
-    "access": "restricted",
-    "registry": "https://gitlab.dicehub.org/api/v4/projects/394/packages/npm/"
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
   },
   "scripts": {
     "build": "pnpm run codegen:registry && pnpm run codegen:themes && vite build && pnpm run codegen:licenses && pnpm run check:theme-build",
@@ -160,5 +160,15 @@
       "kappa-source": "./src/styles/tokens.json",
       "default": "./dist/styles/tokens.json"
     }
+  },
+  "private": false,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dicehub/kappa.git",
+    "directory": "packages/kappa"
+  },
+  "homepage": "https://github.com/dicehub/kappa",
+  "bugs": {
+    "url": "https://github.com/dicehub/kappa/issues"
   }
 }

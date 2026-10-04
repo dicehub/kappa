@@ -3,7 +3,7 @@ import type { ComponentRegistry } from "./types";
 
 export const componentRegistry = {
   "schemaVersion": 1,
-  "package": {"name":"@dicehub/kappa","version":"0.4.0"},
+  "package": {"name":"@dicehub/kappa","version":"0.4.1"},
   "components": {
     "Accordion": {"name":"Accordion","type":"component","group":"accordion","importPath":"@dicehub/kappa/components/accordion","sourceFile":"components/accordion/Accordion.vue","description":"Accordion component exported by the Accordion module.","parts":["Root","Item","Trigger","Content","Indicator"]},
     "AccordionContent": {"name":"AccordionContent","type":"component","group":"accordion","importPath":"@dicehub/kappa/components/accordion","sourceFile":"components/accordion/AccordionContent.vue","description":"AccordionContent component exported by the Accordion module."},

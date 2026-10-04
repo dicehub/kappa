@@ -22,7 +22,7 @@ test.describe("Copy Page", () => {
     await copyPage.click();
     await expect(desktopControls.getByRole("status")).toHaveText("Page copied");
     await expect.poll(() => readClipboard(page)).toContain("# Installation");
-    await expect.poll(() => readClipboard(page)).toContain("pnpm install");
+    await expect.poll(() => readClipboard(page)).toContain("pnpm add @dicehub/kappa vue@^3.5.0");
 
     await options.focus();
     await page.keyboard.press("ArrowDown");

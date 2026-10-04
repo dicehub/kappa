@@ -1,5 +1,12 @@
 # @dicehub/kappa
 
+## 0.4.1
+
+### Patch Changes
+
+- 52a7f97: Clarify installation, Vue and Node.js requirements, and the Ark UI TypeScript workaround.
+- 52a7f97: License Kappa source code and documentation text under MIT. Include the license and Kumo, Ark UI, and Phosphor notices in the package archive.
+
 ## 0.4.0
 
 ### Minor Changes

@@ -7,6 +7,7 @@ stages:
   - release
 
 variables:
+  NPM_CONFIG_USERCONFIG: "$CI_PROJECT_DIR/.npmrc.ci"
   PNPM_STORE_DIR: "$CI_PROJECT_DIR/.pnpm-store"
 
 cache:
@@ -77,15 +78,17 @@ publish-package:
   needs:
     - verify
   resource_group: kappa-package-release
+  environment:
+    name: npm-production
+    url: https://www.npmjs.com/package/@dicehub/kappa
   script:
     - export PACKAGE_VERSION="$(node -p "require('./packages/kappa/package.json').version")"
     - test "$CI_COMMIT_TAG" = "@dicehub/kappa@$PACKAGE_VERSION"
     - pnpm --filter @dicehub/kappa build
     - pnpm --filter @dicehub/kappa validate:package
     - node scripts/release-notes.mjs "$PACKAGE_VERSION" release-notes.md
-    - pnpm config set --location=project "@dicehub:registry" "$CI_API_V4_URL/projects/$CI_PROJECT_ID/packages/npm/"
-    - pnpm config set --location=project "//$CI_SERVER_HOST/api/v4/projects/$CI_PROJECT_ID/packages/npm/:_authToken" "$CI_JOB_TOKEN"
-    - if pnpm view "@dicehub/kappa@$PACKAGE_VERSION" version --registry "$CI_API_V4_URL/projects/$CI_PROJECT_ID/packages/npm/" >/dev/null 2>&1; then echo "@dicehub/kappa@$PACKAGE_VERSION is already published."; else pnpm --filter @dicehub/kappa publish --no-git-checks --access restricted; fi
+    - npm install --global npm@12.2.0 --ignore-scripts
+    - node scripts/publish-npm.mjs
   artifacts:
     paths:
       - release-notes.md
