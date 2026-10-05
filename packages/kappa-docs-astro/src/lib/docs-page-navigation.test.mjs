@@ -260,6 +260,10 @@ describe("docs page navigation", () => {
     });
     assert.deepEqual(adjacentLabels("/docs/blocks/message-composer"), {
       previous: "Resource Picker",
+      next: "Workspace Switcher",
+    });
+    assert.deepEqual(adjacentLabels("/docs/blocks/workspace-switcher"), {
+      previous: "Message Composer",
       next: undefined,
     });
     assert.deepEqual(adjacentLabels("/docs/blocks"), { previous: undefined, next: "Application Shell" });
@@ -297,7 +301,7 @@ describe("docs page navigation", () => {
   it("contains every documentation page exactly once", () => {
     const hrefs = docsPageSequences.flatMap((sequence) => sequence.map((link) => link.href));
     assert.equal(docsPageSequences.length, 4);
-    assert.equal(hrefs.length, 118);
+    assert.equal(hrefs.length, 119);
     assert.equal(new Set(hrefs).size, hrefs.length);
   });
 

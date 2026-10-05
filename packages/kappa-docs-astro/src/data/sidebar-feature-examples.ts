@@ -1,73 +1,54 @@
 // read_when: Add or change Sidebar compositions and interactive examples.
-import namespaceMenuCss from "../components/sidebar-namespace-menu.css?raw";
 import scrollToItemCode from "../components/SidebarScrollToItemDocsDemo.vue?raw";
 import scrollToItemCss from "../components/sidebar-scroll-demo.css?raw";
 
 export const sidebarFeatureExamples = [
   {
     id: "namespace-selector", title: "Namespace Selector",
-    description: "A side-opening menu with framed icons, namespace shortcuts, and an Add namespace action. On mobile, the menu opens below the button inside the drawer. Ctrl/⌘ + 1–3 works only while this menu is open. Add namespace shows a placeholder page in this example; connect the action to your application.",
+    description: "Current workspace details, account actions, and a workspace list with the selected checkmark on the right. Ctrl/⌘ + 1–3 works only while the menu is open. Mobile menus stay inside the drawer.",
     code: `<script setup>
-import { onMounted, ref } from "vue";
-import { Sidebar, Dropdown } from "@dicehub/kappa";
+import { computed, onMounted, ref } from "vue";
+import { Sidebar, WorkspaceSwitcher } from "@dicehub/kappa";
 import { Building2, FlaskConical, Plus, UserRound } from "@lucide/vue";
-const emit = defineEmits(["add"]);
+const emit = defineEmits(["action"]);
 const namespace = ref("Engineering");
 const open = ref(false);
 const isMac = ref(false);
 const namespaces = [
-  { name: "Engineering", icon: Building2 },
-  { name: "Research", icon: FlaskConical },
-  { name: "Personal", icon: UserRound },
+  { value: "Engineering", name: "Engineering", description: "Pro plan · 12 members", icon: Building2 },
+  { value: "Research", name: "Research", description: "Pro plan · 8 members", icon: FlaskConical },
+  { value: "Personal", name: "Personal", description: "Free plan · 1 member", icon: UserRound },
 ];
-const desktop = { placement: "right-start", strategy: "fixed", gutter: 8 };
-const mobile = { placement: "bottom-start", strategy: "fixed", gutter: 6 };
+const items = computed(() => namespaces.map((item, index) => ({ ...item,
+  shortcut: (isMac.value ? "⌘" : "Ctrl ") + (index + 1),
+  ariaKeyshortcuts: (isMac.value ? "Meta+" : "Control+") + (index + 1),
+})));
 onMounted(() => { isMac.value = /Mac|iPhone|iPad/.test(navigator.platform); });
 function onShortcut(event) {
   if (!open.value || !(event.metaKey || event.ctrlKey) || event.altKey || event.shiftKey || event.isComposing || event.repeat) return;
-  const item = namespaces[Number(event.key) - 1];
+  const item = items.value[Number(event.key) - 1];
   if (!item) return;
   event.preventDefault();
   event.stopPropagation();
-  namespace.value = item.name;
+  namespace.value = item.value;
   open.value = false;
 }
 </script>
 <template>
-  <!-- Inside Sidebar.Root -->
   <Sidebar.Header>
     <Sidebar.Context v-slot="{ isMobile, setMobileOpen }">
-      <Dropdown.Root v-model:open="open" aria-label="Namespaces" :positioning="isMobile ? mobile : desktop">
-        <Dropdown.Trigger as-child>
-          <Sidebar.MenuButton :icon="Building2" :tooltip="namespace">{{ namespace }}</Sidebar.MenuButton>
-        </Dropdown.Trigger>
-        <Dropdown.Content :teleport="!isMobile" :inert="!open || undefined"
-          class="sidebar-demo__namespace-menu" @keydown="onShortcut">
-          <Dropdown.Group>
-            <Dropdown.Label>Namespaces</Dropdown.Label>
-            <Dropdown.Item v-for="(item, index) in namespaces" :key="item.name" :value="item.name" :value-text="item.name"
-              :aria-current="namespace === item.name ? 'true' : undefined"
-              :aria-keyshortcuts="(isMac ? 'Meta+' : 'Control+') + (index + 1)" @select="namespace = item.name">
-              <template #icon><span class="sidebar-demo__namespace-icon" aria-hidden="true"><component :is="item.icon" /></span></template>
-              {{ item.name }}
-              <template #end><Dropdown.Shortcut aria-hidden="true">{{ isMac ? '⌘' : 'Ctrl ' }}{{ index + 1 }}</Dropdown.Shortcut></template>
-            </Dropdown.Item>
-          </Dropdown.Group>
-          <Dropdown.Separator />
-          <Dropdown.Group>
-            <Dropdown.Item value="add-namespace" class="sidebar-demo__namespace-add" @select="emit('add'); setMobileOpen(false)">
-              <template #icon><span class="sidebar-demo__namespace-icon" aria-hidden="true"><Plus /></span></template>
-              Add namespace
-            </Dropdown.Item>
-          </Dropdown.Group>
-        </Dropdown.Content>
-      </Dropdown.Root>
+      <WorkspaceSwitcher v-model="namespace" v-model:open="open" :items="items" label="Namespaces"
+        :teleport="!isMobile" :positioning="{ placement: isMobile ? 'bottom-start' : 'right-start', strategy: 'fixed' }"
+        :workspace-actions="[{ value: 'add', label: 'Add namespace', icon: Plus }]"
+        @keydown="onShortcut" @action="action => { emit('action', action); setMobileOpen(false); }">
+        <template #trigger="{ workspace }">
+          <Sidebar.MenuButton :icon="workspace?.icon" :tooltip="namespace" :aria-label="'Namespace: ' + namespace">{{ namespace }}</Sidebar.MenuButton>
+        </template>
+      </WorkspaceSwitcher>
     </Sidebar.Context>
     <Sidebar.Close />
   </Sidebar.Header>
-</template>
-<style>
-${namespaceMenuCss}</style>`,
+</template>`,
   },
   {
     id: "profile-selector", title: "Profile Selector",

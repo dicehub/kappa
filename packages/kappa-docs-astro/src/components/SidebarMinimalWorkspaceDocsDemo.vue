@@ -7,6 +7,8 @@ import { Avatar } from "@dicehub/kappa/components/avatar";
 import { Button } from "@dicehub/kappa/components/button";
 import { CommandPalette } from "@dicehub/kappa/components/command-palette";
 import { Dropdown } from "@dicehub/kappa/components/dropdown";
+import { WorkspaceSwitcher } from "@dicehub/kappa/blocks/workspace-switcher";
+import { namespaceSwitcherItems, namespaceSwitcherActions, namespaceSwitcherFooterActions, namespaceSwitcherWorkspaceActions, namespaceActionDescriptions } from "../data/workspace-switcher-demo";
 import { Input } from "@dicehub/kappa/components/input";
 import { Table } from "@dicehub/kappa/components/table";
 import { Activity, Building2, ChevronDown, CircleHelp, Clock3, Compass, CreditCard, FileText, Folder, House, LayoutDashboard, LogOut, PanelLeftClose, PanelLeftOpen, Plus, Search, Settings, UserRound, UsersRound } from "@lucide/vue";
@@ -18,7 +20,10 @@ const selected = ref("Dashboard");
 const filter = ref("");
 const query = ref("");
 const searchOpen = ref(false);
-const namespaces = ["Ros.Space", "Engineering", "Research"];
+const namespaces = [
+  { value: "Ros.Space", name: "Ros.Space", description: "Free plan · 1 member", avatarSrc: "/avatars/ros-space-astronaut.webp", initials: "RS" },
+  ...namespaceSwitcherItems.filter(item => item.value !== "Personal"),
+];
 const globalLinks = ["Dashboard", "Explore", "Templates", "Community"];
 const links = [
   { label: "Dashboard", icon: LayoutDashboard },
@@ -27,6 +32,7 @@ const links = [
   { label: "User settings", icon: Settings },
 ];
 const descriptions: Record<string, string> = {
+  ...namespaceActionDescriptions,
   Dashboard: "Your projects and recent work, in one place.",
   Projects: "Projects in the selected namespace.",
   "Recently opened": "Return to a project you opened recently.",
@@ -100,17 +106,16 @@ function createProject(context: SidebarContextValue, template?: string) {
         </div>
       </template>
       <template #header="context">
-        <Dropdown.Root :positioning="{ placement: context.iconCollapsed ? 'right-start' : 'bottom-start', strategy: 'fixed', gutter: 6 }">
-          <Dropdown.Trigger as-child><Sidebar.MenuButton class="minimal-workspace-demo__namespace" :aria-label="`Namespace: ${namespace}`" :tooltip="`Namespace: ${namespace}`">
+        <WorkspaceSwitcher v-model="namespace" :items="namespaces" label="Namespaces" account-label="ros@example.test"
+          :actions="namespaceSwitcherActions" :footer-actions="namespaceSwitcherFooterActions"
+          :workspace-actions="[...namespaceSwitcherWorkspaceActions, { value: 'groups', label: 'Show all groups', icon: UsersRound }]"
+          :teleport="!context.isMobile" :positioning="{ placement: context.iconCollapsed ? 'right-start' : 'bottom-start', strategy: 'fixed', gutter: 6 }"
+          @action="navigate($event.value === 'groups' ? 'Groups' : $event.label, context)">
+          <template #trigger><Sidebar.MenuButton class="minimal-workspace-demo__namespace" :aria-label="`Namespace: ${namespace}`" :tooltip="`Namespace: ${namespace}`">
             <template #icon><Avatar.Root v-if="namespace === 'Ros.Space'" aria-hidden="true"><Avatar.Image src="/avatars/ros-space-astronaut.webp" alt="" /><Avatar.Fallback>RS</Avatar.Fallback></Avatar.Root><Building2 v-else aria-hidden="true" /></template>
             <span>{{ namespace }}</span><ChevronDown aria-hidden="true" />
-          </Sidebar.MenuButton></Dropdown.Trigger>
-          <Dropdown.Context v-slot="menu"><Dropdown.Content :teleport="!context.isMobile" :inert="!menu.open || undefined">
-            <Dropdown.RadioGroup v-model="namespace"><Dropdown.Label>Namespaces</Dropdown.Label><Dropdown.RadioItem v-for="name in namespaces" :key="name" :value="name" close-on-select>{{ name }}</Dropdown.RadioItem></Dropdown.RadioGroup>
-            <Dropdown.Separator />
-            <Dropdown.Item value="groups" :icon="UsersRound" @select="navigate('Groups', context)">Show all groups</Dropdown.Item>
-          </Dropdown.Content></Dropdown.Context>
-        </Dropdown.Root>
+          </Sidebar.MenuButton></template>
+        </WorkspaceSwitcher>
       </template>
       <template #navigation="context">
         <Sidebar.Group>
@@ -151,7 +156,7 @@ function createProject(context: SidebarContextValue, template?: string) {
           </div>
           <dl v-else-if="currentProject" class="minimal-workspace-demo__details"><div><dt>Namespace</dt><dd>{{ namespace }}</dd></div><div><dt>Status</dt><dd>{{ currentProject.status }}</dd></div><div><dt>Updated</dt><dd>{{ currentProject.updated }}</dd></div></dl>
           <ul v-else-if="selected === 'Activities'" class="minimal-workspace-demo__list"><li v-for="project in namespaceProjects" :key="project.id"><span>{{ project.name }} — {{ project.status }}</span><small>{{ project.updated }}</small></li></ul>
-          <ul v-else-if="selected === 'Groups'" class="minimal-workspace-demo__list"><li v-for="name in namespaces.slice(1)" :key="name"><Button variant="ghost" size="sm" :icon="Building2" @click="namespace = name">{{ name }}</Button><small>Group namespace</small></li></ul>
+          <ul v-else-if="selected === 'Groups'" class="minimal-workspace-demo__list"><li v-for="item in namespaces.slice(1)" :key="item.value"><Button variant="ghost" size="sm" :icon="item.icon" @click="namespace = item.value">{{ item.name }}</Button><small>Group namespace</small></li></ul>
           <ul v-else-if="selected === 'Templates'" class="minimal-workspace-demo__list"><li v-for="name in ['Flow study', 'Thermal study']" :key="name"><span>{{ name }}</span><Button size="sm" variant="outline" @click="createProject(context, name)">Use {{ name }}</Button></li></ul>
           <p v-else-if="selected === 'Community'" class="minimal-workspace-demo__note"><FileText aria-hidden="true" />No shared notes yet.</p>
           <p class="minimal-workspace-demo__note">Example data only. Changes stay in this preview until reload.</p>

@@ -117,7 +117,7 @@ test("full-screen preview supports different widths, keeps menus inside, and upd
   await opener.click();
   await expect(sheet).toHaveCSS("width", "320px");
   await sheet.getByRole("button", { name: "Namespace: Engineering", exact: true }).click();
-  await sheet.getByRole("menuitem", { name: "Research", exact: true }).click();
+  await sheet.getByRole("menuitemradio", { name: "Research", exact: true }).click();
   await sheet.getByRole("link", { name: "Refinement", exact: true }).click();
   await expect(sheet).toBeHidden();
   await expect(opener).toBeFocused();

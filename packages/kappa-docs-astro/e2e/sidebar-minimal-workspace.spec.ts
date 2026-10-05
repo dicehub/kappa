@@ -225,6 +225,7 @@ test('minimal shell supports both themes, RTL, reduced motion, and 320px width',
   const content = (await page.locator('.minimal-workspace-demo__page').boundingBox())!;
   expect(nav.x).toBeGreaterThan(content.x);
   await page.setViewportSize({ width: 320, height: 700 });
+  await expect(page.locator('.kappa-sidebar-layout')).toHaveAttribute('data-mobile', '');
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   expect(await page.locator('.kappa-sidebar-layout__content').evaluate(node => node.scrollWidth <= node.clientWidth)).toBe(true);
   await page.getByRole('button', { name: 'Open sidebar', exact: true }).click();

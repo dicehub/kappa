@@ -10,6 +10,8 @@ import SidebarInboxDocsDemo from "../../../components/SidebarInboxDocsDemo.vue";
 import SidebarWorkspacePagesDocsDemo from "../../../components/SidebarWorkspacePagesDocsDemo.vue";
 import SidebarMinimalWorkspaceDocsDemo from "../../../components/SidebarMinimalWorkspaceDocsDemo.vue";
 import minimalWorkspaceSource from "../../../components/SidebarMinimalWorkspaceDocsDemo.vue?raw";
+import workspaceSwitcherDemoSource from "../../../data/workspace-switcher-demo.ts?raw";
+import { inlineWorkspaceSwitcherSource } from "../../../lib/inline-workspace-switcher-source";
 import minimalWorkspaceStyles from "../../../components/sidebar-minimal-workspace-demo.css?raw";
 import workspacePagesSource from "../../../components/SidebarWorkspacePagesDocsDemo.vue?raw";
 import workspacePagesStyles from "../../../components/sidebar-workspace-pages-demo.css?raw";
@@ -84,7 +86,7 @@ const exampleSource = (variant: string) => variant === "minimal-workspace" ? min
             <div class="docs-component-example docs-block-example" data-block-example={block.id}>
               <div class="docs-block-example__bar"><span>Application Shell · {block.id}</span><a href={`/examples/sidebar/${block.id}`} target="_blank" rel="noopener noreferrer">Open full example <span aria-hidden="true">↗</span><span class="docs-block-example__sr-only"> (new tab)</span></a></div>
               <div class="docs-component-preview docs-block-example__preview">{block.id === "minimal-workspace" ? <SidebarMinimalWorkspaceDocsDemo client:load /> : block.id === "workspace-pages" ? <SidebarWorkspacePagesDocsDemo client:load /> : block.id === "inbox-navigation" ? <SidebarInboxDocsDemo client:load /> : block.id === "dropdown-submenus" ? <SidebarDropdownSubmenusDocsDemo client:load /> : block.id === "submenus" || block.id === "floating-submenus" || block.id === "collapsible-submenus" ? <SidebarSubmenusDocsDemo client:load floating={block.id === "floating-submenus"} collapsible={block.id === "collapsible-submenus"} /> : block.id === "grouped" || block.id === "collapsible-sections" ? <SidebarGroupedDocsDemo client:load collapsibleSections={block.id === "collapsible-sections"} /> : <SidebarBlocksDocsDemo client:load variant={block.id === "inset-navigation" ? "inset" : block.id === "collapsible-icons" ? "workspace" : block.id} iconNavigation={block.id === "collapsible-icons"} insetNavigation={block.id === "inset-navigation"} />}</div>
-              <CodeBlock code={exampleSource(block.id)} lang="vue" collapsible revealId={`sidebar-block-${block.id}-code`} />
+              <CodeBlock code={inlineWorkspaceSwitcherSource(exampleSource(block.id), workspaceSwitcherDemoSource)} lang="vue" collapsible revealId={`sidebar-block-${block.id}-code`} />
             </div>
           </>)}
         </section>
@@ -110,6 +112,7 @@ const exampleSource = (variant: string) => variant === "minimal-workspace" ? min
         <section id="api" class="docs-section">
           <h2><a class="docs-section-anchor" href="#api">API and Composition</a></h2>
           <p>All <a href="/docs/components/sidebar#provider-api">Sidebar.Provider props</a> and events are supported, including controlled open/mobile state, width, resize events, compact mode, logical placement, and custom mobile breakpoints. Attributes, styles, and DOM listeners go to the Provider layout element.</p>
+          <p>Namespace menus use the published <a href="/docs/blocks/workspace-switcher">WorkspaceSwitcher</a> block. It shows current workspace details, grouped actions, and a checkmark on the right of the selected workspace. Connect its selection and action events to your application.</p>
           <div class="docs-api-table"><table><thead><tr><th>Prop</th><th>Default</th><th>Purpose</th></tr></thead><tbody>
             <tr><td><code>variant</code></td><td><code>workspace</code></td><td>workspace, rail, inset, floating, split, or header.</td></tr>
             <tr><td><code>contentAlignment</code></td><td><code>available</code></td><td>available uses space beside navigation; shell balances it around the complete layout.</td></tr>
@@ -150,7 +153,7 @@ const exampleSource = (variant: string) => variant === "minimal-workspace" ? min
           <h2><a class="docs-section-anchor" href="#accessibility">Accessibility and Styling</a></h2>
           <p>Keyboard navigation, visible focus, mobile focus trapping, Escape, and resize controls come from the existing Kappa components. Split navigation hides and disables its secondary column during icon collapse, then stacks the columns on mobile. The top header stays outside the scrolling content.</p>
           <p>Navigation headers and page toolbars have a 64px minimum height. Floating and inset surfaces are block-only styles. Mobile uses the normal Sidebar drawer surface. Light and dark modes use the same semantic tokens; reduced-motion settings are preserved.</p>
-          <p>Optional dimensions: <code>--kappa-sidebar-layout-gap</code> (0.5rem), <code>--kappa-sidebar-layout-radius</code> (0.625rem), and <code>--kappa-sidebar-layout-primary-width</code> (9.5rem for split's first column). Namespace and profile data remain example-level compositions, not new application-specific controls.</p>
+          <p>Optional dimensions: <code>--kappa-sidebar-layout-gap</code> (0.5rem), <code>--kappa-sidebar-layout-radius</code> (0.625rem), and <code>--kappa-sidebar-layout-primary-width</code> (9.5rem for split's first column). WorkspaceSwitcher supplies the shared namespace menu; your application supplies namespace and profile data.</p>
         </section>
         <DocsPageNavigation currentPath={currentPath} />
       </article>

@@ -2622,6 +2622,7 @@ test("generates deterministic search indexes", () => {
     "SidebarLayout",
     "SettingsLayout",
     "SettingsSection",
+    "WorkspaceSwitcher",
   ].sort((a, b) => a.localeCompare(b));
   assert.deepEqual(Object.keys(registry.components), publicNames);
   assert.deepEqual(registry.search.byName, publicNames);
@@ -2735,10 +2736,11 @@ test("generates deterministic search indexes", () => {
     tooltip: tooltipComponentNames,
     toast: toastComponentNames,
     "virtual-tree": virtualTreeComponentNames,
+    "workspace-switcher": ["WorkspaceSwitcher"],
     "xy-plot": xyPlotComponentNames,
   });
   assert.deepEqual(registry.search.byType, {
-    block: ["DeleteResource", "FileBrowser", "FileBrowserRoot", "LoginLayout", "MessageComposer", "ResourceListLayout", "ResourcePicker", "SettingsLayout", "SettingsSection", "SidebarLayout"],
+    block: ["DeleteResource", "FileBrowser", "FileBrowserRoot", "LoginLayout", "MessageComposer", "ResourceListLayout", "ResourcePicker", "SettingsLayout", "SettingsSection", "SidebarLayout", "WorkspaceSwitcher"],
     component: [...componentNames, "ContentLoader", "DragSelection", "FilterBar", "ImageCropper", "PropertyList", "PropertyListItem", "PropertyListRoot", "PropertyListTerm", "PropertyListValue"].sort((a, b) => a.localeCompare(b)),
   });
 });

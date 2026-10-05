@@ -1,0 +1,68 @@
+---
+import CodeBlock from "../../../components/CodeBlock.astro";
+import CopyPageControls from "../../../components/CopyPageControls.vue";
+import DocsPageNavigation from "../../../components/DocsPageNavigation.astro";
+import WorkspaceSwitcherDocsDemo from "../../../components/WorkspaceSwitcherDocsDemo.vue";
+import { workspaceSwitcherUsage, workspaceSwitcherSidebarUsage } from "../../../data/workspace-switcher-docs";
+import DocsLayout from "../../../layouts/DocsLayout.astro";
+import "../../../styles/docs-components.css";
+const currentPath = "/docs/blocks/workspace-switcher";
+const description = "Switch workspaces from a menu with current workspace details, account actions, and a checkmark beside the active workspace.";
+---
+
+<DocsLayout title="Workspace Switcher" description={description}>
+  <div class="docs-page docs-page--component">
+    <header class="docs-page-header"><div class="docs-page-header__inner"><div class="docs-page-header__content">
+      <div class="docs-page-header__mobile-actions"><CopyPageControls client:only="vue" align="center" /></div>
+      <div class="docs-page-header__title-row"><h1>Workspace Switcher</h1><div class="docs-page-header__navigation-actions"><div class="docs-page-header__desktop-actions"><CopyPageControls client:only="vue" /></div><DocsPageNavigation currentPath={currentPath} variant="compact" /></div></div>
+      <p class="docs-page-header__lede">{description}</p>
+    </div></div></header>
+    <div class="docs-page-body"><article class="docs-article docs-article--component">
+      <section id="preview" class="docs-section"><div class="docs-component-example"><div class="docs-component-preview"><WorkspaceSwitcherDocsDemo client:load /></div><CodeBlock code={workspaceSwitcherUsage} lang="vue" /></div></section>
+      <section id="usage" class="docs-section"><h2><a class="docs-section-anchor" href="#usage">Usage</a></h2>
+        <p>Import <code>WorkspaceSwitcher</code> from <code>@dicehub/kappa</code> or <code>@dicehub/kappa/blocks/workspace-switcher</code>. Set <code>items</code> and use <code>v-model</code> for the active workspace. Each item needs a unique <code>value</code> and <code>name</code>. Add an icon, image, initials, or description as needed.</p>
+        <p><code>actions</code> appears below the current workspace. <code>workspaceActions</code> appears below the list. <code>footerActions</code> appears at the bottom. The <code>action</code> event supplies the selected action object. Connect it to your application's routing or account flow.</p>
+      </section>
+      <section id="sidebar" class="docs-section"><h2><a class="docs-section-anchor" href="#sidebar">Sidebar</a></h2>
+        <p>Use the <code>trigger</code> slot for a <a href="/docs/components/sidebar">Sidebar.MenuButton</a>. Set <code>:teleport="!isMobile"</code> inside a drawer. Close the drawer when your application navigation completes.</p>
+        <CodeBlock code={workspaceSwitcherSidebarUsage} lang="vue" />
+        <p><a href="/examples/sidebar/minimal-workspace">Open the Minimal Workspace example →</a></p>
+      </section>
+      <section id="controlled" class="docs-section"><h2><a class="docs-section-anchor" href="#controlled">Controlled Selection</a></h2>
+        <p>Selection changes only when your application updates <code>modelValue</code>. This example rejects changes until you unlock selection.</p>
+        <div class="docs-component-example"><div class="docs-component-preview"><WorkspaceSwitcherDocsDemo client:load variant="controlled" /></div></div>
+      </section>
+      <section id="long-list" class="docs-section"><h2><a class="docs-section-anchor" href="#long-list">Long List</a></h2>
+        <p>The menu body scrolls separately from the footer, so footer actions stay visible. Arrow keys and typeahead keep the highlighted item in view.</p>
+        <div class="docs-component-example"><div class="docs-component-preview"><WorkspaceSwitcherDocsDemo client:load variant="long" /></div></div>
+      </section>
+      <section id="rtl" class="docs-section"><h2><a class="docs-section-anchor" href="#rtl">Right-to-left</a></h2>
+        <p>The selected checkmark stays at the end of its row.</p>
+        <div class="docs-component-example"><div class="docs-component-preview"><WorkspaceSwitcherDocsDemo client:load variant="rtl" /></div></div>
+      </section>
+      <section id="states" class="docs-section"><h2><a class="docs-section-anchor" href="#states">Action States</a></h2>
+        <p>Set <code>disabled</code> to prevent an action or workspace from being selected. Use <code>variant="destructive"</code> for an action that removes data.</p>
+        <div class="docs-component-example"><div class="docs-component-preview"><WorkspaceSwitcherDocsDemo client:load variant="states" /></div></div>
+      </section>
+      <section id="api" class="docs-section"><h2><a class="docs-section-anchor" href="#api">API</a></h2>
+        <div class="docs-api-table"><table><thead><tr><th>Prop</th><th>Default</th><th>Purpose</th></tr></thead><tbody>
+          <tr><td><code>items / modelValue</code></td><td>Required</td><td>Workspace items and controlled active value.</td></tr>
+          <tr><td><code>label / placeholder</code></td><td>Workspaces / Select workspace</td><td>List label and text when no item matches the value.</td></tr>
+          <tr><td><code>triggerLabel</code></td><td>List label and current name</td><td>Accessible name of the default trigger.</td></tr>
+          <tr><td><code>accountLabel</code></td><td>List label</td><td>Account identity above the workspace list.</td></tr>
+          <tr><td><code>actions / workspaceActions / footerActions</code></td><td>Empty</td><td>Action groups. Each action needs a unique value and label.</td></tr>
+          <tr><td><code>open / defaultOpen</code></td><td>Uncontrolled / false</td><td>Controlled or initial menu state. Use <code>v-model:open</code>.</td></tr>
+          <tr><td><code>positioning / teleport / dir</code></td><td>bottom-start / true / inherited</td><td>Menu placement, popup container, and text direction. Positioning merges with viewport-fit defaults.</td></tr>
+          <tr><td><code>disabled</code></td><td>false</td><td>Disable the default trigger. Bind the slot's disabled value for a custom trigger.</td></tr>
+        </tbody></table></div>
+        <p>Items also support <code>description</code>, <code>icon</code>, <code>avatarSrc</code>, <code>initials</code>, <code>disabled</code>, <code>shortcut</code>, and <code>ariaKeyshortcuts</code>. Shortcut text is a label; your application handles its keyboard event. Actions support <code>icon</code>, <code>disabled</code>, <code>variant</code>, and <code>accent</code>.</p>
+        <p>Events: <code>update:modelValue</code>, <code>update:open</code>, <code>openChange</code>, and <code>action</code>. The trigger slot receives <code>workspace</code> and <code>disabled</code>. Attributes, styles, and DOM listeners go to the popup.</p>
+      </section>
+      <section id="accessibility" class="docs-section"><h2><a class="docs-section-anchor" href="#accessibility">Accessibility</a></h2>
+        <p>Workspace rows use menu radio semantics and <code>aria-checked</code>. Enter and Space open the menu. Arrow keys, Home, End, and typing move between enabled items. Enter selects an item; Escape closes the menu and returns focus to its trigger. The checkmark is decorative.</p>
+        <p>The block composes <a href="/docs/components/dropdown">Dropdown</a> and <a href="/docs/components/avatar">Avatar</a>. It uses Kappa theme tokens and supports reduced motion.</p>
+      </section>
+      <DocsPageNavigation currentPath={currentPath} />
+    </article><aside class="docs-page-toc" aria-label="On this page"><div class="docs-page-toc__inner"><span class="docs-page-toc__title">On this page</span><ul>{["usage", "sidebar", "controlled", "long-list", "rtl", "states", "api", "accessibility"].map(id => <li><a href={`#${id}`} data-toc-link={id}>{id === "rtl" ? "Right-to-left" : id === "long-list" ? "Long List" : id === "states" ? "Action States" : id === "api" ? "API" : id[0].toUpperCase() + id.slice(1)}</a></li>)}</ul></div></aside></div>
+  </div>
+</DocsLayout>

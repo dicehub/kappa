@@ -2,7 +2,7 @@
 .minimal-workspace-demo[data-standalone] { block-size: 100svh; }
 .minimal-workspace-demo .kappa-sidebar-layout { background: var(--kappa-tint); border: 1px solid var(--kappa-line); border-radius: 0.625rem; overflow: hidden; }
 .minimal-workspace-demo[data-standalone] .kappa-sidebar-layout { border: 0; border-radius: 0; }
-.minimal-workspace-demo .kappa-sidebar-layout .kappa-sidebar-layout__site-header { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); gap: 0.75rem; min-block-size: 3rem; padding: 0.375rem 0.75rem; border: 0; background: var(--kappa-tint); }
+.minimal-workspace-demo .kappa-sidebar-layout[data-variant="header"] .kappa-sidebar-layout__site-header { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); gap: 0.75rem; min-block-size: 3rem; padding: 0.375rem 0.75rem; border: 0; background: var(--kappa-tint); }
 /* The built-in trigger opens mobile navigation; desktop uses the footer trigger. */
 .minimal-workspace-demo .kappa-sidebar-layout:not([data-mobile]) .kappa-sidebar-layout__site-header > .kappa-sidebar__trigger { display: none; }
 .minimal-workspace-demo .kappa-sidebar-layout__site-header > .kappa-sidebar__trigger { grid-area: 1 / 1; justify-self: start; z-index: 1; }

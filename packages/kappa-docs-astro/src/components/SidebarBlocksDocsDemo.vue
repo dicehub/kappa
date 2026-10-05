@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { computed, ref, useId } from "vue";
 import { SidebarLayout, type SidebarLayoutVariant } from "@dicehub/kappa/blocks/sidebar-layout";
+import { WorkspaceSwitcher } from "@dicehub/kappa/blocks/workspace-switcher";
+import { namespaceSwitcherItems, namespaceSwitcherActions, namespaceSwitcherFooterActions, namespaceSwitcherWorkspaceActions, namespaceActionDescriptions } from "../data/workspace-switcher-demo";
 import { Sidebar, type SidebarContextValue } from "@dicehub/kappa/components/sidebar";
 import { Button } from "@dicehub/kappa/components/button";
 import { Dropdown } from "@dicehub/kappa/components/dropdown";
@@ -17,6 +19,7 @@ const profile = ref("ros");
 const selected = ref("Overview");
 const secondaryLinks = [{ label: "Support", icon: CircleHelp }, { label: "Feedback", icon: MessageSquare }];
 const accountPages: Record<string, string> = {
+  ...namespaceActionDescriptions,
   'Upgrade to Pro': 'Review the plans available for your workspace.',
   Account: 'Manage your profile and account details.',
   Billing: 'Review your subscription, invoices, and payment details.',
@@ -74,21 +77,18 @@ function createProject() {
   <div class="sidebar-block-demo" :data-sidebar-block="props.insetNavigation ? 'inset-navigation' : props.iconNavigation ? 'collapsible-icons' : props.variant" :data-standalone="props.standalone || undefined">
     <SidebarLayout :variant="props.variant" :label="props.insetNavigation ? 'Inset application navigation' : props.iconNavigation ? 'Icon application navigation' : `${props.variant} application navigation`" :resizable="!richNavigation && props.variant === 'workspace'" full-screen-on-mobile>
       <template #header="context">
-        <Dropdown.Root aria-label="Namespaces" :positioning="richNavigation && !context.isMobile ? { placement: 'right-start', strategy: 'fixed', gutter: 8 } : namespacePositioning">
-          <Dropdown.Trigger as-child>
+        <WorkspaceSwitcher v-model="namespace" :items="namespaceSwitcherItems" label="Namespaces" :account-label="account.email"
+          :actions="namespaceSwitcherActions" :workspace-actions="namespaceSwitcherWorkspaceActions" :footer-actions="namespaceSwitcherFooterActions"
+          :teleport="!context.isMobile" :positioning="richNavigation && !context.isMobile ? { placement: 'right-start', strategy: 'fixed', gutter: 8 } : namespacePositioning"
+          @action="navigate($event.label, context)">
+          <template #trigger>
             <Sidebar.MenuButton :aria-label="`Namespace: ${namespace}`" :tooltip="`Namespace: ${namespace}`" class="sidebar-block-demo__identity-button sidebar-block-demo__namespace">
               <template #icon><span class="sidebar-block-demo__namespace-icon"><Building2 aria-hidden="true" /></span></template>
               <span class="sidebar-block-demo__identity"><strong>{{ namespace }}</strong><small>Namespace</small></span>
               <ChevronsUpDown class="sidebar-block-demo__chevrons" aria-hidden="true" />
             </Sidebar.MenuButton>
-          </Dropdown.Trigger>
-          <Dropdown.Context v-slot="menu"><Dropdown.Content :teleport="!context.isMobile" :inert="!menu.open || undefined">
-            <Dropdown.RadioGroup v-model="namespace">
-              <Dropdown.Label>Switch namespace</Dropdown.Label>
-              <Dropdown.RadioItem v-for="name in ['Engineering', 'Research', 'Personal']" :key="name" :value="name" close-on-select>{{ name }}</Dropdown.RadioItem>
-            </Dropdown.RadioGroup>
-          </Dropdown.Content></Dropdown.Context>
-        </Dropdown.Root>
+          </template>
+        </WorkspaceSwitcher>
       </template>
       <template #navigation="context">
         <Sidebar.Menu class="sidebar-block-demo__search">

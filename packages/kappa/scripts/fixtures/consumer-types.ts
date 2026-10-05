@@ -10,6 +10,18 @@ import { SettingsLayout, SettingsSection } from "@dicehub/kappa";
 import type { SettingsLayout as GranularSettingsLayout, SettingsSectionProps } from "@dicehub/kappa/blocks/settings-layout";
 import { SidebarLayout } from "@dicehub/kappa";
 import type { SidebarLayout as GranularSidebarLayout, SidebarLayoutContentAlignment, SidebarLayoutProps } from "@dicehub/kappa/blocks/sidebar-layout";
+import { WorkspaceSwitcher } from "@dicehub/kappa";
+import type { WorkspaceSwitcher as GranularWorkspaceSwitcher, WorkspaceSwitcherAction, WorkspaceSwitcherProps } from "@dicehub/kappa/blocks/workspace-switcher";
+
+const workspaceSwitcher: typeof GranularWorkspaceSwitcher = WorkspaceSwitcher;
+const switcher: WorkspaceSwitcherProps = { modelValue: "engineering", items: [{ value: "engineering", name: "Engineering" }] };
+const switcherAction: WorkspaceSwitcherAction = { value: "settings", label: "Settings" };
+const switcherTrigger: InstanceType<typeof WorkspaceSwitcher>["$slots"]["trigger"] = ({ workspace }) => workspace?.name;
+// @ts-expect-error Workspace selection must be supplied by the application.
+const missingWorkspace: WorkspaceSwitcherProps = { items: [] };
+// @ts-expect-error Workspace entries require a display name.
+const unnamedWorkspace: WorkspaceSwitcherProps = { modelValue: "engineering", items: [{ value: "engineering" }] };
+void [workspaceSwitcher, switcher, switcherAction, switcherTrigger, missingWorkspace, unnamedWorkspace];
 
 const sidebarLayout: typeof GranularSidebarLayout = SidebarLayout;
 const alignment: SidebarLayoutContentAlignment = "shell";
