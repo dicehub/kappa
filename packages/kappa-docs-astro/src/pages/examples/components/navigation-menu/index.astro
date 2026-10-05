@@ -1,0 +1,24 @@
+---
+import NavigationMenuDocsDemo from "../../../../components/NavigationMenuDocsDemo.vue";
+import "../../../../styles/docs.css";
+---
+
+<!doctype html>
+<html lang="en" class="kappa-docs-root">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="robots" content="noindex" />
+    <title>Navigation Menu — Kappa</title>
+    <script is:inline>
+      const mode = localStorage.getItem("theme") === "dark" ? "dark" : "light";
+      document.documentElement.dataset.mode = mode;
+      document.documentElement.dataset.kappaTheme = mode;
+      document.documentElement.style.colorScheme = mode;
+    </script>
+  </head>
+  <body><main><NavigationMenuDocsDemo client:load standalone /></main></body>
+</html>
+
+<style>body { margin: 0; } main { min-inline-size: 0; min-block-size: 100dvh; }</style>

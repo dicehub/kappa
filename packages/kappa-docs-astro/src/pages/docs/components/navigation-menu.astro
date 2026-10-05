@@ -1,0 +1,88 @@
+---
+import ArkUiDocsLink from "../../../components/ArkUiDocsLink.astro";
+import CodeBlock from "../../../components/CodeBlock.astro";
+import CopyPageControls from "../../../components/CopyPageControls.vue";
+import DocsPageNavigation from "../../../components/DocsPageNavigation.astro";
+import NavigationMenuDocsDemo from "../../../components/NavigationMenuDocsDemo.vue";
+import { barrelCode, granularCode, previewCode, compactCode, controlledCode, verticalCode, rtlCode, linksCode, routerCode, compositionCode } from "../../../data/navigation-menu-docs";
+import DocsLayout from "../../../layouts/DocsLayout.astro";
+import "../../../styles/docs-components.css";
+
+const currentPath = "/docs/components/navigation-menu";
+const description = "Website and application navigation with links and expandable panels.";
+const examples = [
+  { id: "compact", title: "Compact", description: "Use size=\"sm\" for smaller controls and tighter spacing.", code: compactCode },
+  { id: "controlled", title: "Click to open", description: "Use v-model:value to open or close a panel. Disable hover to open panels only on click.", code: controlledCode },
+  { id: "vertical", title: "Vertical", description: "Set orientation=\"vertical\" and align=\"start\" to open panels beside the list. Arrows point toward the panels.", code: verticalCode },
+  { id: "links", title: "Direct links", description: "Use links without panels. Set current on the active page link.", code: linksCode },
+  { id: "rtl", title: "Right to left", description: "Wrap the menu in DirectionProvider and set an RTL locale.", code: rtlCode },
+] as const;
+---
+
+<DocsLayout title="Navigation Menu" description={description}>
+  <div class="docs-page docs-page--component">
+    <header class="docs-page-header"><div class="docs-page-header__inner"><div class="docs-page-header__content">
+      <div class="docs-page-header__mobile-actions"><CopyPageControls client:only="vue" align="center" /></div>
+      <div class="docs-page-header__title-row"><h1>Navigation Menu</h1><ArkUiDocsLink /><div class="docs-page-header__navigation-actions"><div class="docs-page-header__desktop-actions"><CopyPageControls client:only="vue" /></div><DocsPageNavigation currentPath={currentPath} variant="compact" /></div></div>
+      <p class="docs-page-header__lede">{description}</p>
+    </div></div></header>
+    <div class="docs-page-body"><article class="docs-article docs-article--component">
+      <section id="preview" class="docs-section">
+        <p><a href="/examples/components/navigation-menu" target="_blank" rel="noopener noreferrer">Open full-screen example ↗</a></p>
+        <div class="docs-component-example"><div class="docs-component-preview"><NavigationMenuDocsDemo client:load /></div><CodeBlock code={previewCode} lang="vue" collapsible revealId="navigation-menu-preview-code" /></div>
+      </section>
+      <section id="installation" class="docs-section">
+        <h2><a class="docs-section-anchor" href="#installation">Installation</a></h2>
+        <h3 id="barrel">Barrel</h3><CodeBlock code={barrelCode} lang="javascript" />
+        <h3 id="granular">Granular</h3><CodeBlock code={granularCode} lang="javascript" />
+      </section>
+      <section id="usage" class="docs-section">
+        <h2><a class="docs-section-anchor" href="#usage">Usage</a></h2>
+        <p>Put each link or dropdown in an <code>Item</code> with a unique <code>value</code>. Use <code>Trigger</code> to open <code>Content</code>, and give <code>Root</code> an <code>aria-label</code>.</p>
+        <p>Set <code>current</code> on the active link. Use <code>size="sm"</code> for a compact menu. Bind <code>v-model:value</code> to control the open panel; set it to <code>''</code> to close.</p>
+      </section>
+      <section id="composition" class="docs-section">
+        <h2><a class="docs-section-anchor" href="#composition">Composition</a></h2>
+        <CodeBlock code={compositionCode} lang="text" />
+        <p>Put <code>ViewportPositioner</code> inside <code>Root</code>, after <code>List</code>. Keep each <code>Content</code> inside its <code>Item</code>. Allow panels to extend beyond the navigation container.</p>
+      </section>
+      <section id="examples" class="docs-section docs-section--component-examples">
+        <h2><a class="docs-section-anchor" href="#examples">Examples</a></h2>
+        {examples.map((example) => <><h3 id={example.id}><a class="docs-section-anchor" href={`#${example.id}`}>{example.title}</a></h3><p>{example.description}</p><div class="docs-component-example"><div class="docs-component-preview"><NavigationMenuDocsDemo client:load variant={example.id} /></div><CodeBlock code={example.code} lang="vue" collapsible revealId={`navigation-menu-${example.id}-code`} /></div></>)}
+      </section>
+      <section id="routing" class="docs-section">
+        <h2><a class="docs-section-anchor" href="#routing">Router links</a></h2>
+        <p>Use <code>asChild</code> with your router link. Set <code>current</code> from the active route.</p>
+        <CodeBlock code={routerCode} lang="vue" />
+      </section>
+      <section id="accessibility" class="docs-section">
+        <h2><a class="docs-section-anchor" href="#accessibility">Accessibility</a></h2>
+        <ul>
+          <li>The root is a navigation landmark, triggers are buttons, and destinations are links. There are no menuitem roles on page links.</li>
+          <li>Tab moves through the navigation. Left and Right arrows move between horizontal triggers and links. Vertical navigation uses Up and Down. Home and End move to the first and last item.</li>
+          <li>Enter or Space toggles a trigger. Down arrow enters an open horizontal panel. In vertical mode, Right enters the panel, or Left in right-to-left mode.</li>
+          <li>Escape closes the panel and restores trigger focus. Outside interaction dismisses it. Disabled triggers are skipped.</li>
+          <li>Touch users can tap triggers. Motion is disabled when reduced motion is requested.</li>
+        </ul>
+      </section>
+      <section id="api-reference" class="docs-section">
+        <h2><a class="docs-section-anchor" href="#api-reference">API Reference</a></h2>
+        <p>Use <code>v-model:value</code> to control the open panel, or <code>defaultValue</code> to select one initially. An empty string closes the menu. Initially selected panels open after mount. The root emits <code>update:value</code> and <code>valueChange</code>.</p>
+        <ul>
+          <li><code>Root</code> and <code>RootProvider</code> accept <code>size="sm | md"</code>, default <code>md</code>. <code>openDelay</code> defaults to 200 ms; <code>closeDelay</code> defaults to 300 ms.</li>
+          <li><code>Trigger</code> adds <code>showIndicator</code>, default <code>true</code>. Supply your own chevron when using <code>asChild</code>.</li>
+          <li><code>Link</code> supports <code>current</code>, <code>closeOnClick</code> (default true), and the cancelable <code>select</code> event. Prevent that event to keep the panel open.</li>
+          <li><code>ViewportPositioner</code> supports <code>align="start | center | end"</code>, default <code>center</code>.</li>
+          <li>Panels stay mounted while closed. Lazy mounting and unmount-on-exit are not supported.</li>
+          <li>Set <code>--kappa-navigation-menu-content-width</code> on Content to change panel width. Set <code>--kappa-navigation-menu-z-index</code> on Root to change stacking.</li>
+        </ul>
+        <p>All compound parts also have named exports, such as <code>NavigationMenuTrigger</code>. Advanced compositions can use <code>RootProvider</code>, <code>Context</code>, <code>useNavigationMenu</code>, and <code>useNavigationMenuContext</code>. Optional indicators include <code>Indicator</code>, <code>ItemIndicator</code>, and <code>Arrow</code>.</p>
+      </section>
+      <DocsPageNavigation currentPath={currentPath} />
+    </article><aside class="docs-page-toc" aria-label="On this page"><div class="docs-page-toc__inner"><span class="docs-page-toc__title">On this page</span><ul>
+      {[["installation", "Installation"], ["usage", "Usage"], ["composition", "Composition"], ["examples", "Examples"]].map(([id, title]) => <li><a href={`#${id}`} data-toc-link={id}>{title}</a></li>)}
+      {examples.map(({ id, title }) => <li><a href={`#${id}`} data-toc-link={id}>{title}</a></li>)}
+      {[["routing", "Router links"], ["accessibility", "Accessibility"], ["api-reference", "API Reference"]].map(([id, title]) => <li><a href={`#${id}`} data-toc-link={id}>{title}</a></li>)}
+    </ul></div></aside></div>
+  </div>
+</DocsLayout>

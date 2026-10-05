@@ -60,6 +60,7 @@ export * from "./matrix-loader";
 export * from "./menu-bar";
 export * from "./meter";
 export * from "./native-select";
+export * from "./navigation-menu";
 export * from "./number-input";
 export * from "./pagination";
 export * from "./popover";
