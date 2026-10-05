@@ -30,7 +30,8 @@ const positioning = { placement: "bottom-start", strategy: "fixed", gutter: 6 } 
 
 <template>
   <div class="sidebar-grouped-demo" :data-sidebar-block="props.collapsibleSections ? 'collapsible-sections' : 'grouped'" :data-standalone="props.standalone || undefined">
-    <SidebarLayout label="Documentation navigation" collapsible="offcanvas" full-screen-on-mobile>
+    <SidebarLayout label="Documentation navigation" collapsible="offcanvas" full-screen-on-mobile
+      :content-alignment="props.standalone ? 'shell' : 'available'" :mobile-breakpoint="1200">
       <template #header="context">
         <Dropdown.Root aria-label="Documentation versions" :positioning="positioning">
           <Dropdown.Trigger as-child>

@@ -8,6 +8,16 @@ import { NavigationMenu } from "@dicehub/kappa";
 import type { NavigationMenuProps, NavigationMenuRootProviderProps } from "@dicehub/kappa/components/navigation-menu";
 import { SettingsLayout, SettingsSection } from "@dicehub/kappa";
 import type { SettingsLayout as GranularSettingsLayout, SettingsSectionProps } from "@dicehub/kappa/blocks/settings-layout";
+import { SidebarLayout } from "@dicehub/kappa";
+import type { SidebarLayout as GranularSidebarLayout, SidebarLayoutContentAlignment, SidebarLayoutProps } from "@dicehub/kappa/blocks/sidebar-layout";
+
+const sidebarLayout: typeof GranularSidebarLayout = SidebarLayout;
+const alignment: SidebarLayoutContentAlignment = "shell";
+const centeredLayout: SidebarLayoutProps = { contentAlignment: alignment, mobileBreakpoint: 1200 };
+const componentAlignment: InstanceType<typeof SidebarLayout>["$props"]["contentAlignment"] = "available";
+// @ts-expect-error Content alignment accepts only available or shell.
+const invalidAlignment: SidebarLayoutProps = { contentAlignment: "viewport" };
+void [sidebarLayout, centeredLayout, componentAlignment, invalidAlignment];
 
 const settingsLayout: typeof GranularSettingsLayout = SettingsLayout;
 const settingsSection: typeof SettingsSection = SettingsLayout.Section;

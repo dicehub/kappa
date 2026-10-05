@@ -96,7 +96,8 @@ function toggleFavorite() {
 
 <template>
   <div class="sidebar-pages-demo" data-sidebar-block="workspace-pages" :data-standalone="props.standalone || undefined">
-    <SidebarLayout label="Workspace pages navigation" navigation-label="Workspace page links" collapsible="offcanvas" full-screen-on-mobile>
+    <SidebarLayout label="Workspace pages navigation" navigation-label="Workspace page links" collapsible="offcanvas" full-screen-on-mobile
+      :content-alignment="props.standalone ? 'shell' : 'available'" :mobile-breakpoint="1200">
       <template #header="context">
         <Dropdown.Root :positioning="{ placement: context.isMobile ? 'bottom-start' : 'right-start', strategy: 'fixed', gutter: 8 }">
           <Dropdown.Trigger as-child>

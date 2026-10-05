@@ -8,6 +8,7 @@ const source = name => readFileSync(new URL(name, import.meta.url), "utf8");
 test("six layout presets preserve rail and split defaults", () => {
   assert.deepEqual(SIDEBAR_LAYOUT_VARIANTS, ["workspace", "rail", "inset", "floating", "split", "header"]);
   assert.equal(SIDEBAR_LAYOUT_DEFAULTS.variant, "workspace");
+  assert.equal(SIDEBAR_LAYOUT_DEFAULTS.contentAlignment, "available");
   for (const variant of SIDEBAR_LAYOUT_VARIANTS) {
     assert.equal(sidebarLayoutDefaultOpen(variant), variant !== "rail");
     assert.equal(sidebarLayoutDefaultWidth(variant), variant === "split" ? 352 : 260);

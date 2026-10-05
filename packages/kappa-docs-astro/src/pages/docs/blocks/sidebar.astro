@@ -95,11 +95,24 @@ const exampleSource = (variant: string) => variant === "minimal-workspace" ? min
           <CodeBlock code={sidebarLayoutUsage} lang="vue" collapsible revealId="sidebar-layout-usage-code" />
           <p>Give the block a height. The built-in toggle and mobile Close remain available in every layout. Do not add another Provider or Root inside its slots. SidebarLayout does not create a main landmark; use one in the default slot for an application page.</p>
         </section>
+        <section id="content-alignment" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#content-alignment">Content Alignment</a></h2>
+          <p>Use <code>content-alignment="shell"</code> for reading pages and forms. It balances the sidebar with space on the opposite side, so your content stays centered in the full shell as navigation expands, collapses, or resizes. Embedded shells center within their own container.</p>
+          <CodeBlock code={`<SidebarLayout content-alignment="shell" :mobile-breakpoint="1200" style="height: 100svh">
+  <template #navigation><!-- Your navigation --></template>
+  <main style="max-width: 44rem; margin-inline: auto; padding: 2rem">
+    Your page content.
+  </main>
+</SidebarLayout>`} lang="vue" />
+          <p>Give your page a maximum width and automatic inline margins. The column shrinks when space is limited. Choose a <code>mobileBreakpoint</code> that leaves enough room for your sidebar and reading column; the drawer then removes the desktop reservation. This breakpoint uses viewport width, so narrowing an embedded container alone does not open the drawer. The full-page reading examples use 1200px; narrow gallery previews use the default alignment.</p>
+          <p>The default, <code>content-alignment="available"</code>, uses all space beside the sidebar. Use it for wide tables and application views.</p>
+        </section>
         <section id="api" class="docs-section">
           <h2><a class="docs-section-anchor" href="#api">API and Composition</a></h2>
           <p>All <a href="/docs/components/sidebar#provider-api">Sidebar.Provider props</a> and events are supported, including controlled open/mobile state, width, resize events, compact mode, logical placement, and custom mobile breakpoints. Attributes, styles, and DOM listeners go to the Provider layout element.</p>
           <div class="docs-api-table"><table><thead><tr><th>Prop</th><th>Default</th><th>Purpose</th></tr></thead><tbody>
             <tr><td><code>variant</code></td><td><code>workspace</code></td><td>workspace, rail, inset, floating, split, or header.</td></tr>
+            <tr><td><code>contentAlignment</code></td><td><code>available</code></td><td>available uses space beside navigation; shell balances it around the complete layout.</td></tr>
             <tr><td><code>defaultOpen</code></td><td>False for rail; true otherwise</td><td>Initial desktop state. Changing variant does not reset the current preference.</td></tr>
             <tr><td><code>width / defaultWidth</code></td><td>352px for split; 260px otherwise</td><td>Fixed CSS width or initial numeric resize width. Explicit values take priority.</td></tr>
             <tr><td><code>label</code></td><td>Application navigation</td><td>Navigation landmark and mobile dialog name.</td></tr>
