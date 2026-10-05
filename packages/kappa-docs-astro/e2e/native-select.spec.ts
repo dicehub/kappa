@@ -29,8 +29,8 @@ test.describe("Native Select documentation", () => {
       "/docs/components/meter",
     );
     await expect(
-      compact.getByRole("link", { name: "Next page: Number Input" }),
-    ).toHaveAttribute("href", "/docs/components/number-input");
+      compact.getByRole("link", { name: "Next page: Navigation Menu" }),
+    ).toHaveAttribute("href", "/docs/components/navigation-menu");
 
     const toc = page.getByRole("complementary", { name: "On this page" });
     await expect(toc.getByRole("link")).toHaveText([

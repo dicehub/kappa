@@ -35,15 +35,15 @@ test.describe("Number Input documentation", () => {
     const compact = page.getByRole("navigation", { name: "Adjacent documentation pages" });
     const footer = page.getByRole("navigation", { name: "Documentation pagination" });
     await expect(sidebar).toHaveAttribute("aria-current", "page");
-    await expect(compact.getByRole("link", { name: "Previous page: Native Select" })).toHaveAttribute(
+    await expect(compact.getByRole("link", { name: "Previous page: Navigation Menu" })).toHaveAttribute(
       "href",
-      "/docs/components/native-select",
+      "/docs/components/navigation-menu",
     );
     await expect(compact.getByRole("link", { name: "Next page: Pagination" })).toHaveAttribute(
       "href",
       "/docs/components/pagination",
     );
-    await expect(footer.getByRole("link", { name: "Native Select", exact: true })).toBeVisible();
+    await expect(footer.getByRole("link", { name: "Navigation Menu", exact: true })).toBeVisible();
     await expect(footer.getByRole("link", { name: "Pagination", exact: true })).toBeVisible();
 
     const toc = page.getByRole("complementary", { name: "On this page" });

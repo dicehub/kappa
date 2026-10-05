@@ -176,10 +176,14 @@ describe("docs page navigation", () => {
     });
     assert.deepEqual(adjacentLabels("/docs/components/native-select"), {
       previous: "Meter",
+      next: "Navigation Menu",
+    });
+    assert.deepEqual(adjacentLabels("/docs/components/navigation-menu"), {
+      previous: "Native Select",
       next: "Number Input",
     });
     assert.deepEqual(adjacentLabels("/docs/components/number-input"), {
-      previous: "Native Select",
+      previous: "Navigation Menu",
       next: "Pagination",
     });
     assert.deepEqual(adjacentLabels("/docs/components/progress"), {
@@ -292,7 +296,7 @@ describe("docs page navigation", () => {
   it("contains every documentation page exactly once", () => {
     const hrefs = docsPageSequences.flatMap((sequence) => sequence.map((link) => link.href));
     assert.equal(docsPageSequences.length, 4);
-    assert.equal(hrefs.length, 116);
+    assert.equal(hrefs.length, 117);
     assert.equal(new Set(hrefs).size, hrefs.length);
   });
 

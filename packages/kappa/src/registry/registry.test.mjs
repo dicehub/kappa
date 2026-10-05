@@ -542,6 +542,22 @@ const nativeSelectComponentNames = [
   "NativeSelectOption",
   "NativeSelectRoot",
 ];
+const navigationMenuComponentNames = [
+  "NavigationMenu",
+  "NavigationMenuArrow",
+  "NavigationMenuContent",
+  "NavigationMenuContext",
+  "NavigationMenuIndicator",
+  "NavigationMenuItem",
+  "NavigationMenuItemIndicator",
+  "NavigationMenuLink",
+  "NavigationMenuList",
+  "NavigationMenuRoot",
+  "NavigationMenuRootProvider",
+  "NavigationMenuTrigger",
+  "NavigationMenuViewport",
+  "NavigationMenuViewportPositioner",
+];
 const paginationComponentNames = [
   "Pagination",
   "PaginationContext",
@@ -956,6 +972,7 @@ const componentNames = [
   ...menuBarComponentNames,
   ...meterComponentNames,
   ...nativeSelectComponentNames,
+  ...navigationMenuComponentNames,
   ...numberInputComponentNames,
   ...paginationComponentNames,
   ...popoverComponentNames,
@@ -2678,6 +2695,7 @@ test("generates deterministic search indexes", () => {
     "menu-bar": menuBarComponentNames,
     meter: meterComponentNames,
     "native-select": nativeSelectComponentNames,
+    "navigation-menu": navigationMenuComponentNames,
     "number-input": numberInputComponentNames,
     pagination: paginationComponentNames,
     popover: popoverComponentNames,
