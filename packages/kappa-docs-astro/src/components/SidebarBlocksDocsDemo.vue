@@ -56,7 +56,9 @@ const projects = ref([
 ]);
 const namespacePositioning = { placement: "bottom-start", strategy: "fixed", gutter: 6 } as const;
 const desktopProfilePositioning = { placement: "right-end", strategy: "fixed", gutter: 8 } as const;
-const mobileProfilePositioning = { placement: "top-start", strategy: "fixed", gutter: 8 } as const;
+const aboveProfilePositioning = { placement: "top-start", strategy: "fixed", gutter: 8 } as const;
+const profileSubmenuPositioning = { placement: "right-end", strategy: "fixed", gutter: 4, fitViewport: true, overflowPadding: 8 } as const;
+const mobileProfileSubmenuPositioning = { ...profileSubmenuPositioning, overlap: true } as const;
 function navigate(value: string, context: SidebarContextValue) {
   selected.value = value;
   if (richNavigation.value) {
@@ -79,7 +81,7 @@ function createProject() {
       <template #header="context">
         <WorkspaceSwitcher v-model="namespace" :items="namespaceSwitcherItems" label="Namespaces" :account-label="account.email"
           :actions="namespaceSwitcherActions" :workspace-actions="namespaceSwitcherWorkspaceActions" :footer-actions="namespaceSwitcherFooterActions"
-          :teleport="!context.isMobile" :positioning="richNavigation && !context.isMobile ? { placement: 'right-start', strategy: 'fixed', gutter: 8 } : namespacePositioning"
+          :teleport="!context.isMobile" :positioning="props.insetNavigation && !context.isMobile ? { placement: 'right-start', strategy: 'fixed', gutter: 8 } : namespacePositioning"
           @action="navigate($event.label, context)">
           <template #trigger>
             <Sidebar.MenuButton :aria-label="`Namespace: ${namespace}`" :tooltip="`Namespace: ${namespace}`" class="sidebar-block-demo__identity-button sidebar-block-demo__namespace">
@@ -146,7 +148,7 @@ function createProject() {
             <Sidebar.MenuButton :icon="link.icon" :tooltip="link.label" :active="selected === link.label" :href="`?view=${link.label.toLowerCase()}`" @click.prevent="navigate(link.label, context)">{{ link.label }}</Sidebar.MenuButton>
           </Sidebar.MenuItem></Sidebar.Menu>
         </nav>
-        <Dropdown.Root aria-label="Profile" :positioning="context.isMobile ? mobileProfilePositioning : desktopProfilePositioning">
+        <Dropdown.Root aria-label="Profile" :positioning="context.isMobile || props.iconNavigation ? aboveProfilePositioning : desktopProfilePositioning">
           <Dropdown.Trigger as-child>
             <Sidebar.MenuButton :aria-label="`Profile: ${account.name}`" :tooltip="account.name" class="sidebar-block-demo__identity-button sidebar-block-demo__profile">
               <template #icon><Avatar.Root class="sidebar-block-demo__avatar" aria-hidden="true"><Avatar.Image :src="account.avatar" alt="" /><Avatar.Fallback>{{ account.initials }}</Avatar.Fallback></Avatar.Root></template>
@@ -169,10 +171,16 @@ function createProject() {
               <Dropdown.Item value="preferences" :icon="Settings" @select="navigate('Preferences', context)">Preferences</Dropdown.Item>
             </Dropdown.Group>
             <Dropdown.Separator />
-            <Dropdown.Sub aria-label="Switch profile" :positioning="{ placement: 'right-end', strategy: 'fixed', gutter: 4, fitViewport: true, overflowPadding: 8 }">
+            <Dropdown.Sub aria-label="Switch profile" :positioning="context.isMobile ? mobileProfileSubmenuPositioning : profileSubmenuPositioning">
               <Dropdown.SubTrigger :icon="UsersRound">Switch profile</Dropdown.SubTrigger>
               <Dropdown.Context v-slot="submenu"><Dropdown.SubContent :teleport="!context.isMobile" :inert="!submenu.open || undefined" class="sidebar-block-demo__profile-menu" :data-mobile="context.isMobile || undefined">
-                <Dropdown.RadioGroup v-model="profile"><Dropdown.Label>Profiles</Dropdown.Label><Dropdown.RadioItem v-for="item in profiles" :key="item.value" :value="item.value" close-on-select>{{ item.name }}</Dropdown.RadioItem></Dropdown.RadioGroup>
+                <Dropdown.RadioGroup v-model="profile">
+                  <Dropdown.Label>Profiles</Dropdown.Label>
+                  <Dropdown.RadioItem v-for="item in profiles" :key="item.value" :value="item.value" close-on-select class="sidebar-block-demo__profile-option">
+                    <template #indicator><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="m3 8.25 3 3 7-7" /></svg></template>
+                    {{ item.name }}
+                  </Dropdown.RadioItem>
+                </Dropdown.RadioGroup>
               </Dropdown.SubContent></Dropdown.Context>
             </Dropdown.Sub>
             <Dropdown.Separator />
