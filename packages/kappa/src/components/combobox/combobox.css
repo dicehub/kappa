@@ -245,6 +245,7 @@
 .kappa-combobox__positioner {
   z-index: var(--kappa-combobox-z-index, 1000);
   max-inline-size: calc(100vw - 1rem);
+  pointer-events: none;
 }
 
 .kappa-combobox__content {
@@ -265,6 +266,11 @@
     var(--kappa-popover-shadow, 0 10px 28px -8px rgba(16, 24, 40, 0.2));
   outline: none;
   transform-origin: var(--transform-origin);
+  pointer-events: auto;
+}
+
+.kappa-combobox__content[hidden] {
+  display: none;
 }
 
 .kappa-combobox__content[data-state="open"] {

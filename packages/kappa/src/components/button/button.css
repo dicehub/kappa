@@ -5,7 +5,7 @@
   --kappa-button-background: var(--kappa-control, #ffffff);
   --kappa-button-border: var(--kappa-line, #e3e6eb);
   --kappa-button-foreground: var(--kappa-default, #17191f);
-  --kappa-button-hover-background: var(--kappa-overlay, #e9edf2);
+  --kappa-button-hover-background: var(--kappa-control-hover, var(--kappa-tint, #fafafa));
   --kappa-button-hover-foreground: var(--kappa-button-foreground);
   --kappa-button-active-background: color-mix(
     in oklab,
@@ -71,12 +71,12 @@
   pointer-events: none;
 }
 
-.kappa-button[aria-expanded="true"]:is(
+.kappa-button[aria-expanded="true"]:not(:hover):not(:active):is(
     [data-variant="secondary"],
     [data-variant="outline"],
     [data-variant="ghost"]
   ) {
-  background: var(--kappa-overlay, #e9edf2);
+  background: var(--kappa-button-hover-background);
 }
 
 .kappa-button[data-size="xs"] {

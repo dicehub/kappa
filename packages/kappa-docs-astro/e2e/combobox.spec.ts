@@ -79,9 +79,13 @@ test.describe("Combobox documentation", () => {
     await input.fill("west");
     await expect(openOptions(page)).toHaveCount(2);
     await expect(openOptions(page).first()).toHaveText(/EU West · Dublin/);
+    const popupId = await openContent(page).getAttribute("id");
+    const popup = page.locator(`[id="${popupId}"]`);
     await input.press("Enter");
     await expect(input).toHaveValue("EU West · Dublin");
     await expect(openContent(page)).toHaveCount(0);
+    await expect(popup).toHaveAttribute("hidden");
+    await expect(popup).toBeHidden();
 
     const clear = preview.getByRole("button", { name: "Clear selection" });
     await clear.click();

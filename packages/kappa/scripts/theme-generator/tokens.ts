@@ -35,6 +35,14 @@ export const themeTokens: ThemeToken[] = [
     preview: "background",
   },
   {
+    name: "--kappa-control-hover",
+    group: "surfaces",
+    description: "Hover surface for neutral action controls.",
+    light: "#fafafa",
+    dark: "var(--kappa-tint)",
+    preview: "background",
+  },
+  {
     name: "--kappa-tint",
     group: "surfaces",
     description: "Recessed surface for grouped rows, tracks, and low-emphasis fills.",

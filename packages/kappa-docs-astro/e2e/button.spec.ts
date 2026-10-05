@@ -235,6 +235,28 @@ test.describe("Button documentation", () => {
     await expect(unavailable.locator("a")).toHaveCount(0);
   });
 
+  test("neutral buttons use the light hover fill and retain dark and expanded states", async ({ page }) => {
+    for (const mode of ["light", "dark"]) {
+      await page.evaluate((mode) => {
+        document.documentElement.setAttribute("data-kappa-theme", mode);
+        document.documentElement.setAttribute("data-mode", mode);
+      }, mode);
+      const hoverFill = mode === "light" ? "rgb(250, 250, 250)" : "rgb(38, 38, 38)";
+
+      for (const variant of ["secondary", "outline", "ghost", "secondary-destructive"]) {
+        const control = buttons(demo(page, variant));
+        await control.hover();
+        await expect(control).toHaveCSS("background-color", hoverFill);
+        await control.evaluate((element) => element.setAttribute("aria-expanded", "true"));
+        await expect(control).toHaveCSS("background-color", hoverFill);
+        await page.mouse.down();
+        await expect(control).not.toHaveCSS("background-color", hoverFill);
+        await page.mouse.up();
+        await control.evaluate((element) => element.removeAttribute("aria-expanded"));
+      }
+    }
+  });
+
   test("keeps complete light, dark, hover, active, focus, and contrast states", async ({ page }) => {
     const variantButtons = buttons(page.locator("[data-button-variant-examples]"));
     const lightContrast = await readContrast(variantButtons);

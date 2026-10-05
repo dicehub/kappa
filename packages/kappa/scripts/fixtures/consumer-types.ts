@@ -6,6 +6,17 @@ import type { SelectProps } from "@dicehub/kappa/components/select";
 import type { TableOfContentsRoot } from "@dicehub/kappa/components/table-of-contents";
 import { NavigationMenu } from "@dicehub/kappa";
 import type { NavigationMenuProps, NavigationMenuRootProviderProps } from "@dicehub/kappa/components/navigation-menu";
+import { SettingsLayout, SettingsSection } from "@dicehub/kappa";
+import type { SettingsLayout as GranularSettingsLayout, SettingsSectionProps } from "@dicehub/kappa/blocks/settings-layout";
+
+const settingsLayout: typeof GranularSettingsLayout = SettingsLayout;
+const settingsSection: typeof SettingsSection = SettingsLayout.Section;
+const setting: SettingsSectionProps = { title: "Time zone", defaultOpen: true, headingLevel: 3 };
+// @ts-expect-error Section headings require a title.
+const untitledSetting: SettingsSectionProps = { defaultOpen: true };
+// @ts-expect-error Section heading levels are limited to 2, 3, and 4.
+const invalidSettingLevel: SettingsSectionProps = { title: "Time zone", headingLevel: 1 };
+void [settingsLayout, settingsSection, setting, untitledSetting, invalidSettingLevel];
 
 type ButtonProps = InstanceType<typeof Button>["$props"];
 type DialogProps = InstanceType<typeof Dialog.Root>["$props"];

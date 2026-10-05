@@ -47,6 +47,7 @@
   --kappa-dicehub-number-trigger-active-text: #ffffff;
   --kappa-dicehub-number-focus: #247ab7;
   --kappa-dicehub-number-updated: rgb(39 168 229 / 30%);
+  --kappa-settings-demo-background: #fbfbfb;
 }
 
 html.kappa-docs-root[data-kappa-theme="dark"],
@@ -57,6 +58,7 @@ html.kappa-docs-root[data-mode="dark"]:not([data-kappa-theme="light"]) {
   --kappa-dicehub-number-surface: #333333;
   --kappa-dicehub-number-text: #e7e7e7;
   --kappa-dicehub-number-focus: #69b2e6;
+  --kappa-settings-demo-background: var(--kappa-tint);
 }
 
 * {
