@@ -10,9 +10,9 @@ export const sidebarBlocks = [
   { id: "inset-navigation", title: "Inset Navigation", description: "An inset content panel beside nested navigation and project links. Support and Feedback stay above the profile menu while the main links scroll. Includes namespace selection, Quick search, icon collapse, and full-screen mobile navigation." },
   { id: "inbox-navigation", title: "Inbox Navigation", description: "A fixed folder icon rail beside a searchable message list and reading panel. Filter unread messages, collapse the list, and open messages from a full-screen mobile drawer." },
   { id: "workspace-pages", title: "Workspace Pages", description: "A page-based workspace with Favorites, expandable groups, namespace selection, Quick search, and utility links. Desktop collapse hides the sidebar; mobile uses a full-screen drawer. The original Workspace example remains available below." },
-  { id: "minimal-workspace", title: "Minimal Workspace", description: "A compact dicehub-style shell with centered search, a simple namespace selector, a resizable sidebar, and a rounded content panel. Includes local project creation, profile and Help menus, a footer collapse button, and full-screen mobile navigation." },
+  { id: "minimal-workspace", title: "Minimal Workspace", description: "A compact dicehub-style shell with centered search and a / shortcut, a simple namespace selector, a resizable sidebar, and a rounded content panel. Includes local project creation, profile and Help menus, a footer collapse button, and full-screen mobile navigation." },
   { id: "workspace", title: "Workspace", description: "Grouped navigation, namespace and profile menus, Quick search, and a resizable edge." },
-  { id: "rail", title: "Icon Rail", description: "Starts with a compact icon rail. Expand it for labels and nested navigation." },
+  { id: "rail", title: "Icon Rail", description: "Starts with a compact icon rail. Expand it for labels and nested navigation. Use the centered search field or press / to open a panel that expands and fades in. Search pages and projects." },
   { id: "inset", title: "Inset Content", description: "A quiet navigation surface beside a bordered, inset content panel." },
   { id: "floating", title: "Floating Sidebar", description: "A separate navigation panel with a small outer gap and rounded edges." },
 ] as const;

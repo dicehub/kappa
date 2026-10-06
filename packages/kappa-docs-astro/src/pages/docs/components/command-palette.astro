@@ -3,6 +3,8 @@ import ArkUiDocsLink from "../../../components/ArkUiDocsLink.astro";
 import CodeBlock from "../../../components/CodeBlock.astro";
 import CompositionTree from "../../../components/CompositionTree.astro";
 import CommandPaletteDocsDemo from "../../../components/CommandPaletteDocsDemo.vue";
+import topAlignedCode from "../../../components/CommandPaletteTopAlignedDocsDemo.vue?raw";
+import morphingCode from "../../../components/CommandPaletteMorphingDocsDemo.vue?raw";
 import CopyPageControls from "../../../components/CopyPageControls.vue";
 import DocsPageNavigation from "../../../components/DocsPageNavigation.astro";
 import {
@@ -66,6 +68,20 @@ const examples = [
     id: "result-item-with-breadcrumbs",
     title: "ResultItem with Breadcrumbs",
     variant: "result-item",
+  },
+  {
+    code: topAlignedCode,
+    description: "Click the search field, or press / while it has focus. The panel expands and fades in at the top of the screen. Reduced motion removes the animation.",
+    id: "top-aligned-search",
+    title: "Top-aligned search",
+    variant: "top-aligned",
+  },
+  {
+    code: morphingCode,
+    description: "Click the search field, or press / while it has focus. The field expands into a search panel and returns when closed. Reduced motion opens it without animation.",
+    id: "morphing-search",
+    title: "Morphing search",
+    variant: "morphing",
   },
 ] as const;
 ---
@@ -188,6 +204,7 @@ const examples = [
           <h2><a class="docs-section-anchor" href="#accessibility">Accessibility</a></h2>
           <ul>
             <li>Dialog traps focus, blocks background interaction, and restores focus after dismissal.</li>
+            <li>Closing panels cannot receive focus during an exit animation.</li>
             <li>The search input receives initial focus and has a configurable accessible name.</li>
             <li>Disabled commands remain perceivable and are skipped during keyboard navigation.</li>
             <li>Empty and Loading expose complete no-result and progress states.</li>

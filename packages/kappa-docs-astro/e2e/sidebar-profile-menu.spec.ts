@@ -68,3 +68,48 @@ test('mobile profile submenu stays in the drawer and account selection restores 
   await expect(toggle).toBeFocused();
   await expect(page.getByRole('heading', { name: 'Log out', exact: true })).toBeVisible();
 });
+
+test('rail profile menu opens above the trigger when collapsed and expanded', async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.goto('/examples/sidebar/rail');
+  await expect.poll(() => page.locator('[data-sidebar-block="rail"]').evaluate(node => node.closest('astro-island')?.hasAttribute('ssr'))).toBe(false);
+  for (const state of ['collapsed', 'expanded']) {
+    const trigger = page.getByRole('button', { name: 'Profile: Ros.Space', exact: true });
+    await trigger.press('Enter');
+    const menu = page.getByRole('menu', { name: 'Profile: Ros.Space', exact: true });
+    await expect(menu).toHaveAttribute('data-side', 'top');
+    await expect.poll(async () => {
+      const popup = await menu.boundingBox();
+      const button = await trigger.boundingBox();
+      return Boolean(popup && button && popup.y + popup.height <= button.y);
+    }).toBe(true);
+    await page.keyboard.press('Escape');
+    await expect(menu).toBeHidden();
+    await expect(trigger).toBeFocused();
+    if (state === 'collapsed') await page.getByRole('button', { name: 'Expand sidebar', exact: true }).click();
+  }
+});
+
+test('mobile rail profile menu opens above its trigger and returns focus after selection', async ({ page }) => {
+  await page.setViewportSize({ width: 320, height: 700 });
+  await page.goto('/examples/sidebar/rail');
+  await expect.poll(() => page.locator('[data-sidebar-block="rail"]').evaluate(node => node.closest('astro-island')?.hasAttribute('ssr'))).toBe(false);
+  const toggle = page.getByRole('button', { name: 'Open sidebar', exact: true });
+  await toggle.click();
+  const drawer = page.getByRole('dialog', { name: 'rail application navigation', exact: true });
+  const trigger = drawer.getByRole('button', { name: 'Profile: Ros.Space', exact: true });
+  await trigger.click({ position: { x: 16, y: 16 } });
+  const menu = drawer.getByRole('menu', { name: 'Profile: Ros.Space', exact: true });
+  await expect(menu).toHaveAttribute('data-side', 'top');
+  await expect.poll(async () => {
+    const popup = await menu.boundingBox();
+    const button = await trigger.boundingBox();
+    return Boolean(popup && button && popup.y >= 0 && popup.y + popup.height <= button.y && popup.x >= 0 && popup.x + popup.width <= 320);
+  }).toBe(true);
+  await menu.getByRole('menuitem', { name: 'Switch profile', exact: true }).click();
+  await drawer.getByRole('menuitemradio', { name: 'Jordan Lee', exact: true }).click();
+  await expect(drawer.getByRole('button', { name: 'Profile: Jordan Lee', exact: true })).toBeFocused();
+  await page.keyboard.press('Escape');
+  await expect(drawer).toBeHidden();
+  await expect(toggle).toBeFocused();
+});

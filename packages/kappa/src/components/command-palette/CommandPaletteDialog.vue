@@ -69,7 +69,7 @@ const handleOpenChange = (details: { open: boolean }) => {
       <Dialog.Positioner class="kappa-command-palette__positioner">
         <Dialog.Content
           ref="content"
-          v-bind="$attrs"
+          v-bind="{ ...$attrs, ...(!props.open ? { inert: true } : {}) }"
           :aria-label="props.ariaLabel"
           class="kappa-command-palette__content"
         >

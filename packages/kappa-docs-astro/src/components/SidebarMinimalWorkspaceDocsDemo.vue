@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref, useId, watch } from "vue";
+import { computed, onBeforeUnmount, onMounted, ref, useId, watch, type Component } from "vue";
 import { SidebarLayout } from "@dicehub/kappa/blocks/sidebar-layout";
 import { Sidebar, type SidebarContextValue } from "@dicehub/kappa/components/sidebar";
 import { DicehubLogo } from "@dicehub/kappa/components/dicehub-logo";
@@ -20,6 +20,9 @@ const selected = ref("Dashboard");
 const filter = ref("");
 const query = ref("");
 const searchOpen = ref(false);
+const searchScope = ref<HTMLElement>();
+type SearchItem = { label: string; icon: Component; namespace?: string };
+type SearchGroup = { label: string; items: SearchItem[] };
 const namespaces = [
   { value: "Ros.Space", name: "Ros.Space", description: "Free plan · 1 member", avatarSrc: "/avatars/ros-space-astronaut.webp", initials: "RS" },
   ...namespaceSwitcherItems.filter(item => item.value !== "Personal"),
@@ -59,7 +62,20 @@ const namespaceProjects = computed(() => projects.value.filter(project => projec
 const visibleProjects = computed(() => namespaceProjects.value.filter(project => project.name.toLowerCase().includes(filter.value.trim().toLowerCase())));
 const currentProject = computed(() => namespaceProjects.value.find(project => project.name === selected.value));
 const isProjectList = computed(() => ["Dashboard", "Projects", "Recently opened", "Explore"].includes(selected.value));
-const searchItems = computed(() => [...new Set([...globalLinks, ...links.map(link => link.label), "Projects", "Groups", ...namespaceProjects.value.map(project => project.name), "Help"])]);
+const searchPages: SearchItem[] = [
+  ...links,
+  { label: "Explore", icon: Compass }, { label: "Templates", icon: Folder },
+  { label: "Community", icon: UsersRound }, { label: "Projects", icon: Folder },
+  { label: "Groups", icon: UsersRound }, { label: "Help", icon: CircleHelp },
+];
+const searchGroups = computed(() => {
+  const term = query.value.trim().toLocaleLowerCase();
+  const groups: SearchGroup[] = [{ label: "Go to", items: term ? searchPages : searchPages.filter(item => globalLinks.includes(item.label)) }];
+  if (term) groups.push({ label: "Projects", items: namespaceProjects.value.map(project => ({ label: project.name, namespace: project.namespace, icon: Folder })) });
+  return groups.map(group => ({ ...group, items: group.items.filter(item => `${item.label} ${item.namespace ?? ""}`.toLocaleLowerCase().includes(term)) })).filter(group => group.items.length);
+});
+const selectableSearchItems = (groups: unknown[]) => (groups as SearchGroup[]).flatMap(group => group.items);
+const searchItemLabel = (item: unknown) => (item as SearchItem).label;
 const menuPosition = { placement: "bottom-end", strategy: "fixed", gutter: 6 } as const;
 watch(namespace, () => { selected.value = "Dashboard"; filter.value = ""; });
 
@@ -68,7 +84,18 @@ function navigate(label: string, context: SidebarContextValue) {
   filter.value = "";
   context.setMobileOpen(false);
 }
-function search() { query.value = ""; searchOpen.value = true; }
+function search() { searchScope.value?.querySelector<HTMLElement>('[data-workspace-search-trigger]')?.focus(); query.value = ""; searchOpen.value = true; }
+function searchShortcut(event: KeyboardEvent) {
+  if (event.key !== "/" || event.defaultPrevented || event.repeat || event.isComposing || event.metaKey || event.ctrlKey || event.altKey || searchOpen.value) return;
+  if (document.querySelector('[role="dialog"][data-state="open"], [role="menu"][data-state="open"]')) return;
+  const target = event.composedPath().find(node => node instanceof HTMLElement) as HTMLElement | undefined;
+  if (target?.isContentEditable || target?.closest('input, textarea, select, [role="textbox"], [role="combobox"], [role="searchbox"], [role="dialog"], [role="menu"], [role="listbox"]')) return;
+  event.preventDefault();
+  event.stopPropagation();
+  search();
+}
+onMounted(() => { if (props.standalone) window.addEventListener("keydown", searchShortcut); });
+onBeforeUnmount(() => { window.removeEventListener("keydown", searchShortcut); });
 function createProject(context: SidebarContextValue, template?: string) {
   const number = projects.value.length + 1;
   const name = template ? `${template} ${number}` : `Untitled project ${number}`;
@@ -78,14 +105,14 @@ function createProject(context: SidebarContextValue, template?: string) {
 </script>
 
 <template>
-  <div class="minimal-workspace-demo" data-sidebar-block="minimal-workspace" :data-standalone="props.standalone || undefined">
+  <div ref="searchScope" class="minimal-workspace-demo" data-sidebar-block="minimal-workspace" :data-standalone="props.standalone || undefined" @keydown="searchShortcut">
     <SidebarLayout variant="header" label="Minimal workspace navigation" width="250px" :default-width="250" :min-width="200" :max-width="420" collapsed-width="48px" resizable full-screen-on-mobile>
       <template #toolbar="context">
         <div class="minimal-workspace-demo__header-start">
         <a href="?view=dashboard" class="minimal-workspace-demo__brand" aria-label="dicehub home" @click.prevent="navigate('Dashboard', context)"><DicehubLogo aria-hidden="true" /></a>
         <nav class="minimal-workspace-demo__global-nav" aria-label="Application pages"><a v-for="label in globalLinks" :key="label" :href="`?view=${encodeURIComponent(label)}`" :aria-current="selected === label ? 'page' : undefined" @click.prevent="navigate(label, context)">{{ label }}</a></nav>
         </div>
-        <Button size="sm" variant="ghost" :icon="Search" class="minimal-workspace-demo__search" aria-label="Search or go to…" aria-haspopup="dialog" :aria-expanded="searchOpen" @click="search"><span>Search or go to…</span></Button>
+        <Button size="sm" variant="ghost" :icon="Search" class="minimal-workspace-demo__search" data-workspace-search-trigger aria-label="Search or go to…" aria-keyshortcuts="/" aria-haspopup="dialog" :aria-expanded="searchOpen" @click="search"><span>Search or go to…</span><kbd aria-hidden="true">/</kbd></Button>
         <div class="minimal-workspace-demo__header-end">
         <Dropdown.Root :positioning="menuPosition">
           <Dropdown.Trigger as-child><Button size="sm" shape="square" variant="ghost" :icon="Compass" aria-label="Browse application pages" class="minimal-workspace-demo__browse" /></Dropdown.Trigger>
@@ -138,11 +165,19 @@ function createProject(context: SidebarContextValue, template?: string) {
         <Sidebar.Trigger v-if="!context.isMobile" as-child><Sidebar.MenuButton class="minimal-workspace-demo__collapse" :icon="context.open ? PanelLeftClose : PanelLeftOpen" :tooltip="context.open ? 'Collapse sidebar' : 'Expand sidebar'">{{ context.open ? 'Collapse sidebar' : 'Expand sidebar' }}</Sidebar.MenuButton></Sidebar.Trigger>
       </template>
       <template #default="context">
-        <CommandPalette.Root v-model:open="searchOpen" v-model:value="query" :items="searchItems" :inert="!searchOpen || undefined" aria-label="Search minimal workspace" @select="item => { searchOpen = false; navigate(String(item), context); }">
-          <CommandPalette.Input placeholder="Search pages and projects…" />
-          <CommandPalette.List><CommandPalette.Results v-slot="{ item }"><CommandPalette.Item :value="item">{{ item }}</CommandPalette.Item></CommandPalette.Results><CommandPalette.Empty>No results found.</CommandPalette.Empty></CommandPalette.List>
-          <CommandPalette.Footer><span>↑↓ Navigate</span><span>Enter Open</span></CommandPalette.Footer>
-        </CommandPalette.Root>
+        <CommandPalette.Dialog v-model:open="searchOpen" class="minimal-workspace-search-dialog" aria-label="Search minimal workspace">
+          <CommandPalette.Panel v-model:value="query" :open="searchOpen" :items="searchGroups" :filter="false" :get-selectable-items="selectableSearchItems" :item-to-string-value="searchItemLabel" @close="searchOpen = false" @select="item => { searchOpen = false; navigate(searchItemLabel(item), context); }">
+            <CommandPalette.Input aria-label="Search pages and projects" placeholder="Search or go to…" />
+            <CommandPalette.List>
+              <CommandPalette.Results v-slot="{ item: group }"><CommandPalette.Group :items="(group as SearchGroup).items">
+                <CommandPalette.GroupLabel>{{ (group as SearchGroup).label }}</CommandPalette.GroupLabel>
+                <CommandPalette.Items v-slot="{ item }"><CommandPalette.ResultItem :value="item" :title="(item as SearchItem).label" :description="(item as SearchItem).namespace" :show-arrow="!(item as SearchItem).namespace"><template #icon><component :is="(item as SearchItem).icon" :size="16" aria-hidden="true" /></template></CommandPalette.ResultItem></CommandPalette.Items>
+              </CommandPalette.Group></CommandPalette.Results>
+              <CommandPalette.Empty>No results found.</CommandPalette.Empty>
+            </CommandPalette.List>
+            <CommandPalette.Footer><span>↑↓ Navigate</span><span>Enter Open</span><span>Esc Close</span></CommandPalette.Footer>
+          </CommandPalette.Panel>
+        </CommandPalette.Dialog>
         <nav class="minimal-workspace-demo__breadcrumb" aria-label="Workspace breadcrumb"><a href="?view=dashboard" aria-label="Workspace home" @click.prevent="navigate('Dashboard', context)"><House aria-hidden="true" /></a><a href="?view=projects" @click.prevent="navigate('Projects', context)">{{ namespace }}</a><span aria-hidden="true">/</span><span aria-current="page">{{ selected }}</span></nav>
         <section class="minimal-workspace-demo__page" :aria-labelledby="headingId">
           <div class="minimal-workspace-demo__page-heading"><div><h2 :id="headingId">{{ selected }}</h2><p>{{ currentProject ? 'Project overview in this local workspace.' : descriptions[selected] }}</p></div><Button v-if="isProjectList" size="sm" :icon="Plus" @click="createProject(context)">New project</Button></div>

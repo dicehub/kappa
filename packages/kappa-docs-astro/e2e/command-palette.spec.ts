@@ -24,13 +24,15 @@ test.describe("Command Palette documentation", () => {
       "loading",
       "autocomplete-off",
       "result-item",
+      "top-aligned",
+      "morphing",
     ]) {
       await expect(demo(page, variant)).toHaveCount(1);
     }
 
     const frames = page.locator(".docs-component-preview--command-palette");
-    await expect(frames).toHaveCount(6);
-    await expect(page.locator(".docs-component-example")).toHaveCount(6);
+    await expect(frames).toHaveCount(8);
+    await expect(page.locator(".docs-component-example")).toHaveCount(8);
     await expect(page.locator(".docs-keyboard-shortcut")).toHaveCount(5);
     await expect(page.locator("#component-parts h3")).toHaveCount(15);
     await expect(page.getByText("Chips, multiple selection, and a clear-selection control do not apply.")).toBeVisible();
@@ -58,7 +60,7 @@ test.describe("Command Palette documentation", () => {
     const toc = page.getByRole("complementary", { name: "On this page" });
     await expect(toc).toHaveClass(/docs-page-toc/);
     await expect(toc.locator(".docs-page-toc__inner")).toBeVisible();
-    await expect(toc.locator('[data-part="item"][data-depth="3"]')).toHaveCount(10);
+    await expect(toc.locator('[data-part="item"][data-depth="3"]')).toHaveCount(12);
     await expect(toc.getByRole("link")).toHaveText([
       "Installation",
       "Barrel",
@@ -72,6 +74,8 @@ test.describe("Command Palette documentation", () => {
       "Loading State",
       "Disabling Browser Autocomplete",
       "ResultItem with Breadcrumbs",
+      "Top-aligned search",
+      "Morphing search",
       "Component Parts",
       "Accessibility",
       "API Reference",
@@ -79,6 +83,17 @@ test.describe("Command Palette documentation", () => {
       "ResultItem",
       "Events",
     ]);
+  });
+
+  test("outside-click dismissal restores the opener while the panel animates out", async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 1000 });
+    await page.emulateMedia({ reducedMotion: "no-preference" });
+    const trigger = demo(page, "preview").getByRole("button", { name: "Open Command Palette", exact: true });
+    const surface = await openDemo(page, "preview", "Open Command Palette");
+    await expect(surface.getByRole("combobox")).toBeFocused();
+    await page.mouse.click(10, 600);
+    await expect(surface).toHaveCount(0);
+    await expect(trigger).toBeFocused();
   });
 
   test("uses theme-aware modal styling", async ({ page }) => {

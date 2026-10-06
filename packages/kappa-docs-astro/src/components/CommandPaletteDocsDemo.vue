@@ -3,14 +3,18 @@ import { ChartLine, File, Folder, House, Search, Settings, Users } from "@lucide
 import { computed, onBeforeUnmount, ref } from "vue";
 import { Button } from "@dicehub/kappa/components/button";
 import { CommandPalette } from "@dicehub/kappa/components/command-palette";
+import CommandPaletteTopAlignedDocsDemo from "./CommandPaletteTopAlignedDocsDemo.vue";
+import CommandPaletteMorphingDocsDemo from "./CommandPaletteMorphingDocsDemo.vue";
 
 type DemoVariant =
   | "autocomplete-off"
   | "grouped"
   | "loading"
+  | "morphing"
   | "preview"
   | "result-item"
-  | "simple";
+  | "simple"
+  | "top-aligned";
 type CommandItem = {
   description?: string;
   disabled?: boolean;
@@ -166,7 +170,9 @@ onBeforeUnmount(() => {
 
 <template>
   <div class="command-palette-demo" :data-command-palette-demo="props.variant">
-    <template v-if="props.variant === 'preview' || props.variant === 'grouped'">
+    <CommandPaletteTopAlignedDocsDemo v-if="props.variant === 'top-aligned'" />
+    <CommandPaletteMorphingDocsDemo v-else-if="props.variant === 'morphing'" />
+    <template v-else-if="props.variant === 'preview' || props.variant === 'grouped'">
       <Button @click="openGrouped">Open Command Palette</Button>
       <p v-if="groupedSelected" class="command-palette-demo__selected">
         Last selected: <span>{{ groupedSelected }}</span>

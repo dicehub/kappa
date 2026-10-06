@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref, useId } from "vue";
+import { computed, onBeforeUnmount, onMounted, ref, useId } from "vue";
 import { SidebarLayout, type SidebarLayoutVariant } from "@dicehub/kappa/blocks/sidebar-layout";
 import { WorkspaceSwitcher } from "@dicehub/kappa/blocks/workspace-switcher";
 import { namespaceSwitcherItems, namespaceSwitcherActions, namespaceSwitcherFooterActions, namespaceSwitcherWorkspaceActions, namespaceActionDescriptions } from "../data/workspace-switcher-demo";
@@ -33,6 +33,13 @@ const searchOpen = ref(false);
 const query = ref("");
 const navigating = ref(false);
 const searchFromDrawer = ref(false);
+const searchScope = ref<HTMLElement>();
+const railMobileBreakpoint = ref(768);
+let railResizeObserver: ResizeObserver | undefined;
+function updateRailBreakpoint() {
+  const shell = searchScope.value?.querySelector<HTMLElement>(".kappa-sidebar-layout");
+  railMobileBreakpoint.value = (shell?.clientWidth ?? 0) < 588 ? window.innerWidth + 1 : 768;
+}
 const sectionsOpen = ref(true);
 const profiles = [
   { value: "ros", name: "Ros.Space", email: "ros@example.com", initials: "RS", avatar: "/avatars/ros-space-astronaut.webp" },
@@ -54,6 +61,7 @@ const projects = ref([
   { name: "Channel flow", code: "MESH-041", state: "In review" },
   { name: "Heat exchanger", code: "MESH-039", state: "Draft" },
 ]);
+const railSearchItems = computed(() => [...searchItems.value, ...projects.value.map(project => project.name)]);
 const namespacePositioning = { placement: "bottom-start", strategy: "fixed", gutter: 6 } as const;
 const desktopProfilePositioning = { placement: "right-end", strategy: "fixed", gutter: 8 } as const;
 const aboveProfilePositioning = { placement: "top-start", strategy: "fixed", gutter: 8 } as const;
@@ -67,7 +75,34 @@ function navigate(value: string, context: SidebarContextValue) {
   }
   context.setMobileOpen(false);
 }
-function search(context: SidebarContextValue) { query.value = ""; navigating.value = false; searchFromDrawer.value = context.isMobile && context.mobileOpen; searchOpen.value = true; }
+function search(context: SidebarContextValue, event?: Event) { if (event?.currentTarget instanceof HTMLElement) event.currentTarget.focus(); query.value = ""; navigating.value = false; searchFromDrawer.value = context.isMobile && context.mobileOpen; searchOpen.value = true; }
+function railSearchShortcut(event: KeyboardEvent) {
+  if (props.variant !== "rail" || event.key !== "/" || event.defaultPrevented || event.repeat || event.isComposing || event.metaKey || event.ctrlKey || event.altKey || searchOpen.value) return;
+  if (document.querySelector('[role="dialog"][data-state="open"], [role="menu"][data-state="open"]')) return;
+  const target = event.composedPath().find(node => node instanceof HTMLElement) as HTMLElement | undefined;
+  if (target?.isContentEditable || target?.closest('input, textarea, select, [role="textbox"], [role="combobox"], [role="searchbox"], [role="dialog"], [role="menu"], [role="listbox"]')) return;
+  const trigger = searchScope.value?.querySelector<HTMLButtonElement>('[data-rail-search-trigger]');
+  if (!trigger) return;
+  event.preventDefault();
+  event.stopPropagation();
+  trigger.focus();
+  trigger.click();
+}
+onMounted(() => {
+  if (props.variant !== "rail") return;
+  if (props.standalone) window.addEventListener("keydown", railSearchShortcut);
+  else if (searchScope.value) {
+    railResizeObserver = new ResizeObserver(updateRailBreakpoint);
+    railResizeObserver.observe(searchScope.value);
+    window.addEventListener("resize", updateRailBreakpoint);
+    updateRailBreakpoint();
+  }
+});
+onBeforeUnmount(() => {
+  window.removeEventListener("keydown", railSearchShortcut);
+  window.removeEventListener("resize", updateRailBreakpoint);
+  railResizeObserver?.disconnect();
+});
 function createProject() {
   const name = `Untitled project ${projects.value.length - 2}`;
   projects.value.push({ name, code: `MESH-${String(43 + projects.value.length - 3).padStart(3, "0")}`, state: "Draft" });
@@ -76,8 +111,8 @@ function createProject() {
 </script>
 
 <template>
-  <div class="sidebar-block-demo" :data-sidebar-block="props.insetNavigation ? 'inset-navigation' : props.iconNavigation ? 'collapsible-icons' : props.variant" :data-standalone="props.standalone || undefined">
-    <SidebarLayout :variant="props.variant" :label="props.insetNavigation ? 'Inset application navigation' : props.iconNavigation ? 'Icon application navigation' : `${props.variant} application navigation`" :resizable="!richNavigation && props.variant === 'workspace'" full-screen-on-mobile>
+  <div ref="searchScope" class="sidebar-block-demo" :data-sidebar-block="props.insetNavigation ? 'inset-navigation' : props.iconNavigation ? 'collapsible-icons' : props.variant" :data-standalone="props.standalone || undefined" @keydown="railSearchShortcut">
+    <SidebarLayout :variant="props.variant" :mobile-breakpoint="props.variant === 'rail' ? railMobileBreakpoint : undefined" :label="props.insetNavigation ? 'Inset application navigation' : props.iconNavigation ? 'Icon application navigation' : `${props.variant} application navigation`" :resizable="!richNavigation && props.variant === 'workspace'" full-screen-on-mobile>
       <template #header="context">
         <WorkspaceSwitcher v-model="namespace" :items="namespaceSwitcherItems" label="Namespaces" :account-label="account.email"
           :actions="namespaceSwitcherActions" :workspace-actions="namespaceSwitcherWorkspaceActions" :footer-actions="namespaceSwitcherFooterActions"
@@ -148,7 +183,7 @@ function createProject() {
             <Sidebar.MenuButton :icon="link.icon" :tooltip="link.label" :active="selected === link.label" :href="`?view=${link.label.toLowerCase()}`" @click.prevent="navigate(link.label, context)">{{ link.label }}</Sidebar.MenuButton>
           </Sidebar.MenuItem></Sidebar.Menu>
         </nav>
-        <Dropdown.Root aria-label="Profile" :positioning="context.isMobile || props.iconNavigation ? aboveProfilePositioning : desktopProfilePositioning">
+        <Dropdown.Root aria-label="Profile" :positioning="context.isMobile || props.iconNavigation || props.variant === 'rail' ? aboveProfilePositioning : desktopProfilePositioning">
           <Dropdown.Trigger as-child>
             <Sidebar.MenuButton :aria-label="`Profile: ${account.name}`" :tooltip="account.name" class="sidebar-block-demo__identity-button sidebar-block-demo__profile">
               <template #icon><Avatar.Root class="sidebar-block-demo__avatar" aria-hidden="true"><Avatar.Image :src="account.avatar" alt="" /><Avatar.Fallback>{{ account.initials }}</Avatar.Fallback></Avatar.Root></template>
@@ -188,11 +223,19 @@ function createProject() {
           </Dropdown.Content></Dropdown.Context>
         </Dropdown.Root>
       </template>
-      <template #toolbar>
-        <span class="sidebar-block-demo__breadcrumb"><span>{{ namespace }}</span><span aria-hidden="true">/</span><span>{{ selected }}</span></span>
+      <template #toolbar="context">
+        <span v-if="props.variant !== 'rail'" class="sidebar-block-demo__breadcrumb"><span>{{ namespace }}</span><span aria-hidden="true">/</span><span>{{ selected }}</span></span>
+        <Button v-if="props.variant === 'rail'" variant="ghost" :icon="Search" class="sidebar-block-demo__rail-search" data-rail-search-trigger aria-label="Search or go to…" aria-keyshortcuts="/" aria-haspopup="dialog" :aria-expanded="searchOpen" @click="search(context, $event)"><span>Search or go to…</span><kbd aria-hidden="true">/</kbd></Button>
       </template>
       <template #default="context">
-        <CommandPalette.Root v-model:open="searchOpen" v-model:value="query" :items="searchItems" :restore-focus="!navigating || !searchFromDrawer" aria-label="Search navigation" @select="item => { navigating = true; searchOpen = false; navigate(String(item), context); }">
+        <CommandPalette.Dialog v-if="props.variant === 'rail'" v-model:open="searchOpen" :restore-focus="!navigating || !searchFromDrawer" class="sidebar-rail-search-dialog" aria-label="Search navigation">
+          <CommandPalette.Panel v-model:value="query" :open="searchOpen" :items="railSearchItems" @close="searchOpen = false" @select="item => { navigating = true; searchOpen = false; navigate(String(item), context); }">
+            <CommandPalette.Input placeholder="Search or go to…" />
+            <CommandPalette.List><CommandPalette.Results v-slot="{ item }"><CommandPalette.Item :value="item">{{ item }}</CommandPalette.Item></CommandPalette.Results><CommandPalette.Empty>No pages found.</CommandPalette.Empty></CommandPalette.List>
+            <CommandPalette.Footer><span>↑↓ Navigate</span><span>Enter Open</span><span>Esc Close</span></CommandPalette.Footer>
+          </CommandPalette.Panel>
+        </CommandPalette.Dialog>
+        <CommandPalette.Root v-else v-model:open="searchOpen" v-model:value="query" :items="searchItems" :restore-focus="!navigating || !searchFromDrawer" aria-label="Search navigation" @select="item => { navigating = true; searchOpen = false; navigate(String(item), context); }">
           <CommandPalette.Input placeholder="Search navigation…" />
           <CommandPalette.List>
             <CommandPalette.Results v-slot="{ item }"><CommandPalette.Item :value="item">{{ item }}</CommandPalette.Item></CommandPalette.Results>

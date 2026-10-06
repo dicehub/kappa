@@ -29,8 +29,20 @@
 .minimal-workspace-demo__global-nav a:hover, .minimal-workspace-demo__global-nav a[aria-current] { color: var(--kappa-default); background: var(--kappa-overlay); }
 .minimal-workspace-demo__brand:focus-visible, .minimal-workspace-demo__global-nav a:focus-visible, .minimal-workspace-demo__breadcrumb a:focus-visible { outline: 2px solid var(--kappa-focus); outline-offset: 2px; }
 .minimal-workspace-demo__browse.kappa-button { display: none; }
-.minimal-workspace-demo__search.kappa-button { grid-area: 1 / 2; inline-size: 14rem; min-inline-size: 0; justify-content: flex-start; border: 1px solid var(--kappa-line); background: color-mix(in srgb, var(--kappa-control) 25%, var(--kappa-tint)); color: var(--kappa-subtle); }
-.minimal-workspace-demo__search .kappa-button__label { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.minimal-workspace-demo__search.kappa-button { grid-area: 1 / 2; inline-size: 13.75rem; min-inline-size: 0; block-size: 1.875rem; min-block-size: 1.875rem; justify-content: flex-start; border: 1px solid var(--kappa-line); background: color-mix(in srgb, var(--kappa-control) 50%, var(--kappa-tint)); color: var(--kappa-subtle); }
+.minimal-workspace-demo__search.kappa-button[data-variant="ghost"] { --kappa-button-hover-background: color-mix(in srgb, var(--kappa-control) 50%, var(--kappa-tint)); --kappa-button-hover-foreground: var(--kappa-subtle); }
+.minimal-workspace-demo__search.kappa-button:hover { border-color: color-mix(in srgb, var(--kappa-line) 90%, var(--kappa-subtle)); }
+.minimal-workspace-demo__search .kappa-button__label { display: flex; flex: 1; align-items: center; gap: 0.375rem; min-inline-size: 0; }
+.minimal-workspace-demo__search .kappa-button__label > span { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.minimal-workspace-demo__search kbd { display: grid; place-items: center; flex: none; min-inline-size: 1.25rem; block-size: 1.25rem; border: 1px solid var(--kappa-line); border-radius: 0.1875rem; background: var(--kappa-control); font: 0.6875rem / 1 var(--kappa-font-mono); }
+.minimal-workspace-search-dialog.kappa-command-palette__content { inline-size: min(35rem, calc(100vw - 2rem)); border-radius: 0.75rem; }
+.minimal-workspace-search-dialog .kappa-command-palette__input-header { min-block-size: 2.75rem; padding-block: 0; }
+.minimal-workspace-search-dialog .kappa-command-palette__input { font-size: 1rem; }
+.minimal-workspace-search-dialog .kappa-command-palette__group-label { font-family: var(--kappa-font-sans); font-weight: 550; letter-spacing: normal; text-transform: none; }
+.minimal-workspace-search-dialog .kappa-command-palette__result-icon { inline-size: 1.25rem; block-size: 1.25rem; border: 0; background: transparent; }
+.minimal-workspace-search-dialog .kappa-command-palette__result-item { min-block-size: 2.25rem; padding-block: 0.375rem; }
+.minimal-workspace-search-dialog.kappa-command-palette__content[data-state="open"] { animation: minimal-workspace-search-enter 150ms ease-out; }
+@keyframes minimal-workspace-search-enter { from { opacity: 0; transform: translateY(-0.5rem); } to { opacity: 1; transform: translateY(0); } }
 .minimal-workspace-demo__profile.kappa-button { padding: 0.125rem 0.25rem; flex: 0 0 auto; gap: 0.375rem; }
 .minimal-workspace-demo__profile .kappa-button__label { display: flex; align-items: center; gap: 0.375rem; }
 .minimal-workspace-demo__profile .kappa-avatar { --kappa-avatar-size: 1.5rem; }
