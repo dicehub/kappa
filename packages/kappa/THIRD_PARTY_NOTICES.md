@@ -17,9 +17,11 @@ Kappa includes adapted third-party source covered by the full notices below. Run
 | `@zag-js/collection` | `1.43.3` | Runtime dependency | MIT |
 | `@zag-js/color-picker` | `1.43.3` | Runtime dependency | MIT |
 | `@zag-js/color-utils` | `1.43.3` | Runtime dependency | MIT |
+| `@zag-js/dom-query` | `1.43.3` | Runtime dependency | MIT |
 | `@zag-js/drawer` | `1.43.3` | Runtime dependency | MIT |
 | `@zag-js/file-upload` | `1.43.3` | Runtime dependency | MIT |
 | `@zag-js/listbox` | `1.43.3` | Runtime dependency | MIT |
+| `@zag-js/number-input` | `1.43.3` | Runtime dependency | MIT |
 | `@zag-js/presence` | `1.43.3` | Runtime dependency | MIT |
 | `@zag-js/progress` | `1.43.3` | Runtime dependency | MIT |
 | `@zag-js/select` | `1.43.3` | Runtime dependency | MIT |
@@ -89,9 +91,38 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
+### Zag Number Input
+
+Source: [Zag Number Input](https://github.com/chakra-ui/zag). Number Input cursor mapping and input synchronization adapted from @zag-js/number-input 1.43.3.
+
+Reviewed reference: [`46f88c089c1dbb0fc681b31172dc5eb8a07eef0d`](https://github.com/chakra-ui/zag/tree/46f88c089c1dbb0fc681b31172dc5eb8a07eef0d). This identifies the inspected reference, not the original revision of every adaptation.
+
+MIT License
+
+Copyright (c) 2021 Chakra UI
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
 ## Ark UI Vue
 
 External runtime dependency: `@ark-ui/vue` 5.39.2. The notice below is copied from that installed package.
+The Number Input hook is adapted from Ark UI Vue 5.39.2 at [`8067ebecca4c222b7ee346a947b1e30f54cc36e7`](https://github.com/chakra-ui/ark/tree/8067ebecca4c222b7ee346a947b1e30f54cc36e7). Kappa synchronizes its input after Vue renders while retaining the upstream state machine and providers.
 The package includes private Ark declarations for color-picker, file-upload, listbox, progress, select, slider, and highlight, plus their declaration dependencies. Kappa repairs missing default-slot types and a duplicate type import. The JavaScript runtime remains external.
 
 MIT License

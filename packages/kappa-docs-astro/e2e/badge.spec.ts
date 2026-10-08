@@ -1,7 +1,22 @@
-import { expect, type Page, test } from "@playwright/test";
+import { expect, type Locator, type Page, test } from "@playwright/test";
 
 const demo = (page: Page, variant: string) =>
   page.locator(`[data-badge-demo="${variant}"]`);
+
+const waitForBadgeStyles = async (badges: Locator) => {
+  await expect(badges.first()).toBeAttached();
+  await expect.poll(() => badges.evaluateAll((elements) => {
+    const surfaces = new Set<Element>();
+    for (const element of elements) {
+      for (let current: Element | null = element; current; current = current.parentElement) {
+        surfaces.add(current);
+      }
+    }
+    return [...surfaces].flatMap((element) => element.getAnimations()).filter(
+      (animation) => animation.playState === "running" || animation.pending,
+    ).length;
+  })).toBe(0);
+};
 
 const readBadgeContrasts = (page: Page) =>
   page
@@ -114,6 +129,9 @@ test.describe("Badge documentation", () => {
     await themeToggle.click();
     await expect(root).toHaveAttribute("data-mode", "dark");
     await expect.poll(async () => (await readStyles()).background).not.toBe(lightStyles.background);
+    await waitForBadgeStyles(page.locator(
+      '[data-badge-demo="preview"] .kappa-badge, [data-badge-demo="semantic"] .kappa-badge, [data-badge-demo="colors"] .kappa-badge',
+    ));
     const darkStyles = await readStyles();
     const darkContrasts = await readBadgeContrasts(page);
 
@@ -185,6 +203,7 @@ test.describe("Badge documentation", () => {
     const hoverContrast = async (variant: string) => {
       const link = page.locator(`[data-badge-link-contrast-fixture] [data-variant="${variant}"]`);
       await link.hover();
+      await waitForBadgeStyles(link);
       return link.evaluate((element) => {
         const luminance = (color: string) => {
           const channels = color.match(/[\d.]+/g)?.slice(0, 3).map(Number) ?? [];

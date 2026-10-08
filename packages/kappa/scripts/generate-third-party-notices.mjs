@@ -1,7 +1,7 @@
 import { existsSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
 import { dirname, join, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
-import { adaptedSources } from "./third-party-sources.mjs";
+import { adaptedSources, arkNumberInputSource } from "./third-party-sources.mjs";
 
 const packageRoot = resolve(fileURLToPath(new URL("..", import.meta.url)));
 const distRoot = resolve(packageRoot, "dist");
@@ -88,6 +88,7 @@ const output = [
   "## Ark UI Vue",
   "",
   `External runtime dependency: \`@ark-ui/vue\` ${manifest.dependencies["@ark-ui/vue"]}. The notice below is copied from that installed package.`,
+  `The Number Input hook is adapted from Ark UI Vue 5.39.2 at [\`${arkNumberInputSource.reference}\`](${arkNumberInputSource.repository}/tree/${arkNumberInputSource.reference}). Kappa synchronizes its input after Vue renders while retaining the upstream state machine and providers.`,
   "The package includes private Ark declarations for color-picker, file-upload, listbox, progress, select, slider, and highlight, plus their declaration dependencies. Kappa repairs missing default-slot types and a duplicate type import. The JavaScript runtime remains external.",
   "",
   readFileSync(resolve(packageRoot, "node_modules/@ark-ui/vue/LICENSE"), "utf8").trim(),

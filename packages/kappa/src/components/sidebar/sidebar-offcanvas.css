@@ -1,0 +1,67 @@
+/* Hover panels use shell-relative offsets; set them to match the app header. */
+.kappa-sidebar-provider[data-peekable][data-collapsible="offcanvas"]:not([data-mobile]) { overflow-x: clip; }
+.kappa-sidebar__shell[data-peekable][data-collapsible="offcanvas"] {
+  transition: inline-size 200ms ease;
+}
+.kappa-sidebar__shell[data-peekable][data-collapsible="offcanvas"]:is([data-state="collapsed"], [data-state="peeking"]) {
+  inline-size: 0;
+}
+.kappa-sidebar__shell[data-peekable][data-collapsible="offcanvas"] > .kappa-sidebar {
+  --kappa-sidebar-peek-sign: -1;
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-start: 0;
+  z-index: var(--kappa-sidebar-peek-z-index, 2);
+  inline-size: var(--kappa-sidebar-width, 16.25rem);
+  visibility: visible;
+  overflow: visible;
+  transition: transform 200ms ease, opacity 200ms ease;
+}
+.kappa-sidebar__shell[data-peekable][data-collapsible="offcanvas"][data-side="end"] > .kappa-sidebar {
+  --kappa-sidebar-peek-sign: 1;
+  inset-inline-start: auto;
+  inset-inline-end: 0;
+}
+.kappa-sidebar__shell[data-peekable][data-collapsible="offcanvas"] > .kappa-sidebar:dir(rtl) { --kappa-sidebar-peek-sign: 1; }
+.kappa-sidebar__shell[data-peekable][data-collapsible="offcanvas"][data-side="end"] > .kappa-sidebar:dir(rtl) { --kappa-sidebar-peek-sign: -1; }
+.kappa-sidebar__shell[data-peekable][data-collapsible="offcanvas"]:is([data-state="collapsed"], [data-state="peeking"]) > .kappa-sidebar {
+  block-size: max(0px, calc(100% - var(--kappa-sidebar-peek-top, 0.75rem) - var(--kappa-sidebar-peek-bottom, 0.75rem)));
+  transform: translateY(var(--kappa-sidebar-peek-top, 0.75rem));
+  border: 0;
+  border-start-end-radius: var(--kappa-sidebar-peek-radius, 0.5rem);
+  border-end-end-radius: var(--kappa-sidebar-peek-radius, 0.5rem);
+  box-shadow: var(--kappa-sidebar-peek-shadow,
+    0 20px 24px color-mix(in srgb, var(--kappa-default, #17191f) 5%, transparent),
+    0 5px 8px color-mix(in srgb, var(--kappa-default, #17191f) 3%, transparent),
+    0 0 0 1px var(--kappa-line, #e3e6eb));
+}
+.kappa-sidebar__shell[data-peekable][data-collapsible="offcanvas"][data-state="collapsed"] > .kappa-sidebar {
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(calc(var(--kappa-sidebar-peek-sign) * (100% - 1.25rem)), var(--kappa-sidebar-peek-top, 0.75rem));
+}
+.kappa-sidebar__shell[data-peekable][data-collapsible="offcanvas"][data-side="end"]:is([data-state="collapsed"], [data-state="peeking"]) > .kappa-sidebar {
+  border-start-end-radius: 0;
+  border-end-end-radius: 0;
+  border-start-start-radius: var(--kappa-sidebar-peek-radius, 0.5rem);
+  border-end-start-radius: var(--kappa-sidebar-peek-radius, 0.5rem);
+}
+.kappa-sidebar__shell[data-peekable][data-collapsible="offcanvas"][data-state="peeking"] > .kappa-sidebar::before {
+  content: "";
+  position: absolute;
+  inset-block-end: 100%;
+  inset-inline: 0;
+  block-size: clamp(0px, var(--kappa-sidebar-peek-gap, 0.75rem), var(--kappa-sidebar-peek-top, 0.75rem));
+}
+.kappa-sidebar__trigger[data-peek] { position: relative; }
+.kappa-sidebar__trigger[data-peek]::before {
+  content: "";
+  position: absolute;
+  inset: -0.75rem;
+}
+.kappa-sidebar__shell[data-peekable][data-collapsible="offcanvas"][data-resizing],
+.kappa-sidebar__shell[data-peekable][data-collapsible="offcanvas"][data-resizing] > .kappa-sidebar { transition: none; }
+@media (prefers-reduced-motion: reduce) {
+  .kappa-sidebar__shell[data-peekable][data-collapsible="offcanvas"],
+  .kappa-sidebar__shell[data-peekable][data-collapsible="offcanvas"] > .kappa-sidebar { transition: none; }
+}

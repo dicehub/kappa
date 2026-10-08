@@ -7,7 +7,7 @@ async function openWorkspace(page: Page) {
 
 async function expectSingleEdge(nav: Locator) {
   const handle = nav.locator('[data-slot="sidebar-resize-handle"]');
-  await expect(handle).toHaveCSS("width", "7px");
+  await expect(handle).toHaveCSS("width", "12px");
   const bounds = (await nav.boundingBox())!;
   const target = (await handle.boundingBox())!;
   const line = await handle.evaluate(node => {

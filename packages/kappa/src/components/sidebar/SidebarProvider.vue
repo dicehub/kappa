@@ -34,7 +34,7 @@ const resize = useSidebarResize(props, {
   onResize: (width) => { emit("update:resizeWidth", width); emit("resize", { width }); },
   onResizeEnd: (width) => emit("resizeEnd", { width }),
 });
-const isPeeking = computed(() => props.peekable && !isMobile.value && !open.value && props.collapsible === "icon" && peekInteraction.value && !resize.isResizing.value);
+const isPeeking = computed(() => props.peekable && !isMobile.value && !open.value && props.collapsible !== "none" && peekInteraction.value && !resize.isResizing.value);
 const iconCollapsed = computed(() => !isMobile.value && !open.value && !isPeeking.value && props.collapsible === "icon");
 const state = computed(() => isPeeking.value ? "peeking" : (isMobile.value ? mobileOpen.value : open.value) ? "expanded" : "collapsed");
 const dimensions = computed(() => ({
@@ -62,7 +62,7 @@ function finalFocusEl() {
   const trigger = lastTriggerId.value ? document.getElementById(lastTriggerId.value) : null;
   if (visible(trigger)) return trigger;
   return Array.from(layout.value?.querySelectorAll<HTMLElement>('[data-slot="sidebar-trigger"]') ?? [])
-    .find(node => visible(node)) ?? null;
+    .find(node => visible(node) && [navId.value, contentId.value].includes(node.getAttribute("aria-controls") ?? "")) ?? null;
 }
 
 onMounted(() => { mounted.value = true; });
@@ -96,6 +96,7 @@ watch(open, async (expanded) => {
   const sectionTrigger = section?.querySelector<HTMLElement>('[data-part="trigger"]');
   const target = props.collapsible === "icon" ? sectionTrigger ?? active : finalFocusEl();
   if (target?.isConnected && target.getClientRects().length) target.focus();
+  else finalFocusEl()?.focus({ preventScroll: true });
 });
 
 const context: SidebarContext = {
@@ -110,6 +111,7 @@ const context: SidebarContext = {
   setOpen, setMobileOpen,
   toggle: () => isMobile.value ? setMobileOpen(!mobileOpen.value) : setOpen(!open.value),
   rememberTrigger: (value) => { lastTriggerId.value = value; },
+  focusTrigger: () => { finalFocusEl()?.focus({ preventScroll: true }); },
 };
 provide(sidebarContextKey, context);
 </script>
@@ -133,6 +135,8 @@ provide(sidebarContextKey, context);
       data-slot="sidebar-provider"
       :data-state="state"
       :data-mobile="isMobile ? '' : undefined"
+      :data-peekable="props.peekable ? '' : undefined"
+      :data-collapsible="props.collapsible"
       :data-resizing="resize.isResizing.value ? '' : undefined"
       :style="dimensions"
     >

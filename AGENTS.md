@@ -99,6 +99,7 @@ Current repository locations:
 | Declaration compatibility | `packages/kappa/scripts/ark-declarations.mjs` + `ark-declaration-repairs.json` | Generates private Ark declarations with version and input checks; review when upgrading Ark |
 | License notices      | `packages/kappa/licenses/` + `packages/kappa/scripts/third-party-sources.mjs` | Preserved adapted-source licenses; generated package notices and `/licenses.txt` docs output |
 | Demo examples        | `packages/kappa-docs-astro/src/components/*DocsDemo.vue`       | Rendered by docs pages and exercised by end-to-end tests                         |
+| Copyable examples    | `packages/kappa-docs-astro/src/snippets/`                     | Short Vue files shown in docs, type-checked and mounted in browser tests          |
 | Documentation pages  | `packages/kappa-docs-astro/src/pages/docs/`                    | Guides, component pages, block pages, and routes                                 |
 | Documentation data   | `packages/kappa-docs-astro/src/data/`                          | API and navigation metadata; keep synchronized with components                   |
 | Standalone examples | `packages/kappa-docs-astro/src/pages/examples/`             | Full-screen block previews and isolated component viewports.                  |

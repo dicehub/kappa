@@ -12,15 +12,15 @@ test("namespace menu shows current details, actions, and a checkmark on the righ
   const trigger = demo.getByRole("button", { name: "Namespace: Engineering", exact: true });
   await trigger.click();
   const menu = page.getByRole("menu", { name: "Namespace: Engineering", exact: true });
-  await expect(menu).toHaveAttribute("data-placement", "right-start");
+  await expect(menu).toHaveAttribute("data-placement", "bottom-start");
   await expect(menu.getByRole("group", { name: "casey@example.test", exact: true })).toBeVisible();
   await expect(menu.getByRole("menuitem")).toHaveCount(6);
   await expect(menu.getByRole("separator")).toHaveCount(3);
   await expect(menu.locator('[data-slot="dropdown-label"]')).toHaveCSS("text-transform", "none");
   const buttonBox = (await trigger.boundingBox())!;
   const menuBox = (await menu.boundingBox())!;
-  expect(menuBox.x).toBeCloseTo(buttonBox.x + buttonBox.width + 8, 0);
-  expect(menuBox.y).toBeCloseTo(buttonBox.y, 0);
+  expect(menuBox.x).toBeCloseTo(buttonBox.x, 0);
+  expect(menuBox.y).toBeCloseTo(buttonBox.y + buttonBox.height + 6, 0);
   expect(menuBox.width).toBeCloseTo(300, 0);
   for (const [index, name] of ["Engineering", "Research", "Personal"].entries()) {
     const item = menu.getByRole("menuitemradio", { name, exact: true });
@@ -38,7 +38,7 @@ test("namespace menu shows current details, actions, and a checkmark on the righ
   await demo.getByRole("button", { name: "Namespace: Research", exact: true }).click();
   const collapsedMenu = page.getByRole("menu", { name: "Namespace: Research", exact: true });
   await expect(collapsedMenu).toHaveCSS("width", "300px");
-  await expect(collapsedMenu).toHaveAttribute("data-placement", "right-start");
+  await expect(collapsedMenu).toHaveAttribute("data-placement", "bottom-start");
   await expect(collapsedMenu.getByRole("menuitemradio", { name: "Research", exact: true })).toHaveAttribute("aria-checked", "true");
 });
 

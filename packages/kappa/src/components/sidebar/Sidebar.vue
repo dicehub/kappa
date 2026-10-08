@@ -21,6 +21,7 @@ const navProps = computed(() => ({
   "data-collapsible": sidebar.collapsible.value,
   "data-compact": sidebar.compact.value ? "" : undefined,
   "data-mobile": sidebar.isMobile.value ? "" : undefined,
+  "data-peekable": sidebar.peekable.value ? "" : undefined,
   "data-resizing": sidebar.isResizing.value ? "" : undefined,
   style: sidebar.dimensions.value,
 }));
@@ -51,6 +52,7 @@ const navProps = computed(() => ({
     :data-state="sidebar.state.value"
     :data-side="sidebar.side.value"
     :data-collapsible="sidebar.collapsible.value"
+    :data-peekable="sidebar.peekable.value ? '' : undefined"
     :data-resizing="sidebar.isResizing.value ? '' : undefined"
   >
     <nav
@@ -58,8 +60,8 @@ const navProps = computed(() => ({
       v-bind="{ ...navProps, ...$attrs, id: sidebar.navId.value }"
       class="kappa-sidebar"
       data-slot="sidebar"
-      :inert="sidebar.collapsible.value === 'offcanvas' && !sidebar.open.value ? true : undefined"
-      :aria-hidden="sidebar.collapsible.value === 'offcanvas' && !sidebar.open.value ? true : undefined"
+      :inert="sidebar.collapsible.value === 'offcanvas' && sidebar.state.value === 'collapsed' ? true : undefined"
+      :aria-hidden="sidebar.collapsible.value === 'offcanvas' && sidebar.state.value === 'collapsed' ? true : undefined"
     ><slot /></nav>
   </div>
 </template>

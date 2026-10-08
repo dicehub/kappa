@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "KAPPA_SOURCE=1 astro dev",
     "build": "astro build",
-    "typecheck": "KAPPA_SOURCE=1 astro check && tsc --project tsconfig.json",
+    "typecheck": "KAPPA_SOURCE=1 astro check && tsc --project tsconfig.json && pnpm --filter @dicehub/kappa exec vue-tsc --noEmit --project ../kappa-docs-astro/src/snippets/tsconfig.json",
     "preview": "astro preview",
     "astro": "astro",
     "test": "pnpm test:markdown && pnpm test:e2e",

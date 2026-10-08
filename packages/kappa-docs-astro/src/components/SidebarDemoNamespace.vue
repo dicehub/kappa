@@ -15,9 +15,7 @@ const items = computed(() => namespaces.map((item, index) => ({ ...item,
   ariaKeyshortcuts: `${isMac.value ? 'Meta' : 'Control'}+${index + 1}`,
 })));
 const selected = computed(() => namespaces.find(item => item.name === namespace.value) ?? namespaces[0]);
-const desktopPositioning = { placement: "right-start", gutter: 8, strategy: "fixed" } as const;
-const endPositioning = { placement: "left-start", gutter: 8, strategy: "fixed" } as const;
-const mobilePositioning = { placement: "bottom-start", gutter: 6, strategy: "fixed" } as const;
+const positioning = { placement: "bottom-start", gutter: 6, strategy: "fixed" } as const;
 onMounted(() => { isMac.value = /Mac|iPhone|iPad/.test(navigator.platform); });
 
 // Shortcuts belong to this open menu, never to the page or browser tabs.
@@ -33,10 +31,10 @@ function onShortcut(event: KeyboardEvent) {
 </script>
 
 <template>
-  <Sidebar.Context v-slot="{ isMobile, side, setMobileOpen }">
+  <Sidebar.Context v-slot="{ isMobile, setMobileOpen }">
     <WorkspaceSwitcher v-model="namespace" v-model:open="open" :items="items" label="Namespaces" account-label="casey@example.test"
       :actions="namespaceSwitcherActions" :workspace-actions="namespaceSwitcherWorkspaceActions" :footer-actions="namespaceSwitcherFooterActions"
-      :teleport="!isMobile" :positioning="isMobile ? mobilePositioning : side === 'end' ? endPositioning : desktopPositioning"
+      :teleport="!isMobile" :positioning="positioning"
       @keydown="onShortcut" @action="action => { action.value === 'add-namespace' ? emit('add') : emit('action', action.label); setMobileOpen(false); }">
       <template #trigger>
         <Sidebar.MenuButton :icon="selected.icon" :tooltip="`Namespace: ${namespace}`" :aria-label="`Namespace: ${namespace}`" class="sidebar-demo__namespace">

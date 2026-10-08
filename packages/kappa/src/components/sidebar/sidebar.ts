@@ -12,6 +12,7 @@ export const SIDEBAR_DEFAULTS = {
   collapsedWidth: "3.25rem",
   mobileWidth: "18rem",
   resizable: false,
+  collapseOnResize: true,
   defaultWidth: 260,
   minWidth: 180,
   maxWidth: 400,
@@ -39,12 +40,14 @@ export interface SidebarProviderProps {
   mobileWidth?: string;
   /** Enable the desktop edge separator. Add Sidebar.ResizeHandle inside Root. */
   resizable?: boolean;
+  /** Allow the resize separator to collapse navigation. Triggers remain independent. */
+  collapseOnResize?: boolean;
   /** Controlled expanded resize width, in pixels. Used only with resizable. */
   resizeWidth?: number;
   defaultWidth?: number;
   minWidth?: number;
   maxWidth?: number;
-  /** Temporarily expand a collapsed icon rail on hover or keyboard focus. */
+  /** Temporarily reveal collapsed desktop navigation without changing open. */
   peekable?: boolean;
 }
 
@@ -70,6 +73,8 @@ export type SidebarRootProps = SidebarProps;
 export type SidebarRootSlots = SidebarSlots;
 export interface SidebarPartProps { asChild?: boolean }
 export interface SidebarTriggerProps extends SidebarPartProps {
+  /** Reveal a peekable offcanvas Sidebar on pointer hover. Click pins it open. */
+  peek?: boolean;
   expandLabel?: string;
   collapseLabel?: string;
   openLabel?: string;

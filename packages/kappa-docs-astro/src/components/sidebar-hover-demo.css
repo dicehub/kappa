@@ -1,0 +1,70 @@
+.sidebar-hover-demo { inline-size: 100%; text-align: start; }
+.sidebar-hover-demo .sidebar-hover-demo__layout {
+  --kappa-sidebar-peek-top: 3.6875rem;
+  --kappa-sidebar-peek-gap: 0.9375rem;
+  --kappa-sidebar-peek-bottom: 2rem;
+  block-size: 28rem;
+  border: 1px solid var(--kappa-line);
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+.sidebar-hover-demo .kappa-sidebar-layout__toolbar,
+.sidebar-hover-demo .kappa-sidebar-layout__navigation > .kappa-sidebar__header { min-block-size: 2.75rem; padding-block: 0.25rem; }
+.sidebar-hover-demo .kappa-sidebar-layout__navigation { background: var(--kappa-tint); }
+.sidebar-hover-demo .kappa-sidebar__header { border-block-end: 0; }
+.sidebar-hover-demo .kappa-sidebar__footer { border-block-start: 0; }
+.sidebar-hover-demo [data-side="end"] .kappa-sidebar-layout__toolbar { flex-direction: row-reverse; }
+.sidebar-hover-demo__workspace .kappa-sidebar__menu-label { display: flex; align-items: center; gap: 0.375rem; }
+.sidebar-hover-demo__workspace .kappa-sidebar__menu-label > span { flex: 1; min-inline-size: 0; overflow: hidden; text-overflow: ellipsis; font-weight: 550; }
+.sidebar-hover-demo__workspace .kappa-sidebar__menu-label > svg { flex: none; inline-size: 0.875rem; block-size: 0.875rem; color: var(--kappa-subtle); opacity: 0; transition: opacity 200ms ease; }
+.sidebar-hover-demo__workspace.kappa-sidebar__menu-button:is(:hover, [aria-expanded="true"]):not([data-disabled]) { background: var(--kappa-overlay); }
+.sidebar-hover-demo__workspace:is(:hover, [aria-expanded="true"]) .kappa-sidebar__menu-label > svg { opacity: 1; }
+.sidebar-hover-demo .kappa-sidebar[data-state="peeking"] > .kappa-sidebar__resize-handle { display: none; }
+.sidebar-hover-demo__contexts.kappa-tabs { color: inherit; font: inherit; }
+.sidebar-hover-demo__context-row { position: relative; display: flex; align-items: center; gap: 0.25rem; margin-block-end: 0.5rem; min-inline-size: 0; }
+.sidebar-hover-demo__context-list.kappa-tabs__list { flex: 1; inline-size: 0; max-inline-size: none; block-size: 2.25rem; padding: 0.125rem; border: 0; background: transparent; }
+.sidebar-hover-demo__context-tab.kappa-tabs__trigger { gap: 0; padding-inline: 0.5rem; min-inline-size: 2rem; block-size: 2rem; border-radius: 999px; font-weight: 400; }
+.sidebar-hover-demo__context-tab.kappa-tabs__trigger > svg { inline-size: 1rem; block-size: 1rem; }
+.sidebar-hover-demo__context-tab.kappa-tabs__trigger[aria-selected="true"] { background: var(--kappa-overlay); }
+.sidebar-hover-demo__context-tab.kappa-tabs__trigger:hover:not([aria-selected="true"]) { background: color-mix(in srgb, var(--kappa-control) 50%, var(--kappa-tint)); }
+.sidebar-hover-demo__context-label { display: grid; grid-template-columns: 0fr; opacity: 0; margin-inline-start: 0; transition: grid-template-columns 160ms ease, opacity 160ms ease, margin-inline-start 160ms ease; }
+.sidebar-hover-demo__context-label > span { min-inline-size: 0; overflow: hidden; }
+.sidebar-hover-demo__context-tab[aria-selected="true"] .sidebar-hover-demo__context-label { grid-template-columns: 1fr; opacity: 1; margin-inline-start: 0.375rem; }
+.sidebar-hover-demo__context-row[data-labels-expanded] .sidebar-hover-demo__context-label,
+.sidebar-hover-demo__context-measure .sidebar-hover-demo__context-label { grid-template-columns: 1fr; opacity: 1; margin-inline-start: 0.375rem; }
+.sidebar-hover-demo__context-measure-clip { position: absolute; inset-block-start: 0; inset-inline-start: 0; inline-size: 0; block-size: 0; overflow: hidden; visibility: hidden; pointer-events: none; }
+.sidebar-hover-demo__context-measure.sidebar-hover-demo__context-list.kappa-tabs__list { flex: none; inline-size: max-content; }
+.sidebar-hover-demo__context-panel.kappa-tabs__content { padding-block-start: 0; }
+.sidebar-hover-demo__search.kappa-button {
+  --kappa-button-hover-background: color-mix(in srgb, var(--kappa-control) 50%, var(--kappa-tint));
+  --kappa-button-hover-foreground: var(--kappa-subtle);
+  flex: none;
+  inline-size: 2rem;
+  min-block-size: 2rem;
+  padding: 0;
+  border: 0;
+  border-radius: 0.375rem;
+  background: transparent;
+  color: var(--kappa-subtle);
+}
+.kappa-sidebar[data-mobile] .sidebar-hover-demo__context-list.kappa-tabs__list { block-size: 3rem; }
+.kappa-sidebar[data-mobile] .sidebar-hover-demo__context-tab.kappa-tabs__trigger { min-inline-size: 2.75rem; block-size: 2.75rem; padding-inline: 0.875rem; }
+.kappa-sidebar[data-mobile] .sidebar-hover-demo__search.kappa-button { inline-size: 2.75rem; min-block-size: 2.75rem; }
+.sidebar-hover-demo__group-trigger.kappa-sidebar__menu-button { color: var(--kappa-subtle); font-size: 0.75rem; font-weight: 550; }
+.sidebar-hover-demo__group-trigger .kappa-sidebar__menu-chevron { margin-inline-start: 0; }
+.sidebar-hover-demo__pages.kappa-sidebar__menu-sub { border-inline-start: 0; margin-inline-start: 0.5rem; }
+.sidebar-hover-demo__pin { opacity: 0; transition: opacity 200ms ease; }
+.sidebar-hover-demo__profile-option.kappa-dropdown__option-item { padding-inline: 0.5rem 2rem; }
+.sidebar-hover-demo__profile-option .kappa-dropdown__item-indicator { inset-inline-start: auto; inset-inline-end: 0.5rem; }
+.sidebar-hover-demo .kappa-sidebar__header:is(:hover, :focus-within) .sidebar-hover-demo__pin,
+.sidebar-hover-demo .kappa-sidebar[data-state="peeking"] .sidebar-hover-demo__pin { opacity: 1; }
+.sidebar-hover-demo__article { max-inline-size: 42rem; margin-inline: auto; padding: 3rem 1.5rem; overflow-wrap: anywhere; }
+.sidebar-hover-demo__eyebrow { font-size: 0.8125rem; color: var(--kappa-subtle); }
+.sidebar-hover-demo__article h2 { margin-block: 0.5rem 1.5rem; font-size: 1.5rem; }
+.sidebar-hover-demo__article p { font-size: 0.9375rem; line-height: 1.6; }
+.sidebar-hover-demo__article output { font-size: 0.8125rem; color: var(--kappa-subtle); }
+.sidebar-hover-demo__controls { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-block-start: 1.5rem; }
+.sidebar-hover-demo__sr-only { position: absolute; inline-size: 1px; block-size: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.sidebar-hover-demo[data-standalone] .sidebar-hover-demo__layout { block-size: 100dvb; border: 0; border-radius: 0; }
+@media (prefers-reduced-motion: reduce) { .sidebar-hover-demo__pin, .sidebar-hover-demo__context-label, .sidebar-hover-demo__workspace .kappa-sidebar__menu-label > svg { transition: none; } }
+@media (max-width: 767px) { .sidebar-hover-demo__article { padding: 1.5rem 1rem; } }

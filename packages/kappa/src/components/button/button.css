@@ -7,6 +7,7 @@
   --kappa-button-foreground: var(--kappa-default, #17191f);
   --kappa-button-hover-background: var(--kappa-control-hover, var(--kappa-tint, #fafafa));
   --kappa-button-hover-foreground: var(--kappa-button-foreground);
+  --kappa-button-hover-border: var(--kappa-button-border);
   --kappa-button-active-background: color-mix(
     in oklab,
     var(--kappa-button-hover-background) 92%,
@@ -57,7 +58,7 @@
 }
 
 .kappa-button:focus-visible {
-  outline: 2px solid var(--kappa-focus, #4c63ff);
+  outline: 2px solid var(--kappa-focus, #247ab7);
   outline-offset: 2px;
 }
 
@@ -77,6 +78,21 @@
     [data-variant="ghost"]
   ) {
   background: var(--kappa-button-hover-background);
+}
+.kappa-button:where(
+    [data-variant="secondary"],
+    [data-variant="outline"],
+    [data-variant="ghost"]
+  ):where(:hover):not(:disabled, [aria-disabled="true"]),
+.kappa-button:where(
+    [data-variant="secondary"],
+    [data-variant="outline"],
+    [data-variant="ghost"]
+  ):where([aria-expanded="true"][aria-haspopup]:not([aria-haspopup="false"], :hover, :active)):not(:disabled, [aria-disabled="true"]) {
+  border-color: var(--kappa-button-hover-border);
+}
+.kappa-button:is([data-variant="secondary"], [data-variant="outline"], [data-variant="ghost"]) {
+  --kappa-button-hover-border: var(--kappa-line-strong, #c7cdd6);
 }
 
 .kappa-button[data-size="xs"] {

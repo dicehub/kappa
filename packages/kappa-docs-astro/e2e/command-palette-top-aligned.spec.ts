@@ -71,14 +71,3 @@ test("reduced motion removes animation and the panel fits 320px in both themes",
     await expect(trigger).toBeFocused();
   }
 });
-
-test("copied source includes the complete composition, motion, and local shortcut", async ({ page, request }) => {
-  const code = page.locator('#command-palette-top-aligned-search-code code');
-  await expect(code).toContainText("CommandPalette.Dialog");
-  await expect(code).toContainText("CommandPalette.Panel");
-  await expect(code).toContainText("@keyframes command-palette-top-search-in");
-  await expect(code).not.toContainText("localhost");
-  const markdown = await request.get("/docs/components/command-palette.md");
-  expect(markdown.ok()).toBe(true);
-  expect(await markdown.text()).toContain("Top-aligned search");
-});

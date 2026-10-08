@@ -158,8 +158,8 @@ import { Breadcrumbs } from "@dicehub/kappa/components/breadcrumbs";
 </template>`;
 
 export const menuCode = `<script setup>
-import { Menu } from "@ark-ui/vue/menu";
 import { Breadcrumbs } from "@dicehub/kappa/components/breadcrumbs";
+import { Dropdown } from "@dicehub/kappa/components/dropdown";
 </script>
 
 <template>
@@ -168,18 +168,16 @@ import { Breadcrumbs } from "@dicehub/kappa/components/breadcrumbs";
       <Breadcrumbs.Item><Breadcrumbs.Link href="/projects">Projects</Breadcrumbs.Link></Breadcrumbs.Item>
       <Breadcrumbs.Separator />
       <Breadcrumbs.Item>
-        <Menu.Root>
-          <Menu.Trigger class="ancestor-trigger">
+        <Dropdown.Root>
+          <Dropdown.Trigger class="ancestor-trigger">
             <Breadcrumbs.Ellipsis />
             <span class="visually-hidden">Show collapsed ancestors</span>
-          </Menu.Trigger>
-          <Menu.Positioner>
-            <Menu.Content aria-label="Collapsed ancestors">
-              <Menu.Item value="models" as-child><a href="/models">Models</a></Menu.Item>
-              <Menu.Item value="rotor" as-child><a href="/models/rotor">Rotor study</a></Menu.Item>
-            </Menu.Content>
-          </Menu.Positioner>
-        </Menu.Root>
+          </Dropdown.Trigger>
+          <Dropdown.Content aria-label="Collapsed ancestors">
+            <Dropdown.LinkItem value="models" href="/models">Models</Dropdown.LinkItem>
+            <Dropdown.LinkItem value="rotor" href="/models/rotor">Rotor study</Dropdown.LinkItem>
+          </Dropdown.Content>
+        </Dropdown.Root>
       </Breadcrumbs.Item>
       <Breadcrumbs.Separator />
       <Breadcrumbs.Item><Breadcrumbs.Page>Run 042</Breadcrumbs.Page></Breadcrumbs.Item>

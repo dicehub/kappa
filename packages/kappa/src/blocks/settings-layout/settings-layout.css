@@ -87,6 +87,7 @@
   line-height: 1.5;
   overflow-wrap: anywhere;
 }
+.kappa-settings-section__title:focus-visible { outline: 2px solid var(--kappa-focus, #247ab7); outline-offset: 0.25rem; }
 
 .kappa-settings-section__content {
   font-size: 0.8125rem;

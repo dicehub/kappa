@@ -1,4 +1,5 @@
 import { expect, type Locator, type Page, test } from "@playwright/test";
+import { waitForDocsIsland } from "./helpers/docs-island";
 
 const demo = (page: Page) => page.locator('[data-number-input-demo="scrubbable"]');
 const input = (scope: Locator, name: string) =>
@@ -79,6 +80,7 @@ const dragBy = async (
 test("composes decrement and increment triggers around a scrubbable field", async ({ page }) => {
   await page.goto("/docs/components/number-input");
   const scope = demo(page);
+  await waitForDocsIsland(scope);
   const field = input(scope, "Clipping plane offset (mm)");
   const decrement = scope.getByRole("button", { name: "Decrease clipping plane offset" });
   const increment = scope.getByRole("button", { name: "Increase clipping plane offset" });
@@ -142,6 +144,7 @@ test("supports whole-field editing, scrubbing, modifiers, rollback, and cleanup"
 }) => {
   await page.goto("/docs/components/number-input");
   const scope = demo(page);
+  await waitForDocsIsland(scope);
   const field = input(scope, "Under-relaxation factor");
   const scrubbable = scope.locator('[data-slot="number-input-scrubbable-input"]').first();
   const display = scrubbable.locator('[data-slot="number-input-scrubbable-display"]');

@@ -131,9 +131,17 @@ test.describe("Select documentation", () => {
 
     const usage = demo(page, "usage");
     await usage.getByRole("combobox", { name: "Mesh format" }).click();
-    const disabled = openOptions(page).getByText("STAR-CCM+ mesh", { exact: true });
+    const disabled = openContent(page).getByRole("option", { name: "STAR-CCM+ mesh", exact: true });
     await expect(disabled).toHaveAttribute("data-disabled", "");
+    await expect(disabled).toHaveAttribute("aria-disabled", "true");
+    await expect(openContent(page)).toHaveAttribute("data-placement", /.+/);
+    await expect.poll(() => openContent(page).evaluate((element) =>
+      element.getAnimations({ subtree: true }).filter((animation) =>
+        animation.playState === "running" || animation.pending).length,
+    )).toBe(0);
+    await expect(disabled).toBeInViewport({ ratio: 1 });
     await disabled.click({ force: true });
+    await expect(openContent(page)).toBeVisible();
     await expect(usage.getByRole("combobox", { name: "Mesh format" })).toContainText(
       "OpenFOAM mesh",
     );

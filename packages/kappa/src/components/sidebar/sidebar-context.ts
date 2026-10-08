@@ -22,6 +22,7 @@ export interface SidebarContext {
   setMobileOpen: (open: boolean) => void;
   toggle: () => void;
   rememberTrigger: (id: string) => void;
+  focusTrigger: () => void;
   setPeekInteraction: (active: boolean) => void;
   setWidth: (width: number) => void;
 }

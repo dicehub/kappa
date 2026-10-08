@@ -29,7 +29,7 @@ const mobile = computed(() => ["mobile", "full-screen-mobile"].includes(props.va
 const resizable = computed(() => ["resizable", "resizable-controlled", "end", "rtl"].includes(props.variant));
 const rtl = computed(() => ["rtl", "resizable-rtl"].includes(props.variant));
 const withNamespace = computed(() => ["preview", "namespace-selector", "peeking", "sliding-views", "full-screen-mobile"].includes(props.variant));
-const withProfile = computed(() => ["preview", "profile-selector", "peeking", "full-screen-mobile", "scrollable"].includes(props.variant));
+const withProfile = computed(() => ["preview", "namespace-selector", "profile-selector", "peeking", "full-screen-mobile", "scrollable"].includes(props.variant));
 const withSearch = computed(() => ["preview", "quick-search", "peeking", "full-screen-mobile", "resizable"].includes(props.variant));
 const navLabel = computed(() => `${props.variant} navigation`);
 function updateOpen(value: boolean) { if (!locked.value) open.value = value; }

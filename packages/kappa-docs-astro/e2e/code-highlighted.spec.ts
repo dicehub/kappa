@@ -1,4 +1,5 @@
 import { expect, type Page, test } from "@playwright/test";
+import { waitForDocsIsland } from "./helpers/docs-island";
 
 const demo = (page: Page, variant: string) =>
   page.locator(`[data-code-highlighted-demo="${variant}"]`);
@@ -90,6 +91,7 @@ test.describe("Code Highlighted documentation", () => {
 
   test("copies code through the copy button and localizes labels", async ({ page, context }) => {
     await context.grantPermissions(["clipboard-read", "clipboard-write"]);
+    await waitForDocsIsland(demo(page, "preview"));
     const block = demo(page, "preview").locator(".kappa-code-highlighted");
     const copyButton = block.getByRole("button", { name: "Copy" });
 
@@ -135,6 +137,7 @@ test.describe("Code Highlighted documentation", () => {
 
   test("keeps the copy button inline and visible on single-line blocks", async ({ page, context }) => {
     await context.grantPermissions(["clipboard-read", "clipboard-write"]);
+    await waitForDocsIsland(demo(page, "copy-button"));
     const block = demo(page, "copy-button").locator(".kappa-code-highlighted");
     const copyButton = block.getByRole("button", { name: "Copy" });
 

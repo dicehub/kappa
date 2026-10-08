@@ -143,8 +143,7 @@ for (const theme of ["light", "dark"]) {
           element.style.maxInlineSize = maxWidth;
         }, maxInlineSize);
 
-        const bounds = await block.boundingBox();
-        expect(bounds!.width).toBeGreaterThan(200);
+        await expect.poll(async () => (await block.boundingBox())?.width ?? 0).toBeGreaterThan(200);
         await expect(block.locator('[data-slot="resource-list-layout-body"]')).toHaveCSS(
           "display",
           "grid",

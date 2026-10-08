@@ -421,12 +421,15 @@ test.describe("Dropdown documentation", () => {
       has: mobileSurface,
     });
     await expect(mobilePositioner).toHaveCSS("z-index", "1000");
-    const box = await mobileSurface.boundingBox();
-    expect(box).not.toBeNull();
-    expect(box!.x).toBeGreaterThanOrEqual(0);
-    expect(box!.x + box!.width).toBeLessThanOrEqual(390);
-    expect(box!.y).toBeGreaterThanOrEqual(0);
-    expect(box!.y + box!.height).toBeLessThanOrEqual(844);
+    await expect.poll(async () => {
+      const box = await mobileSurface.boundingBox();
+      return {
+        left: !!box && box.x >= 0,
+        right: !!box && box.x + box.width <= 390,
+        top: !!box && box.y >= 0,
+        bottom: !!box && box.y + box.height <= 844,
+      };
+    }).toEqual({ left: true, right: true, top: true, bottom: true });
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   });
 });

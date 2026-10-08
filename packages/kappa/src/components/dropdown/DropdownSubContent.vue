@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Menu as ArkMenu } from "@ark-ui/vue/menu";
+import { Menu as ArkMenu, useMenuContext } from "@ark-ui/vue/menu";
 import { computed, inject, onMounted, ref, Teleport, useAttrs } from "vue";
 import { dropdownAriaLabelKey } from "./dropdown-aria-label";
 import type { DropdownSubContentProps, DropdownSubContentSlots } from "./dropdown";
@@ -15,6 +15,7 @@ const props = withDefaults(defineProps<DropdownSubContentProps>(), {
 defineSlots<DropdownSubContentSlots>();
 
 const attrs = useAttrs();
+const menu = useMenuContext();
 const inheritedAriaLabel = inject(dropdownAriaLabelKey, undefined);
 const resolvedAriaLabel = computed(() => {
   const label = attrs["aria-label"];
@@ -38,6 +39,7 @@ onMounted(() => {
         v-bind="{
           ...$attrs,
           ...(resolvedAriaLabel === undefined ? {} : { 'aria-label': resolvedAriaLabel }),
+          ...(!menu.open ? { inert: true } : {}),
         }"
         class="kappa-dropdown__content kappa-dropdown__content--sub"
         data-slot="dropdown-sub-content"

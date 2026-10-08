@@ -40,7 +40,7 @@ onMounted(() => {
       <SidebarLayout v-model:resize-width="width" :resizable="!cssWidth" :width="cssWidth"
         :variant="variant" :collapsible="collapsible" :side="end ? 'end' : 'start'" :dir="rtl ? 'rtl' : 'ltr'"
         :content-alignment="available ? 'available' : 'shell'" :mobile-breakpoint="1000"
-        :default-open="true" peekable :peek-delay="0" :peek-close-delay="0"
+        :default-open="true" peekable :trigger-props="{ peek: collapsible === 'offcanvas' }"
         full-screen-on-mobile label="Centering navigation" class="centering-fixture__shell">
         <template #navigation><Sidebar.Menu><Sidebar.MenuItem><Sidebar.MenuButton :icon="Folder" tooltip="Projects">Projects</Sidebar.MenuButton></Sidebar.MenuItem></Sidebar.Menu></template>
         <template #toolbar>Page title</template>

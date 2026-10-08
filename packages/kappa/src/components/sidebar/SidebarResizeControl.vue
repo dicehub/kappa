@@ -12,7 +12,7 @@ const resize = useSidebarResizeContext();
 const api = useSplitter(resize.props);
 const handleProps = computed(() => api.value.getResizeTriggerProps({ id: resize.handleId.value, disabled: props.disabled }));
 function toggleTrailingPanel(event: KeyboardEvent) {
-  if (event.defaultPrevented || props.disabled || event.key !== "Enter" || resize.handleId.value !== "remainder:navigation") return;
+  if (event.defaultPrevented || props.disabled || !resize.canCollapse.value || event.key !== "Enter" || resize.handleId.value !== "remainder:navigation") return;
   // Ark's Enter shortcut targets the leading panel. Our controlled panel can trail it.
   event.preventDefault();
   if (sidebar.open.value) api.value.collapsePanel("navigation");

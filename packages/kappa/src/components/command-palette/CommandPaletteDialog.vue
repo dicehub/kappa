@@ -51,6 +51,7 @@ const handleOpenChange = (details: { open: boolean }) => {
 
 <template>
   <Dialog.Root
+    :ids="props.ids"
     :close-on-escape="props.closeOnEscape"
     :close-on-interact-outside="props.closeOnInteractOutside"
     :final-focus-el="getFinalFocus"

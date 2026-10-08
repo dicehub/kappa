@@ -116,7 +116,7 @@ function createProject() {
       <template #header="context">
         <WorkspaceSwitcher v-model="namespace" :items="namespaceSwitcherItems" label="Namespaces" :account-label="account.email"
           :actions="namespaceSwitcherActions" :workspace-actions="namespaceSwitcherWorkspaceActions" :footer-actions="namespaceSwitcherFooterActions"
-          :teleport="!context.isMobile" :positioning="props.insetNavigation && !context.isMobile ? { placement: 'right-start', strategy: 'fixed', gutter: 8 } : namespacePositioning"
+          :teleport="!context.isMobile" :positioning="namespacePositioning"
           @action="navigate($event.label, context)">
           <template #trigger>
             <Sidebar.MenuButton :aria-label="`Namespace: ${namespace}`" :tooltip="`Namespace: ${namespace}`" class="sidebar-block-demo__identity-button sidebar-block-demo__namespace">
@@ -183,7 +183,7 @@ function createProject() {
             <Sidebar.MenuButton :icon="link.icon" :tooltip="link.label" :active="selected === link.label" :href="`?view=${link.label.toLowerCase()}`" @click.prevent="navigate(link.label, context)">{{ link.label }}</Sidebar.MenuButton>
           </Sidebar.MenuItem></Sidebar.Menu>
         </nav>
-        <Dropdown.Root aria-label="Profile" :positioning="context.isMobile || props.iconNavigation || props.variant === 'rail' ? aboveProfilePositioning : desktopProfilePositioning">
+        <Dropdown.Root aria-label="Profile" :positioning="context.isMobile || props.iconNavigation || props.insetNavigation || props.variant === 'rail' ? aboveProfilePositioning : desktopProfilePositioning">
           <Dropdown.Trigger as-child>
             <Sidebar.MenuButton :aria-label="`Profile: ${account.name}`" :tooltip="account.name" class="sidebar-block-demo__identity-button sidebar-block-demo__profile">
               <template #icon><Avatar.Root class="sidebar-block-demo__avatar" aria-hidden="true"><Avatar.Image :src="account.avatar" alt="" /><Avatar.Fallback>{{ account.initials }}</Avatar.Fallback></Avatar.Root></template>

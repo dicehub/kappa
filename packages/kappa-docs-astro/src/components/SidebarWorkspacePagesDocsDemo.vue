@@ -103,7 +103,7 @@ function toggleFavorite() {
       <template #header="context">
         <WorkspaceSwitcher v-model="namespace" :items="namespaceSwitcherItems" label="Namespaces" account-label="ros@example.test"
           :actions="namespaceSwitcherActions" :workspace-actions="namespaceSwitcherWorkspaceActions" :footer-actions="namespaceSwitcherFooterActions"
-          :teleport="!context.isMobile" :positioning="{ placement: context.isMobile ? 'bottom-start' : 'right-start', strategy: 'fixed', gutter: 8 }"
+          :teleport="!context.isMobile" :positioning="{ placement: 'bottom-start', strategy: 'fixed', gutter: 8 }"
           @action="navigate($event.label, context)">
           <template #trigger>
             <Sidebar.MenuButton :aria-label="`Namespace: ${namespace}`" class="sidebar-pages-demo__namespace">

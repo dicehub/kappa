@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Collapsible as ArkCollapsible } from "@ark-ui/vue/collapsible";
-import { ref, useId, useSlots, watch } from "vue";
+import { nextTick, ref, useId, useSlots, watch } from "vue";
 import { Button } from "../../components/button";
 import type { CollapsibleOpenChangeDetails } from "@ark-ui/vue/collapsible";
 import type { SettingsSectionEmits, SettingsSectionProps, SettingsSectionSlots } from "./settings-layout";
@@ -27,9 +27,16 @@ function restoreFocus(open: boolean | undefined) {
   const element = section.value;
   if (open !== false || !props.collapsible || !element) return;
   const content = element.querySelector('[data-slot="settings-section-content"]');
-  if (content?.contains(element.ownerDocument.activeElement)) {
-    element.querySelector<HTMLButtonElement>('[data-kappa-settings-trigger]')?.focus();
-  }
+  const document = element.ownerDocument;
+  const focused = document.activeElement;
+  if (!content?.contains(focused)) return;
+  void nextTick(() => {
+    if (section.value !== element || !element.isConnected || !props.collapsible || props.open === true) return;
+    if (document.activeElement !== focused && document.activeElement !== document.body) return;
+    const trigger = element.querySelector<HTMLButtonElement>('[data-kappa-settings-trigger]');
+    const target = trigger && !trigger.disabled ? trigger : element.querySelector<HTMLElement>(`[id="${headingId}"]`);
+    target?.focus({ preventScroll: true });
+  });
 }
 
 function onOpenChange(details: CollapsibleOpenChangeDetails) {
@@ -59,7 +66,7 @@ watch(() => props.open, restoreFocus);
       <ArkCollapsible.Context v-slot="context">
         <header class="kappa-settings-section__header">
           <div class="kappa-settings-section__identity">
-            <component :is="`h${props.headingLevel}`" :id="headingId" class="kappa-settings-section__title">
+            <component :is="`h${props.headingLevel}`" :id="headingId" :tabindex="props.collapsible ? -1 : undefined" class="kappa-settings-section__title">
               <slot name="title" :open="context.open">{{ props.title }}</slot>
             </component>
             <div v-if="props.description || slots.description" class="kappa-settings-section__description">

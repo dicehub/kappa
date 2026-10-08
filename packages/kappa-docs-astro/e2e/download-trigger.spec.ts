@@ -1,4 +1,5 @@
 import { expect, type Page, test } from "@playwright/test";
+import { waitForDocsIsland } from "./helpers/docs-island";
 
 const demo = (page: Page, variant: string) =>
   page.locator(`[data-download-trigger-demo="${variant}"]`);
@@ -65,10 +66,12 @@ test.describe("Download Trigger documentation", () => {
   });
 
   test("downloads string and asynchronously generated data", async ({ page }) => {
+    await waitForDocsIsland(demo(page, "usage"));
     const plainDownload = page.waitForEvent("download");
     await demo(page, "usage").getByRole("button", { name: "Download release notes" }).click();
     expect((await plainDownload).suggestedFilename()).toBe("release-notes.txt");
 
+    await waitForDocsIsland(demo(page, "async"));
     const asyncDownload = page.waitForEvent("download");
     await demo(page, "async").getByRole("button", { name: "Build and download CSV" }).click();
     expect((await asyncDownload).suggestedFilename()).toBe("run-status.csv");

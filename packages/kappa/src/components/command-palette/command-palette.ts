@@ -74,7 +74,7 @@ export type CommandPaletteDialogProps = Pick<
   | "restoreFocus"
   | "trapFocus"
   | "unmountOnExit"
->;
+> & Pick<DialogRootProps, "ids">;
 
 export type CommandPaletteEmits<T = unknown> = {
   close: [];

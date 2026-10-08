@@ -62,7 +62,11 @@ import { SettingsLayout, SettingsSection, Tabs } from "@dicehub/kappa"
     </SettingsLayout>
   </Tabs.Root>
 </template>`;
-  if (id === "preferences") return `<template>
+  if (id === "preferences") return `<script setup lang="ts">
+import { SettingsLayout, SettingsSection } from "@dicehub/kappa"
+</script>
+
+<template>
   <SettingsLayout title="Preferences">
     <SettingsSection title="Time zone" description="Europe/Berlin" default-open>
       <slot name="timezone-form" />

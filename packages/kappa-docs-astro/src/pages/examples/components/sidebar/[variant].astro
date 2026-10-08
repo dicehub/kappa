@@ -1,9 +1,10 @@
 ---
 import SidebarDocsDemo from "../../../../components/SidebarDocsDemo.vue";
+import SidebarHoverRevealDocsDemo from "../../../../components/SidebarHoverRevealDocsDemo.vue";
 import "../../../../styles/docs.css";
 
 export function getStaticPaths() {
-  return ["mobile", "full-screen-mobile"].map(variant => ({ params: { variant } }));
+  return ["mobile", "full-screen-mobile", "hover-reveal"].map(variant => ({ params: { variant } }));
 }
 const { variant } = Astro.params;
 ---
@@ -15,7 +16,7 @@ const { variant } = Astro.params;
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="color-scheme" content="light dark" />
     <meta name="robots" content="noindex" />
-    <title>{variant === "mobile" ? "Mobile Sidebar" : "Full-screen Mobile Sidebar"} — Kappa</title>
+    <title>{variant === "hover-reveal" ? "Hover Reveal Sidebar" : variant === "mobile" ? "Mobile Sidebar" : "Full-screen Mobile Sidebar"} — Kappa</title>
     <script is:inline>
       const mode = localStorage.getItem("theme") === "dark" ? "dark" : "light";
       document.documentElement.dataset.mode = mode;
@@ -23,7 +24,7 @@ const { variant } = Astro.params;
       document.documentElement.style.colorScheme = mode;
     </script>
   </head>
-  <body><main><SidebarDocsDemo client:load variant={variant} standalone /></main></body>
+  <body><main>{variant === "hover-reveal" ? <SidebarHoverRevealDocsDemo client:load standalone /> : <SidebarDocsDemo client:load variant={variant} standalone />}</main></body>
 </html>
 
 <style>html, body { margin: 0; block-size: 100%; overflow: hidden; } main { min-inline-size: 0; }</style>

@@ -98,9 +98,10 @@ test.describe("Expandable Text documentation", () => {
     const collapse = root.getByRole("button", { name: "Show less" });
     await expect(collapse).toHaveAttribute("aria-expanded", "true");
     await expect(content).toHaveAttribute("data-state", "open");
-    await content.evaluate(async (element) => {
-      await Promise.all(element.getAnimations().map((animation) => animation.finished));
-    });
+    await expect.poll(() => content.evaluate((element) =>
+      element.getAnimations().filter((animation) =>
+        animation.playState === "running" || animation.pending).length,
+    )).toBe(0);
     expect((await content.boundingBox())!.height).toBeGreaterThan(collapsed!.height + 10);
     await expect(collapse).toBeFocused();
 

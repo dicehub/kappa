@@ -6,7 +6,8 @@ import DocsPageNavigation from "../../../components/DocsPageNavigation.astro";
 import SidebarDocsDemo from "../../../components/SidebarDocsDemo.vue";
 import SidebarMobilePreview from "../../../components/SidebarMobilePreview.vue";
 import SidebarScrollToItemDocsDemo from "../../../components/SidebarScrollToItemDocsDemo.vue";
-import { barrelCode, granularCode, previewCode, nestedCode, routingCode, examples, providerProps, partProps } from "../../../data/sidebar-docs";
+import SidebarHoverRevealDocsDemo from "../../../components/SidebarHoverRevealDocsDemo.vue";
+import { barrelCode, granularCode, previewCode, anatomyCode, nestedCode, routingCode, examples, providerProps, partProps } from "../../../data/sidebar-docs";
 import DocsLayout from "../../../layouts/DocsLayout.astro";
 import "../../../styles/docs-components.css";
 
@@ -39,39 +40,54 @@ const description = "Compact application navigation with resizing, peeking, slid
         </section>
         <section id="installation" class="docs-section">
           <h2><a class="docs-section-anchor" href="#installation">Installation</a></h2>
-          <p>Sidebar is part of Kappa. It adds no dependencies. Icons in these examples come from the documentation site's existing icon package; the library accepts any Vue icon component or icon slot.</p>
+          <p>Follow the <a href="/docs/installation#theme">styles and theme setup</a> once in your application. These examples use <code>@lucide/vue</code> for icons. Install it, or use your own Vue icons.</p>
+          <CodeBlock code="pnpm add @lucide/vue" lang="bash" />
           <h3 id="barrel"><a class="docs-section-anchor" href="#barrel">Barrel</a></h3><CodeBlock code={barrelCode} lang="javascript" />
           <h3 id="granular"><a class="docs-section-anchor" href="#granular">Granular</a></h3><CodeBlock code={granularCode} lang="javascript" />
         </section>
         <section id="usage" class="docs-section">
           <h2><a class="docs-section-anchor" href="#usage">Usage</a></h2>
+          <p>Copy a snippet into a Vue file. The examples use <a href="/docs/blocks/sidebar">SidebarLayout</a> for the layout, header toggle, mobile Close button, and resize handle. Mount it in an application container with a set height so the navigation can scroll.</p>
           <p>For complete application layouts, see <a href="/docs/blocks/sidebar">Blocks → Sidebar</a>: workspace, icon rail, inset, floating, two-column navigation, and top-header examples.</p>
           <p>Put one Root and the application content inside a Provider. Give the layout a height, then let Content scroll between Header and Footer. Keep one Trigger in the application header so the mobile drawer and offcanvas Sidebar can be reopened. A second footer toggle is not needed. These demos align both desktop headers at 4rem. Include Close in the navigation header for mobile.</p>
           <p>Use MenuItem around every top-level entry and MenuSubItem around nested entries. These explicit list items keep navigation semantics predictable when you compose a Collapsible.</p>
           <p>Use icons for every top-level item when <code>collapsible="icon"</code>. Labels remain accessible when visually hidden; <code>tooltip</code> adds a visible label on hover or focus. Custom header and footer content must also fit the rail. Wrap text in MenuLabel, or use Context to change the composition.</p>
+          <p>For hover reveal, use <code>collapsible="offcanvas"</code> and <code>peekable</code>. Add <code>peek</code> to the external header Trigger. Hover reveals a temporary panel; click or Enter pins it open. Set <code>--kappa-sidebar-peek-top</code> to your header height plus the panel gap, <code>--kappa-sidebar-peek-gap</code> to that gap, and <code>--kappa-sidebar-peek-bottom</code> to the bottom margin. Offsets are relative to the desktop Sidebar shell. The defaults are 0.75rem. Keep the trigger above the panel, next to the same logical edge.</p>
         </section>
         <section id="composition" class="docs-section">
           <h2><a class="docs-section-anchor" href="#composition">Composition</a></h2>
           <CompositionTree component="sidebar" />
+          <p>Use the primitive parts when you want to supply your own application layout.</p>
+          <CodeBlock code={anatomyCode} lang="vue" collapsible revealId="sidebar-anatomy-code" />
           <p><code>Sidebar</code> and <code>Sidebar.Root</code> are the same navigation component. Provider supplies the state and flex layout; it does not provide an application header, router, or store.</p>
           <p>Kappa owns desktop state, navigation markup, dimensions, and semantic-token styling. Ark owns mobile modality, scroll locking, focus trapping, Escape/outside dismissal, and section accessibility. Mobile panels teleport to body. Global Kappa theme tokens must reach the teleport target.</p>
           <p>Resizing adapts Ark Splitter's two-panel size model to a pixel-width Sidebar and normal flex content. No extra application wrapper is required. The separator controls the navigation landmark. Ark's collapse threshold and keyboard behavior are preserved.</p>
+          <p>Set <code>:collapse-on-resize="false"</code> to stop resizing at <code>minWidth</code>. The separator is hidden while collapsed. The header Trigger can still hide the sidebar.</p>
+          <p>Start dragging on the divider or a few pixels into the content beside it. The visible line stays on the sidebar border.</p>
           <p>The resize scope uses physical left/right panel order, including RTL. This avoids an installed Ark Splitter inconsistency between RTL pointer and keyboard direction without replacing its interaction code. Enter targets the navigation panel through Ark's collapse/expand API when that panel follows the content. Navigation retains the application locale.</p>
           <p>Namespace, profile, and Quick search examples compose Dropdown and CommandPalette. They are not application-specific Sidebar parts. The scroll-to-item example uses native scrolling scoped to Content; it does not add a Sidebar scrolling API or move the outer page.</p>
           <p>Inside the mobile drawer, keep Dropdown.Content in the drawer with <code>:teleport="false"</code> and fixed positioning. This keeps popup focus inside the modal boundary. Desktop popups can teleport to body.</p>
+          <p>Offcanvas hover panels stay within the Provider's inline bounds. Teleport desktop menus to body so they can extend beyond those bounds.</p>
           <h3 id="nested-sections"><a class="docs-section-anchor" href="#nested-sections">Nested Sections</a></h3>
           <CodeBlock code={nestedCode} lang="vue" collapsible revealId="sidebar-nested-code" />
           <p>Icon collapse hides nested content without resetting each section's open preference. Activating a collapsed section requests expansion of the Sidebar and section. Controlled parents must accept both updates when both levels are controlled.</p>
         </section>
         <section id="examples" class="docs-section docs-section--component-examples">
           <h2><a class="docs-section-anchor" href="#examples">Examples</a></h2>
+          <p>Each snippet is a complete Vue file for the named feature. Previews include additional menus and controls.</p>
           {examples.map(example => <>
             {example.id === "full-screen-mobile" && <span id="full-screen" />}
             <h3 id={example.id}><a class="docs-section-anchor" href={`#${example.id}`}>{example.title}</a></h3>
             <p>{example.description}</p>
+            {example.id === "hover-reveal" && <p>The snippet adds hover reveal, pinning, and resizing. Use <a href="/docs/blocks/workspace-switcher">WorkspaceSwitcher</a>, <a href="/docs/components/tabs">Tabs</a>, and <a href="/docs/components/command-palette">CommandPalette</a> to add the preview's other controls.</p>}
+            {example.id === "hover-reveal" && <p>The preview leaves room for its content when resizing. <a href="/examples/components/sidebar/hover-reveal" target="_blank" rel="noopener">Open the full-screen example</a> to try screen-centered content.</p>}
+            {example.id === "scroll-to-item" && <p>The snippet scrolls the navigation to Settings instantly. Its handler changes only the Sidebar's scroll position.</p>}
+            {(example.id === "mobile" || example.id === "full-screen-mobile") && <p>The snippet uses the normal mobile breakpoint. Resize your browser below 768 px to open the drawer.</p>}
             <div class="docs-component-example">
               <div class="docs-component-preview">
-                {example.id === "mobile" || example.id === "full-screen-mobile"
+                {example.id === "hover-reveal"
+                  ? <SidebarHoverRevealDocsDemo client:load />
+                  : example.id === "mobile" || example.id === "full-screen-mobile"
                   ? <SidebarMobilePreview client:load variant={example.id} />
                   : example.id === "scroll-to-item"
                     ? <SidebarScrollToItemDocsDemo client:load />
@@ -96,9 +112,9 @@ const description = "Compact application navigation with resizing, peeking, slid
             <li>Active entries use <code>aria-current="page"</code>. Disabled entries cannot navigate or activate and leave the tab order.</li>
             <li>Mobile uses a named modal dialog. Focus stays inside while open. Escape, Close, and backdrop interaction dismiss it; focus returns to the opening Trigger.</li>
             <li>Use a visible Close in mobile headers. Do not rely only on the backdrop.</li>
-            <li>Offcanvas content is hidden and inert. Icon labels remain in the accessibility tree; nested hidden links leave the tab order.</li>
+            <li>Collapsed offcanvas content is hidden and inert. A temporary hover panel exposes its links. Icon labels remain in the accessibility tree; nested hidden links leave the tab order.</li>
             <li>ResizeHandle is a focusable vertical separator. Arrow keys, Shift+Arrow, Home, End, and Enter use Ark's resize behavior. End placement reverses which edge grows the Sidebar. The handle is not rendered on mobile.</li>
-            <li>Peeking keeps the desktop layout width fixed. Escape dismisses it without moving the pointer. It also closes when both pointer and focus leave. Popups linked through aria-controls remain part of the interaction area; their first Escape closes the popup.</li>
+            <li>Peeking keeps the desktop layout width fixed. Escape dismisses it without moving the pointer. It closes when pointer and focus leave and its popups are closed. Popups linked through aria-controls keep the panel available; their first Escape closes the popup.</li>
             <li>Sliding views keep inactive content mounted, hidden, and inert. In-view navigation transfers focus; an external view change does not take focus from its external control.</li>
             <li>Content is a keyboard-focusable scrolling region. Use a descriptive aria-label if its default is not suitable.</li>
             <li>Pass translated Root, Trigger, Close, and Loading labels. Pair DirectionProvider with a DOM dir attribute for RTL.</li>
@@ -116,6 +132,8 @@ const description = "Compact application navigation with resizing, peeking, slid
           <p>Resizing emits <code>update:resizeWidth(number)</code>, <code>resize(&#123; width &#125;)</code>, and <code>resizeEnd(&#123; width &#125;)</code>. Widths are in pixels. The expanded width is retained during collapse and mobile mode. Use <code>v-model:resize-width</code> to control it.</p>
           <p><code>Sidebar.Context</code> exposes unwrapped <code>open</code>, <code>mobileOpen</code>, <code>isMobile</code>, <code>state</code>, <code>iconCollapsed</code>, <code>side</code>, <code>compact</code>, and <code>collapsible</code>, plus <code>setOpen</code>, <code>setMobileOpen</code>, and <code>toggle</code>. <code>useSidebarContext()</code> exposes the same values as Vue refs in a descendant setup function.</p>
           <p>Context also exposes <code>resizable</code>, <code>width</code>, <code>isResizing</code>, <code>setWidth</code>, <code>peekable</code>, and <code>isPeeking</code>. State can be <code>expanded</code>, <code>collapsed</code>, or <code>peeking</code>. Peeking never emits a desktop open change.</p>
+          <p>Use <code>focusTrigger()</code> to return focus to a visible Sidebar Trigger.</p>
+          <p>A <code>peek</code> Trigger reports visible hover navigation through <code>aria-expanded</code>. Its click toggles persistent <code>open</code>. Keyboard focus alone does not reveal offcanvas navigation. Escape returns focus to a visible Trigger when focus was inside the panel; page focus stays in place during pointer-only use.</p>
           <h3 id="styling-and-exports"><a class="docs-section-anchor" href="#styling-and-exports">Styling and Exports</a></h3>
           <p>Structural parts forward attributes, classes, styles, and listeners. Root and Provider use reserved generated IDs; supply the Provider id prop to customize their relationships. Root exposes <code>data-state</code>, <code>data-side</code>, <code>data-collapsible</code>, <code>data-mobile</code>, and <code>data-compact</code>. MenuButton exposes <code>data-active</code> and <code>data-disabled</code>; Ark parts retain their state attributes.</p>
           <p>Colors inherit Kappa control, default, subtle, line, tint, overlay, and focus tokens. Dimensions use <code>--kappa-sidebar-width</code>, <code>--kappa-sidebar-collapsed-width</code>, and <code>--kappa-sidebar-mobile-width</code>; prefer the matching Provider props so teleported mobile content receives them too.</p>

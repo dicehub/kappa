@@ -41,9 +41,12 @@ const positioning = { placement: "bottom-start", strategy: "fixed", gutter: 6 } 
               <ChevronsUpDown class="sidebar-grouped-demo__chevrons" aria-hidden="true" />
             </Sidebar.MenuButton>
           </Dropdown.Trigger>
-          <Dropdown.Context v-slot="menu"><Dropdown.Content :teleport="!context.isMobile" :inert="!menu.open || undefined">
+          <Dropdown.Context v-slot="menu"><Dropdown.Content :teleport="!context.isMobile" :inert="!menu.open || undefined" class="sidebar-grouped-demo__version-menu" :data-mobile="context.isMobile || undefined">
             <Dropdown.RadioGroup v-model="version"><Dropdown.Label>Versions</Dropdown.Label>
-              <Dropdown.RadioItem v-for="item in ['1.0.1', '1.1.0-alpha', '2.0.0-beta']" :key="item" :value="item" close-on-select>v{{ item }}</Dropdown.RadioItem>
+              <Dropdown.RadioItem v-for="item in ['1.0.1', '1.1.0-alpha', '2.0.0-beta']" :key="item" :value="item" close-on-select class="sidebar-grouped-demo__version-option">
+                <template #indicator><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="m3 8.25 3 3 7-7" /></svg></template>
+                v{{ item }}
+              </Dropdown.RadioItem>
             </Dropdown.RadioGroup>
           </Dropdown.Content></Dropdown.Context>
         </Dropdown.Root>

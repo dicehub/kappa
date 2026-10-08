@@ -61,7 +61,9 @@ test.describe("Tag Input documentation", () => {
     await items(usage).first().dblclick();
     const itemInput = usage.locator('[data-slot="tag-input-item-input"]:visible');
     await expect(itemInput).toBeVisible();
+    await expect(itemInput).toBeFocused();
     await itemInput.fill("cad");
+    await expect(itemInput).toHaveValue("cad");
     await itemInput.press("Enter");
     await expect(usage.locator('[data-slot="tag-input-item-text"]').first()).toHaveText("cad");
 

@@ -5,6 +5,36 @@ async function openExample(page: Page) {
   await expect.poll(() => page.locator('[data-sidebar-block="inset-navigation"]').evaluate(node => node.closest('astro-island')?.hasAttribute('ssr'))).toBe(false);
 }
 
+test('inset switcher opens below and profile menu above in both sidebar states', async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await openExample(page);
+  for (const state of ['expanded', 'collapsed']) {
+    const namespace = page.getByRole('button', { name: 'Namespace: Engineering', exact: true });
+    await namespace.press('Enter');
+    const namespaceMenu = page.getByRole('menu', { name: 'Namespace: Engineering', exact: true });
+    await expect(namespaceMenu).toHaveAttribute('data-placement', 'bottom-start');
+    await namespaceMenu.evaluate(async node => { await Promise.all(node.getAnimations().map(animation => animation.finished.catch(() => {}))); });
+    const namespaceBounds = (await namespace.boundingBox())!;
+    const popup = (await namespaceMenu.boundingBox())!;
+    expect(popup.y).toBeGreaterThanOrEqual(namespaceBounds.y + namespaceBounds.height);
+    expect(popup.x).toBeCloseTo(namespaceBounds.x, 1);
+    await page.keyboard.press('Escape');
+    await expect(namespace).toBeFocused();
+    const profile = page.getByRole('button', { name: 'Profile: Ros.Space', exact: true });
+    await profile.press('Enter');
+    const profileMenu = page.getByRole('menu', { name: 'Profile: Ros.Space', exact: true });
+    await expect(profileMenu).toHaveAttribute('data-placement', 'top-start');
+    await profileMenu.evaluate(async node => { await Promise.all(node.getAnimations().map(animation => animation.finished.catch(() => {}))); });
+    const profileBounds = (await profile.boundingBox())!;
+    const menu = (await profileMenu.boundingBox())!;
+    expect(menu.y + menu.height).toBeLessThanOrEqual(profileBounds.y);
+    expect(menu.x).toBeCloseTo(profileBounds.x, 1);
+    await page.keyboard.press('Escape');
+    await expect(profile).toBeFocused();
+    if (state === 'expanded') await page.getByRole('button', { name: 'Collapse sidebar', exact: true }).click();
+  }
+});
+
 test('inset headers align and secondary links remain above the profile when primary navigation scrolls', async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 650 });
   await openExample(page);
@@ -75,6 +105,12 @@ test('mobile uses a full-screen drawer and secondary navigation restores focus',
   await expect(drawer).toHaveCSS('width', '390px');
   await expect(drawer).toHaveCSS('height', '844px');
   await expect(drawer).toHaveCSS('border-top-left-radius', '0px');
+  const namespace = drawer.getByRole('button', { name: 'Namespace: Engineering', exact: true });
+  await namespace.click();
+  const namespaceMenu = drawer.getByRole('menu', { name: 'Namespace: Engineering', exact: true });
+  await expect(namespaceMenu).toHaveAttribute('data-placement', 'bottom-start');
+  await namespaceMenu.getByRole('menuitemradio', { name: 'Research', exact: true }).click();
+  await expect(drawer.getByRole('button', { name: 'Namespace: Research', exact: true })).toBeFocused();
   const support = drawer.getByRole('link', { name: 'Support', exact: true });
   expect((await support.boundingBox())!.height).toBeGreaterThanOrEqual(44);
   await support.click();
@@ -86,6 +122,11 @@ test('mobile uses a full-screen drawer and secondary navigation restores focus',
   await drawer.getByRole('button', { name: 'Profile: Ros.Space', exact: true }).click({ position: { x: 16, y: 16 } });
   const profile = drawer.getByRole('menu', { name: 'Profile: Ros.Space', exact: true });
   await expect(profile).toBeVisible();
+  await expect(profile).toHaveAttribute('data-placement', 'top-start');
+  await profile.evaluate(async node => { await Promise.all(node.getAnimations().map(animation => animation.finished.catch(() => {}))); });
+  const profileBounds = (await profile.boundingBox())!;
+  const buttonBounds = (await drawer.getByRole('button', { name: 'Profile: Ros.Space', exact: true }).boundingBox())!;
+  expect(profileBounds.y + profileBounds.height).toBeLessThanOrEqual(buttonBounds.y);
   await page.keyboard.press('Escape');
   await expect(profile).toBeHidden();
   await expect(drawer).toBeVisible();

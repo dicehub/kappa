@@ -192,6 +192,7 @@ const examples = [
 
         <section id="component-parts" class="docs-section">
           <h2><a class="docs-section-anchor" href="#component-parts">Component Parts</a></h2>
+          <p><code>Dialog</code> accepts <code>ids</code> for its parts. Use <code>:ids="&#123; content: 'workspace-search' &#125;"</code> and set the opening button's <code>aria-controls="workspace-search"</code>.</p>
           {componentParts.map((part) => (
             <div class="docs-component-part">
               <h3 id={part.id}><a class="docs-section-anchor" href={`#${part.id}`}>CommandPalette.{part.name}</a></h3>

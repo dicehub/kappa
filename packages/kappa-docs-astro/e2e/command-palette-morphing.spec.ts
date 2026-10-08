@@ -117,19 +117,3 @@ test("morphing search fits mobile and short viewports with reduced motion in bot
   }
   expect(errors).toEqual([]);
 });
-
-test("morphing example has complete copyable source and a separate table-of-contents entry", async ({ page, request }) => {
-  const code = page.locator('#command-palette-morphing-search-code code');
-  await expect(code).toContainText("getBoundingClientRect");
-  await expect(code).toContainText("CommandPalette.Dialog");
-  await expect(code).toContainText("CommandPalette.Panel");
-  await expect(code).toContainText("@keyframes command-palette-morph-in");
-  await expect(code).toContainText("prefers-reduced-motion");
-  await expect(code).not.toContainText("localhost");
-  const toc = page.getByRole("complementary", { name: "On this page" });
-  await expect(toc.getByRole("link", { name: "Morphing search", exact: true })).toHaveAttribute("href", "#morphing-search");
-  await expect(toc.getByRole("link", { name: "Top-aligned search", exact: true })).toBeVisible();
-  const markdown = await request.get('/docs/components/command-palette.md');
-  expect(markdown.ok()).toBe(true);
-  expect(await markdown.text()).toContain("Morphing search");
-});

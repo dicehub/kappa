@@ -40,7 +40,8 @@
   --kappa-sidebar-layout-balance: var(--kappa-sidebar-layout-reservation);
 }
 .kappa-sidebar-layout[data-content-alignment="shell"]:is([data-state="collapsed"], [data-state="peeking"])[data-collapsible="icon"] { --kappa-sidebar-layout-reservation: var(--kappa-sidebar-collapsed-width, 3.25rem); }
-.kappa-sidebar-layout[data-content-alignment="shell"][data-state="collapsed"][data-collapsible="offcanvas"] { --kappa-sidebar-layout-reservation: 0px; }
+.kappa-sidebar-layout[data-content-alignment="shell"]:is([data-state="collapsed"], [data-state="peeking"])[data-collapsible="offcanvas"] { --kappa-sidebar-layout-reservation: 0px; }
+.kappa-sidebar-layout:where([data-peekable][data-collapsible="offcanvas"]) { --kappa-sidebar-layout-content-transition: inline-size 200ms ease; }
 .kappa-sidebar-layout[data-content-alignment="shell"][data-variant="inset"] { --kappa-sidebar-layout-balance: calc(var(--kappa-sidebar-layout-reservation) - var(--kappa-sidebar-layout-gap)); }
 .kappa-sidebar-layout[data-content-alignment="shell"][data-variant="floating"] { --kappa-sidebar-layout-balance: calc(var(--kappa-sidebar-layout-reservation) + var(--kappa-sidebar-layout-gap)); }
 .kappa-sidebar-layout[data-content-alignment="shell"] > .kappa-sidebar-layout__body > .kappa-sidebar-layout__main > .kappa-sidebar-layout__content-frame > .kappa-sidebar-layout__content { scrollbar-gutter: stable both-edges; }

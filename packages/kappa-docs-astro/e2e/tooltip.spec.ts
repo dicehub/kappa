@@ -1,4 +1,5 @@
 import { expect, type Locator, type Page, test } from "@playwright/test";
+import { attachTooltipEvents, recordTooltipEvents } from "./helpers/tooltip-events";
 
 const demo = (page: Page, variant: string) => page.locator(`[data-tooltip-demo="${variant}"]`);
 
@@ -16,8 +17,13 @@ async function openTooltip(page: Page, trigger: Locator) {
 
 test.describe("Tooltip documentation", () => {
   test.beforeEach(async ({ page }) => {
+    await recordTooltipEvents(page);
     await page.goto("/docs/components/tooltip");
     await expect(page.locator("astro-island[ssr]:has([data-tooltip-demo])")).toHaveCount(0);
+  });
+
+  test.afterEach(async ({ page }, info) => {
+    await attachTooltipEvents(page, info);
   });
 
   test("renders complete examples, references, composition, and Markdown", async ({
@@ -113,7 +119,16 @@ test.describe("Tooltip documentation", () => {
     page,
   }) => {
     const disabledTrigger = demo(page, "disabled").locator(".tooltip-demo__disabled-trigger");
+    const setupScroll = await page.evaluate(() => ({ x: scrollX, y: scrollY, time: performance.now() }));
     await disabledTrigger.scrollIntoViewIfNeeded();
+    await expect.poll(() => page.evaluate(start => {
+      if (scrollX === start.x && scrollY === start.y) return true;
+      return (window.__kappaTooltipEvents ?? []).some(event =>
+        event.type === "scrollend" && (event.target === null || event.target === "HTML") &&
+        typeof event.time === "number" && event.time >= start.time &&
+        event.scrollX === scrollX && event.scrollY === scrollY,
+      );
+    }, setupScroll)).toBe(true);
     await disabledTrigger.focus();
     await page.keyboard.press("Shift+Tab");
     // Finish the blur transition before returning with keyboard focus.
