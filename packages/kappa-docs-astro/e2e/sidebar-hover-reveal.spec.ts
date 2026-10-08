@@ -102,9 +102,12 @@ test('nested portalled menus remain usable and receive Escape first', async ({ p
   const submenu = page.getByRole('menu', { name: 'Switch profile', exact: true });
   await expect(submenu).toBeVisible();
   const selected = submenu.getByRole('menuitemradio', { name: 'Casey Rivera', exact: true });
-  const selectedBox = await selected.boundingBox();
-  const indicatorBox = await selected.locator('[data-slot="dropdown-radio-item-indicator"]').boundingBox();
-  expect(selectedBox!.x + selectedBox!.width - indicatorBox!.x - indicatorBox!.width).toBeCloseTo(8, 0);
+  const indicatorInset = await selected.evaluate(row => {
+    const indicator = row.querySelector('[data-slot="dropdown-radio-item-indicator"]');
+    if (!indicator) throw new Error('Selected profile has no checkmark');
+    return row.getBoundingClientRect().right - indicator.getBoundingClientRect().right;
+  });
+  expect(indicatorInset).toBeCloseTo(8, 0);
   await submenu.getByRole('menuitemradio', { name: 'Jordan Lee', exact: true }).hover();
   await expect(nav(page)).toHaveAttribute('data-state', 'peeking');
   await page.keyboard.press('Escape');
