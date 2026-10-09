@@ -90,6 +90,10 @@
   height: 0.75rem;
 }
 
+.docs-copy-controls__button .docs-copy-controls__copy-icon {
+  stroke-width: 2;
+}
+
 .docs-copy-controls__positioner {
   --z-index: 1000;
   z-index: 1000 !important;

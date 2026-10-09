@@ -6,7 +6,6 @@ const componentLinks = [
   ["avatar", "avatar"],
   ["checkbox", "checkbox"],
   ["clipboard-text", "clipboard"],
-  ["code-highlighted", "clipboard"],
   ["collapsible", "collapsible"],
   ["combobox", "combobox"],
   ["date-picker", "date-picker"],
@@ -37,7 +36,7 @@ const componentLinks = [
   ["tooltip", "tooltip"],
 ] as const;
 
-const nativeOnlyPages = [
+const pagesWithoutPrimitiveReference = [
   "aspect-ratio",
   "attachment",
   "badge",
@@ -47,6 +46,7 @@ const nativeOnlyPages = [
   "button-group",
   "card",
   "code",
+  "code-highlighted",
   "dicehub-logo",
   "empty",
   "flow",
@@ -125,10 +125,10 @@ test.describe("Ark UI documentation links", () => {
     expect(transitionDurationMs).toBeLessThanOrEqual(0.01);
   });
 
-  test("does not imply an Ark primitive on native-only headers", async ({ context }) => {
+  test("omits unrelated primitive references from headers", async ({ context }) => {
     test.setTimeout(120_000);
 
-    for (const component of nativeOnlyPages) {
+    for (const component of pagesWithoutPrimitiveReference) {
       await test.step(component, async () => {
         const page = await context.newPage();
         try {

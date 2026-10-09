@@ -17,9 +17,12 @@ for (const name of ['preview', 'namespace-selector']) {
       await trigger.click();
       const menu = page.getByRole('menu', { name: 'Namespace: Engineering', exact: true });
       await expect(menu).toHaveAttribute('data-side', 'bottom');
-      const button = (await trigger.boundingBox())!;
-      const popup = (await menu.boundingBox())!;
-      expect(popup.y).toBeGreaterThanOrEqual(button.y + button.height);
+      await expect(menu).toBeInViewport();
+      await expect.poll(async () => {
+        const button = await trigger.boundingBox();
+        const popup = await menu.boundingBox();
+        return button && popup ? popup.y - button.y - button.height : -Infinity;
+      }).toBeGreaterThanOrEqual(0);
       await page.keyboard.press('Escape');
       await expect(trigger).toBeFocused();
     }
@@ -35,9 +38,12 @@ for (const name of ['preview', 'namespace-selector', 'profile-selector']) {
     await trigger.click();
     let menu = page.getByRole('menu', { name: 'Profile: Casey Rivera', exact: true });
     await expect(menu).toHaveAttribute('data-side', 'top');
-    const button = (await trigger.boundingBox())!;
-    const popup = (await menu.boundingBox())!;
-    expect(popup.y + popup.height).toBeLessThanOrEqual(button.y);
+    await expect(menu).toBeInViewport();
+    await expect.poll(async () => {
+      const button = await trigger.boundingBox();
+      const popup = await menu.boundingBox();
+      return button && popup ? popup.y + popup.height - button.y : Infinity;
+    }).toBeLessThanOrEqual(0);
     async function selected(name: string) {
       const item = menu.getByRole('menuitemradio', { name, exact: true });
       await expect(item).toHaveAttribute('aria-checked', 'true');

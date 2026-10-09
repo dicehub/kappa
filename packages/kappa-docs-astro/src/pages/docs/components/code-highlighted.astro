@@ -1,5 +1,4 @@
 ---
-import ArkUiDocsLink from "../../../components/ArkUiDocsLink.astro";
 import CodeHighlightedDocsDemo from "../../../components/CodeHighlightedDocsDemo.vue";
 import CodeBlock from "../../../components/CodeBlock.astro";
 import CompositionTree from "../../../components/CompositionTree.astro";
@@ -15,6 +14,7 @@ import {
   labelsCode,
   languagesCode,
   lineNumbersCode,
+  languageSwitchCode,
   previewCode,
   shikiProviderProps,
   titleCode,
@@ -38,7 +38,6 @@ const description =
           </div>
           <div class="docs-page-header__title-row">
             <h1>Code Highlighted</h1>
-            <ArkUiDocsLink />
             <div class="docs-page-header__navigation-actions">
               <div class="docs-page-header__desktop-actions"><CopyPageControls client:only="vue" /></div>
               <DocsPageNavigation currentPath={currentPath} variant="compact" />
@@ -55,6 +54,19 @@ const description =
           <div class="docs-component-example">
             <div class="docs-component-preview"><CodeHighlightedDocsDemo client:load variant="preview" /></div>
             <CodeBlock code={previewCode} lang="vue" collapsible revealId="code-highlighted-preview-code" />
+          </div>
+        </section>
+
+        <section id="language-switch" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#language-switch">Language Switch</a></h2>
+          <p>
+            Use <code>v-model:lang</code> with <code>languageOptions</code> to select a language.
+            Pass the selected source to <code>code</code> and load all choices with <code>ShikiProvider</code>.
+            Use <code>showLineNumbers</code> to add line numbers.
+          </p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><CodeHighlightedDocsDemo client:load variant="language-switch" /></div>
+            <CodeBlock code={languageSwitchCode} lang="vue" collapsible revealId="code-highlighted-language-switch-code" />
           </div>
         </section>
 
@@ -80,6 +92,10 @@ const description =
             Wrap code blocks in one <code>ShikiProvider</code> per application or subtree. It
             creates a single shared highlighter and loads only the listed languages. Until the
             highlighter is ready, blocks render plain text.
+          </p>
+          <p>
+            Code uses a system monospace font. Set <code>--kappa-font-mono</code> on the
+            block or a parent to use another font.
           </p>
           <div class="docs-component-example">
             <div class="docs-component-preview"><CodeHighlightedDocsDemo client:load variant="usage" /></div>
@@ -107,7 +123,7 @@ const description =
           <h2><a class="docs-section-anchor" href="#examples">Examples</a></h2>
 
           <h3 id="title"><a class="docs-section-anchor" href="#title">Title</a></h3>
-          <p>Add a short file name or label with <code>title</code>. The copy control stays visible in the header.</p>
+          <p>Use <code>title</code> for a file name or label. The language selector and copy button appear on the right.</p>
           <div class="docs-component-example">
             <div class="docs-component-preview"><CodeHighlightedDocsDemo client:load variant="title" /></div>
             <CodeBlock code={titleCode} lang="vue" collapsible revealId="code-highlighted-title-code" />
@@ -168,6 +184,7 @@ const description =
             <li>Code renders as a <code>pre</code>/<code>code</code> region; plain text remains available while the highlighter loads.</li>
             <li>The optional title renders as a semantic <code>figcaption</code>.</li>
             <li>Line numbers are decorative and hidden from assistive technology.</li>
+            <li>Use arrow keys to select a language. Escape closes the list and returns focus to the selector.</li>
             <li>The Ark UI copy button has an accessible name and a polite status announcement.</li>
             <li>The button stays visible on touch devices and remains reachable with the keyboard.</li>
           </ul>
@@ -196,6 +213,7 @@ const description =
         <div class="docs-page-toc__inner">
           <span class="docs-page-toc__title">On this page</span>
           <ul>
+            <li><a href="#language-switch" data-toc-link="language-switch">Language Switch</a></li>
             <li><a href="#installation" data-toc-link="installation">Installation</a><ul><li><a href="#dedicated-entry-point" data-toc-link="dedicated-entry-point">Dedicated Entry Point</a></li></ul></li>
             <li><a href="#usage" data-toc-link="usage">Usage</a></li>
             <li><a href="#composition" data-toc-link="composition">Composition</a></li>

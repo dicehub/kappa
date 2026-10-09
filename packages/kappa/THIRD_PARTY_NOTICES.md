@@ -65,7 +65,7 @@ THE SOFTWARE.
 
 ### Phosphor Icons
 
-Source: [Phosphor Icons](https://github.com/phosphor-icons/react). CopySimple, Check, and House SVG paths used by documentation controls and examples.
+Source: [Phosphor Icons](https://github.com/phosphor-icons/react). Check and House SVG paths used by documentation controls and examples.
 
 Reviewed reference: [`v2.1.10`](https://github.com/phosphor-icons/react/tree/v2.1.10). This identifies the inspected reference, not the original revision of every adaptation.
 

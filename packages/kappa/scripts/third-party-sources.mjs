@@ -11,7 +11,7 @@ export const adaptedSources = [
     repository: "https://github.com/phosphor-icons/react",
     reference: "v2.1.10",
     licenseFile: "licenses/phosphor.LICENSE",
-    scope: "CopySimple, Check, and House SVG paths used by documentation controls and examples.",
+    scope: "Check and House SVG paths used by documentation controls and examples.",
   },
   {
     name: "Zag Number Input",

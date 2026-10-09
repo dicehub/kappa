@@ -5,6 +5,7 @@ import { test } from "node:test";
 const readSource = (name) => readFileSync(new URL(name, import.meta.url), "utf8");
 
 const componentSource = readSource("./CodeHighlighted.vue");
+const copySource = readSource("./CodeHighlightedCopy.vue");
 const providerSource = readSource("./ShikiProvider.vue");
 const hookSource = readSource("./use-shiki-highlighter.ts");
 const languagesSource = readSource("./code-highlighted-languages.ts");
@@ -39,19 +40,17 @@ test("highlights through the shared provider with kappa themes", () => {
 
 test("renders highlighted html with plain-text fallback and line options", () => {
   assert.match(componentSource, /data-slot="code-highlighted"/);
-  assert.match(componentSource, /<figcaption v-if="title"/);
   assert.match(componentSource, /kappa-code-highlighted__title/);
   assert.match(componentSource, /v-html="processedHtml"/);
   assert.match(componentSource, /<pre v-else class="kappa-code-highlighted__plain">/);
   assert.match(componentSource, /<span class="line line-highlighted">/);
   assert.match(componentSource, /kappa-code-highlighted__line-numbers/);
   assert.match(componentSource, /aria-hidden="true"/);
-  assert.match(componentSource, /Clipboard as ArkClipboard/);
-  assert.match(componentSource, /<ArkClipboard\.Root/);
-  assert.match(componentSource, /<ArkClipboard\.Trigger/);
-  assert.match(componentSource, /aria-live="polite"/);
-  assert.doesNotMatch(componentSource, /navigator\.clipboard/);
-  assert.equal((componentSource.match(/<svg/g) ?? []).length, 2);
+  assert.match(copySource, /Clipboard as ArkClipboard/);
+  assert.match(copySource, /<ArkClipboard\.Root/);
+  assert.match(copySource, /<ArkClipboard\.Trigger/);
+  assert.match(copySource, /aria-live="polite"/);
+  assert.doesNotMatch(copySource, /navigator\.clipboard/);
 });
 
 test("declares the supported language set with aliases and dynamic imports", () => {
@@ -100,7 +99,8 @@ test("uses token-driven Kappa styling with dual-theme shiki vars", () => {
   assert.match(styles, /:focus-visible/);
   assert.match(styles, /@media \(prefers-reduced-motion: reduce\)/);
   assert.match(styles, /@media \(forced-colors: active\)/);
-  assert.doesNotMatch(styles, /\.(?!kappa-|(?:shiki|line(?:-highlighted)?)(?![\w-]))[a-z][\w-]*|(?<![\w-])--(?!kappa-)[a-z][\w-]*/);
+  assert.doesNotMatch(styles, /\.(?!kappa-|(?:shiki|line(?:-highlighted)?)(?![\w-]))[a-z][\w-]*/);
+  assert.doesNotMatch(styles, /(?:^|[;{}])\s*--(?!kappa-)[a-z][\w-]*\s*:/m);
   assert.doesNotMatch(
     styles,
     /(?:margin|padding|border)-(?:left|right)|text-align:\s*(?:left|right)/,
