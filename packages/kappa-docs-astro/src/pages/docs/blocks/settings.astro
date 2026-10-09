@@ -1,0 +1,93 @@
+---
+import CodeBlock from "../../../components/CodeBlock.astro";
+import CopyPageControls from "../../../components/CopyPageControls.vue";
+import DocsPageNavigation from "../../../components/DocsPageNavigation.astro";
+import SettingsDocsDemo from "../../../components/SettingsDocsDemo.vue";
+import { settingsExamples, settingsSource, settingsUsage } from "../../../data/settings-docs";
+import DocsLayout from "../../../layouts/DocsLayout.astro";
+import "../../../styles/docs-components.css";
+import "../../../styles/docs-blocks.css";
+
+const currentPath = "/docs/blocks/settings";
+const description = "Account and workspace settings with tabs, current values, and expandable forms.";
+---
+
+<DocsLayout title="Settings" description={description}>
+  <div class="docs-page docs-page--component docs-page--blocks">
+    <header class="docs-page-header"><div class="docs-page-header__inner"><div class="docs-page-header__content">
+      <div class="docs-page-header__title-row"><h1>Settings</h1><div class="docs-page-header__navigation-actions"><div class="docs-page-header__desktop-actions"><CopyPageControls client:only="vue" /></div><DocsPageNavigation currentPath={currentPath} variant="compact" /></div></div>
+      <p class="docs-page-header__lede">{description}</p>
+    </div></div></header>
+    <div class="docs-page-body">
+      <article class="docs-article docs-article--component">
+        <section id="usage" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#usage">Usage</a></h2>
+          <p>Use <code>SettingsLayout</code> for the page and <code>SettingsSection</code> for each setting. Put your fields and save actions in the section. Add tabs or links through the navigation slot.</p>
+          <CodeBlock code={settingsUsage} lang="vue" />
+        </section>
+        <section id="examples" class="docs-section docs-section--component-examples">
+          <h2><a class="docs-section-anchor" href="#examples">Examples</a></h2>
+          <p>The examples use sample data. Changes stay in the example.</p>
+          <p>Account forms have one save button with a short label for the setting. Notification options use separate rows. Emails and linked accounts use tables. Privacy checkboxes save on change and show a brief status beside each group.</p>
+          {settingsExamples.map(example => <>
+            <h3 id={example.id}><a class="docs-section-anchor" href={`#${example.id}`}>{example.title}</a></h3>
+            <p>{example.description}</p>
+            <div class="docs-component-example docs-block-example" data-block-example={example.id}>
+              <div class="docs-block-example__bar"><span>Settings · {example.id}</span><a href={`/examples/settings/${example.id}`} target="_blank" rel="noopener noreferrer">Open full example <span aria-hidden="true">↗</span><span class="docs-block-example__sr-only"> (new tab)</span></a></div>
+              <div class="docs-component-preview docs-block-example__preview"><SettingsDocsDemo client:load variant={example.id} /></div>
+              <CodeBlock code={settingsSource(example.id)} lang="vue" collapsible revealId={`settings-${example.id}-code`} />
+            </div>
+          </>)}
+        </section>
+        <section id="installation" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#installation">Installation</a></h2>
+          <p>Import from the package root or <code>@dicehub/kappa/blocks/settings-layout</code>. Load the theme once in your app.</p>
+          <CodeBlock code={'import { SettingsLayout, SettingsSection } from "@dicehub/kappa/blocks/settings-layout"\nimport "@dicehub/kappa/styles/theme-kappa.css"'} lang="javascript" />
+        </section>
+        <section id="api" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#api">API</a></h2>
+          <h3>SettingsLayout</h3>
+          <p><code>title</code> and <code>description</code> are optional strings. Slots: <code>title</code>, <code>description</code>, <code>actions</code>, <code>navigation</code>, and the default panel content. The title renders as <code>h1</code>. Omit it when your app already has a page heading.</p>
+          <h3>SettingsSection</h3>
+          <div class="docs-api-table"><table>
+            <thead><tr><th>Prop</th><th>Default</th><th>Use</th></tr></thead>
+            <tbody>
+              <tr><td><code>title</code></td><td>Required</td><td>Section heading and accessible toggle name.</td></tr>
+              <tr><td><code>description</code></td><td>—</td><td>Current value or short help text.</td></tr>
+              <tr><td><code>headingLevel</code></td><td><code>2</code></td><td>Heading level: <code>2</code>, <code>3</code>, or <code>4</code>.</td></tr>
+              <tr><td><code>collapsible</code></td><td><code>true</code></td><td>Set to false to keep the section open without a toggle.</td></tr>
+              <tr><td><code>defaultOpen</code></td><td><code>false</code></td><td>Initial state for an uncontrolled section.</td></tr>
+              <tr><td><code>open</code></td><td>—</td><td>Controlled state. Use <code>v-model:open</code>.</td></tr>
+              <tr><td><code>disabled</code></td><td>—</td><td>Disables the toggle. Disable form controls separately.</td></tr>
+              <tr><td><code>expandLabel</code>, <code>closeLabel</code></td><td><code>Expand</code>, <code>Close</code></td><td>Translated toggle labels.</td></tr>
+              <tr><td><code>id</code>, <code>ids</code></td><td>Generated</td><td>Collapsible identifiers.</td></tr>
+              <tr><td><code>lazyMount</code>, <code>unmountOnExit</code></td><td><code>false</code></td><td>Optional mounting behavior. Unmounting can discard form state.</td></tr>
+            </tbody>
+          </table></div>
+          <p>Slots: <code>title</code>, <code>description</code>, <code>actions</code>, and default content. Each receives <code>{'{ open }'}</code>. Events: <code>update:open</code>, <code>openChange</code>, and <code>exitComplete</code>. The section is also available as <code>SettingsLayout.Section</code>.</p>
+          <p>Attributes and DOM listeners pass to the layout root or section. Sections stay mounted when closed by default, so form values remain available.</p>
+        </section>
+        <section id="accessibility" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#accessibility">Accessibility</a></h2>
+          <p>Toggle sections with Enter or Space. Sections expand and close with a short height animation; reduced motion disables it. Closed content is hidden from keyboard navigation. If closing hides the focused control, focus returns to the section toggle, or to its heading when the toggle is disabled. Choose heading levels that fit your page, label every field, and announce save results near the form. Use a confirmation dialog for account deletion.</p>
+          <p>The time zone example lists UTC offsets and city names, sorted by offset. Offsets use the current date and include daylight saving time. Type a city or region to search. The saved value is the time-zone ID.</p>
+          <p>The app supplies validation, save requests, permissions, and routing. Use <code>Button</code>'s loading state and disable fields while saving.</p>
+          <p>Related components: <a href="/docs/components/tabs">Tabs</a>, <a href="/docs/components/field">Field</a>, and <a href="/docs/blocks/delete-resource">Delete Resource</a>. Behavior reference: <a href="https://ark-ui.com/docs/components/collapsible" target="_blank" rel="noopener noreferrer">Collapsible</a>.</p>
+        </section>
+        <section id="styling" class="docs-section">
+          <h2><a class="docs-section-anchor" href="#styling">Styling</a></h2>
+          <p>The block uses Kappa tokens in both themes. Set <code>--kappa-settings-layout-content-max</code>, <code>--kappa-settings-layout-padding</code>, or <code>--kappa-settings-section-padding</code> to adjust the layout. Keep forms narrower than the panel when they contain short account fields.</p>
+        </section>
+        <DocsPageNavigation currentPath={currentPath} />
+      </article>
+      <aside class="docs-page-toc" aria-label="On this page"><div class="docs-page-toc__inner"><span class="docs-page-toc__title">On this page</span><ul>
+        <li><a href="#usage" data-toc-link="usage">Usage</a></li>
+        <li><a href="#examples" data-toc-link="examples">Examples</a><ul>{settingsExamples.map(example => <li><a href={`#${example.id}`} data-toc-link={example.id}>{example.title}</a></li>)}</ul></li>
+        <li><a href="#installation" data-toc-link="installation">Installation</a></li>
+        <li><a href="#api" data-toc-link="api">API</a></li>
+        <li><a href="#accessibility" data-toc-link="accessibility">Accessibility</a></li>
+        <li><a href="#styling" data-toc-link="styling">Styling</a></li>
+      </ul></div></aside>
+    </div>
+  </div>
+</DocsLayout>

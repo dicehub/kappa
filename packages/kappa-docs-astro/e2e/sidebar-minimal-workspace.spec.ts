@@ -176,6 +176,58 @@ test('header search and profile menus support keyboard selection and focus retur
   await expect(page.getByText('Local preview only. Your real session stays signed in.', { exact: true })).toBeVisible();
 });
 
+test('slash opens grouped search and leaves typing and other menus alone', async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await openExample(page);
+  const trigger = page.getByRole('button', { name: 'Search or go to…', exact: true });
+  await expect(trigger).toHaveAttribute('aria-keyshortcuts', '/');
+  await expect(trigger.locator('kbd')).toHaveText('/');
+  await page.keyboard.press('/');
+  const dialog = page.getByRole('dialog', { name: 'Search minimal workspace', exact: true });
+  const input = dialog.getByRole('combobox');
+  await expect(input).toBeFocused();
+  await expect(input).toHaveValue('');
+  await expect(dialog).toHaveCSS('width', '560px');
+  await expect(dialog.getByText('Go to', { exact: true })).toBeVisible();
+  await expect(dialog.getByRole('option').filter({ hasText: 'Rotor study' })).toHaveCount(0);
+  await input.press('/');
+  await expect(input).toHaveValue('/');
+  await input.fill('Channel');
+  await expect(dialog.getByText('Projects', { exact: true })).toBeVisible();
+  await expect(dialog.getByRole('option')).toHaveCount(1);
+  await expect(dialog.getByRole('option')).toContainText('Ros.Space');
+  await input.press('Escape');
+  await expect(trigger).toBeFocused();
+  const filter = page.getByRole('searchbox', { name: 'Search projects', exact: true });
+  await filter.press('/');
+  await expect(filter).toHaveValue('/');
+  await expect(dialog).toBeHidden();
+  await filter.fill('');
+  await trigger.press('Control+/');
+  await expect(dialog).toBeHidden();
+  await page.getByRole('button', { name: 'Profile: Ros.Space', exact: true }).click();
+  await page.keyboard.press('/');
+  await expect(page.getByRole('menu', { name: 'Profile: Ros.Space', exact: true })).toBeVisible();
+  await expect(dialog).toBeHidden();
+  await page.keyboard.press('Escape');
+});
+
+test('gallery search shortcut stays within the focused example', async ({ page }) => {
+  await page.goto('/docs/blocks/sidebar#minimal-workspace');
+  const example = page.locator('[data-block-example="minimal-workspace"]');
+  await expect.poll(() => example.locator('astro-island[ssr]').count()).toBe(0);
+  const trigger = example.getByRole('button', { name: 'Search or go to…', exact: true });
+  await trigger.focus();
+  await trigger.press('/');
+  const dialog = page.getByRole('dialog', { name: 'Search minimal workspace', exact: true });
+  await expect(dialog.getByRole('combobox')).toBeFocused();
+  await page.keyboard.press('Escape');
+  await expect(trigger).toBeFocused();
+  await page.getByRole('heading', { level: 1, name: 'Application Shell', exact: true }).click();
+  await page.keyboard.press('/');
+  await expect(dialog).toBeHidden();
+});
+
 test('mobile drawer, Browse menu, and global search remain usable at 390px', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await openExample(page);
@@ -225,6 +277,7 @@ test('minimal shell supports both themes, RTL, reduced motion, and 320px width',
   const content = (await page.locator('.minimal-workspace-demo__page').boundingBox())!;
   expect(nav.x).toBeGreaterThan(content.x);
   await page.setViewportSize({ width: 320, height: 700 });
+  await expect(page.locator('.kappa-sidebar-layout')).toHaveAttribute('data-mobile', '');
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   expect(await page.locator('.kappa-sidebar-layout__content').evaluate(node => node.scrollWidth <= node.clientWidth)).toBe(true);
   await page.getByRole('button', { name: 'Open sidebar', exact: true }).click();

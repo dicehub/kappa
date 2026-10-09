@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { computed, nextTick, ref, useId } from "vue";
 import { SidebarLayout } from "@dicehub/kappa/blocks/sidebar-layout";
+import { WorkspaceSwitcher } from "@dicehub/kappa/blocks/workspace-switcher";
+import { namespaceSwitcherItems, namespaceSwitcherActions, namespaceSwitcherFooterActions, namespaceSwitcherWorkspaceActions, namespaceActionDescriptions } from "../data/workspace-switcher-demo";
 import { Sidebar, type SidebarContextValue } from "@dicehub/kappa/components/sidebar";
 import { Dropdown } from "@dicehub/kappa/components/dropdown";
 import { CommandPalette } from "@dicehub/kappa/components/command-palette";
@@ -96,22 +98,21 @@ function toggleFavorite() {
 
 <template>
   <div class="sidebar-pages-demo" data-sidebar-block="workspace-pages" :data-standalone="props.standalone || undefined">
-    <SidebarLayout label="Workspace pages navigation" navigation-label="Workspace page links" collapsible="offcanvas" full-screen-on-mobile>
+    <SidebarLayout label="Workspace pages navigation" navigation-label="Workspace page links" collapsible="offcanvas" full-screen-on-mobile
+      :content-alignment="props.standalone ? 'shell' : 'available'" :mobile-breakpoint="1200">
       <template #header="context">
-        <Dropdown.Root :positioning="{ placement: context.isMobile ? 'bottom-start' : 'right-start', strategy: 'fixed', gutter: 8 }">
-          <Dropdown.Trigger as-child>
+        <WorkspaceSwitcher v-model="namespace" :items="namespaceSwitcherItems" label="Namespaces" account-label="ros@example.test"
+          :actions="namespaceSwitcherActions" :workspace-actions="namespaceSwitcherWorkspaceActions" :footer-actions="namespaceSwitcherFooterActions"
+          :teleport="!context.isMobile" :positioning="{ placement: 'bottom-start', strategy: 'fixed', gutter: 8 }"
+          @action="navigate($event.label, context)">
+          <template #trigger>
             <Sidebar.MenuButton :aria-label="`Namespace: ${namespace}`" class="sidebar-pages-demo__namespace">
               <template #icon><span class="sidebar-pages-demo__namespace-icon"><Building2 aria-hidden="true" /></span></template>
               <span class="sidebar-pages-demo__identity"><strong>{{ namespace }}</strong><small>Workspace pages</small></span>
               <ChevronsUpDown class="sidebar-pages-demo__chevrons" aria-hidden="true" />
             </Sidebar.MenuButton>
-          </Dropdown.Trigger>
-          <Dropdown.Context v-slot="menu"><Dropdown.Content :teleport="!context.isMobile" :inert="!menu.open || undefined">
-            <Dropdown.RadioGroup v-model="namespace"><Dropdown.Label>Switch namespace</Dropdown.Label>
-              <Dropdown.RadioItem v-for="name in Object.keys(workspaces)" :key="name" :value="name" close-on-select>{{ name }}</Dropdown.RadioItem>
-            </Dropdown.RadioGroup>
-          </Dropdown.Content></Dropdown.Context>
-        </Dropdown.Root>
+          </template>
+        </WorkspaceSwitcher>
       </template>
       <template #navigation="context">
         <Sidebar.Menu aria-label="Workspace shortcuts">
@@ -162,7 +163,7 @@ function toggleFavorite() {
           <span class="sidebar-pages-demo__page-icon" aria-hidden="true">{{ currentPage?.emoji ?? (selected === 'Home' ? '🏡' : '📋') }}</span>
           <p class="sidebar-pages-demo__eyebrow">{{ namespace }}<template v-if="currentGroup"> / {{ currentGroup.name }}</template></p>
           <h2 :id="headingId">{{ selected }}</h2>
-          <p class="sidebar-pages-demo__summary">{{ currentPage?.summary ?? utility?.description ?? 'Your shared pages, project notes, and team resources in one place.' }}</p>
+          <p class="sidebar-pages-demo__summary">{{ currentPage?.summary ?? utility?.description ?? namespaceActionDescriptions[selected] ?? 'Your shared pages, project notes, and team resources in one place.' }}</p>
           <template v-if="currentPage">
             <div class="sidebar-pages-demo__byline"><span>Ros.Space</span><span>Sample document</span></div>
             <h3>At a glance</h3>
@@ -170,7 +171,7 @@ function toggleFavorite() {
             <aside class="sidebar-pages-demo__callout"><Star aria-hidden="true" /><p>Add pages to Favorites with the star in the toolbar. They stay within the selected namespace.</p></aside>
           </template>
           <ul v-else-if="utility" class="sidebar-pages-demo__notes"><li v-for="note in utility.notes" :key="note">{{ note }}</li></ul>
-          <template v-else>
+          <template v-else-if="!namespaceActionDescriptions[selected]">
             <h3>All pages <span class="sidebar-pages-demo__count">{{ pages.length }}</span></h3>
             <ul class="sidebar-pages-demo__index"><li v-for="page in pages" :key="page.title"><button type="button" @click="navigate(page.title, context)"><span aria-hidden="true">{{ page.emoji }}</span><span>{{ page.title }}</span></button></li></ul>
           </template>

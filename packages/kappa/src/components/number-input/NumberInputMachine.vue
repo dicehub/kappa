@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { useNumberInput, type UseNumberInputProps } from "@ark-ui/vue/number-input";
+import type { UseNumberInputProps } from "@ark-ui/vue/number-input";
+import { useNumberInput } from "./use-number-input";
 import { computed } from "vue";
 import NumberInputRootProvider from "./NumberInputRootProvider.vue";
 import type { NumberInputSize } from "./number-input";

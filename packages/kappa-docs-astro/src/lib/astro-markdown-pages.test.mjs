@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { existsSync, globSync, readFileSync } from "node:fs";
 import { join, relative } from "node:path";
 import { describe, it } from "node:test";
+import { compileScript, parse } from "vue/compiler-sfc";
 import {
   htmlPathToMarkdownPath,
   markdownPathToHtmlPath,
@@ -303,7 +304,27 @@ describe("Markdown build output", () => {
     assert.match(commandPalette, /@dicehub\/kappa\/components\/command-palette/);
     assert.match(commandPalette, /```vue\n<script setup>/);
     assert.match(commandPalette, /```javascript\nimport \{/);
-    assert.doesNotMatch(commandPalette, /lang="ts"|```typescript/);
+    let originalExamples = commandPalette;
+    for (const [title, id, animation] of [
+      ["Top-aligned search", "top-aligned-search", "command-palette-top-search-in"],
+      ["Morphing search", "morphing-search", "command-palette-morph-in"],
+    ]) {
+      const section = commandPalette.split(`### [${title}](#${id})`)[1];
+      const source = section?.match(/```vue\n([\s\S]*?)\n```/)?.[1];
+      assert.ok(source, `missing copyable ${id} example`);
+      originalExamples = originalExamples.replace(source, "");
+      assert.match(source, /<script setup lang="ts">/);
+      assert.match(source, /<CommandPalette\.Dialog/);
+      assert.match(source, /<CommandPalette\.Panel/);
+      assert.match(source, /@keydown="shortcut"/);
+      assert.ok(source.includes(`@keyframes ${animation}`));
+      assert.doesNotMatch(source, /from ["']\.\.?\//);
+      const { descriptor, errors } = parse(source);
+      assert.deepEqual(errors, []);
+      assert.equal(descriptor.styles.length, 1);
+      assert.doesNotThrow(() => compileScript(descriptor, { id }));
+    }
+    assert.doesNotMatch(originalExamples, /lang="ts"|```typescript/);
     assert.match(commandPalette, /^## \[Examples\]\(#examples\)$/m);
     assert.match(commandPalette, /^## \[Composition\]\(#composition\)$/m);
     assert.match(commandPalette, /^## \[Keyboard Navigation\]\(#keyboard-navigation\)$/m);

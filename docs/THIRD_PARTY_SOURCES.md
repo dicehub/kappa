@@ -51,6 +51,19 @@ removes a duplicate type import. `scripts/ark-declarations.mjs` checks the exact
 upstream inputs and copies Ark's license beside these declarations. The runtime
 continues to use the external Ark package.
 
+The Number Input hook is adapted from Ark UI Vue 5.39.2, commit
+`8067ebecca4c222b7ee346a947b1e30f54cc36e7`. It retains Ark's providers, props,
+and callbacks. Kappa changes the input synchronization action to run after Vue's
+render instead of in a later animation frame, so value changes preserve text
+selections. The preserved Ark notice also covers this hook.
+
+## Zag Number Input
+
+The Number Input cursor helpers are adapted from `@zag-js/number-input` 1.43.3,
+commit `46f88c089c1dbb0fc681b31172dc5eb8a07eef0d`. The MIT notice is preserved in
+`packages/kappa/licenses/zag-number-input.LICENSE` and the generated package notices.
+The state machine and all other actions remain part of the external Zag runtime.
+
 ## Maintain notices
 
 Add adapted source to `packages/kappa/scripts/third-party-sources.mjs`. Preserve

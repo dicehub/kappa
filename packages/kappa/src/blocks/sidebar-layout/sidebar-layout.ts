@@ -3,9 +3,11 @@ import type { SidebarContextValue, SidebarProviderEmits, SidebarProviderProps, S
 
 export const SIDEBAR_LAYOUT_VARIANTS = ["workspace", "rail", "inset", "floating", "split", "header"] as const;
 export type SidebarLayoutVariant = (typeof SIDEBAR_LAYOUT_VARIANTS)[number];
+export type SidebarLayoutContentAlignment = "available" | "shell";
 
 export const SIDEBAR_LAYOUT_DEFAULTS = {
   variant: "workspace",
+  contentAlignment: "available",
   label: "Application navigation",
   navigationLabel: "Navigation links",
   secondaryLabel: "Secondary navigation",
@@ -16,6 +18,8 @@ export const SIDEBAR_LAYOUT_DEFAULTS = {
 
 export interface SidebarLayoutProps extends SidebarProviderProps {
   variant?: SidebarLayoutVariant;
+  /** Center the content region within the available space or the complete shell. */
+  contentAlignment?: SidebarLayoutContentAlignment;
   /** Name of the navigation landmark and mobile dialog. */
   label?: string;
   navigationLabel?: string;

@@ -1,3 +1,5 @@
+@import "./sidebar-offcanvas.css";
+
 .kappa-sidebar-provider {
   display: flex;
   min-inline-size: 0;
@@ -22,11 +24,13 @@
 .kappa-sidebar__shell[data-state="peeking"][data-side="end"] > .kappa-sidebar { inset-inline-start: auto; inset-inline-end: 0; }
 .kappa-sidebar__shell[data-resizing], .kappa-sidebar[data-resizing] { transition: none; }
 .kappa-sidebar__width-measure { position: absolute; visibility: hidden; pointer-events: none; inline-size: var(--kappa-sidebar-collapsed-width, 3.25rem); block-size: 0; }
-/* Align the indicator with the navigation border; keep the wider drag target. */
-.kappa-sidebar__resize-handle { position: absolute; inset-block: 0; inset-inline-end: -4px; inline-size: 7px; z-index: 3; outline: none; }
-.kappa-sidebar[data-side="end"] > .kappa-sidebar__resize-handle { inset-inline-end: auto; inset-inline-start: -4px; }
-.kappa-sidebar__resize-handle::after { content: ""; position: absolute; inset-block: 0; inset-inline-start: 3px; inline-size: 1px; background: var(--kappa-line, #e3e6eb); }
-.kappa-sidebar__resize-handle:is(:hover, :focus-visible, [data-dragging]):not([data-disabled])::after { inset-inline-start: 2px; inline-size: 3px; background: var(--kappa-focus, #4c63ff); }
+/* Keep the line on the border and the drag target on the content side. */
+.kappa-sidebar__resize-handle { position: absolute; inset-block: 0; inset-inline-end: -12px; inline-size: 12px; z-index: 3; outline: none; }
+.kappa-sidebar[data-side="end"] > .kappa-sidebar__resize-handle { inset-inline-end: auto; inset-inline-start: -12px; }
+.kappa-sidebar__resize-handle::after { content: ""; position: absolute; inset-block: 0; inset-inline-start: 0; inline-size: 1px; background: var(--kappa-line, #e3e6eb); }
+.kappa-sidebar__resize-handle:is(:hover, :focus-visible, [data-dragging]):not([data-disabled])::after { inset-inline-start: -1px; inline-size: 3px; background: var(--kappa-focus, #4c63ff); }
+.kappa-sidebar[data-side="end"] > .kappa-sidebar__resize-handle::after { inset-inline-start: 11px; }
+.kappa-sidebar[data-side="end"] > .kappa-sidebar__resize-handle:is(:hover, :focus-visible, [data-dragging]):not([data-disabled])::after { inset-inline-start: 10px; }
 
 .kappa-sidebar {
   box-sizing: border-box;

@@ -7,6 +7,7 @@ import { Breadcrumbs } from "@dicehub/kappa/components/breadcrumbs";
 import { ArrowLeftRight, Box } from "@lucide/vue";
 import SidebarDemoNavigation from "./SidebarDemoNavigation.vue";
 import SidebarDemoNamespace from "./SidebarDemoNamespace.vue";
+import { namespaceActionDescriptions } from "../data/workspace-switcher-demo";
 import SidebarDemoProfile from "./SidebarDemoProfile.vue";
 import SidebarDemoSearch from "./SidebarDemoSearch.vue";
 import SidebarDemoSlidingNavigation from "./SidebarDemoSlidingNavigation.vue";
@@ -28,7 +29,7 @@ const mobile = computed(() => ["mobile", "full-screen-mobile"].includes(props.va
 const resizable = computed(() => ["resizable", "resizable-controlled", "end", "rtl"].includes(props.variant));
 const rtl = computed(() => ["rtl", "resizable-rtl"].includes(props.variant));
 const withNamespace = computed(() => ["preview", "namespace-selector", "peeking", "sliding-views", "full-screen-mobile"].includes(props.variant));
-const withProfile = computed(() => ["preview", "profile-selector", "peeking", "full-screen-mobile", "scrollable"].includes(props.variant));
+const withProfile = computed(() => ["preview", "namespace-selector", "profile-selector", "peeking", "full-screen-mobile", "scrollable"].includes(props.variant));
 const withSearch = computed(() => ["preview", "quick-search", "peeking", "full-screen-mobile", "resizable"].includes(props.variant));
 const navLabel = computed(() => `${props.variant} navigation`);
 function updateOpen(value: boolean) { if (!locked.value) open.value = value; }
@@ -67,7 +68,7 @@ function trackRequest(_details: SidebarOpenChangeDetails) { requests.value += 1;
               @click="surface = surface === 'workspace' ? 'project' : 'workspace'">
               <strong>{{ surface === 'workspace' ? 'Workspace view' : 'Rotor study view' }}</strong>
             </Sidebar.MenuButton>
-            <SidebarDemoNamespace v-else-if="withNamespace" v-model="namespace" @add="selected = 'Add namespace'" />
+            <SidebarDemoNamespace v-else-if="withNamespace" v-model="namespace" @add="selected = 'Add namespace'" @action="selected = $event" />
             <template v-else>
               <Box class="sidebar-demo__brand-icon" aria-hidden="true" />
               <Sidebar.MenuLabel><strong>Workspace</strong></Sidebar.MenuLabel>
@@ -101,6 +102,7 @@ function trackRequest(_details: SidebarOpenChangeDetails) { requests.value += 1;
             <span class="sidebar-demo__eyebrow">{{ withNamespace ? namespace : 'Project workspace' }}</span>
             <p class="sidebar-demo__title">{{ selected }}</p>
             <p v-if="selected === 'Add namespace'" class="sidebar-demo__hint">Connect this action to your namespace creation flow. This example does not create an account or namespace.</p>
+            <p v-else-if="namespaceActionDescriptions[selected]" class="sidebar-demo__hint">{{ namespaceActionDescriptions[selected] }}</p>
             <p v-else class="sidebar-demo__hint">{{ mobile ? 'Open the navigation drawer and select a page.' : resizable ? 'Drag the separator. Or focus it and use the arrow keys.' : props.variant === 'peeking' ? 'Hover or focus the icon rail to peek. The page stays in place.' : props.variant === 'sliding-views' ? 'Use the header button to switch views, or open Rotor study in the navigation.' : 'Select a link or collapse the sidebar.' }}</p>
             <Sidebar.Context v-if="props.variant === 'peeking'" v-slot="{ open, isPeeking, isMobile, toggle }">
               <div class="sidebar-demo__interaction" data-sidebar-peek-controls>

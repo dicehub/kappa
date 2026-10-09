@@ -17,6 +17,7 @@ interface ResizeContext {
   props: ComputedRef<UseSplitterProps>;
   handleId: ComputedRef<"navigation:remainder" | "remainder:navigation">;
   range: ComputedRef<{ min: number; max: number; collapsed: number }>;
+  canCollapse: ComputedRef<boolean>;
   setIsResizing: (value: boolean) => void;
 }
 const resizeKey: InjectionKey<ResizeContext> = Symbol("KappaSidebarResize");
@@ -36,12 +37,13 @@ export function useSidebarResize(props: Required<Pick<SidebarProviderProps, "def
   const bounds = computed(() => resolveSidebarWidthBounds(props.minWidth, props.maxWidth));
   const width = computed(() => Math.min(groupWidth.value || Infinity, clampSidebarWidth(props.resizeWidth ?? internalWidth.value, bounds.value.minWidth, bounds.value.maxWidth)));
   const enabled = computed(() => !!props.resizable && !options.isMobile.value);
+  const canCollapse = computed(() => props.collapseOnResize !== false && props.collapsible !== "none");
   const sidebarIndex = computed(() => (props.side === "end") !== (locale.value.dir === "rtl") ? 1 : 0);
   const handleId = computed(() => sidebarIndex.value ? "remainder:navigation" as const : "navigation:remainder" as const);
   const collapsedPixels = ref(52);
   const range = computed(() => {
     const collapsed = props.collapsible === "offcanvas" ? 0 : Math.min(collapsedPixels.value, bounds.value.minWidth);
-    return { min: props.collapsible === "none" ? bounds.value.minWidth : collapsed, max: Math.min(groupWidth.value || Infinity, bounds.value.maxWidth), collapsed };
+    return { min: canCollapse.value ? collapsed : bounds.value.minWidth, max: Math.min(groupWidth.value || Infinity, bounds.value.maxWidth), collapsed };
   });
   let observer: ResizeObserver | undefined;
 
@@ -70,13 +72,12 @@ export function useSidebarResize(props: Required<Pick<SidebarProviderProps, "def
   }
 
   const splitterProps = computed<UseSplitterProps>(() => {
-    const canCollapse = props.collapsible !== "none";
     const collapsed = props.collapsible === "offcanvas" ? 0 : Math.min(collapsedPixels.value, bounds.value.minWidth);
     const current = options.open.value ? width.value : collapsed;
     const percentage = groupWidth.value > 0 ? Math.min(100, current / groupWidth.value * 100) : 25;
     const navigation = {
       id: "navigation", minSize: `${bounds.value.minWidth}px`, maxSize: `${bounds.value.maxWidth}px`,
-      collapsible: canCollapse, collapsedSize: `${collapsed}px`, resizeBehavior: "preserve-pixel-size" as const,
+      collapsible: canCollapse.value, collapsedSize: `${collapsed}px`, resizeBehavior: "preserve-pixel-size" as const,
     };
     return {
       id: `${options.id.value}-resize`,
@@ -87,13 +88,13 @@ export function useSidebarResize(props: Required<Pick<SidebarProviderProps, "def
       onResize: ({ size }: { size: number[] }) => {
         if (!enabled.value || groupWidth.value <= 0) return;
         const next = (size[sidebarIndex.value] ?? 0) / 100 * groupWidth.value;
-        const isCollapsed = canCollapse && next <= collapsed + 0.5;
+        const isCollapsed = canCollapse.value && next <= collapsed + 0.5;
         options.setOpen(!isCollapsed);
         if (!isCollapsed) setWidth(next);
       },
       onResizeEnd: () => { if (enabled.value) options.onResizeEnd(width.value); },
     };
   });
-  provide(resizeKey, { props: splitterProps, handleId, range, setIsResizing: (value) => { resizing.value = value; } });
+  provide(resizeKey, { props: splitterProps, handleId, range, canCollapse, setIsResizing: (value) => { resizing.value = value; } });
   return { width, setWidth, isResizing: computed(() => enabled.value && resizing.value) };
 }

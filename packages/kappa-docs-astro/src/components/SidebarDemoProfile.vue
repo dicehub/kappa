@@ -14,8 +14,8 @@ const selected = computed(() => profiles.find(item => item.value === profile.val
 </script>
 
 <template>
-  <Sidebar.Context v-slot="{ isMobile, side, setMobileOpen }">
-    <Dropdown.Root aria-label="Profile" :positioning="{ placement: isMobile ? 'top-start' : side === 'end' ? 'left-end' : 'right-end', gutter: 8, strategy: 'fixed' }">
+  <Sidebar.Context v-slot="{ isMobile, setMobileOpen }">
+    <Dropdown.Root aria-label="Profile" :positioning="{ placement: 'top-start', gutter: 6, strategy: 'fixed' }">
       <Dropdown.Trigger as-child>
         <Sidebar.MenuButton :aria-label="`Profile: ${selected.name}`" :tooltip="selected.name" class="sidebar-demo__profile">
           <template #icon><span class="sidebar-demo__avatar" aria-hidden="true">{{ selected.initials }}</span></template>
@@ -26,7 +26,10 @@ const selected = computed(() => profiles.find(item => item.value === profile.val
       <Dropdown.Content :teleport="!isMobile" class="sidebar-demo__popup">
         <Dropdown.RadioGroup v-model="profile">
           <Dropdown.Label>Switch profile</Dropdown.Label>
-          <Dropdown.RadioItem v-for="item in profiles" :key="item.value" :value="item.value" close-on-select>{{ item.name }}</Dropdown.RadioItem>
+          <Dropdown.RadioItem v-for="item in profiles" :key="item.value" :value="item.value" close-on-select class="sidebar-demo__profile-option">
+            <template #indicator><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="m3 8.25 3 3 7-7" /></svg></template>
+            {{ item.name }}
+          </Dropdown.RadioItem>
         </Dropdown.RadioGroup>
         <Dropdown.Separator />
         <Dropdown.Item value="account" :icon="UserRound" @select="emit('select', 'Account'); setMobileOpen(false)">Account</Dropdown.Item>

@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { Menu } from "@ark-ui/vue/menu";
 import { Breadcrumbs } from "@dicehub/kappa/components/breadcrumbs";
+import { Dropdown } from "@dicehub/kappa/components/dropdown";
 
 type DemoVariant =
   | "preview"
@@ -113,25 +113,17 @@ withDefaults(defineProps<{ variant?: DemoVariant }>(), { variant: "preview" });
         <Breadcrumbs.Item><Breadcrumbs.Link href="#menu-projects">Projects</Breadcrumbs.Link></Breadcrumbs.Item>
         <Breadcrumbs.Separator />
         <Breadcrumbs.Item>
-          <Menu.Root id="breadcrumbs-ancestor-menu" :positioning="{ placement: 'bottom-start', gutter: 6 }">
-            <Menu.Trigger class="breadcrumbs-demo__ancestor-trigger">
+          <Dropdown.Root id="breadcrumbs-ancestor-menu" :positioning="{ placement: 'bottom-start', gutter: 6 }">
+            <Dropdown.Trigger class="breadcrumbs-demo__ancestor-trigger">
               <Breadcrumbs.Ellipsis />
               <span class="docs-visually-hidden">Show collapsed ancestors</span>
-            </Menu.Trigger>
-            <Menu.Positioner class="breadcrumbs-demo__menu-positioner">
-              <Menu.Content class="breadcrumbs-demo__menu" aria-label="Collapsed ancestors">
-                <Menu.Item value="models" class="breadcrumbs-demo__menu-item" as-child>
-                  <a href="#menu-models">Models</a>
-                </Menu.Item>
-                <Menu.Item value="rotor" class="breadcrumbs-demo__menu-item" as-child>
-                  <a href="#menu-rotor">Rotor study</a>
-                </Menu.Item>
-                <Menu.Item value="mesh" class="breadcrumbs-demo__menu-item" as-child>
-                  <a href="#menu-mesh">Mesh variants</a>
-                </Menu.Item>
-              </Menu.Content>
-            </Menu.Positioner>
-          </Menu.Root>
+            </Dropdown.Trigger>
+            <Dropdown.Content class="breadcrumbs-demo__menu" aria-label="Collapsed ancestors" :teleport="false">
+              <Dropdown.LinkItem value="models" href="#menu-models" class="breadcrumbs-demo__menu-item">Models</Dropdown.LinkItem>
+              <Dropdown.LinkItem value="rotor" href="#menu-rotor" class="breadcrumbs-demo__menu-item">Rotor study</Dropdown.LinkItem>
+              <Dropdown.LinkItem value="mesh" href="#menu-mesh" class="breadcrumbs-demo__menu-item">Mesh variants</Dropdown.LinkItem>
+            </Dropdown.Content>
+          </Dropdown.Root>
         </Breadcrumbs.Item>
         <Breadcrumbs.Separator />
         <Breadcrumbs.Item><Breadcrumbs.Page>Run 042</Breadcrumbs.Page></Breadcrumbs.Item>
@@ -250,7 +242,7 @@ withDefaults(defineProps<{ variant?: DemoVariant }>(), { variant: "preview" });
   outline-offset: 2px;
 }
 
-.breadcrumbs-demo__menu-positioner { z-index: 4; }
+.breadcrumbs-demo :deep([data-slot="dropdown-positioner"]) { --kappa-dropdown-z-index: 4; }
 .breadcrumbs-demo__menu {
   z-index: 4;
   display: grid;

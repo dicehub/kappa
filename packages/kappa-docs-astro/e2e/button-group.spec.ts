@@ -1,4 +1,5 @@
 import { expect, type Locator, type Page, test } from "@playwright/test";
+import { waitForDocsIsland } from "./helpers/docs-island";
 
 const demo = (page: Page, variant: string) =>
   page.locator(`[data-button-group-demo="${variant}"]`);
@@ -281,6 +282,7 @@ test.describe("Button Group documentation", () => {
 
   test("preserves interaction states, themes, reduced motion, and mobile width", async ({ page }) => {
     const preview = demo(page, "preview");
+    await waitForDocsIsland(preview);
     await preview.getByRole("button", { name: "Validate" }).click();
     await expect(preview.getByRole("status")).toHaveText("Validated");
 

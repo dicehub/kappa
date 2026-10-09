@@ -166,7 +166,7 @@ export const componentNav = grouped("Components", "/docs/components", [
 export const navGroups: NavGroup[] = [
   componentNav,
   grouped("Charts", "/docs/charts", ["Charts", "Timeseries", "Maps"]),
-  grouped("Blocks", "/docs/blocks", ["Application Shell", "Login", "Signup", "Resource List", "File Browser", "Delete Resource", "Resource Picker", "Message Composer"]),
+  grouped("Blocks", "/docs/blocks", ["Application Shell", "Login", "Signup", "Settings", "Resource List", "File Browser", "Delete Resource", "Resource Picker", "Message Composer", "Workspace Switcher"]),
 ];
 
 const implementedPages = new Set([
@@ -181,7 +181,9 @@ const implementedPages = new Set([
   "/docs/blocks/login",
   "/docs/blocks/resource-list",
   "/docs/blocks/signup",
+  "/docs/blocks/settings",
   "/docs/blocks/sidebar",
+  "/docs/blocks/workspace-switcher",
   "/docs/components/accordion",
   "/docs/components/activity-feed",
   "/docs/components/aspect-ratio",

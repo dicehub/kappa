@@ -1,0 +1,21 @@
+---
+import CenteringFixture from "./_CenteringFixture.vue";
+import "@dicehub/kappa/styles/theme-kappa.css";
+import "@dicehub/kappa/styles/kappa.css";
+---
+
+<!doctype html>
+<html lang="en" class="kappa-docs-root">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex" />
+    <title>Application Shell centering — Kappa</title>
+  </head>
+  <body><CenteringFixture client:load /></body>
+</html>
+
+<style is:global>
+  @font-face { font-family: "Geist"; src: url("/fonts/geist/geist-variable.woff2") format("woff2"); font-weight: 100 900; font-display: swap; }
+  html, body { margin: 0; background: var(--kappa-control); color: var(--kappa-default); font-family: Geist, sans-serif; }
+</style>

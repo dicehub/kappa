@@ -260,14 +260,19 @@ describe("docs page navigation", () => {
     });
     assert.deepEqual(adjacentLabels("/docs/blocks/message-composer"), {
       previous: "Resource Picker",
+      next: "Workspace Switcher",
+    });
+    assert.deepEqual(adjacentLabels("/docs/blocks/workspace-switcher"), {
+      previous: "Message Composer",
       next: undefined,
     });
     assert.deepEqual(adjacentLabels("/docs/blocks"), { previous: undefined, next: "Application Shell" });
     assert.deepEqual(adjacentLabels("/docs/blocks/sidebar"), { previous: "Blocks", next: "Login" });
     assert.deepEqual(adjacentLabels("/docs/blocks/login"), { previous: "Application Shell", next: "Signup" });
-    assert.deepEqual(adjacentLabels("/docs/blocks/signup"), { previous: "Login", next: "Resource List" });
+    assert.deepEqual(adjacentLabels("/docs/blocks/signup"), { previous: "Login", next: "Settings" });
+    assert.deepEqual(adjacentLabels("/docs/blocks/settings"), { previous: "Signup", next: "Resource List" });
     assert.deepEqual(adjacentLabels("/docs/blocks/resource-list"), {
-      previous: "Signup",
+      previous: "Settings",
       next: "File Browser",
     });
     assert.deepEqual(adjacentLabels("/docs/blocks/file-browser"), {
@@ -296,7 +301,7 @@ describe("docs page navigation", () => {
   it("contains every documentation page exactly once", () => {
     const hrefs = docsPageSequences.flatMap((sequence) => sequence.map((link) => link.href));
     assert.equal(docsPageSequences.length, 4);
-    assert.equal(hrefs.length, 117);
+    assert.equal(hrefs.length, 119);
     assert.equal(new Set(hrefs).size, hrefs.length);
   });
 

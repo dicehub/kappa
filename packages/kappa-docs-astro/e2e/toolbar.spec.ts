@@ -69,6 +69,7 @@ test.describe("Toolbar documentation", () => {
     await selectTrigger.click();
     await page.getByRole("option", { name: "Created date" }).click();
     await expect(selectTrigger).toContainText("Created date");
+    await expect(selectTrigger).toBeFocused();
 
     const combobox = demo(page, "combobox");
     await waitForHydration(combobox);

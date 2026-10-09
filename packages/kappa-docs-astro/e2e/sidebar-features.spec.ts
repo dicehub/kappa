@@ -86,7 +86,8 @@ test("resize follows end placement and right-to-left direction", async ({ page }
     await handle(page, name).scrollIntoViewIfNeeded();
     const edge = await handle(page, name).boundingBox();
     const root = await nav(page, name).boundingBox();
-    expect(Math.abs(edge!.x + edge!.width / 2 - root!.x)).toBeLessThan(4);
+    expect(root!.x).toBeGreaterThanOrEqual(edge!.x);
+    expect(root!.x).toBeLessThanOrEqual(edge!.x + edge!.width);
     await drag(page, handle(page, name), -60);
     await expect.poll(() => width(nav(page, name))).toBeCloseTo(300, 0);
     await handle(page, name).press("ArrowLeft");
@@ -134,9 +135,9 @@ test("namespace and profile popup selection stays usable while peeking", async (
   await namespace.hover();
   await namespace.click();
   const menu = page.getByRole("menu", { name: "Namespace: Engineering", exact: true });
-  await menu.getByRole("menuitem", { name: "Research", exact: true }).hover();
+  await menu.getByRole("menuitemradio", { name: "Research", exact: true }).hover();
   await expect(root).toHaveAttribute("data-state", "peeking");
-  await menu.getByRole("menuitem", { name: "Research", exact: true }).click();
+  await menu.getByRole("menuitemradio", { name: "Research", exact: true }).click();
   await expect(root.getByRole("button", { name: "Namespace: Research" })).toBeFocused();
   await expect(demo(page, "peeking").locator(".sidebar-demo__eyebrow")).toHaveText("Research");
   await root.getByRole("button", { name: "Profile: Casey Rivera" }).click();
@@ -194,7 +195,7 @@ test("full-screen mobile supports namespace, profile and nested search without l
   const sheet = page.getByRole("dialog", { name: "full-screen-mobile navigation", exact: true });
   await expect(sheet).toHaveCSS("width", "390px");
   await sheet.getByRole("button", { name: "Namespace: Engineering" }).click();
-  await page.getByRole("menuitem", { name: "Research", exact: true }).click();
+  await page.getByRole("menuitemradio", { name: "Research", exact: true }).click();
   await expect(sheet).toBeVisible();
   await sheet.getByRole("button", { name: "Profile: Casey Rivera" }).click();
   await page.getByRole("menuitemradio", { name: "Jordan Lee", exact: true }).click();

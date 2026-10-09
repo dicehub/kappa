@@ -1,4 +1,5 @@
 import { expect, type Locator, type Page, test } from "@playwright/test";
+import { waitForDocsIsland } from "./helpers/docs-island";
 
 const demo = (page: Page, variant: string) => page.locator(`[data-avatar-demo="${variant}"]`);
 const roots = (container: Locator) => container.locator('[data-slot="avatar"]');
@@ -190,6 +191,7 @@ test.describe("Avatar documentation", () => {
     await page.goto("/docs/components/avatar");
 
     const dropdown = demo(page, "dropdown");
+    await waitForDocsIsland(dropdown);
     const trigger = dropdown.getByRole("button", { name: "Open account menu for Lina Haddad" });
     await expect(trigger).toHaveAttribute("type", "button");
     await expect(trigger).toHaveAttribute("aria-expanded", "false");

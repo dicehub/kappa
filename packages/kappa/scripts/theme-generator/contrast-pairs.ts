@@ -32,6 +32,15 @@ export const themeContrastPairs: ThemeContrastPair[] = [
     note: "Inputs, buttons, and menu labels.",
   },
   {
+    id: "text-default-on-control-hover",
+    label: "Default text on hovered controls",
+    foreground: "--kappa-default",
+    background: "--kappa-control-hover",
+    kind: "text",
+    minimum: 4.5,
+    note: "Neutral button labels on hover.",
+  },
+  {
     id: "text-default-on-tint",
     label: "Default text on tint",
     foreground: "--kappa-default",

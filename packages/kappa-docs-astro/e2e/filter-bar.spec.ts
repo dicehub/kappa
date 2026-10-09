@@ -37,8 +37,11 @@ test("sorting and view controls support keyboard interaction", async ({ page }) 
   const sort = demo.getByRole("button", { name: "Sort by: Updated date" });
   await sort.focus();
   await page.keyboard.press("Enter");
-  await expect(page.getByRole("menu")).toBeVisible();
+  const menu = page.getByRole("menu");
+  await expect(menu).toBeVisible();
+  await expect(menu).toBeFocused();
   await page.keyboard.press("n");
+  await expect(menu.getByRole("menuitemradio", { name: "Name", exact: true })).toHaveAttribute("data-highlighted", "");
   await page.keyboard.press("Enter");
   await expect(demo.getByRole("button", { name: "Sort by: Name" })).toBeFocused();
   await demo.getByRole("radio", { name: "List view" }).focus();

@@ -25,7 +25,8 @@ const slug = (name: string) => name.toLowerCase().replaceAll(" ", "-");
 
 <template>
   <div class="sidebar-grouped-demo" :data-sidebar-block="props.collapsible ? 'collapsible-submenus' : props.floating ? 'floating-submenus' : 'submenus'" :data-standalone="props.standalone || undefined">
-    <SidebarLayout :variant="props.floating ? 'floating' : 'workspace'" :width="props.floating ? '19rem' : undefined" label="Documentation navigation" collapsible="offcanvas" full-screen-on-mobile>
+    <SidebarLayout :variant="props.floating ? 'floating' : 'workspace'" :width="props.floating ? '19rem' : undefined" label="Documentation navigation" collapsible="offcanvas" full-screen-on-mobile
+      :content-alignment="props.standalone ? 'shell' : 'available'" :mobile-breakpoint="1200">
       <template #header="context">
         <Sidebar.MenuButton href="?page=introduction" class="sidebar-grouped-demo__version" @click.prevent="selected = 'Introduction'; openGroups['Getting started'] = true; query = ''; context.setMobileOpen(false)">
           <template #icon><span class="sidebar-grouped-demo__mark"><BookOpen aria-hidden="true" /></span></template>

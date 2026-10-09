@@ -31,8 +31,17 @@ test('Favorites support add, remove, and empty state; namespace state is indepen
   const favorites = page.getByRole('list', { name: 'Favorites', exact: true });
   await page.getByRole('button', { name: 'Remove Project brief from Favorites', exact: true }).click();
   await expect(favorites.getByRole('link')).toHaveCount(2);
-  await page.getByRole('button', { name: 'Namespace: Engineering', exact: true }).click();
+  const namespace = page.getByRole('button', { name: 'Namespace: Engineering', exact: true });
+  await namespace.click();
+  const menu = page.getByRole('menu', { name: 'Namespace: Engineering', exact: true });
+  await expect(menu).toHaveAttribute('data-placement', 'bottom-start');
+  await menu.evaluate(async node => { await Promise.all(node.getAnimations().map(animation => animation.finished.catch(() => {}))); });
+  const triggerBounds = (await namespace.boundingBox())!;
+  const menuBounds = (await menu.boundingBox())!;
+  expect(menuBounds.y).toBeGreaterThanOrEqual(triggerBounds.y + triggerBounds.height);
+  expect(menuBounds.x).toBeCloseTo(triggerBounds.x, 1);
   await page.getByRole('menuitemradio', { name: 'Research', exact: true }).click();
+  await expect(page.getByRole('button', { name: 'Namespace: Research', exact: true })).toBeFocused();
   await expect(page.getByRole('heading', { name: 'Study plan', exact: true })).toBeVisible();
   await expect(favorites.getByRole('link')).toHaveCount(1);
   const remove = page.getByRole('button', { name: 'Remove Study plan from Favorites', exact: true });
@@ -87,6 +96,7 @@ test('mobile namespace and search stay usable; selection restores focus and surv
   await expect(drawer).toHaveCSS('width', '390px');
   await expect(drawer).toHaveCSS('height', '844px');
   await drawer.getByRole('button', { name: 'Namespace: Engineering', exact: true }).click();
+  await expect(drawer.getByRole('menu', { name: 'Namespace: Engineering', exact: true })).toHaveAttribute('data-placement', 'bottom-start');
   await drawer.getByRole('menuitemradio', { name: 'Research', exact: true }).click();
   await expect(drawer.getByRole('button', { name: 'Namespace: Research', exact: true })).toBeFocused();
   const search = drawer.getByRole('button', { name: 'Quick search …', exact: true });

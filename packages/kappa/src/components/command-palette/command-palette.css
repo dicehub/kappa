@@ -46,6 +46,10 @@
   pointer-events: auto;
 }
 
+.kappa-command-palette__content[hidden],
+.kappa-command-palette__backdrop[hidden],
+.kappa-command-palette__positioner[hidden] { display: none; }
+
 .kappa-command-palette__backdrop[data-state="open"] {
   animation: kappa-command-palette-fade-in 140ms ease-out;
 }

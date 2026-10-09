@@ -6,6 +6,39 @@ import type { SelectProps } from "@dicehub/kappa/components/select";
 import type { TableOfContentsRoot } from "@dicehub/kappa/components/table-of-contents";
 import { NavigationMenu } from "@dicehub/kappa";
 import type { NavigationMenuProps, NavigationMenuRootProviderProps } from "@dicehub/kappa/components/navigation-menu";
+import { SettingsLayout, SettingsSection } from "@dicehub/kappa";
+import type { SettingsLayout as GranularSettingsLayout, SettingsSectionProps } from "@dicehub/kappa/blocks/settings-layout";
+import { SidebarLayout } from "@dicehub/kappa";
+import type { SidebarLayout as GranularSidebarLayout, SidebarLayoutContentAlignment, SidebarLayoutProps } from "@dicehub/kappa/blocks/sidebar-layout";
+import { WorkspaceSwitcher } from "@dicehub/kappa";
+import type { WorkspaceSwitcher as GranularWorkspaceSwitcher, WorkspaceSwitcherAction, WorkspaceSwitcherProps } from "@dicehub/kappa/blocks/workspace-switcher";
+
+const workspaceSwitcher: typeof GranularWorkspaceSwitcher = WorkspaceSwitcher;
+const switcher: WorkspaceSwitcherProps = { modelValue: "engineering", items: [{ value: "engineering", name: "Engineering" }] };
+const switcherAction: WorkspaceSwitcherAction = { value: "settings", label: "Settings" };
+const switcherTrigger: InstanceType<typeof WorkspaceSwitcher>["$slots"]["trigger"] = ({ workspace }) => workspace?.name;
+// @ts-expect-error Workspace selection must be supplied by the application.
+const missingWorkspace: WorkspaceSwitcherProps = { items: [] };
+// @ts-expect-error Workspace entries require a display name.
+const unnamedWorkspace: WorkspaceSwitcherProps = { modelValue: "engineering", items: [{ value: "engineering" }] };
+void [workspaceSwitcher, switcher, switcherAction, switcherTrigger, missingWorkspace, unnamedWorkspace];
+
+const sidebarLayout: typeof GranularSidebarLayout = SidebarLayout;
+const alignment: SidebarLayoutContentAlignment = "shell";
+const centeredLayout: SidebarLayoutProps = { contentAlignment: alignment, mobileBreakpoint: 1200 };
+const componentAlignment: InstanceType<typeof SidebarLayout>["$props"]["contentAlignment"] = "available";
+// @ts-expect-error Content alignment accepts only available or shell.
+const invalidAlignment: SidebarLayoutProps = { contentAlignment: "viewport" };
+void [sidebarLayout, centeredLayout, componentAlignment, invalidAlignment];
+
+const settingsLayout: typeof GranularSettingsLayout = SettingsLayout;
+const settingsSection: typeof SettingsSection = SettingsLayout.Section;
+const setting: SettingsSectionProps = { title: "Time zone", defaultOpen: true, headingLevel: 3 };
+// @ts-expect-error Section headings require a title.
+const untitledSetting: SettingsSectionProps = { defaultOpen: true };
+// @ts-expect-error Section heading levels are limited to 2, 3, and 4.
+const invalidSettingLevel: SettingsSectionProps = { title: "Time zone", headingLevel: 1 };
+void [settingsLayout, settingsSection, setting, untitledSetting, invalidSettingLevel];
 
 type ButtonProps = InstanceType<typeof Button>["$props"];
 type DialogProps = InstanceType<typeof Dialog.Root>["$props"];

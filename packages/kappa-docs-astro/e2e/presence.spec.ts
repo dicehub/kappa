@@ -1,4 +1,5 @@
 import { expect, type Page, test } from "@playwright/test";
+import { waitForDocsIsland } from "./helpers/docs-island";
 
 const demo = (page: Page, variant: string) => page.locator(`[data-presence-demo="${variant}"]`);
 
@@ -63,6 +64,7 @@ test.describe("Presence documentation", () => {
 
   test("waits for motion, reports lifecycle events, and unmounts lazy content", async ({ page }) => {
     const preview = demo(page, "preview");
+    await waitForDocsIsland(preview);
     const status = preview.getByRole("region", { name: "Service status" });
     const presence = preview.locator('[data-slot="presence"]');
     await expect(status).toBeVisible();
@@ -77,6 +79,7 @@ test.describe("Presence documentation", () => {
     await expect(preview.getByText("Entered")).toBeVisible();
 
     const lazy = demo(page, "lazy");
+    await waitForDocsIsland(lazy);
     await expect(lazy.locator("[data-lazy-presence]")).toHaveCount(0);
     await lazy.getByRole("button", { name: "Mount details" }).click();
     await expect(lazy.locator("[data-lazy-presence]")).toBeVisible();

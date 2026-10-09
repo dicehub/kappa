@@ -31,6 +31,8 @@
 .sidebar-demo__profile > .kappa-sidebar__menu-icon { inline-size: 1.75rem; block-size: 1.75rem; }
 .sidebar-demo__profile { padding-inline: 0.25rem; }
 .sidebar-demo__popup { inline-size: 15rem; }
+.sidebar-demo__profile-option.kappa-dropdown__option-item { padding-inline: 0.5rem 2rem; }
+.sidebar-demo__profile-option .kappa-dropdown__item-indicator { inset-inline-start: auto; inset-inline-end: 0.5rem; }
 .sidebar-demo__search { margin-block-end: 0.5rem; }
 .sidebar-demo__search .kappa-sidebar__menu-button { color: var(--kappa-subtle); }
 .sidebar-demo__breadcrumb { display: flex; gap: 0.5rem; color: var(--kappa-subtle); }

@@ -1,4 +1,5 @@
 import { expect, type Page, test } from "@playwright/test";
+import { waitForDocsIsland } from "./helpers/docs-island";
 
 const demo = (page: Page, variant: string) =>
   page.locator(`[data-scroll-area-demo="${variant}"]`);
@@ -60,6 +61,7 @@ test.describe("Scroll Area documentation", () => {
     await page.goto("/docs/components/scroll-area");
 
     const controlled = demo(page, "controls");
+    await waitForDocsIsland(controlled);
     const viewport = controlled.getByRole("region", { name: "Controlled event log" });
     await controlled.getByRole("button", { name: "Last" }).click();
     await expect.poll(() => viewport.evaluate((element) => element.scrollTop)).toBeGreaterThan(0);

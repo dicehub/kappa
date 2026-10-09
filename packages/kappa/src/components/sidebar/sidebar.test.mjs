@@ -11,6 +11,7 @@ test("sidebar defaults keep desktop and mobile state separate", () => {
   assert.equal(SIDEBAR_DEFAULTS.collapsible, "icon");
   assert.equal(SIDEBAR_DEFAULTS.side, "start");
   assert.equal(SIDEBAR_DEFAULTS.compact, false);
+  assert.equal(SIDEBAR_DEFAULTS.collapseOnResize, true);
   assert.equal(SIDEBAR_DEFAULTS.mobileBreakpoint, 768);
 });
 
@@ -51,7 +52,8 @@ test("sidebar styles preserve semantic tokens, compact targets and hidden state"
   assert.match(css, /clip-path: inset\(50%\)/);
   assert.match(source("Sidebar.vue"), /:inert=/);
   assert.doesNotMatch(css, /data-mode=/);
-  assert.doesNotMatch(css, /\.(?!kappa-)[a-z][\w-]*|(?<![\w-])--(?!kappa-)[a-z][\w-]*/);
+  const styles = css.replace(/@import\s+[^;]+;/g, "") + source("sidebar-offcanvas.css");
+  assert.doesNotMatch(styles, /\.(?!kappa-)[a-z][\w-]*|(?<![\w-])--(?!kappa-)[a-z][\w-]*/);
 });
 
 test("sidebar exposes explicit native list semantics and all compound parts", () => {

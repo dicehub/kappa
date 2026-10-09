@@ -92,7 +92,7 @@ export {
 
 export {
   numberInputAnatomy,
-  useNumberInput,
   useNumberInputContext,
   type UseNumberInputProps,
 } from "@ark-ui/vue/number-input";
+export { useNumberInput } from "./use-number-input";

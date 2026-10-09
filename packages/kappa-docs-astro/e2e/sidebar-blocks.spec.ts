@@ -5,6 +5,15 @@ const demo = (page: Page, variant = "workspace") => page.locator(`[data-sidebar-
 const navigation = (page: Page, variant = "workspace") => demo(page, variant).getByRole("navigation", { name: `${variant} application navigation`, exact: true });
 const toggle = (page: Page, variant = "workspace") => demo(page, variant).locator('.kappa-sidebar-layout__toolbar [data-slot="sidebar-trigger"]');
 const width = (element: Locator) => element.evaluate(node => node.getBoundingClientRect().width);
+const indicator = (element: Locator) => element.evaluate(node => {
+  const style = getComputedStyle(node, "::after");
+  const nav = node.closest('[data-slot="sidebar"]')!;
+  const bounds = nav.getBoundingClientRect();
+  return {
+    left: node.getBoundingClientRect().left + Number.parseFloat(style.left), width: Number.parseFloat(style.width),
+    navLeft: bounds.left, navRight: bounds.right,
+  };
+});
 async function ready(page: Page, variant = "workspace") {
   await expect.poll(() => demo(page, variant).evaluate(el => el.closest("astro-island")?.hasAttribute("ssr"))).toBe(false);
 }
@@ -190,12 +199,17 @@ test("controlled layouts forward attributes, translated labels, rejected request
   await expect(contract.getByRole("button", { name: "Expand navigation", exact: true })).toBeFocused();
   await contract.getByRole("button", { name: "Expand navigation", exact: true }).click();
   await contract.getByRole("button", { name: "End placement", exact: true }).click();
-  const ltrEdge = (await separator.boundingBox())!;
-  expect(Math.abs(ltrEdge.x + ltrEdge.width / 2 - (await nav.boundingBox())!.x)).toBeLessThan(4);
+  await page.mouse.move(0, 0);
+  await expect.poll(async () => {
+    const line = await indicator(separator);
+    return { width: line.width, aligned: Math.abs(line.left - line.navLeft) < 0.05 };
+  }).toEqual({ width: 1, aligned: true });
   await contract.getByRole("button", { name: "RTL", exact: true }).click();
-  const rtlEdge = (await separator.boundingBox())!;
-  const rtlNav = (await nav.boundingBox())!;
-  expect(Math.abs(rtlEdge.x + rtlEdge.width / 2 - rtlNav.x - rtlNav.width)).toBeLessThan(4);
+  await page.mouse.move(0, 0);
+  await expect.poll(async () => {
+    const line = await indicator(separator);
+    return { width: line.width, aligned: Math.abs(line.left - line.navRight + 1) < 0.05 };
+  }).toEqual({ width: 1, aligned: true });
   await page.setViewportSize({ width: 390, height: 844 });
   await contract.getByRole("button", { name: "Open navigation", exact: true }).click();
   const mobile = page.getByRole("dialog", { name: "Controlled navigation", exact: true });
