@@ -106,13 +106,15 @@ const positioning = computed(() => ({
       >
         <svg
           v-if="!copied"
+          class="docs-copy-controls__copy-icon"
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
+          stroke-width="2"
           aria-hidden="true"
         >
-          <rect x="8" y="8" width="11" height="11" rx="2" />
-          <path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2" />
+          <rect x="3" y="8" width="13" height="13" rx="3" />
+          <path d="M8 8V6a3 3 0 0 1 3-3h7a3 3 0 0 1 3 3v7a3 3 0 0 1-3 3h-2" />
         </svg>
         <svg
           v-else

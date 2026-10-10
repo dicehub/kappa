@@ -1,8 +1,11 @@
 <script setup lang="ts">
 import { CodeHighlighted, ShikiProvider } from "@dicehub/kappa/components/code-highlighted";
+import LanguageSwitch from "../snippets/code-highlighted/LanguageSwitch.vue";
+import NumberedLanguageSwitch from "../snippets/code-highlighted/NumberedLanguageSwitch.vue";
 
 type DemoVariant =
   | "preview"
+  | "language-switch"
   | "usage"
   | "title"
   | "languages"
@@ -15,13 +18,6 @@ type DemoVariant =
 withDefaults(defineProps<{ variant?: DemoVariant }>(), {
   variant: "preview",
 });
-
-const previewCode = `// Clamp the Courant number before each iteration
-const courant = computed(() => Math.min(rawCourant.value, 5));
-
-watch(courant, (value) => {
-  solver.setMaxCourant(value);
-});`;
 
 const usageCode = `interface BoundaryPatch {
   name: string;
@@ -96,14 +92,9 @@ export function useCourantLimit(raw: Ref<number>) {
 
 <template>
   <div class="code-highlighted-demo" :data-code-highlighted-demo="variant">
-    <ShikiProvider v-if="variant === 'preview'" :languages="['typescript']">
-      <CodeHighlighted
-        title="courant-limit.ts"
-        :code="previewCode"
-        lang="typescript"
-        show-copy-button
-      />
-    </ShikiProvider>
+    <LanguageSwitch v-if="variant === 'preview'" />
+
+    <NumberedLanguageSwitch v-else-if="variant === 'language-switch'" />
 
     <ShikiProvider v-else-if="variant === 'usage'" :languages="['typescript']">
       <CodeHighlighted :code="usageCode" lang="typescript" />

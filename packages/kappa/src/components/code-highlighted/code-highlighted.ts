@@ -41,17 +41,29 @@ export type ShikiEngine = "javascript" | "wasm";
 export type CodeHighlightedLabels = {
   copy?: string;
   copied?: string;
+  language?: string;
 };
 
 export const DEFAULT_CODE_HIGHLIGHTED_LABELS: Required<CodeHighlightedLabels> = {
   copy: "Copy",
   copied: "Copied!",
+  language: "Code language",
+};
+
+export interface CodeHighlightedLanguageOption {
+  label: string;
+  value: LanguageInput | (string & {});
+}
+
+export type CodeHighlightedEmits = {
+  "update:lang": [language: string];
 };
 
 export interface CodeHighlightedProps {
   code: string;
   lang: LanguageInput | (string & {});
   title?: string;
+  languageOptions?: CodeHighlightedLanguageOption[];
   showLineNumbers?: boolean;
   highlightLines?: number[];
   showCopyButton?: boolean;

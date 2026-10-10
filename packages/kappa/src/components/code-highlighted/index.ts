@@ -14,6 +14,8 @@ export {
   DEFAULT_CODE_HIGHLIGHTED_LABELS,
   normalizeCodeHighlightedLanguage,
   type CodeHighlightedLabels,
+  type CodeHighlightedEmits,
+  type CodeHighlightedLanguageOption,
   type CodeHighlightedProps,
   type LanguageAlias,
   type LanguageInput,

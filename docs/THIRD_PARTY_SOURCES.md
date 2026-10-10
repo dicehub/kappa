@@ -32,7 +32,7 @@ dependency on Kumo. Ark UI provides Kappa's component primitives.
 
 ## Phosphor Icons
 
-The documentation uses Phosphor CopySimple, Check, and House SVG paths. The
+The documentation uses Phosphor Check and House SVG paths. The
 preserved MIT notice comes from `phosphor-icons/react` tag `v2.1.10`, as recorded
 in `packages/kappa/licenses/phosphor.LICENSE`. This identifies the reviewed
 license version; the original SVG import revision was not recorded.

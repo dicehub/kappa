@@ -49,6 +49,12 @@ export default defineConfig({
       ...(useKappaSource ? { conditions: ["kappa-source"] } : {}),
       dedupe: ["vue"],
     },
+    ...(useKappaSource ? {
+      ssr: {
+        noExternal: ["@dicehub/kappa"],
+        resolve: { conditions: ["kappa-source", "module", "node", "development|production"] },
+      },
+    } : {}),
   },
   markdown: {
     shikiConfig: {

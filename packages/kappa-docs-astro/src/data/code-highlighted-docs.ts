@@ -1,31 +1,14 @@
+import previewCode from "../snippets/code-highlighted/LanguageSwitch.vue?raw";
+import languageSwitchCode from "../snippets/code-highlighted/NumberedLanguageSwitch.vue?raw";
+
+export { previewCode, languageSwitchCode };
+
 export const installationCode = `import {
   CodeHighlighted,
   CodeHighlightedRoot,
   ShikiProvider,
   useShikiHighlighter,
 } from "@dicehub/kappa/components/code-highlighted";`;
-
-export const previewCode = `<script setup>
-import { CodeHighlighted, ShikiProvider } from "@dicehub/kappa/components/code-highlighted";
-
-const code = \`// Clamp the Courant number before each iteration
-const courant = computed(() => Math.min(rawCourant.value, 5));
-
-watch(courant, (value) => {
-  solver.setMaxCourant(value);
-});\`;
-</script>
-
-<template>
-  <ShikiProvider :languages="['typescript']">
-    <CodeHighlighted
-      title="courant-limit.ts"
-      :code="code"
-      lang="typescript"
-      show-copy-button
-    />
-  </ShikiProvider>
-</template>`;
 
 export const usageCode = `<script setup>
 import { CodeHighlighted, ShikiProvider } from "@dicehub/kappa/components/code-highlighted";
@@ -86,12 +69,13 @@ export const labelsCode = `<ShikiProvider :languages="['typescript']" :labels="{
 export const shikiProviderProps = [
   { name: "languages", type: "string[]", defaultValue: "required", description: "Languages to load; only these get highlighted." },
   { name: "engine", type: '"javascript" | "wasm"', defaultValue: '"javascript"', description: "Shiki regex engine; JavaScript is smaller, Oniguruma (wasm) is more accurate." },
-  { name: "labels", type: "CodeHighlightedLabels", defaultValue: "Copy / Copied!", description: "Copy-button labels for every CodeHighlighted inside." },
+  { name: "labels", type: "CodeHighlightedLabels", defaultValue: "Copy / Copied! / Code language", description: "Copy-button and language-selector labels for every CodeHighlighted inside." },
 ] as const;
 
 export const codeHighlightedProps = [
   { name: "code", type: "string", defaultValue: "required", description: "Source text to display." },
   { name: "lang", type: "LanguageInput | string", defaultValue: "required", description: "Language id or alias; must be in the provider languages." },
+  { name: "languageOptions", type: "CodeHighlightedLanguageOption[]", defaultValue: "[]", description: "Language choices shown in the header; use with v-model:lang." },
   { name: "title", type: "string", defaultValue: "—", description: "Optional file name or short label rendered above the code." },
   { name: "showLineNumbers", type: "boolean", defaultValue: "false", description: "Adds a line-number column for multi-line code." },
   { name: "highlightLines", type: "number[]", defaultValue: "[]", description: "1-indexed lines to emphasize." },
@@ -105,8 +89,10 @@ export const exportsList = [
   { name: "ShikiProvider", description: "Lazy-loads one shared Shiki highlighter for all child blocks." },
   { name: "useShikiHighlighter", description: "Access highlight, loading state, and labels inside a provider." },
   { name: "normalizeCodeHighlightedLanguage", description: "Resolves aliases to supported language ids." },
-  { name: "DEFAULT_CODE_HIGHLIGHTED_LABELS", description: "Default copy-button labels." },
-  { name: "CodeHighlightedLabels", description: "Copy-button label overrides." },
+  { name: "DEFAULT_CODE_HIGHLIGHTED_LABELS", description: "Default copy-button and language-selector labels." },
+  { name: "CodeHighlightedLabels", description: "Copy-button and language-selector label overrides." },
+  { name: "CodeHighlightedEmits", description: "Events, including update:lang for language selection." },
+  { name: "CodeHighlightedLanguageOption", description: "A language choice with a label and value." },
   { name: "CodeHighlightedProps", description: "Public component props." },
   { name: "LanguageAlias", description: "Supported shorthand language ids." },
   { name: "LanguageInput", description: "Supported language ids and aliases." },

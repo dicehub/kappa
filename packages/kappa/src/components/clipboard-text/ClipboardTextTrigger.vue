@@ -23,16 +23,16 @@ defineSlots<ClipboardTextTriggerSlots>();
       <ClipboardTextIndicator>
         <svg
           class="kappa-clipboard-text__icon"
-          viewBox="0 0 16 16"
+          viewBox="0 0 24 24"
           fill="none"
+          stroke="currentColor"
+          stroke-width="2"
           aria-hidden="true"
           focusable="false"
         >
-          <rect x="5" y="5" width="9" height="9" rx="1.5" stroke="currentColor" stroke-width="1.5" />
+          <rect x="3" y="8" width="13" height="13" rx="3" />
           <path
-            d="M11 5V3.5A1.5 1.5 0 0 0 9.5 2h-6A1.5 1.5 0 0 0 2 3.5v6A1.5 1.5 0 0 0 3.5 11H5"
-            stroke="currentColor"
-            stroke-width="1.5"
+            d="M8 8V6a3 3 0 0 1 3-3h7a3 3 0 0 1 3 3v7a3 3 0 0 1-3 3h-2"
           />
         </svg>
         <template #copied>
