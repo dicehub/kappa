@@ -325,11 +325,15 @@ test.describe("Dialog documentation", () => {
     const parent = await openDemo(page, "nested-dialog", "Open parent dialog");
     await parent.dialog.getByRole("button", { name: "Edit advanced settings" }).click();
     const child = surface(page, "nested-child");
-    await expect(page.getByRole("dialog")).toHaveCount(2);
+    await expect(parent.dialog).toBeVisible();
+    await expect(child).toBeVisible();
+    await expect(page.getByRole("dialog", { includeHidden: true })).toHaveCount(2);
+    await expect(page.getByRole("dialog")).toHaveCount(1);
+    await expect(page.getByRole("dialog", { name: "Advanced settings", exact: true })).toBeVisible();
     await expect(child.getByRole("heading", { name: "Advanced settings" })).toBeVisible();
     await child.getByRole("button", { name: "Done" }).click();
     await expect(child).toHaveCount(0);
-    await expect(parent.dialog).toBeVisible();
+    await expect(page.getByRole("dialog", { name: "Run settings", exact: true })).toBeVisible();
     await page.keyboard.press("Escape");
     await expect(parent.dialog).toHaveCount(0);
 
