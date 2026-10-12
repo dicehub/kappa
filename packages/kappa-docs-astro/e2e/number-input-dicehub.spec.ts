@@ -62,43 +62,7 @@ test("commits drafts, accepts decimals, and clamps the value", async ({ page }) 
   await expect(field(page)).toHaveValue("0");
 });
 
-test("uses dicehub drag multipliers and restores the dragged value on Escape", async ({ page }) => {
-  await page.evaluate(() => {
-    // Exercise the supported capture fallback; no OS pointer-lock timing dependency.
-    HTMLElement.prototype.requestPointerLock = () => Promise.reject(new Error("Test capture fallback"));
-  });
-  for (const [keys, expected] of [
-    [[], "12"], [["Shift"], "2.2"], [["Alt"], "102"], [["Control"], "1002"],
-    [["Shift", "Alt"], "2.2"], [["Control", "Shift", "Alt"], "1002"],
-  ] as const) {
-    await surface(page).click();
-    await field(page).fill("2");
-    await field(page).press("Enter");
-    const box = (await surface(page).boundingBox())!;
-    const x = box.x + box.width / 2, y = box.y + box.height / 2;
-    for (const key of keys) await page.keyboard.down(key);
-    await page.mouse.move(x, y);
-    await page.mouse.down();
-    await page.mouse.move(x + 9, y);
-    await expect(field(page)).toHaveValue("2");
-    await page.mouse.move(x + 11, y);
-    await page.mouse.move(x + 21, y);
-    await expect(field(page)).toHaveValue(expected);
-    await page.mouse.up();
-    for (const key of keys) await page.keyboard.up(key);
-  }
-  const box = (await surface(page).boundingBox())!;
-  const y = box.y + box.height / 2;
-  await page.mouse.move(box.x + 50, y);
-  await page.mouse.down();
-  await page.mouse.move(box.x + 61, y);
-  await page.mouse.move(box.x + 71, y);
-  await expect(field(page)).toHaveValue("1012");
-  await page.keyboard.press("Escape");
-  await page.mouse.up();
-  await expect(field(page)).toHaveValue("1002");
-  await expect(surface(page)).not.toHaveAttribute("data-dragging", "");
-});
+
 
 test("steps on release and repeats after a 400ms hold without leaking a timer", async ({ page }) => {
   const now = new Date();

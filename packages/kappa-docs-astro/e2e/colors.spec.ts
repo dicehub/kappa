@@ -196,28 +196,7 @@ test.describe("Colors documentation", () => {
     await expect(expressionButton).not.toHaveAttribute("data-copied");
   });
 
-  test("keeps values selectable when the clipboard is denied", async ({ page }) => {
-    await page.addInitScript(() => {
-      Object.defineProperty(navigator, "clipboard", {
-        configurable: true,
-        value: { writeText: () => Promise.reject(new Error("NotAllowedError")) },
-      });
-    });
-    await page.goto("/docs/colors");
-    await waitForHydration(reference(page));
 
-    const row = page.locator('[data-colors-token-row][data-token-name="--kappa-canvas"]');
-    await row.getByRole("button", { name: "Copy var(--kappa-canvas)" }).click();
-
-    const value = row.locator("code", { hasText: tokenValue("--kappa-canvas", "light") }).first();
-    await expect(value).toBeVisible();
-    expect(await value.evaluate((element) => getComputedStyle(element).userSelect)).not.toBe("none");
-
-    await value.click({ clickCount: 3 });
-    expect(await page.evaluate(() => window.getSelection()?.toString() ?? "")).toContain(
-      tokenValue("--kappa-canvas", "light"),
-    );
-  });
 
   test("hydrates without console errors", async ({ page }) => {
     const errors: string[] = [];

@@ -34,31 +34,7 @@ test.beforeEach(async ({ page }) => {
 });
 
 for (const variant of ["uncontrolled", "controlled", "provider"]) {
-  test(`${variant} keeps select-all after a value update with queued frames`, async ({ page }) => {
-    const input = field(page, variant);
-    await input.click();
-    await expect(input).toBeFocused();
-    await holdAnimationFrames(page);
-    try {
-      await input.press("End");
-      await expect(input).toHaveValue("64");
-      await input.press("ControlOrMeta+A");
-      await expect(input).toHaveJSProperty("selectionStart", 0);
-      await expect(input).toHaveJSProperty("selectionEnd", 2);
-      await page.evaluate(() => (window as Window & { releaseCaretFrames?: () => void }).releaseCaretFrames?.());
-      await expect(input).toHaveJSProperty("selectionStart", 0);
-      await expect(input).toHaveJSProperty("selectionEnd", 2);
-      await page.keyboard.insertText("16");
-      await expect(input).toHaveValue("16");
-      await input.press("Enter");
-      await expect(input).toHaveValue("16");
-      if (variant !== "uncontrolled") {
-        await expect(page.locator(`[data-caret-case="${variant}"] [data-model-value]`)).toHaveText("16");
-      }
-    } finally {
-      await page.evaluate(() => (window as Window & { releaseCaretFrames?: () => void }).releaseCaretFrames?.());
-    }
-  });
+
 }
 
 test("preserves partial decimals and middle-caret edits across rendering and commit", async ({ page }) => {

@@ -11,7 +11,7 @@ pnpm --filter @dicehub/kappa-docs-astro exec playwright install --with-deps chro
 Git and OpenSSL must be available. No service credentials are needed.
 
 ```sh
-pnpm test            # Public checks and every retained test during the rework
+pnpm test            # Public checks and the approved logic cases
 pnpm test:blackbox   # Public checks and the approved private logic cases
 ```
 
@@ -56,11 +56,15 @@ pnpm test:blackbox -- --project=consumer --grep 'controlled'
 The package, CLI, and logic checks still run. Browser retries are disabled so
 the result records the first attempt.
 
-The test rework is incomplete. Both suites remain until behavior mapping,
-coverage comparison, and paired mutation results support each deletion batch.
+The duplicate suite has been removed. The contribution and adversarial review
+rules are in [CONTRIBUTING.md](../CONTRIBUTING.md) and [REVIEW.md](../REVIEW.md).
 The native late-pointer-lock check uses a mounted control's public disabled
 state and trusted browser events. Its targeted cleanup fault proof passed. The
-old mixed browser group still protects pending-request deduplication, which this
-case does not replace. Two real-Shiki ownership cases are approved
+retained browser regression still protects pending-request deduplication, which
+this case does not replace. Its browser API override remains a documented
+exception until a native test covers the same pending sequence. Two real-Shiki ownership cases are approved
 private logic exceptions; see [their scope and limits](test-rework/LIFECYCLE_EXCEPTIONS.md).
-See [the approved plan](../TEST_REWORK_PLAN.md).
+The final removals reuse existing evidence at Ros's request. The remaining
+aggregate coverage and core mutation comparison has not been completed; no new
+score is claimed. See [the plan](../TEST_REWORK_PLAN.md) and
+[the final removal report](test-rework/FINAL_REPORT.md).

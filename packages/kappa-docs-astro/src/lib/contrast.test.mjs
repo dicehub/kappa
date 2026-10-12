@@ -1,12 +1,6 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import {
-  compositeOver,
-  contrastRatio,
-  formatContrastRatio,
-  parseColor,
-  relativeLuminance,
-} from "./contrast.ts";
+import { compositeOver, contrastRatio, formatContrastRatio, parseColor, relativeLuminance } from "./contrast.ts";
 
 let themeTokens;
 try {
@@ -104,33 +98,4 @@ test("measures unrounded WCAG ratios", () => {
 
   assert.equal(formatContrastRatio(21), "21.00:1");
   assert.equal(formatContrastRatio(4.7565), "4.76:1");
-});
-
-test("keeps every recommended Kappa pair at or above its minimum", () => {
-  const tokensByName = Object.fromEntries(
-    themeTokens.tokens.map((token) => [token.name, token]),
-  );
-
-  assert.ok(themeTokens.modes.length === 2, "both modes are measured");
-  assert.ok(themeTokens.contrastPairs.length >= 20, "the theme recommends a full pair set");
-
-  for (const pair of themeTokens.contrastPairs) {
-    const foreground = tokensByName[pair.foreground];
-    const background = tokensByName[pair.background];
-    assert.ok(foreground, `${pair.id} foreground ${pair.foreground} is declared`);
-    assert.ok(background, `${pair.id} background ${pair.background} is declared`);
-
-    assert.ok(
-      pair.kind === "text" ? pair.minimum >= 4.5 : pair.minimum >= 3,
-      `${pair.id} declares a usable minimum`,
-    );
-
-    for (const mode of themeTokens.modes) {
-      const ratio = contrastRatio(foreground.resolved[mode], background.resolved[mode]);
-      assert.ok(
-        ratio >= pair.minimum,
-        `${pair.id} in ${mode} mode measures ${ratio.toFixed(3)}:1, below ${pair.minimum}:1`,
-      );
-    }
-  }
 });

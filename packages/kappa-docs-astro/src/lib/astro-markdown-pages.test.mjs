@@ -3,36 +3,9 @@ import { existsSync, globSync, readFileSync } from "node:fs";
 import { join, relative } from "node:path";
 import { describe, it } from "node:test";
 import { compileScript, parse } from "vue/compiler-sfc";
-import {
-  htmlPathToMarkdownPath,
-  markdownPathToHtmlPath,
-} from "./markdown-route-paths.ts";
+import { htmlPathToMarkdownPath } from "./markdown-route-paths.ts";
 
 const distDir = join(import.meta.dirname, "../../dist");
-
-describe("Markdown route mapping", () => {
-  it("maps docs Markdown paths to their rendered pages", () => {
-    assert.equal(markdownPathToHtmlPath("/docs.md"), "/docs/");
-    assert.equal(markdownPathToHtmlPath("/docs/components.md"), "/docs/components/");
-    assert.equal(
-      markdownPathToHtmlPath("/docs/components/button.md"),
-      "/docs/components/button/",
-    );
-    assert.equal(markdownPathToHtmlPath("/docs/changelog.md"), "/docs/changelog/all/");
-    assert.equal(htmlPathToMarkdownPath("/docs/"), "/docs.md");
-    assert.equal(
-      htmlPathToMarkdownPath("/docs/components/button/"),
-      "/docs/components/button.md",
-    );
-    assert.equal(htmlPathToMarkdownPath("/docs/changelog/all/"), "/docs/changelog.md");
-  });
-
-  it("leaves unrelated paths alone", () => {
-    assert.equal(markdownPathToHtmlPath("/README.md"), undefined);
-    assert.equal(markdownPathToHtmlPath("/docs/components/button"), undefined);
-    assert.equal(htmlPathToMarkdownPath("/README/"), undefined);
-  });
-});
 
 describe("Markdown build output", () => {
   it("backs every rendered Copy Page control with Markdown", () => {

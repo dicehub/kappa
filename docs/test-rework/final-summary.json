@@ -1,0 +1,58 @@
+{
+  "status": "removal complete; final scoped gate passed",
+  "sourceBefore": "78a62955b04fbec367f254ece10d1a88df2740ca",
+  "originalCasesRemoved": 725,
+  "originalCasesRetained": 972,
+  "before": {
+    "allCases": 1697,
+    "privateNodeCases": 744,
+    "files": 295,
+    "testLines": 43947,
+    "fullSuiteSeconds": 885
+  },
+  "after": {
+    "allCases": 1355,
+    "privateLogicCases": 28,
+    "browserCases": 969,
+    "packageCases": 306,
+    "cliCases": 16,
+    "artifactCases": 34,
+    "httpCompilerCases": 2,
+    "files": 212,
+    "testLines": 30720,
+    "fullSuiteSeconds": null
+  },
+  "netTestLinesRemoved": 13227,
+  "originalTestFilesDeleted": 117,
+  "finalEvidence": "/tmp/kappa-fast-final-IKjNpp",
+  "finalGate": {
+    "seconds": 250,
+    "scope": "Actual library build/pack, strict core/full/snippet consumers, library types, all28 logic, all16 real CLI, all34 artifacts, both HTTP/compiler cases, 32 affected browser cases; all969 browser cases discovered. No new mutation work.",
+    "result": "passed",
+    "fullBrowserRerun": false
+  },
+  "productionSeamRemovals": [
+    "image-cropper-source.ts: remove injected Image/ObjectURL factory environment",
+    "publish-npm.mjs: remove injected process runner and filesystem writer",
+    "cloudflare-pages.mjs: remove external fetch/logger/wait callbacks",
+    "cloudflare-access.mjs: remove external fetch/logger callbacks"
+  ],
+  "remainingException": {
+    "browserCase": "supports whole-field editing, scrubbing, modifiers, rollback, and cleanup",
+    "reason": "Pending pointer-lock request deduplication still lacks a deterministic native replacement; retained with its browser API override."
+  },
+  "limits": [
+    "Final aggregate coverage and all-core mutation comparison not complete. User explicitly requested no additional proof work before removal.",
+    "Prior parser/CLI/fault results retain their original source scope; do not report them as current aggregate scores after seam removal.",
+    "No fresh independent final adversarial review; reviewer definition and contribution policy are present.",
+    "Unchanged browser tests reuse prior results; preserve prior full-run timing failure and its assertion-preserving focused correction."
+  ],
+  "confirmedPackageBugIssues": [
+    9,
+    10,
+    11,
+    13,
+    14
+  ],
+  "docsOnlyIssue": 12
+}

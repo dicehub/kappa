@@ -5,9 +5,13 @@ Read when approving or applying an earlier test deletion batch.
 Status: approved by Ros on 12 October 2026. This amends the proof order in
 `TEST_REWORK_PLAN.md`. Other requirements remain in effect. No subagents.
 
-Verify each deletion batch before removing it, rather than waiting for the
-proof for every core module. Keep all unresolved tests. Complete the remaining
-coverage and mutation work before the final report.
+Latest amendment: Ros asked to stop additional test work and complete removals
+as quickly as possible. Reuse saved passing results, remove the remaining
+implementation and mock tests together, and use one final check on dh-pc.
+Keep approved logic, public tests, and the pending pointer-lock regression.
+Record unfinished coverage/mutation work without claiming it has passed.
+
+The earlier proof order below describes the first three removal batches.
 
 For each batch:
 

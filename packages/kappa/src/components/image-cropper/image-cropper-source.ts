@@ -13,19 +13,8 @@ interface SourceCallbacks {
   error: (error: Error) => void;
 }
 
-interface SourceEnvironment {
-  createImage: () => HTMLImageElement;
-  createObjectURL: (blob: Blob) => string;
-  revokeObjectURL: (url: string) => void;
-}
-
 /** Own only URLs created here. Superseded image callbacks cannot publish state. */
-export function createImageCropperSourceLoader(callbacks: SourceCallbacks, environment?: SourceEnvironment) {
-  const env = environment ?? {
-    createImage: () => new Image(),
-    createObjectURL: (blob: Blob) => URL.createObjectURL(blob),
-    revokeObjectURL: (url: string) => URL.revokeObjectURL(url),
-  };
+export function createImageCropperSourceLoader(callbacks: SourceCallbacks) {
   let revision = 0;
   let disposed = false;
   let image: HTMLImageElement | undefined;
@@ -39,7 +28,7 @@ export function createImageCropperSourceLoader(callbacks: SourceCallbacks, envir
       image.removeAttribute("src");
       image = undefined;
     }
-    if (ownedUrl) env.revokeObjectURL(ownedUrl);
+    if (ownedUrl) URL.revokeObjectURL(ownedUrl);
     ownedUrl = undefined;
   }
 
@@ -57,8 +46,8 @@ export function createImageCropperSourceLoader(callbacks: SourceCallbacks, envir
       callbacks.error(new Error("The image could not be loaded. Check its format and cross-origin access."));
     }
     try {
-      const url = typeof source === "string" ? source : (ownedUrl = env.createObjectURL(source));
-      const pending = env.createImage();
+      const url = typeof source === "string" ? source : (ownedUrl = URL.createObjectURL(source));
+      const pending = new Image();
       image = pending;
       pending.crossOrigin = crossOrigin;
       pending.onload = () => {

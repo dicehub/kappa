@@ -21,7 +21,6 @@ export async function browserSuite(root, scratch, full, args = []) {
   await cp(join(root, "tests/blackbox/process.mjs"), join(full, "blackbox/process.mjs"));
   await cp(join(root, "tests/blackbox/development-fixture.mjs"), join(full, "blackbox/development-fixture.mjs"));
   await cp(join(root, "docs/test-rework/docs-routes-baseline.json"), join(full, "blackbox/docs-routes-baseline.json"));
-  await cp(join(root, "tests/blackbox/legacy-browser-cases.json"), join(full, "blackbox/legacy-browser-cases.json"));
   await cp(join(root, "tests/blackbox/playwright.config.ts"), join(full, "playwright.blackbox.config.ts"));
   await cp(join(root, "packages/kappa-docs-astro/e2e"), join(full, "e2e"), { recursive: true });
   for (const name of await readdir(join(full, "e2e"))) {

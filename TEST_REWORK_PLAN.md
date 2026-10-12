@@ -1,6 +1,8 @@
 # Test rework plan
 
-Status: Phase 2 approved by Ros. Build the public-interface suite while retaining every existing test. Coverage and mutation proof come before deletion.
+Status: removal approved. Ros's latest instruction prioritizes completion using
+existing results, with one final dh-pc check. The earlier proof order below is
+historical. Unfinished aggregate coverage/mutation work stays explicitly open.
 
 Astra Max reviewed the inventory and plan. Its corrections to browser conversion targets, independent API checks, lifecycle proof, mutation comparison, and helper evidence are applied. Final review: approved; no remaining review blockers. Ros then approved Phase 2 with “Go on”.
 

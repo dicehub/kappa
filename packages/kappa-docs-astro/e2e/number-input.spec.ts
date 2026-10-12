@@ -157,63 +157,7 @@ test.describe("Number Input documentation", () => {
     );
   });
 
-  test("scrubs in both directions and blocks read-only scrubbing", async ({ page }) => {
-    const scrubDemo = demo(page, "scrubbing");
-    const scrubInput = input(scrubDemo, "Under-relaxation factor");
-    const scrubber = scrubDemo.locator('[data-slot="number-input-scrubber"]');
-    await scrubber.scrollIntoViewIfNeeded();
-    const box = await scrubber.boundingBox();
-    expect(box).not.toBeNull();
-    const initial = await numericValue(scrubInput);
-    await page.evaluate(() => {
-      const browserWindow = window as Window & { __pointerLockRequests?: number };
-      browserWindow.__pointerLockRequests = 0;
-      document.body.requestPointerLock = () => {
-        browserWindow.__pointerLockRequests = (browserWindow.__pointerLockRequests ?? 0) + 1;
-        return Promise.resolve();
-      };
-    });
 
-    await page.mouse.move(box!.x + box!.width / 2, box!.y + box!.height / 2);
-    await page.mouse.down();
-    await expect(scrubber).toHaveAttribute("data-scrubbing", "");
-    await expect
-      .poll(() =>
-        page.evaluate(
-          () => (window as Window & { __pointerLockRequests?: number }).__pointerLockRequests,
-        ),
-      )
-      .toBe(1);
-    await page.mouse.move(box!.x + box!.width / 2 + 40, box!.y + box!.height / 2, {
-      steps: 5,
-    });
-    await expect.poll(() => numericValue(scrubInput)).toBeGreaterThan(initial);
-    await page.mouse.up();
-    const increased = await numericValue(scrubInput);
-
-    await page.mouse.move(box!.x + box!.width / 2, box!.y + box!.height / 2);
-    await page.mouse.down();
-    await page.mouse.move(box!.x + box!.width / 2 - 80, box!.y + box!.height / 2, {
-      steps: 5,
-    });
-    await expect.poll(() => numericValue(scrubInput)).toBeLessThan(increased);
-    await page.mouse.up();
-
-    const states = demo(page, "states");
-    const readOnly = input(states, "Read-only partitions");
-    const readOnlyScrubber = states.locator('[data-slot="number-input-scrubber"]');
-    await expect(readOnly).toHaveAttribute("readonly", "");
-    await expect(readOnlyScrubber).toHaveAttribute("data-readonly", "");
-    await expect(readOnlyScrubber).toHaveCSS("cursor", "default");
-    await readOnlyScrubber.scrollIntoViewIfNeeded();
-    const readOnlyBox = await readOnlyScrubber.boundingBox();
-    expect(readOnlyBox).not.toBeNull();
-    await page.mouse.move(readOnlyBox!.x + 4, readOnlyBox!.y + 4);
-    await page.mouse.down();
-    await page.mouse.move(readOnlyBox!.x + 60, readOnlyBox!.y + 4, { steps: 5 });
-    await page.mouse.up();
-    await expect(readOnly).toHaveValue("24");
-  });
 
   test("preserves field states, locale, wheel opt-in, and RTL", async ({ page }) => {
     const states = demo(page, "states");

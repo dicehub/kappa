@@ -217,7 +217,7 @@ Update this table whenever the repository structure changes.
 
 | Layer              | Location                                  | Purpose                                       |
 | ------------------ | ----------------------------------------- | --------------------------------------------- |
-| Unit tests         | `packages/kappa/src/**/*.test.mjs`        | Logic, variants, state, and component APIs    |
+| Logic tests        | `packages/kappa/src/**/*.test.mjs` + `tests/blackbox/logic/` | Approved calculation, parser, state, and resource ownership exceptions |
 | End-to-end tests   | `packages/kappa-docs-astro/e2e/*.spec.ts` | Real browser interaction and documentation    |
 | Package validation | `packages/kappa/scripts/`                 | Exports, packed artifacts, and consumer usage |
 
