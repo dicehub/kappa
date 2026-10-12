@@ -3,7 +3,8 @@
 Read when resuming this branch or checking deletion readiness.
 
 Phase 3 continues, with Phase 4 now allowed for verified batches. Batch 1 removes
-94 export/type definitions from the working tree: 1,603 original cases remain.
+Batch 1 removes 94 export/type definitions in commit `5169573`. Batch 2 removes
+42 Diff Viewer/resource cases: 1,561 original cases remain.
 All 651 remaining library/docs cases pass in the isolated removal copy. The
 foundation is committed as `1c3595b`. Ros approved the two local commits on
 12 October. No push, merge, or release has occurred. Other groups remain.
@@ -406,6 +407,24 @@ the public harness, CI wiring, frozen inventory/contracts and approved fixes.
 Automatic approval review first rejected the separate foundation commit because
 its authorization was unclear. Ros then explicitly approved both local commits
 on 12 October. The foundation commit succeeded after that approval.
+
+Batch 2 removes 24 Diff Viewer and 18 resource workflow cases in three files.
+The final owned dh-pc copy passes all 42 old cases before removal, all 546
+remaining library cases, 16 installed-package function cases and 38 browser
+cases. The first two browser setup failures remain excluded in saved artifacts;
+no assertions were weakened. The passing proof is `kappa-diff-resource-removal-
+S5hgPP`. Source and executed-input hashes match the snapshot. Paired coverage has
+no old-only LCOV hits in these areas. Resource statement/branch maps match;
+three Diff maps retain their attribution limit. The parser's 339-identity pilot
+loses no raw detection and increases kills-only score by 1.47 points. Resource
+fault proof stays scoped to four v1 and two v2 faults. No production seam changes.
+See `deletion-batch-2.json`; remaining core coverage/mutation work stays open.
+
+A read-only audit also selects 47 complete runtime function/constant groups in
+40 mixed files. Their 894 frozen input requirements use released public exports.
+Five mixed groups stay out of the proposal: Field, Fieldset, Hover Card, Number
+Input alignment and XY Plot append/format behavior. No guard group is removed
+until its proposed-removal and scoped proof checks pass on dh-pc.
 
 Still required: complete behavior mapping, remaining coverage
 gaps, the core-module mutation comparison, and proof for lifecycle obligations
