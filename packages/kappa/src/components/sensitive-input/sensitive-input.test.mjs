@@ -13,18 +13,7 @@ const component = source("SensitiveInput.vue");
 const styles = source("sensitive-input.css");
 const barrel = source("index.ts");
 
-test("guards and resolves supported input densities", () => {
-  assert.deepEqual(SENSITIVE_INPUT_SIZES, ["xs", "sm", "base", "lg"]);
-  assert.equal(SENSITIVE_INPUT_DEFAULT_SIZE, "base");
-  for (const size of SENSITIVE_INPUT_SIZES) {
-    assert.equal(isSensitiveInputSize(size), true);
-    assert.equal(resolveSensitiveInputSize(size), size);
-  }
-  for (const invalid of ["xl", "default", "__proto__", null, 4]) {
-    assert.equal(isSensitiveInputSize(invalid), false);
-    assert.equal(resolveSensitiveInputSize(invalid), "base");
-  }
-});
+
 
 test("preserves controlled and uncontrolled value contracts", () => {
   assert.match(component, /defineOptions\(\{ inheritAttrs: false \}\)/);

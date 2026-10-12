@@ -23,51 +23,7 @@ const graphic = source("LoaderGraphic.vue");
 const styles = source("loader.css");
 const barrel = source("index.ts");
 
-test("defines preset sizes and safe runtime fallbacks", () => {
-  assert.deepEqual(LOADER_SIZES, { sm: 16, base: 24, lg: 32 });
-  assert.equal(LOADER_DEFAULT_SIZE, "base");
-  assert.equal(LOADER_DEFAULT_VARIANT, "spinner");
-  assert.equal(LOADER_DEFAULT_DURATION, 1500);
-  assert.equal(LOADER_DEFAULT_LABEL, "Loading");
-  assert.deepEqual(LOADER_VARIANTS, [
-    "spinner",
-    "waveform",
-    "helix",
-    "quantum",
-    "dot-wave",
-    "dot-stream",
-    "mirage",
-    "ping",
-    "orbit",
-  ]);
 
-  for (const size of ["sm", "base", "lg"]) assert.equal(isLoaderSize(size), true);
-  for (const size of ["missing", "constructor", "__proto__", null, 24]) {
-    assert.equal(isLoaderSize(size), false);
-  }
-  for (const variant of LOADER_VARIANTS) assert.equal(isLoaderVariant(variant), true);
-  for (const variant of ["atom", "constructor", null, 1]) {
-    assert.equal(isLoaderVariant(variant), false);
-  }
-
-  assert.equal(resolveLoaderSize("sm"), 16);
-  assert.equal(resolveLoaderSize("lg"), 32);
-  assert.equal(resolveLoaderSize(40), 40);
-  for (const invalid of [0, -1, Number.NaN, Number.POSITIVE_INFINITY, "xl", null]) {
-    assert.equal(resolveLoaderSize(invalid), 24);
-  }
-  assert.equal(resolveLoaderVariant("orbit"), "orbit");
-  assert.equal(resolveLoaderVariant("atom"), "spinner");
-  assert.equal(resolveLoaderDuration(900), 900);
-  assert.equal(resolveLoaderDuration(100), 400);
-  assert.equal(resolveLoaderDuration(20_000), 10_000);
-  assert.equal(resolveLoaderDuration(null), 1500);
-
-  assert.equal(resolveLoaderLabel("Loading reports"), "Loading reports");
-  for (const invalid of ["", "   ", null, 1]) {
-    assert.equal(resolveLoaderLabel(invalid), "Loading");
-  }
-});
 
 test("renders an accessible status with an explicit decorative mode", () => {
   assert.match(component, /defineOptions\(\{ inheritAttrs: false \}\)/);

@@ -14,19 +14,7 @@ const component = source("InputArea.vue");
 const styles = source("input-area.css");
 const barrel = source("index.ts");
 
-test("shares the guarded Kappa control densities", () => {
-  assert.deepEqual(INPUT_AREA_SIZES, ["xs", "sm", "base", "lg"]);
-  assert.equal(INPUT_AREA_DEFAULT_SIZE, "base");
 
-  for (const size of INPUT_AREA_SIZES) {
-    assert.equal(isInputAreaSize(size), true);
-    assert.equal(resolveInputAreaSize(size), size);
-  }
-  for (const invalid of ["default", "xl", "constructor", "__proto__", null]) {
-    assert.equal(isInputAreaSize(invalid), false);
-    assert.equal(resolveInputAreaSize(invalid), "base");
-  }
-});
 
 test("composes the Ark Field textarea and forwards its behavior", () => {
   assert.match(component, /Field as ArkField/);

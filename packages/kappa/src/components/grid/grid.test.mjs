@@ -28,26 +28,7 @@ const barrel = source("index.ts");
 
 
 
-test("guards runtime values without accepting inherited object keys", () => {
-  for (const variant of Object.keys(GRID_VARIANTS)) assert.equal(isGridVariant(variant), true);
-  for (const gap of Object.keys(GRID_GAPS)) assert.equal(isGridGap(gap), true);
-  for (const element of GRID_ROOT_ELEMENTS) assert.equal(isGridRootElement(element), true);
-  for (const element of GRID_ITEM_ELEMENTS) assert.equal(isGridItemElement(element), true);
 
-  for (const invalid of ["toString", "constructor", "__proto__", "missing", null, 2]) {
-    assert.equal(isGridVariant(invalid), false);
-    assert.equal(isGridGap(invalid), false);
-  }
-
-  assert.equal(resolveGridVariant("3up"), "3up");
-  assert.equal(resolveGridVariant("missing"), undefined);
-  assert.equal(resolveGridGap("sm"), "sm");
-  assert.equal(resolveGridGap("missing"), "base");
-  assert.equal(resolveGridRootElement("ul"), "ul");
-  assert.equal(resolveGridRootElement("main"), "div");
-  assert.equal(resolveGridItemElement("li"), "li");
-  assert.equal(resolveGridItemElement("button"), "div");
-});
 
 test("renders an attribute-transparent root and provides resolved state", () => {
   assert.match(rootSource, /defineOptions\(\{ inheritAttrs: false \}\)/);

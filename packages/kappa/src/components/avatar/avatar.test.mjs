@@ -19,16 +19,7 @@ const typesSource = source("avatar.ts");
 const styles = source("avatar.css");
 const moduleBarrel = source("index.ts");
 
-test("defines guarded compact avatar sizes", () => {
-  assert.deepEqual(AVATAR_SIZES, ["sm", "default", "lg"]);
-  assert.equal(AVATAR_DEFAULT_SIZE, "default");
-  for (const size of AVATAR_SIZES) assert.equal(isAvatarSize(size), true);
-  for (const value of ["xs", "toString", "constructor", "__proto__", null, 1]) {
-    assert.equal(isAvatarSize(value), false);
-  }
-  assert.equal(resolveAvatarSize("lg"), "lg");
-  assert.equal(resolveAvatarSize("missing"), "default");
-});
+
 
 test("preserves Ark root behavior, events, and locale direction", () => {
   assert.match(rootSource, /from "@ark-ui\/vue\/avatar"/);

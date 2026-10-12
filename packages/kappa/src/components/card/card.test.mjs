@@ -29,27 +29,9 @@ const partSources = partFiles.map(source);
 const styles = source("card.css");
 const barrel = source("index.ts");
 
-test("defines safe semantic defaults and sizes", () => {
-  assert.deepEqual(CARD_SIZES, ["sm", "base"]);
-  assert.deepEqual(CARD_ROOT_ELEMENTS, ["div", "article", "section", "aside", "a", "form"]);
-  assert.equal(CARD_DEFAULT_SIZE, "base");
-  assert.equal(CARD_TITLE_DEFAULT_ELEMENT, "h3");
-  assert.equal(resolveCardSize("sm"), "sm");
-  assert.equal(resolveCardSize("large"), "base");
-});
 
-test("rejects unsupported runtime elements", () => {
-  for (const element of CARD_ROOT_ELEMENTS) assert.equal(isCardRootElement(element), true);
-  for (const value of ["script", "toString", "constructor", "__proto__", null, 1]) {
-    assert.equal(isCardRootElement(value), false);
-  }
-  assert.equal(resolveCardRootElement("article"), "article");
-  assert.equal(resolveCardRootElement("script"), "div");
-  assert.equal(resolveCardTitleElement("h2"), "h2");
-  assert.equal(resolveCardTitleElement("span"), "h3");
-  assert.equal(resolveCardPrimaryElement("a"), "a");
-  assert.equal(resolveCardPrimaryElement("button"), "div");
-});
+
+
 
 test("renders native, attribute-transparent compound parts", () => {
   for (const partSource of partSources) {

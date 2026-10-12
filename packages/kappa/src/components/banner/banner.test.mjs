@@ -30,30 +30,9 @@ const moduleBarrel = readFileSync(new URL("./index.ts", import.meta.url), "utf8"
 
 
 
-test("rejects inherited and unsupported runtime values", () => {
-  for (const variant of Object.keys(BANNER_VARIANTS)) assert.equal(isBannerVariant(variant), true);
-  for (const size of Object.keys(BANNER_SIZES)) assert.equal(isBannerSize(size), true);
-  for (const variant of BANNER_ACTION_VARIANTS) assert.equal(isBannerActionVariant(variant), true);
-  for (const type of BANNER_ACTION_TYPES) assert.equal(isBannerActionType(type), true);
 
-  for (const value of ["missing", "toString", "constructor", "__proto__", null, 1]) {
-    assert.equal(isBannerVariant(value), false);
-    assert.equal(isBannerSize(value), false);
-    assert.equal(isBannerActionVariant(value), false);
-    assert.equal(isBannerActionType(value), false);
-  }
-});
 
-test("falls back safely for invalid JavaScript callers", () => {
-  assert.equal(resolveBannerVariant("secondary"), "secondary");
-  assert.equal(resolveBannerVariant("constructor"), "default");
-  assert.equal(resolveBannerSize("sm"), "sm");
-  assert.equal(resolveBannerSize("lg"), "base");
-  assert.equal(resolveBannerActionVariant("ghost"), "ghost");
-  assert.equal(resolveBannerActionVariant("outline"), "primary");
-  assert.equal(resolveBannerActionType("submit"), "submit");
-  assert.equal(resolveBannerActionType("menu"), "button");
-});
+
 
 test("renders a neutral native container and forwards accessibility attributes", () => {
   assert.match(rootSource, /defineOptions\(\{ inheritAttrs: false \}\)/);

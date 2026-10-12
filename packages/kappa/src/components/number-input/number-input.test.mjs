@@ -52,17 +52,7 @@ test("supports reference pointer multipliers without changing the defaults", () 
   }
 });
 
-test("accepts xs and preserves the default size fallback", () => {
-  assert.deepEqual(NUMBER_INPUT_SIZES, ["xs", "sm", "default", "lg"]);
-  for (const size of NUMBER_INPUT_SIZES) {
-    assert.equal(isNumberInputSize(size), true);
-    assert.equal(resolveNumberInputSize(size), size);
-  }
-  for (const value of [undefined, null, "compact", 20]) {
-    assert.equal(isNumberInputSize(value), false);
-    assert.equal(resolveNumberInputSize(value), "default");
-  }
-});
+
 
 test("preserves the Ark root contract and adds Kappa direction and size", () => {
   for (const prop of [

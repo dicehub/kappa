@@ -14,19 +14,7 @@ const component = source("Input.vue");
 const styles = source("input.css");
 const barrel = source("index.ts");
 
-test("defines guarded input size variants", () => {
-  assert.deepEqual(INPUT_SIZES, ["xs", "sm", "base", "lg"]);
-  assert.equal(INPUT_DEFAULT_SIZE, "base");
 
-  for (const size of INPUT_SIZES) {
-    assert.equal(isInputSize(size), true);
-    assert.equal(resolveInputSize(size), size);
-  }
-  for (const invalid of ["default", "xl", "constructor", "__proto__", null]) {
-    assert.equal(isInputSize(invalid), false);
-    assert.equal(resolveInputSize(invalid), "base");
-  }
-});
 
 test("renders one native input and preserves Vue and native event contracts", () => {
   assert.match(component, /defineOptions\(\{ inheritAttrs: false \}\)/);

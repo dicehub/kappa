@@ -65,26 +65,7 @@ test("forwards disabled semantics and toolbar sizing to supported controls", () 
   assert.match(separatorSource, /<Separator/);
 });
 
-test("uses guarded orientation and size metadata", () => {
-  assert.deepEqual(TOOLBAR_ORIENTATIONS, ["horizontal", "vertical"]);
-  assert.deepEqual(TOOLBAR_SIZES, ["xs", "sm", "base", "lg"]);
-  assert.equal(TOOLBAR_DEFAULT_ORIENTATION, "horizontal");
-  assert.equal(TOOLBAR_DEFAULT_SIZE, "base");
-  for (const orientation of TOOLBAR_ORIENTATIONS) {
-    assert.equal(isToolbarOrientation(orientation), true);
-    assert.equal(resolveToolbarOrientation(orientation), orientation);
-  }
-  for (const size of TOOLBAR_SIZES) {
-    assert.equal(isToolbarSize(size), true);
-    assert.equal(resolveToolbarSize(size), size);
-  }
-  for (const invalid of ["diagonal", "xl", null, 1, {}, "constructor", "__proto__"]) {
-    assert.equal(isToolbarOrientation(invalid), false);
-    assert.equal(isToolbarSize(invalid), false);
-  }
-  assert.equal(resolveToolbarOrientation("diagonal"), "horizontal");
-  assert.equal(resolveToolbarSize("xl"), "base");
-});
+
 
 test("uses Kappa semantic tokens and complete toolbar states", () => {
   for (const token of [

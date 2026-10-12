@@ -20,16 +20,7 @@ const typesSource = source("breadcrumbs.ts");
 const styles = source("breadcrumbs.css");
 const moduleBarrel = source("index.ts");
 
-test("defines guarded breadcrumb sizes", () => {
-  assert.deepEqual(BREADCRUMBS_SIZES, ["sm", "base"]);
-  assert.equal(BREADCRUMBS_DEFAULT_SIZE, "base");
-  for (const size of BREADCRUMBS_SIZES) assert.equal(isBreadcrumbsSize(size), true);
-  for (const value of ["lg", "toString", "constructor", "__proto__", null, 1]) {
-    assert.equal(isBreadcrumbsSize(value), false);
-  }
-  assert.equal(resolveBreadcrumbsSize("sm"), "sm");
-  assert.equal(resolveBreadcrumbsSize("missing"), "base");
-});
+
 
 test("renders an overridable labelled navigation landmark", () => {
   assert.match(rootSource, /<nav\s+:aria-label="\$attrs\['aria-labelledby'\]/);

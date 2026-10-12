@@ -53,23 +53,7 @@ test("defines the Item variants, sizes, and media treatments", () => {
   assert.deepEqual(ITEM_TITLE_ELEMENTS, ["h2", "h3", "h4", "h5", "h6", "p", "div"]);
 });
 
-test("rejects unsafe runtime values and resolves safe native defaults", () => {
-  for (const element of ITEM_ROOT_ELEMENTS) assert.equal(isItemRootElement(element), true);
-  for (const value of ["script", "button", "toString", "constructor", "__proto__", null, 1]) {
-    assert.equal(isItemRootElement(value), false);
-  }
 
-  assert.equal(resolveItemVariant("outline"), "outline");
-  assert.equal(resolveItemVariant("card"), "default");
-  assert.equal(resolveItemSize("xs"), "xs");
-  assert.equal(resolveItemSize("lg"), "default");
-  assert.equal(resolveItemMediaVariant("image"), "image");
-  assert.equal(resolveItemMediaVariant("video"), "default");
-  assert.equal(resolveItemRootElement("a"), "a");
-  assert.equal(resolveItemRootElement("button"), "div");
-  assert.equal(resolveItemTitleElement("h4"), "h4");
-  assert.equal(resolveItemTitleElement("span"), "div");
-});
 
 test("keeps every compound part native and attribute-transparent", () => {
   for (const partSource of partSources) {

@@ -16,14 +16,7 @@ const barrel = source("index.ts");
 const componentBarrel = source("../index.ts");
 const packageJson = JSON.parse(source("../../../package.json"));
 
-test("keeps Ark's query-dependent matchAll default", () => {
-  assert.equal(HIGHLIGHT_DEFAULT_IGNORE_CASE, false);
-  assert.equal(HIGHLIGHT_DEFAULT_EXACT_MATCH, false);
-  assert.equal(resolveHighlightMatchAll("solver"), false);
-  assert.equal(resolveHighlightMatchAll(["solver", "mesh"]), true);
-  assert.equal(resolveHighlightMatchAll(["solver", "mesh"], false), false);
-  assert.equal(resolveHighlightMatchAll("solver", true), true);
-});
+
 
 test("wraps Ark Highlight in an inline Kappa root and forwards query props", () => {
   assert.match(component, /Highlight as ArkHighlight/);

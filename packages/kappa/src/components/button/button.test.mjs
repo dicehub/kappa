@@ -31,27 +31,7 @@ const barrel = readFileSync(new URL("./index.ts", import.meta.url), "utf8");
 
 
 
-test("rejects invalid and prototype-shaped runtime options", () => {
-  for (const value of BUTTON_VARIANTS) assert.equal(isButtonVariant(value), true);
-  for (const value of BUTTON_SIZES) assert.equal(isButtonSize(value), true);
-  for (const value of BUTTON_SHAPES) assert.equal(isButtonShape(value), true);
-  for (const value of BUTTON_ICON_POSITIONS) assert.equal(isButtonIconPosition(value), true);
-  for (const value of BUTTON_TYPES) assert.equal(isButtonType(value), true);
 
-  for (const value of ["missing", "toString", "constructor", "__proto__", null, 1]) {
-    assert.equal(isButtonVariant(value), false);
-    assert.equal(isButtonSize(value), false);
-    assert.equal(isButtonShape(value), false);
-    assert.equal(isButtonIconPosition(value), false);
-    assert.equal(isButtonType(value), false);
-  }
-
-  assert.equal(resolveButtonVariant("bad"), BUTTON_DEFAULT_VARIANT);
-  assert.equal(resolveButtonSize("bad"), BUTTON_DEFAULT_SIZE);
-  assert.equal(resolveButtonShape("bad"), BUTTON_DEFAULT_SHAPE);
-  assert.equal(resolveButtonIconPosition("bad"), BUTTON_DEFAULT_ICON_POSITION);
-  assert.equal(resolveButtonType("bad"), BUTTON_DEFAULT_TYPE);
-});
 
 test("renders a safe native action and blocks loading activation", () => {
   assert.match(buttonSource, /defineOptions\(\{ inheritAttrs: false \}\)/);

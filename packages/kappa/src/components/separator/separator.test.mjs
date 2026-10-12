@@ -14,17 +14,7 @@ const component = source("Separator.vue");
 const styles = source("separator.css");
 const barrel = source("index.ts");
 
-test("defines horizontal and vertical orientations with a safe default", () => {
-  assert.deepEqual(SEPARATOR_ORIENTATIONS, ["horizontal", "vertical"]);
-  assert.equal(SEPARATOR_DEFAULT_ORIENTATION, "horizontal");
-  assert.equal(isSeparatorOrientation("horizontal"), true);
-  assert.equal(isSeparatorOrientation("vertical"), true);
 
-  for (const invalid of ["diagonal", "", null, 1, "constructor"]) {
-    assert.equal(isSeparatorOrientation(invalid), false);
-    assert.equal(resolveSeparatorOrientation(invalid), "horizontal");
-  }
-});
 
 test("renders a native line with explicit decorative and semantic contracts", () => {
   assert.match(component, /defineOptions\(\{ inheritAttrs: false \}\)/);

@@ -36,32 +36,9 @@ test("defines the compact Kappa text scale and compatibility variants", () => {
   assert.equal(TEXT_ELEMENTS.includes("figcaption"), true);
 });
 
-test("guards variants, sizes, and semantic elements", () => {
-  assert.equal(resolveTextVariant("heading"), "heading");
-  assert.equal(resolveTextVariant("unknown"), "body");
-  assert.equal(resolveTextSize("xs"), "xs");
-  assert.equal(resolveTextSize("xl"), "base");
-  assert.equal(isTextElement("time"), true);
-  for (const invalid of ["script", "button", "constructor", "__proto__", null]) {
-    assert.equal(isTextElement(invalid), false);
-  }
-  assert.equal(isCopyTextVariant("success"), true);
-  assert.equal(isMonospaceTextVariant("mono-secondary"), true);
-  assert.equal(isHeadingTextVariant("heading3"), true);
-  assert.equal(isDeprecatedHeadingTextVariant("heading2"), true);
-});
 
-test("keeps visual treatment separate from semantic HTML", () => {
-  assert.equal(resolveTextElement(undefined, "body"), "p");
-  assert.equal(resolveTextElement(undefined, "heading"), "span");
-  assert.equal(resolveTextElement(undefined, "mono"), "span");
-  assert.equal(resolveTextElement("h2", "heading"), "h2");
-  assert.equal(resolveTextElement("script", "body"), "p");
-  assert.equal(resolveTextSizeClass("heading", "base"), undefined);
-  assert.equal(resolveTextSizeClass("heading", "lg"), "kappa-text--size-lg");
-  assert.equal(resolveTextSizeClass("mono", "base"), "kappa-text--size-sm");
-  assert.equal(resolveTextSizeClass("mono", "lg"), "kappa-text--size-base");
-});
+
+
 
 test("builds deterministic classes with safe fallbacks", () => {
   assert.equal(textVariants(), "kappa-text kappa-text--body kappa-text--size-base");

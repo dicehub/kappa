@@ -13,17 +13,7 @@ const component = source("AspectRatio.vue");
 const styles = source("aspect-ratio.css");
 const barrel = source("index.ts");
 
-test("guards finite positive ratios and falls back to a square", () => {
-  assert.equal(ASPECT_RATIO_DEFAULT_RATIO, 1);
-  for (const ratio of [1, 16 / 9, 0.5, Number.MIN_VALUE]) {
-    assert.equal(isAspectRatio(ratio), true);
-    assert.equal(resolveAspectRatio(ratio), ratio);
-  }
-  for (const invalid of [0, -1, Number.NaN, Number.POSITIVE_INFINITY, Number.NEGATIVE_INFINITY, "16/9", null]) {
-    assert.equal(isAspectRatio(invalid), false);
-    assert.equal(resolveAspectRatio(invalid), 1);
-  }
-});
+
 
 test("renders a native ratio root and forwards consumer attributes", () => {
   assert.match(component, /defineOptions\(\{ inheritAttrs: false \}\)/);

@@ -21,17 +21,7 @@ const types = source("resizable.ts");
 const styles = source("resizable.css");
 const barrel = source("index.ts");
 
-test("defines the horizontal default and a safe orientation contract", () => {
-  assert.deepEqual(RESIZABLE_ORIENTATIONS, ["horizontal", "vertical"]);
-  assert.equal(RESIZABLE_DEFAULT_ORIENTATION, "horizontal");
-  assert.equal(isResizableOrientation("horizontal"), true);
-  assert.equal(isResizableOrientation("vertical"), true);
 
-  for (const invalid of ["diagonal", "", null, 1, "constructor"]) {
-    assert.equal(isResizableOrientation(invalid), false);
-    assert.equal(resolveResizableOrientation(invalid), "horizontal");
-  }
-});
 
 test("forwards the Ark splitter root contract and all resize events", () => {
   assert.match(root, /from "@ark-ui\/vue\/splitter"/);

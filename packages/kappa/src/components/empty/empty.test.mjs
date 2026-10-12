@@ -29,24 +29,7 @@ const moduleBarrel = source("index.ts");
 
 
 
-test("rejects unsupported runtime values and resolves safe defaults", () => {
-  for (const size of EMPTY_SIZES) assert.equal(isEmptySize(size), true);
-  for (const variant of EMPTY_MEDIA_VARIANTS) assert.equal(isEmptyMediaVariant(variant), true);
-  for (const element of EMPTY_TITLE_ELEMENTS) assert.equal(isEmptyTitleElement(element), true);
 
-  for (const value of ["missing", "toString", "constructor", "__proto__", null, 1]) {
-    assert.equal(isEmptySize(value), false);
-    assert.equal(isEmptyMediaVariant(value), false);
-    assert.equal(isEmptyTitleElement(value), false);
-  }
-
-  assert.equal(resolveEmptySize("lg"), "lg");
-  assert.equal(resolveEmptySize("xs"), "base");
-  assert.equal(resolveEmptyMediaVariant("icon"), "icon");
-  assert.equal(resolveEmptyMediaVariant("image"), "default");
-  assert.equal(resolveEmptyTitleElement("h2"), "h2");
-  assert.equal(resolveEmptyTitleElement("span"), "h3");
-});
 
 test("renders a guarded native root and forwards consumer attributes", () => {
   assert.match(rootSource, /defineOptions\(\{ inheritAttrs: false \}\)/);

@@ -30,17 +30,7 @@ const parts = [
   ["HiddenInput", "tag-input-hidden-input"],
 ];
 
-test("supports all Kappa input sizes and a stable fallback", () => {
-  assert.deepEqual(TAG_INPUT_SIZES, ["xs", "sm", "base", "lg"]);
-  for (const size of TAG_INPUT_SIZES) {
-    assert.equal(isTagInputSize(size), true);
-    assert.equal(resolveTagInputSize(size), size);
-  }
-  for (const value of [undefined, null, "compact", 20]) {
-    assert.equal(isTagInputSize(value), false);
-    assert.equal(resolveTagInputSize(value), "base");
-  }
-});
+
 
 test("forwards the complete Ark root contract", () => {
   assert.match(root, /from "@ark-ui\/vue\/tags-input"/);

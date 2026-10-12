@@ -17,31 +17,9 @@ const icon = source("LinkExternalIcon.vue");
 const styles = source("link.css");
 const barrel = source("index.ts");
 
-test("defines guarded inline, current, and plain variants", () => {
-  assert.deepEqual(LINK_VARIANTS, ["inline", "current", "plain"]);
-  assert.equal(LINK_DEFAULT_VARIANT, "inline");
 
-  for (const variant of LINK_VARIANTS) {
-    assert.equal(isLinkVariant(variant), true);
-    assert.equal(resolveLinkVariant(variant), variant);
-  }
-  for (const invalid of ["default", "button", "constructor", "__proto__", null]) {
-    assert.equal(isLinkVariant(invalid), false);
-    assert.equal(resolveLinkVariant(invalid), "inline");
-  }
-});
 
-test("resolves safe external targets and rel tokens", () => {
-  assert.equal(resolveLinkTarget(undefined, false), undefined);
-  assert.equal(resolveLinkTarget(undefined, true), "_blank");
-  assert.equal(resolveLinkTarget("_self", true), "_self");
 
-  assert.equal(resolveLinkRel(undefined, undefined, false), undefined);
-  assert.equal(resolveLinkRel("author", "_self", false), "author");
-  assert.equal(resolveLinkRel(undefined, "_blank", false), "noopener noreferrer");
-  assert.equal(resolveLinkRel("nofollow noopener", "_blank", false), "nofollow noopener noreferrer");
-  assert.equal(resolveLinkRel("external", "_self", true), "external noopener noreferrer");
-});
 
 test("uses the Ark anchor factory and composes router links", () => {
   assert.match(component, /ark } from "@ark-ui\/vue\/factory"/);

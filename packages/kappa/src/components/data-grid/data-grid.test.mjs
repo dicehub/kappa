@@ -36,13 +36,7 @@ test("resolves accessors and filters rows with query and column predicates", () 
   assert.deepEqual(filterDataGridRows(rows, columns, "atlas", { status: "ready" }), []);
 });
 
-test("normalizes virtual window values", () => {
-  assert.equal(resolveDataGridPositiveInteger(42.8, 10), 42);
-  assert.equal(resolveDataGridPositiveInteger(0.5, 10), 1);
-  assert.equal(resolveDataGridPositiveInteger(0, 10), 10);
-  assert.equal(resolveDataGridOverscan(-2), 0);
-  assert.equal(resolveDataGridOverscan(200), 100);
-});
+
 
 test("keeps the public contract Kappa-owned and the virtual DOM bounded", () => {
   const component = source("DataGrid.vue");

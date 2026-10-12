@@ -20,18 +20,7 @@ const styles = source("input-otp.css");
 const types = source("input-otp.ts");
 const barrel = source("index.ts");
 
-test("guards and resolves OTP densities", () => {
-  assert.deepEqual(INPUT_OTP_SIZES, ["sm", "base", "lg"]);
-  assert.equal(INPUT_OTP_DEFAULT_SIZE, "base");
-  for (const size of INPUT_OTP_SIZES) {
-    assert.equal(isInputOtpSize(size), true);
-    assert.equal(resolveInputOtpSize(size), size);
-  }
-  for (const invalid of ["xs", "xl", "__proto__", null, 3]) {
-    assert.equal(isInputOtpSize(invalid), false);
-    assert.equal(resolveInputOtpSize(invalid), "base");
-  }
-});
+
 
 test("wraps Ark pin-input root and preserves controlled events", () => {
   assert.match(root, /from "@ark-ui\/vue\/pin-input"/);

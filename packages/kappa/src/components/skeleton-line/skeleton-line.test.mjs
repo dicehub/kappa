@@ -13,16 +13,7 @@ const component = source("SkeletonLine.vue");
 const styles = source("skeleton-line.css");
 const barrel = source("index.ts");
 
-test("resolves deterministic CSS lengths with safe fallbacks", () => {
-  assert.equal(SKELETON_LINE_DEFAULT_WIDTH, "100%");
-  assert.equal(SKELETON_LINE_DEFAULT_HEIGHT, "0.5rem");
-  assert.equal(resolveSkeletonLineLength(48, "1rem"), "48px");
-  assert.equal(resolveSkeletonLineLength(" 72% ", "100%"), "72%");
 
-  for (const invalid of [0, -1, Number.NaN, Number.POSITIVE_INFINITY, "", "   ", null]) {
-    assert.equal(resolveSkeletonLineLength(invalid, "1rem"), "1rem");
-  }
-});
 
 test("renders a decorative line and forwards attributes to its visible shape", () => {
   assert.match(component, /defineOptions\(\{ inheritAttrs: false \}\)/);

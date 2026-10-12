@@ -18,14 +18,7 @@ const moduleBarrel = readSource("./index.ts");
 const componentBarrel = readSource("../index.ts");
 const packageJson = JSON.parse(readSource("../../../package.json"));
 
-test("defines the four Kappa control sizes with a safe default", () => {
-  assert.deepEqual(NATIVE_SELECT_SIZES, ["xs", "sm", "base", "lg"]);
-  assert.equal(NATIVE_SELECT_DEFAULT_SIZE, "base");
-  assert.equal(isNativeSelectSize("xs"), true);
-  assert.equal(isNativeSelectSize("constructor"), false);
-  assert.equal(resolveNativeSelectSize("lg"), "lg");
-  assert.equal(resolveNativeSelectSize("large"), "base");
-});
+
 
 test("renders one native select with model and attribute forwarding", () => {
   assert.match(rootSource, /defineOptions\(\{ inheritAttrs: false \}\)/);

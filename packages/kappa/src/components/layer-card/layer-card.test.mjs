@@ -37,26 +37,7 @@ test("defines safe semantic defaults", () => {
   assert.equal(LAYER_CARD_SECONDARY_DEFAULT_ELEMENT, "div");
 });
 
-test("rejects unsupported runtime elements", () => {
-  for (const element of LAYER_CARD_ROOT_ELEMENTS) assert.equal(isLayerCardRootElement(element), true);
-  for (const element of LAYER_CARD_PRIMARY_ELEMENTS) {
-    assert.equal(isLayerCardPrimaryElement(element), true);
-  }
-  for (const element of LAYER_CARD_SECONDARY_ELEMENTS) {
-    assert.equal(isLayerCardSecondaryElement(element), true);
-  }
-  for (const value of ["script", "toString", "constructor", "__proto__", null, 1]) {
-    assert.equal(isLayerCardRootElement(value), false);
-    assert.equal(isLayerCardPrimaryElement(value), false);
-    assert.equal(isLayerCardSecondaryElement(value), false);
-  }
-  assert.equal(resolveLayerCardRootElement("article"), "article");
-  assert.equal(resolveLayerCardRootElement("script"), "div");
-  assert.equal(resolveLayerCardPrimaryElement("a"), "a");
-  assert.equal(resolveLayerCardPrimaryElement("button"), "div");
-  assert.equal(resolveLayerCardSecondaryElement("header"), "header");
-  assert.equal(resolveLayerCardSecondaryElement("span"), "div");
-});
+
 
 test("renders native, attribute-transparent compound parts", () => {
   for (const partSource of partSources) {

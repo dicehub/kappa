@@ -22,28 +22,7 @@ const component = source("Toggle.vue");
 const styles = source("toggle.css");
 const barrel = source("index.ts");
 
-test("keeps variants, sizes, and native button types deterministic", () => {
-  assert.deepEqual(TOGGLE_VARIANTS, ["default", "outline"]);
-  assert.deepEqual(TOGGLE_SIZES, ["sm", "base", "lg"]);
-  assert.deepEqual(TOGGLE_TYPES, ["button", "submit", "reset"]);
-  assert.equal(TOGGLE_DEFAULT_VARIANT, "default");
-  assert.equal(TOGGLE_DEFAULT_SIZE, "base");
-  assert.equal(TOGGLE_DEFAULT_TYPE, "button");
 
-  for (const value of TOGGLE_VARIANTS) assert.equal(isToggleVariant(value), true);
-  for (const value of TOGGLE_SIZES) assert.equal(isToggleSize(value), true);
-  for (const value of TOGGLE_TYPES) assert.equal(isToggleType(value), true);
-
-  for (const invalid of ["", "missing", "constructor", "__proto__", null, 1]) {
-    assert.equal(isToggleVariant(invalid), false);
-    assert.equal(isToggleSize(invalid), false);
-    assert.equal(isToggleType(invalid), false);
-  }
-
-  assert.equal(resolveToggleVariant("bad"), TOGGLE_DEFAULT_VARIANT);
-  assert.equal(resolveToggleSize("bad"), TOGGLE_DEFAULT_SIZE);
-  assert.equal(resolveToggleType("bad"), TOGGLE_DEFAULT_TYPE);
-});
 
 test("renders a controlled or uncontrolled native pressed button", () => {
   assert.match(component, /defineOptions\(\{ inheritAttrs: false \}\)/);

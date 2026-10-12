@@ -23,17 +23,7 @@ const parts = [
   ["CancelTrigger", "editable-cancel-trigger"],
 ];
 
-test("accepts the compact size and preserves the default for invalid values", () => {
-  assert.deepEqual(EDITABLE_SIZES, ["xs", "sm", "default", "lg"]);
-  for (const size of EDITABLE_SIZES) {
-    assert.equal(isEditableSize(size), true);
-    assert.equal(resolveEditableSize(size), size);
-  }
-  for (const value of [undefined, null, "compact", 20]) {
-    assert.equal(isEditableSize(value), false);
-    assert.equal(resolveEditableSize(value), "default");
-  }
-});
+
 
 test("forwards the complete Ark root state and event contract", () => {
   assert.match(root, /from "@ark-ui\/vue\/editable"/);

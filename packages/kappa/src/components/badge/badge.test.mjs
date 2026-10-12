@@ -37,23 +37,9 @@ test("keeps the public variant contract", () => {
   assert.equal(BADGE_DEFAULT_ELEMENT, "span");
 });
 
-test("validates only own variant keys", () => {
-  for (const variant of Object.keys(BADGE_VARIANTS)) {
-    assert.equal(isBadgeVariant(variant), true);
-  }
 
-  for (const value of ["missing", "toString", "constructor", "__proto__", null, 1]) {
-    assert.equal(isBadgeVariant(value), false);
-  }
-});
 
-test("supports only a label span or semantic link", () => {
-  assert.equal(isBadgeElement("span"), true);
-  assert.equal(isBadgeElement("a"), true);
-  assert.equal(isBadgeElement("button"), false);
-  assert.equal(isBadgeElement("div"), false);
-  assert.equal(isBadgeElement(null), false);
-});
+
 
 test("renders a configurable native element and forwards consumer attributes", () => {
   assert.match(componentSource, /defineOptions\(\{ inheritAttrs: false \}\)/);

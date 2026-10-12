@@ -24,15 +24,7 @@ const moduleBarrel = readFileSync(new URL("./index.ts", import.meta.url), "utf8"
 
 
 
-test("validates logo variants and colors", () => {
-  assert.equal(isDicehubLogoVariant("glyph"), true);
-  assert.equal(isDicehubLogoVariant("full"), true);
-  assert.equal(isDicehubLogoVariant("mark"), false);
-  assert.equal(isDicehubLogoColor("color"), true);
-  assert.equal(isDicehubLogoColor("black"), true);
-  assert.equal(isDicehubLogoColor("white"), true);
-  assert.equal(isDicehubLogoColor("currentColor"), false);
-});
+
 
 test("generates the default full-color SVG", () => {
   const svg = generateDicehubLogoSvg();

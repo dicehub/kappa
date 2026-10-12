@@ -19,22 +19,7 @@ const textSource = readFileSync(new URL("./ButtonGroupText.vue", import.meta.url
 const styles = readFileSync(new URL("./button-group.css", import.meta.url), "utf8");
 const barrel = readFileSync(new URL("./index.ts", import.meta.url), "utf8");
 
-test("defines guarded layout orientations", () => {
-  assert.deepEqual(BUTTON_GROUP_ORIENTATIONS, ["horizontal", "vertical"]);
-  assert.equal(BUTTON_GROUP_DEFAULT_ORIENTATION, "horizontal");
-  assert.equal(BUTTON_GROUP_SEPARATOR_DEFAULT_ORIENTATION, "vertical");
 
-  for (const orientation of BUTTON_GROUP_ORIENTATIONS) {
-    assert.equal(isButtonGroupOrientation(orientation), true);
-  }
-  for (const value of ["missing", "constructor", "toString", "__proto__", null, 1]) {
-    assert.equal(isButtonGroupOrientation(value), false);
-  }
-
-  assert.equal(resolveButtonGroupOrientation("missing"), "horizontal");
-  assert.equal(resolveButtonGroupSeparatorOrientation("missing"), "vertical");
-  assert.equal(resolveButtonGroupSeparatorOrientation("horizontal"), "horizontal");
-});
 
 test("renders a fixed semantic group and forwards consumer attributes", () => {
   assert.match(rootSource, /defineOptions\(\{ inheritAttrs: false \}\)/);

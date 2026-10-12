@@ -16,25 +16,7 @@ const component = source("Label.vue");
 const styles = source("label.css");
 const barrel = source("index.ts");
 
-test("defines a guarded native element and translated optional-text contract", () => {
-  assert.deepEqual(LABEL_ELEMENTS, ["label", "span"]);
-  assert.equal(LABEL_DEFAULT_ELEMENT, "label");
-  assert.equal(LABEL_DEFAULT_OPTIONAL_TEXT, "optional");
 
-  assert.equal(isLabelElement("label"), true);
-  assert.equal(isLabelElement("span"), true);
-  for (const invalid of ["div", "button", "constructor", "__proto__", null]) {
-    assert.equal(isLabelElement(invalid), false);
-  }
-
-  assert.equal(resolveLabelElement("span"), "span");
-  assert.equal(resolveLabelElement("div"), "label");
-  assert.equal(resolveLabelElement("label", true), "span");
-  assert.equal(resolveLabelOptionalText("facultatif"), "facultatif");
-  for (const invalid of ["", "   ", null, 1]) {
-    assert.equal(resolveLabelOptionalText(invalid), "optional");
-  }
-});
 
 test("renders a native label, forwards attributes, and supports content composition", () => {
   assert.match(component, /defineOptions\(\{ inheritAttrs: false \}\)/);

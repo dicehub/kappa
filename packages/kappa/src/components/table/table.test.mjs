@@ -34,36 +34,7 @@ const partFiles = [
   "TableResizeHandle.vue",
 ];
 
-test("defines guarded layout, row, header, and sticky contracts", () => {
-  assert.deepEqual(TABLE_LAYOUTS, ["auto", "fixed"]);
-  assert.deepEqual(TABLE_ROW_VARIANTS, ["default", "selected"]);
-  assert.deepEqual(TABLE_STICKY_COLUMNS, ["left", "right"]);
-  assert.deepEqual(TABLE_HEADER_VARIANTS, ["default", "compact"]);
-  assert.equal(TABLE_DEFAULT_VARIANTS.layout, "auto");
-  assert.equal(TABLE_DEFAULT_VARIANTS.variant, "default");
-  assert.equal(TABLE_DEFAULT_HEADER_VARIANT, "default");
 
-  for (const value of TABLE_LAYOUTS) assert.equal(isTableLayout(value), true);
-  for (const value of TABLE_ROW_VARIANTS) assert.equal(isTableRowVariant(value), true);
-  for (const value of TABLE_STICKY_COLUMNS) assert.equal(isTableStickyColumn(value), true);
-  for (const value of TABLE_HEADER_VARIANTS) assert.equal(isTableHeaderVariant(value), true);
-
-  for (const value of ["missing", "constructor", "__proto__", null, 1]) {
-    assert.equal(isTableLayout(value), false);
-    assert.equal(isTableRowVariant(value), false);
-    assert.equal(isTableStickyColumn(value), false);
-    assert.equal(isTableHeaderVariant(value), false);
-  }
-
-  assert.equal(resolveTableLayout("fixed"), "fixed");
-  assert.equal(resolveTableLayout("large"), "auto");
-  assert.equal(resolveTableRowVariant("selected"), "selected");
-  assert.equal(resolveTableRowVariant("active"), "default");
-  assert.equal(resolveTableStickyColumn("left"), "left");
-  assert.equal(resolveTableStickyColumn("center"), undefined);
-  assert.equal(resolveTableHeaderVariant("compact"), "compact");
-  assert.equal(resolveTableHeaderVariant("dense"), "default");
-});
 
 test("renders semantic native parts and forwards consumer attributes", () => {
   for (const file of partFiles) {

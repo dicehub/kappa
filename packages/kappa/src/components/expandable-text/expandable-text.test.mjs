@@ -18,13 +18,7 @@ const componentBarrel = source("../index.ts");
 
 
 
-test("normalizes the visible line count", () => {
-  assert.equal(resolveExpandableTextLines(1), 1);
-  assert.equal(resolveExpandableTextLines(4.9), 4);
-  for (const value of [0, -1, Number.NaN, Number.POSITIVE_INFINITY, "3", null]) {
-    assert.equal(resolveExpandableTextLines(value), EXPANDABLE_TEXT_DEFAULT_LINES);
-  }
-});
+
 
 test("composes Ark Collapsible and measures real overflow", () => {
   assert.match(component, /Collapsible as ArkCollapsible/);

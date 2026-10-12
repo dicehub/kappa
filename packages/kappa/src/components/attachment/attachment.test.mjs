@@ -46,42 +46,7 @@ const moduleBarrel = source("index.ts");
 
 
 
-test("rejects unsupported runtime values and resolves safe defaults", () => {
-  for (const state of ATTACHMENT_STATES) assert.equal(isAttachmentState(state), true);
-  for (const size of ATTACHMENT_SIZES) assert.equal(isAttachmentSize(size), true);
-  for (const orientation of ATTACHMENT_ORIENTATIONS) {
-    assert.equal(isAttachmentOrientation(orientation), true);
-  }
-  for (const variant of ATTACHMENT_MEDIA_VARIANTS) {
-    assert.equal(isAttachmentMediaVariant(variant), true);
-  }
-  for (const type of ATTACHMENT_BUTTON_TYPES) assert.equal(isAttachmentButtonType(type), true);
-  for (const element of ATTACHMENT_TRIGGER_ELEMENTS) {
-    assert.equal(isAttachmentTriggerElement(element), true);
-  }
 
-  for (const value of ["missing", "toString", "constructor", "__proto__", null, 1]) {
-    assert.equal(isAttachmentState(value), false);
-    assert.equal(isAttachmentSize(value), false);
-    assert.equal(isAttachmentOrientation(value), false);
-    assert.equal(isAttachmentMediaVariant(value), false);
-    assert.equal(isAttachmentButtonType(value), false);
-    assert.equal(isAttachmentTriggerElement(value), false);
-  }
-
-  assert.equal(resolveAttachmentState("uploading"), "uploading");
-  assert.equal(resolveAttachmentState("complete"), "done");
-  assert.equal(resolveAttachmentSize("xs"), "xs");
-  assert.equal(resolveAttachmentSize("lg"), "default");
-  assert.equal(resolveAttachmentOrientation("vertical"), "vertical");
-  assert.equal(resolveAttachmentOrientation("diagonal"), "horizontal");
-  assert.equal(resolveAttachmentMediaVariant("image"), "image");
-  assert.equal(resolveAttachmentMediaVariant("video"), "icon");
-  assert.equal(resolveAttachmentButtonType("reset"), "reset");
-  assert.equal(resolveAttachmentButtonType("menu"), "button");
-  assert.equal(resolveAttachmentTriggerElement("a"), "a");
-  assert.equal(resolveAttachmentTriggerElement("router-link"), "button");
-});
 
 test("renders a guarded native root and forwards consumer attributes", () => {
   assert.match(rootSource, /defineOptions\(\{ inheritAttrs: false \}\)/);

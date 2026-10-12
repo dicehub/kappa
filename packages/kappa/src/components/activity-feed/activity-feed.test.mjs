@@ -47,25 +47,7 @@ const barrel = source("index.ts");
 
 
 
-test("rejects unsafe runtime values and resolves public defaults", () => {
-  for (const element of ACTIVITY_FEED_HEADING_ELEMENTS) {
-    assert.equal(isActivityFeedHeadingElement(element), true);
-  }
-  for (const value of ["script", "a", "button", "constructor", "__proto__", null, 1]) {
-    assert.equal(isActivityFeedHeadingElement(value), false);
-  }
 
-  assert.equal(resolveActivityFeedSize("compact"), "compact");
-  assert.equal(resolveActivityFeedSize("dense"), "default");
-  assert.equal(resolveActivityFeedTone("danger"), "danger");
-  assert.equal(resolveActivityFeedTone("brand"), "neutral");
-  assert.equal(resolveActivityFeedMarkerVariant("avatar"), "avatar");
-  assert.equal(resolveActivityFeedMarkerVariant("image"), "dot");
-  assert.equal(resolveActivityFeedGroupLabelElement("h4"), "h4");
-  assert.equal(resolveActivityFeedGroupLabelElement("script"), "h3");
-  assert.equal(resolveActivityFeedTitleElement("div"), "div");
-  assert.equal(resolveActivityFeedTitleElement("span"), "p");
-});
 
 test("uses native list, section, and time semantics without a state-machine dependency", () => {
   for (const partSource of partSources) {

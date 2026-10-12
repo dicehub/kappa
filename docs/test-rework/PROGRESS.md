@@ -2,12 +2,11 @@
 
 Read when resuming this branch or checking deletion readiness.
 
-Phase 3 continues, with Phase 4 now allowed for verified batches. Batch 1 removes
-Batch 1 removes 94 export/type definitions in commit `5169573`. Batch 2 removes
-42 Diff Viewer/resource cases: 1,561 original cases remain.
-All 651 remaining library/docs cases pass in the isolated removal copy. The
-foundation is committed as `1c3595b`. Ros approved the two local commits on
-12 October. No push, merge, or release has occurred. Other groups remain.
+Phase 3 continues; Phase 4 runs only for verified batches. Three batches remove
+183 original cases: 1,514 remain. Batch 1 is `5169573`; Batch 2 records are
+`9155442` and its three file removals are `a3c42dd`. Batch 3 removes 47 runtime
+guard definitions from 40 mixed files. No push, merge, or release has occurred.
+The foundation is `1c3595b`. Ros approved local batch commits on 12 October.
 
 Five published-package fixes have explicit approval, patch changesets, public
 regressions, and open GitLab issues: Dialog compound isolation (#9), missing
@@ -420,11 +419,17 @@ loses no raw detection and increases kills-only score by 1.47 points. Resource
 fault proof stays scoped to four v1 and two v2 faults. No production seam changes.
 See `deletion-batch-2.json`; remaining core coverage/mutation work stays open.
 
-A read-only audit also selects 47 complete runtime function/constant groups in
-40 mixed files. Their 894 frozen input requirements use released public exports.
-Five mixed groups stay out of the proposal: Field, Fieldset, Hover Card, Number
-Input alignment and XY Plot append/format behavior. No guard group is removed
-until its proposed-removal and scoped proof checks pass on dh-pc.
+Batch 3's 47 definitions map to 894 frozen public input requirements and released
+constants. Its owned dh-pc copy passes all 499 remaining library cases. The
+inactive selected old cases pass 47/47; real packed core/full consumers pass
+170/170 and 136/136 plus strict declarations and snippets. All 166 selected
+return-undefined faults fail intended assertions in both suites; no old detection
+is lost. Both installed source maps contain the exact instrumented originals.
+The audit preserves the hash, log-directory and missing-LICENSE setup failures;
+the corrected package uses real assets and the unchanged successful build.
+No assertion was weakened. This selected fault set is not an overall mutation
+score. Five mixed groups remain: Field, Fieldset, Hover Card, Number Input
+alignment and XY Plot append/format. See `deletion-batch-3.json`.
 
 Still required: complete behavior mapping, remaining coverage
 gaps, the core-module mutation comparison, and proof for lifecycle obligations

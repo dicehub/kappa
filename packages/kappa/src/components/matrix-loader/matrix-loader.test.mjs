@@ -20,29 +20,7 @@ import {
 
 const source = (name) => readFileSync(new URL(`./${name}`, import.meta.url), "utf8");
 
-test("defines stable presets and safe runtime fallbacks", () => {
-  assert.deepEqual(MATRIX_LOADER_SIZES, { sm: 16, base: 24, lg: 32 });
-  assert.deepEqual(MATRIX_LOADER_SHAPES, ["square", "circle", "diamond", "ring"]);
-  assert.deepEqual(MATRIX_LOADER_MOTIONS, ["pulse", "scan", "twinkle", "orbit"]);
-  assert.equal(MATRIX_LOADER_DEFAULT_SIZE, "base");
-  assert.equal(MATRIX_LOADER_DEFAULT_SHAPE, "square");
-  assert.equal(MATRIX_LOADER_DEFAULT_MOTION, "pulse");
-  assert.equal(MATRIX_LOADER_DEFAULT_DURATION, 1200);
-  assert.equal(MATRIX_LOADER_DEFAULT_LABEL, "Loading");
 
-  assert.equal(resolveMatrixLoaderSize("sm"), 16);
-  assert.equal(resolveMatrixLoaderSize(48), 48);
-  assert.equal(resolveMatrixLoaderSize("missing"), 24);
-  assert.equal(resolveMatrixLoaderShape("ring"), "ring");
-  assert.equal(resolveMatrixLoaderShape("missing"), "square");
-  assert.equal(resolveMatrixLoaderMotion("orbit"), "orbit");
-  assert.equal(resolveMatrixLoaderMotion("missing"), "pulse");
-  assert.equal(resolveMatrixLoaderDuration(200), 400);
-  assert.equal(resolveMatrixLoaderDuration(20_000), 10_000);
-  assert.equal(resolveMatrixLoaderDuration(Number.NaN), 1200);
-  assert.equal(resolveMatrixLoaderLabel("Meshing"), "Meshing");
-  assert.equal(resolveMatrixLoaderLabel("  "), "Loading");
-});
 
 test("builds deterministic five by five matrices for every shape and motion", () => {
   const visibleCounts = { square: 25, circle: 21, diamond: 13, ring: 16 };

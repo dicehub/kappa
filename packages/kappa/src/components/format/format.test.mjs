@@ -18,25 +18,9 @@ const styles = source("format.css");
 const contracts = source("format.ts");
 const barrel = source("index.ts");
 
-test("resolves a safe locale for Intl formatters", () => {
-  assert.equal(FORMAT_DEFAULT_LOCALE, "en-US");
-  assert.equal(resolveFormatLocale(undefined), "en-US");
-  assert.equal(resolveFormatLocale("  de-DE  "), "de-DE");
-  assert.equal(resolveFormatLocale("de-de"), "de-DE");
-  assert.equal(resolveFormatLocale("invalid_locale"), "en-US");
-  assert.equal(resolveFormatLocale(""), "en-US");
-  assert.equal(resolveFormatLocale("   "), "en-US");
-  assert.equal(resolveFormatLocale(null), "en-US");
-});
 
-test("accepts only supported relative-time styles", () => {
-  for (const style of ["long", "short", "narrow"]) {
-    assert.equal(resolveFormatRelativeTimeStyle(style), style);
-  }
-  for (const invalid of [{}, "", "wide", null]) {
-    assert.equal(resolveFormatRelativeTimeStyle(invalid), undefined);
-  }
-});
+
+
 
 test("provides locale context without adding a root element", () => {
   assert.match(root, /LocaleProvider/);

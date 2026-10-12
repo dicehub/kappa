@@ -24,38 +24,7 @@ const textSource = source("InputGroupText.vue");
 const styles = source("input-group.css");
 const barrel = source("index.ts");
 
-test("defines guarded sizes, addon alignment, and state helpers", () => {
-  assert.deepEqual(INPUT_GROUP_SIZES, ["xs", "sm", "base", "lg"]);
-  assert.deepEqual(INPUT_GROUP_ADDON_ALIGNS, [
-    "inline-start",
-    "inline-end",
-    "block-start",
-    "block-end",
-  ]);
-  assert.equal(INPUT_GROUP_DEFAULT_SIZE, "base");
-  assert.equal(INPUT_GROUP_DEFAULT_ADDON_ALIGN, "inline-start");
 
-  for (const size of INPUT_GROUP_SIZES) {
-    assert.equal(isInputGroupSize(size), true);
-    assert.equal(resolveInputGroupSize(size), size);
-  }
-  for (const align of INPUT_GROUP_ADDON_ALIGNS) {
-    assert.equal(isInputGroupAddonAlign(align), true);
-    assert.equal(resolveInputGroupAddonAlign(align), align);
-  }
-  for (const invalid of ["default", "xl", "constructor", "__proto__", null, 1]) {
-    assert.equal(isInputGroupSize(invalid), false);
-    assert.equal(isInputGroupAddonAlign(invalid), false);
-  }
-  assert.equal(resolveInputGroupSize("bad"), "base");
-  assert.equal(resolveInputGroupAddonAlign("bad"), "inline-start");
-  assert.equal(isInputGroupInvalid({ "aria-invalid": "true" }), true);
-  assert.equal(isInputGroupInvalid({ "data-invalid": "" }), true);
-  assert.equal(isInputGroupInvalid({ "data-invalid": false }), false);
-  assert.equal(resolveInputGroupAriaBoolean(true), "true");
-  assert.equal(resolveInputGroupAriaBoolean("false"), "false");
-  assert.equal(resolveInputGroupAriaBoolean("other"), undefined);
-});
 
 test("renders an attribute-transparent compound native composition", () => {
   for (const partSource of [
