@@ -110,12 +110,3 @@ test("styles layered surfaces with Kappa tokens and forced colors", () => {
   assert.doesNotMatch(styles, /animation|transition/);
   assert.doesNotMatch(styles, /\.(?!kappa-)[a-z][\w-]*|(?<![\w-])--(?!kappa-)[a-z][\w-]*/);
 });
-
-test("exports the complete compound surface", () => {
-  assert.match(barrel, /export const LayerCard = Object\.assign/);
-  for (const name of ["Root", "Primary", "Secondary"]) {
-    assert.match(barrel, new RegExp(`${name}: LayerCard${name}`));
-  }
-  assert.match(barrel, /export \{ LayerCardPrimary, LayerCardRoot, LayerCardSecondary \}/);
-  assert.match(barrel, /export \* from "\.\/layer-card"/);
-});

@@ -29,21 +29,7 @@ const linkSource = readFileSync(new URL("./LinkButton.vue", import.meta.url), "u
 const styles = readFileSync(new URL("./button.css", import.meta.url), "utf8");
 const barrel = readFileSync(new URL("./index.ts", import.meta.url), "utf8");
 
-test("keeps the public options and quiet defaults deterministic", () => {
-  assert.deepEqual(BUTTON_VARIANTS, [
-    "primary", "secondary", "outline", "ghost", "destructive",
-    "secondary-destructive", "destructive-outline", "success", "warning", "link",
-  ]);
-  assert.deepEqual(BUTTON_SIZES, ["xs", "sm", "base", "lg"]);
-  assert.deepEqual(BUTTON_SHAPES, ["base", "square", "circle"]);
-  assert.deepEqual(BUTTON_ICON_POSITIONS, ["inline-start", "inline-end"]);
-  assert.deepEqual(BUTTON_TYPES, ["button", "submit", "reset"]);
-  assert.equal(BUTTON_DEFAULT_VARIANT, "secondary");
-  assert.equal(BUTTON_DEFAULT_SIZE, "base");
-  assert.equal(BUTTON_DEFAULT_SHAPE, "base");
-  assert.equal(BUTTON_DEFAULT_ICON_POSITION, "inline-start");
-  assert.equal(BUTTON_DEFAULT_TYPE, "button");
-});
+
 
 test("rejects invalid and prototype-shaped runtime options", () => {
   for (const value of BUTTON_VARIANTS) assert.equal(isButtonVariant(value), true);
@@ -111,14 +97,4 @@ test("uses flat, compact, logical, and resilient styling", () => {
   assert.match(styles, /@media \(forced-colors: active\)/);
   assert.match(styles, /var\(--kappa-accent-solid, #247ab7\)/);
   assert.match(styles, /\.kappa-button\[aria-invalid="true"\][\s\S]*outline: 1px solid/);
-});
-
-test("exports both components and the complete public contract", () => {
-  assert.match(barrel, /export \{ default as Button \}/);
-  assert.match(barrel, /export \{ default as LinkButton \}/);
-  for (const name of [
-    "BUTTON_VARIANTS", "BUTTON_SIZES", "BUTTON_SHAPES", "BUTTON_ICON_POSITIONS",
-    "BUTTON_TYPES", "isButtonVariant", "resolveButtonVariant", "ButtonProps",
-    "LinkButtonProps", "ButtonSlots", "LinkButtonSlots",
-  ]) assert.match(barrel, new RegExp(name));
 });

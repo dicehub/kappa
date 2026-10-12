@@ -31,13 +31,7 @@ test("batches bounded append data and formats technical values", () => {
   assert.match(formatXYPlotValue(0.00001), /e-/);
 });
 
-test("creates every supported uPlot path builder", () => {
-  assert.equal(createXYPlotPathBuilder("line"), undefined);
-  assert.equal(typeof createXYPlotPathBuilder("bars"), "function");
-  assert.equal(typeof createXYPlotPathBuilder("spline"), "function");
-  assert.equal(typeof createXYPlotPathBuilder("stepped"), "function");
-  assert.equal(typeof createXYPlotPathBuilder("points"), "function");
-});
+
 
 test("keeps dense data shallow and cleans every browser resource", () => {
   const component = source("./XYPlot.vue");

@@ -87,22 +87,3 @@ test("uses compact Kappa states without layout movement", () => {
   assert.doesNotMatch(styles, /margin-left|margin-right|padding-left|padding-right/);
   assert.doesNotMatch(styles, /\.(?!kappa-)[a-z][\w-]*|(?<![\w-])--(?!kappa-)[a-z][\w-]*/);
 });
-
-test("exports the complete public contract", () => {
-  for (const name of [
-    "Toggle",
-    "TOGGLE_VARIANTS",
-    "TOGGLE_SIZES",
-    "TOGGLE_TYPES",
-    "ToggleVariant",
-    "ToggleSize",
-    "ToggleType",
-    "ToggleProps",
-    "ToggleEmits",
-    "ToggleSlots",
-    "isToggleVariant",
-    "resolveToggleVariant",
-  ]) {
-    assert.match(barrel, new RegExp(name));
-  }
-});

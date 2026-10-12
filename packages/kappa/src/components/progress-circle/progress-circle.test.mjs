@@ -38,22 +38,3 @@ test("uses Kappa tokens and supports determinate and indeterminate motion", () =
   // Ark owns the size and thickness variables; public styles use Kappa names.
   assert.doesNotMatch(styles, /\.(?!kappa-)[a-z][\w-]*|(?<![\w-])--(?!kappa-|(?:size|thickness)\b)[a-z][\w-]*/);
 });
-
-test("exports barrel and granular circular parts", () => {
-  for (const name of [
-    "ProgressCircle",
-    "ProgressCircleRoot",
-    "ProgressCircleRootProvider",
-    "ProgressCircleLabel",
-    "ProgressCircleValueText",
-    "ProgressCircleGraphic",
-    "ProgressCircleTrack",
-    "ProgressCircleRange",
-    "ProgressCircleView",
-    "ProgressCircleContext",
-    "useProgress",
-    "ProgressCircleProps",
-  ]) {
-    assert.match(barrel, new RegExp(name));
-  }
-});

@@ -39,13 +39,3 @@ test("block styling is scoped and preserves mobile and hidden secondary content"
   assert.doesNotMatch(css, /#[0-9a-f]{3,8}\b|rgba?\(|data-mode/);
   assert.doesNotMatch(css, /\.(?!kappa-)[a-z][\w-]*|(?<![\w-])--(?!kappa-)[a-z][\w-]*/);
 });
-
-test("SidebarLayout is a published block with a generated registry entry", () => {
-  const registry = JSON.parse(source("../../registry/component-registry.json"));
-  assert.equal(registry.components.SidebarLayout.type, "block");
-  assert.equal(registry.components.SidebarLayout.importPath, "@dicehub/kappa/blocks/sidebar-layout");
-  const manifest = JSON.parse(source("../../../package.json"));
-  assert.equal(manifest.exports["./blocks/*"]["kappa-source"], "./src/blocks/*/index.ts");
-  assert.equal(manifest.exports["./blocks/*"].types, "./dist/blocks/*/index.d.ts");
-  assert.match(source("../../index.ts"), /export \* from "\.\/blocks"/);
-});

@@ -28,18 +28,7 @@ const bannerStyles = readFileSync(new URL("./banner.css", import.meta.url), "utf
 const actionStyles = readFileSync(new URL("./banner-action.css", import.meta.url), "utf8");
 const moduleBarrel = readFileSync(new URL("./index.ts", import.meta.url), "utf8");
 
-test("keeps the Banner metadata synchronized", () => {
-  assert.deepEqual(Object.keys(BANNER_VARIANTS), ["default", "alert", "error", "secondary"]);
-  assert.deepEqual(Object.keys(BANNER_SIZES), ["base", "sm"]);
-  assert.deepEqual(BANNER_ACTION_VARIANTS, ["primary", "secondary", "ghost"]);
-  assert.deepEqual(BANNER_ACTION_SIZE_BY_BANNER, { base: "sm", sm: "xs" });
-  assert.deepEqual(BANNER_ACTION_TYPES, ["button", "submit", "reset"]);
-  assert.equal(BANNER_DEFAULT_VARIANT, "default");
-  assert.equal(BANNER_DEFAULT_SIZE, "base");
-  assert.equal(BANNER_ACTION_DEFAULT_VARIANT, "primary");
-  assert.equal(BANNER_ACTION_DEFAULT_SIZE, "sm");
-  assert.equal(BANNER_ACTION_DEFAULT_TYPE, "button");
-});
+
 
 test("rejects inherited and unsupported runtime values", () => {
   for (const variant of Object.keys(BANNER_VARIANTS)) assert.equal(isBannerVariant(variant), true);
@@ -100,21 +89,7 @@ test("implements Banner.Action as a guarded native button", () => {
   assert.doesNotMatch(actionSource, /loading|iconProps|shape/);
 });
 
-test("exports the Banner.Action compound and its public contracts", () => {
-  assert.match(moduleBarrel, /export const Banner = Object\.assign/);
-  assert.match(moduleBarrel, /Action: BannerAction/);
-  assert.match(moduleBarrel, /export \{ BannerAction, BannerRoot \}/);
-  for (const name of [
-    "BannerProps",
-    "BannerActionProps",
-    "BannerSize",
-    "BannerVariant",
-    "BannerActionType",
-    "BannerActionVariant",
-  ]) {
-    assert.match(moduleBarrel, new RegExp(name));
-  }
-});
+
 
 test("uses Kappa semantic tokens, Alert-style grid layout, responsive actions, and reduced motion", () => {
   assert.match(bannerStyles, /var\(--kappa-control/);

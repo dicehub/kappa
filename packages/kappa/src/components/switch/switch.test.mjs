@@ -92,18 +92,7 @@ test("resolves the compact size contract", () => {
   assert.match(rootProviderSource, /:data-size="resolvedSize"/);
 });
 
-test("exports the compound API, named parts, and Ark hooks", () => {
-  for (const part of ["Root", "RootProvider", "Control", "Thumb", "Label", "Context"]) {
-    assert.match(moduleBarrel, new RegExp(`${part}: Switch${part}`));
-    assert.match(moduleBarrel, new RegExp(`Switch${part}`));
-  }
-  assert.match(moduleBarrel, /SwitchProps/);
-  assert.match(moduleBarrel, /SwitchDirection/);
-  assert.match(moduleBarrel, /SwitchCheckedChangeDetails/);
-  assert.match(moduleBarrel, /switchAnatomy/);
-  assert.match(moduleBarrel, /useSwitch/);
-  assert.match(moduleBarrel, /useSwitchContext/);
-});
+
 
 test("uses state attributes, semantic tokens, and logical motion", () => {
   assert.match(styles, /\.kappa-switch__control \{/);

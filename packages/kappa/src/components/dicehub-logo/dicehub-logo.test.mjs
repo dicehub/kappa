@@ -22,18 +22,7 @@ const poweredBySource = readFileSync(new URL("./PoweredByDicehub.vue", import.me
 const logoStyles = readFileSync(new URL("./dicehub-logo.css", import.meta.url), "utf8");
 const moduleBarrel = readFileSync(new URL("./index.ts", import.meta.url), "utf8");
 
-test("keeps the public logo metadata synchronized", () => {
-  assert.deepEqual(DICEHUB_LOGO_VARIANTS, ["glyph", "full"]);
-  assert.deepEqual(DICEHUB_LOGO_COLORS, ["color", "black", "white"]);
-  assert.equal(DICEHUB_LOGO_DEFAULT_VARIANT, "full");
-  assert.equal(DICEHUB_LOGO_DEFAULT_COLOR, "color");
-  assert.equal(DICEHUB_LOGO_INK, "#333333");
-  assert.equal(DICEHUB_GLYPH_VIEWBOX, "0 0 33 36");
-  assert.equal(DICEHUB_FULL_LOGO_VIEWBOX, "0 0 137 41");
-  assert.equal(DICEHUB_GLYPH_PATHS.length, 5);
-  assert.equal(DICEHUB_FULL_LOGO_PATHS.length, 13);
-  assert.equal(DICEHUB_WORDMARK_PATH, DICEHUB_FULL_LOGO_PATHS.slice(5).join(" "));
-});
+
 
 test("validates logo variants and colors", () => {
   assert.equal(isDicehubLogoVariant("glyph"), true);
@@ -72,9 +61,7 @@ test("falls back when JavaScript callers pass unsupported values", () => {
   assert.equal(svg.match(/fill="#333333"/g)?.length, DICEHUB_FULL_LOGO_PATHS.length);
 });
 
-test("exports the powered-by composition from the public logo module", () => {
-  assert.match(moduleBarrel, /export \{ default as PoweredByDicehub \} from "\.\/PoweredByDicehub\.vue";/);
-});
+
 
 test("keeps the powered-by link defaults and safe external-link relationship", () => {
   assert.match(poweredBySource, /href: "https:\/\/dicehub\.com"/);

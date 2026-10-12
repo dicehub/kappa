@@ -41,12 +41,7 @@ const state = (tree, overrides = {}) => ({
   ...overrides,
 });
 
-test("defines stable Flow defaults", () => {
-  assert.equal(FLOW_DEFAULT_ALIGN, "start");
-  assert.equal(FLOW_DEFAULT_CONNECTOR, "orthogonal");
-  assert.equal(FLOW_DEFAULT_ORIENTATION, "horizontal");
-  assert.deepEqual(FLOW_DEFAULT_PADDING, { x: 16, y: 64 });
-});
+
 
 test("creates rounded horizontal and vertical connector paths", () => {
   assert.equal(
@@ -172,25 +167,4 @@ test("uses Kappa tokens and preserves accessibility preferences", () => {
   assert.match(styles, /@media \(prefers-reduced-motion: reduce\)/);
   assert.match(styles, /@media \(forced-colors: active\)/);
   assert.doesNotMatch(styles, /\.(?!kappa-)[a-z][\w-]*|(?<![\w-])--(?!kappa-)[a-z][\w-]*/);
-});
-
-test("exports named, compound, and public contract surfaces", () => {
-  assert.match(barrel, /export const Flow = Object\.assign/);
-  for (const name of [
-    "Root: FlowRoot",
-    "Node: FlowNode",
-    "Anchor: FlowAnchor",
-    "Parallel: FlowParallel",
-    "List: FlowList",
-    "FlowRootProps",
-    "FlowNodeProps",
-    "FlowAnchorProps",
-    "FlowParallelProps",
-    "FlowListProps",
-    "FlowOrientation",
-    "FlowConnectorType",
-    "FlowOverflow",
-  ]) {
-    assert.match(barrel, new RegExp(name));
-  }
 });

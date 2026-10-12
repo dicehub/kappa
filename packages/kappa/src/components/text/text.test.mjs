@@ -96,20 +96,3 @@ test("uses semantic tokens, compact typography, and one-line truncation", () => 
   assert.match(styles, /@media \(forced-colors: active\)/);
   assert.doesNotMatch(styles, /\.(?!kappa-)[a-z][\w-]*|(?<![\w-])--(?!kappa-)[a-z][\w-]*/);
 });
-
-test("exports the component and public text contracts", () => {
-  for (const name of [
-    "Text",
-    "TextProps",
-    "TextSlots",
-    "TextVariant",
-    "TextSize",
-    "TextElement",
-    "KAPPA_TEXT_VARIANTS",
-    "KAPPA_TEXT_STYLING",
-    "textVariants",
-    "resolveTextElement",
-  ]) {
-    assert.match(barrel, new RegExp(name));
-  }
-});

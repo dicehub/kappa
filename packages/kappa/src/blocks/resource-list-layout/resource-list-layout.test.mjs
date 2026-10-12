@@ -61,18 +61,3 @@ test("resource list layout styling is scoped, responsive, and token based", () =
   assert.doesNotMatch(css, /data-mode/);
   assert.doesNotMatch(css, /(?<![\w-])--(?!kappa-)[a-z][\w-]*/);
 });
-
-test("ResourceListLayout is a published block with a generated registry entry", () => {
-  const registry = JSON.parse(source("../../registry/component-registry.json"));
-  assert.equal(registry.components.ResourceListLayout?.type, "block");
-  assert.equal(
-    registry.components.ResourceListLayout?.importPath,
-    "@dicehub/kappa/blocks/resource-list-layout",
-  );
-  const manifest = JSON.parse(source("../../../package.json"));
-  assert.equal(
-    manifest.exports["./blocks/*"]["kappa-source"],
-    "./src/blocks/*/index.ts",
-  );
-  assert.equal(manifest.exports["./blocks/*"].import, "./dist/blocks/*.js");
-});

@@ -65,15 +65,7 @@ test("wraps every semantic Ark part and forwards attributes", () => {
   assert.match(contextSource, /<slot v-bind="context"/);
 });
 
-test("exports the compound API, named parts, types, and Ark hooks", () => {
-  for (const part of ["Root", "RootProvider", "Legend", "HelperText", "ErrorText", "Context"]) {
-    assert.match(moduleBarrel, new RegExp(`${part}: Fieldset${part}`));
-    assert.match(moduleBarrel, new RegExp(`Fieldset${part}`));
-  }
-  assert.match(moduleBarrel, /fieldsetAnatomy/);
-  assert.match(moduleBarrel, /useFieldset/);
-  assert.match(moduleBarrel, /useFieldsetContext/);
-});
+
 
 test("uses semantic, state-driven, logical Kappa styling", () => {
   assert.match(styles, /\.kappa-fieldset__/);

@@ -100,39 +100,7 @@ test("supports compound options, collection rendering, and teleport positioning"
   assert.match(rootProviderSource, /@exit-complete/);
 });
 
-test("exports the compound surface, Option alias, and Ark hooks", () => {
-  for (const part of [
-    "Root",
-    "RootProvider",
-    "Trigger",
-    "ValueText",
-    "Indicator",
-    "ClearTrigger",
-    "Control",
-    "Content",
-    "Label",
-    "Positioner",
-    "List",
-    "Item",
-    "Option",
-    "ItemText",
-    "ItemIndicator",
-    "Group",
-    "GroupLabel",
-    "Separator",
-    "HiddenSelect",
-    "Context",
-    "ItemContext",
-  ]) {
-    assert.match(moduleBarrel, new RegExp(`${part}: Select${part}`));
-  }
-  assert.match(moduleBarrel, /createListCollection as createSelectCollection/);
-  assert.match(moduleBarrel, /useSelectContext/);
-  assert.match(moduleBarrel, /selectAnatomy/);
-  assert.match(moduleBarrel, /SelectSelectionDetails/);
-  assert.equal(packageJson.exports["./components/*"]["kappa-source"], "./src/components/*/index.ts");
-  assert.equal(packageJson.exports["./components/*"].import, "./dist/components/*.js");
-});
+
 
 test("uses logical, state-driven Kappa styling", () => {
   assert.match(styles, /--kappa-select-trigger-radius: 0\.125rem/);

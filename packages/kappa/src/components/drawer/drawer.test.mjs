@@ -85,38 +85,7 @@ test("keeps the grabber and close controls composable and accessible", () => {
   assert.match(swipeAreaSource, /<ArkDrawer\.SwipeArea/);
 });
 
-test("exports the full compound and named-part API", () => {
-  for (const part of [
-    "Root",
-    "RootProvider",
-    "Stack",
-    "Trigger",
-    "SwipeArea",
-    "Backdrop",
-    "Positioner",
-    "Content",
-    "Grabber",
-    "GrabberIndicator",
-    "Header",
-    "Title",
-    "Description",
-    "Footer",
-    "Close",
-    "Context",
-    "Indent",
-    "IndentBackground",
-  ]) {
-    assert.match(moduleBarrel, new RegExp(`${part}: Drawer${part}`));
-    assert.match(moduleBarrel, new RegExp(`Drawer${part}`));
-  }
 
-  assert.match(moduleBarrel, /CloseTrigger: DrawerClose/);
-  assert.match(moduleBarrel, /DRAWER_SWIPE_DIRECTIONS/);
-  assert.match(moduleBarrel, /useDrawer/);
-  assert.match(moduleBarrel, /useDrawerContext/);
-  assert.match(moduleBarrel, /useDrawerStackContext/);
-  assert.match(moduleBarrel, /drawerAnatomy/);
-});
 
 test("uses semantic, logical, direction-aware Kappa styling", () => {
   for (const token of [

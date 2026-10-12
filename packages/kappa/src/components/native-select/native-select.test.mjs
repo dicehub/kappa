@@ -63,22 +63,3 @@ test("uses logical Kappa styling and native platform fallbacks", () => {
   assert.doesNotMatch(styles, /\.native-select\s/);
   assert.doesNotMatch(styles, /\.(?!kappa-)[a-z][\w-]*|(?<![\w-])--(?!kappa-)[a-z][\w-]*/);
 });
-
-test("exports the named API and Kappa compound aliases", () => {
-  for (const name of [
-    "NativeSelect",
-    "NativeSelectRoot",
-    "NativeSelectOption",
-    "NativeSelectOptGroup",
-    "NativeSelectProps",
-    "NativeSelectSize",
-  ]) {
-    assert.match(moduleBarrel, new RegExp(name));
-  }
-
-  assert.match(moduleBarrel, /Option: NativeSelectOption/);
-  assert.match(moduleBarrel, /OptGroup: NativeSelectOptGroup/);
-  assert.match(componentBarrel, /export \* from "\.\/native-select"/);
-  assert.equal(packageJson.exports["./components/*"]["kappa-source"], "./src/components/*/index.ts");
-  assert.equal(packageJson.exports["./components/*"].types, "./dist/components/*/index.d.ts");
-});

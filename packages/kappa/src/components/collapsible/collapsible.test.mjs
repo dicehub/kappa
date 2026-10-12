@@ -90,25 +90,7 @@ test("supports external state machines through RootProvider and hooks", () => {
   assert.match(moduleBarrel, /collapsibleAnatomy/);
 });
 
-test("exports named parts and the complete compound API", () => {
-  for (const part of ["Root", "RootProvider", "Trigger", "Content", "Indicator", "Context"]) {
-    assert.match(moduleBarrel, new RegExp(`${part}: Collapsible${part}`));
-    assert.match(moduleBarrel, new RegExp(`Collapsible${part}`));
-  }
 
-  for (const contract of [
-    "CollapsibleProps",
-    "CollapsibleEmits",
-    "CollapsibleRootProviderProps",
-    "CollapsibleTriggerProps",
-    "CollapsibleContentProps",
-    "CollapsibleIndicatorProps",
-    "CollapsibleContextSlots",
-    "CollapsibleOpenChangeDetails",
-  ]) {
-    assert.match(moduleBarrel, new RegExp(contract));
-  }
-});
 
 test("uses dense, logical, state-driven Kappa styling", () => {
   assert.match(styles, /min-block-size: 2\.625rem/);

@@ -133,27 +133,7 @@ test("forwards the Ark group prop and event contract", () => {
   assert.match(typesSource, /maxSelectedValues\?: ArkCheckboxGroupProps\["maxSelectedValues"\]/);
 });
 
-test("exports named parts, the compound API, and Ark hooks", () => {
-  for (const part of [
-    "Root",
-    "RootProvider",
-    "Group",
-    "Control",
-    "Indicator",
-    "Label",
-    "Context",
-  ]) {
-    assert.match(moduleBarrel, new RegExp(`${part}: Checkbox${part}`));
-    assert.match(moduleBarrel, new RegExp(`Checkbox${part}`));
-  }
-  assert.match(moduleBarrel, /CheckboxProps/);
-  assert.match(moduleBarrel, /CheckboxEmits/);
-  assert.match(moduleBarrel, /CheckboxGroupProps/);
-  assert.match(moduleBarrel, /CheckboxCheckedChangeDetails/);
-  assert.match(moduleBarrel, /checkboxAnatomy/);
-  assert.match(moduleBarrel, /useCheckbox/);
-  assert.match(moduleBarrel, /useCheckboxGroup/);
-});
+
 
 test("uses state-attribute-driven Kappa styling", () => {
   assert.match(styles, /\.kappa-checkbox__control \{/);

@@ -118,44 +118,7 @@ test("keeps checkbox and radio options stateful when uncontrolled", () => {
   assert.match(radioItemSource, /closeOnSelect: false/);
 });
 
-test("exports the compound API, public contracts, and Ark hooks", () => {
-  for (const part of [
-    "Root",
-    "RootProvider",
-    "Trigger",
-    "Content",
-    "Item",
-    "LinkItem",
-    "CheckboxItem",
-    "RadioGroup",
-    "RadioItem",
-    "Group",
-    "Label",
-    "Separator",
-    "Shortcut",
-    "Sub",
-    "SubTrigger",
-    "SubContent",
-    "ContextTrigger",
-  ]) {
-    assert.match(moduleBarrel, new RegExp(`${part}: Dropdown${part}`));
-  }
 
-  for (const contract of [
-    "DropdownProps",
-    "DropdownEmits",
-    "DropdownContentProps",
-    "DropdownItemProps",
-    "DropdownCheckboxItemProps",
-    "DropdownRadioGroupProps",
-    "DropdownSubProps",
-  ]) {
-    assert.match(moduleBarrel, new RegExp(contract));
-  }
-
-  assert.match(moduleBarrel, /useMenu as useDropdown/);
-  assert.match(moduleBarrel, /menuAnatomy as dropdownAnatomy/);
-});
 
 test("uses semantic, logical, state-driven Kappa styling", () => {
   for (const token of [

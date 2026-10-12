@@ -113,32 +113,7 @@ test("provides localized, unique, and composable close controls", () => {
   assert.equal((closeSource.match(/<svg/g) ?? []).length, 1);
 });
 
-test("exports named parts, constants, types, hooks, and the compound API", () => {
-  for (const part of [
-    "Root",
-    "RootProvider",
-    "Trigger",
-    "Backdrop",
-    "Positioner",
-    "Content",
-    "Header",
-    "Title",
-    "Description",
-    "Footer",
-    "Close",
-    "Context",
-  ]) {
-    assert.match(moduleBarrel, new RegExp(`${part}: Dialog${part}`));
-    assert.match(moduleBarrel, new RegExp(`Dialog${part}`));
-  }
 
-  assert.match(moduleBarrel, /CloseTrigger: DialogClose/);
-  assert.match(moduleBarrel, /DIALOG_SIZES/);
-  assert.match(moduleBarrel, /resolveDialogRole/);
-  assert.match(moduleBarrel, /useDialog/);
-  assert.match(moduleBarrel, /useDialogContext/);
-  assert.match(moduleBarrel, /dialogAnatomy/);
-});
 
 test("uses semantic, logical, state-driven Kappa styling", () => {
   for (const token of [

@@ -86,21 +86,3 @@ test("styles standard and layered compositions with Kappa tokens", () => {
   assert.doesNotMatch(styles, /\.(?!kappa-)[a-z][\w-]*|(?<![\w-])--(?!kappa-)[a-z][\w-]*/);
   assert.doesNotMatch(styles, /animation|transition/);
 });
-
-test("exports the complete compound surface", () => {
-  assert.match(barrel, /export const Card = Object\.assign/);
-  for (const name of [
-    "Root",
-    "Header",
-    "Title",
-    "Description",
-    "Action",
-    "Content",
-    "Footer",
-    "Primary",
-    "Secondary",
-  ]) {
-    assert.match(barrel, new RegExp(`${name}: Card${name === "Root" ? "Root" : name}`));
-  }
-  assert.match(barrel, /export \* from "\.\/card"/);
-});

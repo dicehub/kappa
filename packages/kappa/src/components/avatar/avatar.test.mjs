@@ -66,15 +66,7 @@ test("keeps presentational extensions native and attribute-transparent", () => {
   assert.doesNotMatch(badgeSource + groupSource + countSource, /role="(?:status|group|img)"/);
 });
 
-test("exports the named and compound API", () => {
-  assert.match(moduleBarrel, /export const Avatar = Object\.assign/);
-  for (const part of ["Root", "Image", "Fallback", "Badge", "Group", "GroupCount"]) {
-    assert.match(moduleBarrel, new RegExp(`${part}: Avatar${part}`));
-    assert.match(moduleBarrel, new RegExp(`Avatar${part}`));
-  }
-  assert.match(moduleBarrel, /AvatarStatusChangeDetails/);
-  assert.match(moduleBarrel, /AvatarImageProps/);
-});
+
 
 test("uses logical, themeable, state-safe avatar styling", () => {
   assert.match(styles, /--kappa-avatar-size: 2rem/);

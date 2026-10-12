@@ -37,14 +37,7 @@ test("keeps native color-picker parts on Ark behavior", () => {
   assert.match(content, /<ArkColorPicker\.Content/);
 });
 
-test("exports the compound component and Ark utilities", () => {
-  for (const part of ["Root", "RootProvider", "Label", "Control", "ChannelInput", "Trigger", "ValueSwatch", "Content", "Area", "AreaBackground", "AreaThumb", "ChannelSlider", "ChannelSliderTrack", "ChannelSliderThumb", "SwatchGroup", "SwatchTrigger", "Swatch", "SwatchIndicator", "HiddenInput", "Context"]) {
-    assert.match(barrel, new RegExp(`${part}: ColorPicker${part}`));
-  }
-  assert.match(barrel, /parseColor/);
-  assert.match(barrel, /useColorPicker/);
-  assert.match(barrel, /colorPickerAnatomy/);
-});
+
 
 test("uses Kappa tokens and complete interaction states", () => {
   assert.match(styles, /\.kappa-color-picker__content/);

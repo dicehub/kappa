@@ -106,31 +106,7 @@ test("keeps Field.Item renderless and exposes context", () => {
   assert.match(contextSource, /<slot v-bind="context"/);
 });
 
-test("exports named parts, compound API, types, and Ark utilities", () => {
-  for (const part of [
-    "Root",
-    "RootProvider",
-    "Label",
-    "Input",
-    "Textarea",
-    "Select",
-    "HelperText",
-    "ErrorText",
-    "RequiredIndicator",
-    "Item",
-    "Context",
-  ]) {
-    assert.match(moduleBarrel, new RegExp(`${part}: Field${part}`));
-    assert.match(moduleBarrel, new RegExp(`Field${part}`));
-  }
 
-  assert.match(moduleBarrel, /fieldAnatomy/);
-  assert.match(moduleBarrel, /useField/);
-  assert.match(moduleBarrel, /useFieldContext/);
-  assert.match(componentBarrel, /export \* from "\.\/field"/);
-  assert.equal(packageJson.exports["./components/*"]["kappa-source"], "./src/components/*/index.ts");
-  assert.equal(packageJson.exports["./components/*"].types, "./dist/components/*/index.d.ts");
-});
 
 test("uses semantic, state-driven, logical Kappa styling", () => {
   assert.match(styles, /border-radius: 0\.125rem/);

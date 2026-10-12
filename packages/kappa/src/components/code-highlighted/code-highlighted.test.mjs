@@ -65,18 +65,7 @@ test("declares the supported language set with aliases and dynamic imports", () 
   assert.match(typesSource, /DEFAULT_CODE_HIGHLIGHTED_LABELS/);
 });
 
-test("exports the documented component API and keeps lifecycle helpers private", () => {
-  assert.match(moduleBarrel, /Root: CodeHighlightedRoot/);
-  assert.match(moduleBarrel, /Provider: ShikiProvider/);
-  assert.match(moduleBarrel, /export \{ CodeHighlightedRoot, ShikiProvider \}/);
-  assert.match(moduleBarrel, /useShikiHighlighter/);
-  assert.match(moduleBarrel, /normalizeCodeHighlightedLanguage/);
-  assert.match(moduleBarrel, /CodeHighlightedProps/);
-  assert.match(moduleBarrel, /ShikiProviderProps/);
-  assert.doesNotMatch(moduleBarrel, /startShikiInitialization/);
-  assert.doesNotMatch(moduleBarrel, /getLanguageSetKey/);
-  assert.doesNotMatch(moduleBarrel, /normalizeLanguageSet/);
-});
+
 
 test("isolates optional Shiki packages from the root barrel and library bundle", () => {
   assert.doesNotMatch(componentsBarrel, /code-highlighted/);

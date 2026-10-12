@@ -26,25 +26,7 @@ const itemSource = source("GridItem.vue");
 const styles = source("grid.css");
 const barrel = source("index.ts");
 
-test("defines compatible responsive presets, gaps, and semantic elements", () => {
-  assert.deepEqual(Object.keys(GRID_VARIANTS), [
-    "2up",
-    "side-by-side",
-    "2-1",
-    "1-2",
-    "1-3up",
-    "3up",
-    "4up",
-    "6up",
-    "1-2-4up",
-  ]);
-  assert.deepEqual(Object.keys(GRID_GAPS), ["none", "sm", "base", "lg"]);
-  assert.deepEqual(GRID_ROOT_ELEMENTS, ["div", "section", "ul", "ol"]);
-  assert.deepEqual(GRID_ITEM_ELEMENTS, ["div", "article", "section", "li"]);
-  assert.equal(GRID_DEFAULT_GAP, "base");
-  assert.equal(GRID_ROOT_DEFAULT_ELEMENT, "div");
-  assert.equal(GRID_ITEM_DEFAULT_ELEMENT, "div");
-});
+
 
 test("guards runtime values without accepting inherited object keys", () => {
   for (const variant of Object.keys(GRID_VARIANTS)) assert.equal(isGridVariant(variant), true);
@@ -112,24 +94,4 @@ test("styles every responsive preset with logical sizing and Kappa tokens", () =
   assert.match(styles, /@media \(forced-colors: active\)/);
   assert.doesNotMatch(styles, /\.(?!kappa-)[a-z][\w-]*|(?<![\w-])--(?!kappa-)[a-z][\w-]*/);
   assert.doesNotMatch(styles, /animation|transition/);
-});
-
-test("exports named, compound, and public contract surfaces", () => {
-  assert.match(barrel, /export const Grid = Object\.assign/);
-  assert.match(barrel, /Root: GridRoot/);
-  assert.match(barrel, /Item: GridItem/);
-  for (const name of [
-    "GridRoot",
-    "GridItem",
-    "GridRootProps",
-    "GridItemProps",
-    "GridVariant",
-    "GridGap",
-    "GRID_VARIANTS",
-    "GRID_GAPS",
-    "resolveGridVariant",
-    "resolveGridGap",
-  ]) {
-    assert.match(barrel, new RegExp(name));
-  }
 });

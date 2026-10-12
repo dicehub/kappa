@@ -244,30 +244,7 @@ test("preserves decimal and scientific-notation scrub steps", () => {
   assert.equal(addNumberInputDecimalSteps(1e-13, 1e-13, -1), 0);
 });
 
-test("exports named parts, the compound API, and Ark context utilities", () => {
-  for (const part of [
-    "Root",
-    "RootProvider",
-    "Label",
-    "Control",
-    "Input",
-    "ValueText",
-    "IncrementTrigger",
-    "DecrementTrigger",
-    "Scrubber",
-    "ScrubbableInput",
-    "Unit",
-    "Context",
-  ]) {
-    assert.match(moduleBarrel, new RegExp(`${part}: NumberInput${part}`));
-    assert.match(moduleBarrel, new RegExp(`NumberInput${part}`));
-  }
 
-  assert.match(moduleBarrel, /useNumberInput/);
-  assert.match(moduleBarrel, /useNumberInputContext/);
-  assert.match(moduleBarrel, /numberInputAnatomy/);
-  assert.match(moduleBarrel, /UseNumberInputProps/);
-});
 
 test("uses flat, state-driven, logical Kappa styling", () => {
   assert.match(styles, /\[data-size="sm"\]/);

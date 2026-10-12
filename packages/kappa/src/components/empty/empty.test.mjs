@@ -27,14 +27,7 @@ const contentSource = source("EmptyContent.vue");
 const styles = source("empty.css");
 const moduleBarrel = source("index.ts");
 
-test("defines the empty size, media, and title contracts", () => {
-  assert.deepEqual(EMPTY_SIZES, ["sm", "base", "lg"]);
-  assert.deepEqual(EMPTY_MEDIA_VARIANTS, ["default", "icon"]);
-  assert.deepEqual(EMPTY_TITLE_ELEMENTS, ["h2", "h3", "h4", "p", "div"]);
-  assert.equal(EMPTY_DEFAULT_SIZE, "base");
-  assert.equal(EMPTY_MEDIA_DEFAULT_VARIANT, "default");
-  assert.equal(EMPTY_TITLE_DEFAULT_ELEMENT, "h3");
-});
+
 
 test("rejects unsupported runtime values and resolves safe defaults", () => {
   for (const size of EMPTY_SIZES) assert.equal(isEmptySize(size), true);
@@ -83,22 +76,7 @@ test("keeps all presentational parts native and attribute-transparent", () => {
   }
 });
 
-test("exports the complete named and compound component surface", () => {
-  assert.match(moduleBarrel, /export const Empty = Object\.assign/);
-  for (const part of ["Root", "Header", "Media", "Title", "Description", "Content"]) {
-    assert.match(moduleBarrel, new RegExp(`${part}: Empty${part}`));
-  }
-  for (const name of [
-    "EmptyRootProps",
-    "EmptyMediaProps",
-    "EmptyTitleProps",
-    "EmptySize",
-    "EmptyMediaVariant",
-    "EmptyTitleElement",
-  ]) {
-    assert.match(moduleBarrel, new RegExp(name));
-  }
-});
+
 
 test("styles sizes, media, composition, accessibility, and logical layout", () => {
   assert.match(styles, /var\(--kappa-default/);

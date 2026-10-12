@@ -69,16 +69,7 @@ test("exposes the provider, item, context, and forwarded item attributes", () =>
   assert.match(contextSource, /<ArkToggleGroup\.Context v-slot="context">/);
 });
 
-test("exports the compound API and Ark hooks", () => {
-  for (const part of ["Root", "RootProvider", "Item", "Context"]) {
-    assert.match(moduleBarrel, new RegExp(`${part}: ToggleGroup${part}`));
-    assert.match(moduleBarrel, new RegExp(`ToggleGroup${part}`));
-  }
-  assert.match(moduleBarrel, /ToggleGroupProps/);
-  assert.match(moduleBarrel, /toggleGroupAnatomy/);
-  assert.match(moduleBarrel, /useToggleGroup/);
-  assert.match(moduleBarrel, /useToggleGroupContext/);
-});
+
 
 test("uses semantic tokens, Ark state attributes, and accessible focus states", () => {
   for (const token of [

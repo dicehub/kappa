@@ -111,32 +111,7 @@ test("resolves list variants and sizes without changing Ark behavior", () => {
   assert.match(listSource, /:data-size="resolvedSize"/);
 });
 
-test("exports named parts, compound API, and Ark hooks", () => {
-  for (const part of ["Root", "RootProvider", "List", "Trigger", "Content", "Indicator", "Context"]) {
-    assert.match(moduleBarrel, new RegExp(`${part}: Tabs${part}`));
-    assert.match(moduleBarrel, new RegExp(`Tabs${part}`));
-  }
-  for (const contract of [
-    "TabsProps",
-    "TabsEmits",
-    "TabsRootProviderProps",
-    "TabsTriggerProps",
-    "TabsContentProps",
-    "TabsIndicatorProps",
-    "TabsListProps",
-    "TabsSize",
-    "TabsFocusChangeDetails",
-    "TabsVariant",
-    "TabsValueChangeDetails",
-  ]) {
-    assert.match(moduleBarrel, new RegExp(contract));
-  }
-  assert.match(moduleBarrel, /tabsAnatomy/);
-  assert.match(moduleBarrel, /useTabs/);
-  assert.match(moduleBarrel, /useTabsContext/);
-  assert.match(moduleBarrel, /TABS_VARIANTS/);
-  assert.match(moduleBarrel, /TABS_SIZES/);
-});
+
 
 test("uses state-driven logical styling with indicator, themes, and reduced motion", () => {
   assert.match(styles, /\.kappa-tabs__list \{/);

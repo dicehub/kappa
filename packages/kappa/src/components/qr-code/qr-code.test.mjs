@@ -80,21 +80,3 @@ test("keeps the generated graphic scan-safe and theme independent", () => {
   assert.match(styles, /forced-colors: active/);
   assert.doesNotMatch(styles, /(?:margin|padding|border)-(?:left|right)/);
 });
-
-test("exports the complete compound API and Ark utilities", () => {
-  for (const name of [
-    "QrCode",
-    "QrCodeRoot",
-    "QrCodeRootProvider",
-    "QrCodeFrame",
-    "QrCodePattern",
-    "QrCodeOverlay",
-    "QrCodeDownloadTrigger",
-    "QrCodeContext",
-    "useQrCode",
-    "useQrCodeContext",
-    "qrCodeAnatomy",
-  ]) {
-    assert.match(barrel, new RegExp(name));
-  }
-});

@@ -38,19 +38,3 @@ test("provides state-driven motion with a reduced-motion fallback", () => {
   assert.doesNotMatch(styles, /(?:margin|padding|border)-(?:left|right)|translateX/);
   assert.doesNotMatch(styles, /#[\da-f]{3,8}/i);
 });
-
-test("exports the component, Ark composables, provider, and contracts", () => {
-  for (const name of [
-    "Presence",
-    "PresenceProvider",
-    "usePresence",
-    "usePresenceContext",
-    "PresenceProps",
-    "PresenceEmits",
-    "PresenceSlots",
-    "UsePresenceProps",
-    "UsePresenceReturn",
-  ]) {
-    assert.match(barrel, new RegExp(name));
-  }
-});

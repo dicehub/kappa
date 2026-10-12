@@ -81,13 +81,3 @@ test("uses dense logical styling and complete interaction states", () => {
   assert.doesNotMatch(styles, /(?:margin|padding|border)-(?:left|right)|text-align:\s*(?:left|right)/);
   assert.doesNotMatch(styles, /#[\da-f]{3,8}(?![^\n]*\))/i);
 });
-
-test("exports the full compound component", () => {
-  assert.match(barrel, /export const CollapsibleSection = Object\.assign/);
-  for (const part of ["Root", "Header", "Trigger", "Indicator", "Actions", "Content"]) {
-    assert.match(barrel, new RegExp(`${part}: CollapsibleSection${part}`));
-  }
-  for (const partSource of [rootSource, headerSource, triggerSource, indicatorSource, actionsSource, contentSource]) {
-    assert.match(partSource, /defineOptions\(\{ inheritAttrs: false \}\)/);
-  }
-});

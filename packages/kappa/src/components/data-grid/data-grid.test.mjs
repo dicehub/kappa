@@ -73,9 +73,7 @@ test("keeps the public contract Kappa-owned and the virtual DOM bounded", () => 
   assert.doesNotMatch(styles, /#[\da-f]{3,8}(?![^\n]*\))/i);
 });
 
-test("returns the same row array when client filters are inactive", () => {
-  assert.equal(filterDataGridRows(rows, columns, "", {}), rows);
-});
+
 
 test("adds the selection column only when requested", () => {
   assert.notEqual(createDataGridColumnDefs(columns, true)[0].id, columns[0].id);

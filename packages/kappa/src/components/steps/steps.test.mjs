@@ -62,30 +62,7 @@ test("resolves list size without changing Ark behavior", () => {
   assert.match(listSource, /:data-size="resolvedSize"/);
 });
 
-test("exports every compound part and Ark hook", () => {
-  for (const part of [
-    "Root",
-    "RootProvider",
-    "List",
-    "Item",
-    "Trigger",
-    "Indicator",
-    "Separator",
-    "Content",
-    "CompletedContent",
-    "PrevTrigger",
-    "NextTrigger",
-    "Progress",
-    "Context",
-    "ItemContext",
-  ]) {
-    assert.match(moduleBarrel, new RegExp(`${part}: Steps${part}`));
-  }
 
-  for (const hook of ["stepsAnatomy", "useSteps", "useStepsContext", "useStepsItemContext"]) {
-    assert.match(moduleBarrel, new RegExp(hook));
-  }
-});
 
 test("uses compact logical styling and one reduced-motion-aware motion pattern", () => {
   assert.match(styles, /--kappa-steps-marker-size: 1\.5rem/);

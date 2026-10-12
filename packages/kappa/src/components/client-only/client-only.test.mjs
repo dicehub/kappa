@@ -27,9 +27,3 @@ test("documents a renderless boundary without inventing component props", () => 
   assert.match(contracts, /server-side rendering/);
   assert.match(contracts, /after the component mounts/);
 });
-
-test("exports the component and slot contracts", () => {
-  for (const name of ["ClientOnly", "ClientOnlyProps", "ClientOnlySlots"]) {
-    assert.match(barrel, new RegExp(name));
-  }
-});

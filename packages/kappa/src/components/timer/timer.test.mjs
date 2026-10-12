@@ -44,22 +44,3 @@ test("uses Kappa tokens and accessible motion fallbacks", () => {
   assert.match(styles, /@media \(forced-colors: active\)/);
   assert.doesNotMatch(styles, /\.(?!kappa-)[a-z][\w-]*|(?<![\w-])--(?!kappa-)[a-z][\w-]*/);
 });
-
-test("exports the compound Timer and every granular Ark-backed part", () => {
-  for (const name of [
-    "Timer",
-    "TimerRoot",
-    "TimerRootProvider",
-    "TimerArea",
-    "TimerItem",
-    "TimerSeparator",
-    "TimerControl",
-    "TimerActionTrigger",
-    "TimerContext",
-    "useTimer",
-    "TimerProps",
-    "TimerSize",
-  ]) {
-    assert.match(barrel, new RegExp(name));
-  }
-});

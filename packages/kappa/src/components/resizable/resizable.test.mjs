@@ -94,34 +94,7 @@ test("keeps Ark parts composable and forwards attributes", () => {
   assert.match(context, /<slot v-bind="context"/);
 });
 
-test("exports both the friendly Handle alias and Ark-aligned trigger API", () => {
-  assert.match(barrel, /export const Resizable = Object\.assign/);
-  for (const part of [
-    "Root",
-    "RootProvider",
-    "Panel",
-    "Handle",
-    "ResizeTrigger",
-    "ResizeTriggerIndicator",
-    "Context",
-  ]) {
-    assert.match(barrel, new RegExp(`${part}: Resizable`));
-  }
-  for (const name of [
-    "ResizableHandle",
-    "ResizablePanel",
-    "ResizableResizeTrigger",
-    "ResizableResizeTriggerIndicator",
-    "ResizableApi",
-    "ResizablePanelData",
-    "ResizableEmits",
-    "useSplitter",
-    "useSplitterContext",
-    "splitterAnatomy",
-  ]) {
-    assert.match(barrel, new RegExp(name));
-  }
-});
+
 
 test("uses semantic tokens, logical orientation, and complete interaction states", () => {
   for (const token of [

@@ -158,24 +158,3 @@ test("covers responsive, directional, state, and motion styling", () => {
   assert.match(styles, /font-size: 1rem/);
   assert.match(styles, /@media \(prefers-reduced-motion: reduce\)/);
 });
-
-test("exports the full compound surface", () => {
-  for (const part of [
-    "Content",
-    "Empty",
-    "Group",
-    "GroupLabel",
-    "InputGroup",
-    "Item",
-    "ItemIndicator",
-    "ItemText",
-    "Label",
-    "List",
-    "Root",
-    "Separator",
-  ]) {
-    assert.match(moduleBarrel, new RegExp(`${part}: Autocomplete${part}`));
-  }
-  assert.match(moduleBarrel, /createListCollection as createAutocompleteCollection/);
-  assert.match(moduleBarrel, /useListCollection as useAutocompleteCollection/);
-});

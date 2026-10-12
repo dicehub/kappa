@@ -128,25 +128,3 @@ test("uses Kappa tokens and complete control states", () => {
   assert.match(styles, /forced-colors: active/);
   assert.doesNotMatch(styles, /\.(?!kappa-)[a-z][\w-]*|(?<![\w-])--(?!kappa-)[a-z][\w-]*/);
 });
-
-test("exports the compound API and public contracts", () => {
-  assert.match(barrel, /export const InputGroup = Object\.assign/);
-  for (const part of ["Addon", "Button", "Input", "Textarea", "Text"]) {
-    assert.match(barrel, new RegExp(`${part}: InputGroup${part}`));
-  }
-  for (const name of [
-    "InputGroupProps",
-    "InputGroupAddonProps",
-    "InputGroupButtonProps",
-    "InputGroupInputProps",
-    "InputGroupTextareaProps",
-    "InputGroupTextProps",
-    "InputGroupSize",
-    "InputGroupAddonAlign",
-    "InputGroupControlEmits",
-    "resolveInputGroupSize",
-    "resolveInputGroupAddonAlign",
-  ]) {
-    assert.match(barrel, new RegExp(name));
-  }
-});

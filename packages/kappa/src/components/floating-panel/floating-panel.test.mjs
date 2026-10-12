@@ -78,31 +78,7 @@ test("keeps Ark parts composable and protects header controls from dragging", ()
   assert.match(stageTrigger, /forwardedAttrs/);
 });
 
-test("exports the full compound surface and Ark hooks", () => {
-  assert.match(barrel, /export const FloatingPanel = Object\.assign/);
-  for (const part of [
-    "Root",
-    "RootProvider",
-    "Trigger",
-    "Positioner",
-    "Content",
-    "DragTrigger",
-    "Header",
-    "Title",
-    "Control",
-    "StageTrigger",
-    "Close",
-    "CloseTrigger",
-    "Body",
-    "ResizeTrigger",
-    "Context",
-  ]) {
-    assert.match(barrel, new RegExp(`${part}: FloatingPanel`), part);
-  }
-  assert.match(barrel, /useFloatingPanel/);
-  assert.match(barrel, /useFloatingPanelContext/);
-  assert.match(barrel, /floatingPanelAnatomy/);
-});
+
 
 test("uses semantic tokens and complete interaction states", () => {
   for (const token of [

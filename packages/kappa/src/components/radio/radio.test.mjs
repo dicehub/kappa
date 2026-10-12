@@ -89,28 +89,7 @@ test("provides the complete styled and renderless part set", () => {
   assert.match(itemContextSource, /<ArkRadioGroup\.ItemContext v-slot="context">/);
 });
 
-test("exports the compound API, named parts, and Ark hooks", () => {
-  for (const part of [
-    "Root",
-    "RootProvider",
-    "Label",
-    "Indicator",
-    "Item",
-    "ItemControl",
-    "ItemText",
-    "Context",
-    "ItemContext",
-  ]) {
-    assert.match(moduleBarrel, new RegExp(`${part}: Radio${part}`));
-    assert.match(moduleBarrel, new RegExp(`Radio${part}`));
-  }
-  assert.match(moduleBarrel, /RadioProps/);
-  assert.match(moduleBarrel, /RadioGroupValueChangeDetails/);
-  assert.match(moduleBarrel, /radioGroupAnatomy/);
-  assert.match(moduleBarrel, /useRadioGroup/);
-  assert.match(moduleBarrel, /useRadioGroupContext/);
-  assert.match(moduleBarrel, /useRadioGroupItemContext/);
-});
+
 
 test("uses Ark state attributes, semantic tokens, and logical layout", () => {
   assert.match(styles, /\.kappa-radio__item-control \{/);

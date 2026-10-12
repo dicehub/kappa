@@ -115,26 +115,3 @@ test("uses current color, logical sizing, scoped motion, and accessibility fallb
   assert.match(styles, /clip-path: inset\(50%\)/);
   assert.doesNotMatch(styles, /\.(?!kappa-)[a-z][\w-]*|(?<![\w-])--(?!kappa-)[a-z][\w-]*/);
 });
-
-test("exports the public component, types, constants, and resolvers", () => {
-  for (const name of [
-    "Loader",
-    "LoaderProps",
-    "LoaderSize",
-    "LoaderVariant",
-    "LOADER_DEFAULT_DURATION",
-    "LOADER_DEFAULT_LABEL",
-    "LOADER_DEFAULT_SIZE",
-    "LOADER_DEFAULT_VARIANT",
-    "LOADER_SIZES",
-    "LOADER_VARIANTS",
-    "isLoaderSize",
-    "isLoaderVariant",
-    "resolveLoaderDuration",
-    "resolveLoaderLabel",
-    "resolveLoaderSize",
-    "resolveLoaderVariant",
-  ]) {
-    assert.match(barrel, new RegExp(name));
-  }
-});

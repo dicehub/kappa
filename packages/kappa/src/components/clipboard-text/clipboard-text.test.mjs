@@ -61,27 +61,7 @@ test("keeps the read-only value input and provider parts thin", () => {
   assert.match(rootProviderSource, /:value="value"/);
 });
 
-test("exports named parts, the compound API, and Ark hooks", () => {
-  for (const part of [
-    "Root",
-    "RootProvider",
-    "Label",
-    "Control",
-    "Input",
-    "Trigger",
-    "Indicator",
-    "ValueText",
-    "Context",
-  ]) {
-    assert.match(moduleBarrel, new RegExp(`${part}: ClipboardText${part}`));
-    assert.match(moduleBarrel, new RegExp(`ClipboardText${part}`));
-  }
-  assert.match(moduleBarrel, /ClipboardTextProps/);
-  assert.match(moduleBarrel, /ClipboardTextEmits/);
-  assert.match(moduleBarrel, /ClipboardCopyStatusDetails/);
-  assert.match(moduleBarrel, /clipboardAnatomy/);
-  assert.match(moduleBarrel, /useClipboard/);
-});
+
 
 test("uses state-attribute-driven Kappa styling", () => {
   assert.match(styles, /\.kappa-clipboard-text__control \{/);

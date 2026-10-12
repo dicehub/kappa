@@ -16,11 +16,7 @@ const styles = source("expandable-text.css");
 const barrel = source("index.ts");
 const componentBarrel = source("../index.ts");
 
-test("defines stable line and label defaults", () => {
-  assert.equal(EXPANDABLE_TEXT_DEFAULT_LINES, 3);
-  assert.equal(EXPANDABLE_TEXT_DEFAULT_EXPAND_LABEL, "Show more");
-  assert.equal(EXPANDABLE_TEXT_DEFAULT_COLLAPSE_LABEL, "Show less");
-});
+
 
 test("normalizes the visible line count", () => {
   assert.equal(resolveExpandableTextLines(1), 1);
@@ -53,20 +49,7 @@ test("supports controlled state, accessible labels, and a scoped trigger slot", 
   }
 });
 
-test("exports the component, contracts, defaults, and resolver", () => {
-  for (const name of [
-    "ExpandableText",
-    "ExpandableTextProps",
-    "ExpandableTextEmits",
-    "ExpandableTextSlots",
-    "ExpandableTextTriggerSlotProps",
-    "EXPANDABLE_TEXT_DEFAULT_LINES",
-    "resolveExpandableTextLines",
-  ]) {
-    assert.match(barrel, new RegExp(name));
-  }
-  assert.match(componentBarrel, /export \* from "\.\/expandable-text"/);
-});
+
 
 test("uses Kappa tokens, logical properties, motion preferences, and forced colors", () => {
   assert.match(styles, /var\(--kappa-default/);

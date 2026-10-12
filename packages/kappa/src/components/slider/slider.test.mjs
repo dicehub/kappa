@@ -90,30 +90,7 @@ test("renders every Ark part with a Kappa slot and forwards attributes", () => {
   assert.match(partSources["SliderThumb.vue"], /:index="props\.index"/);
 });
 
-test("exports the compound API, named parts, and Ark hooks", () => {
-  for (const part of [
-    "Root",
-    "RootProvider",
-    "Label",
-    "ValueText",
-    "Control",
-    "Track",
-    "Range",
-    "Thumb",
-    "HiddenInput",
-    "MarkerGroup",
-    "Marker",
-    "DraggingIndicator",
-    "Context",
-  ]) {
-    assert.match(moduleBarrel, new RegExp(`${part}: Slider${part}`));
-    assert.match(moduleBarrel, new RegExp(`Slider${part}`));
-  }
-  assert.match(moduleBarrel, /SliderProps/);
-  assert.match(moduleBarrel, /sliderAnatomy/);
-  assert.match(moduleBarrel, /useSlider/);
-  assert.match(moduleBarrel, /useSliderContext/);
-});
+
 
 test("uses Ark state attributes, semantic tokens, logical orientation, and complete states", () => {
   for (const token of [

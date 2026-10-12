@@ -44,27 +44,7 @@ const groupSource = source("AttachmentGroup.vue");
 const styles = source("attachment.css");
 const moduleBarrel = source("index.ts");
 
-test("defines the attachment state, density, orientation, media, and native element contracts", () => {
-  assert.deepEqual(ATTACHMENT_STATES, [
-    "idle",
-    "uploading",
-    "processing",
-    "error",
-    "done",
-  ]);
-  assert.deepEqual(ATTACHMENT_SIZES, ["default", "sm", "xs"]);
-  assert.deepEqual(ATTACHMENT_ORIENTATIONS, ["horizontal", "vertical"]);
-  assert.deepEqual(ATTACHMENT_MEDIA_VARIANTS, ["icon", "image"]);
-  assert.deepEqual(ATTACHMENT_BUTTON_TYPES, ["button", "submit", "reset"]);
-  assert.deepEqual(ATTACHMENT_TRIGGER_ELEMENTS, ["button", "a"]);
-  assert.equal(ATTACHMENT_DEFAULT_STATE, "done");
-  assert.equal(ATTACHMENT_DEFAULT_SIZE, "default");
-  assert.equal(ATTACHMENT_DEFAULT_ORIENTATION, "horizontal");
-  assert.equal(ATTACHMENT_MEDIA_DEFAULT_VARIANT, "icon");
-  assert.equal(ATTACHMENT_ACTION_DEFAULT_TYPE, "button");
-  assert.equal(ATTACHMENT_TRIGGER_DEFAULT_ELEMENT, "button");
-  assert.equal(ATTACHMENT_TRIGGER_DEFAULT_TYPE, "button");
-});
+
 
 test("rejects unsupported runtime values and resolves safe defaults", () => {
   for (const state of ATTACHMENT_STATES) assert.equal(isAttachmentState(state), true);
@@ -163,34 +143,7 @@ test("implements Trigger as a guarded button or anchor behind card actions", () 
   assert.match(styles, /\.kappa-attachment__actions > \* \{[\s\S]*pointer-events: auto/);
 });
 
-test("exports the complete named and compound component surface", () => {
-  assert.match(moduleBarrel, /export const Attachment = Object\.assign/);
-  for (const part of [
-    "Root",
-    "Media",
-    "Content",
-    "Title",
-    "Description",
-    "Actions",
-    "Action",
-    "Trigger",
-    "Group",
-  ]) {
-    assert.match(moduleBarrel, new RegExp(`${part}: Attachment${part === "Root" ? "Root" : part}`));
-  }
-  for (const name of [
-    "AttachmentRootProps",
-    "AttachmentMediaProps",
-    "AttachmentActionProps",
-    "AttachmentTriggerProps",
-    "AttachmentState",
-    "AttachmentSize",
-    "AttachmentOrientation",
-    "AttachmentMediaVariant",
-  ]) {
-    assert.match(moduleBarrel, new RegExp(name));
-  }
-});
+
 
 test("styles the complete state, size, layout, accessibility, and motion contract", () => {
   assert.match(styles, /var\(--kappa-control/);

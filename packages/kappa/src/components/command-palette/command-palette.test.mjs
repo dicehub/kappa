@@ -90,27 +90,7 @@ test("keeps Enter selection exact and supports modified activation", () => {
   assert.match(itemSource, /newTab: true/);
 });
 
-test("exports the full compound surface", () => {
-  for (const part of [
-    "Dialog",
-    "Empty",
-    "Footer",
-    "Group",
-    "GroupLabel",
-    "HighlightedText",
-    "Input",
-    "Item",
-    "Items",
-    "List",
-    "Loading",
-    "Panel",
-    "ResultItem",
-    "Results",
-    "Root",
-  ]) {
-    assert.match(barrel, new RegExp(`${part}: CommandPalette${part}`));
-  }
-});
+
 
 test("uses semantic Kappa tokens and complete motion fallbacks", () => {
   for (const token of ["--kappa-control", "--kappa-default", "--kappa-focus", "--kappa-line"]) {

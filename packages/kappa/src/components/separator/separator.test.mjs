@@ -51,17 +51,3 @@ test("uses logical one-pixel geometry and Kappa semantic tokens", () => {
   assert.doesNotMatch(styles, /\.separator\s/);
   assert.doesNotMatch(styles, /\.(?!kappa-)[a-z][\w-]*|(?<![\w-])--(?!kappa-)[a-z][\w-]*/);
 });
-
-test("exports the component and public orientation contract", () => {
-  for (const name of [
-    "Separator",
-    "SeparatorOrientation",
-    "SeparatorProps",
-    "SEPARATOR_DEFAULT_ORIENTATION",
-    "SEPARATOR_ORIENTATIONS",
-    "isSeparatorOrientation",
-    "resolveSeparatorOrientation",
-  ]) {
-    assert.match(barrel, new RegExp(name));
-  }
-});

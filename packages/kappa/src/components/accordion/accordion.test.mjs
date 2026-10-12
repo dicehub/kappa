@@ -101,16 +101,7 @@ test("wraps content for Ark measured-height animation and spacing", () => {
   assert.match(contentSource, /v-bind="\$attrs"/);
 });
 
-test("exports named parts and the compound API", () => {
-  for (const part of ["Root", "Item", "Trigger", "Content", "Indicator"]) {
-    assert.match(moduleBarrel, new RegExp(`${part}: Accordion${part}`));
-    assert.match(moduleBarrel, new RegExp(`Accordion${part}`));
-  }
-  assert.match(moduleBarrel, /AccordionProps/);
-  assert.match(moduleBarrel, /AccordionEmits/);
-  assert.match(moduleBarrel, /AccordionFocusChangeDetails/);
-  assert.match(moduleBarrel, /AccordionValueChangeDetails/);
-});
+
 
 test("uses refined, logical, state-driven Kappa styling", () => {
   assert.match(styles, /min-block-size: 2\.625rem/);

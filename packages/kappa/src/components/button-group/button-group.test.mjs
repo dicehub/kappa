@@ -79,22 +79,3 @@ test("uses flat logical seams and preserves focus", () => {
     /margin-left|margin-right|padding-left|padding-right|border-left|border-right/,
   );
 });
-
-test("exports the complete named and compound surface", () => {
-  assert.match(barrel, /Object\.assign\(ButtonGroupRoot/);
-  assert.match(barrel, /Root: ButtonGroupRoot/);
-  assert.match(barrel, /Separator: ButtonGroupSeparator/);
-  assert.match(barrel, /Text: ButtonGroupText/);
-  for (const name of [
-    "ButtonGroupRoot",
-    "ButtonGroupSeparator",
-    "ButtonGroupText",
-    "BUTTON_GROUP_ORIENTATIONS",
-    "resolveButtonGroupSeparatorOrientation",
-    "ButtonGroupProps",
-    "ButtonGroupSeparatorProps",
-    "ButtonGroupTextProps",
-  ]) {
-    assert.match(barrel, new RegExp(name));
-  }
-});

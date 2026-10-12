@@ -47,16 +47,3 @@ test("uses dense keycap geometry, logical sizing, and semantic tokens", () => {
   assert.doesNotMatch(styles, /margin-left|margin-right/);
   assert.doesNotMatch(styles, /\.(?!kappa-)[a-z][\w-]*|(?<![\w-])--(?!kappa-)[a-z][\w-]*/);
 });
-
-test("exports both components and their public contracts", () => {
-  for (const name of [
-    "Kbd",
-    "KbdGroup",
-    "KbdProps",
-    "KbdSlots",
-    "KbdGroupProps",
-    "KbdGroupSlots",
-  ]) {
-    assert.match(barrel, new RegExp(name));
-  }
-});

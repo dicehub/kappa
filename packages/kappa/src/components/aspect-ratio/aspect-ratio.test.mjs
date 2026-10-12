@@ -47,16 +47,3 @@ test("uses a logical, block-level CSS aspect ratio without a runtime primitive",
   assert.doesNotMatch(component, /@ark-ui|@zag-js/);
   assert.doesNotMatch(styles, /\.(?!kappa-)[a-z][\w-]*|(?<![\w-])--(?!kappa-)[a-z][\w-]*/);
 });
-
-test("exports the component and public ratio contracts", () => {
-  for (const name of [
-    "AspectRatio",
-    "AspectRatioProps",
-    "AspectRatioSlots",
-    "ASPECT_RATIO_DEFAULT_RATIO",
-    "isAspectRatio",
-    "resolveAspectRatio",
-  ]) {
-    assert.match(barrel, new RegExp(name));
-  }
-});

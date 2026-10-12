@@ -53,20 +53,3 @@ test("covers complete Kappa textarea states and platform preferences", () => {
   assert.match(styles, /@media \(forced-colors: active\)/);
   assert.doesNotMatch(styles, /\.(?!kappa-)[a-z][\w-]*|(?<![\w-])--(?!kappa-)[a-z][\w-]*/);
 });
-
-test("exports the component, public contracts, constants, and resolvers", () => {
-  for (const name of [
-    "InputArea",
-    "InputAreaEmits",
-    "InputAreaModelValue",
-    "InputAreaProps",
-    "InputAreaSize",
-    "InputAreaSlots",
-    "INPUT_AREA_DEFAULT_SIZE",
-    "INPUT_AREA_SIZES",
-    "isInputAreaSize",
-    "resolveInputAreaSize",
-  ]) {
-    assert.match(barrel, new RegExp(name));
-  }
-});

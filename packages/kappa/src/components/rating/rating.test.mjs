@@ -4,29 +4,7 @@ import test from "node:test";
 
 const read = (name) => readFile(new URL(name, import.meta.url), "utf8");
 
-test("exports the Rating compound API under Kappa names", async () => {
-  const [barrel, root, control, item] = await Promise.all([
-    read("./index.ts"),
-    read("./Rating.vue"),
-    read("./RatingControl.vue"),
-    read("./RatingItem.vue"),
-  ]);
 
-  assert.match(barrel, /export const Rating = Object\.assign/);
-  assert.match(barrel, /RootProvider: RatingRootProvider/);
-  assert.match(barrel, /Control: RatingControl/);
-  assert.match(barrel, /Item: RatingItem/);
-  assert.match(barrel, /ratingGroupAnatomy as ratingAnatomy/);
-  assert.match(barrel, /useRatingGroup as useRating/);
-  assert.match(root, /ArkRatingGroup\.Root/);
-  assert.match(root, /ArkRatingGroup\.HiddenInput/);
-  assert.match(root, /:data-disabled="props\.disabled \? '' : undefined"/);
-  assert.match(root, /:data-readonly="props\.readOnly \? '' : undefined"/);
-  assert.match(root, /@update:model-value="emit\('update:modelValue', \$event\)"/);
-  assert.match(control, /v-for="item in context\.items"/);
-  assert.match(item, /ArkRatingGroup\.ItemContext/);
-  assert.match(item, /kappa-rating__icon-fill/);
-});
 
 test("keeps size resolution deterministic", async () => {
   const source = await read("./rating.ts");

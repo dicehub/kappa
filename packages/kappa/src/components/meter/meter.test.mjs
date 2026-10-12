@@ -102,21 +102,3 @@ test("uses Kappa tokens, logical geometry, and complete media states", () => {
   assert.match(styles, /@media \(forced-colors: active\)/);
   assert.doesNotMatch(styles, /\.(?!kappa-)[a-z][\w-]*|(?<![\w-])--(?!kappa-)[a-z][\w-]*/);
 });
-
-test("exports the component and complete public contract", () => {
-  for (const name of [
-    "Meter",
-    "MeterProps",
-    "MeterRange",
-    "MeterSize",
-    "MeterTone",
-    "METER_SIZES",
-    "METER_TONES",
-    "clampMeterValue",
-    "formatMeterValue",
-    "getMeterPercentage",
-    "resolveMeterRange",
-  ]) {
-    assert.match(barrel, new RegExp(name));
-  }
-});

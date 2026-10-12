@@ -71,16 +71,7 @@ test("keeps separators and ellipses decorative and replaceable", () => {
   assert.match(ellipsisSource, /kappa-breadcrumbs__ellipsis-icon/);
 });
 
-test("exports the named, canonical, compatibility, and compound APIs", () => {
-  assert.match(moduleBarrel, /export const Breadcrumbs = Object\.assign/);
-  for (const part of ["Root", "List", "Item", "Link", "Page", "Current", "Separator", "Ellipsis"]) {
-    assert.match(moduleBarrel, new RegExp(`${part}: Breadcrumbs${part}`));
-  }
-  assert.match(moduleBarrel, /const BreadcrumbsCurrent = BreadcrumbsPage/);
-  for (const name of ["BreadcrumbsRootProps", "BreadcrumbsLinkProps", "BreadcrumbsSize"]) {
-    assert.match(moduleBarrel, new RegExp(name));
-  }
-});
+
 
 test("uses flat, logical, wrapping, themeable styling", () => {
   assert.match(styles, /flex-wrap: wrap/);

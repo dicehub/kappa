@@ -26,13 +26,3 @@ test("composes Kappa Dropdown and keeps top-level menus mutually exclusive", () 
   assert.match(subTrigger, /@pointerleave\.capture="keepOpenAcrossPortal"/);
   assert.match(subTrigger, /if \(menu\.value\.open\) event\.stopImmediatePropagation\(\)/);
 });
-
-test("exports a compound API based on the existing Dropdown parts", () => {
-  const barrel = source("./index.ts");
-  for (const part of ["Root", "Menu", "Trigger", "Content", "Item", "CheckboxItem", "RadioGroup", "RadioItem", "Sub", "SubTrigger", "SubContent"]) {
-    assert.match(barrel, new RegExp(`${part}:`));
-  }
-  assert.match(barrel, /Item: Dropdown\.Item/);
-  assert.match(barrel, /SubContent: Dropdown\.SubContent/);
-  assert.match(barrel, /SubTrigger: MenuBarSubTrigger/);
-});

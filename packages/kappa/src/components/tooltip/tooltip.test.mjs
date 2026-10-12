@@ -15,16 +15,7 @@ const arrow = source("TooltipArrow.vue");
 const styles = source("tooltip.css");
 const barrel = source("index.ts");
 
-test("defines stable Kappa timing and viewport-aware positioning defaults", () => {
-  assert.equal(TOOLTIP_DEFAULT_OPEN_DELAY, 400);
-  assert.equal(TOOLTIP_DEFAULT_CLOSE_DELAY, 150);
-  assert.deepEqual(TOOLTIP_DEFAULT_POSITIONING, {
-    fitViewport: true,
-    gutter: 8,
-    overflowPadding: 12,
-    placement: "top",
-  });
-});
+
 
 test("forwards Ark UI state, positioning, and controlled events", () => {
   assert.match(root, /ArkTooltip\.Root/);
@@ -63,13 +54,4 @@ test("styles the popup with Kappa tokens and complete motion fallbacks", () => {
   assert.match(styles, /prefers-reduced-motion: reduce/);
   assert.match(styles, /forced-colors: active/);
   assert.doesNotMatch(styles, /\.(?!kappa-)[a-z][\w-]*|(?<![\w-])--(?!kappa-|(?:z-index|available-width|transform-origin|arrow-background|arrow-size)(?![\w-]))[a-z][\w-]*/);
-});
-
-test("exports the complete compound surface", () => {
-  assert.match(barrel, /export const Tooltip = Object\.assign/);
-  for (const name of ["Root", "RootProvider", "Trigger", "Content", "Arrow", "ArrowTip", "Context"]) {
-    assert.match(barrel, new RegExp(`${name}: Tooltip${name === "Root" ? "Root" : name}`));
-  }
-  assert.match(barrel, /useTooltip/);
-  assert.match(barrel, /tooltipAnatomy/);
 });

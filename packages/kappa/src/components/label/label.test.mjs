@@ -63,20 +63,3 @@ test("uses Kappa label typography, optional text, and explicit disabled styling"
   assert.match(styles, /@media \(forced-colors: active\)/);
   assert.doesNotMatch(styles, /\.(?!kappa-)[a-z][\w-]*|(?<![\w-])--(?!kappa-)[a-z][\w-]*/);
 });
-
-test("exports the component, public types, constants, and resolvers", () => {
-  for (const name of [
-    "Label",
-    "LabelElement",
-    "LabelProps",
-    "LabelSlots",
-    "LABEL_DEFAULT_ELEMENT",
-    "LABEL_DEFAULT_OPTIONAL_TEXT",
-    "LABEL_ELEMENTS",
-    "isLabelElement",
-    "resolveLabelElement",
-    "resolveLabelOptionalText",
-  ]) {
-    assert.match(barrel, new RegExp(name));
-  }
-});

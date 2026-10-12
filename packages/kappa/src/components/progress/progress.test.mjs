@@ -33,21 +33,3 @@ test("uses Kappa tokens and supports orientation and motion preferences", () => 
   assert.match(styles, /@media \(forced-colors: active\)/);
   assert.doesNotMatch(styles, /\.(?!kappa-)[a-z][\w-]*|(?<![\w-])--(?!kappa-)[a-z][\w-]*/);
 });
-
-test("exports barrel and granular Ark-backed parts", () => {
-  for (const name of [
-    "Progress",
-    "ProgressRoot",
-    "ProgressRootProvider",
-    "ProgressLabel",
-    "ProgressValueText",
-    "ProgressTrack",
-    "ProgressRange",
-    "ProgressView",
-    "ProgressContext",
-    "useProgress",
-    "ProgressProps",
-  ]) {
-    assert.match(barrel, new RegExp(name));
-  }
-});

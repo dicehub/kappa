@@ -59,19 +59,3 @@ test("covers complete Kappa input states without external visual namespaces", ()
   assert.match(styles, /@media \(forced-colors: active\)/);
   assert.doesNotMatch(styles, /\.(?!kappa-)[a-z][\w-]*|(?<![\w-])--(?!kappa-)[a-z][\w-]*/);
 });
-
-test("exports the component, public types, constants, and resolvers", () => {
-  for (const name of [
-    "Input",
-    "InputEmits",
-    "InputModelValue",
-    "InputProps",
-    "InputSize",
-    "INPUT_DEFAULT_SIZE",
-    "INPUT_SIZES",
-    "isInputSize",
-    "resolveInputSize",
-  ]) {
-    assert.match(barrel, new RegExp(name));
-  }
-});

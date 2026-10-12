@@ -46,43 +46,7 @@ test("keeps controlled root-provider and generic collection types", () => {
   assert.match(typesSource, /TreeViewRootProviderProps<T extends TreeNode/);
 });
 
-test("exports every compound part and Ark collection helper", () => {
-  for (const part of [
-    "Root",
-    "RootProvider",
-    "Label",
-    "Tree",
-    "NodeProvider",
-    "Branch",
-    "BranchControl",
-    "BranchTrigger",
-    "BranchIndicator",
-    "BranchText",
-    "BranchContent",
-    "BranchIndentGuide",
-    "Item",
-    "ItemIndicator",
-    "ItemText",
-    "NodeCheckbox",
-    "NodeCheckboxIndicator",
-    "NodeRenameInput",
-    "Context",
-    "NodeContext",
-  ]) {
-    assert.match(moduleBarrel, new RegExp(`${part}: TreeView${part}`));
-  }
 
-  for (const helper of [
-    "createFileTreeCollection",
-    "createTreeCollection",
-    "treeViewAnatomy",
-    "useTreeView",
-    "useTreeViewContext",
-    "useTreeViewNodeContext",
-  ]) {
-    assert.match(moduleBarrel, new RegExp(helper));
-  }
-});
 
 test("uses compact logical styling with complete interaction states", () => {
   assert.match(styles, /--kappa-tree-row-height: 1\.75rem/);

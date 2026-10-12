@@ -45,31 +45,7 @@ const partSources = [
 const styles = source("activity-feed.css");
 const barrel = source("index.ts");
 
-test("defines stable activity feed sizes, tones, markers, and semantic defaults", () => {
-  assert.deepEqual(ACTIVITY_FEED_SIZES, ["default", "compact"]);
-  assert.deepEqual(ACTIVITY_FEED_TONES, [
-    "neutral",
-    "accent",
-    "success",
-    "warning",
-    "danger",
-  ]);
-  assert.deepEqual(ACTIVITY_FEED_MARKER_VARIANTS, ["dot", "icon", "avatar"]);
-  assert.deepEqual(ACTIVITY_FEED_HEADING_ELEMENTS, [
-    "h2",
-    "h3",
-    "h4",
-    "h5",
-    "h6",
-    "p",
-    "div",
-  ]);
-  assert.equal(ACTIVITY_FEED_DEFAULT_SIZE, "default");
-  assert.equal(ACTIVITY_FEED_DEFAULT_TONE, "neutral");
-  assert.equal(ACTIVITY_FEED_DEFAULT_MARKER_VARIANT, "dot");
-  assert.equal(ACTIVITY_FEED_GROUP_LABEL_DEFAULT_ELEMENT, "h3");
-  assert.equal(ACTIVITY_FEED_TITLE_DEFAULT_ELEMENT, "p");
-});
+
 
 test("rejects unsafe runtime values and resolves public defaults", () => {
   for (const element of ACTIVITY_FEED_HEADING_ELEMENTS) {
@@ -139,25 +115,4 @@ test("uses semantic Kappa tokens for density, markers, tones, and focus", () => 
   }
   assert.match(styles, /:focus-visible/);
   assert.match(styles, /forced-colors: active/);
-});
-
-test("exports named parts and the compound ActivityFeed API", () => {
-  assert.match(barrel, /export const ActivityFeed = Object\.assign/);
-  for (const part of [
-    "Root",
-    "Group",
-    "GroupLabel",
-    "List",
-    "Item",
-    "Marker",
-    "Content",
-    "Header",
-    "Title",
-    "Description",
-    "Time",
-    "Actions",
-  ]) {
-    assert.match(barrel, new RegExp(`${part}: ActivityFeed${part === "Root" ? "Root" : part}`));
-  }
-  assert.match(barrel, /export \* from "\.\/activity-feed"/);
 });

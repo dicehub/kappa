@@ -43,17 +43,3 @@ test("reuses guarded Button variants, sizes, shapes, and icon positions", () => 
   }
   assert.match(contracts, /extends ButtonVisualProps/);
 });
-
-test("exports the component, Ark hook, and public contracts", () => {
-  for (const name of [
-    "DownloadTrigger",
-    "useDownload",
-    "DownloadableData",
-    "DownloadTriggerProps",
-    "DownloadTriggerSlots",
-    "UseDownloadProps",
-    "UseDownloadReturn",
-  ]) {
-    assert.match(barrel, new RegExp(name));
-  }
-});

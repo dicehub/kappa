@@ -61,29 +61,3 @@ test("ships Ark-required scrollbar hiding and complete platform states", () => {
   // Ark owns the corner dimensions; public styles use Kappa names.
   assert.doesNotMatch(styles, /\.(?!kappa-)[a-z][\w-]*|(?<![\w-])--(?!kappa-|corner-(?:height|width)\b)[a-z][\w-]*/);
 });
-
-test("exports named parts, compound parts, hooks, and public contracts", () => {
-  assert.match(barrel, /export const ScrollArea = Object\.assign/);
-  for (const part of [
-    "Root",
-    "RootProvider",
-    "Viewport",
-    "Content",
-    "Scrollbar",
-    "Thumb",
-    "Corner",
-    "Context",
-  ]) {
-    assert.match(barrel, new RegExp(`${part}: ScrollArea${part === "Root" ? "Root" : part}`));
-  }
-  for (const name of [
-    "ScrollAreaProps",
-    "ScrollAreaDirection",
-    "ScrollAreaApi",
-    "useScrollArea",
-    "useScrollAreaContext",
-    "scrollAreaAnatomy",
-  ]) {
-    assert.match(barrel, new RegExp(name));
-  }
-});

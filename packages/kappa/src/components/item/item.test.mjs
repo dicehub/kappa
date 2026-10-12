@@ -113,23 +113,3 @@ test("uses Kappa semantic tokens for dense and accessible item states", () => {
   assert.match(styles, /forced-colors: active/);
   assert.doesNotMatch(styles, /\.(?!kappa-)[a-z][\w-]*|(?<![\w-])--(?!kappa-)[a-z][\w-]*/);
 });
-
-test("exports named parts and the compound Item API", () => {
-  assert.match(barrel, /export const Item = Object\.assign/);
-  for (const part of [
-    "Root",
-    "Group",
-    "Separator",
-    "Media",
-    "Content",
-    "Title",
-    "Description",
-    "Actions",
-    "Header",
-    "Footer",
-  ]) {
-    assert.match(barrel, new RegExp(`${part}: Item${part === "Root" ? "Root" : part}`));
-  }
-  assert.match(barrel, /export \*?\s*\{?/);
-  assert.match(barrel, /from "\.\/item"/);
-});

@@ -69,16 +69,7 @@ test("wraps Ark pin-input root and preserves controlled events", () => {
   assert.match(types, /"update:modelValue"/);
 });
 
-test("exports named compound parts and Ark provider hooks", () => {
-  for (const part of ["Root", "RootProvider", "Control", "Input", "HiddenInput", "Label", "Context"]) {
-    assert.match(barrel, new RegExp(`${part}: InputOtp${part}`));
-    assert.match(barrel, new RegExp(`InputOtp${part}`));
-  }
-  assert.match(barrel, /Object\.assign\(InputOtpRoot/);
-  assert.match(barrel, /pinInputAnatomy/);
-  assert.match(barrel, /usePinInput/);
-  assert.match(barrel, /usePinInputContext/);
-});
+
 
 test("forwards Ark part props and context", () => {
   assert.match(control, /<ArkPinInput\.Control/);

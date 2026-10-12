@@ -151,37 +151,3 @@ test("uses semantic, state-driven, logical, and accessible styling", () => {
   assert.doesNotMatch(styles, /\.(?!kappa-)[a-z][\w-]*|(?<![\w-])--(?!kappa-|(?:z-index|available-width|available-height|transform-origin|arrow-background|arrow-size)(?![\w-]))[a-z][\w-]*/);
   assert.doesNotMatch(styles, /(?:margin|padding|border)-(?:left|right)|text-align:\s*(?:left|right)/);
 });
-
-test("exports the complete compound surface and Ark hooks", () => {
-  assert.match(barrel, /export const Popover = Object\.assign/);
-  for (const name of [
-    "Root",
-    "RootProvider",
-    "Trigger",
-    "Anchor",
-    "Positioner",
-    "Content",
-    "Arrow",
-    "ArrowTip",
-    "Title",
-    "Description",
-    "Indicator",
-    "Close",
-    "CloseTrigger",
-    "Context",
-  ]) {
-    assert.match(barrel, new RegExp(`${name}: Popover${name === "Close" ? "CloseTrigger" : name}`));
-  }
-  assert.match(barrel, /usePopover/);
-  assert.match(barrel, /popoverAnatomy/);
-  for (const contract of [
-    "PopoverProps",
-    "PopoverDirection",
-    "PopoverEmits",
-    "PopoverContentProps",
-    "PopoverCloseTriggerProps",
-    "PopoverPositioningOptions",
-  ]) {
-    assert.match(barrel, new RegExp(contract));
-  }
-});

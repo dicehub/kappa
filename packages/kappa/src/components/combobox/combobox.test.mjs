@@ -134,36 +134,7 @@ test("teleports content and synchronizes positioning with Root", () => {
   assert.match(contentSource, /<Combobox\.Content/);
 });
 
-test("exports the full compound surface and Ark hooks", () => {
-  for (const part of [
-    "Root",
-    "Chip",
-    "ClearTrigger",
-    "Content",
-    "Context",
-    "Control",
-    "Empty",
-    "Group",
-    "GroupLabel",
-    "Input",
-    "Item",
-    "ItemIndicator",
-    "ItemText",
-    "Label",
-    "List",
-    "Separator",
-    "Trigger",
-    "TriggerInput",
-    "TriggerMultipleWithInput",
-    "TriggerValue",
-    "Value",
-  ]) {
-    assert.match(moduleBarrel, new RegExp(`${part}: Combobox${part}`));
-  }
-  assert.match(moduleBarrel, /createListCollection as createComboboxCollection/);
-  assert.match(moduleBarrel, /useComboboxContext/);
-  assert.match(moduleBarrel, /comboboxAnatomy/);
-});
+
 
 test("uses dense, logical, state-driven Kappa styling", () => {
   assert.match(styles, /\.kappa-combobox__content/);

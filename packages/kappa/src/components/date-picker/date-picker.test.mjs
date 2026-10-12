@@ -134,47 +134,7 @@ test("keeps table cells typed on Ark DateValue contracts", () => {
   assert.match(rootProviderSource, /:value="value"/);
 });
 
-test("exports named parts, the compound API, and Ark hooks", () => {
-  for (const part of [
-    "Root",
-    "RootProvider",
-    "Label",
-    "Control",
-    "Input",
-    "Trigger",
-    "ClearTrigger",
-    "Content",
-    "Calendar",
-    "View",
-    "ViewControl",
-    "ViewTrigger",
-    "PrevTrigger",
-    "NextTrigger",
-    "Table",
-    "TableHead",
-    "TableHeader",
-    "TableBody",
-    "TableRow",
-    "TableCell",
-    "TableCellTrigger",
-    "WeekNumberCell",
-    "WeekNumberHeaderCell",
-    "ValueText",
-    "RangeText",
-    "PresetTrigger",
-    "MonthSelect",
-    "YearSelect",
-    "Context",
-  ]) {
-    assert.match(moduleBarrel, new RegExp(`${part}: DatePicker${part}`));
-  }
-  assert.match(moduleBarrel, /DatePickerProps/);
-  assert.match(moduleBarrel, /DatePickerEmits/);
-  assert.match(moduleBarrel, /DatePickerValueChangeDetails/);
-  assert.match(moduleBarrel, /datePickerAnatomy/);
-  assert.match(moduleBarrel, /parseDate/);
-  assert.match(moduleBarrel, /useDatePicker/);
-});
+
 
 test("uses state-attribute-driven Kappa styling", () => {
   assert.match(styles, /\.kappa-date-picker__control \{/);

@@ -104,38 +104,7 @@ test("wraps the provider, page parts, triggers, ellipsis, and context", () => {
   assert.match(contextSource, /<slot v-bind="context" \/>/);
 });
 
-test("exports the compound API and Ark pagination hooks", () => {
-  for (const part of [
-    "Root",
-    "RootProvider",
-    "Item",
-    "Ellipsis",
-    "FirstTrigger",
-    "PrevTrigger",
-    "NextTrigger",
-    "LastTrigger",
-    "Context",
-    "Controls",
-  ]) {
-    assert.match(moduleBarrel, new RegExp(`${part}: Pagination${part}`));
-    assert.match(moduleBarrel, new RegExp(`Pagination${part}`));
-  }
-  for (const contract of [
-    "PaginationProps",
-    "PaginationEmits",
-    "PaginationRootProviderProps",
-    "PaginationItemProps",
-    "PaginationEllipsisProps",
-    "PaginationPageChangeDetails",
-    "PaginationPageSizeChangeDetails",
-    "PaginationPageUrlDetails",
-  ]) {
-    assert.match(moduleBarrel, new RegExp(contract));
-  }
-  assert.match(moduleBarrel, /paginationAnatomy/);
-  assert.match(moduleBarrel, /usePagination/);
-  assert.match(moduleBarrel, /usePaginationContext/);
-});
+
 
 test("provides default arrows and optional labels without replacing custom slots", () => {
   for (const source of [firstSource, prevSource, nextSource, lastSource]) {

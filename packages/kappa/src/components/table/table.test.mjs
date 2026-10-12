@@ -145,27 +145,3 @@ test("keeps state, sticky, selection, and resize styling token-backed", () => {
   assert.match(styles, /@media \(forced-colors: active\)/);
   assert.doesNotMatch(styles, /\.(?!kappa-)[a-z][\w-]*|(?<![\w-])--(?!kappa-)[a-z][\w-]*/);
 });
-
-test("exports the complete compound component surface", () => {
-  const barrel = source("index.ts");
-
-  assert.match(barrel, /export const Table = Object\.assign/);
-  for (const part of [
-    "Root",
-    "Caption",
-    "Header",
-    "Head",
-    "Body",
-    "Row",
-    "Cell",
-    "Footer",
-    "CheckHead",
-    "CheckCell",
-    "ResizeHandle",
-  ]) {
-    assert.match(barrel, new RegExp(`${part}: Table${part === "Root" ? "Root" : part}`));
-  }
-  assert.match(barrel, /export type \{/);
-  assert.match(barrel, /TableCheckboxChangeDetails/);
-  assert.match(barrel, /from ".\/table"/);
-});

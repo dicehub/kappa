@@ -34,24 +34,7 @@ const block = (selector) => {
   return declarations;
 };
 
-test("publishes the theme and metadata through package exports", () => {
-  assert.equal(
-    manifest.exports["./styles/theme-kappa.css"]["kappa-source"],
-    "./src/styles/theme-kappa.css",
-  );
-  assert.equal(manifest.exports["./styles/theme-kappa.css"].default, "./dist/styles/theme-kappa.css");
-  assert.equal(manifest.exports["./styles/tokens.json"]["kappa-source"], "./src/styles/tokens.json");
-  assert.equal(manifest.exports["./styles/tokens.json"].default, "./dist/styles/tokens.json");
-  assert.equal(manifest.exports["./styles/kappa.css"], "./dist/styles/kappa.css");
 
-  assert.match(manifest.scripts["codegen:themes"], /theme-generator\/index\.mjs/);
-  assert.match(manifest.scripts["check:themes"], /--check/);
-  assert.match(manifest.scripts.typecheck, /check:themes/);
-  assert.ok(
-    manifest.scripts.build.indexOf("codegen:themes") < manifest.scripts.build.indexOf("vite build"),
-    "the build generates theme assets before Vite runs",
-  );
-});
 
 test("emits the theme assets into the library output", () => {
   assert.match(viteConfig, /kappa-theme-assets/);

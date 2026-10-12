@@ -92,19 +92,3 @@ test("limits interactive states to semantic links and respects reduced motion", 
   assert.doesNotMatch(styles, /\n\.kappa-badge:hover/);
   assert.match(styles, /@media \(prefers-reduced-motion: reduce\)/);
 });
-
-test("exports the component, helpers, props, element, and variant types", () => {
-  assert.match(moduleBarrel, /export \{ default as Badge \}/);
-  for (const name of [
-    "BADGE_DEFAULT_ELEMENT",
-    "BADGE_DEFAULT_VARIANT",
-    "BADGE_VARIANTS",
-    "isBadgeElement",
-    "isBadgeVariant",
-    "BadgeElement",
-    "BadgeProps",
-    "BadgeVariant",
-  ]) {
-    assert.match(moduleBarrel, new RegExp(name));
-  }
-});

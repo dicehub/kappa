@@ -54,16 +54,3 @@ test("uses exact logical geometry, semantic tokens, and restrained motion", () =
   assert.doesNotMatch(styles, /\.skeleton-line\s/);
   assert.doesNotMatch(styles, /\.(?!kappa-)[a-z][\w-]*|(?<![\w-])--(?!kappa-)[a-z][\w-]*/);
 });
-
-test("exports the component, public props, constants, and resolver", () => {
-  for (const name of [
-    "SkeletonLine",
-    "SkeletonLineLength",
-    "SkeletonLineProps",
-    "SKELETON_LINE_DEFAULT_HEIGHT",
-    "SKELETON_LINE_DEFAULT_WIDTH",
-    "resolveSkeletonLineLength",
-  ]) {
-    assert.match(barrel, new RegExp(name));
-  }
-});

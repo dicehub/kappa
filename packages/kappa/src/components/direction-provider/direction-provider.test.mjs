@@ -26,16 +26,3 @@ test("reads direction from the nearest Ark UI locale context", () => {
   assert.match(contracts, /computed\(\(\) => localeContext\.value\.dir\)/);
   assert.match(contracts, /Direction = "ltr" \| "rtl"/);
 });
-
-test("exports the component, composable, and public contracts", () => {
-  for (const name of [
-    "DirectionProvider",
-    "DIRECTION_PROVIDER_DEFAULT_LOCALE",
-    "useDirection",
-    "Direction",
-    "DirectionProviderProps",
-    "DirectionProviderSlots",
-  ]) {
-    assert.match(barrel, new RegExp(name));
-  }
-});

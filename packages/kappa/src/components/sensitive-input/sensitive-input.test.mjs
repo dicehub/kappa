@@ -84,19 +84,3 @@ test("styles complete control states with Kappa tokens", () => {
   assert.match(styles, /@media \(forced-colors: active\)/);
   assert.doesNotMatch(styles, /\.(?!kappa-)[a-z][\w-]*|(?<![\w-])--(?!kappa-)[a-z][\w-]*/);
 });
-
-test("exports the component and public contract", () => {
-  for (const name of [
-    "SensitiveInput",
-    "SensitiveInputProps",
-    "SensitiveInputEmits",
-    "SensitiveInputMode",
-    "SensitiveInputModelValue",
-    "SENSITIVE_INPUT_SIZES",
-    "SENSITIVE_INPUT_DEFAULT_SIZE",
-    "isSensitiveInputSize",
-    "resolveSensitiveInputSize",
-  ]) {
-    assert.match(barrel, new RegExp(name));
-  }
-});

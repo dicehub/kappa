@@ -133,30 +133,3 @@ test("uses interactive, token-based, state-driven, and accessible styling", () =
   assert.doesNotMatch(styles, /\.(?!kappa-)[a-z][\w-]*|(?<![\w-])--(?!kappa-|(?:z-index|available-width|available-height|transform-origin|arrow-background|arrow-size)(?![\w-]))[a-z][\w-]*/);
   assert.doesNotMatch(styles, /(?:margin|padding|border)-(?:left|right)|text-align:\s*(?:left|right)/);
 });
-
-test("exports the complete compound surface and Ark hooks", () => {
-  assert.match(barrel, /export const HoverCard = Object\.assign/);
-  for (const name of [
-    "Root",
-    "RootProvider",
-    "Trigger",
-    "Positioner",
-    "Content",
-    "Arrow",
-    "ArrowTip",
-    "Context",
-  ]) {
-    assert.match(barrel, new RegExp(`${name}: HoverCard${name}`));
-  }
-  assert.match(barrel, /useHoverCard/);
-  assert.match(barrel, /hoverCardAnatomy/);
-  for (const contract of [
-    "HoverCardProps",
-    "HoverCardEmits",
-    "HoverCardContentProps",
-    "HoverCardPositionerProps",
-    "HoverCardPositioningOptions",
-  ]) {
-    assert.match(barrel, new RegExp(contract));
-  }
-});

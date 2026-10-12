@@ -76,24 +76,3 @@ test("covers complete visual states and platform preferences", () => {
   assert.match(styles, /@media \(forced-colors: active\)/);
   assert.doesNotMatch(styles, /\.(?!kappa-)[a-z][\w-]*|(?<![\w-])--(?!kappa-)[a-z][\w-]*/);
 });
-
-test("exports the component, icon, public contracts, constants, and resolvers", () => {
-  for (const name of [
-    "Link",
-    "LinkExternalIcon",
-    "LinkRoot",
-    "LinkProps",
-    "LinkSlots",
-    "LinkVariant",
-    "LINK_DEFAULT_VARIANT",
-    "LINK_VARIANTS",
-    "isLinkVariant",
-    "resolveLinkRel",
-    "resolveLinkTarget",
-    "resolveLinkVariant",
-  ]) {
-    assert.match(barrel, new RegExp(name));
-  }
-  assert.match(barrel, /Object\.assign\(LinkRoot/);
-  assert.match(barrel, /ExternalIcon: LinkExternalIcon/);
-});

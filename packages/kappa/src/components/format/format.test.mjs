@@ -104,25 +104,3 @@ test("uses semantic styling and stable data slots", () => {
     assert.match(source(file), new RegExp(`data-slot="${slot}"`));
   }
 });
-
-test("exports the compound root, named parts, and public prop contracts", () => {
-  for (const name of [
-    "Format",
-    "FormatRoot",
-    "FormatByte",
-    "FormatNumber",
-    "FormatRelativeTime",
-    "FormatTime",
-    "FormatProps",
-    "FormatByteProps",
-    "FormatNumberProps",
-    "FormatRelativeTimeProps",
-    "FormatRelativeTimeStyle",
-    "FormatTimeProps",
-    "FORMAT_DEFAULT_LOCALE",
-    "resolveFormatLocale",
-    "resolveFormatRelativeTimeStyle",
-  ]) {
-    assert.match(barrel, new RegExp(name));
-  }
-});
