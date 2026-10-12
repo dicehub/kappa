@@ -187,13 +187,13 @@ test.describe("Colors documentation", () => {
     const darkValue = tokenValue("--kappa-tint", "dark");
 
     await row.getByRole("button", { name: `Copy light value ${lightValue}` }).click();
-    expect(await page.evaluate(() => navigator.clipboard.readText())).toBe(lightValue);
-    await expect(expressionButton).not.toHaveAttribute("data-copied");
     await expect(status).toContainText(`Copied ${lightValue}`);
+    expect(await page.evaluate(() => navigator.clipboard.readText())).toBe(lightValue);
 
     await row.getByRole("button", { name: `Copy dark value ${darkValue}` }).click();
-    expect(await page.evaluate(() => navigator.clipboard.readText())).toBe(darkValue);
     await expect(status).toContainText(`Copied ${darkValue}`);
+    expect(await page.evaluate(() => navigator.clipboard.readText())).toBe(darkValue);
+    await expect(expressionButton).not.toHaveAttribute("data-copied");
   });
 
   test("keeps values selectable when the clipboard is denied", async ({ page }) => {

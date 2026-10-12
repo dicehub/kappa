@@ -163,12 +163,10 @@ test("disabled controls cannot copy and truncated controls copy the full value",
   expect(await page.evaluate(() => navigator.clipboard.readText())).toBe("run_20261004_0842_eu_central_simulation");
 });
 
-test("uses both themes and supports reduced motion and right-to-left layouts", async ({ page }, testInfo) => {
+test("uses both themes and supports reduced motion and right-to-left layouts", async ({ page }) => {
   const light = await button(page).evaluate((element) => getComputedStyle(element).color);
-  await demo(page).screenshot({ path: testInfo.outputPath("inline-copy-light.png") });
   await page.getByRole("button", { name: "Toggle theme" }).filter({ visible: true }).click();
   await expect.poll(() => button(page).evaluate((element) => getComputedStyle(element).color)).not.toBe(light);
-  await demo(page).screenshot({ path: testInfo.outputPath("inline-copy-dark.png") });
   await page.emulateMedia({ reducedMotion: "reduce" });
   await expect.poll(() => icon(page).evaluate((element) => Number.parseFloat(getComputedStyle(element).transitionDuration)))
     .toBeLessThanOrEqual(0.00001);

@@ -1,0 +1,10 @@
+[
+  "keeps values selectable when the clipboard is denied",
+  "copies Markdown and exposes the full keyboard menu",
+  "uncontrolled keeps select-all after a value update with queued frames",
+  "controlled keeps select-all after a value update with queued frames",
+  "provider keeps select-all after a value update with queued frames",
+  "uses dicehub drag multipliers and restores the dragged value on Escape",
+  "supports whole-field editing, scrubbing, modifiers, rollback, and cleanup",
+  "scrubs in both directions and blocks read-only scrubbing"
+]

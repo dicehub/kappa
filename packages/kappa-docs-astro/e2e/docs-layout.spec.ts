@@ -246,13 +246,11 @@ test.describe("Docs shell", () => {
     );
     expect(labels).toEqual(sortedLabels);
 
-    const mobileBoxes = await Promise.all([
-      links.nth(0).boundingBox(),
-      links.nth(1).boundingBox(),
-      links.nth(2).boundingBox(),
-    ]);
-    expect(mobileBoxes[0]?.y).toBe(mobileBoxes[1]?.y);
-    expect(mobileBoxes[2]?.y).toBeGreaterThan(mobileBoxes[0]?.y ?? 0);
+    const mobileRows = await links.evaluateAll(elements =>
+      elements.slice(0, 3).map(element => element.getBoundingClientRect().top),
+    );
+    expect(mobileRows[0]).toBe(mobileRows[1]);
+    expect(mobileRows[2]).toBeGreaterThan(mobileRows[0]);
 
     await links.first().focus();
     await page.keyboard.press("Tab");
@@ -260,15 +258,10 @@ test.describe("Docs shell", () => {
     await expectNoHorizontalOverflow(page);
 
     await page.setViewportSize({ width: 1024, height: 900 });
-    const desktopBoxes = await Promise.all([
-      links.nth(0).boundingBox(),
-      links.nth(1).boundingBox(),
-      links.nth(2).boundingBox(),
-      links.nth(3).boundingBox(),
-    ]);
-    expect(desktopBoxes[0]?.y).toBe(desktopBoxes[1]?.y);
-    expect(desktopBoxes[0]?.y).toBe(desktopBoxes[2]?.y);
-    expect(desktopBoxes[3]?.y).toBeGreaterThan(desktopBoxes[0]?.y ?? 0);
+    await expect.poll(() => links.evaluateAll(elements => {
+      const rows = elements.slice(0, 4).map(element => element.getBoundingClientRect().top);
+      return { firstRow: rows[0] === rows[1] && rows[0] === rows[2], nextRow: rows[3] > rows[0] };
+    })).toEqual({ firstRow: true, nextRow: true });
 
     await page.setViewportSize({ width: 1440, height: 1000 });
     const currentLinks = page.locator('a[aria-current="page"]:visible');

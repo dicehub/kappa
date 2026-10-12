@@ -7,7 +7,7 @@ import { Avatar } from "@dicehub/kappa/components/avatar";
 import { Button } from "@dicehub/kappa/components/button";
 import { CommandPalette } from "@dicehub/kappa/components/command-palette";
 import { Dropdown } from "@dicehub/kappa/components/dropdown";
-import { WorkspaceSwitcher } from "@dicehub/kappa/blocks/workspace-switcher";
+import { WorkspaceSwitcher, type WorkspaceSwitcherItem } from "@dicehub/kappa/blocks/workspace-switcher";
 import { namespaceSwitcherItems, namespaceSwitcherActions, namespaceSwitcherFooterActions, namespaceSwitcherWorkspaceActions, namespaceActionDescriptions } from "../data/workspace-switcher-demo";
 import { Input } from "@dicehub/kappa/components/input";
 import { Table } from "@dicehub/kappa/components/table";
@@ -23,7 +23,7 @@ const searchOpen = ref(false);
 const searchScope = ref<HTMLElement>();
 type SearchItem = { label: string; icon: Component; namespace?: string };
 type SearchGroup = { label: string; items: SearchItem[] };
-const namespaces = [
+const namespaces: WorkspaceSwitcherItem[] = [
   { value: "Ros.Space", name: "Ros.Space", description: "Free plan · 1 member", avatarSrc: "/avatars/ros-space-astronaut.webp", initials: "RS" },
   ...namespaceSwitcherItems.filter(item => item.value !== "Personal"),
 ];

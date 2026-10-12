@@ -1,0 +1,355 @@
+{
+  "scope": [
+    "scripts/publish-npm.mjs",
+    "scripts/check-release-state.mjs",
+    "scripts/release-notes.mjs"
+  ],
+  "mutants": 246,
+  "old": {
+    "statuses": {
+      "Killed": 139,
+      "Survived": 107
+    },
+    "rawScore": 56.50406504065041
+  },
+  "new": {
+    "statuses": {
+      "Killed": 196,
+      "Survived": 47,
+      "Timeout": 3
+    },
+    "rawScore": 80.89430894308943
+  },
+  "lost": [
+    {
+      "key": [
+        "scripts/check-release-state.mjs",
+        "93",
+        "ConditionalExpression",
+        {
+          "end": {
+            "column": 79,
+            "line": 61
+          },
+          "start": {
+            "column": 5,
+            "line": 61
+          }
+        },
+        "true"
+      ],
+      "old": "Killed",
+      "new": "Survived"
+    },
+    {
+      "key": [
+        "scripts/check-release-state.mjs",
+        "95",
+        "LogicalOperator",
+        {
+          "end": {
+            "column": 79,
+            "line": 61
+          },
+          "start": {
+            "column": 5,
+            "line": 61
+          }
+        },
+        "process.argv[1] || import.meta.url === pathToFileURL(process.argv[1]).href"
+      ],
+      "old": "Killed",
+      "new": "Survived"
+    },
+    {
+      "key": [
+        "scripts/check-release-state.mjs",
+        "96",
+        "ConditionalExpression",
+        {
+          "end": {
+            "column": 79,
+            "line": 61
+          },
+          "start": {
+            "column": 24,
+            "line": 61
+          }
+        },
+        "true"
+      ],
+      "old": "Killed",
+      "new": "Survived"
+    },
+    {
+      "key": [
+        "scripts/publish-npm.mjs",
+        "206",
+        "ConditionalExpression",
+        {
+          "end": {
+            "column": 79,
+            "line": 51
+          },
+          "start": {
+            "column": 5,
+            "line": 51
+          }
+        },
+        "true"
+      ],
+      "old": "Killed",
+      "new": "Survived"
+    },
+    {
+      "key": [
+        "scripts/publish-npm.mjs",
+        "208",
+        "LogicalOperator",
+        {
+          "end": {
+            "column": 79,
+            "line": 51
+          },
+          "start": {
+            "column": 5,
+            "line": 51
+          }
+        },
+        "process.argv[1] || import.meta.url === pathToFileURL(process.argv[1]).href"
+      ],
+      "old": "Killed",
+      "new": "Survived"
+    },
+    {
+      "key": [
+        "scripts/publish-npm.mjs",
+        "209",
+        "ConditionalExpression",
+        {
+          "end": {
+            "column": 79,
+            "line": 51
+          },
+          "start": {
+            "column": 24,
+            "line": 51
+          }
+        },
+        "true"
+      ],
+      "old": "Killed",
+      "new": "Survived"
+    }
+  ],
+  "activationReview": "Astra independently verified every new killed case, identical mutant identities and production source bytes, explicit test overrides, and intended fault assertions. Fixed three-script scope only; no deletion approval.",
+  "artifactRoot": "/home/dh/.cache/kappa-registry-fixed-gTd1Yj/tmp/cli-mutation-pair-ZujqjJ",
+  "rawKillsOnly": {
+    "old": 56.50406504065041,
+    "new": 79.67479674796748
+  },
+  "supplementalTimeoutEvidence": {
+    "artifactRoot": "/home/dh/.cache/kappa-registry-fixed-gTd1Yj/tmp/astra-cli-focused-MM7cCn",
+    "ids": [
+      "55",
+      "56",
+      "57"
+    ],
+    "result": "All three fail the intended public exit-code assertions within about one second. Preserve raw Timeout status; its original cause remains unknown."
+  },
+  "lostClassification": "Six raw old-only detections concern unsupported private imports of directly invoked scripts. Keep them in raw counts; do not classify release-notes importing as unsupported.",
+  "nextRun": "Current fixed-set comparison completed and reviewed; broader core-module and behavior proof remains open.",
+  "previousPair": {
+    "artifactRoot": "/home/dh/.cache/kappa-registry-fixed-gTd1Yj/tmp/cli-mutation-pair-Ydxzl6",
+    "identities": 246,
+    "old": {
+      "Killed": 139,
+      "Survived": 107
+    },
+    "new": {
+      "Killed": 197,
+      "Survived": 42,
+      "Timeout": 7
+    },
+    "killsOnlyPercent": {
+      "old": 56.50406504065041,
+      "new": 80.08130081300813
+    },
+    "review": "Astra Max checked intended failures, source/mutant identities and the explicit staged-input hash sidecar. This snapshot predates the latest ID139 assertion. Raw timeout statuses remain unchanged.",
+    "supplementalTimeoutEvidence": {
+      "artifactRoot": "/home/dh/.cache/kappa-registry-fixed-gTd1Yj/tmp/astra-cli-timeouts-in_bp39x",
+      "assertionDetections": [
+        "136",
+        "140",
+        "185",
+        "186",
+        "188"
+      ],
+      "survived": [
+        "139",
+        "187"
+      ],
+      "interpretation": "ID139 exposed an error-message gap, now closed separately. ID187 preserves manifest JSON parsing by Buffer coercion; equivalent within supported direct CLI usage. No automatic timeout credit."
+    },
+    "diagnosticCorrection": {
+      "artifactRoot": "/home/dh/.cache/kappa-registry-fixed-gTd1Yj/tmp/cli-registry-diagnostic-ruE1rt",
+      "id": "139",
+      "result": "Current selected guard case passes inactive, then fails refused-publication diagnostic assertion when active. Astra reviewed hashes and all 1/1 no-omission counts; no setup failure."
+    },
+    "limits": [
+      "Six unsupported private-import guard losses remain in raw survivor counts.",
+      "Four old-killed to raw-new-timeout records require the separate activation evidence above.",
+      "No current full 246 rerun after the diagnostic correction; no overall core-module score or deletion approval."
+    ]
+  },
+  "latestPair": {
+    "artifactRoot": "/home/dh/.cache/kappa-registry-fixed-gTd1Yj/tmp/cli-mutation-pair-fyRrLC",
+    "identities": 246,
+    "old": {
+      "Killed": 139,
+      "Survived": 107
+    },
+    "new": {
+      "Killed": 207,
+      "Survived": 39
+    },
+    "killsOnlyPercent": {
+      "old": 56.50406504065041,
+      "new": 84.14634146341463
+    },
+    "lost": [
+      {
+        "key": [
+          "scripts/check-release-state.mjs",
+          "93",
+          "ConditionalExpression",
+          {
+            "end": {
+              "column": 79,
+              "line": 61
+            },
+            "start": {
+              "column": 5,
+              "line": 61
+            }
+          },
+          "true"
+        ],
+        "old": "Killed",
+        "new": "Survived"
+      },
+      {
+        "key": [
+          "scripts/check-release-state.mjs",
+          "95",
+          "LogicalOperator",
+          {
+            "end": {
+              "column": 79,
+              "line": 61
+            },
+            "start": {
+              "column": 5,
+              "line": 61
+            }
+          },
+          "process.argv[1] || import.meta.url === pathToFileURL(process.argv[1]).href"
+        ],
+        "old": "Killed",
+        "new": "Survived"
+      },
+      {
+        "key": [
+          "scripts/check-release-state.mjs",
+          "96",
+          "ConditionalExpression",
+          {
+            "end": {
+              "column": 79,
+              "line": 61
+            },
+            "start": {
+              "column": 24,
+              "line": 61
+            }
+          },
+          "true"
+        ],
+        "old": "Killed",
+        "new": "Survived"
+      },
+      {
+        "key": [
+          "scripts/publish-npm.mjs",
+          "206",
+          "ConditionalExpression",
+          {
+            "end": {
+              "column": 79,
+              "line": 51
+            },
+            "start": {
+              "column": 5,
+              "line": 51
+            }
+          },
+          "true"
+        ],
+        "old": "Killed",
+        "new": "Survived"
+      },
+      {
+        "key": [
+          "scripts/publish-npm.mjs",
+          "208",
+          "LogicalOperator",
+          {
+            "end": {
+              "column": 79,
+              "line": 51
+            },
+            "start": {
+              "column": 5,
+              "line": 51
+            }
+          },
+          "process.argv[1] || import.meta.url === pathToFileURL(process.argv[1]).href"
+        ],
+        "old": "Killed",
+        "new": "Survived"
+      },
+      {
+        "key": [
+          "scripts/publish-npm.mjs",
+          "209",
+          "ConditionalExpression",
+          {
+            "end": {
+              "column": 79,
+              "line": 51
+            },
+            "start": {
+              "column": 24,
+              "line": 51
+            }
+          },
+          "true"
+        ],
+        "old": "Killed",
+        "new": "Survived"
+      }
+    ],
+    "review": "Astra Max verified all 246 source/identity matches, current staged-input hashes, executed sandbox inputs and 207 intended failures with seven completed TAP cases and zero omissions. Five kills require missing public output files; 202 include assertion failures. No setup failures or timeouts receive credit.",
+    "limits": [
+      "Six unsupported private-import guard losses remain in raw counts.",
+      "Current ID199 fails the first real registry-refusal exit assertion; this raw result is not an ENOENT-specific proof.",
+      "Three CLI modules only; no overall core-module score or deletion approval."
+    ]
+  },
+  "publicationHookProof": {
+    "artifactRoot": "/tmp/kappa-npm-lifecycle-proof-MwGolU",
+    "mutation": "Remove the --ignore-scripts array entry without adding an empty npm argument.",
+    "result": "Selected old and new inactive cases pass. Active old flag assertion fails; active new real publication exits successfully but fails the required absence of the prepublishOnly marker.",
+    "review": "Astra Max verified source/test hashes, single-case no-omission counters and intended assertion locations. Separate native fault proof; no extra aggregate-score credit."
+  }
+}

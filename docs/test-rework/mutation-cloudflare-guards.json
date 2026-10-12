@@ -1,0 +1,123 @@
+{
+  "scope": "Five fixed deployment/security faults; selected Node suites only, not overall mutation score.",
+  "source": "/home/dh/.cache/kappa-registry-fixed-gTd1Yj/repo",
+  "testHashes": {
+    "scripts/cloudflare-access.test.mjs": "b78ec559a86c849213c82b5db4e18fca28841ecb2a8127d7de3370ad23dd0b7d",
+    "scripts/cloudflare-pages.test.mjs": "85190b3a9d93d2c1916e55e736f2404e330da658a7a1624fa98af34f188c9287",
+    "tests/blackbox/cli/cloudflare.test.mjs": "32c2cc6fb3d7772a0942a96d195763b525d0c4c68b27d20882ebad7d2a64ee4e",
+    "tests/blackbox/cli/fixtures.mjs": "98b5628bb46b288a7508adb9f557d411083041c9f6b6806d67bdfa79c3124658",
+    "tests/blackbox/cli/cloudflare-service.mjs": "821e6d4ad782dcd8aa668b31c35887c69e55b36d7da43a8126b57f782fa5298a",
+    "tests/blackbox/cli/proxy.mjs": "c1ac1e6f95fb5d4cbbd1a2afb0013c93757af37a3b521f4432e5a5edfc5e0579"
+  },
+  "baseline": {
+    "old": {
+      "code": 0,
+      "log": "baseline-old.tap",
+      "killed": false
+    },
+    "new": {
+      "code": 0,
+      "log": "baseline-new.tap",
+      "killed": false
+    }
+  },
+  "outcomes": [
+    {
+      "id": "dns-ambiguous",
+      "file": "scripts/cloudflare-pages.mjs",
+      "before": "if (routes.length > 1)",
+      "after": "if (false)",
+      "originalSha256": "90c7371cb37e489da2e2fb99d1e9c0e80d932bbaecde999de883824d927092a2",
+      "mutantSha256": "5f4d1cae6faf99a5fcdc7cef2d133ce95123ed6e58ce4ef819dffec0814342e3",
+      "old": {
+        "code": 1,
+        "log": "dns-ambiguous-old.tap",
+        "killed": true
+      },
+      "new": {
+        "code": 1,
+        "log": "dns-ambiguous-new.tap",
+        "killed": true
+      }
+    },
+    {
+      "id": "deployment-branch",
+      "file": "scripts/cloudflare-pages.mjs",
+      "before": "(item) => item?.deployment_trigger?.metadata?.branch === branch,",
+      "after": "(item) => true,",
+      "originalSha256": "90c7371cb37e489da2e2fb99d1e9c0e80d932bbaecde999de883824d927092a2",
+      "mutantSha256": "fa6b948e1101cbe74ea8b926cf555f40533297cdb71699ea71886bd29cce6716",
+      "old": {
+        "code": 0,
+        "log": "deployment-branch-old.tap",
+        "killed": false
+      },
+      "new": {
+        "code": 1,
+        "log": "deployment-branch-new.tap",
+        "killed": true
+      }
+    },
+    {
+      "id": "access-production-opt-out",
+      "file": "scripts/cloudflare-access.mjs",
+      "before": "...(protectPagesProduction ? [`${project}.pages.dev`] : []),",
+      "after": "...(true ? [`${project}.pages.dev`] : []),",
+      "originalSha256": "ef7dca2fa15cebefa053b8a5951044cd3016dd9ecec2c0841635934d662d4cc1",
+      "mutantSha256": "fa1a4cce2d1b44077fa6327c8d5c0852dcfc227c8c1a4aa3284db66b353f8fc9",
+      "old": {
+        "code": 1,
+        "log": "access-production-opt-out-old.tap",
+        "killed": true
+      },
+      "new": {
+        "code": 1,
+        "log": "access-production-opt-out-new.tap",
+        "killed": true
+      }
+    },
+    {
+      "id": "access-email-rules",
+      "file": "scripts/cloudflare-access.mjs",
+      "before": "...emails.map((email) => ({ email: { email } })),",
+      "after": "...[],",
+      "originalSha256": "ef7dca2fa15cebefa053b8a5951044cd3016dd9ecec2c0841635934d662d4cc1",
+      "mutantSha256": "0ad741a2b4ae682dc6012054bce0bd030e5a0fdc53fa4d2263d7d853f4d493c9",
+      "old": {
+        "code": 1,
+        "log": "access-email-rules-old.tap",
+        "killed": true
+      },
+      "new": {
+        "code": 1,
+        "log": "access-email-rules-new.tap",
+        "killed": true
+      }
+    },
+    {
+      "id": "provider-redaction",
+      "file": "scripts/cloudflare-pages.mjs",
+      "before": "safe = safe.replaceAll(secret, \"[redacted]\")",
+      "after": "safe = safe",
+      "originalSha256": "90c7371cb37e489da2e2fb99d1e9c0e80d932bbaecde999de883824d927092a2",
+      "mutantSha256": "5af674b1936054262ee413f9ed2bf99a0d2721f81611810e1f5487d185bd8fec",
+      "old": {
+        "code": 0,
+        "log": "provider-redaction-old.tap",
+        "killed": false
+      },
+      "new": {
+        "code": 1,
+        "log": "provider-redaction-new.tap",
+        "killed": true
+      }
+    }
+  ],
+  "artifactRoot": "/home/dh/.cache/kappa-registry-fixed-gTd1Yj/tmp/cloudflare-faults-XVlAQt",
+  "review": "Astra Max independently verified all 12 TAP logs, source diffs, restored bytes, and test/helper hashes. Five scoped public assertion failures approved; no deletion approval.",
+  "limits": [
+    "Five fixed faults, selected Node cases only; not the overall core-module mutation score.",
+    "Driver rejects setup errors and missing counters; intended failure locations were verified manually, not through its unused assertion fields.",
+    "Old email-rule fault has one intended policy assertion failure and two collateral unexpected-PUT mock failures. These do not count as separate behavioral proofs."
+  ]
+}

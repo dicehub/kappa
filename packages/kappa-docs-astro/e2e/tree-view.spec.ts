@@ -74,6 +74,10 @@ test.describe("Tree View documentation", () => {
     const focused = tree.locator('[data-focus="true"]');
     await expect(focused).toContainText("Region 100");
     expect(await rows.count()).toBeLessThan(50);
+    await tree.press("ArrowRight");
+    await tree.press("End");
+    await expect(focused).toContainText("Cell 100000");
+    expect(await rows.count()).toBeLessThan(50);
 
     await tree.press("Home");
     await tree.press("r");
@@ -85,10 +89,13 @@ test.describe("Tree View documentation", () => {
 
     const activeId = await tree.getAttribute("aria-activedescendant");
     expect(activeId).toBeTruthy();
+    const lastBeforeScroll = await rows.last().textContent();
     await tree.evaluate((element) => {
       element.scrollTop = element.scrollHeight;
       element.dispatchEvent(new Event("scroll"));
     });
+    await expect(rows.last()).not.toHaveText(lastBeforeScroll!);
+    await expect(rows.last()).toContainText("Cell 100000");
     await expect(page.locator(`[id="${activeId}"]`)).toHaveCount(1);
     expect(await rows.count()).toBeLessThan(50);
   });

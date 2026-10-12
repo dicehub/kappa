@@ -1,0 +1,35 @@
+import { test, expect, visitConsumer } from "./fixtures";
+
+test("a 100,000-leaf tree updates its bounded window, pins focus, and measures viewport growth", async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: "reduce", forcedColors: "active" });
+  await visitConsumer(page, "/test-consumer/tree-window");
+  const tree = page.getByRole("tree", { name: "All results", exact: true });
+  const rows = tree.getByRole("treeitem");
+  await expect(rows.nth(1)).toHaveAttribute("aria-setsize", "100000");
+  expect(await rows.count()).toBeLessThan(40);
+  await tree.focus();
+  await tree.press("End");
+  const last = tree.getByRole("treeitem", { name: "Node 99999", exact: true });
+  await expect(last).toHaveAttribute("aria-posinset", "100000");
+  await expect(tree).toHaveAttribute("aria-activedescendant", (await last.getAttribute("id"))!);
+  await tree.press("Home");
+  await tree.press("ArrowRight");
+  const first = tree.getByRole("treeitem", { name: "Node 0", exact: true });
+  const firstId = (await first.getAttribute("id"))!;
+  await expect(tree).toHaveAttribute("aria-activedescendant", firstId);
+  await expect(last).toHaveCount(0);
+  await expect(first).toHaveCSS("outline-style", "solid");
+  await expect(first).toHaveCSS("outline-width", "2px");
+  const branch = tree.getByRole("treeitem", { name: "Records", exact: true });
+  await expect(branch.locator('[data-slot="virtual-tree-indicator"]')).toHaveCSS("transition-duration", "0s");
+  await tree.evaluate(element => { element.scrollTop = element.scrollHeight; });
+  await expect(last).toBeVisible();
+  await expect(page.locator(`[id="${firstId}"]`)).toHaveCount(1);
+  expect(await rows.count()).toBeLessThan(40);
+  await tree.evaluate(element => { element.scrollTop = 0; });
+  await expect(branch).toBeVisible();
+  const before = await rows.count();
+  await page.getByRole("button", { name: "Grow tree viewport", exact: true }).click();
+  await expect.poll(() => rows.count()).toBeGreaterThan(before);
+  expect(await rows.count()).toBeLessThan(50);
+});

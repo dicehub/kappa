@@ -92,26 +92,22 @@ test.describe("Menu Bar documentation", () => {
     await nested.getByRole("menuitem", { name: "File" }).click();
     await page.getByRole("menuitem", { name: "Export as" }).click();
     const exportMenu = page.locator('[data-menu-bar-surface="export"]');
-    await expect(exportMenu).toBeVisible();
-    const triggerBounds = await page.getByRole("menuitem", { name: "Export as" }).boundingBox();
-    const submenuBounds = await exportMenu.boundingBox();
-    expect(triggerBounds).not.toBeNull();
-    expect(submenuBounds).not.toBeNull();
-    await page.mouse.move(
-      submenuBounds!.x + 12,
-      triggerBounds!.y + triggerBounds!.height / 2,
-      { steps: 8 },
-    );
+    const enterExport = async () => {
+      await expect(exportMenu).toBeVisible();
+      await expect.poll(() => exportMenu.evaluate(element => element.getAnimations({ subtree: true })
+        .filter(animation => animation.playState === "running" || animation.pending).length)).toBe(0);
+      const triggerBounds = await page.getByRole("menuitem", { name: "Export as" }).boundingBox();
+      const submenuBounds = await exportMenu.boundingBox();
+      expect(triggerBounds).not.toBeNull();
+      expect(submenuBounds).not.toBeNull();
+      await page.mouse.move(submenuBounds!.x + 12, triggerBounds!.y + triggerBounds!.height / 2, { steps: 8 });
+    };
+    await enterExport();
     await expect(exportMenu).toBeVisible();
     await page.getByRole("menuitem", { name: "Save" }).hover();
     await expect(exportMenu).not.toBeVisible();
     await page.getByRole("menuitem", { name: "Export as" }).click();
-    await expect(exportMenu).toBeVisible();
-    await page.mouse.move(
-      submenuBounds!.x + 12,
-      triggerBounds!.y + triggerBounds!.height / 2,
-      { steps: 8 },
-    );
+    await enterExport();
     await exportMenu.getByRole("menuitem", { name: "SVG" }).click();
     await expect(nested.locator("output")).toHaveText("export-svg");
   });

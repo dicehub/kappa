@@ -1,0 +1,53 @@
+{
+  "scope": "One public generated-JS index fault; not an overall mutation score",
+  "source": "packages/kappa/scripts/component-registry/index.mjs",
+  "before": "${formattedRegistry} as const",
+  "after": "${formattedRegistry.replace('\"byType\": {\"block\":[\"DeleteResource\",', '\"byType\": {\"block\":[')} as const",
+  "originalSha256": "42c2761be2392d0937047181eb51c1295fb8d02bcfe86c2180a154411c4e56dd",
+  "mutantSha256": "8821da0b8a37720e89a722485830f3a652e81d05af57b31054e43940c8d4f609",
+  "unchangedJsonSha256": "df800eb1ce2237f63479ca00aef26dbf5af4a659dded663cde8f220fa636ef11",
+  "tests": {
+    "packages/kappa/src/registry/registry.test.mjs": "5ff81f6c46ffedbeb46e329a567a67a937e43c80de7cd3194f212a11e0aed696",
+    "tests/blackbox/package/exports.test.mjs": "cb8bf0e1d7c3b5f14269abababacdfe61325eb4601df08384923c4e087bbc715"
+  },
+  "results": [
+    {
+      "phase": "baseline",
+      "suite": "old",
+      "code": 0,
+      "tests": 60,
+      "passed": 60,
+      "failed": 0,
+      "log": "/home/dh/.cache/kappa-registry-fixed-gTd1Yj/tmp/registry-index-fault-6CkLtG/baseline-old.log"
+    },
+    {
+      "phase": "baseline",
+      "suite": "new",
+      "code": 0,
+      "tests": 1,
+      "passed": 1,
+      "failed": 0,
+      "log": "/home/dh/.cache/kappa-registry-fixed-gTd1Yj/tmp/registry-index-fault-6CkLtG/baseline-new.log"
+    },
+    {
+      "phase": "fault",
+      "suite": "old",
+      "code": 0,
+      "tests": 60,
+      "passed": 60,
+      "failed": 0,
+      "log": "/home/dh/.cache/kappa-registry-fixed-gTd1Yj/tmp/registry-index-fault-6CkLtG/fault-old.log"
+    },
+    {
+      "phase": "fault",
+      "suite": "new",
+      "code": 1,
+      "tests": 1,
+      "passed": 0,
+      "failed": 1,
+      "log": "/home/dh/.cache/kappa-registry-fixed-gTd1Yj/tmp/registry-index-fault-6CkLtG/fault-new.log"
+    }
+  ],
+  "artifactRoot": "/home/dh/.cache/kappa-registry-fixed-gTd1Yj/tmp/registry-index-fault-6CkLtG",
+  "review": "Astra Max independently verified source and test hashes, successful setup, and the intended baseline/fault results; scoped proof approved. No deletion approval."
+}

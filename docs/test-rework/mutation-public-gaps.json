@@ -1,0 +1,75 @@
+{
+  "scope": "Three selected faults; not an overall core-module mutation score.",
+  "review": "Astra Max independently read activation, build, package, and assertion logs; approved the three scoped proofs.",
+  "baseline": "Cumulative passing results: three Shiki/Tooltip cases in public-gaps-reviewed-r2; two corrected defaults/plot cases in public-gaps-reviewed-r3. Strict fixtures and five SSR cases also passed.",
+  "artifactRoot": "/home/dh/.cache/kappa-test-phase2-xOor8R/tmp/kappa-public-gap-mutations-mzZlrp",
+  "excludedRun": "kappa-public-gap-mutations-51gnrA: consumer setup lacked pnpm-lock.yaml; no behavioral kill credited.",
+  "faults": [
+    {
+      "id": "xy-bars-factory-removed",
+      "source": "packages/kappa/src/components/xy-plot/xy-plot-paths.ts",
+      "originalSourceSha256": "7d93ac54621b87563d6b1636dcfbcfb8c855da440c0dda49652fe9fa7d2a42a9",
+      "before": "if (path === \"bars\") return uPlot.paths.bars?.({ size: [0.72, 48, 1] });",
+      "after": "if (path === \"bars\") return undefined;",
+      "mutantSourceSha256": "96caa76fe55010cce69755200aabb8a71026c7e3b4942557112bcfa5d95a089b",
+      "oldResult": "assertion failed",
+      "replacementResult": "intended public assertion failed",
+      "assertion": {
+        "file": "tests/blackbox/browser/plot.spec.ts",
+        "line": 37,
+        "result": "Adjacent bars have no clear gaps."
+      },
+      "evidence": {
+        "activation": "xy-bars-factory-removed/activation.json",
+        "old": "xy-bars-factory-removed/old.log",
+        "replacement": "xy-bars-factory-removed/browser.log",
+        "traces": "xy-bars-factory-removed/browser-traces"
+      },
+      "preconditions": "Library build, frozen core/full installs, strict declarations, package behavior, fixture declarations, and production docs build passed."
+    },
+    {
+      "id": "xy-points-factory-removed",
+      "source": "packages/kappa/src/components/xy-plot/xy-plot-paths.ts",
+      "originalSourceSha256": "7d93ac54621b87563d6b1636dcfbcfb8c855da440c0dda49652fe9fa7d2a42a9",
+      "before": "if (path === \"points\") return () => null;",
+      "after": "if (path === \"points\") return undefined;",
+      "mutantSourceSha256": "fb03d1615ebde17fffcbec1fedf9a177c603dc8608bc0c97664496d7f7ffca53",
+      "oldResult": "assertion failed",
+      "replacementResult": "intended public assertion failed",
+      "assertion": {
+        "file": "tests/blackbox/browser/plot.spec.ts",
+        "line": 39,
+        "result": "A points series fills the area below its samples."
+      },
+      "evidence": {
+        "activation": "xy-points-factory-removed/activation.json",
+        "old": "xy-points-factory-removed/old.log",
+        "replacement": "xy-points-factory-removed/browser.log",
+        "traces": "xy-points-factory-removed/browser-traces"
+      },
+      "preconditions": "Library build, frozen core/full installs, strict declarations, package behavior, fixture declarations, and production docs build passed."
+    },
+    {
+      "id": "shiki-cancelled-error-guard-removed",
+      "source": "packages/kappa/src/components/code-highlighted/shiki-lifecycle.ts",
+      "originalSourceSha256": "08679dc90bc2aeb02d179a152fbcb838baf4ff8257319ae33dac141e0f9f3f7d",
+      "before": "if (!cancelled) options.onError(error);",
+      "after": "options.onError(error);",
+      "mutantSourceSha256": "6f2fd8ac49e9c99ff006def1fb6f3a6ee77654c47777ddffcb7df7889b83a6b6",
+      "oldResult": "survived",
+      "replacementResult": "intended public assertion failed",
+      "assertion": {
+        "file": "tests/blackbox/browser/shiki.spec.ts",
+        "line": 47,
+        "result": "The ready Python output disappears after the cancelled TypeScript failure; witness settlement passed."
+      },
+      "evidence": {
+        "activation": "shiki-cancelled-error-guard-removed/activation.json",
+        "old": "shiki-cancelled-error-guard-removed/old.log",
+        "replacement": "shiki-cancelled-error-guard-removed/browser.log",
+        "traces": "shiki-cancelled-error-guard-removed/browser-traces"
+      },
+      "preconditions": "Library build, frozen core/full installs, strict declarations, package behavior, fixture declarations, and production docs build passed."
+    }
+  ]
+}

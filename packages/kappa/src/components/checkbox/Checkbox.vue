@@ -3,6 +3,7 @@ import { Checkbox as ArkCheckbox } from "@ark-ui/vue/checkbox";
 import type { CheckboxCheckedChangeDetails, CheckboxCheckedState } from "@ark-ui/vue/checkbox";
 import { computed, ref, useTemplateRef } from "vue";
 import { syncCheckboxIndeterminate } from "./checkbox-indeterminate";
+import CheckboxHiddenInput from "./CheckboxHiddenInput.vue";
 import {
   resolveCheckboxCheckedState,
   type CheckboxEmits,
@@ -69,7 +70,7 @@ syncCheckboxIndeterminate(
     @update:checked="emit('update:checked', $event)"
   >
     <slot />
-    <ArkCheckbox.HiddenInput />
+    <CheckboxHiddenInput />
   </ArkCheckbox.Root>
 </template>
 

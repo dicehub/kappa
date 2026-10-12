@@ -1,0 +1,153 @@
+{
+  "scope": "Four selected state faults, not an overall mutation score.",
+  "artifactRoot": "/home/dh/.cache/kappa-registry-fixed-gTd1Yj/tmp/resource-workflow-faults-jGvlYL",
+  "review": "Astra Max verified all intended old/public assertion failures, successful build/install/compiler/docs setup, and exact mutant source in packed maps and installed JS/maps.",
+  "limits": [
+    "Faults executed v1 browser inputs. The later v2 cell, specific-abort and ignored-abort-success additions have separate 51-case baseline evidence.",
+    "No deleted tests or overall mutation/deletion approval."
+  ],
+  "faults": [
+    {
+      "id": "file-single-cardinality",
+      "file": "packages/kappa/src/blocks/file-browser/use-file-browser-state.ts",
+      "before": "return props.selectionMode === \"single\" ? values.slice(0, 1) : values;",
+      "after": "return values;",
+      "oldFile": "packages/kappa/src/blocks/file-browser/file-browser.test.mjs",
+      "oldName": "controlled selection emits a request and respects the supplied value",
+      "publicName": "a rejected controlled selection stays unchanged; filtering and disabled entries remain safe",
+      "source": "/home/dh/.cache/kappa-registry-fixed-gTd1Yj/tmp/kappa-build-blackbox-zyW89M",
+      "originalSha256": "db733b46b42488548a867b3bfe4da007b766d386dad2bfb46c0eaf600056a254",
+      "mutantSha256": "2fbd92ec53e0defea18fc3471541c1b0051497a96c0510c544c40e3a9e7c0104",
+      "tests": {
+        "packages/kappa/src/blocks/file-browser/file-browser.test.mjs": "c57b91ff91b2933175904ede732d855fa928c8a71c71efa9dbe2009a94d5f665",
+        "tests/blackbox/browser/file-browser.spec.ts": "a97195938604c94f2089c2e2111e7605660a78f6b4d728d9a363fd6ff50795a7",
+        "tests/blackbox/browser/resource-picker.spec.ts": "a0422db0cd39f300f5f2b60df0a2da10970394078190185f6addb2fb8cb1c48c",
+        "tests/blackbox/consumer/FileBrowserConsumer.vue": "0e7f9bd1cf4be34ba0c2aec6f610340fd03cd2761fed565347ede38a29423f82"
+      },
+      "baseline": "Old selected case passed; public baseline recorded as part of strict consumer plus 48 passing current browser cases in browser-state-check-70AMwc.",
+      "old": "assertion failed",
+      "replacement": "requires assertion review",
+      "error": "Public HTTP/compiler/browser checks failed; /home/dh/.cache/kappa-registry-fixed-gTd1Yj/tmp/resource-workflow-faults-jGvlYL/file-single-cardinality"
+    },
+    {
+      "id": "file-stale-response",
+      "file": "packages/kappa/src/blocks/file-browser/use-file-browser-state.ts",
+      "before": "if (request.signal.aborted || disposed) return;",
+      "after": "if (disposed) return;",
+      "oldFile": "packages/kappa/src/blocks/file-browser/file-browser.test.mjs",
+      "oldName": "newer folder results win even when an old loader ignores cancellation",
+      "publicName": "a late folder response cannot replace a newer root, even if the consumer ignores cancellation",
+      "source": "/home/dh/.cache/kappa-registry-fixed-gTd1Yj/tmp/kappa-build-blackbox-woaCrg",
+      "originalSha256": "db733b46b42488548a867b3bfe4da007b766d386dad2bfb46c0eaf600056a254",
+      "mutantSha256": "e8a971c3aae0e9f1dae55bfc82b0719bf09d5c747362ef6043e7a8bf18da8c7d",
+      "tests": {
+        "packages/kappa/src/blocks/file-browser/file-browser.test.mjs": "c57b91ff91b2933175904ede732d855fa928c8a71c71efa9dbe2009a94d5f665",
+        "tests/blackbox/browser/file-browser.spec.ts": "a97195938604c94f2089c2e2111e7605660a78f6b4d728d9a363fd6ff50795a7",
+        "tests/blackbox/browser/resource-picker.spec.ts": "a0422db0cd39f300f5f2b60df0a2da10970394078190185f6addb2fb8cb1c48c",
+        "tests/blackbox/consumer/FileBrowserConsumer.vue": "0e7f9bd1cf4be34ba0c2aec6f610340fd03cd2761fed565347ede38a29423f82"
+      },
+      "baseline": "Old selected case passed; public baseline recorded as part of strict consumer plus 48 passing current browser cases in browser-state-check-70AMwc.",
+      "old": "assertion failed",
+      "replacement": "requires assertion review",
+      "error": "Public HTTP/compiler/browser checks failed; /home/dh/.cache/kappa-registry-fixed-gTd1Yj/tmp/resource-workflow-faults-jGvlYL/file-stale-response"
+    },
+    {
+      "id": "resource-disabled-history",
+      "file": "packages/kappa/src/blocks/resource-picker/use-resource-picker-state.ts",
+      "before": "draft.value = draft.value.filter(value => !disabledIds.has(value));",
+      "after": "draft.value = draft.value.filter(value => !disabledIds.has(value) || true);",
+      "oldFile": "packages/kappa/src/blocks/resource-picker/resource-picker.test.mjs",
+      "oldName": "a selected resource that becomes disabled stays removed across external results",
+      "publicName": "disabled initial IDs are excluded and eligibility loss survives later search results",
+      "source": "/home/dh/.cache/kappa-registry-fixed-gTd1Yj/tmp/kappa-build-blackbox-rg40y9",
+      "originalSha256": "addab81e2eb3b6a11d36400df664e2e289752b77aa032d3a947824a5ddb3075a",
+      "mutantSha256": "6211dd138ba1e23bb2c35db7625633ec25db2eb71b88fc80bc4eee51ebd80d0a",
+      "tests": {
+        "packages/kappa/src/blocks/resource-picker/resource-picker.test.mjs": "cd603a8b7398d02c6e2c64d47607d148d48ed298a8610e90f9ecff943201d7f9",
+        "tests/blackbox/browser/file-browser.spec.ts": "a97195938604c94f2089c2e2111e7605660a78f6b4d728d9a363fd6ff50795a7",
+        "tests/blackbox/browser/resource-picker.spec.ts": "a0422db0cd39f300f5f2b60df0a2da10970394078190185f6addb2fb8cb1c48c",
+        "tests/blackbox/consumer/FileBrowserConsumer.vue": "0e7f9bd1cf4be34ba0c2aec6f610340fd03cd2761fed565347ede38a29423f82"
+      },
+      "baseline": "Old selected case passed; public baseline recorded as part of strict consumer plus 48 passing current browser cases in browser-state-check-70AMwc.",
+      "old": "assertion failed",
+      "replacement": "requires assertion review",
+      "error": "Public HTTP/compiler/browser checks failed; /home/dh/.cache/kappa-registry-fixed-gTd1Yj/tmp/resource-workflow-faults-jGvlYL/resource-disabled-history"
+    },
+    {
+      "id": "resource-confirm-cancel",
+      "file": "packages/kappa/src/blocks/resource-picker/use-resource-picker-state.ts",
+      "before": "    confirmed = true;",
+      "after": "    confirmed = false;",
+      "oldFile": "packages/kappa/src/blocks/resource-picker/resource-picker.test.mjs",
+      "oldName": "accepted confirmation close does not also emit cancellation",
+      "publicName": "external filtering preserves hidden selections when another visible item is selected",
+      "source": "/home/dh/.cache/kappa-registry-fixed-gTd1Yj/tmp/kappa-build-blackbox-endt2L",
+      "originalSha256": "addab81e2eb3b6a11d36400df664e2e289752b77aa032d3a947824a5ddb3075a",
+      "mutantSha256": "0a788ca621ff0c4376cbb134415460aff234433a9cec27a06915145da8634606",
+      "tests": {
+        "packages/kappa/src/blocks/resource-picker/resource-picker.test.mjs": "cd603a8b7398d02c6e2c64d47607d148d48ed298a8610e90f9ecff943201d7f9",
+        "tests/blackbox/browser/file-browser.spec.ts": "a97195938604c94f2089c2e2111e7605660a78f6b4d728d9a363fd6ff50795a7",
+        "tests/blackbox/browser/resource-picker.spec.ts": "a0422db0cd39f300f5f2b60df0a2da10970394078190185f6addb2fb8cb1c48c",
+        "tests/blackbox/consumer/FileBrowserConsumer.vue": "0e7f9bd1cf4be34ba0c2aec6f610340fd03cd2761fed565347ede38a29423f82"
+      },
+      "baseline": "Old selected case passed; public baseline recorded as part of strict consumer plus 48 passing current browser cases in browser-state-check-70AMwc.",
+      "old": "assertion failed",
+      "replacement": "requires assertion review",
+      "error": "Public HTTP/compiler/browser checks failed; /home/dh/.cache/kappa-registry-fixed-gTd1Yj/tmp/resource-workflow-faults-jGvlYL/resource-confirm-cancel"
+    }
+  ],
+  "v2Proof": {
+    "artifactRoot": "/tmp/kappa-resource-v2-faults-rFrplB",
+    "baseline": "/home/dh/.cache/kappa-registry-fixed-gTd1Yj/tmp/browser-state-reviewed-y0scVO",
+    "baselineCounts": "17 distinct browser cases, three repeats each: 51 passes; strict declarations and fresh docs build pass.",
+    "review": "Astra Max checked both intended assertions, one-case/no-omission selection, build/pack/core169/full134/types/snippets/artifacts34/HTTP2 passes, unchanged test/helper bytes and exact source in packed/installed maps.",
+    "faults": [
+      {
+        "id": "file-negative-size",
+        "file": "packages/kappa/src/blocks/file-browser/file-browser-logic.ts",
+        "before": "if (size === undefined || !Number.isFinite(size) || size < 0) return \"\u2014\";",
+        "after": "if (size === undefined || !Number.isFinite(size)) return \"\u2014\";",
+        "oldFile": "packages/kappa/src/blocks/file-browser/file-browser.test.mjs",
+        "oldName": "formats deterministic dates and missing sizes",
+        "publicName": "removed or disabled static selections stay cleared when the source returns; dates and sizes stay readable",
+        "source": "/tmp/kappa-build-blackbox-aMUBJL",
+        "originalSha256": "b406aa1f6b4885be533e7d1dda86dfb2d0071d4c9bf6bc0644f57fc2168da4b4",
+        "mutantSha256": "bfefcedc5dd886bd728bf96f3d5a30c2fdd6b932e1706319eff22add9c6d5214",
+        "tests": {
+          "packages/kappa/src/blocks/file-browser/file-browser.test.mjs": "c57b91ff91b2933175904ede732d855fa928c8a71c71efa9dbe2009a94d5f665",
+          "tests/blackbox/browser/file-browser.spec.ts": "2a794b1dd05b364732f8b205b48ee27ab3d00d0d02129f1331552f2df444a579",
+          "tests/blackbox/browser/resource-picker.spec.ts": "a0422db0cd39f300f5f2b60df0a2da10970394078190185f6addb2fb8cb1c48c",
+          "tests/blackbox/consumer/FileBrowserConsumer.vue": "032cf7fab73b5613599c4616bc16fd677d97871b53118c0b11a7bdbd81d3958f"
+        },
+        "baseline": "Old selected case passed; public baseline recorded as part of strict consumer plus 51 passing v2 browser cases in browser-state-reviewed-y0scVO.",
+        "old": "assertion failed",
+        "replacement": "requires assertion review",
+        "error": "Public HTTP/compiler/browser checks failed; /tmp/kappa-resource-v2-faults-rFrplB/file-negative-size"
+      },
+      {
+        "id": "file-stale-mutation-completion",
+        "file": "packages/kappa/src/blocks/file-browser/use-file-browser-state.ts",
+        "before": "if (context.signal.aborted || disposed) return;\n      emit(\"complete\",",
+        "after": "if (disposed) return;\n      emit(\"complete\",",
+        "oldFile": "packages/kappa/src/blocks/file-browser/file-browser.test.mjs",
+        "oldName": "root changes abort mutations even while the browser is disabled",
+        "publicName": "a late mutation success cannot report completion after a disabled root changes, even when the host ignores abort",
+        "source": "/tmp/kappa-build-blackbox-YBwP3v",
+        "originalSha256": "db733b46b42488548a867b3bfe4da007b766d386dad2bfb46c0eaf600056a254",
+        "mutantSha256": "5a8bbe514c0f29d71ccc9c21970042904465d82ff35ece17323dad79cf11965a",
+        "tests": {
+          "packages/kappa/src/blocks/file-browser/file-browser.test.mjs": "c57b91ff91b2933175904ede732d855fa928c8a71c71efa9dbe2009a94d5f665",
+          "tests/blackbox/browser/file-browser.spec.ts": "2a794b1dd05b364732f8b205b48ee27ab3d00d0d02129f1331552f2df444a579",
+          "tests/blackbox/browser/resource-picker.spec.ts": "a0422db0cd39f300f5f2b60df0a2da10970394078190185f6addb2fb8cb1c48c",
+          "tests/blackbox/consumer/FileBrowserConsumer.vue": "032cf7fab73b5613599c4616bc16fd677d97871b53118c0b11a7bdbd81d3958f"
+        },
+        "baseline": "Old selected case passed; public baseline recorded as part of strict consumer plus 51 passing v2 browser cases in browser-state-reviewed-y0scVO.",
+        "old": "survived",
+        "replacement": "requires assertion review",
+        "error": "Public HTTP/compiler/browser checks failed; /tmp/kappa-resource-v2-faults-rFrplB/file-stale-mutation-completion"
+      }
+    ],
+    "excludedSetup": "P7jiHK: ERR_PNPM_NO_OFFLINE_TARBALL; no completed outcome and no behavioral credit.",
+    "limit": "Stale-completion survival refers only to the selected old root-change case. No full retained-suite or aggregate mutation score."
+  }
+}

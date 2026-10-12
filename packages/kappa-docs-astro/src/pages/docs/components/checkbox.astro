@@ -156,6 +156,8 @@ const description =
           <p>
             Use <code>v-model:checked</code> for live state. The state union is
             <code>true</code>, <code>false</code>, or <code>"indeterminate"</code>.
+            With a controlled <code>checked</code> prop, leave it unchanged to reject an update.
+            The native state and form value keep the accepted state.
           </p>
           <div class="docs-component-example">
             <div class="docs-component-preview"><CheckboxDocsDemo client:load variant="controlled" /></div>

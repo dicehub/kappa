@@ -1,0 +1,16 @@
+{
+  "scope": "One native subprocess-error fault; not an overall mutation score.",
+  "review": "Astra Max independently checked activation, hashes, unchanged test files, and intended assertion failures; approved.",
+  "source": "scripts/publish-npm.mjs",
+  "originalSourceSha256": "9c0e465197044cfe2c78ecc1005f49ef1152b05dfe5f783e20b34347b8e591e9",
+  "mutantSourceSha256": "7aa0ea724ade967d33a1e10c810e3abd8aa7dc59ac5ff5599dbad90cae0d1fd6",
+  "before": "if (result.error || result.status !== 0)",
+  "after": "if (!result.error && result.status !== 0)",
+  "baseline": "All nine affected native CLI cases passed; retained publisher tests passed in the complete paired run.",
+  "artifactRoot": "/home/dh/.cache/kappa-test-phase2-xOor8R/tmp/kappa-publisher-error-fault-yG2Dfw",
+  "oldResult": "Missing expected exception at publish-npm.test.mjs:91.",
+  "replacementResult": "Public CLI incorrectly exits zero after real npm ENOENT; npm.test.mjs:86 fails.",
+  "mechanism": "The fixture starts the unchanged real publisher with absolute Node and an owned empty PATH. No npm executable can resolve.",
+  "excludedRun": "kappa-publisher-error-fault-eMYtrl lacked the old package manifest. Its old setup failure is not a behavioral kill.",
+  "productionChanges": "None; fault applied only in the disposable dh-pc fixture."
+}

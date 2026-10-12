@@ -6,6 +6,7 @@ const readSource = (name) => readFileSync(new URL(name, import.meta.url), "utf8"
 
 const rootSource = readSource("./Checkbox.vue");
 const rootProviderSource = readSource("./CheckboxRootProvider.vue");
+const hiddenInputSource = readSource("./CheckboxHiddenInput.vue");
 const groupSource = readSource("./CheckboxGroup.vue");
 const controlSource = readSource("./CheckboxControl.vue");
 const indicatorSource = readSource("./CheckboxIndicator.vue");
@@ -77,8 +78,9 @@ test("syncs the native mixed state for assistive technology", () => {
 });
 
 test("renders the hidden input for native form submission by default", () => {
-  assert.match(rootSource, /<ArkCheckbox\.HiddenInput \/>/);
-  assert.match(rootProviderSource, /<ArkCheckbox\.HiddenInput \/>/);
+  assert.match(rootSource, /<CheckboxHiddenInput \/>/);
+  assert.match(rootProviderSource, /<CheckboxHiddenInput \/>/);
+  assert.match(hiddenInputSource, /<ArkCheckbox\.HiddenInput\s/);
   assert.match(rootSource, /<ArkCheckbox\.Root/);
   assert.match(rootProviderSource, /<ArkCheckbox\.RootProvider/);
   assert.match(rootProviderSource, /:value="value"/);

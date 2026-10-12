@@ -66,6 +66,7 @@ export * from "./pagination";
 export * from "./popover";
 export * from "./presence";
 export * from "./progress";
+export { progressAnatomy, useProgress, useProgressContext } from "./progress";
 export * from "./progress-circle";
 export * from "./property-list";
 export * from "./qr-code";

@@ -104,6 +104,9 @@ test.describe("Select documentation", () => {
     await trigger.click();
     const selectedName = openContent(page).getByRole("option", { name: "Name", exact: true });
     const activeWrite = openContent(page).getByRole("option", { name: "Write", exact: true });
+    await expect(openContent(page)).toHaveAttribute("data-placement", /.+/);
+    await expect.poll(() => openContent(page).evaluate(element => element.getAnimations({ subtree: true })
+      .filter(animation => animation.playState === "running" || animation.pending).length)).toBe(0);
     await activeWrite.hover();
     await expect(activeWrite).toHaveAttribute("data-highlighted", "");
     // The highlight color transitions after the state attribute changes.

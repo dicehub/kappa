@@ -47,6 +47,12 @@ test("uses roving grid focus and enters interactive cells", async ({ page }) => 
   const grid = demo(page, "preview");
   const first = grid.locator('[data-grid-row-index="0"][data-grid-column-index="0"]');
   await first.focus();
+  await page.keyboard.press("ArrowDown");
+  await expect(grid.locator('[data-grid-row-index="1"][data-grid-column-index="0"]')).toBeFocused();
+  await page.keyboard.press("PageDown");
+  await expect(grid.locator('[data-grid-row-index="4"][data-grid-column-index="0"]')).toBeFocused();
+  await page.keyboard.press("Control+Home");
+  await expect(first).toBeFocused();
   await page.keyboard.press("ArrowRight");
   await expect(grid.locator('[data-grid-row-index="0"][data-grid-column-index="1"]')).toBeFocused();
   await page.keyboard.press("End");

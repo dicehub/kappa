@@ -1,0 +1,43 @@
+{
+  "revision": "78a62955b04fbec367f254ece10d1a88df2740ca",
+  "branch": "8-issue-improve-test-coverage-and-reliability",
+  "execution_host": "dh-pc",
+  "command": "CI=1 KAPPA_E2E_SKIP_BUILD=1 pnpm test",
+  "node": "24.19.0",
+  "pnpm": "10.26.0",
+  "library_node_tests": 680,
+  "docs_node_tests": 65,
+  "browser_tests": 919,
+  "deployment_node_tests": 33,
+  "total_tests": 1697,
+  "test_files": 295,
+  "test_lines": 43947,
+  "runtime_seconds": 885,
+  "failures": 0,
+  "retries": 0,
+  "skipped": 0,
+  "observed_flaky": 0,
+  "coverage": {
+    "method": "Istanbul LCOV, merged by original source path",
+    "files": 1253,
+    "lines": {
+      "covered": 4996,
+      "total": 7023,
+      "pct": 71.14
+    },
+    "branches": {
+      "covered": 8079,
+      "total": 11967,
+      "pct": 67.51
+    },
+    "nodeVersion": "v24.19.0",
+    "reportTool": "monocart-coverage-reports@2.13.2"
+  },
+  "coverage_scope": "Kappa runtime source and tooling; root CLI; docs components, snippets, utilities. Excludes dependencies, generated registry metadata, declarations, thin primitive re-exports, CSS, static docs content/data, build-only Astro templates/configuration.",
+  "mutation_score": null,
+  "mutation_status": "Phase 3; not authorized yet",
+  "tests_removed": 0,
+  "confirmed_new_bugs": 0,
+  "evidence_remote": "/home/dh/.cache/kappa-test-rework-JzKrbp",
+  "evidence_local": "/tmp/kappa-test-rework"
+}

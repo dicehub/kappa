@@ -77,8 +77,8 @@ export interface ShikiProviderProps {
 }
 
 export function normalizeCodeHighlightedLanguage(lang: string): SupportedLanguage | null {
-  if (lang in CODE_HIGHLIGHTED_LANGUAGES) return lang as SupportedLanguage;
-  if (lang in LANGUAGE_ALIASES) return LANGUAGE_ALIASES[lang as LanguageAlias];
+  if (Object.hasOwn(CODE_HIGHLIGHTED_LANGUAGES, lang)) return lang as SupportedLanguage;
+  if (Object.hasOwn(LANGUAGE_ALIASES, lang)) return LANGUAGE_ALIASES[lang as LanguageAlias];
   return null;
 }
 

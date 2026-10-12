@@ -116,8 +116,11 @@ test("peeking supports hover and focus without changing the page width or saved 
   await demo(page, "peeking").scrollIntoViewIfNeeded();
   const main = demo(page, "peeking").locator(".sidebar-demo__main");
   const before = await main.evaluate(node => ({ x: node.getBoundingClientRect().x, width: node.getBoundingClientRect().width, top: (node as HTMLElement).offsetTop }));
-  await root.getByRole("link", { name: "Overview", exact: true }).hover();
+  const box = (await root.getByRole("link", { name: "Overview", exact: true }).boundingBox())!;
+  const scroll = await page.evaluate(() => window.scrollY);
+  await page.mouse.move(box.x + 10, box.y + box.height / 2);
   await expect(root).toHaveAttribute("data-state", "peeking");
+  expect(await page.evaluate(() => window.scrollY)).toBe(scroll);
   expect(await main.evaluate(node => ({ x: node.getBoundingClientRect().x, width: node.getBoundingClientRect().width, top: (node as HTMLElement).offsetTop }))).toEqual(before);
   await expect(trigger(page, "peeking")).toHaveAttribute("aria-expanded", "false");
   await root.getByRole("link", { name: "Overview", exact: true }).focus();
