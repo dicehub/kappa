@@ -64,7 +64,7 @@ retained browser regression still protects pending-request deduplication, which
 this case does not replace. Its browser API override remains a documented
 exception until a native test covers the same pending sequence. Two real-Shiki ownership cases are approved
 private logic exceptions; see [their scope and limits](test-rework/LIFECYCLE_EXCEPTIONS.md).
-The final removals reuse existing evidence at Ros's request. The remaining
-aggregate coverage and core mutation comparison has not been completed; no new
-score is claimed. See [the plan](../TEST_REWORK_PLAN.md) and
+The removals used existing evidence at Ros's request. A subsequent full gate
+passed all 1,357 cases on dh-pc. The aggregate coverage and core mutation
+comparison remains incomplete; no new score is claimed. See [the plan](../TEST_REWORK_PLAN.md) and
 [the final removal report](test-rework/FINAL_REPORT.md).

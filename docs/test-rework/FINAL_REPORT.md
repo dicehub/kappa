@@ -3,7 +3,8 @@
 Read when reviewing this branch or checking the final suite size.
 
 Ros requested the remaining removals without more mutation or coverage work.
-Existing results were reused. One final scoped gate ran on dh-pc and passed.
+Existing results were reused for removal. The complete gate then passed on
+dh-pc for commit `c195f5c`, including every remaining browser case.
 
 | Metric | Before | After |
 | --- | ---: | ---: |
@@ -11,19 +12,27 @@ Existing results were reused. One final scoped gate ran on dh-pc and passed.
 | Private Node cases | 744 | 28 approved logic cases |
 | Test files | 295 | 213 |
 | Test code lines | 43,947 | 30,751 |
-| Full-suite runtime | 885 seconds | Not repeated |
+| Full-suite runtime | 885 seconds | 1,311.73 seconds |
 
 725 original cases and 117 original files were removed. Public replacements
 leave 340 fewer cases overall. Net test code reduction: 13,196 lines, including
 new public tests. Final counts include both package installation profiles.
 
-The final check took about 250 seconds: a real build and packed package, strict
-core/full/snippet declarations, library types, all 28 logic cases, all 16 CLI
-cases, 34 public artifacts, both HTTP/compiler cases and 32 affected browser
-cases. That run discovered 969 browser cases. Unchanged browser
-tests reuse prior passing results. The earlier full-run timing failure remains
-recorded with its assertion-preserving focused correction; this final result
-is not a new full-browser pass. Evidence: `/tmp/kappa-fast-final-IKjNpp` on dh-pc.
+The complete run passed all 1,357 cases: 306 installed-package cases, 28 logic
+cases, 16 real CLI cases, 34 public artifacts, two HTTP/compiler cases, and
+971 browser cases. There were no failures, errors, skips, cancellations or todo
+cases; browser retries were disabled. The earlier Inline Copy Text theme case
+passed in this full run. The test command took 21 minutes 52 seconds, including
+its build, packing and isolated consumer installs. Browser time was 18 minutes
+33 seconds. These commands do more work than the original source-level suite.
+
+Release-state checks, workspace type checks, the production build, package
+validation and changeset status also passed. The overall gate took 25 minutes
+49 seconds, including a setup correction: the temporary clone omitted `dev`.
+Restoring the existing base reference fixed changeset status; source files did
+not change. Its initial failure log is preserved. Evidence on dh-pc:
+`/tmp/kappa-full-gate-yx2h93e_` and `/tmp/kappa-blackbox-nZlSwq`.
+The earlier scoped gate remains under `/tmp/kappa-fast-final-IKjNpp`.
 
 Astra Max's independent removal review found two chart checks without public
 replacements. Two new browser cases cover series removal and time-axis labels,
@@ -56,8 +65,10 @@ merge. Each package fix has a patch changeset.
 Final aggregate coverage and all-core mutation proof are unfinished. Prior
 results remain under their original source and selection scope; no current
 aggregate score or equivalence claim is made. The reviewer definition and
-contribution policy are present. The independent review and chart repairs do
-not replace the unfinished aggregate proof or a full final browser run.
+contribution policy are present. Passing the complete suite does not replace
+the unfinished aggregate proof. Opus 5.5's quick static review supports the
+public test approach and flags audit-based selection and custom lockfile
+handling as maintenance costs; those optional simplifications are separate work.
 
 See `final-summary.json`, `removal-final.jsonl`, and the frozen baseline/inventory
 for counts, removed requirements and evidence limits. No push, merge or release.

@@ -1,5 +1,5 @@
 {
-  "status": "removal complete; final scoped gate and reviewed chart repairs passed",
+  "status": "removal and reviewed chart repairs committed; complete dh-pc gate passed",
   "sourceBefore": "78a62955b04fbec367f254ece10d1a88df2740ca",
   "originalCasesRemoved": 725,
   "originalCasesRetained": 972,
@@ -20,7 +20,7 @@
     "httpCompilerCases": 2,
     "files": 213,
     "testLines": 30751,
-    "fullSuiteSeconds": null
+    "fullSuiteSeconds": 1311.73
   },
   "netTestLinesRemoved": 13196,
   "originalTestFilesDeleted": 117,
@@ -42,6 +42,26 @@
     "seconds": 1.157774,
     "review": "Astra Max approved the two repairs; no remaining findings in that scope."
   },
+  "fullGate": {
+    "sourceCommit": "c195f5cb107630487e1bd303f0f438112a0c3810",
+    "evidence": "/tmp/kappa-full-gate-yx2h93e_",
+    "blackboxEvidence": "/tmp/kappa-blackbox-nZlSwq",
+    "result": "passed",
+    "scope": "Release-state checks, workspace types, production build, package validation, changeset status, and the entire pnpm test command.",
+    "totalCases": 1357,
+    "browserCases": 971,
+    "failures": 0,
+    "errors": 0,
+    "skips": 0,
+    "cancellations": 0,
+    "todo": 0,
+    "browserRetries": 0,
+    "browserSeconds": 1112.929459,
+    "testCommandSeconds": 1311.73,
+    "overallSeconds": 1549.06,
+    "fullBrowserRerun": true,
+    "setupCorrection": "Temporary clone omitted the existing dev reference. Restored its known base and reran changeset status; source unchanged. Initial changesets.log preserved."
+  },
   "productionSeamRemovals": [
     "image-cropper-source.ts: remove injected Image/ObjectURL factory environment",
     "publish-npm.mjs: remove injected process runner and filesystem writer",
@@ -56,7 +76,7 @@
     "Final aggregate coverage and all-core mutation comparison not complete. User explicitly requested no additional proof work before removal.",
     "Prior parser/CLI/fault results retain their original source scope; do not report them as current aggregate scores after seam removal.",
     "Independent Astra Max removal review found two chart gaps; public repairs passed and were reviewed. This does not complete aggregate coverage or core mutation proof.",
-    "Unchanged browser tests reuse prior results; preserve prior full-run timing failure and its assertion-preserving focused correction."
+    "The complete current gate passes, including the previously failed browser case. Earlier raw failure and correction evidence remain preserved."
   ],
   "confirmedPackageBugIssues": [
     9,
