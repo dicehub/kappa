@@ -97,6 +97,15 @@
   line-height: 1.4;
 }
 
+.login-form-demo__password-label {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem;
+  font-size: 0.8125rem;
+  line-height: 1;
+}
+
 .login-form-demo__password-control {
   position: relative;
 }
