@@ -15,6 +15,24 @@ async function ready(block: Locator) {
   await expect.poll(() => block.evaluate(element => element.closest("astro-island")?.hasAttribute("ssr"))).toBe(false);
 }
 
+async function expectPasswordRecoveryPosition(block: Locator) {
+  const link = block.getByRole("link", { name: "Forgot password?", exact: true });
+  await expect(link).toHaveCount(1);
+  await expect(link).toBeVisible();
+  const [label, recovery, input] = await Promise.all([
+    block.getByText("Password", { exact: true }).boundingBox(),
+    link.boundingBox(),
+    block.getByLabel("Password", { exact: true }).boundingBox(),
+  ]);
+  expect(label).not.toBeNull();
+  expect(recovery).not.toBeNull();
+  expect(input).not.toBeNull();
+  expect(recovery!.x).toBeGreaterThan(label!.x + label!.width);
+  expect(Math.abs(recovery!.y - label!.y)).toBeLessThanOrEqual(1);
+  expect(Math.max(label!.y + label!.height, recovery!.y + recovery!.height)).toBeLessThan(input!.y);
+  expect(Math.abs(recovery!.x + recovery!.width - input!.x - input!.width)).toBeLessThanOrEqual(1);
+}
+
 test.beforeEach(async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 1000 });
   await page.emulateMedia({ reducedMotion: "reduce" });
@@ -33,6 +51,10 @@ test("Login blocks page exposes six layouts, source, navigation, and Markdown", 
       `/examples/login/${variant}`,
     );
     await expect(example.locator("[data-code-full] code")).toContainText("LoginLayout");
+    if (variant !== "email-only") {
+      await expectPasswordRecoveryPosition(demo(page, variant));
+      await expect(example.locator("[data-code-full] code")).toContainText("Forgot password?");
+    }
   }
 
   const splitExample = page.locator('[data-block-example="split"]');
@@ -161,7 +183,16 @@ test("credential and email-only forms keep demo actions local", async ({ page })
   });
   expect(dividerLine).toEqual({ content: '\"\"', height: "1px", width: "200px" });
   await expect(simple.locator(".login-form-demo__divider .kappa-separator")).toHaveCount(0);
-  await expect(simple.getByRole("link", { name: "password", exact: true })).toBeVisible();
+  const recoveryUrl = page.url();
+  await email.focus();
+  await page.keyboard.press("Tab");
+  const recovery = simple.getByRole("link", { name: "Forgot password?", exact: true });
+  await expect(recovery).toBeFocused();
+  await page.keyboard.press("Enter");
+  await expect(simple.getByText("Password recovery opened.")).toBeVisible();
+  await expect(page).toHaveURL(recoveryUrl);
+  await page.keyboard.press("Tab");
+  await expect(password).toBeFocused();
   await simple.getByRole("button", { name: "Sign in", exact: true }).click();
   await expect(simple.getByText("Demo sign-in submitted for hey@example.com.")).toBeVisible();
 
@@ -184,10 +215,29 @@ test("credential and email-only forms keep demo actions local", async ({ page })
   await neutralEmail.focus();
   await expect(neutralEmail).toHaveCSS("border-color", "rgb(36, 122, 183)");
   await expect(emailOnly.getByLabel("Password")).toHaveCount(0);
+  await expect(emailOnly.getByRole("link", { name: "Forgot password?", exact: true })).toHaveCount(0);
   await emailOnly.getByRole("textbox", { name: "Email" }).fill("hey@example.com");
   await emailOnly.getByRole("button", { name: "Send sign-in link" }).click();
   await expect(emailOnly.getByText("A demo sign-in link was prepared for hey@example.com.")).toBeVisible();
 });
+
+for (const theme of ["light", "dark"] as const) {
+  test(`password recovery stays above the input on narrow ${theme} login layouts`, async ({ page }) => {
+    await page.setViewportSize({ width: 320, height: 844 });
+    for (const variant of variants.filter(variant => variant !== "email-only")) {
+      await page.goto(`/examples/login/${variant}`);
+      const block = demo(page, variant);
+      await ready(block);
+      await page.locator("html").evaluate((element, mode) => {
+        element.setAttribute("data-kappa-theme", mode);
+        element.setAttribute("data-mode", mode);
+      }, theme);
+      await expect(page.locator("html")).toHaveAttribute("data-kappa-theme", theme);
+      await expectPasswordRecoveryPosition(block);
+      expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+    }
+  });
+}
 
 test("split media responds to the viewport and preserves form access", async ({ page }) => {
   await page.goto("/examples/login/split");

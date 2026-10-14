@@ -44,7 +44,16 @@ const announce = (message: string) => {
       </Field.Root>
 
       <Field.Root v-if="!props.emailOnly" required>
-        <Field.Label>Password</Field.Label>
+        <div class="login-form-demo__password-label">
+          <Field.Label>Password</Field.Label>
+          <Link
+            href="#forgot-password"
+            variant="plain"
+            @click.prevent="announce('Password recovery opened.')"
+          >
+            Forgot password?
+          </Link>
+        </div>
         <div class="login-form-demo__password-control">
           <Field.Input
             v-model="password"
@@ -132,12 +141,6 @@ const announce = (message: string) => {
         <Link href="#create-account" @click.prevent="announce('Account registration opened.')">
           Create an account
         </Link>
-      </p>
-      <p v-if="!props.emailOnly">
-        Forgot your
-        <Link href="#forgot-password" @click.prevent="announce('Password recovery opened.')">
-          password
-        </Link>?
       </p>
     </div>
 

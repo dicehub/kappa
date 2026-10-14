@@ -52,7 +52,10 @@ const loginFormSource = (emailOnly: boolean) => `<form @submit.prevent="submit">
       </Field.Root>${emailOnly ? "" : `
 
       <Field.Root required>
-        <Field.Label>Password</Field.Label>
+        <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 0.5rem; font-size: 0.8125rem; line-height: 1">
+          <Field.Label>Password</Field.Label>
+          <Link href="/forgot-password" variant="plain">Forgot password?</Link>
+        </div>
         <div class="password-control">
           <Field.Input
             v-model="password"
@@ -108,10 +111,7 @@ const loginFormSource = (emailOnly: boolean) => `<form @submit.prevent="submit">
 
       <p>
         New to dicehub? <Link href="/sign-up">Create an account</Link>
-      </p>${emailOnly ? "" : `
-      <p>
-        Forgot your <Link href="/forgot-password">password</Link>?
-      </p>`}
+      </p>
     </form>`;
 
 export const loginBlockSource = (id: LoginBlockId): string => {
