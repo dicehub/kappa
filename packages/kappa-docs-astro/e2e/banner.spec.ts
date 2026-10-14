@@ -8,7 +8,13 @@ const readContrast = (
   colorProperty: "color" | "outlineColor" = "color",
   backgroundFromParent = false,
 ) =>
-  locator.evaluate((element, options) => {
+  locator.evaluate(async (element, options) => {
+    const transitions: Animation[] = [];
+    for (let current: Element | null = element; current; current = current.parentElement) {
+      transitions.push(...current.getAnimations());
+    }
+    await Promise.all(transitions.map((transition) => transition.finished.catch(() => {})));
+
     type Color = { a: number; b: number; g: number; r: number };
     const parse = (value: string): Color => {
       const values = value.match(/-?\d*\.?\d+/g)?.map(Number) ?? [];

@@ -86,7 +86,7 @@
         --kappa-banner-action-accent,
         var(--kappa-info-solid, var(--kappa-info, #175cd3))
       )
-      12%,
+      4%,
     transparent
   );
   color: inherit;

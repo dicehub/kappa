@@ -1,5 +1,16 @@
 # @dicehub/kappa
 
+## 0.6.1
+
+### Patch Changes
+
+- Keep Banner action text readable on hover in both themes.
+- 1c3595b: Restore the native checked and mixed states when an application rejects a checkbox update. Keep accessible state and submitted form values aligned with controlled roots, providers, and groups.
+- 1c3595b: Return `null` for unsupported code languages such as `__proto__` and `constructor`.
+- 1c3595b: Keep Dialog and DialogLayout parts independent when both are imported. Preserve Dialog's header and custom close slot.
+- 1c3595b: Restore progressAnatomy, useProgress, and useProgressContext imports from the package root.
+- 1c3595b: Return undefined for unknown registry names, including inherited object keys.
+
 ## 0.6.0
 
 ### Minor Changes
