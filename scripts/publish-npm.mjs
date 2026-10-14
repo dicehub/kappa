@@ -32,13 +32,13 @@ export function releaseOptions(manifest, env) {
   };
 }
 
-export function publishPackage({ env = process.env, run = spawnSync, write = writeFileSync } = {}) {
+export function publishPackage({ env = process.env } = {}) {
   const manifest = JSON.parse(readFileSync(`${packageDir}package.json`, "utf8"));
   const { channel, args } = releaseOptions(manifest, env);
   const userconfig = `${root}.npmrc.ci`;
-  write(userconfig, `registry=${registry}\n//registry.npmjs.org/:_authToken=\${NPM_TOKEN}\n`, { mode: 0o600 });
+  writeFileSync(userconfig, `registry=${registry}\n//registry.npmjs.org/:_authToken=\${NPM_TOKEN}\n`, { mode: 0o600 });
   console.log(`Publishing ${manifest.name}@${manifest.version} to npm channel ${channel}.`);
-  const result = run("npm", args, {
+  const result = spawnSync("npm", args, {
     cwd: packageDir,
     env: { ...env, NPM_CONFIG_USERCONFIG: userconfig },
     stdio: "inherit",

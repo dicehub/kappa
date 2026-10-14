@@ -34,7 +34,7 @@
     "codegen:licenses": "node scripts/generate-third-party-notices.mjs",
     "codegen:registry": "node scripts/component-registry/index.mjs",
     "codegen:themes": "node scripts/theme-generator/index.mjs",
-    "test": "node --test \"src/**/*.test.mjs\" \"scripts/*.test.mjs\"",
+    "test": "node --test \"src/**/*.test.mjs\"",
     "typecheck": "pnpm run check:registry && pnpm run check:themes && vue-tsc --noEmit",
     "validate:package": "node scripts/validate-package.mjs"
   },

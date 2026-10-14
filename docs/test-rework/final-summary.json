@@ -1,0 +1,158 @@
+{
+  "status": "test rework complete; full dh-pc gate and final coverage comparison passed; authoritative CI and merge status are recorded in MR !9",
+  "sourceBefore": "78a62955b04fbec367f254ece10d1a88df2740ca",
+  "originalCasesRemoved": 725,
+  "originalCasesRetained": 972,
+  "before": {
+    "allCases": 1697,
+    "privateNodeCases": 744,
+    "files": 295,
+    "testLines": 43947,
+    "fullSuiteSeconds": 885
+  },
+  "after": {
+    "allCases": 1357,
+    "privateLogicCases": 28,
+    "browserCases": 971,
+    "packageCases": 306,
+    "cliCases": 16,
+    "artifactCases": 34,
+    "httpCompilerCases": 2,
+    "files": 213,
+    "testLines": 30766,
+    "fullSuiteSeconds": 1311.73
+  },
+  "netTestLinesRemoved": 13181,
+  "originalTestFilesDeleted": 117,
+  "finalEvidence": "/tmp/kappa-fast-final-IKjNpp",
+  "finalGate": {
+    "seconds": 250,
+    "scope": "Actual library build/pack, strict core/full/snippet consumers, library types, all28 logic, all16 real CLI, all34 artifacts, both HTTP/compiler cases, 32 affected browser cases; all969 browser cases discovered. No new mutation work.",
+    "result": "passed",
+    "fullBrowserRerun": false
+  },
+  "chartRepairGate": {
+    "evidence": "/tmp/kappa-timeseries-regressions-gr1UOL",
+    "scope": "Strict fixture declarations, production docs build, and two installed-package browser cases covering series removal and second/year labels, including daily labels across a real axis break.",
+    "result": "passed",
+    "browserCases": 2,
+    "failures": 0,
+    "skips": 0,
+    "retries": 0,
+    "seconds": 1.157774,
+    "review": "Astra Max approved the two repairs; no remaining findings in that scope."
+  },
+  "fullGate": {
+    "sourceCommit": "c195f5cb107630487e1bd303f0f438112a0c3810",
+    "evidence": "/tmp/kappa-full-gate-yx2h93e_",
+    "blackboxEvidence": "/tmp/kappa-blackbox-nZlSwq",
+    "result": "passed",
+    "scope": "Release-state checks, workspace types, production build, package validation, changeset status, and the entire pnpm test command.",
+    "totalCases": 1357,
+    "browserCases": 971,
+    "failures": 0,
+    "errors": 0,
+    "skips": 0,
+    "cancellations": 0,
+    "todo": 0,
+    "browserRetries": 0,
+    "browserSeconds": 1112.929459,
+    "testCommandSeconds": 1311.73,
+    "overallSeconds": 1549.06,
+    "fullBrowserRerun": true,
+    "setupCorrection": "Temporary clone omitted the existing dev reference. Restored its known base and reran changeset status; source unchanged. Initial changesets.log preserved."
+  },
+  "productionSeamRemovals": [
+    "image-cropper-source.ts: remove injected Image/ObjectURL factory environment",
+    "publish-npm.mjs: remove injected process runner and filesystem writer",
+    "cloudflare-pages.mjs: remove external fetch/logger/wait callbacks",
+    "cloudflare-access.mjs: remove external fetch/logger callbacks"
+  ],
+  "remainingException": {
+    "browserCase": "supports whole-field editing, scrubbing, modifiers, rollback, and cleanup",
+    "reason": "Pending pointer-lock request deduplication still lacks a deterministic native replacement; retained with its browser API override."
+  },
+  "limits": [
+    "Before/after coverage comparison is complete. Source-map differences prevent an exact semantic branch-equivalence claim; all-core mutation comparison remains outside the requested coverage-only scope.",
+    "Prior parser/CLI/fault results retain their original source scope; do not report them as current aggregate scores after seam removal.",
+    "Independent Astra Max removal review found two chart gaps; public repairs passed and were reviewed. The later coverage comparison is complete; all-core mutation equivalence is unproven.",
+    "The complete current gate passes, including the previously failed browser case. Earlier raw failure and correction evidence remain preserved."
+  ],
+  "confirmedPackageBugIssues": [
+    9,
+    10,
+    11,
+    13,
+    14
+  ],
+  "docsOnlyIssue": 12,
+  "coverageComparison": {
+    "record": "coverage-final.json",
+    "result": "complete with documented source-map limits",
+    "evidence": "/tmp/kappa-coverage-complete-_xivqy_v",
+    "commonSources": 1252,
+    "lines": {
+      "before": {
+        "covered": 7846,
+        "total": 12661,
+        "pct": 61.97
+      },
+      "after": {
+        "covered": 8167,
+        "total": 12661,
+        "pct": 64.51
+      }
+    },
+    "reportedBranches": {
+      "before": {
+        "covered": 9298,
+        "total": 17333,
+        "pct": 53.64
+      },
+      "after": {
+        "covered": 9713,
+        "total": 17331,
+        "pct": 56.04
+      },
+      "limit": "Raw branch identities and denominators differ with native, bundled, and Vue source-map representations."
+    },
+    "sourceNormalizedBranches": {
+      "method": "Exact original TypeScript AST or Vue condition-expression start and arm index. Source hash verified; no nearby-span matching or cross-profile hit transfer. Remaining compiled representations stay separate in a shared union.",
+      "before": {
+        "covered": 8601,
+        "total": 15327,
+        "pct": 56.12
+      },
+      "after": {
+        "covered": 8996,
+        "total": 15327,
+        "pct": 58.69
+      },
+      "fixedUnionDenominator": true,
+      "apparentlyLostSharedArms": 21,
+      "oldCoveredUnmatchedRepresentations": 12,
+      "filesWithMapDifferences": 14
+    },
+    "currentCasesPassed": 1357,
+    "existingCliChecksStrengthened": 2,
+    "newTestCases": 0,
+    "productionChanges": 0,
+    "mutationCampaignRequested": false
+  },
+  "documentationArchive": {
+    "mergeRequest": 9,
+    "url": "https://gitlab.dicehub.org/dicehub-com/projects/kappa-ui/-/merge_requests/9#test-rework-records",
+    "format": "Verbatim Markdown archive and SHA-256 manifest in the merge request description.",
+    "documents": [
+      "TEST_REWORK_PLAN.md",
+      "docs/test-rework/PROGRESS.md",
+      "docs/test-rework/FASTER_SEQUENCE.md",
+      "docs/test-rework/files.md",
+      "docs/test-rework/COVERAGE_AUDIT.md",
+      "docs/test-rework/COVERAGE_GAP_REASONS.md",
+      "docs/test-rework/FINAL_REPORT.md",
+      "docs/test-rework/LIFECYCLE_EXCEPTIONS.md"
+    ],
+    "exceptionPolicy": "../TESTING.md#test-exceptions"
+  }
+}

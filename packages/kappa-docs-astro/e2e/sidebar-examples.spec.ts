@@ -18,8 +18,13 @@ test("peeking explains temporary and pinned states with working controls", async
   const nav = demo.getByRole("navigation");
   const status = demo.locator('[data-sidebar-peek-controls] output');
   await expect(status).toHaveText("Collapsed — ready to peek");
-  await nav.getByRole("link", { name: "Overview", exact: true }).hover();
+  await demo.scrollIntoViewIfNeeded();
+  await expect.poll(() => demo.evaluate(node => node.closest("astro-island")?.hasAttribute("ssr"))).toBe(false);
+  const box = (await nav.getByRole("link", { name: "Overview", exact: true }).boundingBox())!;
+  const scroll = await page.evaluate(() => window.scrollY);
+  await page.mouse.move(box.x + 10, box.y + box.height / 2);
   await expect(status).toHaveText("Peeking — temporary");
+  expect(await page.evaluate(() => window.scrollY)).toBe(scroll);
   await demo.getByRole("button", { name: "Pin sidebar open", exact: true }).click();
   await expect(nav).toHaveAttribute("data-state", "expanded");
   await expect(status).toHaveText("Expanded — pinned");

@@ -1,0 +1,215 @@
+{
+  "status": "coverage comparison complete; exact semantic branch equivalence remains unproven",
+  "date": "2026-10-13",
+  "executionHost": "dh-pc",
+  "evidence": "/tmp/kappa-coverage-complete-_xivqy_v",
+  "sourceCommit": "e7ca292",
+  "beforeScope": "Pre-removal snapshot with the same approved production bug fixes; historical baseline preserved separately.",
+  "scope": {
+    "byteIdenticalProductionSources": 1252,
+    "matchingExecutableLineIdentifiers": true,
+    "sharedBrowserBuild": true,
+    "matchingCompiledBrowserJavaScriptAndMapArtifacts": 725,
+    "sharedRetainedDocumentationCoverageRecords": true,
+    "buildSetupCompared": true,
+    "changedSourcesExcludedFromCommonComparison": [
+      "packages/kappa/src/components/image-cropper/image-cropper-source.ts",
+      "scripts/publish-npm.mjs",
+      "scripts/cloudflare-pages.mjs",
+      "scripts/cloudflare-access.mjs"
+    ]
+  },
+  "comparableLines": {
+    "before": {
+      "covered": 7846,
+      "total": 12661,
+      "pct": 61.97
+    },
+    "after": {
+      "covered": 8167,
+      "total": 12661,
+      "pct": 64.51
+    }
+  },
+  "reportedBranches": {
+    "before": {
+      "covered": 9298,
+      "total": 17333,
+      "pct": 53.64
+    },
+    "after": {
+      "covered": 9713,
+      "total": 17331,
+      "pct": 56.04
+    },
+    "limit": "Raw branch identities and denominators differ with native, bundled, and Vue source-map representations."
+  },
+  "sourceNormalizedBranches": {
+    "method": "Exact original TypeScript AST or Vue condition-expression start and arm index. Source hash verified; no nearby-span matching or cross-profile hit transfer. Remaining compiled representations stay separate in a shared union.",
+    "before": {
+      "covered": 8601,
+      "total": 15327,
+      "pct": 56.12
+    },
+    "after": {
+      "covered": 8996,
+      "total": 15327,
+      "pct": 58.69
+    },
+    "fixedUnionDenominator": true,
+    "apparentlyLostSharedArms": 21,
+    "oldCoveredUnmatchedRepresentations": 12,
+    "filesWithMapDifferences": 14
+  },
+  "allCurrentSources": {
+    "files": 1256,
+    "lines": {
+      "covered": 8501,
+      "total": 13033,
+      "pct": 65.23
+    },
+    "reportedBranches": {
+      "covered": 9929,
+      "total": 17605,
+      "pct": 56.4
+    },
+    "limit": "Includes four changed seam files; do not compare this denominator with common-source totals."
+  },
+  "execution": {
+    "result": "passed",
+    "oldNodeCasesPassed": 778,
+    "currentCasesPassed": 1357,
+    "currentBrowserCasesPassed": 971,
+    "extraRemovedBrowserCasesPassed": 7,
+    "browserFailures": 0,
+    "browserRetries": 0,
+    "browserSkips": 0,
+    "coverageBrowserWorkers": 4,
+    "intentionalJavaScriptDisabledContexts": 2,
+    "runtimeReference": "Earlier single-worker full gate in final-summary.json; coverage timings do not replace it."
+  },
+  "focusedChecks": {
+    "validAndInvalidPackageDeclarations": {
+      "exitCode": 0,
+      "seconds": 48.753677041997435,
+      "testCountChanged": false,
+      "scope": "One existing public CLI case now accepts a valid tarball before checking unresolved declarations."
+    },
+    "realBuildAndStrictPackedConsumer": {
+      "exitCode": 0,
+      "seconds": 103.10719348999555,
+      "testCountChanged": false,
+      "scope": "Strengthened existing real build/strict consumer fixture: typed component alias, destructured data export, and non-component Object.assign data."
+    },
+    "productionCodeChanged": false,
+    "testCasesAdded": 0,
+    "netTestLinesAdded": 15,
+    "initialValidationDeadlineFailurePreserved": true
+  },
+  "gapAudit": {
+    "details": "https://gitlab.dicehub.org/dicehub-com/projects/kappa-ui/-/merge_requests/9#test-rework-records",
+    "sharedDocumentationWitnessPassed": true,
+    "demoSourcesWithNoRemovedBrowserCoverageInputs": [
+      "PaginationDocsDemo.vue",
+      "ScrollAreaDocsDemo.vue",
+      "PropertyListDocsDemo.vue",
+      "CollapsibleSectionDocsDemo.vue",
+      "LoginFormDocsDemo.vue",
+      "DragSelectionDocsDemo.vue",
+      "ExpandableTextDocsDemo.vue",
+      "NavigationMenuDocsDemo.vue"
+    ],
+    "perSourceApparentGaps": [
+      {
+        "file": "packages/kappa-docs-astro/src/components/CollapsibleSectionDocsDemo.vue",
+        "lostSharedArms": 1,
+        "oldCoveredUnmatchedRepresentations": 0
+      },
+      {
+        "file": "packages/kappa-docs-astro/src/components/DragSelectionDocsDemo.vue",
+        "lostSharedArms": 2,
+        "oldCoveredUnmatchedRepresentations": 0
+      },
+      {
+        "file": "packages/kappa-docs-astro/src/components/ExpandableTextDocsDemo.vue",
+        "lostSharedArms": 4,
+        "oldCoveredUnmatchedRepresentations": 0
+      },
+      {
+        "file": "packages/kappa-docs-astro/src/components/LoginFormDocsDemo.vue",
+        "lostSharedArms": 4,
+        "oldCoveredUnmatchedRepresentations": 0
+      },
+      {
+        "file": "packages/kappa-docs-astro/src/components/NavigationMenuDocsDemo.vue",
+        "lostSharedArms": 6,
+        "oldCoveredUnmatchedRepresentations": 0
+      },
+      {
+        "file": "packages/kappa-docs-astro/src/components/PaginationDocsDemo.vue",
+        "lostSharedArms": 0,
+        "oldCoveredUnmatchedRepresentations": 3
+      },
+      {
+        "file": "packages/kappa-docs-astro/src/components/PropertyListDocsDemo.vue",
+        "lostSharedArms": 2,
+        "oldCoveredUnmatchedRepresentations": 0
+      },
+      {
+        "file": "packages/kappa-docs-astro/src/components/ScrollAreaDocsDemo.vue",
+        "lostSharedArms": 0,
+        "oldCoveredUnmatchedRepresentations": 3
+      },
+      {
+        "file": "packages/kappa/scripts/declaration-barrels.mjs",
+        "lostSharedArms": 1,
+        "oldCoveredUnmatchedRepresentations": 0
+      },
+      {
+        "file": "packages/kappa/src/components/diff-viewer/parse-unified-diff.ts",
+        "lostSharedArms": 0,
+        "oldCoveredUnmatchedRepresentations": 1
+      },
+      {
+        "file": "packages/kappa/src/components/flow/Flow.vue",
+        "lostSharedArms": 0,
+        "oldCoveredUnmatchedRepresentations": 1
+      },
+      {
+        "file": "packages/kappa/src/components/property-list/PropertyListItem.vue",
+        "lostSharedArms": 0,
+        "oldCoveredUnmatchedRepresentations": 2
+      },
+      {
+        "file": "packages/kappa/src/components/timeseries-chart/timeseries-chart.ts",
+        "lostSharedArms": 0,
+        "oldCoveredUnmatchedRepresentations": 1
+      },
+      {
+        "file": "packages/kappa/src/components/xy-plot/XYPlot.vue",
+        "lostSharedArms": 0,
+        "oldCoveredUnmatchedRepresentations": 1
+      },
+      {
+        "file": "scripts/check-release-state.mjs",
+        "lostSharedArms": 1,
+        "oldCoveredUnmatchedRepresentations": 0
+      }
+    ],
+    "decisions": [
+      "Valid package acceptance and declaration data/alias output gained assertions in existing real CLI cases; focused runs passed.",
+      "Physical helper import attribution differs in bundled configuration; actual build and strict consumer compilation execute the helpers.",
+      "Nineteen docs interpolation arms use identical retained raw browser inputs in both profiles; merged counter differences remain reporting limits.",
+      "One private synthetic declaration-input arm and one import-only CLI guard remain outside supported public inputs; no public failure reproduced.",
+      "Twelve unmatched compiler representations remain distinct; no inferred hit transfer or exact branch-equivalence claim.",
+      "The Cloudflare never-active deadline was untested by both suites; the old case tested pending-to-active success only."
+    ]
+  },
+  "limits": [
+    "Higher aggregate coverage does not prove equal protection for every input or unique semantic branch identity.",
+    "No all-core mutation campaign was run; Ros selected coverage only.",
+    "No production source is declared dead from zero coverage alone."
+  ],
+  "reportTool": "monocart-coverage-reports@2.13.2",
+  "nodeVersion": "v24.19.0"
+}

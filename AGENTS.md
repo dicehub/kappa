@@ -104,6 +104,7 @@ Current repository locations:
 | Documentation data   | `packages/kappa-docs-astro/src/data/`                          | API and navigation metadata; keep synchronized with components                   |
 | Standalone examples | `packages/kappa-docs-astro/src/pages/examples/`             | Full-screen block previews and isolated component viewports.                  |
 | End-to-end tests     | `packages/kappa-docs-astro/e2e/`                               | Playwright specs for documentation and public component behavior                 |
+| Public test harness | `tests/blackbox/`                                               | Installed-package, CLI, HTTP, and browser checks; see `docs/TESTING.md`             |
 | CI pipeline          | `.gitlab-ci.yml`                                                | Verification, `dev` docs deployment, and protected-tag package publishing        |
 | Deployment helpers   | `scripts/cloudflare-{pages,access}.mjs`                         | Idempotent Cloudflare Pages, DNS, TLS, and Access setup                           |
 
@@ -216,7 +217,7 @@ Update this table whenever the repository structure changes.
 
 | Layer              | Location                                  | Purpose                                       |
 | ------------------ | ----------------------------------------- | --------------------------------------------- |
-| Unit tests         | `packages/kappa/src/**/*.test.mjs`        | Logic, variants, state, and component APIs    |
+| Logic tests        | `packages/kappa/src/**/*.test.mjs` + `tests/blackbox/logic/` | Approved calculation, parser, state, and resource ownership exceptions |
 | End-to-end tests   | `packages/kappa-docs-astro/e2e/*.spec.ts` | Real browser interaction and documentation    |
 | Package validation | `packages/kappa/scripts/`                 | Exports, packed artifacts, and consumer usage |
 
@@ -227,6 +228,9 @@ Update this table whenever the repository structure changes.
   sleeps or live-service dependencies.
 - Run affected tests during development and the full available gate before
   handoff. Run `validate:package` when exports or package output change.
+- New behavior needs a public black-box check. Private unit tests are limited
+  to approved logic cases; no mock-interaction assertions. See `CONTRIBUTING.md`
+  and `REVIEW.md` for test policy and independent adversarial review.
 
 ## DOCUMENTATION
 
@@ -284,6 +288,7 @@ pnpm dev                                           # Documentation dev server
 pnpm build                                         # Build all packages
 pnpm typecheck                                     # Type-check all packages
 pnpm test                                          # Run the full test suite
+pnpm test:blackbox                                 # Public checks and approved logic cases
 pnpm test:deployment                               # Test Cloudflare deployment helpers
 pnpm changeset                                     # Create a changeset
 pnpm changeset:status                              # Validate changeset state

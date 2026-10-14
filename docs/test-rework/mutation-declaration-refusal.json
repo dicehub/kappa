@@ -1,0 +1,52 @@
+{
+  "scope": "One diagnostic refusal fault, not an aggregate mutation score",
+  "source": "packages/kappa/scripts/check-consumer-declarations.mjs",
+  "before": "if (diagnostics.length) {",
+  "after": "if (false && diagnostics.length) {",
+  "originalSha256": "18b5537bc0318900c56c8fa30c3edf4ed258fcfd226e5886c54e21e106e49b3e",
+  "mutantSha256": "e832337f6104879f1f084681aeb1469adee6dcc027d9658b8dbcd6b7b3c29508",
+  "tests": {
+    "packages/kappa/scripts/check-consumer-declarations.test.mjs": "e92b742477e0a3f475293e91c7a832fbda39c47c342a1b90ccd6b692d816327b",
+    "tests/blackbox/cli/package-validation.test.mjs": "74749fd8fda58687627a3c07ab3e319e48009129be49f308f41f63ff98ddb9a9"
+  },
+  "results": [
+    {
+      "phase": "baseline",
+      "suite": "old",
+      "code": 0,
+      "tests": 1,
+      "passed": 1,
+      "failed": 0,
+      "log": "/home/dh/.cache/kappa-registry-fixed-gTd1Yj/tmp/declaration-fault-Cy9NZs/baseline-old.log"
+    },
+    {
+      "phase": "baseline",
+      "suite": "new",
+      "code": 0,
+      "tests": 1,
+      "passed": 1,
+      "failed": 0,
+      "log": "/home/dh/.cache/kappa-registry-fixed-gTd1Yj/tmp/declaration-fault-Cy9NZs/baseline-new.log"
+    },
+    {
+      "phase": "fault",
+      "suite": "old",
+      "code": 1,
+      "tests": 1,
+      "passed": 0,
+      "failed": 1,
+      "log": "/home/dh/.cache/kappa-registry-fixed-gTd1Yj/tmp/declaration-fault-Cy9NZs/fault-old.log"
+    },
+    {
+      "phase": "fault",
+      "suite": "new",
+      "code": 1,
+      "tests": 1,
+      "passed": 0,
+      "failed": 1,
+      "log": "/home/dh/.cache/kappa-registry-fixed-gTd1Yj/tmp/declaration-fault-Cy9NZs/fault-new.log"
+    }
+  ],
+  "artifactRoot": "/home/dh/.cache/kappa-registry-fixed-gTd1Yj/tmp/declaration-fault-Cy9NZs",
+  "review": "Astra Max independently verified source and test hashes, successful setup, and the intended baseline/fault results; scoped proof approved. No deletion approval."
+}

@@ -1,15 +1,8 @@
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
+
 import { test } from "node:test";
 import { themeConfig } from "../../scripts/theme-generator/config.ts";
-import {
-  classifyThemeValue,
-  collectThemeOutputs,
-  createThemeArtifacts,
-  findThemeIssues,
-  findStaleThemeOutputs,
-  resolveTokenValue,
-} from "../../scripts/theme-generator/render.mjs";
+import { classifyThemeValue, findThemeIssues, resolveTokenValue } from "../../scripts/theme-generator/render.mjs";
 
 const cloneConfig = () => structuredClone(themeConfig);
 
@@ -18,81 +11,6 @@ const issuesFor = (mutate) => {
   mutate(config);
   return findThemeIssues(config);
 };
-
-test("accepts the authoritative configuration and covers both modes", () => {
-  assert.deepEqual(findThemeIssues(themeConfig), []);
-
-  const { json } = createThemeArtifacts(themeConfig);
-  const metadata = JSON.parse(json);
-
-  assert.deepEqual(metadata.modes, ["light", "dark"]);
-  assert.equal(metadata.defaultMode, "light");
-  assert.equal(metadata.tokens.length, themeConfig.tokens.length);
-  assert.ok(metadata.tokens.length > 0);
-
-  for (const token of metadata.tokens) {
-    assert.ok(token.light.length > 0, `${token.name} light`);
-    assert.ok(token.dark.length > 0, `${token.name} dark`);
-    assert.ok(token.resolved.light.length > 0, `${token.name} resolved light`);
-    assert.ok(token.resolved.dark.length > 0, `${token.name} resolved dark`);
-    assert.ok(token.description.length > 0, `${token.name} description`);
-  }
-
-  for (const group of metadata.groups) {
-    assert.ok(
-      metadata.tokens.some((token) => token.group === group.id),
-      `${group.id} has tokens`,
-    );
-  }
-});
-
-test("renders deterministic artifacts that match the checked-in files", () => {
-  const first = createThemeArtifacts(themeConfig);
-  const second = createThemeArtifacts(themeConfig);
-
-  assert.equal(first.css, second.css);
-  assert.equal(first.json, second.json);
-
-  assert.equal(readFileSync(new URL("./theme-kappa.css", import.meta.url), "utf8"), first.css);
-  assert.equal(readFileSync(new URL("./tokens.json", import.meta.url), "utf8"), first.json);
-});
-
-test("reports missing and stale generated files without writing them", () => {
-  const outputs = collectThemeOutputs(themeConfig);
-  const current = Object.fromEntries(outputs.map((output) => [output.file, output.contents]));
-
-  assert.deepEqual(findStaleThemeOutputs(outputs, (file) => current[file]), []);
-  assert.deepEqual(findStaleThemeOutputs(outputs, () => null), [
-    "src/styles/theme-kappa.css is missing",
-    "src/styles/tokens.json is missing",
-  ]);
-  assert.deepEqual(findStaleThemeOutputs(outputs, () => "stale"), [
-    "src/styles/theme-kappa.css is stale",
-    "src/styles/tokens.json is stale",
-  ]);
-  assert.deepEqual(
-    findStaleThemeOutputs(outputs, (file) =>
-      file.endsWith(".json") ? current[file] : `${current[file]} `,
-    ),
-    ["src/styles/theme-kappa.css is stale"],
-  );
-});
-
-test("keeps generated CSS low-specificity and mode-driven", () => {
-  const { css } = createThemeArtifacts(themeConfig);
-
-  assert.match(css, /^:root \{/m);
-  assert.match(css, /\[data-mode="light"\] \{/);
-  assert.match(css, /\[data-mode="dark"\] \{/);
-  assert.match(css, /\[data-kappa-theme="light"\] \{/);
-  assert.doesNotMatch(css, /!important/);
-  assert.doesNotMatch(css, /--kappa-selected\s*:/);
-
-  const compatibility = css.indexOf('[data-mode="dark"]');
-  const canonical = css.indexOf('[data-kappa-theme="dark"]');
-  assert.ok(compatibility >= 0, "compatibility block present");
-  assert.ok(canonical > compatibility, "canonical attribute block is declared after data-mode");
-});
 
 test("rejects duplicates, unknown groups, missing modes, and broken references", () => {
   const duplicate = issuesFor((config) => {

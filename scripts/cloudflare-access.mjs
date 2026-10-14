@@ -273,9 +273,9 @@ async function ensurePolicy({ app, config, fetchFn, logger }) {
 
 export async function ensureAccess({
   env = process.env,
-  fetchFn = globalThis.fetch,
-  logger = console,
 } = {}) {
+  const fetchFn = globalThis.fetch;
+  const logger = console;
   const config = requiredEnvironment(env);
   const { accountId, apiToken, secrets } = config;
   await ensureOneTimePin({ accountId, apiToken, fetchFn, logger, secrets });

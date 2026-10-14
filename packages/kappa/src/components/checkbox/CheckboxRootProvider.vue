@@ -2,6 +2,7 @@
 import { Checkbox as ArkCheckbox } from "@ark-ui/vue/checkbox";
 import { useTemplateRef } from "vue";
 import { syncCheckboxIndeterminate } from "./checkbox-indeterminate";
+import CheckboxHiddenInput from "./CheckboxHiddenInput.vue";
 import type { CheckboxRootProviderProps, CheckboxRootProviderSlots } from "./checkbox";
 
 defineOptions({ inheritAttrs: false });
@@ -26,7 +27,7 @@ syncCheckboxIndeterminate(rootElement, () => props.value.indeterminate);
     :value="value"
   >
     <slot />
-    <ArkCheckbox.HiddenInput />
+    <CheckboxHiddenInput />
   </ArkCheckbox.RootProvider>
 </template>
 

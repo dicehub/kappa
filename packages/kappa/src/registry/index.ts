@@ -12,4 +12,5 @@ export type {
 
 const registryEntries: Readonly<Record<string, RegistryComponent>> = componentRegistry.components;
 
-export const getRegistryComponent = (name: string): RegistryComponent | undefined => registryEntries[name];
+export const getRegistryComponent = (name: string): RegistryComponent | undefined =>
+  Object.hasOwn(registryEntries, name) ? registryEntries[name] : undefined;

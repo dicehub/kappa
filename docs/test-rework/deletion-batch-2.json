@@ -1,0 +1,73 @@
+{
+  "batch": 2,
+  "previousBatchCommit": "5169573",
+  "removedDefinitions": 29,
+  "removedExpandedCases": 42,
+  "originalCasesBefore": 1603,
+  "originalCasesAfter": 1561,
+  "removedFiles": {
+    "packages/kappa/src/components/diff-viewer/diff-viewer.test.mjs": {
+      "sha256": "359a80fc19c61028478420a7a871234398c19eb30cc8e905fde85df40fe10ea3",
+      "lines": 99
+    },
+    "packages/kappa/src/blocks/file-browser/file-browser.test.mjs": {
+      "sha256": "c57b91ff91b2933175904ede732d855fa928c8a71c71efa9dbe2009a94d5f665",
+      "lines": 188
+    },
+    "packages/kappa/src/blocks/resource-picker/resource-picker.test.mjs": {
+      "sha256": "cd603a8b7398d02c6e2c64d47607d148d48ed298a8610e90f9ecff943201d7f9",
+      "lines": 84
+    }
+  },
+  "selection": [
+    "replacement-diff.jsonl",
+    "replacement-resource-workflows.jsonl"
+  ],
+  "productionChanges": [],
+  "testOnlySeamsRemoved": [],
+  "dhPcProof": "/tmp/kappa-diff-resource-removal-S5hgPP",
+  "checks": {
+    "oldBeforeRemoval": 42,
+    "remainingLibrary": 546,
+    "installedPublicFunctions": 16,
+    "browser": 38,
+    "failures": 0,
+    "omittedSelectedCases": 0
+  },
+  "coverage": {
+    "audit": "/tmp/kappa-test-consolidated-SEQD3O/kappa-proof-n6qSP3",
+    "oldOnlyLcovLines": 0,
+    "oldOnlyLcovBranches": 0,
+    "resourceStatementAndBranchMaps": "identical",
+    "diffStatementMaps": "identical",
+    "diffBranchMapLimit": [
+      "DiffViewer.vue",
+      "DiffViewerLine.vue",
+      "parse-unified-diff.ts"
+    ],
+    "limit": "Three Diff branch maps differ in source attribution. Keep this limit; do not transfer coverage counters or claim semantic identity from LCOV IDs."
+  },
+  "mutation": {
+    "diffPilot": {
+      "identities": 339,
+      "oldKilled": 240,
+      "newKilled": 245,
+      "oldTimeout": 20,
+      "newTimeout": 15,
+      "oldSurvived": 79,
+      "newSurvived": 79,
+      "oldOnlyDetected": 0,
+      "killsOnlyPercent": {
+        "old": 70.8,
+        "new": 72.27
+      }
+    },
+    "resource": "mutation-resource-workflows.json; four v1 and two v2 selected state faults, source hashes match. Current v2 inputs preserve prior v1 assertions and have their separate baseline/fault evidence. No overall core-module score."
+  },
+  "excludedSetupAttempts": [
+    "/tmp/kappa-diff-resource-removal-1Gfned",
+    "/tmp/kappa-diff-resource-removal-5laYab"
+  ],
+  "gateReuse": "Reuse unchanged passing foundation builds, strict types and complete-stage results recorded in batch 1; retain the original full-browser timing failure and its assertion-preserving focused correction. This batch changes tests only. No clean single full run claimed.",
+  "netTestLinesRemoved": 371
+}

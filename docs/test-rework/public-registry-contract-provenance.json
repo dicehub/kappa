@@ -1,0 +1,23 @@
+{
+  "sourceCommit": "78a62955b04fbec367f254ece10d1a88df2740ca",
+  "package": {
+    "name": "@dicehub/kappa",
+    "version": "0.6.0"
+  },
+  "schemaVersion": 1,
+  "entries": 823,
+  "artifactSha256": "df800eb1ce2237f63479ca00aef26dbf5af4a659dded663cde8f220fa636ef11",
+  "artifact": "/home/dh/.cache/kappa-test-rework-JzKrbp/repo/packages/kappa/dist/registry/component-registry.json",
+  "frozenFields": [
+    "name",
+    "type",
+    "group",
+    "importPath",
+    "parts"
+  ],
+  "schemaOnlyFields": [
+    "sourceFile",
+    "description"
+  ],
+  "ordering": "Membership and unique names; private deterministic ordering is not a promised public requirement."
+}

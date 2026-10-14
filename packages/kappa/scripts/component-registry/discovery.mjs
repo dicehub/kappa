@@ -140,7 +140,10 @@ const createIndexResolver = (indexPath, sourceFile) => {
         expression.expression.expression.text === "Object" &&
         expression.expression.name.text === "assign"
       ) {
-        return expression.arguments[0] ? resolveExpression(expression.arguments[0], seen) : null;
+        const target = expression.arguments[0];
+        const cloned = target && ts.isObjectLiteralExpression(target) && target.properties.length === 0;
+        const component = cloned ? expression.arguments[1] : target;
+        return component ? resolveExpression(component, seen) : null;
       }
     }
 

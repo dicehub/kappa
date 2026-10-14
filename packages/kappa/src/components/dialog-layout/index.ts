@@ -14,7 +14,7 @@ export const DialogLayoutActions = Object.assign(DialogLayoutActionsRoot, {
   Primary: DialogLayoutPrimaryAction,
 });
 
-export const DialogLayout = Object.assign(DialogRoot, {
+export const DialogLayout = Object.assign(Object.assign({}, DialogRoot) as typeof DialogRoot, {
   Root: DialogRoot,
   Alert: DialogLayoutAlert,
   Trigger: DialogTrigger,

@@ -3,6 +3,15 @@ import ts from "typescript";
 const parse = (content) => ts.createSourceFile("index.ts", content, ts.ScriptTarget.Latest, true);
 const isExported = (statement) => statement.modifiers?.some((modifier) => modifier.kind === ts.SyntaxKind.ExportKeyword);
 const isReference = (node) => ts.isIdentifier(node) || ts.isPropertyAccessExpression(node);
+const componentReference = (node) => {
+  while (ts.isAsExpression(node) || ts.isParenthesizedExpression(node) || ts.isSatisfiesExpression(node)) node = node.expression;
+  if (isReference(node)) return node;
+  if (ts.isCallExpression(node) && node.expression.getText() === "Object.assign" && node.arguments.length === 2) {
+    const [target, source] = node.arguments;
+    if (ts.isObjectLiteralExpression(target) && target.properties.length === 0 && isReference(source)) return source;
+  }
+  return undefined;
+};
 
 /** Preserve Vue component identities instead of expanding their instance types. */
 export const preserveCompoundDeclarations = (source, declaration) => {
@@ -27,8 +36,9 @@ export const preserveCompoundDeclarations = (source, declaration) => {
       if (!isExported(statement)) continue;
       if (!ts.isIdentifier(variable.name) || !call || !ts.isCallExpression(call)) continue;
       if (call.expression.getText(sourceFile) !== "Object.assign" || call.arguments.length !== 2) continue;
-      const [root, parts] = call.arguments;
-      if (!isReference(root) || !ts.isObjectLiteralExpression(parts)) continue;
+      const [target, parts] = call.arguments;
+      const root = componentReference(target);
+      if (!root || !ts.isObjectLiteralExpression(parts)) continue;
       if (!parts.properties.every((part) => ts.isPropertyAssignment(part) && isReference(part.initializer))) continue;
 
       compounds.set(variable.name.text, factory.createIntersectionTypeNode([

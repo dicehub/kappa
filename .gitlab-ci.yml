@@ -28,22 +28,24 @@ default:
 
 verify:
   stage: verify
+  variables:
+    CHOKIDAR_USEPOLLING: "true"
   script:
     - apt-get update
-    - apt-get install --no-install-recommends --yes ca-certificates git
+    - apt-get install --no-install-recommends --yes ca-certificates git openssl
     - git fetch --depth=100 origin dev
     - node scripts/check-release-state.mjs FETCH_HEAD
     - pnpm typecheck
     - pnpm build
     - pnpm --filter @dicehub/kappa validate:package
     - pnpm --filter @dicehub/kappa-docs-astro exec playwright install --with-deps chromium
-    - KAPPA_E2E_SKIP_BUILD=1 pnpm test
+    - pnpm test
   artifacts:
     when: always
     reports:
-      junit: packages/kappa-docs-astro/test-results/e2e-junit.xml
+      junit: test-results/blackbox/*/browser/blackbox.xml
     paths:
-      - packages/kappa-docs-astro/test-results/
+      - test-results/blackbox/
       - packages/kappa-docs-astro/dist/
     expire_in: 1 week
 

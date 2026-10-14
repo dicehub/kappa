@@ -1,10 +1,6 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
-import {
-  getChangelogPageHref,
-  getChangelogStaticPaths,
-  parseChangelog,
-} from "./changelog.js";
+import { parseChangelog } from "./changelog.js";
 
 const CHANGELOG = `# @dicehub/kappa
 
@@ -80,15 +76,4 @@ describe("changelog", () => {
     assert.equal(version.sections[1].entries[1].text, "Keep an existing commit reference.");
   });
 
-  it("creates page props and pagination URLs", () => {
-    const versions = parseChangelog(CHANGELOG);
-    const paths = getChangelogStaticPaths({ perPage: 1, versions });
-    assert.equal(paths.length, 3);
-    assert.equal(paths[0].params.page, undefined);
-    assert.equal(paths[1].params.page, "2");
-    assert.equal(paths[1].props.versions[0].version, "1.2.2");
-    assert.equal(paths.at(-1).params.page, "all");
-    assert.equal(getChangelogPageHref(1), "/docs/changelog/");
-    assert.equal(getChangelogPageHref(2), "/docs/changelog/2/");
-  });
 });

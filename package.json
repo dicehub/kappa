@@ -12,8 +12,9 @@
     "changeset": "changeset",
     "changeset:status": "changeset status",
     "typecheck": "pnpm -r --if-present typecheck",
-    "test": "pnpm -r --if-present test && pnpm test:deployment",
-    "test:deployment": "node --test \"scripts/*.test.mjs\"",
+    "test": "node tests/blackbox/run.mjs",
+    "test:blackbox": "node tests/blackbox/run.mjs",
+    "test:deployment": "node --test tests/blackbox/cli/cloudflare.test.mjs",
     "version-packages": "changeset version"
   },
   "devDependencies": {

@@ -128,9 +128,9 @@ function headers(apiToken) {
 
 export async function ensurePagesProject({
   env = process.env,
-  fetchFn = globalThis.fetch,
-  logger = console,
 } = {}) {
+  const fetchFn = globalThis.fetch;
+  const logger = console;
   const config = requiredEnvironment(env);
   const { accountId, apiToken, branch, project, secrets } = config;
   const accountPath = `${CLOUDFLARE_API}/accounts/${encodeURIComponent(accountId)}`;
@@ -170,9 +170,9 @@ export async function ensurePagesProject({
 
 export async function verifyPagesDeployment({
   env = process.env,
-  fetchFn = globalThis.fetch,
-  logger = console,
 } = {}) {
+  const fetchFn = globalThis.fetch;
+  const logger = console;
   const config = requiredEnvironment(env);
   const { accountId, apiToken, branch, project, secrets } = config;
   const query = new URLSearchParams({ env: "production" });
@@ -224,9 +224,9 @@ function logDomainDiagnostics(logger, result, secrets) {
 
 export async function ensurePagesDomain({
   env = process.env,
-  fetchFn = globalThis.fetch,
-  logger = console,
 } = {}) {
+  const fetchFn = globalThis.fetch;
+  const logger = console;
   const config = requiredEnvironment(env, { requireDomain: true });
   const { accountId, apiToken, domain, project, secrets } = config;
   const projectPath = `${CLOUDFLARE_API}/accounts/${encodeURIComponent(accountId)}`
@@ -275,12 +275,11 @@ function wait(milliseconds) {
 
 export async function waitForPagesDomain({
   env = process.env,
-  fetchFn = globalThis.fetch,
-  logger = console,
   pollIntervalMs = 5_000,
   timeoutMs = 600_000,
-  waitFn = wait,
 } = {}) {
+  const fetchFn = globalThis.fetch;
+  const logger = console;
   if (!Number.isFinite(pollIntervalMs) || pollIntervalMs <= 0) {
     throw new Error("Cloudflare domain poll interval must be a positive number.");
   }
@@ -327,7 +326,7 @@ export async function waitForPagesDomain({
         `Cloudflare Pages domain activation timed out after ${timeoutMs}ms (status ${status}).`,
       );
     }
-    await waitFn(pollIntervalMs);
+    await wait(pollIntervalMs);
   }
 
   throw new Error(`Cloudflare Pages domain activation failed for ${domain}.`);
@@ -367,9 +366,9 @@ async function findZone({ accountId, apiToken, domain, fetchFn, secrets }) {
 
 export async function connectPagesDomain({
   env = process.env,
-  fetchFn = globalThis.fetch,
-  logger = console,
 } = {}) {
+  const fetchFn = globalThis.fetch;
+  const logger = console;
   const config = requiredEnvironment(env, { requireDomain: true });
   const { accountId, apiToken, domain, secrets, target } = config;
   const zone = await findZone({ accountId, apiToken, domain, fetchFn, secrets });
