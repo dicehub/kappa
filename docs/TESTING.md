@@ -15,8 +15,6 @@ pnpm test            # Public checks and the approved logic cases
 pnpm test:blackbox   # Public checks and the approved private logic cases
 ```
 
-Run this work's checks on dh-pc. Do not run them on Ros's local machine.
-
 Each command builds and packs Kappa, installs the tarball in separate core and
 full consumers, checks declarations, runs real CLI processes, builds the docs,
 and tests the browser UI. The consumers use the exact workspace dependency graph
@@ -56,15 +54,29 @@ pnpm test:blackbox -- --project=consumer --grep 'controlled'
 The package, CLI, and logic checks still run. Browser retries are disabled so
 the result records the first attempt.
 
-The duplicate suite has been removed. The contribution and adversarial review
-rules are in [CONTRIBUTING.md](../CONTRIBUTING.md) and [REVIEW.md](../REVIEW.md).
-The native late-pointer-lock check uses a mounted control's public disabled
-state and trusted browser events. Its targeted cleanup fault proof passed. The
-retained browser regression still protects pending-request deduplication, which
-this case does not replace. Its browser API override remains a documented
-exception until a native test covers the same pending sequence. Two real-Shiki ownership cases are approved
-private logic exceptions; see [their scope and limits](test-rework/LIFECYCLE_EXCEPTIONS.md).
-The removals used existing evidence at Ros's request. A subsequent full gate
-passed all 1,357 cases on dh-pc. The aggregate coverage and core mutation
-comparison remains incomplete; no new score is claimed. See [the plan](../TEST_REWORK_PLAN.md) and
-[the final removal report](test-rework/FINAL_REPORT.md).
+The contribution and adversarial review rules are in
+[CONTRIBUTING.md](../CONTRIBUTING.md) and [REVIEW.md](../REVIEW.md).
+
+## Test exceptions
+
+Private tests are limited to non-trivial logic that public tests cannot reliably
+check. Two cases in `tests/blackbox/logic/shiki-owner.test.mjs` protect ownership
+of real Shiki resources:
+
+- Cleanup disposes an already usable highlighter.
+- Cancellation disposes a highlighter delivered later and prevents ready,
+  settled, or error state from changing after cancellation.
+
+Rendering checks cannot prove disposal: provider cleanup clears public state
+even if the owned resource is not disposed. These cases use real Shiki, its
+JavaScript engine, TypeScript grammar, and GitHub Light theme. A nonempty
+`codeToHtml` call succeeds before cleanup and reports disposal afterward. Late
+delivery uses a promise gate, without a fake highlighter, patched method, or
+mock-call assertion. Both cases run through `pnpm test` and `pnpm test:blackbox`.
+They protect the private owner's disposal contract; they do not prove that Vue
+calls the owner during provider cleanup.
+
+The case "supports whole-field editing, scrubbing, modifiers, rollback, and
+cleanup" in `packages/kappa-docs-astro/e2e/number-input-scrubbable.spec.ts`
+overrides the pointer-lock API to check that pending requests are not duplicated.
+Keep this exception until a native browser test covers the same pending sequence.

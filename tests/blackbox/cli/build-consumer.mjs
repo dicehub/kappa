@@ -26,13 +26,16 @@ export async function verifyPackedComponent(library) {
     }, files: ["contract.ts"],
   }));
   await writeFile(join(consumer, "contract.ts"), [
-    'import { BuildProbe, BuildProbeAlias, BuildProbeRoot } from "@dicehub/kappa/components/build-probe";',
+    'import { BuildProbe, BuildProbeAlias, BuildProbeRoot, BuildProbeTypedAlias, buildProbeLimit, buildProbeConfig } from "@dicehub/kappa/components/build-probe";',
     'type Props = InstanceType<typeof BuildProbe>["$props"];',
     'type Slot = InstanceType<typeof BuildProbe.Root>["$slots"]["default"];',
     'const props: Props = { title: "Result", count: 4 };',
     'const slot: Slot = ({ count }) => count.toFixed(2);',
     'const root: typeof BuildProbeRoot = BuildProbe.Root;',
     'const alias: typeof BuildProbeAlias = root;',
+    'const typedAlias: typeof BuildProbeRoot = BuildProbeTypedAlias;',
+    'const limit: number = buildProbeLimit;',
+    'const config: { enabled: boolean; label: string } = buildProbeConfig;',
     'type AliasProps = InstanceType<typeof BuildProbeAlias>["$props"];',
     '// @ts-expect-error A title must be a string.',
     'const invalidProps: Props = { title: 42 };',
@@ -40,7 +43,9 @@ export async function verifyPackedComponent(library) {
     'const invalidSlot: Slot = (props: { count: string }) => props.count;',
     '// @ts-expect-error Aliases retain the public title prop, not any.',
     'const invalidAliasProps: AliasProps = { title: 42 };',
-    'void [props, slot, root, alias, invalidProps, invalidSlot, invalidAliasProps];',
+    '// @ts-expect-error Data exports must retain their inferred types.',
+    'const invalidConfig: { enabled: string } = buildProbeConfig;',
+    'void [props, slot, root, alias, typedAlias, limit, config, invalidProps, invalidSlot, invalidAliasProps, invalidConfig];',
   ].join("\n"));
   await run(join(library, "node_modules/.bin/vue-tsc"), ["--noEmit", "-p", join(consumer, "tsconfig.json")], {
     cwd: consumer, log: join(consumer, "declarations.log"),

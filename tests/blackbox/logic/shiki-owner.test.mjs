@@ -5,7 +5,7 @@ import { pathToFileURL } from "node:url";
 import { setImmediate } from "node:timers/promises";
 import { startShikiInitialization } from "../../../packages/kappa/src/components/code-highlighted/shiki-lifecycle.ts";
 
-// Approved private ownership exception; see docs/test-rework/LIFECYCLE_EXCEPTIONS.md.
+// Approved private ownership exception; see docs/TESTING.md#test-exceptions.
 const require = createRequire(new URL("../../../packages/kappa/package.json", import.meta.url));
 const load = name => import(pathToFileURL(require.resolve(name)));
 const { createHighlighterCore } = await load("shiki/core");

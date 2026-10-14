@@ -17,6 +17,9 @@ export async function addPublicComponent(library) {
     'import BuildProbeRoot from "./BuildProbe.vue";',
     'export const BuildProbe = Object.assign(Object.assign({}, BuildProbeRoot) as typeof BuildProbeRoot, { Root: BuildProbeRoot });',
     'const BuildProbeAlias = BuildProbeRoot;',
+    'export const BuildProbeTypedAlias: typeof BuildProbeRoot = BuildProbeRoot;',
+    'export const { buildProbeLimit } = { buildProbeLimit: 3 };',
+    'export const buildProbeConfig = Object.assign({ enabled: true }, { label: "Ready" });',
     'export { BuildProbeAlias, BuildProbeRoot };',
   ].join("\n"));
   const barrel = join(library, "src/components/index.ts");

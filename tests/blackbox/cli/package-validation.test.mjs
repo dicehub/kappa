@@ -4,6 +4,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { test } from "node:test";
 import { repository, cli } from "./fixtures.mjs";
+import { run } from "../process.mjs";
 
 async function packageFixture() {
   const directory = await mkdtemp(join(tmpdir(), "kappa-package-cli-"));
@@ -69,8 +70,14 @@ test("the package validation CLI refuses incomplete or altered packed licenses",
   }
 });
 
-test("package validation rejects unresolved types in the packed public declaration", async () => {
+test("package validation accepts valid declarations and rejects unresolved packed types", async () => {
   const { directory, library } = await packageFixture();
+  const accepted = await run(process.execPath, [join(library, "scripts/validate-package.mjs")], {
+    cwd: directory, env: { KEEP_PACKAGE_VALIDATION: "1" }, timeout: 120_000,
+    log: join(directory, "valid-package.log"),
+  });
+  assert.match(accepted.output, /Validated core exports without optional peers/);
+  assert.match(accepted.output, /Validated all module exports/);
   const manifest = JSON.parse(await readFile(join(library, "package.json"), "utf8"));
   const declaration = join(library, manifest.exports["."].types);
   await writeFile(declaration, (await readFile(declaration, "utf8")) +
