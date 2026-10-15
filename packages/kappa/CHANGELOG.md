@@ -1,5 +1,11 @@
 # @dicehub/kappa
 
+## 0.6.2
+
+### Patch Changes
+
+- Move "Forgot password?" beside the Password label in the sign-in documentation examples. No component API or runtime changes.
+
 ## 0.6.1
 
 ### Patch Changes
