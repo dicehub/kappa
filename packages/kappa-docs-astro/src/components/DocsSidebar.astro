@@ -8,7 +8,10 @@ const normalizePath = (href: string) => {
   return href.replace(/\/+$/, "");
 };
 
-const currentPath = normalizePath(pathname);
+const normalizedPath = normalizePath(pathname);
+const currentPath = normalizedPath === "/docs/components/code-highlighted"
+  ? "/docs/components/code-block"
+  : normalizedPath;
 const navHrefs = [...primaryNav, ...navGroups.flatMap((group) => group.links)].map((link) =>
   normalizePath(link.href),
 );

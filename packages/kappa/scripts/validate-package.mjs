@@ -131,7 +131,7 @@ try {
 
   const optionalModules = new Set([
     "./components/chart", "./components/timeseries-chart", "./components/map-view",
-    "./components/xy-plot", "./components/code-highlighted",
+    "./components/xy-plot", "./components/code-highlighted", "./components/code-block",
   ]);
   for (const full of [false, true]) {
     const consumerRoot = resolve(temporaryRoot, full ? "full-consumer" : "core-consumer");

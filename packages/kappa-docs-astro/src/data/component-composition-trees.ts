@@ -100,6 +100,8 @@ Code.Block <div>
 
   codeHighlighted: `CodeHighlighted.Provider
 └── CodeHighlighted.Root`,
+  codeBlock: `CodeBlock.Provider
+└── CodeBlock.Root`,
 
   collapsible: `Collapsible.Root
 ├── Collapsible.Trigger

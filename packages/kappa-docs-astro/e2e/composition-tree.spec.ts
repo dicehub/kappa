@@ -11,7 +11,7 @@ const compoundPages = [
   ["card", "card", "Card.Root"],
   ["checkbox", "checkbox", "Checkbox.Group"],
   ["clipboard-text", "clipboardText", "ClipboardText.Root"],
-  ["code-highlighted", "codeHighlighted", "CodeHighlighted.Provider"],
+  ["code-block", "codeBlock", "CodeBlock.Provider"],
   ["collapsible", "collapsible", "Collapsible.Root"],
   ["combobox", "combobox", "Combobox.Root"],
   ["command-palette", "commandPalette", "CommandPalette.Root"],

@@ -67,6 +67,7 @@ export interface CodeHighlightedProps {
   showLineNumbers?: boolean;
   highlightLines?: number[];
   showCopyButton?: boolean;
+  wrap?: boolean;
   labels?: CodeHighlightedLabels;
 }
 

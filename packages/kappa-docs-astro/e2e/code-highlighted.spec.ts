@@ -2,7 +2,7 @@ import { expect, type Page, test } from "@playwright/test";
 import { waitForDocsIsland } from "./helpers/docs-island";
 
 const demo = (page: Page, variant: string) =>
-  page.locator(`[data-code-highlighted-demo="${variant}"]`);
+  page.locator(`[data-code-block-demo="${variant}"]`);
 
 const expectLanguageLabelsFit = async (page: Page) => {
   const menu = page.getByRole("listbox", { name: "Code language" });
@@ -13,26 +13,26 @@ const expectLanguageLabelsFit = async (page: Page) => {
   ).toBe(true);
 };
 
-test.describe("Code Highlighted documentation", () => {
+test.describe("Code Block documentation", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("/docs/components/code-highlighted");
+    await page.goto("/docs/components/code-block");
   });
 
   test("renders public examples, navigation, TOC, and Markdown", async ({ page, request }) => {
-    await expect(page.getByRole("heading", { level: 1, name: "Code Highlighted" })).toBeVisible();
+    await expect(page.getByRole("heading", { level: 1, name: "Code Block" })).toBeVisible();
     await expect(page.getByText("Planned documentation")).toHaveCount(0);
     await expect(demo(page, "preview").locator(".kappa-code-highlighted")).toHaveCount(1);
     await expect(demo(page, "preview").locator(".kappa-code-highlighted__title")).toHaveText("courant-limit.ts");
 
     const snippets = page.locator("pre[data-language]");
-    await expect(snippets.first()).toContainText('from "@dicehub/kappa/components/code-highlighted"');
+    await expect(snippets.first()).toContainText('from "@dicehub/kappa/components/code-block"');
     await expect(snippets.filter({ hasText: "../../../kappa/src" })).toHaveCount(0);
     await expect(page.locator('pre[data-language="typescript"]')).toHaveCount(0);
     await expect(page.locator('pre[data-language="javascript"]')).toHaveCount(1);
 
     const sidebar = page
       .locator("#desktop-navigation")
-      .getByRole("link", { name: "Code Highlighted", exact: true });
+      .getByRole("link", { name: "Code Block", exact: true });
     const compact = page.getByRole("navigation", { name: "Adjacent documentation pages" });
     const footer = page.getByRole("navigation", { name: "Documentation pagination" });
     await expect(sidebar).toHaveAttribute("aria-current", "page");
@@ -49,6 +49,7 @@ test.describe("Code Highlighted documentation", () => {
     const toc = page.getByRole("complementary", { name: "On this page" });
     await expect(toc.getByRole("link")).toHaveText([
       "Language Switch",
+      "Tabbed Examples",
       "Installation",
       "Dedicated Entry Point",
       "Usage",
@@ -56,6 +57,8 @@ test.describe("Code Highlighted documentation", () => {
       "Examples",
       "Title",
       "Languages",
+      "File Tabs",
+      "Wrap Lines",
       "Highlight Lines",
       "Custom Highlight Color",
       "Line Numbers",
@@ -64,14 +67,15 @@ test.describe("Code Highlighted documentation", () => {
       "Accessibility",
       "API Reference",
       "ShikiProvider",
-      "CodeHighlighted",
+      "CodeBlock",
+      "Slots",
       "Exports",
     ]);
 
-    const response = await request.get("/docs/components/code-highlighted.md");
+    const response = await request.get("/docs/components/code-block.md");
     expect(response.ok()).toBe(true);
     const markdown = await response.text();
-    expect(markdown).toContain("# Code Highlighted");
+    expect(markdown).toContain("# Code Block");
     expect(markdown).toContain("## [Accessibility](#accessibility)");
     expect(markdown).toContain("ShikiProvider");
     expect(markdown).not.toContain("View Code");
@@ -116,7 +120,7 @@ test.describe("Code Highlighted documentation", () => {
     await waitForDocsIsland(demo(page, "language-switch"));
     const block = demo(page, "language-switch").locator(".kappa-code-highlighted");
     const language = block.getByRole("combobox", { name: "Code language" });
-    const numbers = block.locator(".kappa-code-highlighted__line-numbers");
+    const numbers = block.locator('[data-slot="code-block-line-number"]');
 
     for (const [name, source, lineCount] of [
       ["JavaScript", "console.log(run.status)", 8],
@@ -128,13 +132,17 @@ test.describe("Code Highlighted documentation", () => {
       await page.getByRole("option", { name, exact: true }).click();
       await expect(language).toContainText(name);
       await expect(block.locator(".shiki")).toContainText(source);
-      await expect(numbers.locator("span")).toHaveText(
+      await expect(numbers).toHaveText(
         Array.from({ length: lineCount }, (_, index) => String(index + 1)),
       );
-      await expect(numbers).toHaveAttribute("aria-hidden", "true");
+      await expect(numbers.first()).toHaveAttribute("aria-hidden", "true");
       await block.getByRole("button", { name: "Copy", exact: true }).click();
       expect(await page.evaluate(() => navigator.clipboard.readText())).toBe(
-        await block.locator(".shiki code").innerText(),
+        await block.locator(".shiki code").evaluate(element => {
+          const source = element.cloneNode(true) as HTMLElement;
+          source.querySelectorAll('[aria-hidden="true"]').forEach(number => number.remove());
+          return source.textContent;
+        }),
       );
     }
 
@@ -162,8 +170,8 @@ test.describe("Code Highlighted documentation", () => {
 
   test("shows line numbers and emphasizes highlighted lines", async ({ page }) => {
     const numbered = demo(page, "line-numbers").locator(".kappa-code-highlighted");
-    await expect(numbered.locator(".kappa-code-highlighted__line-numbers")).toBeVisible();
-    await expect(numbered.locator(".kappa-code-highlighted__line-numbers span")).toHaveCount(11);
+    await expect(numbered.locator('[data-slot="code-block-line-number"]').first()).toBeVisible();
+    await expect(numbered.locator('[data-slot="code-block-line-number"]')).toHaveCount(11);
 
     const highlighted = demo(page, "highlight-lines").locator(".kappa-code-highlighted");
     await expect(highlighted.locator(".shiki")).toBeVisible();
@@ -192,7 +200,7 @@ test.describe("Code Highlighted documentation", () => {
   test("renders labeled blocks for every provider language", async ({ page }) => {
     const grid = demo(page, "languages");
     await expect(grid.locator(".kappa-code-highlighted")).toHaveCount(5);
-    await expect(grid.locator(".code-highlighted-demo__caption")).toHaveText([
+    await expect(grid.locator(".code-block-demo__caption")).toHaveText([
       "TypeScript",
       "Vue",
       "Bash",
@@ -239,7 +247,7 @@ test.describe("Code Highlighted documentation", () => {
       viewport: { width: 390, height: 844 },
     });
     const touchPage = await touchContext.newPage();
-    await touchPage.goto("/docs/components/code-highlighted");
+    await touchPage.goto("/docs/components/code-block");
 
     const copyRoot = demo(touchPage, "labels").locator(".kappa-code-highlighted__copy-root");
     await expect(copyRoot).toBeVisible();

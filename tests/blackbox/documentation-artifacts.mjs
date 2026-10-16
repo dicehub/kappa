@@ -40,6 +40,7 @@ export async function documentationArtifacts(root, scratch, full) {
   await writeFile(join(full, "blackbox/artifact-paths.mjs"), [
     'import { readFileSync } from "node:fs";',
     'const routes = JSON.parse(readFileSync(new URL("./docs-routes-baseline.json", import.meta.url)));',
+    'routes.push("/docs/components/code-block/", "/docs/components/code-block.md");',
     'const pairs = routes.filter(route => route.endsWith(".md") && route.startsWith("/docs")).map(markdown => [markdown === "/docs.md" ? "/docs/" : markdown === "/docs/changelog.md" ? "/docs/changelog/all/" : `${markdown.slice(0, -3)}/`, markdown]);',
     'const html = new Map(pairs); const markdown = new Map(pairs.map(([page, sidecar]) => [sidecar, page]));',
     'html.set("/docs/changelog/", "/docs/changelog.md");',

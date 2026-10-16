@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from "vue";
+import { computed, type VNodeChild } from "vue";
 import { Select } from "../select";
 import CodeHighlightedCopy from "./CodeHighlightedCopy.vue";
 import type { CodeHighlightedEmits, CodeHighlightedProps } from "./code-highlighted";
@@ -13,16 +13,18 @@ const props = withDefaults(defineProps<CodeHighlightedProps>(), {
   languageOptions: () => [],
   showCopyButton: false,
   showLineNumbers: false,
+  wrap: false,
 });
 
 const emit = defineEmits<CodeHighlightedEmits>();
+const slots = defineSlots<{ actions?: () => VNodeChild }>();
 
 const highlighter = useShikiHighlighter();
 
 const labels = computed(() => ({ ...highlighter.labels.value, ...props.labels }));
 const lines = computed(() => props.code.split("\n"));
 const isSingleLine = computed(() => lines.value.length === 1);
-const hasHeader = computed(() => Boolean(props.title || props.languageOptions.length));
+const hasHeader = computed(() => Boolean(props.title || props.languageOptions.length || slots.actions));
 const highlightedHtml = computed(() =>
   highlighter.isLoading.value || highlighter.error.value
     ? null
@@ -37,28 +39,36 @@ function selectLanguage(value: string[]): void {
 }
 
 function processHighlightedHtml(html: string | null, highlightLines: number[]): string | null {
-  if (!html || highlightLines.length === 0) return html;
+  if (!html) return html;
 
   const highlightSet = new Set(highlightLines);
   let lineNumber = 0;
 
-  return html.replace(/<span class="line">/g, () => {
-    lineNumber += 1;
-    return highlightSet.has(lineNumber) ? '<span class="line line-highlighted">' : '<span class="line">';
-  });
+  return html.replace(/<span class="line"><\/span>/g, '<span class="line"><br></span>')
+    .replace(/<span class="line">/g, () => {
+      lineNumber += 1;
+      const className = highlightSet.has(lineNumber) ? "line line-highlighted" : "line";
+      const number = showLineNumbersColumn.value
+        ? `<span class="kappa-code-highlighted__line-number" data-slot="code-block-line-number" aria-hidden="true">${lineNumber}</span>`
+        : "";
+      return `<span class="${className}">${number}`;
+    });
 }
 </script>
 
 <template>
   <figure
     v-bind="$attrs"
-    class="kappa-code-highlighted"
+    class="kappa-code-highlighted kappa-code-block"
     data-slot="code-highlighted"
+    :data-wrap="wrap || undefined"
+    :style="{ '--kappa-code-line-number-width': `${String(lines.length).length + 2}ch` }"
     :class="{
       'kappa-code-highlighted--has-copy': showCopyButton,
       'kappa-code-highlighted--single-line': showCopyButton && isSingleLine && !hasHeader,
       'kappa-code-highlighted--with-title': title,
       'kappa-code-highlighted--with-header': hasHeader,
+      'kappa-code-highlighted--numbered': showLineNumbersColumn,
     }"
   >
     <figcaption v-if="hasHeader" class="kappa-code-highlighted__header">
@@ -87,30 +97,33 @@ function processHighlightedHtml(html: string | null, highlightLines: number[]): 
           </Select.Content>
         </Select.Positioner>
       </Select.Root>
+      <div v-if="$slots.actions" class="kappa-code-highlighted__actions"><slot name="actions" /></div>
       <CodeHighlightedCopy v-if="showCopyButton" :code="code" :labels="labels" />
     </figcaption>
 
-    <div v-if="showLineNumbersColumn" class="kappa-code-highlighted__layout">
-      <div class="kappa-code-highlighted__line-numbers" aria-hidden="true">
-        <span v-for="(_, index) in lines" :key="index">{{ index + 1 }}</span>
-      </div>
-      <div class="kappa-code-highlighted__scroll">
-        <div
-          v-if="processedHtml"
-          class="kappa-code-highlighted__shiki"
-          v-html="processedHtml"
-        />
-        <pre v-else class="kappa-code-highlighted__plain"><code>{{ code }}</code></pre>
-      </div>
-    </div>
-
-    <div v-else class="kappa-code-highlighted__scroll">
+    <div
+      class="kappa-code-highlighted__scroll"
+      role="region"
+      :aria-label="title || 'Code block'"
+      tabindex="0"
+      dir="ltr"
+    >
       <div
         v-if="processedHtml"
         class="kappa-code-highlighted__shiki"
         v-html="processedHtml"
       />
-      <pre v-else class="kappa-code-highlighted__plain"><code>{{ code }}</code></pre>
+      <pre v-else class="kappa-code-highlighted__plain"><code><span
+        v-for="(line, index) in lines"
+        :key="index"
+        class="line"
+        :class="{ 'line-highlighted': highlightLines.includes(index + 1) }"
+      ><span
+          v-if="showLineNumbersColumn"
+          class="kappa-code-highlighted__line-number"
+          data-slot="code-block-line-number"
+          aria-hidden="true"
+        >{{ index + 1 }}</span>{{ line }}<br v-if="!line" /></span></code></pre>
     </div>
 
     <CodeHighlightedCopy v-if="showCopyButton && !hasHeader" :code="code" :labels="labels" />

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import { CodeHighlighted, ShikiProvider } from "@dicehub/kappa/components/code-highlighted";
+import { CodeBlock, ShikiProvider } from "@dicehub/kappa/components/code-block";
 
 const language = ref("javascript");
 const languageOptions = [
@@ -34,9 +34,9 @@ print(run["status"])`,
 
 <template>
   <ShikiProvider :languages="['javascript', 'python', 'bash']">
-    <CodeHighlighted
+    <CodeBlock
       v-model:lang="language"
-      :code="code[language]"
+      :code="code[language] ?? ''"
       :language-options="languageOptions"
       title="Fetch a simulation run"
       show-line-numbers

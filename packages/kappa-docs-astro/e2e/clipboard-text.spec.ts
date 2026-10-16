@@ -35,10 +35,10 @@ test.describe("Clipboard Text documentation", () => {
       "/docs/components/client-only",
     );
     await expect(
-      compact.getByRole("link", { name: "Next page: Code Highlighted" }),
-    ).toHaveAttribute("href", "/docs/components/code-highlighted");
+      compact.getByRole("link", { name: "Next page: Code Block" }),
+    ).toHaveAttribute("href", "/docs/components/code-block");
     await expect(footer.getByRole("link", { name: "Client Only", exact: true })).toBeVisible();
-    await expect(footer.getByRole("link", { name: "Code Highlighted", exact: true })).toBeVisible();
+    await expect(footer.getByRole("link", { name: "Code Block", exact: true })).toBeVisible();
 
     const toc = page.getByRole("complementary", { name: "On this page" });
     await expect(toc.getByRole("link")).toHaveText([

@@ -5,4 +5,5 @@ export const optionalEntrypoints = new Set([
   "@dicehub/kappa/components/map-view",
   "@dicehub/kappa/components/xy-plot",
   "@dicehub/kappa/components/code-highlighted",
+  "@dicehub/kappa/components/code-block",
 ]);

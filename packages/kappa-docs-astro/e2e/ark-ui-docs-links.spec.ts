@@ -46,7 +46,7 @@ const pagesWithoutPrimitiveReference = [
   "button-group",
   "card",
   "code",
-  "code-highlighted",
+  "code-block",
   "dicehub-logo",
   "empty",
   "flow",
