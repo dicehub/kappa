@@ -128,6 +128,10 @@ test.describe("Layer Card documentation", () => {
   });
 
   test("supports simple surfaces, attribute forwarding, and linked states", async ({ page }) => {
+    await page.evaluate(() => {
+      document.documentElement.style.setProperty("scroll-behavior", "auto", "important");
+    });
+
     const simple = demo(page, "simple").locator(".kappa-layer-card");
     await expect(simple).toHaveJSProperty("tagName", "SECTION");
     await expect(simple).toHaveCSS("padding-left", "16px");
@@ -145,6 +149,7 @@ test.describe("Layer Card documentation", () => {
     const linked = demo(page, "linked").locator("[data-interactive-primary]");
     await expect(linked).toHaveJSProperty("tagName", "A");
     await expect(linked).toHaveAttribute("href", "#interactive-primary");
+    await linked.scrollIntoViewIfNeeded();
     const restShadow = await linked.evaluate((element) => getComputedStyle(element).boxShadow);
     await linked.hover();
     await expect
