@@ -90,7 +90,10 @@ const setMobileOpen = (
   if (!open) mobileReturnFocus = null;
 };
 
-const normalizePath = (path: string) => (path === "/" ? path : path.replace(/\/+$/, ""));
+const normalizePath = (path: string) => {
+  const normalized = path === "/" ? path : path.replace(/\/+$/, "");
+  return normalized === "/docs/components/code-highlighted" ? "/docs/components/code-block" : normalized;
+};
 
 const isCurrentPath = (href: string, pathname: string) => {
   const normalizedHref = normalizePath(href);

@@ -4,5 +4,4 @@ export const optionalEntrypoints = new Set([
   "@dicehub/kappa/components/timeseries-chart",
   "@dicehub/kappa/components/map-view",
   "@dicehub/kappa/components/xy-plot",
-  "@dicehub/kappa/components/code-highlighted",
 ]);

@@ -32,6 +32,16 @@
   padding: 0.25rem 0.5rem 0.25rem 0.875rem;
   border-block-end: 1px solid var(--kappa-line, #e3e6eb);
   background: var(--kappa-tint, #f4f6f9);
+  border-start-start-radius: inherit;
+  border-start-end-radius: inherit;
+}
+
+.kappa-code-highlighted__actions {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: 0.25rem;
+  margin-inline-start: auto;
 }
 
 .kappa-code-highlighted__title {
@@ -45,6 +55,14 @@
   line-height: 1.25rem;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.kappa-code-highlighted__title > svg {
+  display: inline-block;
+  inline-size: 0.875rem;
+  block-size: 0.875rem;
+  margin-inline-end: 0.375rem;
+  vertical-align: -0.125rem;
 }
 
 .kappa-code-highlighted__language-select {
@@ -91,16 +109,16 @@
   min-inline-size: min(10rem, var(--available-width, calc(100vw - 1rem)), calc(100vw - 1rem));
 }
 
-.kappa-code-highlighted__layout {
-  display: flex;
-  inline-size: 100%;
-  min-inline-size: 0;
-}
-
 .kappa-code-highlighted__scroll {
   min-inline-size: 0;
   flex: 1 1 auto;
   overflow-x: auto;
+}
+
+.kappa-code-highlighted__scroll:focus-visible {
+  outline: 2px solid var(--kappa-focus, #4c63ff);
+  outline-offset: -2px;
+  border-radius: inherit;
 }
 
 .kappa-code-highlighted .kappa-code-highlighted__plain,
@@ -126,40 +144,58 @@
   border: 0;
   background: transparent;
   font: inherit;
+  white-space: normal;
 }
 
 .kappa-code-highlighted__shiki .shiki {
   background: transparent !important;
 }
 
-.kappa-code-highlighted__shiki .line {
-  min-block-size: 0;
+.kappa-code-highlighted .line {
+  position: relative;
+  display: block;
+  min-block-size: 1.25rem;
   margin: 0;
   padding: 0;
+  white-space: pre;
 }
 
-.kappa-code-highlighted__shiki .line-highlighted {
-  display: inline-block;
+.kappa-code-highlighted .line-highlighted {
   inline-size: calc(100% + 2rem);
   margin-inline: -1rem;
   padding-inline: 1rem;
   background-color: var(--kappa-code-highlight-bg);
 }
 
-.kappa-code-highlighted__line-numbers {
-  flex: none;
-  padding: 0.75rem 0.75rem 0.75rem 1rem;
+.kappa-code-highlighted--numbered .line {
+  padding-inline-start: var(--kappa-code-line-number-width);
+}
+
+.kappa-code-highlighted--numbered .line-highlighted {
+  padding-inline-start: calc(1rem + var(--kappa-code-line-number-width));
+}
+
+.kappa-code-highlighted__line-number {
+  position: absolute;
+  inset-inline-start: 0;
+  inline-size: calc(var(--kappa-code-line-number-width) - 1ch);
   color: var(--kappa-muted, #9aa2ae);
-  font-family: var(--kappa-font-mono, "SF Mono", SFMono-Regular, ui-monospace, Consolas, "Liberation Mono", Menlo, monospace);
-  font-size: 0.875rem;
-  line-height: 1.25rem;
   opacity: 0.6;
   text-align: end;
   user-select: none;
 }
 
-.kappa-code-highlighted__line-numbers span {
-  display: block;
+.kappa-code-highlighted .line-highlighted > .kappa-code-highlighted__line-number {
+  inset-inline-start: 1rem;
+}
+
+.kappa-code-highlighted[data-wrap] code {
+  inline-size: 100%;
+}
+
+.kappa-code-highlighted[data-wrap] .line {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
 }
 
 .kappa-code-highlighted__copy-root {

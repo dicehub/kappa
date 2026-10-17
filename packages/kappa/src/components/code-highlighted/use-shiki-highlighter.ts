@@ -1,5 +1,6 @@
-import { computed, inject, type ComputedRef, type Ref, type ShallowRef } from "vue";
+import { computed, inject, ref, shallowRef, type ComputedRef, type Ref, type ShallowRef } from "vue";
 import {
+  DEFAULT_CODE_HIGHLIGHTED_LABELS,
   normalizeCodeHighlightedLanguage,
   type CodeHighlightedLabels,
   type LanguageInput,
@@ -15,7 +16,7 @@ export type UseShikiHighlighterResult = {
 };
 
 export function useShikiHighlighter(): UseShikiHighlighterResult {
-  const context = inject<ShikiContextValue>(SHIKI_CONTEXT_KEY);
+  const context = inject<ShikiContextValue | null>(SHIKI_CONTEXT_KEY, null);
 
   if (!context) {
     throw new Error(
@@ -24,8 +25,16 @@ export function useShikiHighlighter(): UseShikiHighlighterResult {
     );
   }
 
+  return createHighlighter(context);
+}
+
+export function useOptionalShikiHighlighter(): UseShikiHighlighterResult {
+  return createHighlighter(inject<ShikiContextValue | null>(SHIKI_CONTEXT_KEY, null));
+}
+
+function createHighlighter(context: ShikiContextValue | null): UseShikiHighlighterResult {
   const highlight = (code: string, lang: LanguageInput | (string & {})): string | null => {
-    if (!context.highlighter.value) return null;
+    if (!context?.highlighter.value || ["text", "plain", "txt"].includes(lang)) return null;
 
     const normalizedLang = normalizeCodeHighlightedLanguage(lang);
 
@@ -53,9 +62,9 @@ export function useShikiHighlighter(): UseShikiHighlighterResult {
 
   return {
     highlight,
-    isLoading: context.isLoading,
-    isReady: computed(() => !context.isLoading.value && context.highlighter.value !== null),
-    error: context.error,
-    labels: context.labels,
+    isLoading: context?.isLoading ?? ref(false),
+    isReady: computed(() => Boolean(context && !context.isLoading.value && context.highlighter.value)),
+    error: context?.error ?? shallowRef(null),
+    labels: context?.labels ?? computed(() => DEFAULT_CODE_HIGHLIGHTED_LABELS),
   };
 }

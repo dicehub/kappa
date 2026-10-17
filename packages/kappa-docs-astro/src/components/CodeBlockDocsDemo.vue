@@ -1,11 +1,25 @@
 <script setup lang="ts">
-import { CodeHighlighted, ShikiProvider } from "@dicehub/kappa/components/code-highlighted";
-import LanguageSwitch from "../snippets/code-highlighted/LanguageSwitch.vue";
-import NumberedLanguageSwitch from "../snippets/code-highlighted/NumberedLanguageSwitch.vue";
+import { CodeBlock, ShikiProvider } from "@dicehub/kappa/components/code-block";
+import LanguageSwitch from "../snippets/code-block/LanguageSwitch.vue";
+import NumberedLanguageSwitch from "../snippets/code-block/NumberedLanguageSwitch.vue";
+import TabbedExamples from "../snippets/code-block/TabbedExamples.vue";
+import FileTabs from "../snippets/code-block/FileTabs.vue";
+import WrapLines from "../snippets/code-block/WrapLines.vue";
+import CollapsibleCode from "../snippets/code-block/CollapsibleCode.vue";
+import PlainText from "../snippets/code-block/PlainText.vue";
+import Header from "../snippets/code-block/Header.vue";
+import Actions from "../snippets/code-block/Actions.vue";
 
 type DemoVariant =
   | "preview"
   | "language-switch"
+  | "tabbed-examples"
+  | "file-tabs"
+  | "wrap"
+  | "collapsible"
+  | "plain-text"
+  | "header"
+  | "actions"
   | "usage"
   | "title"
   | "languages"
@@ -64,7 +78,7 @@ pnpm dev`,
   {
     title: "CSS",
     lang: "css",
-    code: `.kappa-code-highlighted {
+    code: `.kappa-code-block {
   border: 1px solid var(--kappa-line);
   border-radius: 0.5rem;
 }`,
@@ -91,17 +105,25 @@ export function useCourantLimit(raw: Ref<number>) {
 </script>
 
 <template>
-  <div class="code-highlighted-demo" :data-code-highlighted-demo="variant">
+  <div class="code-block-demo" :data-code-block-demo="variant">
     <LanguageSwitch v-if="variant === 'preview'" />
 
     <NumberedLanguageSwitch v-else-if="variant === 'language-switch'" />
 
+    <TabbedExamples v-else-if="variant === 'tabbed-examples'" />
+    <FileTabs v-else-if="variant === 'file-tabs'" />
+    <WrapLines v-else-if="variant === 'wrap'" />
+    <CollapsibleCode v-else-if="variant === 'collapsible'" />
+    <PlainText v-else-if="variant === 'plain-text'" />
+    <Header v-else-if="variant === 'header'" />
+    <Actions v-else-if="variant === 'actions'" />
+
     <ShikiProvider v-else-if="variant === 'usage'" :languages="['typescript']">
-      <CodeHighlighted :code="usageCode" lang="typescript" />
+      <CodeBlock :code="usageCode" lang="typescript" />
     </ShikiProvider>
 
     <ShikiProvider v-else-if="variant === 'title'" :languages="['typescript']">
-      <CodeHighlighted
+      <CodeBlock
         title="mesh-partition.ts"
         :code="highlightLinesCode"
         lang="typescript"
@@ -113,21 +135,21 @@ export function useCourantLimit(raw: Ref<number>) {
       v-else-if="variant === 'languages'"
       :languages="['typescript', 'vue', 'bash', 'json', 'css']"
     >
-      <div class="code-highlighted-demo__languages">
-        <figure v-for="example in languageExamples" :key="example.lang" class="code-highlighted-demo__language">
-          <figcaption class="code-highlighted-demo__caption">{{ example.title }}</figcaption>
-          <CodeHighlighted :code="example.code" :lang="example.lang" />
+      <div class="code-block-demo__languages">
+        <figure v-for="example in languageExamples" :key="example.lang" class="code-block-demo__language">
+          <figcaption class="code-block-demo__caption">{{ example.title }}</figcaption>
+          <CodeBlock :code="example.code" :lang="example.lang" />
         </figure>
       </div>
     </ShikiProvider>
 
     <ShikiProvider v-else-if="variant === 'highlight-lines'" :languages="['typescript']">
-      <CodeHighlighted :code="highlightLinesCode" lang="typescript" :highlight-lines="[3]" />
+      <CodeBlock :code="highlightLinesCode" lang="typescript" :highlight-lines="[3]" />
     </ShikiProvider>
 
     <ShikiProvider v-else-if="variant === 'highlight-color'" :languages="['typescript']">
-      <CodeHighlighted
-        class="code-highlighted-demo__accent-lines"
+      <CodeBlock
+        class="code-block-demo__accent-lines"
         :code="highlightLinesCode"
         lang="typescript"
         :highlight-lines="[3]"
@@ -135,11 +157,11 @@ export function useCourantLimit(raw: Ref<number>) {
     </ShikiProvider>
 
     <ShikiProvider v-else-if="variant === 'line-numbers'" :languages="['typescript']">
-      <CodeHighlighted :code="lineNumbersCode" lang="typescript" show-line-numbers />
+      <CodeBlock :code="lineNumbersCode" lang="typescript" show-line-numbers />
     </ShikiProvider>
 
     <ShikiProvider v-else-if="variant === 'copy-button'" :languages="['bash']">
-      <CodeHighlighted code="pnpm add @dicehub/kappa" lang="bash" show-copy-button />
+      <CodeBlock code="pnpm add @dicehub/kappa" lang="bash" show-copy-button />
     </ShikiProvider>
 
     <ShikiProvider
@@ -147,13 +169,13 @@ export function useCourantLimit(raw: Ref<number>) {
       :languages="['typescript']"
       :labels="{ copy: 'Kopieren', copied: 'Kopiert!' }"
     >
-      <CodeHighlighted :code="usageCode" lang="typescript" show-copy-button />
+      <CodeBlock :code="usageCode" lang="typescript" show-copy-button />
     </ShikiProvider>
   </div>
 </template>
 
 <style scoped>
-.code-highlighted-demo {
+.code-block-demo {
   display: grid;
   width: 100%;
   min-width: 0;
@@ -163,29 +185,29 @@ export function useCourantLimit(raw: Ref<number>) {
   font-family: var(--docs-font-sans, "Geist", sans-serif);
 }
 
-.code-highlighted-demo > * {
+.code-block-demo > * {
   width: 100%;
   min-width: 0;
 }
 
-.code-highlighted-demo__languages {
+.code-block-demo__languages {
   display: grid;
   gap: 1rem;
 }
 
-.code-highlighted-demo__language {
+.code-block-demo__language {
   display: grid;
   margin: 0;
   gap: 0.375rem;
 }
 
-.code-highlighted-demo__caption {
+.code-block-demo__caption {
   color: var(--docs-subtle);
   font-size: 0.75rem;
   font-weight: 600;
 }
 
-.code-highlighted-demo__accent-lines {
+.code-block-demo__accent-lines {
   --kappa-code-highlight-bg: color-mix(in oklab, var(--kappa-accent, #4356e8) 14%, transparent);
 }
 </style>

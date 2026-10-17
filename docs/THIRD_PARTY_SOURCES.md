@@ -26,7 +26,7 @@ Confirmed examples include connector geometry in
 `packages/kappa/src/components/flow/flow.ts` and the documentation helpers
 `packages/kappa-docs-astro/src/lib/html-to-markdown.ts` and
 `packages/kappa-docs-astro/src/lib/astro-markdown-pages.ts`.
-CodeHighlighted's language loading and highlighter initialization, and Flow
+CodeBlock's language loading and highlighter initialization, and Flow
 examples, also include Kumo adaptations. These are source origins, not a runtime
 dependency on Kumo. Ark UI provides Kappa's component primitives.
 

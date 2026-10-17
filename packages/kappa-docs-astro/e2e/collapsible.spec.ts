@@ -27,12 +27,12 @@ test.describe("Collapsible documentation", () => {
     const footer = page.getByRole("navigation", { name: "Documentation pagination" });
     await expect(sidebar).toHaveAttribute("aria-current", "page");
     await expect(
-      compact.getByRole("link", { name: "Previous page: Code Highlighted" }),
-    ).toHaveAttribute("href", "/docs/components/code-highlighted");
+      compact.getByRole("link", { name: "Previous page: Code Block" }),
+    ).toHaveAttribute("href", "/docs/components/code-block");
     await expect(
       compact.getByRole("link", { name: "Next page: Collapsible Section" }),
     ).toHaveAttribute("href", "/docs/components/collapsible-section");
-    await expect(footer.getByRole("link", { name: "Code Highlighted", exact: true })).toBeVisible();
+    await expect(footer.getByRole("link", { name: "Code Block", exact: true })).toBeVisible();
     await expect(
       footer.getByRole("link", { name: "Collapsible Section", exact: true }),
     ).toBeVisible();

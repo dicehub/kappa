@@ -3,8 +3,29 @@ import { test } from "node:test";
 import { createSSRApp, h } from "vue";
 import { renderToString } from "vue/server-renderer";
 import { Button, Badge, Input, Link, Text, Dialog, DialogHeader, DialogLayout, ActivityFeed } from "@dicehub/kappa";
+import { CodeBlock } from "@dicehub/kappa/components/code-block";
 
 const render = async (component, props = {}, text = "Consumer content") => (await renderToString(createSSRApp({ render: () => h(component, props, () => text) }))).replace(/<!--.*?-->/gs, "");
+
+test("plain code renders safe server HTML without a provider or optional peers", async () => {
+  const source = '$ pnpm build\n\n<script>window.unsafe = true</script>\nBuild complete.';
+  const html = await render(CodeBlock, { code: source, title: "Build output", showCopyButton: true });
+  assert.match(html, /Build output/);
+  assert.match(html, /&lt;script&gt;window\.unsafe = true&lt;\/script&gt;/);
+  assert.doesNotMatch(html, /<script\b/);
+  assert.match(html, /Build complete\./);
+  assert.match(html, /aria-label="Copy"/);
+});
+
+test("a custom code title renders a header without requiring a title prop", async () => {
+  const html = await renderToString(createSSRApp({ render: () => h(CodeBlock,
+    { code: "pnpm build", showCopyButton: true },
+    { title: () => [h("svg", { "aria-hidden": "true", viewBox: "0 0 24 24" }), "Terminal"] },
+  ) }));
+  assert.match(html, /<figcaption\b[^>]*>.*?<svg\b.*?Terminal.*?<\/figcaption>/s);
+  assert.match(html, /aria-label="Copy"/);
+  assert.match(html, /pnpm build/);
+});
 
 test("Dialog and DialogLayout retain their own public header behavior when used together", async () => {
   const named = await render(DialogHeader);

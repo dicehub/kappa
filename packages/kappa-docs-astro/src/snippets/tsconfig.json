@@ -1,4 +1,4 @@
 {
   "extends": "../../tsconfig.json",
-  "include": ["sidebar/*.vue", "code-highlighted/*.vue"]
+  "include": ["sidebar/*.vue", "code-block/*.vue"]
 }

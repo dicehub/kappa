@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import { ShikiProvider } from "@dicehub/kappa/components/code-highlighted";
+import { ShikiProvider } from "@dicehub/kappa/components/code-block";
 import ShikiStatus from "./ShikiStatus.vue";
 
 const language = ref<"typescript" | "python">("typescript");
