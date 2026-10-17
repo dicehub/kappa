@@ -131,7 +131,7 @@ try {
 
   const optionalModules = new Set([
     "./components/chart", "./components/timeseries-chart", "./components/map-view",
-    "./components/xy-plot", "./components/code-highlighted", "./components/code-block",
+    "./components/xy-plot",
   ]);
   for (const full of [false, true]) {
     const consumerRoot = resolve(temporaryRoot, full ? "full-consumer" : "core-consumer");
@@ -184,6 +184,7 @@ try {
       [
         'import { Button as RootButton } from "@dicehub/kappa";',
         'import { Button, type ButtonProps } from "@dicehub/kappa/components/button";',
+        'import { CodeBlock } from "@dicehub/kappa/components/code-block";',
         'import registry from "@dicehub/kappa/registry/component-registry.json";',
         'import "@dicehub/kappa/styles/kappa.css";',
         'import "@dicehub/kappa/styles/theme-kappa.css";',
@@ -191,7 +192,7 @@ try {
         "",
         'const props: ButtonProps = { variant: "primary" };',
         'if (RootButton !== Button || registry.package.name !== "@dicehub/kappa") throw new Error("invalid package");',
-        'createApp({ render: () => h(Button, props, () => "Kappa") }).mount("#app");',
+        'createApp({ render: () => h("main", [h(Button, props, () => "Kappa"), h(CodeBlock, { code: "pnpm build", showCopyButton: true })]) }).mount("#app");',
         "",
       ].join("\n"),
     );

@@ -57,17 +57,25 @@ export interface CodeHighlightedLanguageOption {
 
 export type CodeHighlightedEmits = {
   "update:lang": [language: string];
+  "update:open": [open: boolean];
+  openChange: [details: { open: boolean }];
 };
 
 export interface CodeHighlightedProps {
   code: string;
-  lang: LanguageInput | (string & {});
+  lang?: LanguageInput | (string & {});
   title?: string;
   languageOptions?: CodeHighlightedLanguageOption[];
   showLineNumbers?: boolean;
   highlightLines?: number[];
   showCopyButton?: boolean;
   wrap?: boolean;
+  collapsible?: boolean;
+  collapsedLines?: number;
+  defaultOpen?: boolean;
+  open?: boolean;
+  expandLabel?: string;
+  collapseLabel?: string;
   labels?: CodeHighlightedLabels;
 }
 

@@ -34,7 +34,7 @@ curl --fail --silent "https://api.example.com/runs/run-042"`,
 <template>
   <ShikiProvider :languages="['typescript', 'json', 'bash']">
     <Tabs.Root default-value="client.ts" lazy-mount unmount-on-exit>
-      <Tabs.List variant="line" aria-label="Example files">
+      <Tabs.List aria-label="Example files">
         <Tabs.Trigger v-for="file in files" :key="file.name" :value="file.name">
           {{ file.name }}
         </Tabs.Trigger>

@@ -3,8 +3,12 @@ import languageSwitchCode from "../snippets/code-block/NumberedLanguageSwitch.vu
 import tabbedExamplesCode from "../snippets/code-block/TabbedExamples.vue?raw";
 import fileTabsCode from "../snippets/code-block/FileTabs.vue?raw";
 import wrapCode from "../snippets/code-block/WrapLines.vue?raw";
+import collapsibleCode from "../snippets/code-block/CollapsibleCode.vue?raw";
+import plainTextCode from "../snippets/code-block/PlainText.vue?raw";
+import headerCode from "../snippets/code-block/Header.vue?raw";
+import actionsCode from "../snippets/code-block/Actions.vue?raw";
 
-export { previewCode, languageSwitchCode, tabbedExamplesCode, fileTabsCode, wrapCode };
+export { previewCode, languageSwitchCode, tabbedExamplesCode, fileTabsCode, wrapCode, collapsibleCode, plainTextCode, headerCode, actionsCode };
 
 export const installationCode = `import {
   CodeBlock,
@@ -77,13 +81,19 @@ export const shikiProviderProps = [
 
 export const codeBlockProps = [
   { name: "code", type: "string", defaultValue: "required", description: "Source text to display." },
-  { name: "lang", type: "LanguageInput | string", defaultValue: "required", description: "Language id or alias; must be in the provider languages." },
+  { name: "lang", type: "LanguageInput | string", defaultValue: '"text"', description: "Language id or alias. text, plain, and txt stay plain; other languages use the provider when available." },
   { name: "languageOptions", type: "CodeBlockLanguageOption[]", defaultValue: "[]", description: "Language choices shown in the header; use with v-model:lang." },
   { name: "title", type: "string", defaultValue: "—", description: "Optional file name or short label rendered above the code." },
   { name: "showLineNumbers", type: "boolean", defaultValue: "false", description: "Adds a line-number column for multi-line code." },
   { name: "highlightLines", type: "number[]", defaultValue: "[]", description: "1-indexed lines to emphasize." },
   { name: "showCopyButton", type: "boolean", defaultValue: "false", description: "Shows the copy button; always visible on single-line blocks." },
   { name: "wrap", type: "boolean", defaultValue: "false", description: "Wraps long lines to fit the block. Line numbers stay aligned with source lines." },
+  { name: "collapsible", type: "boolean", defaultValue: "false", description: "Shows a preview with Expand code / Collapse code controls when the content exceeds collapsedLines." },
+  { name: "collapsedLines", type: "number", defaultValue: "10", description: "Visible rows in the collapsed preview, including wrapped rows. Values are rounded down, with a minimum of 1; non-finite values use 10." },
+  { name: "defaultOpen", type: "boolean", defaultValue: "false", description: "Initial expanded state of a collapsible block." },
+  { name: "open", type: "boolean", defaultValue: "—", description: "Controlled expanded state; use v-model:open." },
+  { name: "expandLabel", type: "string", defaultValue: "Expand code", description: "Text and accessible name of the expand control." },
+  { name: "collapseLabel", type: "string", defaultValue: "Collapse code", description: "Text and accessible name of the collapse control." },
   { name: "labels", type: "CodeBlockLabels", defaultValue: "provider", description: "Overrides provider labels for this block." },
 ] as const;
 

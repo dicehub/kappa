@@ -57,6 +57,14 @@
   white-space: nowrap;
 }
 
+.kappa-code-highlighted__title > svg {
+  display: inline-block;
+  inline-size: 0.875rem;
+  block-size: 0.875rem;
+  margin-inline-end: 0.375rem;
+  vertical-align: -0.125rem;
+}
+
 .kappa-code-highlighted__language-select {
   flex: none;
   inline-size: auto;

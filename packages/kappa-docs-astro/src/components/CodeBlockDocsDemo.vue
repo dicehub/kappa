@@ -5,6 +5,10 @@ import NumberedLanguageSwitch from "../snippets/code-block/NumberedLanguageSwitc
 import TabbedExamples from "../snippets/code-block/TabbedExamples.vue";
 import FileTabs from "../snippets/code-block/FileTabs.vue";
 import WrapLines from "../snippets/code-block/WrapLines.vue";
+import CollapsibleCode from "../snippets/code-block/CollapsibleCode.vue";
+import PlainText from "../snippets/code-block/PlainText.vue";
+import Header from "../snippets/code-block/Header.vue";
+import Actions from "../snippets/code-block/Actions.vue";
 
 type DemoVariant =
   | "preview"
@@ -12,6 +16,10 @@ type DemoVariant =
   | "tabbed-examples"
   | "file-tabs"
   | "wrap"
+  | "collapsible"
+  | "plain-text"
+  | "header"
+  | "actions"
   | "usage"
   | "title"
   | "languages"
@@ -105,6 +113,10 @@ export function useCourantLimit(raw: Ref<number>) {
     <TabbedExamples v-else-if="variant === 'tabbed-examples'" />
     <FileTabs v-else-if="variant === 'file-tabs'" />
     <WrapLines v-else-if="variant === 'wrap'" />
+    <CollapsibleCode v-else-if="variant === 'collapsible'" />
+    <PlainText v-else-if="variant === 'plain-text'" />
+    <Header v-else-if="variant === 'header'" />
+    <Actions v-else-if="variant === 'actions'" />
 
     <ShikiProvider v-else-if="variant === 'usage'" :languages="['typescript']">
       <CodeBlock :code="usageCode" lang="typescript" />

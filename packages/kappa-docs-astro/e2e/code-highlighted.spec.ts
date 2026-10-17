@@ -55,10 +55,14 @@ test.describe("Code Block documentation", () => {
       "Usage",
       "Composition",
       "Examples",
+      "Plain Text",
       "Title",
+      "Header",
+      "Actions",
       "Languages",
       "File Tabs",
       "Wrap Lines",
+      "Collapsible",
       "Highlight Lines",
       "Custom Highlight Color",
       "Line Numbers",
@@ -69,6 +73,7 @@ test.describe("Code Block documentation", () => {
       "ShikiProvider",
       "CodeBlock",
       "Slots",
+      "Events",
       "Exports",
     ]);
 
