@@ -275,7 +275,7 @@ export const examples = [
   {
     id: "variants",
     title: "Variants",
-    description: "Use the segmented rail for compact view switches or the line rail for full-width sections.",
+    description: "Use the segmented rail for compact view switches or the line rail for full-width sections. The segmented rail has equal inner spacing and nested corner curves. Its selected border stays visible when theme shadows are disabled.",
     variant: "variants",
     code: variantsCode,
   },

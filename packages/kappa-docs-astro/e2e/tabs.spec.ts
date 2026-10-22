@@ -137,11 +137,12 @@ test.describe("Tabs documentation", () => {
     const integrations = tab(overflow, "Integrations");
     await expect(integrations).toBeFocused();
     await expect(integrations).toHaveAttribute("aria-selected", "true");
+    // The end tab clears the 1px rail border and the 2px inner spacing.
     await expect.poll(async () => {
       const currentListBox = await box(overflowList);
       const integrationsBox = await box(integrations);
       return currentListBox.x + currentListBox.width - (integrationsBox.x + integrationsBox.width);
-    }).toBeGreaterThanOrEqual(4);
+    }).toBeGreaterThanOrEqual(3);
     await expect(forwardControl).toHaveCount(0);
 
     const rtl = demo(page, "rtl");
