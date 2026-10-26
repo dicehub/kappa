@@ -34,6 +34,12 @@ const query = ref("");
 const navigating = ref(false);
 const searchFromDrawer = ref(false);
 const searchScope = ref<HTMLElement>();
+const railMobileBreakpoint = ref(768);
+let railResizeObserver: ResizeObserver | undefined;
+function updateRailBreakpoint() {
+  const shell = searchScope.value?.querySelector<HTMLElement>(".kappa-sidebar-layout");
+  railMobileBreakpoint.value = (shell?.clientWidth ?? 0) < 588 ? window.innerWidth + 1 : 768;
+}
 const sectionsOpen = ref(true);
 const profiles = [
   { value: "ros", name: "Ros.Space", email: "ros@example.com", initials: "RS", avatar: "/avatars/ros-space-astronaut.webp" },
@@ -85,9 +91,17 @@ function railSearchShortcut(event: KeyboardEvent) {
 onMounted(() => {
   if (props.variant !== "rail") return;
   if (props.standalone) window.addEventListener("keydown", railSearchShortcut);
+  else if (searchScope.value) {
+    railResizeObserver = new ResizeObserver(updateRailBreakpoint);
+    railResizeObserver.observe(searchScope.value);
+    window.addEventListener("resize", updateRailBreakpoint);
+    updateRailBreakpoint();
+  }
 });
 onBeforeUnmount(() => {
   window.removeEventListener("keydown", railSearchShortcut);
+  window.removeEventListener("resize", updateRailBreakpoint);
+  railResizeObserver?.disconnect();
 });
 function createProject() {
   const name = `Untitled project ${projects.value.length - 2}`;
@@ -98,7 +112,7 @@ function createProject() {
 
 <template>
   <div ref="searchScope" class="sidebar-block-demo" :data-sidebar-block="props.insetNavigation ? 'inset-navigation' : props.iconNavigation ? 'collapsible-icons' : props.variant" :data-standalone="props.standalone || undefined" @keydown="railSearchShortcut">
-    <SidebarLayout :variant="props.variant" content-max-width="62rem" :label="props.insetNavigation ? 'Inset application navigation' : props.iconNavigation ? 'Icon application navigation' : `${props.variant} application navigation`" :resizable="!richNavigation && props.variant === 'workspace'" full-screen-on-mobile>
+    <SidebarLayout :variant="props.variant" content-max-width="62rem" :mobile-breakpoint="props.variant === 'rail' ? railMobileBreakpoint : undefined" :label="props.insetNavigation ? 'Inset application navigation' : props.iconNavigation ? 'Icon application navigation' : `${props.variant} application navigation`" :resizable="!richNavigation && props.variant === 'workspace'" full-screen-on-mobile>
       <template #header="context">
         <WorkspaceSwitcher v-model="namespace" :items="namespaceSwitcherItems" label="Namespaces" :account-label="account.email"
           :actions="namespaceSwitcherActions" :workspace-actions="namespaceSwitcherWorkspaceActions" :footer-actions="namespaceSwitcherFooterActions"

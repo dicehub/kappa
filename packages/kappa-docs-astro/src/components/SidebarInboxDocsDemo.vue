@@ -53,7 +53,7 @@ function openAccount(name: string, context: SidebarContextValue) {
 
 <template>
   <div class="sidebar-inbox-demo" data-sidebar-block="inbox-navigation" :data-standalone="props.standalone || undefined">
-    <Sidebar.Provider width="23rem" collapsed-width="4rem" mobile-breakpoint-reference="container" class="sidebar-inbox-demo__layout">
+    <Sidebar.Provider width="23rem" collapsed-width="4rem" class="sidebar-inbox-demo__layout">
       <Sidebar.Context v-slot="context">
         <Sidebar.Root label="Inbox navigation" full-screen-on-mobile class="sidebar-inbox-demo__navigation">
           <div class="sidebar-inbox-demo__rail">

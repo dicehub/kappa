@@ -145,7 +145,7 @@ test('opposite space shrinks before the content column narrows', async ({ page }
 });
 
 test('the container breakpoint preserves desktop state and discards a closed drawer', async ({ page }) => {
-  await ready(page);
+  await ready(page, '?container');
   await toggle(page).click();
   await expect(shell(page)).toHaveAttribute('data-state', 'collapsed');
   const fixture = page.locator('.centering-fixture');
@@ -169,7 +169,7 @@ test('the container breakpoint preserves desktop state and discards a closed dra
 });
 
 test('container measurements recover after hiding and accept breakpoint changes', async ({ page }) => {
-  await ready(page);
+  await ready(page, '?container');
   const fixture = page.locator('.centering-fixture');
   await fixture.evaluate(node => { (node as HTMLElement).style.display = 'none'; });
   await expect(shell(page)).not.toHaveAttribute('data-mobile');
@@ -187,8 +187,8 @@ test('container measurements recover after hiding and accept breakpoint changes'
   await expect(shell(page)).toHaveAttribute('data-mobile', '');
 });
 
-test('viewport breakpoint compatibility ignores a narrow embedded container', async ({ page }) => {
-  await ready(page, '?viewport');
+test('the default viewport breakpoint keeps narrow desktop previews open', async ({ page }) => {
+  await ready(page);
   await page.locator('.centering-fixture').evaluate(node => { (node as HTMLElement).style.width = '900px'; });
   await expect(shell(page)).not.toHaveAttribute('data-mobile');
   await page.setViewportSize({ width: 999, height: 900 });

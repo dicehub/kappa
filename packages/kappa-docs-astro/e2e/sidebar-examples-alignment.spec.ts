@@ -72,9 +72,36 @@ for (const variant of variants) {
   });
 }
 
-test('every gallery preview uses its container width and keeps content fixed behind the drawer', async ({ page }) => {
+test('desktop gallery navigation stays visible and open after selection', async ({ page }) => {
   test.setTimeout(60_000);
   await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.goto('/docs/blocks/sidebar#grouped');
+  for (const variant of variants) {
+    const demo = demoFor(page, variant);
+    await hydrated(demo);
+    const shell = shellFor(demo);
+    await expect(shell, variant).not.toHaveAttribute('data-mobile');
+    const navigation = demo.locator('[data-slot="sidebar"]');
+    await expect(navigation, variant).toBeVisible();
+    await expect(shell, variant).toHaveAttribute('data-state', variant === 'rail' ? 'collapsed' : 'expanded');
+    if (variant === 'rail') await demo.getByRole('button', { name: 'Expand sidebar', exact: true }).click();
+    if (variant === 'inbox-navigation') {
+      await navigation.getByRole('button', { name: 'Drafts', exact: true }).click();
+    } else if (variant === 'dropdown-submenus') {
+      await navigation.getByRole('button', { name: 'Getting started', exact: true }).click();
+      await page.getByRole('menuitem', { name: 'Installation', exact: true }).click();
+    } else {
+      await navigation.locator('[data-slot="sidebar-content"] [data-slot="sidebar-menu-button"]:not([aria-haspopup])').first().click();
+    }
+    await expect(shell, variant).toHaveAttribute('data-state', 'expanded');
+    await expect(navigation, variant).toBeVisible();
+    await expect(page.getByRole('dialog')).toHaveCount(0);
+  }
+});
+
+test('mobile gallery drawers keep content fixed and return focus', async ({ page }) => {
+  test.setTimeout(60_000);
+  await page.setViewportSize({ width: 390, height: 844 });
   await page.goto('/docs/blocks/sidebar');
   for (const variant of variants) {
     const demo = demoFor(page, variant);
@@ -95,5 +122,5 @@ test('every gallery preview uses its container width and keeps content fixed beh
     await centered(demo);
     expect(await demo.evaluate(node => node.scrollWidth <= node.clientWidth), variant).toBe(true);
   }
-  expect(page.viewportSize()!.width).toBe(1440);
+  expect(page.viewportSize()!.width).toBe(390);
 });

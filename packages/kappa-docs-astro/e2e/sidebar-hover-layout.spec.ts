@@ -38,7 +38,8 @@ async function resize(root: Locator, key: 'Home' | 'End') {
   const separator = root.getByRole('separator', { name: 'Resize sidebar', exact: true });
   await separator.focus();
   await separator.press(key);
-  await expect(separator).toHaveAttribute('aria-valuenow', (await separator.getAttribute(key === 'End' ? 'aria-valuemax' : 'aria-valuemin'))!);
+  await expect.poll(() => separator.evaluate((node, key) =>
+    node.getAttribute('aria-valuenow') === node.getAttribute(key === 'End' ? 'aria-valuemax' : 'aria-valuemin'), key)).toBe(true);
   await readable(root);
 }
 
@@ -51,8 +52,7 @@ for (const width of [1920, 1440, 1280, 1024, 768, 390]) {
     await expect(shell).toHaveAttribute('data-content-alignment', 'shell');
     await readable(root);
     const separator = root.getByRole('separator', { name: 'Resize sidebar', exact: true });
-    const containerWidth = await shell.evaluate(el => el.clientWidth);
-    if (containerWidth >= 768) {
+    if (width >= 768) {
       await expect(shell).not.toHaveAttribute('data-mobile');
       await resize(root, 'End');
       await root.getByRole('link', { name: 'Troubleshooting', exact: true }).click();

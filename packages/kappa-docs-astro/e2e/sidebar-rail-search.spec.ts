@@ -85,12 +85,12 @@ test("embedded rail search stays centered and uses a drawer in narrow frames", a
   await expect(demo.locator('.kappa-sidebar-layout')).not.toHaveAttribute('data-mobile');
   await demo.getByRole('button', { name: 'Expand sidebar', exact: true }).click();
   // The embedded shell has a 1px border on each side of its measured content box.
-  for (const width of [800, 770, 769, 590, 360]) {
+  for (const width of [800, 600, 590, 588, 580, 360]) {
     await demo.evaluate((node, width) => {
       Object.assign((node as HTMLElement).style, { inlineSize: `${width}px`, minInlineSize: `${width}px` });
     }, width);
     const layout = demo.locator('.kappa-sidebar-layout');
-    if (width < 770) await expect(layout).toHaveAttribute('data-mobile', '');
+    if (width < 590) await expect(layout).toHaveAttribute('data-mobile', '');
     else await expect(layout).not.toHaveAttribute('data-mobile', '');
     const shell = (await layout.boundingBox())!;
     const trigger = demo.getByRole('button', { name: 'Search or go to…', exact: true });

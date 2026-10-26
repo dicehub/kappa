@@ -9,7 +9,7 @@ export const SIDEBAR_LAYOUT_DEFAULTS = {
   variant: "workspace",
   contentAlignment: "shell",
   contentMaxWidth: "72rem",
-  mobileBreakpointReference: "container",
+  mobileBreakpointReference: "viewport",
   label: "Application navigation",
   navigationLabel: "Navigation links",
   secondaryLabel: "Secondary navigation",
