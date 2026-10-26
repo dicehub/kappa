@@ -9,6 +9,9 @@ import SidebarDropdownSubmenusDocsDemo from "../../../components/SidebarDropdown
 import SidebarInboxDocsDemo from "../../../components/SidebarInboxDocsDemo.vue";
 import SidebarWorkspacePagesDocsDemo from "../../../components/SidebarWorkspacePagesDocsDemo.vue";
 import SidebarMinimalWorkspaceDocsDemo from "../../../components/SidebarMinimalWorkspaceDocsDemo.vue";
+import SidebarHoverRevealDocsDemo from "../../../components/SidebarHoverRevealDocsDemo.vue";
+import hoverRevealSource from "../../../components/SidebarHoverRevealDocsDemo.vue?raw";
+import hoverRevealStyles from "../../../components/sidebar-hover-demo.css?raw";
 import minimalWorkspaceSource from "../../../components/SidebarMinimalWorkspaceDocsDemo.vue?raw";
 import workspaceSwitcherDemoSource from "../../../data/workspace-switcher-demo.ts?raw";
 import { inlineWorkspaceSwitcherSource } from "../../../lib/inline-workspace-switcher-source";
@@ -32,7 +35,10 @@ import "../../../styles/docs-blocks.css";
 
 const currentPath = "/docs/blocks/sidebar";
 const description = "Application shell layouts built from Kappa controls, with responsive navigation and source you can copy.";
-const exampleSource = (variant: string) => variant === "minimal-workspace" ? minimalWorkspaceSource
+const exampleSource = (variant: string) => variant === "hover-reveal" ? hoverRevealSource
+  .replace('standalone: false', 'standalone: true')
+  .replace('applicationShell: false', 'applicationShell: true')
+  .replace('<style src="./sidebar-hover-demo.css"></style>', `<style>\n${hoverRevealStyles}</style>`) : variant === "minimal-workspace" ? minimalWorkspaceSource
   .replace('standalone: false', 'standalone: true')
   .replace('<style src="./sidebar-minimal-workspace-demo.css"></style>', `<style>\n${minimalWorkspaceStyles}</style>`) : variant === "workspace-pages" ? workspacePagesSource
   .replace('standalone: false', 'standalone: true')
@@ -48,9 +54,10 @@ const exampleSource = (variant: string) => variant === "minimal-workspace" ? min
   .replace('standalone: false', 'standalone: true')
   .replace('collapsibleSections: false', `collapsibleSections: ${variant === "collapsible-sections"}`)
   .replace('<style src="./sidebar-grouped-demo.css"></style>', `<style>\n${groupedStyles}</style>`) : source
-  .replace('variant: "workspace", standalone: false', `variant: "${variant === "inset-navigation" ? "inset" : variant === "collapsible-icons" ? "workspace" : variant}", standalone: true`)
+  .replace('variant: "workspace", standalone: false', `variant: "${variant === "inset-navigation" ? "inset" : variant === "collapsible-icons" || variant === "peeking" ? "workspace" : variant}", standalone: true`)
   .replace('iconNavigation: false', `iconNavigation: ${variant === "collapsible-icons"}`)
   .replace('insetNavigation: false', `insetNavigation: ${variant === "inset-navigation"}`)
+  .replace('peeking: false', `peeking: ${variant === "peeking"}`)
   .replace('<style src="./sidebar-blocks-demo.css"></style>', `<style>\n${styles}</style>`);
 ---
 
@@ -85,7 +92,7 @@ const exampleSource = (variant: string) => variant === "minimal-workspace" ? min
             <p>{block.description}</p>
             <div class="docs-component-example docs-block-example" data-block-example={block.id}>
               <div class="docs-block-example__bar"><span>Application Shell · {block.id}</span><a href={`/examples/sidebar/${block.id}`} target="_blank" rel="noopener noreferrer">Open full example <span aria-hidden="true">↗</span><span class="docs-block-example__sr-only"> (new tab)</span></a></div>
-              <div class="docs-component-preview docs-block-example__preview">{block.id === "minimal-workspace" ? <SidebarMinimalWorkspaceDocsDemo client:load /> : block.id === "workspace-pages" ? <SidebarWorkspacePagesDocsDemo client:load /> : block.id === "inbox-navigation" ? <SidebarInboxDocsDemo client:load /> : block.id === "dropdown-submenus" ? <SidebarDropdownSubmenusDocsDemo client:load /> : block.id === "submenus" || block.id === "floating-submenus" || block.id === "collapsible-submenus" ? <SidebarSubmenusDocsDemo client:load floating={block.id === "floating-submenus"} collapsible={block.id === "collapsible-submenus"} /> : block.id === "grouped" || block.id === "collapsible-sections" ? <SidebarGroupedDocsDemo client:load collapsibleSections={block.id === "collapsible-sections"} /> : <SidebarBlocksDocsDemo client:load variant={block.id === "inset-navigation" ? "inset" : block.id === "collapsible-icons" ? "workspace" : block.id} iconNavigation={block.id === "collapsible-icons"} insetNavigation={block.id === "inset-navigation"} />}</div>
+              <div class="docs-component-preview docs-block-example__preview">{block.id === "hover-reveal" ? <SidebarHoverRevealDocsDemo client:load applicationShell /> : block.id === "minimal-workspace" ? <SidebarMinimalWorkspaceDocsDemo client:load /> : block.id === "workspace-pages" ? <SidebarWorkspacePagesDocsDemo client:load /> : block.id === "inbox-navigation" ? <SidebarInboxDocsDemo client:load /> : block.id === "dropdown-submenus" ? <SidebarDropdownSubmenusDocsDemo client:load /> : block.id === "submenus" || block.id === "floating-submenus" || block.id === "collapsible-submenus" ? <SidebarSubmenusDocsDemo client:load floating={block.id === "floating-submenus"} collapsible={block.id === "collapsible-submenus"} /> : block.id === "grouped" || block.id === "collapsible-sections" ? <SidebarGroupedDocsDemo client:load collapsibleSections={block.id === "collapsible-sections"} /> : <SidebarBlocksDocsDemo client:load variant={block.id === "inset-navigation" ? "inset" : block.id === "collapsible-icons" || block.id === "peeking" ? "workspace" : block.id} iconNavigation={block.id === "collapsible-icons"} insetNavigation={block.id === "inset-navigation"} peeking={block.id === "peeking"} />}</div>
               <CodeBlock code={inlineWorkspaceSwitcherSource(exampleSource(block.id), workspaceSwitcherDemoSource)} lang="vue" collapsible revealId={`sidebar-block-${block.id}-code`} />
             </div>
           </>)}
@@ -139,6 +146,8 @@ const exampleSource = (variant: string) => variant === "minimal-workspace" ? min
           <p>Collapsible Submenus wraps each nested list in Sidebar.Collapsible. Parent rows are buttons, not links; click, Enter, or Space toggles the list without changing the selected page. Only the selected page's group starts open. Search opens matching groups; clearing search keeps their current state. Open groups and selection survive mobile transitions.</p>
           <p>Dropdown Submenus composes Kappa Dropdown with Sidebar.MenuButton. Parent buttons open page links in a popup; they do not navigate. Arrow keys move between menu items, Enter selects a page, and Escape closes the popup and returns focus to its parent. Search filters each popup. Mobile popups stay inside the full-screen drawer; selection closes both layers and returns focus to the sidebar toggle.</p>
           <p>This local preview uses Dropdown's <code>navigate</code> callback to dispatch a cancelable native click. The link's <code>@click.prevent</code> then prevents keyboard and pointer selection from leaving the example. Replace this demo handling with your application's navigation when you copy the source.</p>
+          <p>Peeking Navigation uses SidebarLayout with icon collapse and Sidebar's peekable behavior. It starts as an icon rail on desktop. Hover or keyboard focus reveals navigation temporarily without changing the page width; the toolbar toggle pins it open. Namespace, profile, search, and project actions use the same workspace composition as the original Workspace example.</p>
+          <p>Hover Reveal Navigation uses the same off-canvas sidebar as the <a href="/docs/components/sidebar#hover-reveal">component example</a>, with workspace menus, navigation context tabs, collapsible page groups, profile selection, and search. It starts expanded. After collapse, hover over the toolbar toggle to reveal the panel below the header; click the toggle or sidebar pin to keep it open. Keyboard users can focus the toggle and press Enter or Space to open it. Escape dismisses a temporary reveal. Both examples use full-screen drawers on mobile and keep the page centered while navigation is temporary.</p>
           <p>Collapsible Icon Navigation starts expanded and uses SidebarLayout with icon collapse. Each parent button toggles an independent Sidebar.Collapsible. Clicking a group icon in the rail expands the sidebar and opens that group. Hidden child links are not keyboard targets. Quick search opens the selected page's group, and namespace, profile, group state, and page selection are held outside the slots to survive mobile transitions. This is a demo composition, not a new SidebarLayout variant. The original Icon Rail example is unchanged.</p>
           <p>Inset Navigation uses the inset variant with nested link groups and project shortcuts. Its Help and feedback navigation sits in the footer above the profile menu, outside the scrolling primary links. Secondary links open local preview pages, are included in Quick search, and close the mobile drawer after selection. The existing Inset Content example remains unchanged. This composition does not use the secondary slot, which is reserved for the split layout.</p>
           <p>Namespace/profile popups use <code>:teleport="!isMobile"</code> and fixed positioning. The namespace trigger uses a 32px icon tile and a 48px row. In the workspace layouts, Quick search is a bordered button that opens Kappa CommandPalette, not an editable input. The examples close mobile navigation after selection; your application must decide when routing has succeeded.</p>

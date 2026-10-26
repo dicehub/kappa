@@ -79,6 +79,7 @@ const description = "Compact application navigation with resizing, peeking, slid
             {example.id === "full-screen-mobile" && <span id="full-screen" />}
             <h3 id={example.id}><a class="docs-section-anchor" href={`#${example.id}`}>{example.title}</a></h3>
             <p>{example.description}</p>
+            {(example.id === "peeking" || example.id === "hover-reveal") && <p>Try this sidebar in the <a href={`/docs/blocks/sidebar#${example.id}`}>{example.id === "peeking" ? "Peeking Navigation" : "Hover Reveal Navigation"} application shell</a>, with a full-screen preview and copyable source.</p>}
             {example.id === "hover-reveal" && <p>The snippet adds hover reveal, pinning, and resizing. Use <a href="/docs/blocks/workspace-switcher">WorkspaceSwitcher</a>, <a href="/docs/components/tabs">Tabs</a>, and <a href="/docs/components/command-palette">CommandPalette</a> to add the preview's other controls.</p>}
             {example.id === "hover-reveal" && <p>The preview leaves room for its content when resizing. <a href="/examples/components/sidebar/hover-reveal" target="_blank" rel="noopener">Open the full-screen example</a> to try screen-centered content.</p>}
             {example.id === "scroll-to-item" && <p>The snippet scrolls the navigation to Settings instantly. Its handler changes only the Sidebar's scroll position.</p>}

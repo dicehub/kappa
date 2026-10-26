@@ -1,4 +1,5 @@
 ---
+import SidebarHoverRevealDocsDemo from "../../../components/SidebarHoverRevealDocsDemo.vue";
 import SidebarBlocksDocsDemo from "../../../components/SidebarBlocksDocsDemo.vue";
 import SidebarGroupedDocsDemo from "../../../components/SidebarGroupedDocsDemo.vue";
 import SidebarDropdownSubmenusDocsDemo from "../../../components/SidebarDropdownSubmenusDocsDemo.vue";
@@ -30,7 +31,7 @@ const { block } = Astro.props;
       document.documentElement.style.colorScheme = mode;
     </script>
   </head>
-  <body><main>{block.id === "minimal-workspace" ? <SidebarMinimalWorkspaceDocsDemo client:load standalone /> : block.id === "workspace-pages" ? <SidebarWorkspacePagesDocsDemo client:load standalone /> : block.id === "inbox-navigation" ? <SidebarInboxDocsDemo client:load standalone /> : block.id === "dropdown-submenus" ? <SidebarDropdownSubmenusDocsDemo client:load standalone /> : block.id === "submenus" || block.id === "floating-submenus" || block.id === "collapsible-submenus" ? <SidebarSubmenusDocsDemo client:load standalone floating={block.id === "floating-submenus"} collapsible={block.id === "collapsible-submenus"} /> : block.id === "grouped" || block.id === "collapsible-sections" ? <SidebarGroupedDocsDemo client:load standalone collapsibleSections={block.id === "collapsible-sections"} /> : <SidebarBlocksDocsDemo client:load variant={block.id === "inset-navigation" ? "inset" : block.id === "collapsible-icons" ? "workspace" : block.id} iconNavigation={block.id === "collapsible-icons"} insetNavigation={block.id === "inset-navigation"} standalone />}</main></body>
+  <body><main>{block.id === "hover-reveal" ? <SidebarHoverRevealDocsDemo client:load applicationShell standalone /> : block.id === "minimal-workspace" ? <SidebarMinimalWorkspaceDocsDemo client:load standalone /> : block.id === "workspace-pages" ? <SidebarWorkspacePagesDocsDemo client:load standalone /> : block.id === "inbox-navigation" ? <SidebarInboxDocsDemo client:load standalone /> : block.id === "dropdown-submenus" ? <SidebarDropdownSubmenusDocsDemo client:load standalone /> : block.id === "submenus" || block.id === "floating-submenus" || block.id === "collapsible-submenus" ? <SidebarSubmenusDocsDemo client:load standalone floating={block.id === "floating-submenus"} collapsible={block.id === "collapsible-submenus"} /> : block.id === "grouped" || block.id === "collapsible-sections" ? <SidebarGroupedDocsDemo client:load standalone collapsibleSections={block.id === "collapsible-sections"} /> : <SidebarBlocksDocsDemo client:load variant={block.id === "inset-navigation" ? "inset" : block.id === "collapsible-icons" || block.id === "peeking" ? "workspace" : block.id} iconNavigation={block.id === "collapsible-icons"} insetNavigation={block.id === "inset-navigation"} peeking={block.id === "peeking"} standalone />}</main></body>
 </html>
 
 <style>body { margin: 0; } main { min-inline-size: 0; }</style>

@@ -11,7 +11,7 @@ import { Tabs } from "@dicehub/kappa/components/tabs";
 import { Tooltip } from "@dicehub/kappa/components/tooltip";
 import { Building2, ChevronsLeft, ChevronsRight, ChevronsUpDown, FlaskConical, Folder, House, Inbox, MessageCircle, Plus, Search, Settings, UserRound, UsersRound } from "@lucide/vue";
 
-const props = withDefaults(defineProps<{ standalone?: boolean }>(), { standalone: false });
+const props = withDefaults(defineProps<{ standalone?: boolean; applicationShell?: boolean }>(), { standalone: false, applicationShell: false });
 const host = ref<HTMLElement>();
 const maxWidth = ref(600);
 watch(host, (element, _, onCleanup) => {
@@ -138,9 +138,9 @@ onBeforeUnmount(() => window.removeEventListener("keydown", shortcut));
 </script>
 
 <template>
-  <div ref="host" class="sidebar-hover-demo" :data-standalone="props.standalone || undefined" data-sidebar-demo="hover-reveal">
+  <div ref="host" class="sidebar-hover-demo" :data-standalone="props.standalone || undefined" :data-sidebar-block="props.applicationShell ? 'hover-reveal' : undefined" data-sidebar-demo="hover-reveal">
     <DirectionProvider :locale="rtl ? 'ar' : 'en'">
-      <SidebarLayout :open="open" peekable collapsible="offcanvas" content-max-width="42rem" resizable
+      <SidebarLayout :open="open" peekable collapsible="offcanvas" content-max-width="42rem" resizable :full-screen-on-mobile="props.applicationShell"
         :min-width="260" :max-width="maxWidth" :collapse-on-resize="false"
         :side="end ? 'end' : 'start'" :dir="rtl ? 'rtl' : 'ltr'" label="Hover navigation"
         :trigger-props="{ peek: true, expandLabel: 'Pin sidebar open' }" class="sidebar-hover-demo__layout"
@@ -244,14 +244,25 @@ onBeforeUnmount(() => window.removeEventListener("keydown", shortcut));
           <article class="sidebar-hover-demo__article">
             <span class="sidebar-hover-demo__eyebrow">{{ workspace }}</span>
             <h2>{{ selected }}</h2>
-            <p>Collapse the sidebar. Hover over the header toggle to reveal it, then click to pin it open.</p>
-            <p>The temporary panel leaves this reading column in place. Move away to hide it, or press Escape.</p>
-            <output aria-live="polite">{{ context.isMobile ? 'Mobile drawer' : context.state }} · {{ requests }} open requests</output>
-            <div class="sidebar-hover-demo__controls">
-              <Button variant="secondary" size="sm" @click="locked = !locked">{{ locked ? 'Unlock state' : 'Lock state' }}</Button>
-              <Button variant="secondary" size="sm" @click="end = !end">Change side</Button>
-              <Button variant="secondary" size="sm" @click="rtl = !rtl">{{ rtl ? 'Use LTR' : 'Use RTL' }}</Button>
-            </div>
+            <template v-if="props.applicationShell">
+              <p>Keep project data, decisions, and review notes together in the {{ workspace }} workspace.</p>
+              <dl class="sidebar-hover-demo__brief"><div><dt>Owner</dt><dd>{{ profile }}</dd></div><div><dt>Status</dt><dd>In review</dd></div><div><dt>Next review</dt><dd>29 October 2026</dd></div></dl>
+              <h3>Before you start</h3>
+              <p>Confirm the geometry revision and agree on the operating conditions with your team. Keep the source files with the project so each simulation uses the same inputs.</p>
+              <h3>Next steps</h3>
+              <ol><li>Review the project requirements and assign an owner.</li><li>Prepare the geometry and record the mesh settings.</li><li>Share the first results with the team for review.</li></ol>
+              <Button variant="secondary" size="sm" @click="search(false, $event)"><Search aria-hidden="true" />Find a workspace page</Button>
+            </template>
+            <template v-else>
+              <p>Collapse the sidebar. Hover over the header toggle to reveal it, then click to pin it open.</p>
+              <p>The temporary panel leaves this reading column in place. Move away to hide it, or press Escape.</p>
+              <output aria-live="polite">{{ context.isMobile ? 'Mobile drawer' : context.state }} · {{ requests }} open requests</output>
+              <div class="sidebar-hover-demo__controls">
+                <Button variant="secondary" size="sm" @click="locked = !locked">{{ locked ? 'Unlock state' : 'Lock state' }}</Button>
+                <Button variant="secondary" size="sm" @click="end = !end">Change side</Button>
+                <Button variant="secondary" size="sm" @click="rtl = !rtl">{{ rtl ? 'Use LTR' : 'Use RTL' }}</Button>
+              </div>
+            </template>
           </article>
         </template>
       </SidebarLayout>

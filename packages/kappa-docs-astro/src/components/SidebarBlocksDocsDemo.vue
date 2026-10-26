@@ -11,7 +11,7 @@ import { CommandPalette } from "@dicehub/kappa/components/command-palette";
 import { Table } from "@dicehub/kappa/components/table";
 import { Building2, ChevronsUpDown, Folder, LayoutDashboard, FileText, Settings, Search, Plus, Box, CircleHelp, MessageSquare, BadgeCheck, Bell, CreditCard, LogOut, Sparkles, UsersRound } from "@lucide/vue";
 
-const props = withDefaults(defineProps<{ variant?: SidebarLayoutVariant; standalone?: boolean; iconNavigation?: boolean; insetNavigation?: boolean }>(), { variant: "workspace", standalone: false, iconNavigation: false, insetNavigation: false });
+const props = withDefaults(defineProps<{ variant?: SidebarLayoutVariant; standalone?: boolean; iconNavigation?: boolean; insetNavigation?: boolean; peeking?: boolean }>(), { variant: "workspace", standalone: false, iconNavigation: false, insetNavigation: false, peeking: false });
 const richNavigation = computed(() => props.iconNavigation || props.insetNavigation);
 const headingId = useId();
 const namespace = ref("Engineering");
@@ -111,8 +111,9 @@ function createProject() {
 </script>
 
 <template>
-  <div ref="searchScope" class="sidebar-block-demo" :data-sidebar-block="props.insetNavigation ? 'inset-navigation' : props.iconNavigation ? 'collapsible-icons' : props.variant" :data-standalone="props.standalone || undefined" @keydown="railSearchShortcut">
-    <SidebarLayout :variant="props.variant" content-max-width="62rem" :mobile-breakpoint="props.variant === 'rail' ? railMobileBreakpoint : undefined" :label="props.insetNavigation ? 'Inset application navigation' : props.iconNavigation ? 'Icon application navigation' : `${props.variant} application navigation`" :resizable="!richNavigation && props.variant === 'workspace'" full-screen-on-mobile>
+  <div ref="searchScope" class="sidebar-block-demo" :data-sidebar-block="props.peeking ? 'peeking' : props.insetNavigation ? 'inset-navigation' : props.iconNavigation ? 'collapsible-icons' : props.variant" :data-standalone="props.standalone || undefined" @keydown="railSearchShortcut">
+    <SidebarLayout :variant="props.variant" content-max-width="62rem" :mobile-breakpoint="props.variant === 'rail' ? railMobileBreakpoint : undefined" :label="props.peeking ? 'Peeking application navigation' : props.insetNavigation ? 'Inset application navigation' : props.iconNavigation ? 'Icon application navigation' : `${props.variant} application navigation`" :resizable="!props.peeking && !richNavigation && props.variant === 'workspace'"
+      :peekable="props.peeking" :default-open="props.peeking ? false : undefined" :trigger-props="props.peeking ? { expandLabel: 'Pin sidebar open' } : undefined" full-screen-on-mobile>
       <template #header="context">
         <WorkspaceSwitcher v-model="namespace" :items="namespaceSwitcherItems" label="Namespaces" :account-label="account.email"
           :actions="namespaceSwitcherActions" :workspace-actions="namespaceSwitcherWorkspaceActions" :footer-actions="namespaceSwitcherFooterActions"

@@ -2,7 +2,7 @@ import { expect, test, type Locator, type Page } from '@playwright/test';
 
 const variants = [
   'grouped', 'collapsible-sections', 'submenus', 'floating-submenus',
-  'collapsible-submenus', 'dropdown-submenus', 'collapsible-icons',
+  'collapsible-submenus', 'dropdown-submenus', 'collapsible-icons', 'peeking', 'hover-reveal',
   'inset-navigation', 'inbox-navigation', 'workspace-pages', 'minimal-workspace',
   'workspace', 'rail', 'inset', 'floating',
 ];
@@ -12,8 +12,13 @@ const shellFor = (demo: Locator) => demo.locator('.kappa-sidebar-layout, .sideba
 const columnFor = (demo: Locator) => demo.locator([
   '.sidebar-grouped-demo__article', '.sidebar-pages-demo__page',
   '.minimal-workspace-demo__page', '.sidebar-block-demo__page',
-  '.sidebar-inbox-demo__reader-column',
+  '.sidebar-inbox-demo__reader-column', '.sidebar-hover-demo__article',
 ].join(', '));
+
+function desktopToggle(demo: Locator, variant: string, expanded: boolean) {
+  if (variant === 'hover-reveal') return demo.locator('.kappa-sidebar-layout__toolbar [data-slot="sidebar-trigger"]');
+  return demo.getByRole('button', { name: expanded ? 'Collapse sidebar' : variant === 'peeking' ? 'Pin sidebar open' : 'Expand sidebar', exact: true });
+}
 
 async function hydrated(demo: Locator) {
   await expect.poll(() => demo.evaluate(node => node.closest('astro-island')?.hasAttribute('ssr'))).toBe(false);
@@ -43,16 +48,17 @@ for (const variant of variants) {
     const shell = shellFor(demo);
     await expect(shell).not.toHaveAttribute('data-mobile');
     if (await shell.getAttribute('data-state') === 'collapsed') {
-      await demo.getByRole('button', { name: 'Expand sidebar', exact: true }).click();
+      await desktopToggle(demo, variant, false).click();
     }
     await centered(demo);
     const before = await geometry(demo);
     expect(before.width).toBeGreaterThan(600);
-    await demo.getByRole('button', { name: 'Collapse sidebar', exact: true }).click();
+    await desktopToggle(demo, variant, true).click();
+    if (variant === 'hover-reveal') await columnFor(demo).getByRole('heading', { level: 2 }).click();
     await expect(shell).toHaveAttribute('data-state', 'collapsed');
     await centered(demo);
     expect((await geometry(demo)).width).toBeCloseTo(before.width, 0);
-    await demo.getByRole('button', { name: 'Expand sidebar', exact: true }).click();
+    await desktopToggle(demo, variant, false).click();
     await centered(demo);
     expect((await geometry(demo)).width).toBeCloseTo(before.width, 0);
 
@@ -83,8 +89,8 @@ test('desktop gallery navigation stays visible and open after selection', async 
     await expect(shell, variant).not.toHaveAttribute('data-mobile');
     const navigation = demo.locator('[data-slot="sidebar"]');
     await expect(navigation, variant).toBeVisible();
-    await expect(shell, variant).toHaveAttribute('data-state', variant === 'rail' ? 'collapsed' : 'expanded');
-    if (variant === 'rail') await demo.getByRole('button', { name: 'Expand sidebar', exact: true }).click();
+    await expect(shell, variant).toHaveAttribute('data-state', ['rail', 'peeking'].includes(variant) ? 'collapsed' : 'expanded');
+    if (['rail', 'peeking'].includes(variant)) await desktopToggle(demo, variant, false).click();
     if (variant === 'inbox-navigation') {
       await navigation.getByRole('button', { name: 'Drafts', exact: true }).click();
     } else if (variant === 'dropdown-submenus') {
