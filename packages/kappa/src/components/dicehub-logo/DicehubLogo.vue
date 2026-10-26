@@ -1,12 +1,9 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import {
-  DICEHUB_FULL_LOGO_PATHS,
-  DICEHUB_FULL_LOGO_VIEWBOX,
-  DICEHUB_GLYPH_PATHS,
-  DICEHUB_GLYPH_VIEWBOX,
   DICEHUB_LOGO_DEFAULT_COLOR,
   DICEHUB_LOGO_DEFAULT_VARIANT,
+  getDicehubLogoArtwork,
   isDicehubLogoColor,
   isDicehubLogoVariant,
   type DicehubLogoColor,
@@ -32,9 +29,7 @@ const resolvedVariant = computed(() =>
   isDicehubLogoVariant(props.variant) ? props.variant : DICEHUB_LOGO_DEFAULT_VARIANT,
 );
 const resolvedColor = computed(() => (isDicehubLogoColor(props.color) ? props.color : DICEHUB_LOGO_DEFAULT_COLOR));
-const isGlyph = computed(() => resolvedVariant.value === "glyph");
-const viewBox = computed(() => (isGlyph.value ? DICEHUB_GLYPH_VIEWBOX : DICEHUB_FULL_LOGO_VIEWBOX));
-const paths = computed(() => (isGlyph.value ? DICEHUB_GLYPH_PATHS : DICEHUB_FULL_LOGO_PATHS));
+const artwork = computed(() => getDicehubLogoArtwork(resolvedVariant.value));
 </script>
 
 <template>
@@ -42,13 +37,13 @@ const paths = computed(() => (isGlyph.value ? DICEHUB_GLYPH_PATHS : DICEHUB_FULL
     v-bind="$attrs"
     class="kappa-dicehub-logo"
     :class="[`kappa-dicehub-logo--${resolvedVariant}`, `kappa-dicehub-logo--${resolvedColor}`]"
-    :viewBox="viewBox"
+    :viewBox="artwork.viewBox"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
     role="img"
     :aria-label="title"
   >
-    <path v-for="path in paths" :key="path" :d="path" fill="currentColor" />
+    <path v-for="path in artwork.paths" :key="path" :d="path" fill="currentColor" />
   </svg>
 </template>
 

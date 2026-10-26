@@ -52,6 +52,10 @@ html.kappa-docs-root[data-mode="dark"]:not([data-kappa-theme="light"]) .docs-com
   min-height: 15rem;
 }
 
+.docs-component-preview--dicehub-logo:has(.dicehub-logo-demo__asset-menu[open]) {
+  z-index: 3;
+}
+
 .docs-component-preview--command-palette {
   min-height: 7.5rem;
   padding: 1.5rem;

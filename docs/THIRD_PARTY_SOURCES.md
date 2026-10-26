@@ -72,7 +72,7 @@ when they exist. Record the source revision for new adaptations.
 
 Run `pnpm --filter @dicehub/kappa codegen:licenses` after the library build.
 Do not edit `THIRD_PARTY_NOTICES.md` directly. Package validation checks that the
-MIT license, adapted-source license files, and full Kumo, Phosphor, and Ark notices reach
+MIT license, adapted-source and font license files, and full upstream notices reach
 the tarball.
 
 The documentation build enables Vite's bundled dependency license output and
@@ -85,6 +85,17 @@ dependency notices are missing.
 
 Bundled fonts retain their included licenses.
 
+## Nunito ExtraBold
+
+`PoweredByDicehub` bundles the unmodified Nunito ExtraBold Latin WOFF2 font from
+`@fontsource/nunito` 5.1.1 (`files/nunito-latin-800-normal.woff2`).
+The font metadata identifies version 3.602 and weight 800. Its SHA-256 is
+`5b6eb685c75677d9dab957b198d7f19ec9a1d34b378fbd440885c080a5ca6b53`.
+The upstream project is [Nunito](https://github.com/googlefonts/nunito).
+The complete SIL Open Font License 1.1 is preserved in
+`packages/kappa/licenses/nunito.LICENSE` and the generated package notices.
+The font applies only to the dicehub name in the text badge.
+
 ## Artwork and brand assets
 
 Documentation artwork includes the five images in
@@ -93,6 +104,14 @@ Documentation artwork includes the five images in
 `public/images/demos/cropper-field.svg`, and `public/kappa-mark{,-white}.svg`.
 The paths beginning with `public/` are relative to the docs package. Brand artwork
 also includes the exported `packages/kappa/src/components/dicehub-logo/` artwork.
+
+The horizontal logo uses dicehub's supplied `logo-35-text.svg` (SHA-256
+`648935cefa858d0ba26ce3f390c9a64cf9457237c0070664c6627d686b561afa`).
+The vertical logo uses the supplied `logo_vertical.svg` (SHA-256
+`18954f506c95ee2fb44095708bf72839be6a09633283a2ada1d05291cdaf01d3`).
+Their Nunito Bold wordmarks remain outlined SVG artwork, with no font runtime
+dependency. The vertical paths use the component's color instead of a fixed
+fill. Reference copies in the docs end-to-end fixtures are also brand assets.
 
 Artwork and brand assets are excluded from Kappa's MIT grant. Component code
 remains MIT. The MIT license does not grant trademark rights. Fonts and

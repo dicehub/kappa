@@ -15,8 +15,8 @@ test.describe("DicehubLogo documentation", () => {
     await expect(logo).toHaveCount(1);
     await expect(logo).toHaveAttribute("role", "img");
     await expect(logo).toHaveAttribute("aria-label", "dicehub logo");
-    await expect(logo).toHaveAttribute("viewBox", "0 0 137 41");
-    await expect(logo.locator("path")).toHaveCount(13);
+    await expect(logo).toHaveAttribute("viewBox", "0 0 145 38");
+    await expect(logo.locator("path")).toHaveCount(3);
     await expect(logo.locator("path").first()).toHaveAttribute("fill", "currentColor");
     await expect(usageLogo).toHaveAttribute("aria-label", "Primary dicehub logo");
     await expect(usageLogo).toHaveAttribute("data-testid", "logo-attribute-forwarding");
@@ -66,7 +66,7 @@ test.describe("DicehubLogo documentation", () => {
 
     const bounds = await previewLogo.boundingBox();
     expect(bounds).not.toBeNull();
-    expect(Math.abs((bounds?.width ?? 0) / (bounds?.height ?? 1) - 137 / 41)).toBeLessThan(
+    expect(Math.abs((bounds?.width ?? 0) / (bounds?.height ?? 1) - 145 / 38)).toBeLessThan(
       0.02,
     );
     await expect(powered).toHaveCount(5);
@@ -82,13 +82,16 @@ test.describe("DicehubLogo documentation", () => {
     const example = page.locator('[data-logo-demo="copy"]');
     const details = example.locator("details");
     const disclosure = example.locator("summary");
+    const arrow = disclosure.locator('svg').last();
     const copyMark = example.getByRole("button", { name: "Copy mark as SVG" });
 
     await expect(details).not.toHaveAttribute("open", "");
-    await expect(disclosure).toContainText("Logo");
+    await expect(disclosure).toHaveAccessibleName("dicehub");
+    await expect(arrow).toHaveCSS("transform", "none");
     await disclosure.focus();
     await page.keyboard.press("Enter");
     await expect(details).toHaveAttribute("open", "");
+    await expect(arrow).toHaveCSS("transform", "none");
     await expect(copyMark).toBeVisible();
     await expect(example.getByRole("button", { name: "Copy full logo as SVG" })).toBeVisible();
     await expect(example.getByRole("button", { name: "Download brand assets" })).toBeVisible();
@@ -100,6 +103,7 @@ test.describe("DicehubLogo documentation", () => {
     await copyMark.click();
     await expect(disclosure).toBeFocused();
     await expect(details).not.toHaveAttribute("open", "");
+    await expect(arrow).toHaveCSS("transform", "none");
     await expect.poll(() => page.evaluate(() => navigator.clipboard.readText())).toMatch(/^<svg/);
   });
 
@@ -127,6 +131,7 @@ test.describe("DicehubLogo documentation", () => {
       "Usage",
       "Examples",
       "Glyph Only",
+      "Vertical Logo",
       "Color Variants",
       "Glyph Color Variants",
       "Sizing",

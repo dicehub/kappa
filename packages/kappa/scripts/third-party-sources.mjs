@@ -22,6 +22,17 @@ export const adaptedSources = [
   },
 ];
 
+export const bundledFonts = [
+  {
+    name: "Nunito ExtraBold",
+    repository: "https://github.com/googlefonts/nunito",
+    version: "3.602",
+    sha256: "5b6eb685c75677d9dab957b198d7f19ec9a1d34b378fbd440885c080a5ca6b53",
+    licenseFile: "licenses/nunito.LICENSE",
+    scope: "Unmodified Latin WOFF2 font used for the dicehub name in PoweredByDicehub.",
+  },
+];
+
 export const arkNumberInputSource = {
   repository: "https://github.com/chakra-ui/ark",
   reference: "8067ebecca4c222b7ee346a947b1e30f54cc36e7",

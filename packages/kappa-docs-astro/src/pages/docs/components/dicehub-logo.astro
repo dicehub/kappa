@@ -19,12 +19,13 @@ import {
   sizesCode,
   svgGenerationCode,
   usageCode,
+  verticalCode,
 } from "../../../data/dicehub-logo-docs";
 import DocsLayout from "../../../layouts/DocsLayout.astro";
 import "../../../styles/docs-components.css";
 
 const currentPath = "/docs/components/dicehub-logo";
-const description = "Official dicehub logo component with glyph and full logo variants.";
+const description = "Official dicehub SVG artwork with glyph, horizontal, and vertical variants and an outlined Nunito Bold wordmark.";
 ---
 
 <DocsLayout title="DicehubLogo" description={description}>
@@ -77,6 +78,7 @@ const description = "Official dicehub logo component with glyph and full logo va
 
         <section id="usage" class="docs-section">
           <h2><a class="docs-section-anchor" href="#usage">Usage</a></h2>
+          <p>The dicehub wordmark uses the supplied Nunito Bold letterforms as SVG paths. It stays independent of the application's font and requires no font download.</p>
           <div class="docs-component-example">
             <div class="docs-component-preview docs-component-preview--dicehub-logo">
               <DicehubLogoDocsDemo client:load variant="usage" />
@@ -107,8 +109,17 @@ const description = "Official dicehub logo component with glyph and full logo va
             />
           </div>
 
+          <h3 id="vertical"><a class="docs-section-anchor" href="#vertical">Vertical Logo</a></h3>
+          <p>Use <code>variant="vertical"</code> for the mark above the wordmark. The supplied geometry is preserved; every path follows the selected color.</p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview docs-component-preview--dicehub-logo">
+              <DicehubLogoDocsDemo client:load variant="vertical" />
+            </div>
+            <CodeBlock code={verticalCode} lang="vue" collapsible revealId="dicehub-logo-vertical-code" />
+          </div>
+
           <h3 id="color-variants"><a class="docs-section-anchor" href="#color-variants">Color Variants</a></h3>
-          <p>The logo supports three color schemes: color, black, and white.</p>
+          <p>The default <code>color</code> scheme uses dicehub ink (#333333) in light mode and white in dark mode through <code>--kappa-dicehub-logo-foreground</code>. Explicit <code>black</code> and <code>white</code> stay fixed in both themes. Existing <code>--kappa-dicehub-logo-ink</code> overrides remain supported.</p>
           <div class="docs-component-example">
             <div class="docs-component-preview docs-component-preview--dicehub-logo">
               <DicehubLogoDocsDemo client:load variant="colors" />
@@ -172,7 +183,7 @@ const description = "Official dicehub logo component with glyph and full logo va
 
         <section id="powered-by-dicehub" class="docs-section docs-section--component-examples">
           <h2><a class="docs-section-anchor" href="#powered-by-dicehub">PoweredByDicehub</a></h2>
-          <p>A pre-built "Powered by dicehub" badge component for footers and attribution.</p>
+          <p>A pre-built "Powered by dicehub" text badge for footers and attribution. The dicehub name uses bundled Nunito ExtraBold (800); "Powered by" keeps the application font.</p>
 
           <h3 id="powered-basic-usage">
             <a class="docs-section-anchor" href="#powered-basic-usage">Basic Usage</a>
@@ -223,6 +234,7 @@ const description = "Official dicehub logo component with glyph and full logo va
           <p>
             Use <code>generateDicehubLogoSvg()</code> to get copy-paste ready SVG markup for non-Vue contexts.
           </p>
+          <p>Generated files are self-contained: the default uses #333333. Set <code>color: "white"</code> for a dark background. All three variants use outlined artwork, with no CSS or font dependency.</p>
           <CodeBlock code={svgGenerationCode} lang="javascript" />
         </section>
 
@@ -301,6 +313,7 @@ const description = "Official dicehub logo component with glyph and full logo va
               <a href="#examples" data-toc-link="examples">Examples</a>
               <ul>
                 <li><a href="#glyph-only" data-toc-link="glyph-only">Glyph Only</a></li>
+                <li><a href="#vertical" data-toc-link="vertical">Vertical Logo</a></li>
                 <li><a href="#color-variants" data-toc-link="color-variants">Color Variants</a></li>
                 <li>
                   <a href="#glyph-color-variants" data-toc-link="glyph-color-variants">Glyph Color Variants</a>

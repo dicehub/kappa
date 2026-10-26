@@ -34,6 +34,22 @@ import { DicehubLogo } from "@dicehub/kappa/components/dicehub-logo";
   <DicehubLogo variant="glyph" style="width: 6rem;" />
 </template>`;
 
+export const verticalCode = `<script setup>
+import { DicehubLogo } from "@dicehub/kappa/components/dicehub-logo";
+</script>
+
+<template>
+  <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 2rem;">
+    <DicehubLogo variant="vertical" style="width: 6rem;" />
+    <div style="padding: 1rem; background: white;">
+      <DicehubLogo variant="vertical" color="black" style="width: 6rem;" />
+    </div>
+    <div style="padding: 1rem; background: black;">
+      <DicehubLogo variant="vertical" color="white" style="width: 6rem;" />
+    </div>
+  </div>
+</template>`;
+
 export const colorVariantsCode = `<script setup>
 import { DicehubLogo } from "@dicehub/kappa/components/dicehub-logo";
 </script>
@@ -92,12 +108,12 @@ const copyToClipboard = async (variant) => {
   copied.value = variant;
 };
 
-const downloadLogo = () => {
-  const blob = new Blob([generateDicehubLogoSvg()], { type: "image/svg+xml" });
+const downloadLogo = (variant = "full") => {
+  const blob = new Blob([generateDicehubLogoSvg({ variant })], { type: "image/svg+xml" });
   const url = URL.createObjectURL(blob);
   const link = document.createElement("a");
   link.href = url;
-  link.download = "dicehub-logo.svg";
+  link.download = variant === "vertical" ? "dicehub-logo-vertical.svg" : "dicehub-logo.svg";
   link.click();
   window.setTimeout(() => URL.revokeObjectURL(url), 0);
 };
@@ -106,8 +122,7 @@ const downloadLogo = () => {
 <template>
   <details>
     <summary>
-      <DicehubLogo variant="glyph" color="white" style="width: 1.5rem;" />
-      Logo
+      <DicehubLogo title="dicehub" style="width: 6rem;" />
     </summary>
     <button type="button" @click="copyToClipboard('glyph')">
       {{ copied === "glyph" ? "Copied!" : "Copy mark as SVG" }}
@@ -115,7 +130,11 @@ const downloadLogo = () => {
     <button type="button" @click="copyToClipboard('full')">
       {{ copied === "full" ? "Copied!" : "Copy full logo as SVG" }}
     </button>
-    <button type="button" @click="downloadLogo">Download brand assets</button>
+    <button type="button" @click="copyToClipboard('vertical')">
+      {{ copied === "vertical" ? "Copied!" : "Copy vertical logo as SVG" }}
+    </button>
+    <button type="button" @click="downloadLogo()">Download brand assets</button>
+    <button type="button" @click="downloadLogo('vertical')">Download vertical logo</button>
     <a href="https://dicehub.com" target="_blank" rel="noopener noreferrer">
       Visit brand guidelines
     </a>
@@ -163,6 +182,9 @@ const glyphSvg = generateDicehubLogoSvg({ variant: "glyph" });
 // Generate full logo SVG
 const fullSvg = generateDicehubLogoSvg({ variant: "full" });
 
+// Generate a white vertical logo for a dark background
+const verticalSvg = generateDicehubLogoSvg({ variant: "vertical", color: "white" });
+
 // Generate black logo
 const blackSvg = generateDicehubLogoSvg({ color: "black" });
 
@@ -174,15 +196,15 @@ await navigator.clipboard.writeText(
 export const logoProps = [
   {
     name: "variant",
-    type: '"glyph" | "full"',
+    type: '"glyph" | "full" | "vertical"',
     defaultValue: '"full"',
-    description: "Logo variant. Glyph shows just the dicehub mark, full includes the wordmark.",
+    description: "Glyph shows the mark, full places the wordmark beside it, and vertical stacks them.",
   },
   {
     name: "color",
     type: '"color" | "black" | "white"',
     defaultValue: '"color"',
-    description: "Color scheme. Color uses dicehub ink, black and white are solid options.",
+    description: "Color follows the theme: dicehub ink in light mode and white in dark mode. Black and white stay fixed.",
   },
   {
     name: "title",

@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { DicehubLogo, PoweredByDicehub, generateDicehubLogoSvg } from "@dicehub/kappa/components/dicehub-logo";
+import { DicehubLogo, PoweredByDicehub, generateDicehubLogoSvg, type DicehubLogoVariant } from "@dicehub/kappa/components/dicehub-logo";
 import { onBeforeUnmount, onMounted, ref } from "vue";
 
 type DemoVariant =
-  | "basic" | "usage" | "glyph" | "colors" | "glyph-colors" | "sizes" | "copy"
+  | "basic" | "usage" | "glyph" | "vertical" | "colors" | "glyph-colors" | "sizes" | "copy"
   | "powered-basic" | "powered-variants" | "powered-footer" | "home"
   | "preview";
 
@@ -25,7 +25,7 @@ const copyToClipboard = async (text: string, label: string) => {
   try {
     await navigator.clipboard.writeText(text);
     copied.value = label;
-    statusMessage.value = `${label === "glyph" ? "Mark" : "Full logo"} SVG copied.`;
+    statusMessage.value = `${label === "glyph" ? "Mark" : label === "vertical" ? "Vertical logo" : "Full logo"} SVG copied.`;
 
     if (copiedTimeout) clearTimeout(copiedTimeout);
     copiedTimeout = setTimeout(() => {
@@ -39,15 +39,15 @@ const copyToClipboard = async (text: string, label: string) => {
   }
 };
 
-const downloadBrandAsset = () => {
-  const blob = new Blob([generateDicehubLogoSvg()], { type: "image/svg+xml" });
+const downloadBrandAsset = (variant: DicehubLogoVariant = "full") => {
+  const blob = new Blob([generateDicehubLogoSvg({ variant })], { type: "image/svg+xml" });
   const url = URL.createObjectURL(blob);
   const link = document.createElement("a");
   link.href = url;
-  link.download = "dicehub-logo.svg";
+  link.download = variant === "vertical" ? "dicehub-logo-vertical.svg" : "dicehub-logo.svg";
   link.click();
   window.setTimeout(() => URL.revokeObjectURL(url), 0);
-  statusMessage.value = "dicehub logo SVG downloaded.";
+  statusMessage.value = variant === "vertical" ? "Vertical dicehub logo SVG downloaded." : "dicehub logo SVG downloaded.";
   closeAssetMenu(true);
 };
 
@@ -96,6 +96,16 @@ onBeforeUnmount(() => {
       variant="glyph"
       title="dicehub glyph"
     />
+
+    <div v-else-if="variant === 'vertical'" class="dicehub-logo-demo__row dicehub-logo-demo__row--loose">
+      <DicehubLogo variant="vertical" class="dicehub-logo-demo__vertical" title="Vertical dicehub logo" />
+      <div class="dicehub-logo-demo__surface dicehub-logo-demo__surface--light">
+        <DicehubLogo variant="vertical" color="black" class="dicehub-logo-demo__vertical" title="Black vertical dicehub logo" />
+      </div>
+      <div class="dicehub-logo-demo__surface dicehub-logo-demo__surface--dark">
+        <DicehubLogo variant="vertical" color="white" class="dicehub-logo-demo__vertical" title="White vertical dicehub logo" />
+      </div>
+    </div>
 
     <div
       v-else-if="variant === 'colors'"
@@ -156,12 +166,9 @@ onBeforeUnmount(() => {
         <summary class="dicehub-logo-demo__asset-button">
           <DicehubLogo
             class="dicehub-logo-demo__asset-mark"
-            variant="glyph"
             color="white"
-            title="dicehub glyph"
-            aria-hidden="true"
+            title="dicehub"
           />
-          <span>Logo</span>
           <svg viewBox="0 0 16 16" aria-hidden="true">
             <path d="m4 6 4 4 4-4" />
           </svg>
@@ -182,9 +189,17 @@ onBeforeUnmount(() => {
             <svg viewBox="0 0 16 16" aria-hidden="true"><path d="m6 3-4 5 4 5m4-10 4 5-4 5" /></svg>
             <span>{{ copied === "full" ? "Copied!" : "Copy full logo as SVG" }}</span>
           </button>
-          <button type="button" @click="downloadBrandAsset">
+          <button type="button" @click="copyToClipboard(generateDicehubLogoSvg({ variant: 'vertical' }), 'vertical')">
+            <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2h8v12H4z" /></svg>
+            <span>{{ copied === "vertical" ? "Copied!" : "Copy vertical logo as SVG" }}</span>
+          </button>
+          <button type="button" @click="downloadBrandAsset()">
             <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 2v8m-3-3 3 3 3-3M3 13h10" /></svg>
             <span>Download brand assets</span>
+          </button>
+          <button type="button" @click="downloadBrandAsset('vertical')">
+            <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 2v8m-3-3 3 3 3-3M3 13h10" /></svg>
+            <span>Download vertical logo</span>
           </button>
           <div class="dicehub-logo-demo__menu-separator" role="separator"></div>
           <a
@@ -219,274 +234,4 @@ onBeforeUnmount(() => {
   </div>
 </template>
 
-<style scoped>
-.dicehub-logo-demo {
-  display: flex;
-  width: 100%;
-  min-height: 7rem;
-  align-items: center;
-  justify-content: center;
-  color: var(--docs-default);
-}
-
-.dicehub-logo-demo--colors,
-.dicehub-logo-demo--glyph-colors,
-.dicehub-logo-demo--sizes,
-.dicehub-logo-demo--copy,
-.dicehub-logo-demo--powered-variants,
-.dicehub-logo-demo--powered-footer {
-  min-height: 9rem;
-}
-
-.dicehub-logo-demo--home {
-  min-height: 0;
-}
-
-.dicehub-logo-demo__brand-plate {
-  display: flex;
-  width: min(100%, 15rem);
-  min-height: 8rem;
-  align-items: center;
-  justify-content: center;
-  padding: 1.5rem;
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  border-radius: 0.75rem;
-  background: #ffffff;
-  box-shadow: 0 1rem 2.5rem rgba(15, 23, 42, 0.08);
-}
-
-.dicehub-logo-demo__home,
-.dicehub-logo-demo__size-lg {
-  width: 11rem;
-}
-
-.dicehub-logo-demo__full {
-  width: min(100%, 18rem);
-}
-
-.dicehub-logo-demo__usage {
-  width: 9rem;
-}
-
-.dicehub-logo-demo__glyph {
-  width: 6rem;
-}
-
-.dicehub-logo-demo__row {
-  display: flex;
-  width: 100%;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: center;
-  gap: 1rem;
-}
-
-.dicehub-logo-demo__row--loose {
-  gap: 2rem;
-}
-
-.dicehub-logo-demo__row--bottom {
-  align-items: flex-end;
-  gap: 1.5rem;
-}
-
-.dicehub-logo-demo__surface {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 1rem;
-  border-radius: 0.5rem;
-}
-
-.dicehub-logo-demo__surface--light {
-  background: #ffffff;
-}
-
-.dicehub-logo-demo__surface--dark {
-  background: #000000;
-}
-
-.dicehub-logo-demo__variant,
-.dicehub-logo-demo__size-md {
-  width: 7rem;
-}
-
-.dicehub-logo-demo__glyph-small {
-  width: 3rem;
-}
-
-.dicehub-logo-demo__size-sm {
-  width: 5rem;
-}
-
-.dicehub-logo-demo__copy {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: center;
-  gap: 1rem;
-  color: var(--docs-subtle);
-  font-size: 0.875rem;
-}
-
-.dicehub-logo-demo__asset-menu {
-  position: relative;
-}
-
-.dicehub-logo-demo__asset-button {
-  display: inline-flex;
-  min-height: 2.5rem;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.5rem 0.875rem;
-  border: 1px solid #000000;
-  border-radius: 0.5rem;
-  background: #000000;
-  color: #ffffff;
-  font: inherit;
-  font-weight: 600;
-  list-style: none;
-  user-select: none;
-  cursor: pointer;
-  transition: background-color 120ms ease, transform 120ms ease;
-}
-
-.dicehub-logo-demo__asset-button::-webkit-details-marker {
-  display: none;
-}
-
-.dicehub-logo-demo__asset-button:hover {
-  background: #262626;
-  transform: translateY(-1px);
-}
-
-.dicehub-logo-demo__asset-button:focus-visible,
-.dicehub-logo-demo__menu :is(button, a):focus-visible {
-  outline: 2px solid var(--docs-brand);
-  outline-offset: 2px;
-}
-
-.dicehub-logo-demo__asset-button > svg:last-child {
-  width: 0.875rem;
-  fill: none;
-  stroke: currentColor;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  stroke-width: 1.75;
-  transition: transform 120ms ease;
-}
-
-.dicehub-logo-demo__asset-menu[open] .dicehub-logo-demo__asset-button > svg:last-child {
-  transform: rotate(180deg);
-}
-
-.dicehub-logo-demo__asset-mark {
-  width: 1.5rem;
-}
-
-.dicehub-logo-demo__menu {
-  position: absolute;
-  top: calc(100% + 0.5rem);
-  left: 0;
-  z-index: 20;
-  display: grid;
-  width: min(19rem, calc(100vw - 3rem));
-  padding: 0.375rem;
-  border: 1px solid var(--docs-border);
-  border-radius: 0.625rem;
-  background: var(--docs-base);
-  box-shadow: 0 1rem 2.5rem rgba(15, 23, 42, 0.16);
-}
-
-.dicehub-logo-demo__menu :is(button, a) {
-  display: grid;
-  min-height: 2.25rem;
-  grid-template-columns: 1rem minmax(0, 1fr);
-  align-items: center;
-  gap: 0.625rem;
-  padding: 0.5rem 0.625rem;
-  border: 0;
-  border-radius: 0.375rem;
-  background: transparent;
-  color: var(--docs-default);
-  font: inherit;
-  text-align: left;
-  text-decoration: none;
-  cursor: pointer;
-}
-
-.dicehub-logo-demo__menu :is(button, a):hover,
-.dicehub-logo-demo__menu :is(button, a):focus-visible {
-  background: var(--docs-tint);
-}
-
-.dicehub-logo-demo__menu svg {
-  width: 1rem;
-  height: 1rem;
-  fill: none;
-  stroke: currentColor;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  stroke-width: 1.5;
-}
-
-.dicehub-logo-demo__menu-separator {
-  height: 1px;
-  margin: 0.25rem -0.375rem;
-  background: var(--docs-border);
-}
-
-.dicehub-logo-demo__status {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  overflow: hidden;
-  clip: rect(0 0 0 0);
-  clip-path: inset(50%);
-  white-space: nowrap;
-}
-
-.dicehub-logo-demo__footer {
-  display: flex;
-  width: 100%;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  padding: 1rem 1.5rem;
-  border: 1px solid var(--docs-border);
-  border-radius: 0.5rem;
-  background: var(--docs-control);
-  color: var(--docs-subtle);
-  font-size: 0.875rem;
-}
-
-@media (max-width: 640px) {
-  .dicehub-logo-demo__footer {
-    align-items: flex-start;
-    flex-direction: column;
-  }
-
-  .dicehub-logo-demo__row--loose {
-    gap: 1rem;
-  }
-}
-
-@media (max-width: 420px) {
-  .dicehub-logo-demo__copy {
-    align-items: flex-start;
-    flex-direction: column;
-  }
-
-  .dicehub-logo-demo__menu {
-    left: 50%;
-    transform: translateX(-25%);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .dicehub-logo-demo__asset-button,
-  .dicehub-logo-demo__asset-button > svg:last-child {
-    transition: none;
-  }
-}
-</style>
+<style scoped src="./dicehub-logo-demo.css"></style>

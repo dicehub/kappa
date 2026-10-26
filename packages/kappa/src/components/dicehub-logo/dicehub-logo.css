@@ -1,3 +1,12 @@
+/* Keep the brand typeface independent of the host application's text font. */
+@font-face {
+  font-family: "Kappa Nunito";
+  src: url("./nunito-extrabold-latin.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+}
+
 .kappa-dicehub-logo {
   display: block;
   width: 100%;
@@ -6,7 +15,7 @@
 }
 
 .kappa-dicehub-logo--color {
-  color: var(--kappa-dicehub-logo-ink, #333333);
+  color: var(--kappa-dicehub-logo-ink, var(--kappa-dicehub-logo-foreground, #333333));
 }
 
 .kappa-dicehub-logo--black {
@@ -46,7 +55,7 @@
 }
 
 .kappa-powered-by-dicehub--color {
-  color: var(--kappa-dicehub-logo-ink, #333333);
+  color: var(--kappa-dicehub-logo-ink, var(--kappa-dicehub-logo-foreground, #333333));
 }
 
 .kappa-powered-by-dicehub:focus-visible {
@@ -74,7 +83,9 @@
 }
 
 .kappa-powered-by-dicehub strong {
-  font-weight: 650;
+  font-family: "Kappa Nunito", var(--kappa-font-sans, sans-serif);
+  font-weight: 800;
+  font-synthesis: none;
 }
 
 @media (prefers-reduced-motion: reduce) {
