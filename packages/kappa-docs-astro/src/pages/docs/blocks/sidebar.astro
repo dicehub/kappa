@@ -164,6 +164,7 @@ const exampleSource = (variant: string) => variant === "hover-reveal" ? hoverRev
         </section>
         <section id="accessibility" class="docs-section">
           <h2><a class="docs-section-anchor" href="#accessibility">Accessibility and Styling</a></h2>
+          <p>Application Shell examples use a 13px content size (0.8125rem), including body text, table rows, page actions, metadata, and notes. Larger headings, weight, spacing, and color provide hierarchy. Embedded previews, full-screen pages, and their copyable source use the same styles.</p>
           <p>Keyboard navigation, visible focus, mobile focus trapping, Escape, and resize controls come from the existing Kappa components. Split navigation hides and disables its secondary column during icon collapse, then stacks the columns on mobile. The top header stays outside the scrolling content.</p>
           <p>Navigation headers and page toolbars have a 64px minimum height. Floating and inset surfaces are block-only styles. Mobile uses the normal Sidebar drawer surface. Light and dark modes use the same semantic tokens; reduced-motion settings are preserved.</p>
           <p>Optional dimensions: <code>--kappa-sidebar-layout-gap</code> (0.5rem), <code>--kappa-sidebar-layout-radius</code> (0.625rem), and <code>--kappa-sidebar-layout-primary-width</code> (9.5rem for split's first column). WorkspaceSwitcher supplies the shared namespace menu; your application supplies namespace and profile data.</p>

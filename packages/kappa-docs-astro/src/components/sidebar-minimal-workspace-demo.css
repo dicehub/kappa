@@ -58,33 +58,35 @@
 .minimal-workspace-demo__namespace .kappa-sidebar__menu-label > svg { inline-size: 0.75rem; block-size: 0.75rem; flex: none; color: var(--kappa-subtle); }
 .minimal-workspace-demo__help, .minimal-workspace-demo__collapse { color: var(--kappa-subtle); }
 .minimal-workspace-demo__collapse.kappa-sidebar__menu-button { min-inline-size: 0; padding-inline: 0.5rem; text-align: start; }
-.minimal-workspace-demo__breadcrumb { display: flex; gap: 0.375rem; align-items: center; min-block-size: 2.875rem; padding: 0.5rem 1.25rem; font-size: 0.6875rem; }
+.minimal-workspace-demo__breadcrumb { display: flex; gap: 0.375rem; align-items: center; min-block-size: 2.875rem; padding: 0.5rem 1.25rem; font-size: 0.8125rem; }
 .minimal-workspace-demo__breadcrumb > :last-child { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .minimal-workspace-demo__breadcrumb a { flex-shrink: 0; color: var(--kappa-accent-text); text-decoration: none; border-radius: 0.125rem; }
 .minimal-workspace-demo__breadcrumb svg { inline-size: 0.75rem; block-size: 0.75rem; }
-.minimal-workspace-demo__page { max-inline-size: 72rem; margin-inline: auto; padding: 1.25rem 1.5rem 2rem; }
+.minimal-workspace-demo__page { max-inline-size: 72rem; margin-inline: auto; padding: 1.25rem 1.5rem 2rem; font-size: 0.8125rem; line-height: 1.5; }
+.minimal-workspace-demo__page .kappa-table, .minimal-workspace-demo__page .kappa-button, .minimal-workspace-demo__page .kappa-input { font-size: inherit; }
+.minimal-workspace-demo__page .kappa-table { line-height: inherit; }
 .minimal-workspace-demo__page-heading { display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: space-between; gap: 1rem; margin-block-end: 1.5rem; }
 .minimal-workspace-demo__page-heading h2 { margin: 0 !important; font-size: 1.125rem !important; line-height: 1.5rem !important; font-weight: 550; }
 .minimal-workspace-demo__page-heading p { margin: 0.375rem 0 0 !important; color: var(--kappa-subtle); font-size: 0.8125rem !important; line-height: 1.5 !important; }
 .minimal-workspace-demo__project-panel { overflow: hidden; border: 1px solid var(--kappa-line); border-radius: 0.375rem; }
 .minimal-workspace-demo__panel-heading { display: flex; align-items: center; gap: 0.5rem; padding: 0.625rem 0.75rem; border-block-end: 1px solid var(--kappa-line); background: color-mix(in srgb, var(--kappa-tint) 40%, var(--kappa-control)); }
 .minimal-workspace-demo__panel-heading h3 { margin: 0 !important; font-size: 0.8125rem !important; line-height: 1.125rem !important; font-weight: 550; }
-.minimal-workspace-demo__panel-heading > span { color: var(--kappa-subtle); font-size: 0.6875rem; }
+.minimal-workspace-demo__panel-heading > span { color: var(--kappa-subtle); font-size: inherit; }
 .minimal-workspace-demo__filters { display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; padding: 0.5rem 0.75rem; border-block-end: 1px solid var(--kappa-line); }
 .minimal-workspace-demo__filter { position: relative; inline-size: min(14rem, 100%); min-inline-size: 0; }
 .minimal-workspace-demo__filter > svg { position: absolute; inset-inline-start: 0.625rem; inset-block-start: 50%; transform: translateY(-50%); inline-size: 0.875rem; block-size: 0.875rem; color: var(--kappa-subtle); pointer-events: none; }
 .minimal-workspace-demo__filter .kappa-input { padding-inline-start: 1.875rem; }
-.minimal-workspace-demo__filters > span { flex-shrink: 0; color: var(--kappa-subtle); font-size: 0.6875rem; }
+.minimal-workspace-demo__filters > span { flex-shrink: 0; color: var(--kappa-subtle); font-size: inherit; }
 .minimal-workspace-demo__project-panel .kappa-table { border: 0; }
-.minimal-workspace-demo__project-panel .kappa-table__cell { padding: 0.625rem 0.75rem; font-size: 0.75rem; }
+.minimal-workspace-demo__project-panel .kappa-table__cell { padding: 0.625rem 0.75rem; font-size: inherit; }
 .minimal-workspace-demo__project-panel .kappa-table__head { padding-inline: 0.75rem; }
 .minimal-workspace-demo__project-link { display: flex; align-items: center; gap: 0.625rem; padding: 0; border: 0; background: transparent; color: var(--kappa-default); font: inherit; text-align: start; cursor: pointer; }
-.minimal-workspace-demo__project-link small { display: block; margin-block-end: 0.125rem; color: var(--kappa-subtle); font-size: 0.6875rem; }
+.minimal-workspace-demo__project-link small { display: block; margin-block-end: 0.125rem; color: var(--kappa-subtle); font-size: inherit; }
 .minimal-workspace-demo__project-link strong { font-weight: 550; }
 .minimal-workspace-demo__project-link:hover strong { text-decoration: underline; text-underline-offset: 0.2em; }
 .minimal-workspace-demo__project-link:focus-visible { outline: 2px solid var(--kappa-focus); outline-offset: 3px; border-radius: 0.125rem; }
 .minimal-workspace-demo__project-icon { display: grid; place-items: center; flex: 0 0 2rem; block-size: 2rem; border-radius: 0.25rem; background: var(--kappa-tint); color: var(--kappa-subtle); font-size: 0.875rem; }
-.minimal-workspace-demo__status { display: inline-flex; align-items: center; gap: 0.375rem; white-space: nowrap; color: var(--kappa-subtle); font-size: 0.6875rem; }
+.minimal-workspace-demo__status { display: inline-flex; align-items: center; gap: 0.375rem; white-space: nowrap; color: var(--kappa-subtle); font-size: inherit; }
 .minimal-workspace-demo__status::before { content: ""; inline-size: 0.3125rem; block-size: 0.3125rem; border-radius: 50%; background: var(--kappa-subtle); }
 .minimal-workspace-demo__status[data-ready]::before { background: var(--kappa-success-text); }
 .minimal-workspace-demo__empty { padding: 1.5rem !important; text-align: center; color: var(--kappa-subtle); }
@@ -94,8 +96,8 @@
 .minimal-workspace-demo__details dd { margin: 0; }
 .minimal-workspace-demo__list { margin: 0 !important; padding: 0 !important; list-style: none; font-size: 0.8125rem; }
 .minimal-workspace-demo__list li { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding-block: 0.75rem; border-block-end: 1px solid var(--kappa-line); }
-.minimal-workspace-demo__list small { color: var(--kappa-subtle); font-size: 0.6875rem; }
-.minimal-workspace-demo__note { display: flex; gap: 0.5rem; margin: 1.25rem 0 0 !important; color: var(--kappa-subtle); font-size: 0.6875rem !important; line-height: 1.5 !important; }
+.minimal-workspace-demo__list small { color: var(--kappa-subtle); font-size: inherit; }
+.minimal-workspace-demo__note { display: flex; gap: 0.5rem; margin: 1.25rem 0 0 !important; color: var(--kappa-subtle); font-size: inherit !important; line-height: 1.5 !important; }
 .minimal-workspace-demo__note svg { inline-size: 0.875rem; block-size: 0.875rem; flex: none; }
 .minimal-workspace-demo__sr-only { position: absolute; inline-size: 1px; block-size: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 @container minimal-workspace (max-width: 68rem) {
