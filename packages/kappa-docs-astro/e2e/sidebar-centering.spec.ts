@@ -21,8 +21,27 @@ async function ready(page: Page, query = '') {
 }
 
 test.beforeEach(async ({ page }) => {
-  await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.setViewportSize({ width: 1920, height: 1000 });
   await page.emulateMedia({ reducedMotion: 'reduce' });
+});
+
+test('shell alignment is the default and retains the reading column on collapse', async ({ page }) => {
+  await ready(page);
+  await expect(shell(page)).toHaveAttribute('data-content-alignment', 'shell');
+  await centered(page);
+  const before = await article(page).boundingBox();
+  await toggle(page).click();
+  await centered(page);
+  expect(await article(page).boundingBox()).toEqual(before);
+});
+
+test('the default content width is bounded at 72rem', async ({ page }) => {
+  await ready(page, '?default-max-width');
+  await centered(page);
+  await expect(article(page)).toHaveCSS('width', '1152px');
+  await toggle(page).click();
+  await centered(page);
+  await expect(article(page)).toHaveCSS('width', '1152px');
 });
 
 for (const variant of ['workspace', 'rail', 'inset', 'floating', 'split', 'header']) {
@@ -89,7 +108,7 @@ test('embedded shells and changing scrollbar visibility preserve the center', as
     const element = node as HTMLElement;
     element.style.paddingInline = '0';
     element.style.marginInlineStart = '72px';
-    element.style.width = '1100px';
+    element.style.width = '1600px';
   });
   await centered(page);
   const scroller = shell(page).locator('.kappa-sidebar-layout__content');
@@ -108,6 +127,74 @@ test('embedded shells and changing scrollbar visibility preserve the center', as
   await centered(page);
 });
 
+test('opposite space shrinks before the content column narrows', async ({ page }) => {
+  await ready(page);
+  await page.locator('.centering-fixture').evaluate(node => {
+    Object.assign((node as HTMLElement).style, { paddingInline: '0', width: '1100px' });
+  });
+  await expect(shell(page)).not.toHaveAttribute('data-mobile');
+  await expect(article(page)).toHaveCSS('width', '704px');
+  const bounds = (await article(page).boundingBox())!;
+  const navigation = (await shell(page).locator('.kappa-sidebar__shell').boundingBox())!;
+  const outer = (await shell(page).boundingBox())!;
+  expect(bounds.x).toBeGreaterThanOrEqual(navigation.x + navigation.width);
+  expect(bounds.x + bounds.width).toBeLessThanOrEqual(outer.x + outer.width);
+  await toggle(page).click();
+  await centered(page);
+  await expect(article(page)).toHaveCSS('width', '704px');
+});
+
+test('the container breakpoint preserves desktop state and discards a closed drawer', async ({ page }) => {
+  await ready(page);
+  await toggle(page).click();
+  await expect(shell(page)).toHaveAttribute('data-state', 'collapsed');
+  const fixture = page.locator('.centering-fixture');
+  await fixture.evaluate(node => { (node as HTMLElement).style.width = '900px'; });
+  await expect(shell(page)).toHaveAttribute('data-mobile', '');
+  const before = await article(page).boundingBox();
+  await toggle(page).click();
+  const drawer = page.getByRole('dialog', { name: 'Centering navigation', exact: true });
+  await expect(drawer).toBeVisible();
+  expect(await article(page).boundingBox()).toEqual(before);
+  await page.keyboard.press('Escape');
+  await expect(drawer).toBeHidden();
+  await page.mouse.move(0, 0);
+  await fixture.evaluate(node => { (node as HTMLElement).style.width = '1600px'; });
+  await expect(shell(page)).not.toHaveAttribute('data-mobile');
+  await expect(shell(page)).toHaveAttribute('data-state', 'collapsed');
+  await fixture.evaluate(node => { (node as HTMLElement).style.width = '900px'; });
+  await expect(shell(page)).toHaveAttribute('data-mobile', '');
+  await expect(drawer).toBeHidden();
+  expect(page.viewportSize()!.width).toBe(1920);
+});
+
+test('container measurements recover after hiding and accept breakpoint changes', async ({ page }) => {
+  await ready(page);
+  const fixture = page.locator('.centering-fixture');
+  await fixture.evaluate(node => { (node as HTMLElement).style.display = 'none'; });
+  await expect(shell(page)).not.toHaveAttribute('data-mobile');
+  await fixture.evaluate(node => {
+    Object.assign((node as HTMLElement).style, { display: '', width: '900px' });
+  });
+  await expect(shell(page)).toHaveAttribute('data-mobile', '');
+  await page.getByRole('button', { name: 'Toggle mobile breakpoint' }).click();
+  await expect(shell(page)).not.toHaveAttribute('data-mobile');
+  await page.getByRole('button', { name: 'Toggle mobile breakpoint' }).click();
+  await expect(shell(page)).toHaveAttribute('data-mobile', '');
+  await page.getByRole('button', { name: 'Change breakpoint reference' }).click();
+  await expect(shell(page)).not.toHaveAttribute('data-mobile');
+  await page.getByRole('button', { name: 'Change breakpoint reference' }).click();
+  await expect(shell(page)).toHaveAttribute('data-mobile', '');
+});
+
+test('viewport breakpoint compatibility ignores a narrow embedded container', async ({ page }) => {
+  await ready(page, '?viewport');
+  await page.locator('.centering-fixture').evaluate(node => { (node as HTMLElement).style.width = '900px'; });
+  await expect(shell(page)).not.toHaveAttribute('data-mobile');
+  await page.setViewportSize({ width: 999, height: 900 });
+  await expect(shell(page)).toHaveAttribute('data-mobile', '');
+});
+
 test('available alignment retains the space beside navigation', async ({ page }) => {
   await ready(page, '?available');
   await expect.poll(() => offset(page)).toBeCloseTo(130, 0);
@@ -117,7 +204,7 @@ test('available alignment retains the space beside navigation', async ({ page })
 
 test('published styles honor reduced motion without docs overrides', async ({ page }) => {
   await ready(page);
-  const durations = () => shell(page).locator('.kappa-sidebar-layout__content-frame').evaluate(node =>
+  const durations = () => shell(page).locator('.kappa-sidebar-layout__content').evaluate(node =>
     ['::before', '::after'].map(part => getComputedStyle(node, part).transitionDuration));
   expect(await durations()).toEqual(['0s', '0s']);
   await toggle(page).click();
@@ -146,7 +233,7 @@ for (const mode of ['light', 'dark']) {
     await page.keyboard.press('Escape');
     await expect(drawer).toBeHidden();
     await expect(toggle(page)).toBeFocused();
-    await page.setViewportSize({ width: 1440, height: 1000 });
+    await page.setViewportSize({ width: 1920, height: 1000 });
     await expect(shell(page)).not.toHaveAttribute('data-mobile');
     await expect(shell(page).locator('.kappa-sidebar__shell')).toHaveCSS('width', '400px');
     await centered(page);

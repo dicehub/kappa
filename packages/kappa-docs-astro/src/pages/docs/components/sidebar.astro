@@ -103,7 +103,7 @@ const description = "Compact application navigation with resizing, peeking, slid
           <p>MenuButton does not close the mobile drawer automatically. Call <code>setMobileOpen(false)</code> after your router accepts the navigation. This keeps rejected and asynchronous navigation under application control.</p>
           <CodeBlock code={routingCode} lang="vue" collapsible revealId="sidebar-routing-code" />
           <p>Provider supports <code>v-model:open</code> and <code>v-model:mobile-open</code>. Uncontrolled defaults are read once. Leaving mobile mode requests that mobile state close; the desktop preference is unchanged. Controlled parents must handle update events. No cookies, storage, global keyboard shortcuts, or application state are added.</p>
-          <p>SSR renders the desktop structure, then checks the viewport after hydration. Navigation content remounts when switching between desktop and mobile. Keep persistent form state and controlled section state outside Root when they must survive that transition.</p>
+          <p>SSR renders the desktop structure, then checks the viewport after hydration. Set <code>mobile-breakpoint-reference="container"</code> to use the Provider's content-box width instead. Container mode responds to changes in the containing panel, including embedded previews; hidden containers retain their mode until shown. Navigation content remounts when switching between desktop and mobile. Keep persistent form state and controlled section state outside Root when they must survive that transition.</p>
         </section>
         <section id="accessibility" class="docs-section">
           <h2><a class="docs-section-anchor" href="#accessibility">Accessibility</a></h2>

@@ -99,7 +99,7 @@ function toggleFavorite() {
 <template>
   <div class="sidebar-pages-demo" data-sidebar-block="workspace-pages" :data-standalone="props.standalone || undefined">
     <SidebarLayout label="Workspace pages navigation" navigation-label="Workspace page links" collapsible="offcanvas" full-screen-on-mobile
-      :content-alignment="props.standalone ? 'shell' : 'available'" :mobile-breakpoint="1200">
+      content-max-width="46rem" :mobile-breakpoint="1200">
       <template #header="context">
         <WorkspaceSwitcher v-model="namespace" :items="namespaceSwitcherItems" label="Namespaces" account-label="ros@example.test"
           :actions="namespaceSwitcherActions" :workspace-actions="namespaceSwitcherWorkspaceActions" :footer-actions="namespaceSwitcherFooterActions"

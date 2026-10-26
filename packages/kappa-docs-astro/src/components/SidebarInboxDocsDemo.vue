@@ -53,7 +53,7 @@ function openAccount(name: string, context: SidebarContextValue) {
 
 <template>
   <div class="sidebar-inbox-demo" data-sidebar-block="inbox-navigation" :data-standalone="props.standalone || undefined">
-    <Sidebar.Provider width="23rem" collapsed-width="4rem" class="sidebar-inbox-demo__layout">
+    <Sidebar.Provider width="23rem" collapsed-width="4rem" mobile-breakpoint-reference="container" class="sidebar-inbox-demo__layout">
       <Sidebar.Context v-slot="context">
         <Sidebar.Root label="Inbox navigation" full-screen-on-mobile class="sidebar-inbox-demo__navigation">
           <div class="sidebar-inbox-demo__rail">
@@ -98,6 +98,7 @@ function openAccount(name: string, context: SidebarContextValue) {
         <div class="sidebar-inbox-demo__main">
           <header class="sidebar-inbox-demo__toolbar"><Sidebar.Trigger /><span aria-hidden="true" class="sidebar-inbox-demo__divider"></span><nav aria-label="Breadcrumb"><span>Mail</span><span aria-hidden="true">/</span><span aria-current="page">{{ accountPage || folder }}</span></nav></header>
           <div class="sidebar-inbox-demo__reader">
+            <div class="sidebar-inbox-demo__reader-column">
             <section v-if="accountPage" class="sidebar-inbox-demo__account" :aria-labelledby="headingId"><h2 :id="headingId">{{ accountPage }}</h2><p>Local preview only. No account, payment, notification, or session is changed.</p><Button variant="secondary" size="sm" @click="accountPage = ''">Back to messages</Button></section>
             <article v-else-if="selected" :aria-labelledby="headingId">
               <header class="sidebar-inbox-demo__message-header"><span class="sidebar-inbox-demo__sender-initials" aria-hidden="true">{{ selected.sender.split(/[. ]/).map(part => part[0]).join('').slice(0, 2) }}</span><div><strong>{{ selected.sender }}</strong><span>{{ selected.email }}</span><small>{{ folder === 'Sent' || folder === 'Drafts' ? 'From: ros@example.com' : 'To: ros@example.com' }}</small></div><time>{{ selected.date }}</time></header>
@@ -105,6 +106,7 @@ function openAccount(name: string, context: SidebarContextValue) {
               <footer class="sidebar-inbox-demo__reader-note">Example messages. Selection and filters stay in this preview; opening a message does not mark it as read.</footer>
             </article>
             <div v-else class="sidebar-inbox-demo__reader-empty"><Inbox aria-hidden="true" /><h2>No message selected</h2><p>Choose another folder or change the filters.</p></div>
+            </div>
           </div>
         </div>
       </Sidebar.Context>

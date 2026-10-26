@@ -82,9 +82,13 @@ for (const variant of variants) {
 }
 
 test("namespace, profile, search, and project actions stay local and functional", async ({ page }) => {
+  await page.setViewportSize({ width: 1920, height: 1000 });
   await page.goto("/docs/blocks/sidebar");
   await ready(page);
   const current = demo(page);
+  for (const variant of ['workspace', 'inset']) {
+    await expect(demo(page, variant).locator('.kappa-sidebar-layout')).not.toHaveAttribute('data-mobile');
+  }
   await current.getByRole("button", { name: "Namespace: Engineering" }).click();
   await page.getByRole("menuitemradio", { name: "Research", exact: true }).click();
   await expect(current.getByRole("button", { name: "Namespace: Research" })).toBeFocused();
@@ -180,9 +184,11 @@ test("toolbar stays fixed while page content scrolls, with light and dark surfac
 });
 
 test("controlled layouts forward attributes, translated labels, rejected requests, and secondary focus", async ({ page }) => {
+  await page.setViewportSize({ width: 1920, height: 1000 });
   await page.goto("/docs/blocks/sidebar");
   const contract = page.locator("[data-sidebar-layout-state]");
   await expect.poll(() => contract.evaluate(el => el.closest("astro-island")?.hasAttribute("ssr"))).toBe(false);
+  await expect(contract.locator('.kappa-sidebar-layout')).not.toHaveAttribute('data-mobile');
   const nav = contract.getByRole("navigation", { name: "Controlled navigation", exact: true });
   const separator = contract.getByRole("separator", { name: "Resize navigation" });
   await expect(contract.locator(".kappa-sidebar-layout")).toHaveAttribute("data-example-attribute", "forwarded");

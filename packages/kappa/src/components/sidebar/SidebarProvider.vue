@@ -19,7 +19,7 @@ const id = computed(() => props.id ?? `kappa-sidebar-${generatedId}`);
 const navId = computed(() => `${id.value}-nav`);
 const contentId = computed(() => `${id.value}-dialog`);
 const mounted = ref(false);
-const narrowViewport = ref(false);
+const narrowLayout = ref(false);
 const internalOpen = ref(props.defaultOpen);
 const internalMobileOpen = ref(props.defaultMobileOpen);
 const lastTriggerId = ref<string>();
@@ -27,7 +27,7 @@ const layout = ref<HTMLElement>();
 let mobileReturnTarget: HTMLElement | null = null;
 const open = computed(() => props.collapsible === "none" || (props.open ?? internalOpen.value));
 const mobileOpen = computed(() => props.mobileOpen ?? internalMobileOpen.value);
-const isMobile = computed(() => narrowViewport.value);
+const isMobile = computed(() => narrowLayout.value);
 const peekInteraction = ref(false);
 const resize = useSidebarResize(props, {
   layout, id, navId, open, isMobile, setOpen,
@@ -69,8 +69,23 @@ onMounted(() => { mounted.value = true; });
 watchEffect((onCleanup) => {
   if (!mounted.value) return;
   const breakpoint = resolveSidebarBreakpoint(props.mobileBreakpoint);
+  if (breakpoint === 0) {
+    narrowLayout.value = false;
+    return;
+  }
+  if (props.mobileBreakpointReference === "container") {
+    const root = layout.value;
+    if (!root) return;
+    const observer = new ResizeObserver(([entry]) => {
+      // Hidden previews have no available width. Retain their state until shown.
+      if (entry && entry.contentRect.width > 0) narrowLayout.value = entry.contentRect.width < breakpoint;
+    });
+    observer.observe(root);
+    onCleanup(() => observer.disconnect());
+    return;
+  }
   const media = window.matchMedia(`(width < ${breakpoint}px)`);
-  const update = () => { narrowViewport.value = media.matches; };
+  const update = () => { narrowLayout.value = media.matches; };
   update();
   media.addEventListener("change", update);
   onCleanup(() => media.removeEventListener("change", update));

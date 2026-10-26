@@ -12,6 +12,9 @@ const collapsible = ref<SidebarCollapsibleMode>("icon");
 const end = ref(false);
 const rtl = ref(false);
 const available = ref(false);
+const viewportReference = ref(false);
+const defaultMaxWidth = ref(false);
+const mobileBreakpoint = ref(1000);
 const cssWidth = ref<string>();
 const width = ref(260);
 const long = ref(false);
@@ -23,6 +26,8 @@ onMounted(() => {
   end.value = params.get("side") === "end";
   rtl.value = params.has("rtl");
   available.value = params.has("available");
+  viewportReference.value = params.has("viewport");
+  defaultMaxWidth.value = params.has("default-max-width");
   if (params.has("css-width")) cssWidth.value = "20rem";
   ready.value = true;
 });
@@ -35,16 +40,19 @@ onMounted(() => {
       <Button variant="secondary" @click="width = 400">400px</Button>
       <Button variant="secondary" @click="long = !long">Toggle long page</Button>
       <Button variant="secondary" @click="end = !end">Change side</Button>
+      <Button variant="secondary" @click="viewportReference = !viewportReference">Change breakpoint reference</Button>
+      <Button variant="secondary" @click="mobileBreakpoint = mobileBreakpoint ? 0 : 1000">Toggle mobile breakpoint</Button>
     </div>
     <DirectionProvider :locale="rtl ? 'ar' : 'en'">
       <SidebarLayout v-model:resize-width="width" :resizable="!cssWidth" :width="cssWidth"
         :variant="variant" :collapsible="collapsible" :side="end ? 'end' : 'start'" :dir="rtl ? 'rtl' : 'ltr'"
-        :content-alignment="available ? 'available' : 'shell'" :mobile-breakpoint="1000"
+        :content-alignment="available ? 'available' : undefined" :content-max-width="defaultMaxWidth ? undefined : '44rem'"
+        :mobile-breakpoint="mobileBreakpoint" :mobile-breakpoint-reference="viewportReference ? 'viewport' : undefined"
         :default-open="true" peekable :trigger-props="{ peek: collapsible === 'offcanvas' }"
         full-screen-on-mobile label="Centering navigation" class="centering-fixture__shell">
         <template #navigation><Sidebar.Menu><Sidebar.MenuItem><Sidebar.MenuButton :icon="Folder" tooltip="Projects">Projects</Sidebar.MenuButton></Sidebar.MenuItem></Sidebar.Menu></template>
         <template #toolbar>Page title</template>
-        <main class="centering-fixture__article">
+        <main class="centering-fixture__article" :style="defaultMaxWidth ? { maxInlineSize: 'none' } : undefined">
           <h1>Reading column</h1>
           <p v-for="n in long ? 40 : 1" :key="n">Read the project brief and record the next steps for your team.</p>
         </main>

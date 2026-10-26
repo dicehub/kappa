@@ -7,7 +7,9 @@ export type SidebarLayoutContentAlignment = "available" | "shell";
 
 export const SIDEBAR_LAYOUT_DEFAULTS = {
   variant: "workspace",
-  contentAlignment: "available",
+  contentAlignment: "shell",
+  contentMaxWidth: "72rem",
+  mobileBreakpointReference: "container",
   label: "Application navigation",
   navigationLabel: "Navigation links",
   secondaryLabel: "Secondary navigation",
@@ -18,8 +20,10 @@ export const SIDEBAR_LAYOUT_DEFAULTS = {
 
 export interface SidebarLayoutProps extends SidebarProviderProps {
   variant?: SidebarLayoutVariant;
-  /** Center the content region within the available space or the complete shell. */
+  /** Center bounded content in the shell when it fits, or use all available space. */
   contentAlignment?: SidebarLayoutContentAlignment;
+  /** Maximum content width in shell alignment. A CSS length, including page padding. */
+  contentMaxWidth?: string;
   /** Name of the navigation landmark and mobile dialog. */
   label?: string;
   navigationLabel?: string;

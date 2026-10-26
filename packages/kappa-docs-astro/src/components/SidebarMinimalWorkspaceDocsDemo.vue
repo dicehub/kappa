@@ -106,7 +106,7 @@ function createProject(context: SidebarContextValue, template?: string) {
 
 <template>
   <div ref="searchScope" class="minimal-workspace-demo" data-sidebar-block="minimal-workspace" :data-standalone="props.standalone || undefined" @keydown="searchShortcut">
-    <SidebarLayout variant="header" label="Minimal workspace navigation" width="250px" :default-width="250" :min-width="200" :max-width="420" collapsed-width="48px" resizable full-screen-on-mobile>
+    <SidebarLayout variant="header" content-max-width="72rem" label="Minimal workspace navigation" width="250px" :default-width="250" :min-width="200" :max-width="420" collapsed-width="48px" resizable full-screen-on-mobile>
       <template #toolbar="context">
         <div class="minimal-workspace-demo__header-start">
         <a href="?view=dashboard" class="minimal-workspace-demo__brand" aria-label="dicehub home" @click.prevent="navigate('Dashboard', context)"><DicehubLogo aria-hidden="true" /></a>

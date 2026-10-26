@@ -16,7 +16,7 @@ const props = withDefaults(defineProps<SidebarLayoutProps>(), {
 const emit = defineEmits<SidebarLayoutEmits>();
 defineSlots<SidebarLayoutSlots>();
 const providerProps = computed(() => {
-  const { variant, contentAlignment, label, navigationLabel, secondaryLabel, closeLabel, resizeLabel, fullScreenOnMobile, triggerProps, ...provider } = props;
+  const { variant, contentAlignment, contentMaxWidth, label, navigationLabel, secondaryLabel, closeLabel, resizeLabel, fullScreenOnMobile, triggerProps, ...provider } = props;
   return {
     ...provider,
     defaultOpen: props.defaultOpen ?? sidebarLayoutDefaultOpen(variant),
@@ -31,6 +31,7 @@ const providerProps = computed(() => {
     v-bind="{ ...$attrs, ...providerProps }"
     class="kappa-sidebar-layout" :data-variant="props.variant" :data-side="props.side"
     :data-content-alignment="props.contentAlignment" :data-collapsible="props.collapsible"
+    :style="{ '--kappa-sidebar-layout-content-max-width': props.contentMaxWidth }"
     @update:open="emit('update:open', $event)" @open-change="emit('openChange', $event)"
     @update:mobile-open="emit('update:mobileOpen', $event)" @mobile-open-change="emit('mobileOpenChange', $event)"
     @update:resize-width="emit('update:resizeWidth', $event)" @resize="emit('resize', $event)" @resize-end="emit('resizeEnd', $event)"
@@ -64,7 +65,7 @@ const providerProps = computed(() => {
             <slot name="toolbar" v-bind="context" />
           </header>
           <div class="kappa-sidebar-layout__content-frame">
-            <div class="kappa-sidebar-layout__content"><slot v-bind="context" /></div>
+            <div class="kappa-sidebar-layout__content"><div class="kappa-sidebar-layout__content-body"><slot v-bind="context" /></div></div>
           </div>
         </div>
       </div>

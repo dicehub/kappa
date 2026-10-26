@@ -140,7 +140,7 @@ onBeforeUnmount(() => window.removeEventListener("keydown", shortcut));
 <template>
   <div ref="host" class="sidebar-hover-demo" :data-standalone="props.standalone || undefined" data-sidebar-demo="hover-reveal">
     <DirectionProvider :locale="rtl ? 'ar' : 'en'">
-      <SidebarLayout :open="open" peekable collapsible="offcanvas" :content-alignment="props.standalone ? 'shell' : 'available'" resizable
+      <SidebarLayout :open="open" peekable collapsible="offcanvas" content-max-width="42rem" resizable
         :min-width="260" :max-width="maxWidth" :collapse-on-resize="false"
         :side="end ? 'end' : 'start'" :dir="rtl ? 'rtl' : 'ltr'" label="Hover navigation"
         :trigger-props="{ peek: true, expandLabel: 'Pin sidebar open' }" class="sidebar-hover-demo__layout"

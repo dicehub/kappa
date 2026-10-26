@@ -116,8 +116,6 @@
   .minimal-workspace-demo__project-icon { display: none; }
   .minimal-workspace-demo__page-heading { gap: 0.75rem; }
 }
-@media (max-width: 767px) {
-  .minimal-workspace-demo .kappa-sidebar-layout__body { padding: 0; }
-  .minimal-workspace-demo .kappa-sidebar-layout__main { border-radius: 0; }
-  .minimal-workspace-demo__namespace.kappa-sidebar__menu-button { min-block-size: 2.75rem; }
-}
+.minimal-workspace-demo .kappa-sidebar-layout[data-mobile] .kappa-sidebar-layout__body { padding: 0; gap: 0; }
+.minimal-workspace-demo .kappa-sidebar-layout[data-mobile] .kappa-sidebar-layout__main { border-radius: 0; }
+.minimal-workspace-demo .kappa-sidebar-layout__navigation[data-mobile] .minimal-workspace-demo__namespace.kappa-sidebar__menu-button { min-block-size: 2.75rem; }

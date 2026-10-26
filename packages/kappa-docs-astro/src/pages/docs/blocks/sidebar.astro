@@ -99,15 +99,17 @@ const exampleSource = (variant: string) => variant === "minimal-workspace" ? min
         </section>
         <section id="content-alignment" class="docs-section">
           <h2><a class="docs-section-anchor" href="#content-alignment">Content Alignment</a></h2>
-          <p>Use <code>content-alignment="shell"</code> for reading pages and forms. It balances the sidebar with space on the opposite side, so your content stays centered in the full shell as navigation expands, collapses, or resizes. Embedded shells center within their own container.</p>
-          <CodeBlock code={`<SidebarLayout content-alignment="shell" :mobile-breakpoint="1200" style="height: 100svh">
+          <p>By default, content stays centered in the complete shell while there is enough room for the page and navigation. This follows the dicehub client: space opposite the sidebar balances its width, then shrinks before the page becomes narrower. Sidebar collapse and resize keep the page in place when it fits. Content can move and reflow when space is limited.</p>
+          <CodeBlock code={`<SidebarLayout content-max-width="44rem" :mobile-breakpoint="1200" style="height: 100svh">
   <template #navigation><!-- Your navigation --></template>
-  <main style="max-width: 44rem; margin-inline: auto; padding: 2rem">
+  <main style="padding: 2rem">
     Your page content.
   </main>
 </SidebarLayout>`} lang="vue" />
-          <p>Give your page a maximum width and automatic inline margins. The column shrinks when space is limited. Choose a <code>mobileBreakpoint</code> that leaves enough room for your sidebar and reading column; the drawer then removes the desktop reservation. This breakpoint uses viewport width, so narrowing an embedded container alone does not open the drawer. The full-page reading examples use 1200px; narrow gallery previews use the default alignment.</p>
-          <p>The default, <code>content-alignment="available"</code>, uses all space beside the sidebar. Use it for wide tables and application views.</p>
+          <p>Set <code>contentMaxWidth</code> to the page's maximum width, including its padding. The default is 72rem. Keep the same value in embedded and full-screen examples. Avoid adding a smaller maximum width inside this region: the shell needs the page width to balance it correctly.</p>
+          <p>Responsive navigation uses the shell's own width by default. Choose <code>mobileBreakpoint</code> to suit the page; the reading examples use 1200px. Narrow gallery previews therefore use the same drawer as a narrow application window. Opening the drawer or temporarily revealing collapsed navigation does not move the underlying content.</p>
+          <p>Use <code>content-alignment="available"</code> for views that must fill all space beside navigation, such as a wide data grid or canvas. This mode ignores <code>contentMaxWidth</code>.</p>
+          <p>Migration: set <code>content-alignment="available"</code> and <code>mobile-breakpoint-reference="viewport"</code> to keep the previous defaults. Standalone Sidebar.Provider still uses the viewport unless its reference is explicitly set to container.</p>
         </section>
         <section id="api" class="docs-section">
           <h2><a class="docs-section-anchor" href="#api">API and Composition</a></h2>
@@ -115,7 +117,9 @@ const exampleSource = (variant: string) => variant === "minimal-workspace" ? min
           <p>Namespace menus use the published <a href="/docs/blocks/workspace-switcher">WorkspaceSwitcher</a> block. It shows current workspace details, grouped actions, and a checkmark on the right of the selected workspace. Connect its selection and action events to your application.</p>
           <div class="docs-api-table"><table><thead><tr><th>Prop</th><th>Default</th><th>Purpose</th></tr></thead><tbody>
             <tr><td><code>variant</code></td><td><code>workspace</code></td><td>workspace, rail, inset, floating, split, or header.</td></tr>
-            <tr><td><code>contentAlignment</code></td><td><code>available</code></td><td>available uses space beside navigation; shell balances it around the complete layout.</td></tr>
+            <tr><td><code>contentAlignment</code></td><td><code>shell</code></td><td>shell balances bounded content within the complete layout when it fits; available fills the area beside navigation.</td></tr>
+            <tr><td><code>contentMaxWidth</code></td><td><code>72rem</code></td><td>CSS length for the maximum page width in shell alignment, including page padding.</td></tr>
+            <tr><td><code>mobileBreakpointReference</code></td><td><code>container</code></td><td>Measure the shell's content width; viewport retains window-based detection.</td></tr>
             <tr><td><code>defaultOpen</code></td><td>False for rail; true otherwise</td><td>Initial desktop state. Changing variant does not reset the current preference.</td></tr>
             <tr><td><code>width / defaultWidth</code></td><td>352px for split; 260px otherwise</td><td>Fixed CSS width or initial numeric resize width. Explicit values take priority.</td></tr>
             <tr><td><code>label</code></td><td>Application navigation</td><td>Navigation landmark and mobile dialog name.</td></tr>
@@ -140,7 +144,7 @@ const exampleSource = (variant: string) => variant === "minimal-workspace" ? min
           <p>Namespace/profile popups use <code>:teleport="!isMobile"</code> and fixed positioning. The namespace trigger uses a 32px icon tile and a 48px row. In the workspace layouts, Quick search is a bordered button that opens Kappa CommandPalette, not an editable input. The examples close mobile navigation after selection; your application must decide when routing has succeeded.</p>
           <p>Application Shell profile triggers use a 48px row, a 32px rounded Avatar, and two lines of identity text. Their menus repeat the identity above grouped plan, account, billing, notification, and logout actions. Switch profile opens a submenu; Preferences remains available. All account actions open local previews and do not change real accounts or sessions. The sample portraits use the docs site's local avatar assets; replace their paths when copying this example. Quick search uses a subtle token-based surface instead of a solid white background.</p>
           <p>Inbox Navigation composes Sidebar parts directly for a fixed 64px folder rail, a collapsible message list, and a reading panel. It does not add or change a SidebarLayout variant. Folder selection opens the list and clears its filters. Search matches the sender, subject, and body; Unread filters the sample data. Filtering selects the first visible message when necessary. Opening a message does not mark it as read. Empty folders and filters have explicit empty states.</p>
-          <p>On mobile, the folder rail and message list share a full-screen drawer. Selecting a message closes the drawer and returns focus to its opener. Folder, query, unread filter, and selected message survive viewport changes. Tab and Enter operate the folder and message buttons. The Ros.Space profile uses the same local avatar and grouped account actions; this compact single-account example does not include profile switching. No mail or account action contacts a server.</p>
+          <p>Inbox Navigation uses the same adaptive centering for its 46rem reading column and measures its container for responsive navigation. On mobile, the folder rail and message list share a full-screen drawer. Selecting a message closes the drawer and returns focus to its opener. Folder, query, unread filter, and selected message survive size changes. Tab and Enter operate the folder and message buttons. The Ros.Space profile uses the same local avatar and grouped account actions; this compact single-account example does not include profile switching. No mail or account action contacts a server.</p>
           <p>Workspace Pages is a separate composition of SidebarLayout, Sidebar.Collapsible, Dropdown, CommandPalette, and Button. It does not replace the original Workspace example or add a SidebarLayout variant. Namespace selection changes the available pages. Each namespace keeps its own selected page, Favorites, and open groups until reload. The toolbar star adds or removes the current page from Favorites; removing its last Favorite shows an empty state.</p>
           <p>Workspace group buttons only expand or collapse their child links. Selecting a page from Favorites, Home, or Quick search opens its group. Mobile selection closes the full-screen drawer and returns focus to the sidebar toggle. Search matches page names in the active namespace; Escape closes search and returns to its opener. Closed search content is inert during its exit animation. Search selection releases the nested dialog on the next Vue update before closing the drawer, so the two focus traps do not compete. Calendar, Settings, Trash, and Help open local previews. There is no editor, account integration, or server persistence.</p>
           <p>The examples also set closed popup content to <code>inert</code> through Dropdown.Context. This prevents delayed menu focus from returning to a closed popup during its exit animation. Selection, dismissal, and trigger focus remain controlled by Kappa Dropdown.</p>
@@ -161,6 +165,7 @@ const exampleSource = (variant: string) => variant === "minimal-workspace" ? min
         <li><a href="#overview" data-toc-link="overview">Overview</a></li>
         <li><a href="#layouts" data-toc-link="layouts">Layouts</a><ul>{sidebarBlocks.map(block => <li><a href={`#${block.id}`} data-toc-link={block.id}>{block.title}</a></li>)}</ul></li>
         <li><a href="#installation" data-toc-link="installation">Installation and Usage</a></li>
+        <li><a href="#content-alignment" data-toc-link="content-alignment">Content Alignment</a></li>
         <li><a href="#api" data-toc-link="api">API and Composition</a></li>
         <li><a href="#accessibility" data-toc-link="accessibility">Accessibility and Styling</a></li>
       </ul></div></aside>

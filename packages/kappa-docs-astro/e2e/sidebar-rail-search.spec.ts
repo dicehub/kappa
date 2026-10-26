@@ -76,16 +76,21 @@ test("rail field stays at the shell center through sidebar width changes", async
 });
 
 test("embedded rail search stays centered and uses a drawer in narrow frames", async ({ page }) => {
-  await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.setViewportSize({ width: 1920, height: 1000 });
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto('/docs/blocks/sidebar');
   const demo = page.locator('[data-sidebar-block="rail"]');
   await expect.poll(() => demo.evaluate(node => node.closest('astro-island')?.hasAttribute('ssr'))).toBe(false);
+  await demo.evaluate(node => { (node as HTMLElement).style.minInlineSize = '800px'; });
+  await expect(demo.locator('.kappa-sidebar-layout')).not.toHaveAttribute('data-mobile');
   await demo.getByRole('button', { name: 'Expand sidebar', exact: true }).click();
-  for (const width of [600, 590, 588, 580, 360]) {
-    await demo.evaluate((node, width) => { (node as HTMLElement).style.inlineSize = `${width}px`; }, width);
+  // The embedded shell has a 1px border on each side of its measured content box.
+  for (const width of [800, 770, 769, 590, 360]) {
+    await demo.evaluate((node, width) => {
+      Object.assign((node as HTMLElement).style, { inlineSize: `${width}px`, minInlineSize: `${width}px` });
+    }, width);
     const layout = demo.locator('.kappa-sidebar-layout');
-    if (width < 590) await expect(layout).toHaveAttribute('data-mobile', '');
+    if (width < 770) await expect(layout).toHaveAttribute('data-mobile', '');
     else await expect(layout).not.toHaveAttribute('data-mobile', '');
     const shell = (await layout.boundingBox())!;
     const trigger = demo.getByRole('button', { name: 'Search or go to…', exact: true });

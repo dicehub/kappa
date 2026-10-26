@@ -213,7 +213,7 @@ test('nested Providers keep hover triggers and keyboard dismissal in their own s
 
 test('published hover styles disable centering motion under reduced motion', async ({ page }) => {
   await published(page);
-  const durations = () => page.locator('.kappa-sidebar-layout__content-frame').evaluate(el =>
+  const durations = () => page.locator('.kappa-sidebar-layout__content').evaluate(el =>
     ['::before', '::after'].map(part => getComputedStyle(el, part).transitionDuration));
   expect(await durations()).toEqual(['0s', '0s']);
   await page.emulateMedia({ reducedMotion: 'no-preference' });
