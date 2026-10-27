@@ -101,9 +101,11 @@ describe("Markdown build output", () => {
     assert.match(logo, /@dicehub\/kappa\/components\/dicehub-logo/);
     assert.match(logo, /```vue\n<script setup>/);
     assert.match(logo, /```javascript\nimport \{/);
-    assert.equal((logo.match(/```vue/g) ?? []).length, 10);
+    assert.equal((logo.match(/```vue/g) ?? []).length, 11);
     assert.doesNotMatch(logo, /lang="ts"|```typescript/);
     assert.match(logo, /^## \[Examples\]\(#examples\)$/m);
+    assert.match(logo, /^### \[Vertical Logo\]\(#vertical\)$/m);
+    assert.match(logo, /variant="vertical"/);
     assert.match(logo, /^### \[Brand Assets Menu\]\(#brand-assets-menu\)$/m);
     assert.match(logo, /^## \[PoweredByDicehub\]\(#powered-by-dicehub\)$/m);
     assert.match(logo, /^### \[PoweredByDicehub\]\(#powered-by-dicehub-api\)$/m);
