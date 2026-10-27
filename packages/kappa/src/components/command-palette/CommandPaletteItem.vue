@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { Combobox } from "@ark-ui/vue/combobox";
+import { Combobox, useComboboxContext } from "@ark-ui/vue/combobox";
+import { computed } from "vue";
 import type { CommandPaletteItemProps } from "./command-palette";
 import { useCommandPaletteContext } from "./command-palette-context";
 
@@ -10,10 +11,12 @@ const props = withDefaults(defineProps<CommandPaletteItemProps>(), {
 });
 const emit = defineEmits<{ select: [value: unknown, event: MouseEvent] }>();
 const context = useCommandPaletteContext("CommandPalette.Item");
+const combobox = useComboboxContext();
+const disabled = computed(() => props.disabled || combobox.value.getItemState({ item: props.value }).disabled);
 
 const handlePointerMove = () => context.noteHighlightReason("pointer");
 const handleClickCapture = (event: MouseEvent) => {
-  if (props.disabled) {
+  if (disabled.value) {
     event.preventDefault();
     event.stopImmediatePropagation();
     return;
@@ -30,9 +33,9 @@ const handleClickCapture = (event: MouseEvent) => {
 <template>
   <Combobox.Item
     v-bind="$attrs"
-    :aria-disabled="props.disabled ? 'true' : undefined"
+    :aria-disabled="disabled ? 'true' : undefined"
     class="kappa-command-palette__item"
-    :data-disabled="props.disabled ? '' : undefined"
+    :data-disabled="disabled ? '' : undefined"
     :item="props.value"
     @click.capture="handleClickCapture"
     @click="emit('select', props.value, $event)"

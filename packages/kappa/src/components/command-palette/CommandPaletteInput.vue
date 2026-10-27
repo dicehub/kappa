@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Combobox } from "@ark-ui/vue/combobox";
-import { computed, useAttrs } from "vue";
+import { computed, nextTick, useAttrs } from "vue";
 import type { CommandPaletteInputProps } from "./command-palette";
 import { useCommandPaletteContext } from "./command-palette-context";
 
@@ -15,7 +15,21 @@ const attrs = useAttrs();
 const context = useCommandPaletteContext("CommandPalette.Input");
 const accessibleName = computed(() => String(attrs["aria-label"] ?? props.ariaLabel));
 
+const preserveSelection = (event: Event) => {
+  const input = event.target;
+  if (!(input instanceof HTMLInputElement) || (event instanceof InputEvent && event.isComposing)) return;
+  const { value, selectionStart, selectionEnd, selectionDirection } = input;
+  if (selectionStart === null || selectionEnd === null) return;
+  // Ark's query/collection synchronization can move the caret after a native edit.
+  // Keep the browser's selection when the application accepts the same query.
+  void nextTick(() => {
+    if (!input.isConnected || input.ownerDocument.activeElement !== input || input.value !== value) return;
+    input.setSelectionRange(selectionStart, selectionEnd, selectionDirection ?? undefined);
+  });
+};
+
 const handleKeydown = (event: KeyboardEvent) => {
+  if (event.defaultPrevented) return;
   if (["ArrowDown", "ArrowUp", "End", "Home", "PageDown", "PageUp"].includes(event.key)) {
     context.noteHighlightReason("keyboard");
   }
@@ -45,7 +59,8 @@ const handleKeydown = (event: KeyboardEvent) => {
       :data-kappa-command-palette-autofocus="props.autoFocus ? '' : undefined"
       :placeholder="props.placeholder"
       spellcheck="false"
-      @keydown="handleKeydown"
+      @input="preserveSelection"
+      @keydown.capture="handleKeydown"
     />
     <slot name="trailing">
       <button

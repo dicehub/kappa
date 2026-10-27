@@ -1,11 +1,13 @@
 <script setup lang="ts">
+import { Combobox } from "@ark-ui/vue/combobox";
+
 defineOptions({ inheritAttrs: false });
 </script>
 
 <template>
-  <div v-bind="$attrs" class="kappa-command-palette__list">
+  <Combobox.Content v-bind="$attrs" class="kappa-command-palette__list">
     <slot />
-  </div>
+  </Combobox.Content>
 </template>
 
 <style src="./command-palette.css"></style>
