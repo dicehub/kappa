@@ -75,17 +75,17 @@ test("rail field stays at the shell center through sidebar width changes", async
   }
 });
 
-test("embedded rail search stays centered and uses a drawer in narrow frames", async ({ page }) => {
-  await page.setViewportSize({ width: 1920, height: 1000 });
-  await page.emulateMedia({ reducedMotion: "reduce" });
-  await page.goto('/docs/blocks/sidebar');
-  const demo = page.locator('[data-sidebar-block="rail"]');
-  await expect.poll(() => demo.evaluate(node => node.closest('astro-island')?.hasAttribute('ssr'))).toBe(false);
-  await demo.evaluate(node => { (node as HTMLElement).style.minInlineSize = '800px'; });
-  await expect(demo.locator('.kappa-sidebar-layout')).not.toHaveAttribute('data-mobile');
-  await demo.getByRole('button', { name: 'Expand sidebar', exact: true }).click();
-  // The embedded shell has a 1px border on each side of its measured content box.
-  for (const width of [800, 600, 590, 588, 580, 360]) {
+for (const width of [800, 600, 590, 588, 580, 360]) {
+  test(`embedded rail search stays centered and uses the expected drawer at ${width}px`, async ({ page }) => {
+    await page.setViewportSize({ width: 1920, height: 1000 });
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    await page.goto('/docs/blocks/sidebar');
+    const demo = page.locator('[data-sidebar-block="rail"]');
+    await expect.poll(() => demo.evaluate(node => node.closest('astro-island')?.hasAttribute('ssr'))).toBe(false);
+    await demo.evaluate(node => { (node as HTMLElement).style.minInlineSize = '800px'; });
+    await expect(demo.locator('.kappa-sidebar-layout')).not.toHaveAttribute('data-mobile');
+    await demo.getByRole('button', { name: 'Expand sidebar', exact: true }).click();
+    // The embedded shell has a 1px border on each side of its measured content box.
     await demo.evaluate((node, width) => {
       Object.assign((node as HTMLElement).style, { inlineSize: `${width}px`, minInlineSize: `${width}px` });
     }, width);
@@ -105,8 +105,8 @@ test("embedded rail search stays centered and uses a drawer in narrow frames", a
     await expect(dialog.getByRole('combobox')).toBeFocused();
     await page.keyboard.press('Escape');
     await expect(trigger).toBeFocused();
-  }
-});
+  });
+}
 
 test("rail slash shortcut respects open menus and input text", async ({ page }) => {
   await openExample(page);

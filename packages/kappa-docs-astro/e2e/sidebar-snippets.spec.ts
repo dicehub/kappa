@@ -77,7 +77,7 @@ test("copied hover reveal opens, pins, and resizes without application handlers"
   await separator.press("End");
   await expect(separator).toHaveAttribute("aria-valuenow", "600");
   await page.setViewportSize({ width: 1024, height: 900 });
-  await expect(page.locator('.kappa-sidebar-layout')).toHaveAttribute('data-content-alignment', 'available');
+  await expect(page.locator('.kappa-sidebar-layout')).toHaveAttribute('data-content-alignment', 'shell');
   const content = page.locator('.kappa-sidebar-layout__content');
   expect(await content.evaluate(el => el.scrollWidth - el.clientWidth)).toBe(0);
   await expect(page.getByRole('heading', { name: 'Overview', exact: true })).toBeVisible();
