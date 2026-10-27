@@ -55,7 +55,9 @@ pnpm test:blackbox -- --project=consumer --grep 'controlled'
 ```
 
 The package, CLI, and logic checks still run. Browser retries are disabled so
-the result records the first attempt.
+the result records the first attempt. The complete browser suite has a 45-minute
+process budget for its single-worker run. Individual test and assertion timeouts
+remain defined by Playwright and the relevant specs.
 
 The contribution and adversarial review rules are in
 [CONTRIBUTING.md](../CONTRIBUTING.md) and [REVIEW.md](../REVIEW.md).

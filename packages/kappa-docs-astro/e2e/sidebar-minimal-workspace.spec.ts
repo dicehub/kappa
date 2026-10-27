@@ -289,7 +289,7 @@ test('minimal shell supports both themes, RTL, reduced motion, and 320px width',
 
 test('gallery publishes complete Minimal Workspace source and keeps every prior example', async ({ page, request }) => {
   await page.goto('/docs/blocks/sidebar#minimal-workspace');
-  await expect(page.locator('[data-block-example]')).toHaveCount(15);
+  await expect(page.locator('[data-block-example]')).toHaveCount(17);
   const example = page.locator('[data-block-example="minimal-workspace"]');
   await expect(example.getByRole('link', { name: /Open full example/ })).toHaveAttribute('href', '/examples/sidebar/minimal-workspace');
   await expect(example.locator('[data-code-full] code')).toContainText('standalone: true');

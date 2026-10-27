@@ -78,11 +78,10 @@ for (const variant of variants) {
   });
 }
 
-test('desktop gallery navigation stays visible and open after selection', async ({ page }) => {
-  test.setTimeout(60_000);
-  await page.setViewportSize({ width: 1440, height: 1000 });
-  await page.goto('/docs/blocks/sidebar#grouped');
-  for (const variant of variants) {
+for (const variant of variants) {
+  test(`${variant} desktop gallery navigation stays visible and open after selection`, async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 1000 });
+    await page.goto('/docs/blocks/sidebar#grouped');
     const demo = demoFor(page, variant);
     await hydrated(demo);
     const shell = shellFor(demo);
@@ -102,14 +101,13 @@ test('desktop gallery navigation stays visible and open after selection', async 
     await expect(shell, variant).toHaveAttribute('data-state', 'expanded');
     await expect(navigation, variant).toBeVisible();
     await expect(page.getByRole('dialog')).toHaveCount(0);
-  }
-});
+  });
+}
 
-test('mobile gallery drawers keep content fixed and return focus', async ({ page }) => {
-  test.setTimeout(60_000);
-  await page.setViewportSize({ width: 390, height: 844 });
-  await page.goto('/docs/blocks/sidebar');
-  for (const variant of variants) {
+for (const variant of variants) {
+  test(`${variant} mobile gallery drawer keeps content fixed and returns focus`, async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto('/docs/blocks/sidebar');
     const demo = demoFor(page, variant);
     await hydrated(demo);
     const shell = shellFor(demo);
@@ -127,6 +125,6 @@ test('mobile gallery drawers keep content fixed and return focus', async ({ page
     await expect(toggle).toBeFocused();
     await centered(demo);
     expect(await demo.evaluate(node => node.scrollWidth <= node.clientWidth), variant).toBe(true);
-  }
-  expect(page.viewportSize()!.width).toBe(390);
-});
+    expect(page.viewportSize()!.width).toBe(390);
+  });
+}

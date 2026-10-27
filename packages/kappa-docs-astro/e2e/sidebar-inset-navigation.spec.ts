@@ -136,7 +136,7 @@ test('mobile uses a full-screen drawer and secondary navigation restores focus',
 
 test('gallery keeps Inset Content and provides complete inset navigation source', async ({ page, request }) => {
   await page.goto('/docs/blocks/sidebar');
-  await expect(page.locator('[data-block-example]')).toHaveCount(15);
+  await expect(page.locator('[data-block-example]')).toHaveCount(17);
   await expect(page.locator('[data-block-example="inset"]')).toHaveCount(1);
   const example = page.locator('[data-block-example="inset-navigation"]');
   await expect(example.getByRole('link', { name: /Open full example/ })).toHaveAttribute('href', '/examples/sidebar/inset-navigation');

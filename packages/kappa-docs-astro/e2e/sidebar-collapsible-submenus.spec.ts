@@ -57,7 +57,7 @@ test('search reveals closed submenus, handles empty results, and retains mobile 
 
 test('gallery exposes a complete example without replacing the existing layouts', async ({ page, request }) => {
   await page.goto('/docs/blocks/sidebar');
-  await expect(page.locator('[data-block-example]')).toHaveCount(15);
+  await expect(page.locator('[data-block-example]')).toHaveCount(17);
   const example = page.locator('[data-block-example="collapsible-submenus"]');
   await expect(example.getByRole('link', { name: /Open full example/ })).toHaveAttribute('href', '/examples/sidebar/collapsible-submenus');
   const code = example.locator('[data-code-full] code');

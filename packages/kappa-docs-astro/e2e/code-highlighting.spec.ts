@@ -175,8 +175,8 @@ test.describe("Documentation code highlighting", () => {
     const installation = page.locator("#installation");
     const svgGeneration = page.locator("#svg-generation");
 
-    await expect(examples).toHaveCount(10);
-    await expect(page.getByRole("button", { name: "View Code" })).toHaveCount(10);
+    await expect(examples).toHaveCount(11);
+    await expect(page.getByRole("button", { name: "View Code" })).toHaveCount(11);
     await expect(installation.getByRole("button", { name: "View Code" })).toHaveCount(0);
     await expect(svgGeneration.getByRole("button", { name: "View Code" })).toHaveCount(0);
     await expect(installation.locator("[data-code-full]")).toHaveCount(2);

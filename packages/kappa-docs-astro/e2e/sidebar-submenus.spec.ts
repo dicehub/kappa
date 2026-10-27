@@ -49,7 +49,7 @@ test('submenu mobile selection closes the drawer and restores focus', async ({ p
 
 test('submenu gallery source is complete and earlier examples remain', async ({ page, request }) => {
   await page.goto('/docs/blocks/sidebar');
-  await expect(page.locator('[data-block-example]')).toHaveCount(15);
+  await expect(page.locator('[data-block-example]')).toHaveCount(17);
   const example = page.locator('[data-block-example="submenus"]');
   await expect(example.getByRole('link', { name: /Open full example/ })).toHaveAttribute('href', '/examples/sidebar/submenus');
   const code = example.locator('[data-code-full] code');

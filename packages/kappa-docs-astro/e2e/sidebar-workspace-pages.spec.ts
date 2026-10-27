@@ -150,7 +150,7 @@ test('workspace pages support dark mode, RTL, reduced motion, and narrow mobile 
 
 test('gallery adds a separate copyable example and retains the original Workspace', async ({ page, request }) => {
   await page.goto('/docs/blocks/sidebar');
-  await expect(page.locator('[data-block-example]')).toHaveCount(15);
+  await expect(page.locator('[data-block-example]')).toHaveCount(17);
   const example = page.locator('[data-block-example="workspace-pages"]');
   await expect(example.getByRole('link', { name: /Open full example/ })).toHaveAttribute('href', '/examples/sidebar/workspace-pages');
   await expect.poll(() => example.locator('.kappa-sidebar__content').evaluate(node => node.scrollHeight <= node.clientHeight)).toBe(true);

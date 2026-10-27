@@ -69,7 +69,7 @@ test('search and mobile popup selection preserve state and drawer focus', async 
 
 test('gallery keeps existing examples and provides complete source and markdown', async ({ page, request }) => {
   await page.goto('/docs/blocks/sidebar');
-  await expect(page.locator('[data-block-example]')).toHaveCount(15);
+  await expect(page.locator('[data-block-example]')).toHaveCount(17);
   const example = page.locator('[data-block-example="dropdown-submenus"]');
   await expect(example.getByRole('link', { name: /Open full example/ })).toHaveAttribute('href', '/examples/sidebar/dropdown-submenus');
   const code = example.locator('[data-code-full] code');
