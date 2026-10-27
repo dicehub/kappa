@@ -44,6 +44,11 @@ test("complete layout filters resources and keeps behavior outside the block", a
   await expect(layout).toHaveAttribute("data-sticky-sidebar", "");
   await expect(complete.locator('[data-slot="resource-list-layout-aside"]')).toHaveCount(1);
   await expect(complete.locator('[data-slot="item"]')).toHaveCount(4);
+  const [iconBox, identityBox] = await Promise.all([
+    complete.locator('[data-slot="resource-list-layout-icon"]').boundingBox(),
+    complete.locator('[data-slot="resource-list-layout-identity"]').boundingBox(),
+  ]);
+  expect(identityBox!.x).toBeGreaterThan(iconBox!.x + iconBox!.width);
 
   await complete.getByRole("searchbox", { name: "Search resources" }).fill("cryogenic");
   await expect(complete.locator('[data-slot="item"]')).toHaveCount(1);
@@ -94,6 +99,12 @@ test("compact and minimal compositions omit unused regions", async ({ page }) =>
   );
   await expect(compact.locator('[data-slot="item"]')).toHaveCount(3);
   await expect(compact.locator('[data-slot="resource-list-layout-aside"]')).toHaveCount(0);
+  await expect(compact.locator('[data-slot="resource-list-layout-icon"]')).toHaveCount(0);
+  const [headerBox, identityBox] = await Promise.all([
+    compact.locator('[data-slot="resource-list-layout-header"]').boundingBox(),
+    compact.locator('[data-slot="resource-list-layout-identity"]').boundingBox(),
+  ]);
+  expect(identityBox?.x).toBe(headerBox?.x);
 
   await expect(minimal.locator('[data-slot="resource-list-layout-header"]')).toHaveCount(0);
   await expect(minimal.locator('[data-slot="resource-list-layout-toolbar"]')).toHaveCount(0);
