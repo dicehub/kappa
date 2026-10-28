@@ -24,7 +24,7 @@ async function expectVersionMenu(page: Page, trigger: Locator, selected: string)
 test("grouped navigation has complete source and a preview alongside the other layouts", async ({ page, request }) => {
   await page.goto("/docs/blocks/sidebar");
   await ready(page);
-  await expect(page.locator("[data-block-example]")).toHaveCount(17);
+  await expect(page.locator("[data-block-example]")).toHaveCount(18);
   const example = page.locator('[data-block-example="grouped"]');
   await expect(example.getByRole("link", { name: /Open full example/ })).toHaveAttribute("href", "/examples/sidebar/grouped");
   const source = example.locator("[data-code-full] code");

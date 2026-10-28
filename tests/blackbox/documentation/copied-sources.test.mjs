@@ -40,7 +40,7 @@ test("workspace examples served over HTTP compile in a strict installed-package 
   collect(parsed.descriptor.template.ast);
   const attribute = (node, name) => node.props?.find(prop => prop.type === 6 && prop.name === name)?.value?.content;
   const text = node => node.type === 2 ? node.content : (node.children ?? []).map(text).join("");
-  for (const variant of ["minimal-workspace", "workspace", "workspace-pages"]) {
+  for (const variant of ["minimal-workspace", "workspace", "workspace-pages", "paneled-workspace"]) {
     const wrapper = nodes.find(node => attribute(node, "id") === `sidebar-block-${variant}-code`);
     assert.ok(wrapper, `The ${variant} source is available to copy.`);
     const children = [];

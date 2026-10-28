@@ -85,6 +85,24 @@ dependency notices are missing.
 
 Bundled fonts retain their included licenses.
 
+## Geist
+
+The docs site uses unmodified Geist Variable 1.7.2 from Vercel's
+`geist-font` release commit `a73329da8fc62afc917f796555202e4997f79b7c`.
+The source record and SHA-256 are in
+[`packages/kappa-docs-astro/public/fonts/geist/SOURCE.md`](../packages/kappa-docs-astro/public/fonts/geist/SOURCE.md).
+Its SIL Open Font License 1.1 is preserved in
+[`packages/kappa-docs-astro/public/fonts/geist/OFL.txt`](../packages/kappa-docs-astro/public/fonts/geist/OFL.txt).
+Paneled Workspace uses this existing docs font through `--kappa-font-sans`;
+it does not bundle a font.
+
+## GitLab application-shell reference
+
+Paneled Workspace uses an observed signed-in GitLab workspace as a behavior and
+layout reference. Kappa's implementation is an original composition of its
+public controls. No GitLab code, markup, or assets were copied, so no adapted
+source license is required.
+
 ## Nunito ExtraBold
 
 `PoweredByDicehub` bundles the unmodified Nunito ExtraBold Latin WOFF2 font from

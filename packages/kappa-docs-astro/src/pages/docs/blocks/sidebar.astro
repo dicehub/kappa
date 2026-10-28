@@ -9,13 +9,16 @@ import SidebarDropdownSubmenusDocsDemo from "../../../components/SidebarDropdown
 import SidebarInboxDocsDemo from "../../../components/SidebarInboxDocsDemo.vue";
 import SidebarWorkspacePagesDocsDemo from "../../../components/SidebarWorkspacePagesDocsDemo.vue";
 import SidebarMinimalWorkspaceDocsDemo from "../../../components/SidebarMinimalWorkspaceDocsDemo.vue";
+import SidebarPaneledWorkspaceDocsDemo from "../../../components/SidebarPaneledWorkspaceDocsDemo.vue";
 import SidebarHoverRevealDocsDemo from "../../../components/SidebarHoverRevealDocsDemo.vue";
 import hoverRevealSource from "../../../components/SidebarHoverRevealDocsDemo.vue?raw";
 import hoverRevealStyles from "../../../components/sidebar-hover-demo.css?raw";
 import minimalWorkspaceSource from "../../../components/SidebarMinimalWorkspaceDocsDemo.vue?raw";
+import paneledWorkspaceSource from "../../../components/SidebarPaneledWorkspaceDocsDemo.vue?raw";
 import workspaceSwitcherDemoSource from "../../../data/workspace-switcher-demo.ts?raw";
 import { inlineWorkspaceSwitcherSource } from "../../../lib/inline-workspace-switcher-source";
 import minimalWorkspaceStyles from "../../../components/sidebar-minimal-workspace-demo.css?raw";
+import paneledWorkspaceStyles from "../../../components/sidebar-paneled-workspace-demo.css?raw";
 import workspacePagesSource from "../../../components/SidebarWorkspacePagesDocsDemo.vue?raw";
 import workspacePagesStyles from "../../../components/sidebar-workspace-pages-demo.css?raw";
 import inboxSource from "../../../components/SidebarInboxDocsDemo.vue?raw";
@@ -40,7 +43,9 @@ const exampleSource = (variant: string) => variant === "hover-reveal" ? hoverRev
   .replace('applicationShell: false', 'applicationShell: true')
   .replace('<style src="./sidebar-hover-demo.css"></style>', `<style>\n${hoverRevealStyles}</style>`) : variant === "minimal-workspace" ? minimalWorkspaceSource
   .replace('standalone: false', 'standalone: true')
-  .replace('<style src="./sidebar-minimal-workspace-demo.css"></style>', `<style>\n${minimalWorkspaceStyles}</style>`) : variant === "workspace-pages" ? workspacePagesSource
+  .replace('<style src="./sidebar-minimal-workspace-demo.css"></style>', `<style>\n${minimalWorkspaceStyles}</style>`) : variant === "paneled-workspace" ? paneledWorkspaceSource
+  .replace('standalone: false', 'standalone: true')
+  .replace('<style src="./sidebar-paneled-workspace-demo.css"></style>', `<style>\n${paneledWorkspaceStyles}</style>`) : variant === "workspace-pages" ? workspacePagesSource
   .replace('standalone: false', 'standalone: true')
   .replace('<style src="./sidebar-workspace-pages-demo.css"></style>', `<style>\n${workspacePagesStyles}</style>`) : variant === "inbox-navigation" ? inboxSource
   .replace('standalone: false', 'standalone: true')
@@ -83,6 +88,13 @@ const exampleSource = (variant: string) => variant === "hover-reveal" ? hoverRev
             <tr><td><a href="/docs/components/command-palette">Command Palette</a></td><td>Quick search and keyboard navigation between pages.</td></tr>
             <tr><td><a href="/docs/components/button">Button</a></td><td>Page actions such as New project.</td></tr>
             <tr><td><a href="/docs/components/table">Table</a></td><td>Compact project lists in the examples.</td></tr>
+            <tr><td><a href="/docs/components/hover-card">Hover Card</a></td><td>Category flyouts with keyboard and pointer support.</td></tr>
+            <tr><td><a href="/docs/components/dialog">Dialog</a></td><td>Modal feature catalog and a nonmodal contextual detail view.</td></tr>
+            <tr><td><a href="/docs/components/resizable">Resizable</a></td><td>Work-item list and detail panels.</td></tr>
+            <tr><td><a href="/docs/components/input">Input</a></td><td>Search and local form controls.</td></tr>
+            <tr><td><a href="/docs/components/field">Field</a></td><td>Labels and the comment field in work-item details.</td></tr>
+            <tr><td><a href="/docs/components/avatar">Avatar</a></td><td>Account identity in the workspace header.</td></tr>
+            <tr><td><a href="/docs/components/dicehub-logo">Dicehub Logo</a></td><td>Workspace mark in the global header.</td></tr>
           </tbody></table></div>
         </section>
         <section id="layouts" class="docs-section docs-section--component-examples">
@@ -92,7 +104,7 @@ const exampleSource = (variant: string) => variant === "hover-reveal" ? hoverRev
             <p>{block.description}</p>
             <div class="docs-component-example docs-block-example" data-block-example={block.id}>
               <div class="docs-block-example__bar"><span>Application Shell · {block.id}</span><a href={`/examples/sidebar/${block.id}`} target="_blank" rel="noopener noreferrer">Open full example <span aria-hidden="true">↗</span><span class="docs-block-example__sr-only"> (new tab)</span></a></div>
-              <div class="docs-component-preview docs-block-example__preview">{block.id === "hover-reveal" ? <SidebarHoverRevealDocsDemo client:load applicationShell /> : block.id === "minimal-workspace" ? <SidebarMinimalWorkspaceDocsDemo client:load /> : block.id === "workspace-pages" ? <SidebarWorkspacePagesDocsDemo client:load /> : block.id === "inbox-navigation" ? <SidebarInboxDocsDemo client:load /> : block.id === "dropdown-submenus" ? <SidebarDropdownSubmenusDocsDemo client:load /> : block.id === "submenus" || block.id === "floating-submenus" || block.id === "collapsible-submenus" ? <SidebarSubmenusDocsDemo client:load floating={block.id === "floating-submenus"} collapsible={block.id === "collapsible-submenus"} /> : block.id === "grouped" || block.id === "collapsible-sections" ? <SidebarGroupedDocsDemo client:load collapsibleSections={block.id === "collapsible-sections"} /> : <SidebarBlocksDocsDemo client:load variant={block.id === "inset-navigation" ? "inset" : block.id === "collapsible-icons" || block.id === "peeking" ? "workspace" : block.id} iconNavigation={block.id === "collapsible-icons"} insetNavigation={block.id === "inset-navigation"} peeking={block.id === "peeking"} />}</div>
+              <div class="docs-component-preview docs-block-example__preview">{block.id === "hover-reveal" ? <SidebarHoverRevealDocsDemo client:load applicationShell /> : block.id === "minimal-workspace" ? <SidebarMinimalWorkspaceDocsDemo client:load /> : block.id === "paneled-workspace" ? <SidebarPaneledWorkspaceDocsDemo client:load /> : block.id === "workspace-pages" ? <SidebarWorkspacePagesDocsDemo client:load /> : block.id === "inbox-navigation" ? <SidebarInboxDocsDemo client:load /> : block.id === "dropdown-submenus" ? <SidebarDropdownSubmenusDocsDemo client:load /> : block.id === "submenus" || block.id === "floating-submenus" || block.id === "collapsible-submenus" ? <SidebarSubmenusDocsDemo client:load floating={block.id === "floating-submenus"} collapsible={block.id === "collapsible-submenus"} /> : block.id === "grouped" || block.id === "collapsible-sections" ? <SidebarGroupedDocsDemo client:load collapsibleSections={block.id === "collapsible-sections"} /> : <SidebarBlocksDocsDemo client:load variant={block.id === "inset-navigation" ? "inset" : block.id === "collapsible-icons" || block.id === "peeking" ? "workspace" : block.id} iconNavigation={block.id === "collapsible-icons"} insetNavigation={block.id === "inset-navigation"} peeking={block.id === "peeking"} />}</div>
               <CodeBlock code={inlineWorkspaceSwitcherSource(exampleSource(block.id), workspaceSwitcherDemoSource)} lang="vue" collapsible revealId={`sidebar-block-${block.id}-code`} />
             </div>
           </>)}
@@ -116,6 +128,7 @@ const exampleSource = (variant: string) => variant === "hover-reveal" ? hoverRev
           <p>Set <code>contentMaxWidth</code> to the page's maximum width, including its padding. The default is 72rem. Keep the same value in embedded and full-screen examples. Avoid adding a smaller maximum width inside this region: the shell needs the page width to balance it correctly.</p>
           <p>Responsive navigation uses the viewport width by default. Desktop gallery previews keep their sidebars visible, and selecting a page keeps navigation open. The reading examples use a 1200px viewport breakpoint. Set <code>mobile-breakpoint-reference="container"</code> explicitly for layouts that must follow their own width. Opening a mobile drawer or temporarily revealing collapsed navigation does not move the underlying content.</p>
           <p>Use <code>content-alignment="available"</code> for views that must fill all space beside navigation, such as a wide data grid or canvas. This mode ignores <code>contentMaxWidth</code>.</p>
+          <p>Paneled Workspace uses available alignment: its main region fills the space beside navigation and moves as the navigation changes width. Its 240px sidebar collapses to a 44px icon rail, changing the available content width. Minimal Workspace uses shell alignment, which keeps bounded content centered while the full shell has enough room.</p>
           <p>Migration: set <code>content-alignment="available"</code> to keep the previous alignment. SidebarLayout and Sidebar.Provider both retain the viewport breakpoint default.</p>
         </section>
         <section id="api" class="docs-section">
@@ -131,7 +144,7 @@ const exampleSource = (variant: string) => variant === "hover-reveal" ? hoverRev
             <tr><td><code>width / defaultWidth</code></td><td>352px for split; 260px otherwise</td><td>Fixed CSS width or initial numeric resize width. Explicit values take priority.</td></tr>
             <tr><td><code>label</code></td><td>Application navigation</td><td>Navigation landmark and mobile dialog name.</td></tr>
             <tr><td><code>navigationLabel / secondaryLabel</code></td><td>Navigation links / Secondary navigation</td><td>Names for the independently scrollable columns.</td></tr>
-            <tr><td><code>fullScreenOnMobile</code></td><td><code>false</code></td><td>Full-viewport mobile navigation. Enabled in all gallery examples.</td></tr>
+            <tr><td><code>fullScreenOnMobile</code></td><td><code>false</code></td><td>Full-viewport mobile navigation. Paneled Workspace uses a partial-width drawer; the other gallery examples enable full-screen navigation.</td></tr>
             <tr><td><code>triggerProps / closeLabel / resizeLabel</code></td><td>Sidebar labels</td><td>Translate the built-in controls. Trigger props also support disabled state.</td></tr>
           </tbody></table></div>
           <p>Slots: <code>header</code>, <code>navigation</code>, <code>footer</code>, <code>toolbar</code>, <code>secondary</code>, and the default page content. Each receives the <a href="/docs/components/sidebar#events-and-context">Sidebar context</a>. The secondary slot is used only by split. The toolbar is above the full layout for header, and above page content for other variants.</p>
@@ -161,12 +174,15 @@ const exampleSource = (variant: string) => variant === "hover-reveal" ? hoverRev
           <p>The desktop collapse button sits below Help and uses Sidebar.Trigger with Sidebar.MenuButton. The built-in top-bar trigger is hidden only on desktop; it remains the mobile drawer opener. A simple namespace row and project links sit beside a rounded content panel. The example does not include account warnings, credits, or onboarding cards.</p>
           <p>Its Search or go to button opens CommandPalette from the top bar. Search by name filters the project table; Escape clears that field. New project and Use template add local sample projects. Namespace selection changes the project list and resets the page to Dashboard. Profile, Help, and other navigation actions open local previews; Sign out does not end a session. State lasts until reload, and no account, router, or backend is connected.</p>
           <p>Container queries replace the wide top navigation with a Browse application pages menu in narrow previews and reduce search to a centered icon on small screens. On mobile, navigation uses Kappa's full-screen drawer; selecting a link or Help action closes it and returns focus to the single top-bar opener. The desktop footer toggle and resize handle are absent on mobile. Desktop collapse retains the namespace and navigation icons while hiding project shortcuts. All other examples remain unchanged.</p>
+          <p>Paneled Workspace has a 48px global header with centered search and a 240px category sidebar that collapses to a 44px icon rail with HoverCard category flyouts. The gray outer frame holds a white work area. Its work-item list and detail panel scroll independently. The detail opens in a nonmodal Dialog with no backdrop below 1200px of available content width and sits beside the list in Resizable panels at 1200px and above. Below the viewport breakpoint, the sidebar uses a partial-width mobile drawer. Selection and page actions update local sample data only.</p>
+          <p>Paneled Workspace composes SidebarLayout's header with Sidebar.Collapsible navigation, HoverCard flyouts, Dropdown menus, CommandPalette search, Dialog, Resizable panels, Button, Input, Field, Avatar, and DicehubLogo. The Feature catalog uses a modal Dialog. This is an example composition; it does not add a SidebarLayout variant or public library API.</p>
         </section>
         <section id="accessibility" class="docs-section">
           <h2><a class="docs-section-anchor" href="#accessibility">Accessibility and Styling</a></h2>
           <p>Application Shell examples use a 13px content size (0.8125rem), including body text, table rows, page actions, metadata, and notes. Larger headings, weight, spacing, and color provide hierarchy. Embedded previews, full-screen pages, and their copyable source use the same styles.</p>
           <p>Keyboard navigation, visible focus, mobile focus trapping, Escape, and resize controls come from the existing Kappa components. Split navigation hides and disables its secondary column during icon collapse, then stacks the columns on mobile. The top header stays outside the scrolling content.</p>
-          <p>Navigation headers and page toolbars have a 64px minimum height. Floating and inset surfaces are block-only styles. Mobile uses the normal Sidebar drawer surface. Light and dark modes use the same semantic tokens; reduced-motion settings are preserved.</p>
+          <p>Navigation headers and page toolbars use a 64px minimum height, except Paneled Workspace's 48px global header. Floating and inset surfaces are block-only styles. Mobile uses the normal Sidebar drawer surface. Light and dark modes use the same semantic tokens; reduced-motion settings are preserved.</p>
+          <p>Paneled Workspace scopes 13px body text, 24px headings, and 12px metadata to its root. It uses the docs site's existing Geist family through <code>--kappa-font-sans</code>; its metrics are closer to GitLab Sans than Nunito Sans. The example adds no font file or dependency. Standalone page links support new tabs and browser history. Local sample data resets on reload.</p>
           <p>Optional dimensions: <code>--kappa-sidebar-layout-gap</code> (0.5rem), <code>--kappa-sidebar-layout-radius</code> (0.625rem), and <code>--kappa-sidebar-layout-primary-width</code> (9.5rem for split's first column). WorkspaceSwitcher supplies the shared namespace menu; your application supplies namespace and profile data.</p>
         </section>
         <DocsPageNavigation currentPath={currentPath} />

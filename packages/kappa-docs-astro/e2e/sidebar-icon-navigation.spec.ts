@@ -194,7 +194,7 @@ test('touch profile submenu keeps names and right-side checkmarks visible', asyn
 
 test('gallery retains the old rail and publishes complete source', async ({ page, request }) => {
   await page.goto('/docs/blocks/sidebar');
-  await expect(page.locator('[data-block-example]')).toHaveCount(17);
+  await expect(page.locator('[data-block-example]')).toHaveCount(18);
   await expect(page.locator('[data-block-example="rail"]')).toHaveCount(1);
   const example = page.locator('[data-block-example="collapsible-icons"]');
   await expect(example.getByRole('link', { name: /Open full example/ })).toHaveAttribute('href', '/examples/sidebar/collapsible-icons');

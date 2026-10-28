@@ -1,5 +1,7 @@
 import { expect, test, type Locator, type Page } from '@playwright/test';
 
+// Paneled Workspace uses available alignment, so collapse changes its content
+// width and position. The dedicated paneled workspace spec covers that mode.
 const variants = [
   'grouped', 'collapsible-sections', 'submenus', 'floating-submenus',
   'collapsible-submenus', 'dropdown-submenus', 'collapsible-icons', 'peeking', 'hover-reveal',

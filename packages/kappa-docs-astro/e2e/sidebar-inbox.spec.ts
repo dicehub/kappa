@@ -104,7 +104,7 @@ test('inbox supports both themes, RTL, narrow layouts, and copyable gallery sour
   const drawer = page.getByRole('dialog', { name: 'Inbox navigation', exact: true });
   expect(await drawer.evaluate(node => node.scrollWidth <= node.clientWidth)).toBe(true);
   await page.goto('/docs/blocks/sidebar');
-  await expect(page.locator('[data-block-example]')).toHaveCount(17);
+  await expect(page.locator('[data-block-example]')).toHaveCount(18);
   const example = page.locator('[data-block-example="inbox-navigation"]');
   await expect(example.getByRole('link', { name: /Open full example/ })).toHaveAttribute('href', '/examples/sidebar/inbox-navigation');
   await expect(example.locator('[data-code-full] code')).toContainText('standalone: true');

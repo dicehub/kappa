@@ -289,14 +289,14 @@ test('minimal shell supports both themes, RTL, reduced motion, and 320px width',
 
 test('gallery publishes complete Minimal Workspace source and keeps every prior example', async ({ page, request }) => {
   await page.goto('/docs/blocks/sidebar#minimal-workspace');
-  await expect(page.locator('[data-block-example]')).toHaveCount(17);
+  await expect(page.locator('[data-block-example]')).toHaveCount(18);
   const example = page.locator('[data-block-example="minimal-workspace"]');
   await expect(example.getByRole('link', { name: /Open full example/ })).toHaveAttribute('href', '/examples/sidebar/minimal-workspace');
   await expect(example.locator('[data-code-full] code')).toContainText('standalone: true');
   await expect(example.locator('[data-code-full] code')).toContainText('@dicehub/kappa/components/dicehub-logo');
   await expect(example.locator('[data-code-full] code')).not.toContainText('style src=');
   await expect(example.locator('[data-code-full] code')).not.toContainText('localhost:8080');
-  for (const id of ['workspace', 'workspace-pages', 'inbox-navigation', 'inset', 'floating', 'rail']) await expect(page.locator(`[data-block-example="${id}"]`)).toHaveCount(1);
+  for (const id of ['workspace', 'workspace-pages', 'paneled-workspace', 'inbox-navigation', 'inset', 'floating', 'rail']) await expect(page.locator(`[data-block-example="${id}"]`)).toHaveCount(1);
   for (const removed of ['split', 'header']) await expect(page.locator(`[data-block-example="${removed}"]`)).toHaveCount(0);
   expect(await (await request.get('/docs/blocks/sidebar.md')).text()).toContain('Minimal Workspace');
 });
