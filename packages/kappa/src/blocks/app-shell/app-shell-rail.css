@@ -1,0 +1,57 @@
+/* Reserve the tools track even when the main content is empty or removed. */
+.kappa-app-shell[data-has-rail] > .kappa-sidebar-layout__body { display: grid; grid-template-columns: auto minmax(0, 1fr) 2.5rem; grid-template-rows: minmax(0, 1fr); }
+.kappa-app-shell[data-has-rail] > .kappa-sidebar-layout__body > .kappa-sidebar__shell { grid-column: 1; grid-row: 1 / -1; }
+.kappa-app-shell[data-has-rail] > .kappa-sidebar-layout__body > .kappa-sidebar-layout__main { grid-column: 2; grid-row: 1; }
+.kappa-app-shell[data-has-rail][data-side="end"] > .kappa-sidebar-layout__body { grid-template-columns: minmax(0, 1fr) auto 2.5rem; }
+.kappa-app-shell[data-has-rail][data-side="end"] > .kappa-sidebar-layout__body > .kappa-sidebar__shell { grid-column: 2; }
+.kappa-app-shell[data-has-rail][data-side="end"] > .kappa-sidebar-layout__body > .kappa-sidebar-layout__main { grid-column: 1; }
+.kappa-app-shell__rail { position: relative; display: flex; grid-column: 3; grid-row: 1; min-inline-size: 0; min-block-size: 0; flex-direction: column; align-items: center; gap: 0.5rem; padding: 0.5rem; }
+.kappa-app-shell__rail > .kappa-button { inline-size: 1.5rem; min-inline-size: 1.5rem; block-size: 1.5rem; min-block-size: 1.5rem; padding: 0.25rem; border-radius: 0.5rem; color: var(--kappa-subtle); }
+/* Rail controls use navigation states, including a persistent open-panel marker. */
+.kappa-app-shell__rail > .kappa-toolbar-button[data-variant="ghost"] {
+  --kappa-button-foreground: var(--kappa-shell-nav-emphasis);
+  --kappa-button-hover-background: var(--kappa-shell-rail-highlight);
+  --kappa-button-active-background: var(--kappa-shell-rail-pressed);
+
+  position: relative;
+  border: 0;
+  transition: none;
+}
+.kappa-app-shell__rail > .kappa-toolbar-button[data-variant="ghost"]:focus-visible {
+  box-shadow: inset 0 0 0 2px var(--kappa-focus),
+    inset 0 0 0 3px var(--kappa-control),
+    inset 0 0 0 1px var(--kappa-control);
+}
+.kappa-app-shell__rail > .kappa-toolbar-button[data-variant="ghost"][aria-expanded="true"]:where(:not(:disabled, [aria-disabled="true"]))::before {
+  position: absolute;
+  inset-block: 4px;
+  inset-inline-end: -6px;
+  inline-size: 2px;
+  border-start-start-radius: 4px;
+  border-end-start-radius: 4px;
+  background: var(--kappa-focus);
+  content: "";
+  pointer-events: none;
+}
+@container kappa-app-shell (max-width: 61.999rem) {
+  .kappa-app-shell[data-has-rail] > .kappa-sidebar-layout__body { grid-template-columns: auto minmax(0, 1fr); grid-template-rows: minmax(0, 1fr) 2.5rem; }
+  .kappa-app-shell__rail { grid-column: 2; grid-row: 2; flex-direction: row; justify-content: flex-end; }
+  .kappa-app-shell[data-has-rail][data-side="end"] > .kappa-sidebar-layout__body { grid-template-columns: minmax(0, 1fr) auto; }
+  .kappa-app-shell[data-side="end"] > .kappa-sidebar-layout__body > .kappa-app-shell__rail { grid-column: 1; }
+  .kappa-app-shell__rail > .kappa-toolbar-button[data-variant="ghost"][aria-expanded="true"]::before {
+    inset-block: auto -6px;
+    inset-inline: 4px;
+    inline-size: auto;
+    block-size: 2px;
+    border-radius: 4px 4px 0 0;
+  }
+}
+@media (forced-colors: active) {
+  .kappa-app-shell__rail > .kappa-toolbar-button[data-variant="ghost"]:focus-visible {
+    outline: 2px solid Highlight;
+    outline-offset: -2px;
+  }
+  .kappa-app-shell__rail > .kappa-toolbar-button[data-variant="ghost"][aria-expanded="true"]::before {
+    background: Highlight;
+  }
+}

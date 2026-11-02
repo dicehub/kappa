@@ -1,0 +1,43 @@
+.kappa-app-shell__panels-body { position: relative; display: flex; flex: 1; min-inline-size: 0; min-block-size: 0; padding-block-end: 0.5rem; }
+.kappa-app-shell__panel-frame { position: relative; display: flex; flex: 1; min-inline-size: 0; min-block-size: 0; border: 1px solid transparent; border-radius: 0.75rem; overflow: clip; background: var(--kappa-control); box-shadow: var(--kappa-panel-shadow); }
+.kappa-app-shell__panels { position: relative; display: flex; flex: 1; min-inline-size: 0; min-block-size: 0; overflow: hidden; container: kappa-shell-panels / inline-size; }
+.kappa-app-shell__splitter.kappa-resizable { position: relative; display: flex; inline-size: 100%; block-size: 100%; border: 0; border-radius: inherit; background: transparent; }
+.kappa-app-shell__primary, .kappa-app-shell__detail-region { display: flex; min-inline-size: 0; min-block-size: 0; flex-direction: column; overflow: hidden !important; background: var(--kappa-control); }
+.kappa-app-shell__detail-region { position: static; }
+.kappa-app-shell__panels[data-panel-mode="overlay"] .kappa-app-shell__detail-region { display: contents; }
+.kappa-app-shell__resize { --kappa-resizable-handle-size: 0.75rem; z-index: 2; }
+.kappa-app-shell__panels .kappa-dialog__positioner:has(> .kappa-app-shell__detail) { position: static; inline-size: 100%; block-size: 100%; padding: 0; overflow: hidden; pointer-events: none; scrollbar-gutter: auto; }
+.kappa-app-shell__panels .kappa-app-shell__detail.kappa-dialog__content { display: flex; inline-size: 100%; block-size: 100%; max-inline-size: none; max-block-size: none; gap: 0; padding: 0; border: 0; border-radius: 0; background: var(--kappa-control); box-shadow: none; pointer-events: auto; }
+.kappa-app-shell__detail[data-state="open"] { animation: kappa-shell-detail-in 250ms cubic-bezier(0.22, 0.61, 0.36, 1) both; }
+.kappa-app-shell__detail[data-state="closed"] { animation: kappa-shell-detail-out 250ms cubic-bezier(0.22, 0.61, 0.36, 1) both; }
+.kappa-app-shell__panels[data-panel-mode="overlay"] .kappa-dialog__positioner:has(> .kappa-app-shell__detail) { position: absolute; inset: 0; display: flex; align-items: stretch; justify-content: flex-end; }
+.kappa-app-shell__panels[data-panel-mode="overlay"] .kappa-app-shell__detail.kappa-dialog__content { inline-size: 80%; min-inline-size: min(18rem, 100%); margin: 0; border-inline-start: 1px solid var(--kappa-line); border-start-start-radius: 0.75rem; border-end-start-radius: 0.75rem; box-shadow: var(--kappa-panel-shadow); }
+.kappa-app-shell__aside-region { position: relative; inline-size: 0; flex: none; min-block-size: 0; transition: inline-size 250ms cubic-bezier(0.22, 0.61, 0.36, 1); }
+.kappa-app-shell__panels-body:not([data-aside-present]) .kappa-app-shell__aside-region { display: none; }
+.kappa-app-shell__aside-region .kappa-dialog__positioner:has(> .kappa-app-shell__aside) { position: static; inline-size: 100%; block-size: 100%; padding: 0; overflow: hidden; pointer-events: none; scrollbar-gutter: auto; }
+.kappa-app-shell__aside-region .kappa-app-shell__aside.kappa-dialog__content { display: flex; inline-size: 100%; min-inline-size: 25rem; max-inline-size: none; block-size: 100%; max-block-size: none; flex-direction: column; gap: 0.875rem; margin: 0; padding: 1rem; overflow-y: auto; border: 0; border-inline-start: 1px solid var(--kappa-line); border-radius: 0; background: var(--kappa-control); box-shadow: none; pointer-events: auto; }
+.kappa-app-shell__aside[data-state="open"] { animation: kappa-shell-detail-in 250ms cubic-bezier(0.22, 0.61, 0.36, 1) both; }
+.kappa-app-shell__aside[data-state="closed"] { animation: kappa-shell-detail-out 250ms cubic-bezier(0.22, 0.61, 0.36, 1) both; }
+.kappa-app-shell__panels-body[data-aside-open] .kappa-app-shell__aside-region { inline-size: var(--kappa-shell-aside-width, clamp(25rem, 20vw, 35rem)); }
+.kappa-app-shell__aside-region:has(> .kappa-app-shell__aside-resize:is(:focus, [data-dragging])) { transition: none; }
+.kappa-app-shell__aside-resize { position: absolute; z-index: 2; inset-block: 0; inset-inline-start: 0; inline-size: 0.25rem; background: transparent; outline: none; }
+.kappa-app-shell__aside-resize:is(:hover, [data-dragging]) { background: var(--kappa-line-strong); }
+.kappa-app-shell__aside-resize:focus-visible { background: var(--kappa-line-strong); outline: 2px solid var(--kappa-focus); outline-offset: -2px; }
+/* Keep the aside's outer edge fixed while the primary panel fills the remaining space. */
+.kappa-app-shell__panels-body[data-maximized] .kappa-app-shell__panels { visibility: hidden; }
+.kappa-app-shell__panels-body[data-maximized] .kappa-app-shell__aside-region { inline-size: 100%; }
+.kappa-app-shell__panels-body[data-maximized]:not([data-wide]) .kappa-app-shell__aside { border-inline-start: 0; }
+.kappa-app-shell__panels-body[data-maximized][data-wide] .kappa-app-shell__panels { visibility: visible; }
+.kappa-app-shell__panels-body[data-maximized][data-wide] .kappa-app-shell__aside-region { inline-size: 60%; }
+.kappa-app-shell__panels-body[data-aside-mode="overlay"] { flex-direction: column; padding: 0; }
+.kappa-app-shell__panels-body[data-aside-mode="overlay"] .kappa-app-shell__aside-region { position: absolute; z-index: 902; inset: 0; inline-size: 100%; pointer-events: none; }
+.kappa-app-shell__panels-body[data-aside-mode="overlay"] .kappa-app-shell__aside-region .kappa-dialog__positioner { display: flex; justify-content: flex-end; padding: 0 0.75rem 0.5rem; }
+.kappa-app-shell__panels-body[data-aside-mode="overlay"] .kappa-app-shell__aside.kappa-dialog__content { min-inline-size: 0; border: 1px solid var(--kappa-line); border-radius: 0.75rem; box-shadow: var(--kappa-panel-shadow); }
+.kappa-app-shell__panels-body[data-aside-mode="overlay"] .kappa-app-shell__aside[data-state="open"] { animation-name: kappa-shell-aside-in; }
+.kappa-app-shell__panels-body[data-aside-mode="overlay"] .kappa-app-shell__aside[data-state="closed"] { animation-name: kappa-shell-aside-out; }
+@container kappa-shell-panels (max-width: 35.999rem) { .kappa-app-shell__panels[data-panel-mode="overlay"] .kappa-app-shell__detail.kappa-dialog__content { inline-size: 100%; border-radius: 0; } }
+@keyframes kappa-shell-detail-in { from { opacity: 0; transform: translateX(0.5rem); } to { opacity: 1; transform: translateX(0); } }
+@keyframes kappa-shell-detail-out { to { opacity: 0; transform: translateX(0.5rem); } }
+@keyframes kappa-shell-aside-in { from { opacity: 0; transform: translateX(100%); } to { opacity: 1; transform: translateX(0); } }
+@keyframes kappa-shell-aside-out { to { opacity: 0; transform: translateX(100%); } }
+@media (prefers-reduced-motion: reduce) { .kappa-app-shell__panels-body, .kappa-app-shell__panels-body * { animation: none !important; transition: none !important; } }

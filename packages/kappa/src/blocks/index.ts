@@ -7,3 +7,4 @@ export * from "./resource-list-layout";
 export * from "./sidebar-layout";
 export * from "./settings-layout";
 export * from "./workspace-switcher";
+export * from "./app-shell";

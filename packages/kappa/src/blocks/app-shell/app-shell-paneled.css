@@ -1,0 +1,94 @@
+.kappa-app-shell[data-appearance="paneled"],
+.kappa-sidebar__positioner:has([data-app-shell-appearance="paneled"]) { --kappa-paneled-chrome: color-mix(in srgb, var(--kappa-canvas) 40%, var(--kappa-line)); }
+.kappa-app-shell[data-appearance="paneled"] { overflow: hidden; background: var(--kappa-paneled-chrome); }
+.kappa-app-shell[data-appearance="paneled"] > .kappa-sidebar-layout__site-header { z-index: 5; }
+.kappa-app-shell[data-appearance="paneled"][data-mobile] > .kappa-sidebar-layout__site-header { gap: 0.5rem; }
+.kappa-app-shell[data-appearance="paneled"][data-mobile] .kappa-app-shell__brand { inline-size: 1.5rem; }
+.kappa-app-shell[data-appearance="paneled"][data-mobile] .kappa-app-shell__page { padding-inline: 0.75rem; }
+.kappa-app-shell[data-appearance="paneled"] > .kappa-sidebar-layout__body { z-index: 1; padding-block-end: 0.5rem; }
+.kappa-app-shell[data-appearance="paneled"] .kappa-app-shell__panels-body { padding-block-end: 0; }
+.kappa-app-shell[data-appearance="paneled"] .kappa-sidebar-layout__main { background: transparent; }
+/* Panels own scrolling and clipping; leave room for the frame's outer shadow. */
+.kappa-app-shell[data-appearance="paneled"] .kappa-sidebar-layout__content { overflow: visible; }
+.kappa-app-shell[data-appearance="paneled"] .kappa-sidebar-layout__content-body { display: flex; flex: 1; block-size: 100%; min-block-size: 0; }
+/* The attribute follows the navigation into its mobile portal. */
+.kappa-app-shell [data-app-shell-appearance="paneled"],
+.kappa-sidebar[data-app-shell-appearance="paneled"] { border: 0; color: var(--kappa-subtle); background: var(--kappa-paneled-chrome); font-family: var(--kappa-font-sans, inherit); font-size: 0.875rem; line-height: 1.3125rem; }
+.kappa-sidebar[data-app-shell-appearance="paneled"] > .kappa-sidebar__header { position: relative; min-block-size: 0; flex-direction: column; align-items: stretch; gap: 0; padding: 0.625rem 1rem 0.5rem; border: 0; background: var(--kappa-paneled-chrome); }
+.kappa-sidebar[data-app-shell-appearance="paneled"] > .kappa-sidebar__footer { align-items: stretch; flex-direction: column; gap: 0.25rem; padding: 0.5rem; border: 0; background: var(--kappa-paneled-chrome); }
+.kappa-sidebar[data-app-shell-appearance="paneled"] .kappa-sidebar__content { padding: 0.25rem 0.5rem; }
+/* The cover follows the content's bottom edge; the shadow stays at the viewport
+   edge. Lists that fit, or have reached the end, cover the shadow completely. */
+.kappa-sidebar[data-app-shell-appearance="paneled"] .kappa-sidebar__content {
+  background-image:
+    linear-gradient(var(--kappa-paneled-chrome), var(--kappa-paneled-chrome)),
+    linear-gradient(to top, var(--kappa-shell-nav-scroll-shadow), transparent);
+  background-position: center bottom;
+  background-size: 100% 2.25rem;
+  background-repeat: no-repeat;
+  background-attachment: local, scroll;
+}
+.kappa-sidebar[data-app-shell-appearance="paneled"] :is(.kappa-sidebar__menu, .kappa-sidebar__menu-sub) { gap: 0.125rem; }
+.kappa-sidebar[data-app-shell-appearance="paneled"] .kappa-sidebar__menu-button { position: relative; min-block-size: 1.75rem; gap: 0.5rem; padding: 0.125rem 0.25rem; border-radius: 0.5rem; color: var(--kappa-shell-nav-foreground); font-size: 0.875rem; font-weight: 425; line-height: 1.3125rem; transition: none; }
+.kappa-sidebar[data-app-shell-appearance="paneled"] .kappa-sidebar__menu-icon { display: inline-flex; inline-size: 1.5rem; block-size: 1.5rem; flex: none; align-items: center; justify-content: center; }
+.kappa-sidebar[data-app-shell-appearance="paneled"] .kappa-sidebar__menu-icon > svg { inline-size: 1rem; block-size: 1rem; }
+.kappa-sidebar[data-app-shell-appearance="paneled"] .kappa-sidebar__menu-button.kappa-app-shell__project-link { color: var(--kappa-strong); font-weight: 600; }
+.kappa-app-shell__project { margin-block-end: 0.5rem; }
+.kappa-app-shell__project-avatar.kappa-avatar { --kappa-avatar-size: 1.5rem; --kappa-avatar-background: var(--kappa-info-tint); --kappa-avatar-foreground: var(--kappa-info-text); border-radius: 0.25rem; }
+.kappa-app-shell__project-avatar.kappa-avatar::after { border: 0; }
+.kappa-app-shell__project-avatar .kappa-avatar__fallback { font-size: 1rem; }
+.kappa-sidebar[data-app-shell-appearance="paneled"] .kappa-sidebar__menu-button:is([data-active], [data-active-descendant]) { font-weight: 600; }
+.kappa-sidebar[data-app-shell-appearance="paneled"] .kappa-sidebar__menu-button:is(:hover, :focus-visible, [data-active], [data-active-descendant], [data-flyout-open]):not([data-disabled]) { color: var(--kappa-shell-nav-emphasis); background: var(--kappa-shell-nav-highlight); }
+.kappa-sidebar[data-app-shell-appearance="paneled"] .kappa-sidebar__menu-button:active:not([data-disabled]) { color: var(--kappa-shell-nav-emphasis); background: var(--kappa-shell-nav-pressed); }
+.kappa-sidebar[data-app-shell-appearance="paneled"] .kappa-sidebar__menu-button:is([data-active], [data-active-descendant])::before { position: absolute; inline-size: 2px; border-start-end-radius: 4px; border-end-end-radius: 4px; background: var(--kappa-focus); content: ""; inset-block: 4px; inset-inline-start: -8px; pointer-events: none; }
+/* Include the edge indicator inside the collapsible's clipping area. */
+.kappa-sidebar[data-app-shell-appearance="paneled"] .kappa-sidebar__collapsible-content { margin-inline: -0.5rem; padding-inline: 0.5rem; }
+.kappa-sidebar[data-app-shell-appearance="paneled"] .kappa-sidebar__collapsible-content[data-state="open"] { animation: kappa-app-shell-submenu-expand 200ms ease; }
+.kappa-sidebar[data-app-shell-appearance="paneled"] .kappa-sidebar__collapsible-content[data-state="closed"] { animation: kappa-app-shell-submenu-collapse 200ms ease; }
+.kappa-sidebar[data-app-shell-appearance="paneled"] .kappa-sidebar__menu-sub { margin: 0; padding: 0; border: 0; }
+/* Keep the row gap inside the animated height so following groups do not jump. */
+.kappa-sidebar[data-app-shell-appearance="paneled"] .kappa-sidebar__collapsible-content > .kappa-sidebar__menu-sub { margin-block-start: 0.125rem; }
+.kappa-sidebar[data-app-shell-appearance="paneled"] .kappa-sidebar__menu-sub .kappa-sidebar__menu-button { padding-inline-start: 2.25rem; }
+@keyframes kappa-app-shell-submenu-expand { from { height: 0; } to { height: var(--height); } }
+@keyframes kappa-app-shell-submenu-collapse { from { height: var(--height); } to { height: 0; } }
+.kappa-sidebar[data-app-shell-appearance="paneled"] .kappa-sidebar__footer :is(.kappa-dropdown__trigger, .kappa-sidebar__trigger) { inline-size: 100%; justify-content: flex-start; }
+.kappa-sidebar[data-app-shell-appearance="paneled"][data-state="collapsed"] > .kappa-sidebar__header { display: none; }
+.kappa-sidebar[data-app-shell-appearance="paneled"][data-state="collapsed"] .kappa-sidebar__content { padding-block-start: 0.5rem; }
+.kappa-sidebar[data-app-shell-appearance="paneled"][data-state="collapsed"] .kappa-sidebar__menu-button { inline-size: 1.75rem; min-inline-size: 1.75rem; max-inline-size: 1.75rem; padding: 0.125rem; }
+.kappa-sidebar[data-app-shell-appearance="paneled"][data-state="collapsed"] .kappa-sidebar__footer { align-items: flex-start; }
+.kappa-app-shell[data-appearance="paneled"] :is(.kappa-sidebar__shell, .kappa-sidebar):not([data-resizing], :has(.kappa-sidebar__resize-handle:focus)) { transition: inline-size 250ms cubic-bezier(0.22, 0.61, 0.36, 1); }
+.kappa-sidebar__positioner:has([data-app-shell-appearance="paneled"]) .kappa-sidebar__dialog { border-radius: 0 1rem 1rem 0; background: var(--kappa-paneled-chrome); }
+.kappa-sidebar__backdrop:has(+ .kappa-sidebar__positioner [data-app-shell-appearance="paneled"]) { background: var(--kappa-shell-nav-backdrop); }
+.kappa-sidebar__positioner:has([data-app-shell-appearance="paneled"]) .kappa-sidebar__dialog[data-state="open"] { animation: kappa-sidebar-enter 200ms ease; }
+.kappa-sidebar__positioner:has([data-app-shell-appearance="paneled"]) .kappa-sidebar__dialog[data-state="closed"] { animation: kappa-app-shell-nav-exit 200ms ease; }
+@keyframes kappa-app-shell-nav-exit { from { transform: translateX(0); } to { transform: translateX(var(--kappa-sidebar-offset)); } }
+.kappa-sidebar[data-app-shell-appearance="paneled"][data-mobile] { inline-size: 100%; block-size: 100%; }
+.kappa-sidebar[data-app-shell-appearance="paneled"][data-mobile] > .kappa-sidebar__header { padding-inline-end: 3rem; }
+.kappa-sidebar[data-app-shell-appearance="paneled"][data-mobile] > .kappa-sidebar__footer { padding: 0.25rem 0.5rem 0.25rem 0.25rem; }
+.kappa-sidebar[data-app-shell-appearance="paneled"][data-mobile] .kappa-sidebar__close { position: absolute; inset-block-start: 0.5rem; inset-inline-end: 0.5rem; }
+@container kappa-app-shell (max-width: 35.999rem) {
+  .kappa-app-shell[data-appearance="paneled"] > .kappa-sidebar-layout__site-header .kappa-app-shell__search { margin-inline-start: auto; }
+  .kappa-app-shell[data-appearance="paneled"] > .kappa-sidebar-layout__site-header .kappa-app-shell__search + .kappa-app-shell__actions { margin-inline-start: 0; }
+}
+@container kappa-app-shell (min-width: 36rem) {
+  .kappa-app-shell[data-appearance="paneled"][data-mobile] > .kappa-sidebar-layout__body { padding-inline-start: 0.5rem; }
+}
+@container kappa-app-shell (min-width: 36rem) and (max-width: 61.999rem) {
+  .kappa-app-shell[data-appearance="paneled"] > .kappa-sidebar-layout__body { padding-inline-end: 0.5rem; }
+}
+@container kappa-app-shell (max-width: 61.999rem) {
+  .kappa-app-shell[data-appearance="paneled"] > .kappa-sidebar-layout__site-header { padding-inline-start: 0.5rem; }
+  .kappa-app-shell[data-appearance="paneled"] > .kappa-sidebar-layout__body { padding-block-end: 0; }
+}
+.kappa-app-shell[data-bloom]::before, .kappa-app-shell[data-bloom]::after { position: absolute; z-index: 0; inset: 0; content: ""; pointer-events: none; background-repeat: no-repeat; transition: opacity 600ms ease-in-out; }
+.kappa-app-shell[data-bloom]::before { background-image: url("./assets/paneled-side.png?no-inline"); background-position: right top; background-size: 350px 600px; opacity: 0; }
+.kappa-app-shell[data-bloom]::after { background-image: url("./assets/paneled-bottom.png?no-inline"); background-position: bottom right -300px; background-size: 1200px 400px; opacity: 0; }
+@media (min-width: 992px) { .kappa-app-shell[data-bloom]::before { opacity: 1; } }
+.kappa-app-shell[data-bloom]:has(.kappa-app-shell__panels-body[data-aside-open])::before { opacity: 0; }
+.kappa-app-shell[data-bloom]:has(.kappa-app-shell__panels-body[data-aside-open])::after { opacity: 1; }
+@media (prefers-reduced-motion: reduce) {
+  .kappa-app-shell[data-appearance="paneled"] *, .kappa-app-shell[data-bloom]::before, .kappa-app-shell[data-bloom]::after { animation: none !important; transition: none !important; }
+  /* Finish Ark's exit lifecycle, including when the preference changes mid-collapse. */
+  .kappa-sidebar[data-app-shell-appearance="paneled"] .kappa-sidebar__collapsible-content[data-state="closed"] { animation: kappa-app-shell-submenu-collapse 1ms linear !important; }
+  .kappa-sidebar__positioner:has([data-app-shell-appearance="paneled"]) .kappa-sidebar__dialog[data-state="closed"] { animation: kappa-app-shell-nav-exit 1ms linear !important; }
+}

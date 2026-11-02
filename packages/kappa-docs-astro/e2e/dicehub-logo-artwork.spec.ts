@@ -49,6 +49,26 @@ test("horizontal and vertical logos match the supplied SVG artwork without a fon
   }
 });
 
+test("glyph SVG stroke attributes preserve the original artwork", async ({ page, context }) => {
+  await context.grantPermissions(["clipboard-read", "clipboard-write"]);
+  const example = page.locator('[data-logo-demo="copy"]');
+  await example.locator("summary").click();
+  await example.getByRole("button", { name: "Copy mark as SVG", exact: true }).click();
+  const copied = await page.evaluate(() => navigator.clipboard.readText());
+  const reference = await page.evaluate(source => {
+    const svg = new DOMParser().parseFromString(source, "image/svg+xml").documentElement;
+    svg.setAttribute("stroke", "red");
+    svg.setAttribute("stroke-width", "1");
+    return new XMLSerializer().serializeToString(svg);
+  }, copied);
+  const glyph = page.locator('[data-logo-demo="glyph"] svg');
+  await glyph.evaluate(node => {
+    node.setAttribute("stroke", "red");
+    node.setAttribute("stroke-width", "1");
+  });
+  await matchesArtwork(page, glyph, reference);
+});
+
 test("the original attribution text uses loaded Nunito ExtraBold only for dicehub", async ({ page }) => {
   const badge = page.locator('[data-logo-demo="powered-basic"] .kappa-powered-by-dicehub');
   await expect(badge).toHaveAccessibleName("Powered by dicehub");

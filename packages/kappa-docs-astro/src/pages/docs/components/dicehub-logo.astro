@@ -241,6 +241,7 @@ const description = "Official dicehub SVG artwork with glyph, horizontal, and ve
         <section id="api-reference" class="docs-section">
           <h2><a class="docs-section-anchor" href="#api-reference">API Reference</a></h2>
           <p><code>DicehubLogo</code> renders an SVG and accepts standard SVG attributes.</p>
+          <p>The glyph groups its original paths into <code>kappa-dicehub-logo__face</code> elements with <code>data-face="top | right | left"</code>. Each group includes its inset mark and an invisible hover area. <a href="/docs/blocks/appshell">AppShell</a> enables these areas for stable hover feedback across letter cutouts and face gaps. Other logo usage keeps its standard appearance and pointer behaviour.</p>
 
           <div class="docs-api-group">
             <h3 id="dicehub-logo-api">
