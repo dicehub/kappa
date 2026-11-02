@@ -33,7 +33,7 @@ see the [npm announcement](https://github.blog/changelog/2026-09-18-stage-only-n
 ## Prepare the version
 
 1. Start from an up-to-date `dev` branch.
-2. Confirm that each user-visible package change has a changeset. Check that the root and package `LICENSE` files match and the package declares `MIT`; package validation checks the license and full upstream notices in the tarball. See [third-party sources](THIRD_PARTY_SOURCES.md) when source origins change.
+2. Confirm that each user-visible package change has a changeset. Check that the root and package `LICENSE` files match and the package declares `MIT`; package validation checks the license and full upstream notices in the tarball. Update `packages/kappa/scripts/third-party-sources.mjs` when source origins change.
 3. Create a release branch and run `pnpm version-packages`.
 4. Run `pnpm --filter @dicehub/kappa codegen:registry` after the version changes.
 5. Run the full gate:

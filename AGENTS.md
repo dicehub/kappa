@@ -377,9 +377,9 @@ Pin toolchain versions and use deliberate compatibility ranges for public peers.
 - Store deployment and publishing credentials in masked, protected GitLab CI
   variables.
 - Kappa code and documentation text use MIT. Preserve upstream notices for adapted
-  source; see `docs/THIRD_PARTY_SOURCES.md`. Fonts keep their own licenses, and
-  documentation artwork and brand assets follow the license scope in
-  `docs/THIRD_PARTY_SOURCES.md`; new assets require a source and rights record.
+  source; see `packages/kappa/scripts/third-party-sources.mjs`. Fonts keep their
+  own licenses, and documentation artwork and brand assets are excluded from the
+  MIT license; new assets require a source and rights record.
 - Never print secrets in logs, tests, screenshots, issues, MRs, or docs; use
   synthetic data everywhere public.
 - Treat `v-html` as a security boundary: trusted generated content or

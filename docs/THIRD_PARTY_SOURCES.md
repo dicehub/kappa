@@ -96,13 +96,6 @@ Its SIL Open Font License 1.1 is preserved in
 Paneled Workspace uses this existing docs font through `--kappa-font-sans`;
 it does not bundle a font.
 
-## GitLab application-shell reference
-
-Paneled Workspace uses an observed signed-in GitLab workspace as a behavior and
-layout reference. Kappa's implementation is an original composition of its
-public controls. No GitLab code, markup, or assets were copied, so no adapted
-source license is required.
-
 ## Nunito ExtraBold
 
 `PoweredByDicehub` bundles the unmodified Nunito ExtraBold Latin WOFF2 font from
