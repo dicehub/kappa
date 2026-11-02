@@ -8,6 +8,8 @@
 .paneled-workspace-demo[data-standalone] { block-size: 100svh; block-size: 100dvh; min-block-size: 0; border: 0; border-radius: 0; }
 .paneled-workspace-demo__flyout a:focus-visible { outline: 2px solid var(--kappa-focus); outline-offset: -2px; }
 .paneled-workspace-demo__global-actions { display: flex; flex: none; align-items: center; gap: 0.5rem; margin-inline-start: auto; }
+.paneled-workspace-demo__project-switcher { min-inline-size: 0; margin-block-start: 0.25rem; }
+.paneled-workspace-demo__project-switcher[data-collapsed] { inline-size: 1.75rem; }
 .paneled-workspace-demo .kappa-app-shell__search.kappa-button { --kappa-shell-search-border: color-mix(in srgb, var(--kappa-shell-search-hover-border) 30%, transparent); }
 .paneled-workspace-demo .kappa-app-shell__search.kappa-button:is(:hover, :active, :focus-visible, [aria-expanded="true"]):not(:disabled, [aria-disabled="true"]) { border-color: var(--kappa-shell-search-hover-border); }
 .paneled-workspace-demo__notification { position: relative; }
@@ -15,6 +17,19 @@
 .paneled-workspace-demo__context-label { margin: 0; display: block; min-inline-size: 0; overflow: hidden; color: var(--kappa-default); font-size: 0.875rem; font-weight: 600; line-height: 1.3125rem; text-overflow: ellipsis; white-space: nowrap; }
 .paneled-workspace-demo__navigation.kappa-sidebar[data-app-shell-appearance="paneled"][data-state] > .kappa-sidebar__header { display: flex; padding: 0.5rem; }
 .paneled-workspace-demo__navigation.kappa-sidebar[data-app-shell-appearance="paneled"][data-state="collapsed"] > .kappa-sidebar__header { padding-block-end: 0; }
+/* Each navigation view owns its scroll position; the header and footer stay fixed. */
+.paneled-workspace-demo__navigation.kappa-sidebar .kappa-sidebar-layout__primary {
+  display: flex;
+  padding: 0;
+  overflow: hidden;
+  background: none;
+}
+.paneled-workspace-demo__sliding-views > .kappa-sidebar__sliding-view {
+  transition-duration: 250ms;
+  transition-timing-function: cubic-bezier(0.77, 0, 0.175, 1);
+}
+.paneled-workspace-demo__sliding-views[data-initializing] > .kappa-sidebar__sliding-view { transition: none !important; }
+.paneled-workspace-demo__navigation .kappa-sidebar__menu-button.paneled-workspace-demo__back { margin-block-end: 1.625rem; font-weight: 500; }
 .paneled-workspace-demo__context-row,
 .paneled-workspace-demo__workspace-row { display: flex; inline-size: 100%; min-inline-size: 0; align-items: center; gap: 0.25rem; }
 .paneled-workspace-demo__context-row .paneled-workspace-demo__context-label { flex: 1; }
@@ -23,10 +38,13 @@
 .paneled-workspace-demo__help.kappa-toolbar-button { --kappa-toolbar-button-foreground: var(--kappa-shell-nav-foreground); }
 .paneled-workspace-demo__help:is(:hover, :active, :focus-visible, [aria-expanded="true"]).kappa-toolbar-button { --kappa-toolbar-button-foreground: var(--kappa-shell-nav-emphasis); }
 .paneled-workspace-demo__workspace-row[data-collapsed] { flex-direction: column; }
+.paneled-workspace-demo__navigation[data-mobile] .paneled-workspace-demo__workspace-row { flex-direction: column; align-items: flex-start; }
+.paneled-workspace-demo__navigation[data-mobile] .paneled-workspace-demo__workspace-switcher { inline-size: 100%; }
 .paneled-workspace-demo__pin { opacity: 0; transition: opacity 200ms ease; }
 .paneled-workspace-demo__context-row:is(:hover, :focus-within, [data-collapsed]) .paneled-workspace-demo__pin { opacity: 1; }
 .paneled-workspace-demo__context-row[data-collapsed] .paneled-workspace-demo__pin { min-inline-size: 1.75rem; min-block-size: 1.75rem; padding: 0.25rem; }
 .paneled-workspace-demo__navigation[data-mobile] .paneled-workspace-demo__context-row { inline-size: calc(100% - 3rem); min-block-size: 2.75rem; }
+.paneled-workspace-demo__navigation[data-mobile] .paneled-workspace-demo__back { inline-size: calc(100% - 3rem); min-block-size: 2.75rem; }
 .paneled-workspace-demo__navigation[data-mobile] .paneled-workspace-demo__workspace-switcher { min-block-size: 2.75rem; }
 .paneled-workspace-demo__navigation[data-mobile] .paneled-workspace-demo__help { min-inline-size: 2.75rem; min-block-size: 2.75rem; }
 @media (hover: none) { .paneled-workspace-demo__pin { opacity: 1; } }

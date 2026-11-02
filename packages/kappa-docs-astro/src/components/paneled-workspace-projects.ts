@@ -1,5 +1,6 @@
 export interface WorkspaceProject {
   name: string;
+  avatarSrc?: string;
   code: string;
   discipline: string;
   description: string;

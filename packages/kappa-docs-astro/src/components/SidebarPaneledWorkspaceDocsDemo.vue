@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, nextTick, onBeforeUnmount, onMounted, ref, useId, watch } from "vue";
+import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from "vue";
 import { AppShell } from "@dicehub/kappa/blocks/app-shell";
 import { WorkspaceSwitcher } from "@dicehub/kappa/blocks/workspace-switcher";
 import { namespaceSwitcherAvatarItems } from "../data/workspace-switcher-demo";
@@ -7,10 +7,10 @@ import { Sidebar } from "@dicehub/kappa/components/sidebar";
 import { Button, ToolbarButton } from "@dicehub/kappa/components/button";
 import { Breadcrumbs } from "@dicehub/kappa/components/breadcrumbs";
 import { Field } from "@dicehub/kappa/components/field";
+import { Table } from "@dicehub/kappa/components/table";
 import { Badge } from "@dicehub/kappa/components/badge";
 import { Avatar } from "@dicehub/kappa/components/avatar";
 import { DicehubLogo } from "@dicehub/kappa/components/dicehub-logo";
-import { HoverCard } from "@dicehub/kappa/components/hover-card";
 import { CommandPalette } from "@dicehub/kappa/components/command-palette";
 import { Kbd, KbdGroup } from "@dicehub/kappa/components/kbd";
 import PaneledWorkspaceProfileMenu from "./PaneledWorkspaceProfileMenu.vue";
@@ -29,39 +29,33 @@ import PaneledWorkspaceTemplates from "./PaneledWorkspaceTemplates.vue";
 import PaneledWorkspaceCalculators from "./PaneledWorkspaceCalculators.vue";
 import { workspaceCalculatorPages } from "./paneled-workspace-calculators";
 import { workspaceTemplatePages } from "./paneled-workspace-templates";
-import { workspaceProjects } from "./paneled-workspace-projects";
-import { usePaneledFlyoutIntent } from "./use-paneled-flyout-intent";
-import { limitedWorkspacePages, resolveWorkspacePage, workspaceCategories, workspacePages as allPages, workspaceUtilityDescriptions } from "./paneled-workspace-navigation";
-import { Activity, ArrowUpRight, ChevronRight, ChevronsLeft, ChevronsRight, ChevronsUpDown, CirclePlay, LayoutDashboard, Maximize2, Minimize2, Plus, Search, Sparkles, X } from "@lucide/vue";
+import PaneledWorkspaceNavigation from "./PaneledWorkspaceNavigation.vue";
+import PaneledWorkspaceProjectSwitcher from "./PaneledWorkspaceProjectSwitcher.vue";
+import { usePaneledWorkspaceLocation } from "./use-paneled-workspace-location";
+import { limitedWorkspacePages, projectCategories, workspaceCategories as defaultWorkspaceCategories, workspaceUtilityDescriptions } from "./paneled-workspace-navigation";
+import { Activity, ArrowLeft, ArrowUpRight, ChevronsLeft, ChevronsRight, ChevronsUpDown, CirclePlay, LayoutDashboard, Maximize2, Minimize2, Plus, Search, Sparkles, UsersRound, X } from "@lucide/vue";
 
 const props = withDefaults(defineProps<{ standalone?: boolean }>(), { standalone: false });
 const root = ref<HTMLElement>();
+const projectSwitcher = ref<HTMLElement>();
 const namespace = ref("Ros.Space");
 const projectNames = ref<Record<string, string>>({ "Ros.Space": "Aster VTOL", Engineering: "Vega demonstrator", Research: "Orion testbed" });
-const projectName = computed(() => projectNames.value[namespace.value]);
+const { projects: workspaceProjects, view, selectedProject, lastProject, isProjectOverview, hrefForPage: breadcrumbHref, selectPage, readLocation, renameProject } = usePaneledWorkspaceLocation(props.standalone);
+const workspaceCategories = computed(() => defaultWorkspaceCategories.map(group => group.label === "Projects"
+  ? { ...group, pages: ["All projects", ...workspaceProjects.value.slice(0, 6).map(project => project.code)] } : group));
+const pageLabel = (page: string) => workspaceProjects.value.find(project => project.code === page)?.name ?? page;
+const projectName = computed(() => selectedProject.value?.name ?? projectNames.value[namespace.value]);
 const workspaceOptions = namespaceSwitcherAvatarItems.filter(item => Object.hasOwn(projectNames.value, item.value));
 const workspaceMenuOpen = ref(false);
-const view = ref("Simulation runs");
-const selectedProject = computed(() => workspaceProjects.find(project => project.name === view.value));
 const isTemplatePage = computed(() => workspaceTemplatePages.includes(view.value));
 const isCalculatorPage = computed(() => workspaceCalculatorPages.includes(view.value));
-const breadcrumbRoot = computed(() => selectedProject.value || view.value === "Dashboard" || view.value === "All projects" || isTemplatePage.value || isCalculatorPage.value ? { page: "Dashboard", label: namespace.value } : { page: "Overview", label: projectName.value });
-const categories = computed(() => workspaceCategories.map(group => {
-  if (group.label !== "Projects" || !selectedProject.value || group.pages.includes(view.value)) return group;
-  const shortcuts = group.pages.filter(page => page !== "All projects");
-  return { ...group, pages: ["All projects", ...shortcuts.slice(0, 5), view.value] };
-}));
-const navigationLabel = (page: string) => page === "All projects" || page === "All templates" ? "Overview" : page;
 const utilityDescription = computed(() => workspaceUtilityDescriptions[view.value]);
 const isLimitedPage = computed(() => limitedWorkspacePages.includes(view.value));
 const navigationOpen = ref(true);
+const navigationInitialized = ref(!props.standalone);
+let navigationInitFrame = 0;
 const mobileOpen = ref(false);
-const groupsOpen = ref<Record<string, boolean>>({ Projects: true });
-const flyout = ref("");
-const flyoutOwner = useId();
-const { corridor, pointTrigger, leaveTrigger, enterContent } = usePaneledFlyoutIntent(flyout, flyoutOwner);
-watch([navigationOpen, mobileOpen], () => { flyout.value = ""; workspaceMenuOpen.value = false; });
-watch(workspaceMenuOpen, open => { if (open) flyout.value = ""; });
+watch([navigationOpen, mobileOpen], () => { workspaceMenuOpen.value = false; });
 const filter = ref("");
 const stateFilter = ref("All runs");
 const searchOpen = ref(false);
@@ -96,7 +90,6 @@ const detailHeading = ref<HTMLElement>();
 const asideHeading = ref<HTMLElement>();
 let asideOpener: HTMLElement | undefined;
 let detailOpener: HTMLElement | undefined;
-let focusFrame = 0;
 
 const computeAccounts = ref(structuredClone(workspaceCompute));
 const creditsReady = ref(false);
@@ -111,14 +104,16 @@ const namespaceNotifications = computed(() => notifications.value.filter(item =>
 watch(() => events.value.length, updateActivityScroll, { flush: "post" });
 type SearchEntry = { label: string; description: string; id?: string; page?: string; namespace?: string };
 type SearchGroup = { label: string; items: SearchEntry[] };
+const projectSearchPages = computed(() => selectedProject.value ? ["Overview", "Project activity"] : []);
 const navigationSearchGroups = computed<SearchGroup[]>(() => [
-  { label: "Your work", items: [{ label: "Dashboard", description: "" }] },
-  ...categories.value.map(group => ({ label: group.label, items: group.pages.map(page => ({ label: page, page, description: "" })) })),
+  { label: "Your work", items: [{ label: "Dashboard", description: "" }, ...(!selectedProject.value ? [{ label: "Simulation runs", description: "" }] : [])] },
+  { label: "Project", items: projectSearchPages.value.map(page => ({ label: page, page, description: "" })) },
+  ...[...workspaceCategories.value, ...(selectedProject.value ? projectCategories : [])].map(group => ({ label: group.label, items: group.pages.map(page => ({ label: pageLabel(page), page, description: "" })) })),
   { label: "Recent simulation runs", items: compute.value.runs.slice(0, 4).map(run => ({ label: run.name, description: `${run.id} · ${run.status}`, id: run.id })) },
   { label: "Workspaces", items: workspaceOptions.map(item => ({ label: item.name, namespace: item.value, description: "" })) },
 ]);
 const searchEntries = computed<SearchEntry[]>(() => [
-  ...[...new Set(["Dashboard", ...categories.value.flatMap(group => group.pages), ...workspaceProjects.map(project => project.name)])].map(label => ({ label, description: "" })),
+  ...[...new Set(["Dashboard", "Simulation runs", ...projectSearchPages.value, ...[...workspaceCategories.value, ...(selectedProject.value ? projectCategories : [])].flatMap(group => group.pages), ...workspaceProjects.value.map(project => project.code)])].map(page => ({ label: pageLabel(page), page, description: "" })),
   ...compute.value.runs.map(run => ({ label: run.name, description: `${run.id} · ${run.status}`, id: run.id })),
   ...workspaceOptions.map(item => ({ label: item.name, namespace: item.value, description: "Workspace" })),
 ].filter(item => `${item.label} ${item.description}`.toLowerCase().includes(searchQuery.value.trim().toLowerCase())));
@@ -127,45 +122,70 @@ const searchGroups = computed<SearchGroup[]>(() => searchQuery.value.trim()
   : navigationSearchGroups.value.filter(group => group.items.length));
 const selectableSearchItems = (groups: unknown[]) => (groups as SearchGroup[]).flatMap(group => group.items);
 const entryLabel = (item: unknown) => (item as SearchEntry).label;
-
-function breadcrumbHref(page: string) {
-  const path = props.standalone ? "" : "/examples/appshell/paneled-workspace";
-  return `${path}?view=${encodeURIComponent(page)}`;
-}
+const entryValue = (item: unknown) => {
+  const entry = item as SearchEntry;
+  return entry.id ? `run:${entry.id}` : entry.namespace ? `namespace:${entry.namespace}` : `page:${entry.page ?? entry.label}`;
+};
 
 function navigateLink(page: string, event: MouseEvent) {
   if (event.button || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
   event.preventDefault();
   const fromFlyout = event.currentTarget instanceof Element && event.currentTarget.closest("[data-paneled-flyout]");
+  const backNavigation = event.currentTarget instanceof Element && event.currentTarget.matches(".paneled-workspace-demo__back")
+    ? event.currentTarget.closest(".paneled-workspace-demo__navigation") : null;
   navigate(page);
-  if (fromFlyout) void nextTick(() => {
-    const heading = root.value?.querySelector<HTMLElement>(".paneled-workspace-demo__page-content h2");
-    heading?.setAttribute("tabindex", "-1");
-    heading?.focus({ preventScroll: true });
+  if (backNavigation) void nextTick(() => focusWorkspaceNavigation(backNavigation));
+  if (fromFlyout) void nextTick(focusPageHeading);
+}
+function focusPageHeading() {
+  const heading = root.value?.querySelector<HTMLElement>(".paneled-workspace-demo__page-content h2");
+  heading?.setAttribute("tabindex", "-1");
+  heading?.focus({ preventScroll: true });
+}
+function restoreRemovedPageFocus(previous: Element | null, wasMobileOpen: boolean) {
+  if (wasMobileOpen) return;
+  void nextTick(() => {
+    if (previous && !previous.isConnected && document.activeElement === document.body) focusPageHeading();
   });
 }
-function syncLocation() {
-  const url = new URL(window.location.href);
-  const requested = url.searchParams.get("view");
-  const page = resolveWorkspacePage(requested ?? "Simulation runs");
-  const target = allPages.includes(page) ? page : "Simulation runs";
-  navigate(target, false);
-  if (requested && requested !== target) { url.searchParams.set("view", target); window.history.replaceState(null, "", url); }
+function focusWorkspaceNavigation(navigation: Element) {
+  const workspace = navigation.querySelector<HTMLElement>('[data-slot="sidebar-sliding-view"][data-value="workspace"]');
+  const link = workspace?.querySelector<HTMLElement>('a[aria-current="page"]');
+  link?.focus({ preventScroll: true });
+  if (!link || document.activeElement !== link) workspace?.focus({ preventScroll: true });
 }
-function navigate(page: string, updateLocation = true) {
-  page = resolveWorkspacePage(page);
-  view.value = page;
-  if (props.standalone && updateLocation) {
-    const url = new URL(window.location.href);
-    if (url.searchParams.get("view") !== page) { url.searchParams.set("view", page); window.history.pushState(null, "", url); }
-  }
+function navigateFromProjectSwitcher(page: string) {
+  // The switcher unmounts when leaving a project, so its trigger cannot receive focus.
+  const navigation = projectSwitcher.value?.closest('.paneled-workspace-demo__navigation');
+  navigate(page);
+  if (!selectedProject.value && navigation) void nextTick(() => focusWorkspaceNavigation(navigation));
+}
+function finishNavigation(keepDrawer = false) {
   detailOpen.value = false;
-  mobileOpen.value = false;
-  flyout.value = "";
+  if (!keepDrawer) mobileOpen.value = false;
   filter.value = "";
-  for (const category of categories.value) if (category.pages.includes(page)) groupsOpen.value[category.label] = true;
 }
-function changeNamespace(value: string) { namespace.value = value; stateFilter.value = "All runs"; navigate("Simulation runs"); }
+function syncLocation() {
+  const navigation = projectSwitcher.value?.closest('.paneled-workspace-demo__navigation');
+  const active = document.activeElement;
+  const restoreWorkspaceFocus = navigation?.querySelector('[data-slot="sidebar-header"]')?.contains(active)
+    || active?.closest('.paneled-project-switcher__popover');
+  const previousProject = selectedProject.value?.code;
+  const wasMobileOpen = mobileOpen.value;
+  readLocation();
+  finishNavigation(previousProject !== selectedProject.value?.code);
+  restoreRemovedPageFocus(active, wasMobileOpen);
+  if (restoreWorkspaceFocus && !selectedProject.value && navigation) void nextTick(() => focusWorkspaceNavigation(navigation));
+}
+function navigate(page: string) {
+  const previousFocus = document.activeElement;
+  const wasMobileOpen = mobileOpen.value;
+  const contextChanged = selectPage(page);
+  // Keep the drawer open to show project navigation or the return to all projects.
+  finishNavigation(contextChanged && (!!selectedProject.value || page === "All projects"));
+  restoreRemovedPageFocus(previousFocus, wasMobileOpen);
+}
+function changeNamespace(value: string) { namespace.value = value; stateFilter.value = "All runs"; navigate("Dashboard"); mobileOpen.value = false; }
 async function openRun(run: WorkspaceRun, event?: Event) {
   detailOpener = event?.currentTarget instanceof HTMLElement ? event.currentTarget : root.value?.querySelector<HTMLElement>(`[data-simulation-run="${run.id}"]`) ?? undefined;
   if (view.value !== "Simulation runs") { stateFilter.value = "All runs"; navigate("Simulation runs"); }
@@ -226,35 +246,7 @@ function shortcut(event: KeyboardEvent) {
   root.value?.querySelector<HTMLElement>('[data-paneled-search]')?.focus();
   showSearch();
 }
-async function updateFlyout(label: string, open: boolean) {
-  if (open) { flyout.value = label; return; }
-  // Trigger blur precedes the link's focus event. Keep the flyout open while a link has focus.
-  await nextTick();
-  const content = document.querySelector<HTMLElement>(`[data-flyout-owner="${flyoutOwner}"][data-paneled-flyout="${label}"]`);
-  // A short close timer can finish during the trigger-to-content event handoff.
-  if (!content?.matches(":hover") && !content?.contains(document.activeElement) && flyout.value === label) flyout.value = "";
-}
-function closeFlyout(label: string) {
-  flyout.value = "";
-  root.value?.querySelector<HTMLElement>(`[data-paneled-group="${label}"]`)?.focus();
-}
-function focusFlyout(label: string) {
-  flyout.value = label;
-  cancelAnimationFrame(focusFrame);
-  if (!categories.value.find(group => group.label === label)?.pages.length) return;
-  // Ark presence reveals the links on a later frame. Focus only after they can receive it.
-  const focusLink = () => {
-    if (flyout.value !== label || (navigationOpen.value && groupsOpen.value[label])) return;
-    const link = document.querySelector<HTMLElement>(`[data-flyout-owner="${flyoutOwner}"][data-paneled-flyout="${label}"] a`);
-    if (link?.getClientRects().length && getComputedStyle(link).visibility === "visible") {
-      link.focus();
-      if (document.activeElement === link) return;
-    }
-    focusFrame = requestAnimationFrame(focusLink);
-  };
-  focusLink();
-}
-onMounted(() => {
+onMounted(async () => {
   creditsReady.value = true;
   if (root.value) {
     railOnBottom.value = root.value.clientWidth < 992;
@@ -262,8 +254,14 @@ onMounted(() => {
     railObserver.observe(root.value);
   }
   if (props.standalone) { syncLocation(); window.addEventListener("keydown", shortcut); window.addEventListener("popstate", syncLocation); }
+  await nextTick();
+  if (!root.value?.isConnected) return;
+  // Finish Vue's initial enter frames before enabling user-triggered slides.
+  navigationInitFrame = requestAnimationFrame(() => {
+    navigationInitFrame = requestAnimationFrame(() => { navigationInitialized.value = true; });
+  });
 });
-onBeforeUnmount(() => { railObserver?.disconnect(); cancelAnimationFrame(focusFrame); window.removeEventListener("keydown", shortcut); window.removeEventListener("popstate", syncLocation); });
+onBeforeUnmount(() => { railObserver?.disconnect(); cancelAnimationFrame(navigationInitFrame); window.removeEventListener("keydown", shortcut); window.removeEventListener("popstate", syncLocation); });
 </script>
 
 <template>
@@ -282,45 +280,40 @@ onBeforeUnmount(() => { railObserver?.disconnect(); cancelAnimationFrame(focusFr
         </div>
       </template>
       <template #header="context">
+        <Sidebar.MenuButton v-if="selectedProject" :href="breadcrumbHref('All projects')" tooltip="Back to Projects" :icon="ArrowLeft" class="paneled-workspace-demo__back" @click="navigateLink('All projects', $event)">Back to Projects</Sidebar.MenuButton>
         <div class="paneled-workspace-demo__context-row" :data-collapsed="context.iconCollapsed || undefined">
-          <p v-if="!context.iconCollapsed" class="paneled-workspace-demo__context-label">Your work</p>
+          <p v-if="!context.iconCollapsed" class="paneled-workspace-demo__context-label">{{ selectedProject ? "Project" : "Your work" }}</p>
           <Sidebar.Trigger v-if="!context.isMobile" class="paneled-workspace-demo__pin"
             :aria-label="navigationOpen ? 'Collapse sidebar' : 'Expand sidebar'">
             <component :is="navigationOpen ? ChevronsLeft : ChevronsRight" aria-hidden="true" />
           </Sidebar.Trigger>
         </div>
+        <div v-if="selectedProject" ref="projectSwitcher" class="paneled-workspace-demo__project-switcher" :data-collapsed="context.iconCollapsed || undefined">
+          <PaneledWorkspaceProjectSwitcher :project="selectedProject" :projects="workspaceProjects" :href-for-page="breadcrumbHref"
+            :compact="context.iconCollapsed" :is-mobile="context.isMobile" @navigate="navigateFromProjectSwitcher" />
+        </div>
       </template>
       <template #navigation="context">
-        <Sidebar.MenuButton href="?view=Dashboard" tooltip="Dashboard" :icon="LayoutDashboard" :active="view === 'Dashboard'"
-          class="paneled-workspace-demo__workspace paneled-workspace-demo__dashboard"
-          @click="navigateLink('Dashboard', $event)">Dashboard</Sidebar.MenuButton>
-        <div v-for="group in categories" :key="group.label" class="paneled-workspace-demo__nav-group">
-          <HoverCard.Root :open="flyout === group.label && !context.isMobile && (context.iconCollapsed || !groupsOpen[group.label])" :disabled="context.isMobile || (!context.iconCollapsed && groupsOpen[group.label])" :open-delay="0" :close-delay="5" :positioning="{ placement: 'right-start', strategy: 'fixed', gutter: 10 }" @update:open="updateFlyout(group.label, $event)">
-            <HoverCard.Trigger v-if="context.iconCollapsed" as-child><Sidebar.MenuButton :icon="group.icon" :aria-label="group.label" :data-paneled-group="group.label" @pointermove="pointTrigger(group.label, $event)" @pointerleave="leaveTrigger" :data-active-descendant="group.pages.includes(view) || undefined" :data-flyout-open="flyout === group.label || undefined" :aria-expanded="flyout === group.label" @click="flyout = group.label" @keydown.down.capture.prevent="focusFlyout(group.label)" @keydown.esc.stop.prevent="closeFlyout(group.label)">{{ group.label }}</Sidebar.MenuButton></HoverCard.Trigger>
-            <Sidebar.Collapsible v-else :open="groupsOpen[group.label]" @update:open="groupsOpen[group.label] = $event; flyout = ''">
-              <HoverCard.Trigger as-child><Sidebar.CollapsibleTrigger as-child><Sidebar.MenuButton :icon="group.icon" class="paneled-workspace-demo__group-toggle" :data-paneled-group="group.label" @pointermove="pointTrigger(group.label, $event)" @pointerleave="leaveTrigger" :data-active-descendant="!groupsOpen[group.label] && group.pages.includes(view) || undefined" :data-flyout-open="!groupsOpen[group.label] && flyout === group.label || undefined" @keydown.down.capture="!context.isMobile && !groupsOpen[group.label] && ($event.preventDefault(), focusFlyout(group.label))" @keydown.esc="flyout === group.label && ($event.stopPropagation(), $event.preventDefault(), closeFlyout(group.label))"><span>{{ group.label }}</span><ChevronRight aria-hidden="true" /></Sidebar.MenuButton></Sidebar.CollapsibleTrigger></HoverCard.Trigger>
-              <Sidebar.CollapsibleContent><Sidebar.MenuSub>
-                <Sidebar.MenuSubItem v-for="page in group.pages" :key="page">
-                  <Sidebar.MenuButton :href="breadcrumbHref(page)" :active="view === page" @click="navigateLink(page, $event)"><span :title="navigationLabel(page)">{{ navigationLabel(page) }}</span><span v-if="page === 'Simulation runs'" class="paneled-workspace-demo__count" aria-hidden="true">{{ compute.runs.length }}</span></Sidebar.MenuButton>
-                </Sidebar.MenuSubItem>
-              </Sidebar.MenuSub></Sidebar.CollapsibleContent>
-            </Sidebar.Collapsible>
-            <HoverCard.Content :show-arrow="false" class="paneled-workspace-demo__flyout" :data-paneled-flyout="group.label" :data-flyout-owner="flyoutOwner" @pointermove="enterContent" @keydown.esc.stop.prevent="closeFlyout(group.label)">
-              <div v-if="flyout === group.label && corridor" data-flyout-corridor class="paneled-workspace-demo__flyout-corridor" :style="corridor" aria-hidden="true" />
-              <template v-if="context.iconCollapsed">
-                <h3 class="paneled-workspace-demo__flyout-title">{{ group.label }}</h3>
-                <hr class="paneled-workspace-demo__flyout-divider" aria-hidden="true" />
-              </template>
-              <nav :aria-label="`${group.label} pages`">
-                <a v-for="page in group.pages" :key="page" :href="breadcrumbHref(page)" :aria-current="view === page ? 'page' : undefined" @click="navigateLink(page, $event)"><span :title="navigationLabel(page)">{{ navigationLabel(page) }}</span><span v-if="page === 'Simulation runs'" class="paneled-workspace-demo__count" aria-hidden="true">{{ compute.runs.length }}</span></a>
-              </nav>
-            </HoverCard.Content>
-          </HoverCard.Root>
-        </div>
+        <Sidebar.SlidingViews class="paneled-workspace-demo__sliding-views" :data-initializing="!navigationInitialized || undefined" :active-key="selectedProject ? 'project' : 'workspace'" :direction="selectedProject ? 'left' : 'right'">
+          <Sidebar.SlidingView value="workspace" label="Workspace navigation">
+            <PaneledWorkspaceNavigation :categories="workspaceCategories" :view="view" :active="!selectedProject" :icon-collapsed="context.iconCollapsed" :is-mobile="context.isMobile" :menu-open="workspaceMenuOpen" :run-count="compute.runs.length" label="Workspace links" :href-for-page="breadcrumbHref" :page-label="pageLabel" @navigate="navigateLink">
+              <Sidebar.MenuButton :href="breadcrumbHref('Dashboard')" tooltip="Dashboard" :icon="LayoutDashboard" :active="view === 'Dashboard'" class="paneled-workspace-demo__workspace paneled-workspace-demo__dashboard" @click="navigateLink('Dashboard', $event)">Dashboard</Sidebar.MenuButton>
+              <Sidebar.MenuButton :href="breadcrumbHref('Simulation runs')" tooltip="Simulation runs" :icon="CirclePlay" :active="view === 'Simulation runs'" @click="navigateLink('Simulation runs', $event)">Simulation runs<span class="paneled-workspace-demo__count" aria-hidden="true">{{ compute.runs.length }}</span></Sidebar.MenuButton>
+            </PaneledWorkspaceNavigation>
+          </Sidebar.SlidingView>
+          <Sidebar.SlidingView value="project" :label="`${lastProject.name} navigation`">
+            <PaneledWorkspaceNavigation :categories="projectCategories" :view="view" :active="!!selectedProject" :icon-collapsed="context.iconCollapsed" :is-mobile="context.isMobile" :menu-open="workspaceMenuOpen" :run-count="compute.runs.length" label="Project links" :href-for-page="breadcrumbHref" @navigate="navigateLink">
+              <Sidebar.MenuButton :href="breadcrumbHref(lastProject.code)" tooltip="Overview" :icon="LayoutDashboard" :active="isProjectOverview" @click="navigateLink(lastProject.code, $event)">Overview</Sidebar.MenuButton>
+              <Sidebar.MenuButton :href="breadcrumbHref('Project activity')" tooltip="Project activity" :icon="Activity" :active="view === 'Project activity'" @click="navigateLink('Project activity', $event)">Project activity</Sidebar.MenuButton>
+            </PaneledWorkspaceNavigation>
+          </Sidebar.SlidingView>
+        </Sidebar.SlidingViews>
       </template>
       <template #footer="context">
         <div class="paneled-workspace-demo__workspace-row" :data-collapsed="context.iconCollapsed || undefined">
+          <PaneledWorkspaceHelpMenu v-if="context.isMobile || context.iconCollapsed" :is-mobile="context.isMobile" :icon-collapsed="context.iconCollapsed" :href-for-page="breadcrumbHref" @navigate="navigate" />
           <WorkspaceSwitcher show-arrow :model-value="namespace" v-model:open="workspaceMenuOpen" :items="workspaceOptions"
+            :workspace-actions="[{ value: 'New group', label: 'Create Group', icon: Plus }, { value: 'Groups', label: 'Show all groups', icon: UsersRound }]" @action="navigate($event.value)"
             label="Workspaces" account-label="ros@example.test" :teleport="!context.isMobile"
             :positioning="{ placement: context.iconCollapsed ? 'right-end' : 'top-start', gutter: 6, strategy: 'fixed' }" @update:model-value="changeNamespace">
             <template #trigger="{ workspace, disabled }">
@@ -337,7 +330,7 @@ onBeforeUnmount(() => { railObserver?.disconnect(); cancelAnimationFrame(focusFr
               </Sidebar.MenuButton>
             </template>
           </WorkspaceSwitcher>
-          <PaneledWorkspaceHelpMenu :is-mobile="context.isMobile" :icon-collapsed="context.iconCollapsed" :href-for-page="breadcrumbHref" @navigate="navigate" />
+          <PaneledWorkspaceHelpMenu v-if="!context.isMobile && !context.iconCollapsed" :is-mobile="context.isMobile" :icon-collapsed="context.iconCollapsed" :href-for-page="breadcrumbHref" @navigate="navigate" />
         </div>
       </template>
       <template #default>
@@ -347,30 +340,40 @@ onBeforeUnmount(() => { railObserver?.disconnect(); cancelAnimationFrame(focusFr
           :initial-aside-focus="() => asideHeading ?? null" :final-aside-focus="finalAsideFocus">
                 <Breadcrumbs.Root size="sm" class="paneled-workspace-demo__breadcrumbs" aria-label="Workspace breadcrumb">
                   <Breadcrumbs.List>
-                    <Breadcrumbs.Item><Breadcrumbs.Link :href="breadcrumbHref(breadcrumbRoot.page)" @click="navigateLink(breadcrumbRoot.page, $event)">{{ breadcrumbRoot.label }}</Breadcrumbs.Link></Breadcrumbs.Item>
+                    <Breadcrumbs.Item><Breadcrumbs.Link :href="breadcrumbHref('Dashboard')" @click="navigateLink('Dashboard', $event)">{{ namespace }}</Breadcrumbs.Link></Breadcrumbs.Item>
                     <Breadcrumbs.Separator />
-                    <template v-if="selectedProject">
-                      <Breadcrumbs.Item><Breadcrumbs.Link :href="breadcrumbHref('All projects')" @click="navigateLink('All projects', $event)">All projects</Breadcrumbs.Link></Breadcrumbs.Item>
+                    <template v-if="selectedProject && !isProjectOverview">
+                      <Breadcrumbs.Item><Breadcrumbs.Link :href="breadcrumbHref(selectedProject.code)" @click="navigateLink(selectedProject.code, $event)">{{ selectedProject.name }}</Breadcrumbs.Link></Breadcrumbs.Item>
                       <Breadcrumbs.Separator />
                     </template>
-                    <Breadcrumbs.Item><Breadcrumbs.Link :href="breadcrumbHref(view)" aria-current="page" @click="navigateLink(view, $event)">{{ view }}</Breadcrumbs.Link></Breadcrumbs.Item>
+                    <Breadcrumbs.Item><Breadcrumbs.Link :href="breadcrumbHref(view)" aria-current="page" @click="navigateLink(view, $event)">{{ isProjectOverview ? projectName : view }}</Breadcrumbs.Link></Breadcrumbs.Item>
                   </Breadcrumbs.List>
                 </Breadcrumbs.Root>
                 <section class="paneled-workspace-demo__list-scroll" :data-width="isLimitedPage ? 'limited' : undefined" aria-label="Workspace page">
                   <div class="paneled-workspace-demo__page-content" :data-width="isLimitedPage ? 'limited' : undefined">
-                  <div class="paneled-workspace-demo__page-heading"><h2>{{ view }}</h2><Button v-if="view === 'Simulation runs'" size="sm" :icon="Plus" @click="createRun">New simulation run</Button><Button v-else size="sm" variant="outline" :icon="CirclePlay" @click="navigate('Simulation runs')">View simulation runs</Button></div>
-                  <PaneledWorkspaceProjectSummary v-if="selectedProject" :project="selectedProject" />
+                  <div class="paneled-workspace-demo__page-heading"><h2>{{ isProjectOverview ? projectName : view }}</h2><Button v-if="view === 'Simulation runs'" size="sm" :icon="Plus" @click="createRun">New simulation run</Button><Button v-else size="sm" variant="outline" :icon="CirclePlay" @click="navigate('Simulation runs')">View simulation runs</Button></div>
+                  <PaneledWorkspaceProjectSummary v-if="selectedProject && isProjectOverview" :project="selectedProject" />
                   <PaneledWorkspaceProjects v-else-if="view === 'All projects'" :projects="workspaceProjects" :href-for-page="breadcrumbHref" @open="navigateLink" />
+                  <div v-else-if="view === 'Groups'" class="paneled-workspace-demo__overview">
+                    <p>Choose a group to open its workspace.</p>
+                    <Table compact aria-label="Groups">
+                      <Table.Header><Table.Row><Table.Head scope="col">Group</Table.Head><Table.Head scope="col">Details</Table.Head></Table.Row></Table.Header>
+                      <Table.Body><Table.Row v-for="group in workspaceOptions.filter(item => item.value !== 'Ros.Space')" :key="group.value">
+                        <Table.Cell><Button variant="link" size="sm" :icon="group.icon" @click="changeNamespace(group.value)">{{ group.name }}</Button></Table.Cell>
+                        <Table.Cell>{{ group.description }}</Table.Cell>
+                      </Table.Row></Table.Body>
+                    </Table>
+                  </div>
                   <PaneledWorkspaceTemplates v-else-if="isTemplatePage" :key="view" :page="view" />
                   <PaneledWorkspaceCalculators v-else-if="isCalculatorPage" :key="view" :page="view" />
-                  <PaneledWorkspaceProjectPages v-else-if="isLimitedPage && view !== 'Dashboard'" :key="`${namespace}-${view}`" :page="view" :project="projectName" @navigate="navigate" @rename="projectNames[namespace] = $event" />
+                  <PaneledWorkspaceProjectPages v-else-if="isLimitedPage && view !== 'Dashboard'" :key="`${namespace}-${selectedProject?.code}-${view}`" :page="view" :project="projectName" :href-for-page="breadcrumbHref" @navigate="navigate" @rename="renameProject" />
                   <PaneledWorkspaceComputePages v-else-if="view === 'Simulation runs' || view === 'Compute usage' || view === 'Billing'" :key="`${namespace}-${view}`" :page="view" :namespace="namespace" :compute="compute" v-model:filter="stateFilter" v-model:query="filter" :selected-id="detailOpen ? detailId : undefined" @open="openRun" />
                   <div v-else-if="utilityDescription" class="paneled-workspace-demo__overview">
                     <p>{{ utilityDescription }}</p>
                     <Button variant="outline" size="sm" @click="navigate('Dashboard')">Return to Dashboard</Button>
                   </div>
                   <div v-else class="paneled-workspace-demo__overview">
-                    <p>Follow simulations in {{ namespace }}, from the first mesh to the final report.</p>
+                    <p>Follow simulations in {{ selectedProject?.name ?? namespace }}, from the first mesh to the final report.</p>
                     <div class="paneled-workspace-demo__summary">
                       <div><strong>{{ activeRunCount }}</strong><span>Active simulation runs</span></div>
                       <div><strong>{{ compute.runs.filter(run => run.status === 'Queued').length }}</strong><span>Queued simulation runs</span></div>
@@ -419,9 +422,9 @@ onBeforeUnmount(() => { railObserver?.disconnect(); cancelAnimationFrame(focusFr
           </template>
         </AppShell.Panels>
         <AppShell.SearchDialog v-model:open="searchOpen" class="workspace-search-dialog paneled-workspace-search-dialog" aria-label="Search paneled workspace" :data-search-keyboard="searchKeyboard || undefined" @pointermove.capture="searchKeyboard = false" @keydown.capture="searchKeyboard = ['ArrowDown', 'ArrowUp', 'Home', 'End', 'PageDown', 'PageUp'].includes($event.key)">
-          <CommandPalette.Panel v-model:value="searchQuery" :open="searchOpen" :items="searchGroups" :filter="false" :get-selectable-items="selectableSearchItems" :item-to-string-value="entryLabel" @close="searchOpen = false" @select="selectSearch">
+          <CommandPalette.Panel v-model:value="searchQuery" :open="searchOpen" :items="searchGroups" :filter="false" :get-selectable-items="selectableSearchItems" :item-to-string-value="entryLabel" :item-to-value="entryValue" @close="searchOpen = false" @select="selectSearch">
             <CommandPalette.Input aria-label="Search pages and simulation runs" placeholder="Type to search…" />
-            <CommandPalette.List><CommandPalette.Results v-slot="{ item: group }"><CommandPalette.Group :items="(group as SearchGroup).items"><CommandPalette.GroupLabel>{{ (group as SearchGroup).label }}</CommandPalette.GroupLabel><CommandPalette.ResultItem v-for="item in (group as SearchGroup).items" :key="item.label" :value="item" :title="item.label" :description="item.description" :show-arrow="false" /></CommandPalette.Group></CommandPalette.Results><CommandPalette.Empty>No pages or simulation runs found.</CommandPalette.Empty></CommandPalette.List>
+            <CommandPalette.List><CommandPalette.Results v-slot="{ item: group }"><CommandPalette.Group :items="(group as SearchGroup).items"><CommandPalette.GroupLabel>{{ (group as SearchGroup).label }}</CommandPalette.GroupLabel><CommandPalette.ResultItem v-for="item in (group as SearchGroup).items" :key="entryValue(item)" :value="item" :title="item.label" :description="item.description" :show-arrow="false" /></CommandPalette.Group></CommandPalette.Results><CommandPalette.Empty>No pages or simulation runs found.</CommandPalette.Empty></CommandPalette.List>
           </CommandPalette.Panel>
         </AppShell.SearchDialog>
       </template>

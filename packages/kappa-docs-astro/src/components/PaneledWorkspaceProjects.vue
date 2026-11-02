@@ -67,7 +67,7 @@ function clearFilters() { query.value = ""; status.value = "All"; }
             <Table.Body>
               <Table.Row v-for="project in visibleProjects" :key="project.code">
                 <Table.Cell>
-                  <a :href="hrefForPage(project.name)" @click="emit('open', project.name, $event)">{{ project.name }}</a>
+                  <a :href="hrefForPage(project.code)" @click="emit('open', project.code, $event)">{{ project.name }}</a>
                   <p class="paneled-project-pages__catalog-description">{{ project.code }} · {{ project.discipline }}</p>
                 </Table.Cell>
                 <Table.Cell><Badge :variant="project.status === 'In progress' ? 'info' : project.status === 'In review' ? 'warning' : 'outline'">{{ project.status }}</Badge></Table.Cell>

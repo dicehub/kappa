@@ -8,7 +8,7 @@ import { Button } from "@dicehub/kappa/components/button";
 import { CommandPalette } from "@dicehub/kappa/components/command-palette";
 import { Dropdown } from "@dicehub/kappa/components/dropdown";
 import { WorkspaceSwitcher, type WorkspaceSwitcherItem } from "@dicehub/kappa/blocks/workspace-switcher";
-import { namespaceSwitcherAvatarItems, namespaceSwitcherActions, namespaceSwitcherFooterActions, namespaceSwitcherWorkspaceActions, namespaceActionDescriptions } from "../data/workspace-switcher-demo";
+import { namespaceSwitcherAvatarItems, namespaceSwitcherActions, namespaceSwitcherFooterActions, namespaceActionDescriptions } from "../data/workspace-switcher-demo";
 import { Input } from "@dicehub/kappa/components/input";
 import { Table } from "@dicehub/kappa/components/table";
 import { Activity, Building2, ChevronDown, ChevronsLeft, ChevronsRight, ChevronsUpDown, CircleHelp, Clock3, Compass, CreditCard, FileText, Folder, House, LayoutDashboard, LogOut, Plus, Search, Settings, UserRound, UsersRound } from "@lucide/vue";
@@ -40,6 +40,7 @@ const descriptions: Record<string, string> = {
   Activities: "Recent updates in this sample namespace.",
   "User settings": "Profile and account settings preview. No settings are changed.",
   Groups: "Choose a group namespace to see its projects.",
+  "New group": "Group creation preview. Bring people and projects together in a shared group.",
   Explore: "Browse the sample projects available in this namespace.",
   Templates: "Start with a sample project template.",
   Community: "Share project notes and review ideas with your team.",
@@ -136,7 +137,7 @@ function createProject(context: SidebarContextValue, template?: string) {
         <div class="minimal-workspace-demo__namespace-row" :data-collapsed="context.iconCollapsed || undefined">
           <WorkspaceSwitcher v-model="namespace" :items="namespaces" label="Namespaces" account-label="ros@example.test"
             :actions="namespaceSwitcherActions" :footer-actions="namespaceSwitcherFooterActions"
-            :workspace-actions="[...namespaceSwitcherWorkspaceActions, { value: 'groups', label: 'Show all groups', icon: UsersRound }]"
+            :workspace-actions="[{ value: 'new-group', label: 'New group', icon: Plus }, { value: 'groups', label: 'Show all groups', icon: UsersRound }]"
             :teleport="!context.isMobile" :positioning="{ placement: context.iconCollapsed ? 'right-start' : 'bottom-start', strategy: 'fixed', gutter: 6 }"
             @action="navigate($event.value === 'groups' ? 'Groups' : $event.label, context)">
             <template #trigger><Sidebar.MenuButton class="minimal-workspace-demo__namespace" :aria-label="`Namespace: ${namespace}`" :tooltip="`Namespace: ${namespace}`">

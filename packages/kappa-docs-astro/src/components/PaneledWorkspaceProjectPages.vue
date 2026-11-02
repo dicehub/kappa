@@ -10,7 +10,7 @@ import { ActivityFeed } from "@dicehub/kappa/components/activity-feed";
 import { Table } from "@dicehub/kappa/components/table";
 import { Tabs } from "@dicehub/kappa/components/tabs";
 
-const props = defineProps<{ page: string; project: string }>();
+const props = defineProps<{ page: string; project: string; hrefForPage: (page: string) => string }>();
 const emit = defineEmits<{ navigate: [page: string]; rename: [name: string] }>();
 const activityFilter = ref("All activity");
 const visibleCount = ref(6);
@@ -71,7 +71,7 @@ watch(testFilter, filter => {
                   <ActivityFeed.Marker variant="avatar"><Avatar.Root size="sm"><Avatar.Fallback>{{ update.initials }}</Avatar.Fallback></Avatar.Root></ActivityFeed.Marker>
                   <ActivityFeed.Content>
                     <ActivityFeed.Header><ActivityFeed.Title>{{ update.author }} {{ update.action }}</ActivityFeed.Title><ActivityFeed.Time :datetime="update.date">{{ update.time }}</ActivityFeed.Time></ActivityFeed.Header>
-                    <ActivityFeed.Description><a :href="`?view=${encodeURIComponent(update.page)}`" @click="follow(update.page, $event)">{{ update.title }}</a></ActivityFeed.Description>
+                    <ActivityFeed.Description><a :href="hrefForPage(update.page)" @click="follow(update.page, $event)">{{ update.title }}</a></ActivityFeed.Description>
                     <ActivityFeed.Description>{{ update.detail }}</ActivityFeed.Description>
                     <ActivityFeed.Actions><Badge variant="outline">{{ update.category }}</Badge></ActivityFeed.Actions>
                   </ActivityFeed.Content>
@@ -97,16 +97,16 @@ watch(testFilter, filter => {
       <section class="paneled-project-pages__section">
         <h3>Mission objectives</h3>
         <ul class="paneled-project-pages__objectives">
-          <li><span>01</span><div><h4>Establish the aerodynamic baseline</h4><p>Correlate hover and forward-flight predictions with the accepted reference cases.</p></div><a href="?view=Simulation+runs" @click="follow('Simulation runs', $event)">Simulation runs <ArrowUpRight aria-hidden="true" /></a></li>
-          <li><span>02</span><div><h4>Close the design review</h4><p>Resolve the remaining airframe interfaces and record the approved configuration.</p></div><a href="?view=Design+reviews" @click="follow('Design reviews', $event)">Design reviews <ArrowUpRight aria-hidden="true" /></a></li>
-          <li><span>03</span><div><h4>Prepare the flight campaign</h4><p>Connect each test objective to its instrumentation, acceptance criteria, and review owner.</p></div><a href="?view=Flight+test+plan" @click="follow('Flight test plan', $event)">Flight test plan <ArrowUpRight aria-hidden="true" /></a></li>
+          <li><span>01</span><div><h4>Establish the aerodynamic baseline</h4><p>Correlate hover and forward-flight predictions with the accepted reference cases.</p></div><a :href="hrefForPage('Simulation runs')" @click="follow('Simulation runs', $event)">Simulation runs <ArrowUpRight aria-hidden="true" /></a></li>
+          <li><span>02</span><div><h4>Close the design review</h4><p>Resolve the remaining airframe interfaces and record the approved configuration.</p></div><a :href="hrefForPage('Design reviews')" @click="follow('Design reviews', $event)">Design reviews <ArrowUpRight aria-hidden="true" /></a></li>
+          <li><span>03</span><div><h4>Prepare the flight campaign</h4><p>Connect each test objective to its instrumentation, acceptance criteria, and review owner.</p></div><a :href="hrefForPage('Flight test plan')" @click="follow('Flight test plan', $event)">Flight test plan <ArrowUpRight aria-hidden="true" /></a></li>
         </ul>
       </section>
       <section class="paneled-project-pages__section">
         <h3>Next project checkpoint</h3>
         <div class="paneled-project-pages__checkpoint"><Radar aria-hidden="true" /><div><h4>Flight readiness review</h4><p>3 November · 09:00 UTC · Engineering and flight operations</p><p>Review the test sequence, pending simulation runs, and the latest simulation evidence.</p></div><Badge variant="warning">In preparation</Badge></div>
       </section>
-      <a class="paneled-project-pages__footer-link" href="?view=Project+activity" @click="follow('Project activity', $event)"><Activity aria-hidden="true" />View project activity <ArrowUpRight aria-hidden="true" /></a>
+      <a class="paneled-project-pages__footer-link" :href="hrefForPage('Project activity')" @click="follow('Project activity', $event)"><Activity aria-hidden="true" />View project activity <ArrowUpRight aria-hidden="true" /></a>
     </template>
 
     <template v-else-if="props.page === 'Flight test plan'">
@@ -135,7 +135,7 @@ watch(testFilter, filter => {
         <div class="paneled-project-pages__detail-heading"><Radar aria-hidden="true" /><h3>{{ selectedCase.id }} · {{ selectedCase.title }}</h3></div>
         <p>{{ selectedCase.detail }}</p>
         <dl><div><dt>Review owner</dt><dd>{{ selectedCase.owner }}</dd></div><div><dt>Evidence</dt><dd>Test card, recorded channels, and post-test review</dd></div></dl>
-        <a href="?view=Simulation+runs" @click="follow('Simulation runs', $event)">Open simulation runs <ArrowUpRight aria-hidden="true" /></a>
+        <a :href="hrefForPage('Simulation runs')" @click="follow('Simulation runs', $event)">Open simulation runs <ArrowUpRight aria-hidden="true" /></a>
       </section>
     </template>
     <PaneledWorkspaceProjectSettings v-else-if="props.page === 'Project Settings'" :project="props.project" @rename="emit('rename', $event)" />

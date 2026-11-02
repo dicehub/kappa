@@ -1,4 +1,4 @@
-import { ChartNoAxesCombined, Compass, Fan, FolderKanban, LayoutTemplate, Plane, Radar, RadioTower, Wind } from "@lucide/vue";
+import { ChartNoAxesCombined, Compass, FolderKanban, LayoutTemplate, Wind } from "@lucide/vue";
 import { workspaceProjects } from "./paneled-workspace-projects";
 import { workspaceTemplatePages } from "./paneled-workspace-templates";
 import { workspaceCalculatorPages } from "./paneled-workspace-calculators";
@@ -9,13 +9,15 @@ export const workspaceCategories = [
   { label: "Projects", icon: FolderKanban, pages: ["All projects", ...projectPages.slice(0, 6)] },
   { label: "Templates", icon: LayoutTemplate, pages: workspaceTemplatePages },
   { label: "Engineering tools", icon: Compass, pages: workspaceCalculatorPages },
-  { label: "Aircraft", icon: Plane, pages: ["Airframe", "Configurations", "Design reviews"] },
-  { label: "Simulation", icon: Wind, pages: ["Simulation runs", "Result files"] },
-  { label: "Flight testing", icon: Radar, pages: ["Flight test plan", "Test campaigns"] },
-  { label: "Propulsion", icon: Fan, pages: ["Engine models", "Thermal analysis"] },
-  { label: "Flight operations", icon: RadioTower, pages: ["Telemetry", "Anomalies"] },
-  { label: "Reports", icon: ChartNoAxesCombined, pages: ["Engineering reports", "Compute usage"] },
 ];
+
+export const projectCategories = [
+  { label: "Simulation", icon: Wind, pages: ["Simulation runs", "Results", "Storage"] },
+  { label: "Analytics", icon: ChartNoAxesCombined, pages: ["Reports"] },
+];
+
+// Keep previous page URLs available without listing them in project navigation.
+const legacyProjectPages = ["Airframe", "Configurations", "Design reviews", "Flight test plan", "Test campaigns", "Engine models", "Thermal analysis", "Telemetry", "Anomalies", "Compute usage"];
 
 export const workspaceUtilityDescriptions: Record<string, string> = {
   "New project": "Project creation preview. Organize geometry, applications, and simulation results in a project.",
@@ -30,8 +32,9 @@ export const workspaceUtilityDescriptions: Record<string, string> = {
   "What's new": "Release notes preview for Version 0.1.2.",
   "Log out": "This is a local preview of Log out. Your session stays signed in.",
 };
-export const workspacePages = [...new Set(["Dashboard", ...workspaceCategories.flatMap(group => group.pages), ...projectPages, "Overview", "Applications", "Project Settings", "Project activity", "Team", "Profile", "Settings", "Billing", "Keyboard shortcuts", ...Object.keys(workspaceUtilityDescriptions)])];
-export const limitedWorkspacePages = ["Dashboard", "All projects", "Overview", "Applications", "Project Settings", ...projectPages, ...workspaceTemplatePages, ...workspaceCalculatorPages, "Project activity", "Flight test plan"];
+export const projectContextPages = [...projectCategories.flatMap(group => group.pages), ...legacyProjectPages, "Overview", "Applications", "Project Settings", "Project activity"];
+export const workspacePages = [...new Set(["Dashboard", ...workspaceCategories.flatMap(group => group.pages), ...projectContextPages, ...projectPages, "Groups", "Team", "Profile", "Settings", "Billing", "Keyboard shortcuts", ...Object.keys(workspaceUtilityDescriptions)])];
+export const limitedWorkspacePages = ["Dashboard", "All projects", "Groups", "Overview", "Applications", "Project Settings", ...projectPages, ...workspaceTemplatePages, ...workspaceCalculatorPages, "Project activity", "Flight test plan"];
 
 // Keep existing example bookmarks and integrations working after the navigation rename.
 const pageAliases: Record<string, string> = {
@@ -42,9 +45,9 @@ const pageAliases: Record<string, string> = {
   Assistant: "Y+ calculator", Agents: "Boundary layer height calculator",
   "Design assistant": "Y+ calculator", "Trade studies": "Boundary layer height calculator",
   Repositories: "Airframe", Branches: "Configurations", "Merge requests": "Design reviews",
-  Pipelines: "Simulation runs", Artifacts: "Result files", Releases: "Flight test plan",
+  Pipelines: "Simulation runs", Artifacts: "Results", "Result files": "Results", Releases: "Flight test plan",
   Environments: "Test campaigns", Infrastructure: "Engine models", Logs: "Thermal analysis",
-  Metrics: "Telemetry", Incidents: "Anomalies", Reports: "Engineering reports", Usage: "Compute usage",
+  Metrics: "Telemetry", Incidents: "Anomalies", "Engineering reports": "Reports", Usage: "Compute usage",
 };
 
 export const resolveWorkspacePage = (page: string) => pageAliases[page] ?? page;
