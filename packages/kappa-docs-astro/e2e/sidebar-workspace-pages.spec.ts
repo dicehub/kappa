@@ -1,7 +1,7 @@
 import { expect, test, type Page } from '@playwright/test';
 
 async function openExample(page: Page) {
-  await page.goto('/examples/sidebar/workspace-pages');
+  await page.goto('/examples/appshell/workspace-pages');
   await expect.poll(() => page.locator('[data-sidebar-block="workspace-pages"]').evaluate(node => node.closest('astro-island')?.hasAttribute('ssr'))).toBe(false);
 }
 
@@ -149,19 +149,19 @@ test('workspace pages support dark mode, RTL, reduced motion, and narrow mobile 
 });
 
 test('gallery adds a separate copyable example and retains the original Workspace', async ({ page, request }) => {
-  await page.goto('/docs/blocks/sidebar');
+  await page.goto('/docs/blocks/appshell');
   await expect(page.locator('[data-block-example]')).toHaveCount(18);
   const example = page.locator('[data-block-example="workspace-pages"]');
-  await expect(example.getByRole('link', { name: /Open full example/ })).toHaveAttribute('href', '/examples/sidebar/workspace-pages');
+  await expect(example.getByRole('link', { name: /Open full example/ })).toHaveAttribute('href', '/examples/appshell/workspace-pages');
   await expect.poll(() => example.locator('.kappa-sidebar__content').evaluate(node => node.scrollHeight <= node.clientHeight)).toBe(true);
   const source = example.locator('[data-code-full] code');
-  await expect(source).toContainText('standalone: true');
-  await expect(source).toContainText('sidebar-pages-demo__namespace');
+  await expect(source).toContainText('AppShell.Root');
+  await expect(source).toContainText('Sidebar.Collapsible');
   await expect(source).not.toContainText('style src=');
   const workspace = page.locator('[data-block-example="workspace"]');
-  await expect(workspace.getByRole('link', { name: /Open full example/ })).toHaveAttribute('href', '/examples/sidebar/workspace');
-  expect(await (await request.get('/docs/blocks/sidebar.md')).text()).toContain('Workspace Pages');
-  await page.goto('/examples/sidebar/workspace');
+  await expect(workspace.getByRole('link', { name: /Open full example/ })).toHaveAttribute('href', '/examples/appshell/workspace');
+  expect(await (await request.get('/docs/blocks/appshell.md')).text()).toContain('Workspace Pages');
+  await page.goto('/examples/appshell/workspace');
   await expect(page.locator('[data-sidebar-block="workspace"]')).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Overview', exact: true })).toBeVisible();
   await expect(page.getByRole('button', { name: 'Profile: Ros.Space', exact: true })).toBeVisible();

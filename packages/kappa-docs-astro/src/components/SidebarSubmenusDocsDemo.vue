@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, ref, useId, watch } from "vue";
-import { SidebarLayout } from "@dicehub/kappa/blocks/sidebar-layout";
+import { AppShell } from "@dicehub/kappa/blocks/app-shell";
 import { Sidebar } from "@dicehub/kappa/components/sidebar";
 import { Input } from "@dicehub/kappa/components/input";
 import { BookOpen, Search } from "@lucide/vue";
@@ -25,7 +25,7 @@ const slug = (name: string) => name.toLowerCase().replaceAll(" ", "-");
 
 <template>
   <div class="sidebar-grouped-demo" :data-sidebar-block="props.collapsible ? 'collapsible-submenus' : props.floating ? 'floating-submenus' : 'submenus'" :data-standalone="props.standalone || undefined">
-    <SidebarLayout :variant="props.floating ? 'floating' : 'workspace'" :width="props.floating ? '19rem' : undefined" label="Documentation navigation" collapsible="offcanvas" full-screen-on-mobile
+    <AppShell.Root :variant="props.floating ? 'floating' : 'workspace'" :width="props.floating ? '19rem' : undefined" label="Documentation navigation" collapsible="offcanvas" full-screen-on-mobile
       content-max-width="44rem" :mobile-breakpoint="1200">
       <template #header="context">
         <Sidebar.MenuButton href="?page=introduction" class="sidebar-grouped-demo__version" @click.prevent="selected = 'Introduction'; openGroups['Getting started'] = true; query = ''; context.setMobileOpen(false)">
@@ -74,7 +74,7 @@ const slug = (name: string) => name.toLowerCase().replaceAll(" ", "-");
         <ul><li v-for="item in section.items" :key="item">{{ item }}</li></ul>
         <p class="sidebar-grouped-demo__note">Example documentation. Navigation updates this preview only. {{ props.collapsible ? 'Search opens matching submenus. Open groups and the selected page are retained on mobile.' : 'All submenus stay visible; the toolbar button hides the entire sidebar.' }}</p>
       </section>
-    </SidebarLayout>
+    </AppShell.Root>
   </div>
 </template>
 

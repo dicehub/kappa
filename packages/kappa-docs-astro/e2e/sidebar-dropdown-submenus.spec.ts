@@ -1,7 +1,7 @@
 import { expect, test, type Page } from '@playwright/test';
 
 async function openExample(page: Page) {
-  await page.goto('/examples/sidebar/dropdown-submenus');
+  await page.goto('/examples/appshell/dropdown-submenus');
   await expect.poll(() => page.locator('[data-sidebar-block="dropdown-submenus"]').evaluate(node => node.closest('astro-island')?.hasAttribute('ssr'))).toBe(false);
 }
 
@@ -68,14 +68,14 @@ test('search and mobile popup selection preserve state and drawer focus', async 
 });
 
 test('gallery keeps existing examples and provides complete source and markdown', async ({ page, request }) => {
-  await page.goto('/docs/blocks/sidebar');
+  await page.goto('/docs/blocks/appshell');
   await expect(page.locator('[data-block-example]')).toHaveCount(18);
   const example = page.locator('[data-block-example="dropdown-submenus"]');
-  await expect(example.getByRole('link', { name: /Open full example/ })).toHaveAttribute('href', '/examples/sidebar/dropdown-submenus');
+  await expect(example.getByRole('link', { name: /Open full example/ })).toHaveAttribute('href', '/examples/appshell/dropdown-submenus');
   const code = example.locator('[data-code-full] code');
-  await expect(code).toContainText('standalone: true');
-  await expect(code).toContainText('Dropdown.LinkItem');
-  await expect(code).toContainText('<style>');
+  await expect(code).toContainText('AppShell.Root');
+  await expect(code).toContainText('Dropdown.Item');
+  await expect(code).not.toContainText('<style');
   await expect(code).not.toContainText('style src=');
-  expect(await (await request.get('/docs/blocks/sidebar.md')).text()).toContain('Dropdown Submenus');
+  expect(await (await request.get('/docs/blocks/appshell.md')).text()).toContain('Dropdown Submenus');
 });

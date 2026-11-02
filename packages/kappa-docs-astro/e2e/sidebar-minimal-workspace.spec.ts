@@ -1,12 +1,12 @@
 import { expect, test, type Page } from '@playwright/test';
 
 async function openExample(page: Page) {
-  await page.goto('/examples/sidebar/minimal-workspace');
+  await page.goto('/examples/appshell/minimal-workspace');
   await expect.poll(() => page.locator('[data-sidebar-block="minimal-workspace"]').evaluate(node => node.closest('astro-island')?.hasAttribute('ssr'))).toBe(false);
 }
 
 test('server renders the full shell and both labelled menu groups before hydration', async ({ request }) => {
-  const response = await request.get('/examples/sidebar/minimal-workspace');
+  const response = await request.get('/examples/appshell/minimal-workspace');
   expect(response.ok()).toBe(true);
   const html = await response.text();
   expect(html).toContain('data-sidebar-block="minimal-workspace"');
@@ -65,7 +65,7 @@ test('project creation, templates, namespace selection, and page links use only 
   }
   await page.getByRole('button', { name: 'Research', exact: true }).click();
   await expect(page.getByRole('table')).toContainText('Inlet comparison');
-  await expect(page).toHaveURL(/\/examples\/sidebar\/minimal-workspace$/);
+  await expect(page).toHaveURL(/\/examples\/appshell\/minimal-workspace$/);
 });
 
 test('icon collapse retains namespace and Help menus while hiding project shortcuts', async ({ page }) => {
@@ -176,13 +176,13 @@ test('header search and profile menus support keyboard selection and focus retur
   await expect(page.getByText('Local preview only. Your real session stays signed in.', { exact: true })).toBeVisible();
 });
 
-test('slash opens grouped search and leaves typing and other menus alone', async ({ page }) => {
+test('Ctrl+K opens grouped search and leaves typing and other menus alone', async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 1000 });
   await openExample(page);
   const trigger = page.getByRole('button', { name: 'Search or go to…', exact: true });
-  await expect(trigger).toHaveAttribute('aria-keyshortcuts', '/');
-  await expect(trigger.locator('kbd')).toHaveText('/');
-  await page.keyboard.press('/');
+  await expect(trigger).toHaveAttribute('aria-keyshortcuts', 'Control+K');
+  await expect(trigger.locator('kbd')).toHaveText(['Ctrl', 'K']);
+  await page.keyboard.press('Control+k');
   const dialog = page.getByRole('dialog', { name: 'Search minimal workspace', exact: true });
   const input = dialog.getByRole('combobox');
   await expect(input).toBeFocused();
@@ -206,25 +206,25 @@ test('slash opens grouped search and leaves typing and other menus alone', async
   await trigger.press('Control+/');
   await expect(dialog).toBeHidden();
   await page.getByRole('button', { name: 'Profile: Ros.Space', exact: true }).click();
-  await page.keyboard.press('/');
+  await page.keyboard.press('Control+k');
   await expect(page.getByRole('menu', { name: 'Profile: Ros.Space', exact: true })).toBeVisible();
   await expect(dialog).toBeHidden();
   await page.keyboard.press('Escape');
 });
 
 test('gallery search shortcut stays within the focused example', async ({ page }) => {
-  await page.goto('/docs/blocks/sidebar#minimal-workspace');
+  await page.goto('/docs/blocks/appshell#minimal-workspace');
   const example = page.locator('[data-block-example="minimal-workspace"]');
   await expect.poll(() => example.locator('astro-island[ssr]').count()).toBe(0);
   const trigger = example.getByRole('button', { name: 'Search or go to…', exact: true });
   await trigger.focus();
-  await trigger.press('/');
+  await trigger.press('Control+k');
   const dialog = page.getByRole('dialog', { name: 'Search minimal workspace', exact: true });
   await expect(dialog.getByRole('combobox')).toBeFocused();
   await page.keyboard.press('Escape');
   await expect(trigger).toBeFocused();
   await page.getByRole('heading', { level: 1, name: 'Application Shell', exact: true }).click();
-  await page.keyboard.press('/');
+  await page.keyboard.press('Control+k');
   await expect(dialog).toBeHidden();
 });
 
@@ -288,15 +288,15 @@ test('minimal shell supports both themes, RTL, reduced motion, and 320px width',
 });
 
 test('gallery publishes complete Minimal Workspace source and keeps every prior example', async ({ page, request }) => {
-  await page.goto('/docs/blocks/sidebar#minimal-workspace');
+  await page.goto('/docs/blocks/appshell#minimal-workspace');
   await expect(page.locator('[data-block-example]')).toHaveCount(18);
   const example = page.locator('[data-block-example="minimal-workspace"]');
-  await expect(example.getByRole('link', { name: /Open full example/ })).toHaveAttribute('href', '/examples/sidebar/minimal-workspace');
-  await expect(example.locator('[data-code-full] code')).toContainText('standalone: true');
-  await expect(example.locator('[data-code-full] code')).toContainText('@dicehub/kappa/components/dicehub-logo');
+  await expect(example.getByRole('link', { name: /Open full example/ })).toHaveAttribute('href', '/examples/appshell/minimal-workspace');
+  await expect(example.locator('[data-code-full] code')).toContainText('AppShell.Root');
+  await expect(example.locator('[data-code-full] code')).toContainText('AppShell.SearchTrigger');
   await expect(example.locator('[data-code-full] code')).not.toContainText('style src=');
   await expect(example.locator('[data-code-full] code')).not.toContainText('localhost:8080');
   for (const id of ['workspace', 'workspace-pages', 'paneled-workspace', 'inbox-navigation', 'inset', 'floating', 'rail']) await expect(page.locator(`[data-block-example="${id}"]`)).toHaveCount(1);
   for (const removed of ['split', 'header']) await expect(page.locator(`[data-block-example="${removed}"]`)).toHaveCount(0);
-  expect(await (await request.get('/docs/blocks/sidebar.md')).text()).toContain('Minimal Workspace');
+  expect(await (await request.get('/docs/blocks/appshell.md')).text()).toContain('Minimal Workspace');
 });

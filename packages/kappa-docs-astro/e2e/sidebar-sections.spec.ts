@@ -1,7 +1,7 @@
 import { expect, test, type Page } from "@playwright/test";
 
 async function openExample(page: Page) {
-  await page.goto("/examples/sidebar/collapsible-sections");
+  await page.goto("/examples/appshell/collapsible-sections");
   await expect.poll(() => page.locator('[data-sidebar-block="collapsible-sections"]').evaluate(node => node.closest("astro-island")?.hasAttribute("ssr"))).toBe(false);
 }
 
@@ -49,15 +49,15 @@ test("section state survives mobile transitions and selection restores focus", a
 });
 
 test("gallery preserves previous examples and exposes complete collapsible source", async ({ page, request }) => {
-  await page.goto("/docs/blocks/sidebar");
+  await page.goto("/docs/blocks/appshell");
   for (const variant of ["grouped", "collapsible-sections", "workspace", "rail", "inset", "floating"]) {
     await expect(page.locator(`[data-block-example="${variant}"]`)).toHaveCount(1);
   }
   const example = page.locator('[data-block-example="collapsible-sections"]');
-  await expect(example.getByRole("link", { name: /Open full example/ })).toHaveAttribute("href", "/examples/sidebar/collapsible-sections");
+  await expect(example.getByRole("link", { name: /Open full example/ })).toHaveAttribute("href", "/examples/appshell/collapsible-sections");
   const code = example.locator('[data-code-full] code');
-  await expect(code).toContainText('collapsibleSections: true');
+  await expect(code).toContainText('default-open');
   await expect(code).toContainText('Sidebar.Collapsible');
-  await expect(code).toContainText('<style>');
-  expect(await (await request.get('/docs/blocks/sidebar.md')).text()).toContain('Collapsible Sections');
+  await expect(code).not.toContainText('<style');
+  expect(await (await request.get('/docs/blocks/appshell.md')).text()).toContain('Collapsible Sections');
 });

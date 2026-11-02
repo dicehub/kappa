@@ -22,21 +22,21 @@ async function expectVersionMenu(page: Page, trigger: Locator, selected: string)
 }
 
 test("grouped navigation has complete source and a preview alongside the other layouts", async ({ page, request }) => {
-  await page.goto("/docs/blocks/sidebar");
+  await page.goto("/docs/blocks/appshell");
   await ready(page);
   await expect(page.locator("[data-block-example]")).toHaveCount(18);
   const example = page.locator('[data-block-example="grouped"]');
-  await expect(example.getByRole("link", { name: /Open full example/ })).toHaveAttribute("href", "/examples/sidebar/grouped");
+  await expect(example.getByRole("link", { name: /Open full example/ })).toHaveAttribute("href", "/examples/appshell/grouped");
   const source = example.locator("[data-code-full] code");
   await expect(source).toContainText('collapsible="offcanvas"');
-  await expect(source).toContainText('standalone: true');
-  await expect(source).toContainText('<style>');
+  await expect(source).toContainText('AppShell.Root');
+  await expect(source).not.toContainText('<style');
   await expect(source).not.toContainText('style src=');
-  expect(await (await request.get("/docs/blocks/sidebar.md")).text()).toContain("Grouped Navigation");
+  expect(await (await request.get("/docs/blocks/appshell.md")).text()).toContain("Grouped Navigation");
 });
 
 test("text groups support search, empty results, version selection and offcanvas collapse", async ({ page }) => {
-  await page.goto("/examples/sidebar/grouped");
+  await page.goto("/examples/appshell/grouped");
   await ready(page);
   const nav = page.getByRole("navigation", { name: "Documentation navigation", exact: true });
   await expect(nav.getByRole("link")).toHaveCount(10);
@@ -78,7 +78,7 @@ test("text groups support search, empty results, version selection and offcanvas
 
 test("mobile navigation closes on selection, restores focus and keeps local state", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
-  await page.goto("/examples/sidebar/grouped");
+  await page.goto("/examples/appshell/grouped");
   await ready(page);
   const toggle = page.getByRole("button", { name: "Open sidebar", exact: true });
   await toggle.click();

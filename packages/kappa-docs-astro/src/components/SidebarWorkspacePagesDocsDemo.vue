@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, nextTick, ref, useId } from "vue";
-import { SidebarLayout } from "@dicehub/kappa/blocks/sidebar-layout";
+import { AppShell } from "@dicehub/kappa/blocks/app-shell";
 import { WorkspaceSwitcher } from "@dicehub/kappa/blocks/workspace-switcher";
 import { namespaceSwitcherItems, namespaceSwitcherActions, namespaceSwitcherFooterActions, namespaceSwitcherWorkspaceActions, namespaceActionDescriptions } from "../data/workspace-switcher-demo";
 import { Sidebar, type SidebarContextValue } from "@dicehub/kappa/components/sidebar";
@@ -98,7 +98,7 @@ function toggleFavorite() {
 
 <template>
   <div class="sidebar-pages-demo" data-sidebar-block="workspace-pages" :data-standalone="props.standalone || undefined">
-    <SidebarLayout label="Workspace pages navigation" navigation-label="Workspace page links" collapsible="offcanvas" full-screen-on-mobile
+    <AppShell.Root label="Workspace pages navigation" navigation-label="Workspace page links" collapsible="offcanvas" full-screen-on-mobile
       content-max-width="46rem" :mobile-breakpoint="1200">
       <template #header="context">
         <WorkspaceSwitcher v-model="namespace" :items="namespaceSwitcherItems" label="Namespaces" account-label="ros@example.test"
@@ -178,7 +178,7 @@ function toggleFavorite() {
           <p class="sidebar-pages-demo__note">Local example data. Page selection, Favorites, and open groups are kept until you reload.</p>
         </section>
       </template>
-    </SidebarLayout>
+    </AppShell.Root>
   </div>
 </template>
 

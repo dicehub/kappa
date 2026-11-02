@@ -1,15 +1,16 @@
 <script setup lang="ts">
-import { computed, nextTick, onBeforeUnmount, onMounted, ref, useId, watch } from "vue";
-import { SidebarLayout } from "@dicehub/kappa/blocks/sidebar-layout";
+import { nextTick, onBeforeUnmount, onMounted, ref, useId, watch } from "vue";
+import { AppShell } from "@dicehub/kappa/blocks/app-shell";
 import { WorkspaceSwitcher } from "@dicehub/kappa/blocks/workspace-switcher";
+import { namespaceSwitcherAvatarItems as workspaces } from "../data/workspace-switcher-demo";
+import { Avatar } from "@dicehub/kappa/components/avatar";
 import { Sidebar, type SidebarContextValue } from "@dicehub/kappa/components/sidebar";
 import { CommandPalette } from "@dicehub/kappa/components/command-palette";
-import { Dropdown } from "@dicehub/kappa/components/dropdown";
 import { DirectionProvider } from "@dicehub/kappa/components/direction-provider";
 import { Button } from "@dicehub/kappa/components/button";
 import { Tabs } from "@dicehub/kappa/components/tabs";
 import { Tooltip } from "@dicehub/kappa/components/tooltip";
-import { Building2, ChevronsLeft, ChevronsRight, ChevronsUpDown, FlaskConical, Folder, House, Inbox, MessageCircle, Plus, Search, Settings, UserRound, UsersRound } from "@lucide/vue";
+import { ChevronsLeft, ChevronsRight, ChevronsUpDown, Folder, House, Inbox, MessageCircle, Plus, Search, Settings, UsersRound } from "@lucide/vue";
 
 const props = withDefaults(defineProps<{ standalone?: boolean; applicationShell?: boolean }>(), { standalone: false, applicationShell: false });
 const host = ref<HTMLElement>();
@@ -23,12 +24,7 @@ watch(host, (element, _, onCleanup) => {
   observer.observe(element);
   onCleanup(() => observer.disconnect());
 }, { flush: "post" });
-const workspace = ref("Engineering");
-const workspaces = [
-  { value: "Engineering", name: "Engineering", description: "Pro plan · 12 members", icon: Building2 },
-  { value: "Research", name: "Research", description: "Pro plan · 8 members", icon: FlaskConical },
-  { value: "Personal", name: "Personal", description: "Free plan · 1 member", icon: UserRound },
-];
+const workspace = ref("Ros.Space");
 const workspaceActions = [
   { value: "settings", label: "Settings", icon: Settings },
   { value: "invite", label: "Invite members", icon: UsersRound },
@@ -38,9 +34,8 @@ const open = ref(true);
 const locked = ref(false);
 const end = ref(false);
 const rtl = ref(false);
-const mobileProfilePositioning = computed(() => ({ placement: rtl.value ? 'left-start' : 'right-start', gutter: 4, strategy: 'fixed', fitViewport: true, overflowPadding: 8, overlap: true } as const));
 const selected = ref("Create a project");
-const profile = ref("Casey Rivera");
+const profile = "Casey Rivera";
 const requests = ref(0);
 const searchId = `hover-workspace-search-${useId()}`;
 const searchOpen = ref(false);
@@ -124,7 +119,7 @@ async function selectPage(item: unknown, context: SidebarContextValue) {
   navigate(String(item), context.setMobileOpen);
 }
 function shortcut(event: KeyboardEvent) {
-  if (event.key !== "/" || event.defaultPrevented || event.repeat || event.isComposing || event.metaKey || event.ctrlKey || event.altKey || searchOpen.value) return;
+  if (event.key.toLowerCase() !== "k" || !event.ctrlKey || event.metaKey || event.altKey || event.shiftKey || event.defaultPrevented || event.repeat || event.isComposing || searchOpen.value) return;
   const target = event.composedPath().find(node => node instanceof HTMLElement) as HTMLElement | undefined;
   if (!props.standalone && (!target || !host.value?.contains(target))) return;
   if (document.querySelector('[role="dialog"][data-state="open"], [role="menu"][data-state="open"]')) return;
@@ -140,22 +135,12 @@ onBeforeUnmount(() => window.removeEventListener("keydown", shortcut));
 <template>
   <div ref="host" class="sidebar-hover-demo" :data-standalone="props.standalone || undefined" :data-sidebar-block="props.applicationShell ? 'hover-reveal' : undefined" data-sidebar-demo="hover-reveal">
     <DirectionProvider :locale="rtl ? 'ar' : 'en'">
-      <SidebarLayout :open="open" peekable collapsible="offcanvas" content-max-width="42rem" resizable :full-screen-on-mobile="props.applicationShell"
+      <AppShell.Root :open="open" peekable collapsible="offcanvas" content-max-width="42rem" resizable :full-screen-on-mobile="props.applicationShell"
         :min-width="260" :max-width="maxWidth" :collapse-on-resize="false"
         :side="end ? 'end' : 'start'" :dir="rtl ? 'rtl' : 'ltr'" label="Hover navigation"
         :trigger-props="{ peek: true, expandLabel: 'Pin sidebar open' }" class="sidebar-hover-demo__layout"
         @update:open="updateOpen" @open-change="requests += 1">
         <template #header="{ isMobile, open }">
-          <WorkspaceSwitcher v-model="workspace" :items="workspaces" label="Workspaces" account-label="casey@example.test"
-            :actions="workspaceActions" :workspace-actions="creationActions" :teleport="!isMobile"
-            :positioning="{ placement: 'bottom-start', gutter: 6, strategy: 'fixed' }"
-            @update:model-value="resetWorkspace" @action="selected = $event.label">
-            <template #trigger="{ workspace: current }">
-              <Sidebar.MenuButton :icon="current?.icon" :aria-label="`Workspace: ${workspace}`" class="sidebar-hover-demo__workspace">
-                <span>{{ workspace }}</span><ChevronsUpDown aria-hidden="true" />
-              </Sidebar.MenuButton>
-            </template>
-          </WorkspaceSwitcher>
           <Sidebar.Trigger v-if="!isMobile" :expand-label="'Pin sidebar open'" class="sidebar-hover-demo__pin">
             <component :is="open !== (end !== rtl) ? ChevronsLeft : ChevronsRight" aria-hidden="true" />
             <span class="sidebar-hover-demo__sr-only">{{ open ? 'Collapse sidebar' : 'Pin sidebar open' }}</span>
@@ -185,7 +170,7 @@ onBeforeUnmount(() => window.removeEventListener("keydown", shortcut));
               <Tooltip.Root>
                 <Tooltip.Trigger as-child>
                   <Button variant="ghost" :icon="Search" class="sidebar-hover-demo__search" data-hover-search-trigger
-                    aria-label="Search workspace pages" aria-keyshortcuts="/" aria-haspopup="dialog" :aria-expanded="searchOpen"
+                    aria-label="Search workspace pages" aria-keyshortcuts="Control+K" aria-haspopup="dialog" :aria-expanded="searchOpen"
                     :aria-controls="!searchOpen || searchFromSidebar ? searchId : undefined" @click="search(true, $event)" />
                 </Tooltip.Trigger>
                 <Tooltip.Content :teleport="!isMobile">Search (/)</Tooltip.Content>
@@ -209,23 +194,22 @@ onBeforeUnmount(() => window.removeEventListener("keydown", shortcut));
           </Tabs.Root>
         </template>
         <template #footer="{ isMobile }">
-          <Dropdown.Root aria-label="Account menu" :positioning="{ placement: 'top-start', gutter: 6, strategy: 'fixed' }">
-            <Dropdown.Trigger as-child><Sidebar.MenuButton :icon="UserRound">{{ profile }}</Sidebar.MenuButton></Dropdown.Trigger>
-            <Dropdown.Content :teleport="!isMobile">
-              <Dropdown.Item value="preferences" @select="selected = 'Preferences'">Preferences</Dropdown.Item>
-              <Dropdown.Sub aria-label="Switch profile" :positioning="isMobile ? mobileProfilePositioning : undefined">
-                <Dropdown.SubTrigger>Switch profile</Dropdown.SubTrigger>
-                <Dropdown.SubContent :teleport="!isMobile">
-                  <Dropdown.RadioGroup v-model="profile">
-                    <Dropdown.RadioItem v-for="name in ['Casey Rivera', 'Jordan Lee']" :key="name" :value="name" close-on-select class="sidebar-hover-demo__profile-option">
-                      <template #indicator><svg viewBox="0 0 16 16" aria-hidden="true"><path d="m3 8.25 3 3 7-7" /></svg></template>
-                      {{ name }}
-                    </Dropdown.RadioItem>
-                  </Dropdown.RadioGroup>
-                </Dropdown.SubContent>
-              </Dropdown.Sub>
-            </Dropdown.Content>
-          </Dropdown.Root>
+          <WorkspaceSwitcher v-model="workspace" :items="workspaces" label="Workspaces" account-label="ros@example.test"
+            :actions="workspaceActions" :workspace-actions="creationActions" :teleport="!isMobile"
+            :positioning="{ placement: 'top-start', gutter: 6, strategy: 'fixed', overflowPadding: 8 }"
+            @update:model-value="resetWorkspace" @action="selected = $event.label">
+            <template #trigger="{ workspace: current }">
+              <Sidebar.MenuButton :icon="current?.icon" :aria-label="`Workspace: ${workspace}`" class="sidebar-hover-demo__workspace">
+                <template v-if="current?.avatarSrc" #icon>
+                  <Avatar.Root size="sm">
+                    <Avatar.Image :src="current.avatarSrc" alt="" />
+                    <Avatar.Fallback>{{ current.initials }}</Avatar.Fallback>
+                  </Avatar.Root>
+                </template>
+                <span>{{ workspace }}</span><ChevronsUpDown aria-hidden="true" />
+              </Sidebar.MenuButton>
+            </template>
+          </WorkspaceSwitcher>
         </template>
         <template #toolbar>{{ selected }}</template>
         <template #default="context">
@@ -265,7 +249,7 @@ onBeforeUnmount(() => window.removeEventListener("keydown", shortcut));
             </template>
           </article>
         </template>
-      </SidebarLayout>
+      </AppShell.Root>
     </DirectionProvider>
   </div>
 </template>

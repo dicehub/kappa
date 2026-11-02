@@ -4,7 +4,7 @@ const nav = (page: Page) => page.locator('[data-slot="sidebar"]');
 const outside = (page: Page) => page.locator('.kappa-sidebar-layout__toolbar [data-slot="sidebar-trigger"]');
 const search = (page: Page) => page.locator('[data-hover-search-trigger]');
 const palette = (page: Page) => page.getByRole('dialog', { name: 'Search workspace pages', exact: true });
-const workspace = (page: Page, value = 'Engineering') => nav(page).getByRole('button', { name: `Workspace: ${value}`, exact: true });
+const workspace = (page: Page, value = 'Ros.Space') => nav(page).getByRole('button', { name: `Workspace: ${value}`, exact: true });
 async function ready(page: Page) {
   await page.goto('/examples/components/sidebar/hover-reveal');
   await expect.poll(() => page.locator('[data-sidebar-demo="hover-reveal"]').evaluate(el => el.closest('astro-island')?.hasAttribute('ssr'))).toBe(false);
@@ -32,11 +32,11 @@ test('workspace menu opens below, marks the selection, and changes the workspace
   await collapse(page);
   await reveal(page);
   await workspace(page).click();
-  const menu = page.getByRole('menu', { name: 'Workspace: Engineering', exact: true });
+  const menu = page.getByRole('menu', { name: 'Workspace: Ros.Space', exact: true });
   await expect(menu).toHaveAttribute('data-placement', 'bottom-start');
   const triggerBox = await workspace(page).boundingBox();
   await expect.poll(() => menu.evaluate(el => el.getBoundingClientRect().y)).toBeGreaterThanOrEqual(triggerBox!.y + triggerBox!.height);
-  const selected = menu.getByRole('menuitemradio', { name: 'Engineering', exact: true });
+  const selected = menu.getByRole('menuitemradio', { name: 'Ros.Space', exact: true });
   await expect(selected).toHaveAttribute('aria-checked', 'true');
   const itemBox = await selected.boundingBox();
   const checkBox = await selected.locator('[data-slot="dropdown-radio-item-indicator"]').boundingBox();
@@ -53,7 +53,7 @@ test('workspace menu opens below, marks the selection, and changes the workspace
 });
 
 test('workspace hover and open menu share their background and chevron without leaving pointer selection highlighted', async ({ page }) => {
-  const chevron = (value = 'Engineering') => workspace(page, value).locator('.kappa-sidebar__menu-label > svg');
+  const chevron = (value = 'Ros.Space') => workspace(page, value).locator('.kappa-sidebar__menu-label > svg');
   await page.locator('.sidebar-hover-demo__article').hover();
   const original = await workspace(page).boundingBox();
   await expect(chevron()).toHaveCSS('opacity', '0');
@@ -66,7 +66,7 @@ test('workspace hover and open menu share their background and chevron without l
   await page.locator('.sidebar-hover-demo__article').hover();
   await expect(chevron()).toHaveCSS('opacity', '0');
   await workspace(page).click();
-  const menu = page.getByRole('menu', { name: 'Workspace: Engineering', exact: true });
+  const menu = page.getByRole('menu', { name: 'Workspace: Ros.Space', exact: true });
   await expect(menu).toBeVisible();
   await page.locator('.sidebar-hover-demo__article').hover();
   await expect(chevron()).toHaveCSS('opacity', '1');
@@ -85,7 +85,7 @@ test('keyboard focus retains its outline and opening the menu reveals the worksp
   await expect(workspace(page)).toHaveCSS('outline-width', '2px');
   await expect(chevron).toHaveCSS('opacity', '0');
   await page.keyboard.press('Enter');
-  await expect(page.getByRole('menu', { name: 'Workspace: Engineering', exact: true })).toBeVisible();
+  await expect(page.getByRole('menu', { name: 'Workspace: Ros.Space', exact: true })).toBeVisible();
   await expect(chevron).toHaveCSS('opacity', '1');
   await page.keyboard.press('Escape');
   await expect(workspace(page)).toBeFocused();
@@ -99,7 +99,7 @@ for (const rtl of [false, true]) {
     await collapse(page);
     await reveal(page);
     await workspace(page).click();
-    const menu = page.getByRole('menu', { name: 'Workspace: Engineering', exact: true });
+    const menu = page.getByRole('menu', { name: 'Workspace: Ros.Space', exact: true });
     await expect(menu).toHaveAttribute('data-side', 'bottom');
     const box = await workspace(page).boundingBox();
     await expect.poll(() => menu.evaluate(el => el.getBoundingClientRect().y)).toBeGreaterThanOrEqual(box!.y + box!.height);
@@ -153,11 +153,11 @@ test('search traps focus, filters pages, and returns focus to a peeking search t
   await expect(nav(page)).toHaveAttribute('data-state', 'peeking');
 });
 
-test('the slash shortcut works with collapsed navigation and preserves page focus', async ({ page }) => {
+test('the Ctrl+K shortcut works with collapsed navigation and preserves page focus', async ({ page }) => {
   await collapse(page);
   const original = page.getByRole('button', { name: 'Lock state', exact: true });
   await original.focus();
-  await page.keyboard.press('/');
+  await page.keyboard.press('Control+k');
   await expect(palette(page)).toBeVisible();
   await expect(nav(page)).toHaveAttribute('data-state', 'collapsed');
   await palette(page).getByRole('combobox').press('Escape');
@@ -196,9 +196,9 @@ test('the shortcut does not intercept typing or an open workspace menu', async (
   await expect(input).toHaveValue('/');
   await expect(palette(page)).toBeHidden();
   await workspace(page).click();
-  await page.keyboard.press('/');
+  await page.keyboard.press('Control+k');
   await expect(palette(page)).toBeHidden();
-  await expect(page.getByRole('menu', { name: 'Workspace: Engineering', exact: true })).toBeVisible();
+  await expect(page.getByRole('menu', { name: 'Workspace: Ros.Space', exact: true })).toBeVisible();
 });
 
 test('mobile keeps the workspace menu inside the drawer and closes both layers after search selection', async ({ page }) => {
@@ -209,7 +209,7 @@ test('mobile keeps the workspace menu inside the drawer and closes both layers a
   const searchBox = await search(page).boundingBox();
   expect(searchBox!.height).toBeGreaterThanOrEqual(44);
   await workspace(page).click();
-  const menu = page.getByRole('menu', { name: 'Workspace: Engineering', exact: true });
+  const menu = page.getByRole('menu', { name: 'Workspace: Ros.Space', exact: true });
   expect(await menu.evaluate(el => !!el.closest('[role="dialog"]'))).toBe(true);
   await menu.getByRole('menuitemradio', { name: 'Research', exact: true }).click();
   await expect(drawer).toBeVisible();
@@ -229,15 +229,19 @@ test('mobile keeps the workspace menu inside the drawer and closes both layers a
   expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(390);
 });
 
-test('the embedded example scopes slash to its own controls and documents the composition', async ({ page, request }) => {
+test('the embedded example scopes Ctrl+K to its own controls and documents the composition', async ({ page, request }) => {
   await page.goto('/docs/components/sidebar');
   const demo = page.locator('[data-sidebar-demo="hover-reveal"]');
   await expect.poll(() => demo.evaluate(el => el.closest('astro-island')?.hasAttribute('ssr'))).toBe(false);
   await page.getByRole('heading', { level: 1, name: 'Sidebar', exact: true }).click();
-  await page.keyboard.press('/');
+  await page.keyboard.press('Control+k');
   await expect(palette(page)).toBeHidden();
+  const docsSearch = page.getByRole('dialog', { name: 'Search documentation', exact: true });
+  await expect(docsSearch).toBeVisible();
+  await docsSearch.getByRole('combobox').press('Escape');
+  await expect(docsSearch).toBeHidden();
   await demo.getByRole('button', { name: 'Lock state', exact: true }).focus();
-  await page.keyboard.press('/');
+  await page.keyboard.press('Control+k');
   await expect(palette(page)).toBeVisible();
   await palette(page).getByRole('combobox').press('Escape');
   await expect(demo.getByRole('button', { name: 'Lock state', exact: true })).toBeFocused();

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, ref, useId, watch } from "vue";
-import { SidebarLayout } from "@dicehub/kappa/blocks/sidebar-layout";
+import { AppShell } from "@dicehub/kappa/blocks/app-shell";
 import { Sidebar } from "@dicehub/kappa/components/sidebar";
 import { Dropdown } from "@dicehub/kappa/components/dropdown";
 import { Input } from "@dicehub/kappa/components/input";
@@ -30,7 +30,7 @@ const positioning = { placement: "bottom-start", strategy: "fixed", gutter: 6 } 
 
 <template>
   <div class="sidebar-grouped-demo" :data-sidebar-block="props.collapsibleSections ? 'collapsible-sections' : 'grouped'" :data-standalone="props.standalone || undefined">
-    <SidebarLayout label="Documentation navigation" collapsible="offcanvas" full-screen-on-mobile
+    <AppShell.Root label="Documentation navigation" collapsible="offcanvas" full-screen-on-mobile
       content-max-width="44rem" :mobile-breakpoint="1200">
       <template #header="context">
         <Dropdown.Root aria-label="Documentation versions" :positioning="positioning">
@@ -44,7 +44,6 @@ const positioning = { placement: "bottom-start", strategy: "fixed", gutter: 6 } 
           <Dropdown.Context v-slot="menu"><Dropdown.Content :teleport="!context.isMobile" :inert="!menu.open || undefined" class="sidebar-grouped-demo__version-menu" :data-mobile="context.isMobile || undefined">
             <Dropdown.RadioGroup v-model="version"><Dropdown.Label>Versions</Dropdown.Label>
               <Dropdown.RadioItem v-for="item in ['1.0.1', '1.1.0-alpha', '2.0.0-beta']" :key="item" :value="item" close-on-select class="sidebar-grouped-demo__version-option">
-                <template #indicator><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="m3 8.25 3 3 7-7" /></svg></template>
                 v{{ item }}
               </Dropdown.RadioItem>
             </Dropdown.RadioGroup>
@@ -85,7 +84,7 @@ const positioning = { placement: "bottom-start", strategy: "fixed", gutter: 6 } 
         <ol><li>Create the project in your workspace.</li><li>Import geometry and check its dimensions.</li><li>Save your configuration before you run a simulation.</li></ol>
         <p class="sidebar-grouped-demo__note">Example documentation. Search filters the navigation; page and version selections stay in this preview.</p>
       </section>
-    </SidebarLayout>
+    </AppShell.Root>
   </div>
 </template>
 

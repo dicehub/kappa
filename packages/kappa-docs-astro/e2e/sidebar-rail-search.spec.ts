@@ -12,9 +12,9 @@ test("rail header search expands and fades, then navigates pages and projects", 
   await page.emulateMedia({ reducedMotion: "no-preference" });
   await openExample(page);
   const trigger = page.getByRole("button", { name: "Search or go to…", exact: true });
-  await expect(trigger).toHaveAttribute("aria-keyshortcuts", "/");
-  await expect(trigger.locator("kbd")).toHaveText("/");
-  await expectSearchPanelMotion(page, "sidebar-rail-search-in", () => page.keyboard.press("/"));
+  await expect(trigger).toHaveAttribute("aria-keyshortcuts", "Control+K");
+  await expect(trigger.locator("kbd")).toHaveText(["Ctrl", "K"]);
+  await expectSearchPanelMotion(page, "sidebar-rail-search-in", () => page.keyboard.press("Control+k"));
   const dialog = page.locator(".sidebar-rail-search-dialog");
   const input = dialog.getByRole("combobox");
   await expect(input).toBeFocused();
@@ -108,15 +108,15 @@ for (const width of [800, 600, 590, 588, 580, 360]) {
   });
 }
 
-test("rail slash shortcut respects open menus and input text", async ({ page }) => {
+test("rail Ctrl+K shortcut respects open menus and input text", async ({ page }) => {
   await openExample(page);
   await page.getByRole("button", { name: "Profile: Ros.Space", exact: true }).click();
-  await page.keyboard.press("/");
+  await page.keyboard.press("Control+k");
   await expect(page.getByRole("menu", { name: "Profile: Ros.Space", exact: true })).toBeVisible();
   await expect(page.locator(".sidebar-rail-search-dialog")).toHaveCount(0);
   await page.keyboard.press("Escape");
   const trigger = page.getByRole("button", { name: "Search or go to…", exact: true });
-  await trigger.press("/");
+  await trigger.press("Control+k");
   const dialog = page.getByRole("dialog", { name: "Search navigation", exact: true });
   const input = dialog.getByRole("combobox");
   await expect(input).toBeFocused();

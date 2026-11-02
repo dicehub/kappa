@@ -17,15 +17,15 @@ test.beforeEach(async ({ page }) => {
 });
 
 test('both shells have gallery previews, full-screen links, and complete copyable source', async ({ page }) => {
-  await page.goto('/docs/blocks/sidebar');
+  await page.goto('/docs/blocks/appshell');
   for (const variant of variants) {
     const example = page.locator(`[data-block-example="${variant}"]`);
     await ready(demoFor(page, variant));
-    await expect(example.getByRole('link', { name: /Open full example/ })).toHaveAttribute('href', `/examples/sidebar/${variant}`);
+    await expect(example.getByRole('link', { name: /Open full example/ })).toHaveAttribute('href', `/examples/appshell/${variant}`);
     const source = await example.locator('[data-code-full] code').textContent();
-    expect(source).toContain(variant === 'peeking' ? 'peeking: true' : 'applicationShell: true');
-    expect(source).toContain('standalone: true');
-    expect(source).toContain('<style>');
+    expect(source).toContain('peekable');
+    expect(source).toContain('AppShell.Root');
+    expect(source).not.toContain('<style');
     expect(source).not.toMatch(/from ["']\.\.?\//);
     const parsed = parse(source!, { filename: `${variant}.vue` });
     expect(parsed.errors).toEqual([]);
@@ -38,7 +38,7 @@ test('both shells have gallery previews, full-screen links, and complete copyabl
 for (const variant of variants) {
   for (const embedded of [false, true]) {
     test(`${variant} ${embedded ? 'gallery' : 'full-screen'} supports temporary reveal and pinning without moving content`, async ({ page }) => {
-      await page.goto(embedded ? `/docs/blocks/sidebar#${variant}` : `/examples/sidebar/${variant}`);
+      await page.goto(embedded ? `/docs/blocks/appshell#${variant}` : `/examples/appshell/${variant}`);
       const demo = demoFor(page, variant);
       await ready(demo);
       await demo.scrollIntoViewIfNeeded();
@@ -90,7 +90,7 @@ for (const variant of variants) {
   test(`${variant} mobile drawer selects a page and restores focus in dark mode`, async ({ page }) => {
     await page.addInitScript(() => localStorage.setItem('theme', 'dark'));
     await page.setViewportSize({ width: 390, height: 844 });
-    await page.goto(`/examples/sidebar/${variant}`);
+    await page.goto(`/examples/appshell/${variant}`);
     const demo = demoFor(page, variant);
     await ready(demo);
     await expect(demo.locator('.kappa-sidebar-layout')).toHaveAttribute('data-mobile', '');
