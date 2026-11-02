@@ -27,7 +27,7 @@ withDefaults(defineProps<{ variant?: DemoVariant }>(), { variant: "preview" });
           <Breadcrumbs.Separator />
           <Breadcrumbs.Item><Breadcrumbs.Link href="#rotor-study">Rotor study</Breadcrumbs.Link></Breadcrumbs.Item>
           <Breadcrumbs.Separator />
-          <Breadcrumbs.Item><Breadcrumbs.Page>Run 042</Breadcrumbs.Page></Breadcrumbs.Item>
+          <Breadcrumbs.Item><Breadcrumbs.Link href="#preview" aria-current="page">Run 042</Breadcrumbs.Link></Breadcrumbs.Item>
         </Breadcrumbs.List>
       </Breadcrumbs.Root>
     </div>
@@ -38,16 +38,16 @@ withDefaults(defineProps<{ variant?: DemoVariant }>(), { variant: "preview" });
         <Breadcrumbs.Separator />
         <Breadcrumbs.Item><Breadcrumbs.Link href="#simulations">Simulations</Breadcrumbs.Link></Breadcrumbs.Item>
         <Breadcrumbs.Separator />
-        <Breadcrumbs.Item><Breadcrumbs.Current>Run 042</Breadcrumbs.Current></Breadcrumbs.Item>
+        <Breadcrumbs.Item><Breadcrumbs.Link href="#basic" aria-current="page">Run 042</Breadcrumbs.Link></Breadcrumbs.Item>
       </Breadcrumbs.List>
     </Breadcrumbs.Root>
 
     <Breadcrumbs.Root v-else-if="variant === 'separator'" aria-label="Dataset path">
       <Breadcrumbs.List>
         <Breadcrumbs.Item><Breadcrumbs.Link href="#data">Data</Breadcrumbs.Link></Breadcrumbs.Item>
-        <Breadcrumbs.Separator><span aria-hidden="true">/</span></Breadcrumbs.Separator>
+        <Breadcrumbs.Separator><span aria-hidden="true">·</span></Breadcrumbs.Separator>
         <Breadcrumbs.Item><Breadcrumbs.Link href="#wind">Wind</Breadcrumbs.Link></Breadcrumbs.Item>
-        <Breadcrumbs.Separator><span aria-hidden="true">/</span></Breadcrumbs.Separator>
+        <Breadcrumbs.Separator><span aria-hidden="true">·</span></Breadcrumbs.Separator>
         <Breadcrumbs.Item><Breadcrumbs.Page>inlet.csv</Breadcrumbs.Page></Breadcrumbs.Item>
       </Breadcrumbs.List>
     </Breadcrumbs.Root>
@@ -61,7 +61,7 @@ withDefaults(defineProps<{ variant?: DemoVariant }>(), { variant: "preview" });
             <Breadcrumbs.Separator />
             <Breadcrumbs.Item><Breadcrumbs.Link :href="`#${size}-cases`">Cases</Breadcrumbs.Link></Breadcrumbs.Item>
             <Breadcrumbs.Separator />
-            <Breadcrumbs.Item><Breadcrumbs.Page>Run 042</Breadcrumbs.Page></Breadcrumbs.Item>
+            <Breadcrumbs.Item><Breadcrumbs.Link href="#sizes" aria-current="page">Run 042</Breadcrumbs.Link></Breadcrumbs.Item>
           </Breadcrumbs.List>
         </Breadcrumbs.Root>
       </div>
@@ -80,7 +80,7 @@ withDefaults(defineProps<{ variant?: DemoVariant }>(), { variant: "preview" });
         <Breadcrumbs.Separator />
         <Breadcrumbs.Item><Breadcrumbs.Link href="#icon-projects">Projects</Breadcrumbs.Link></Breadcrumbs.Item>
         <Breadcrumbs.Separator />
-        <Breadcrumbs.Item><Breadcrumbs.Page>Current Project</Breadcrumbs.Page></Breadcrumbs.Item>
+        <Breadcrumbs.Item><Breadcrumbs.Link href="#with-icons" aria-current="page">Current Project</Breadcrumbs.Link></Breadcrumbs.Item>
       </Breadcrumbs.List>
     </Breadcrumbs.Root>
 
@@ -93,7 +93,7 @@ withDefaults(defineProps<{ variant?: DemoVariant }>(), { variant: "preview" });
             <Breadcrumbs.Link href="#offshore-platform">Offshore platform verification</Breadcrumbs.Link>
           </Breadcrumbs.Item>
           <Breadcrumbs.Separator />
-          <Breadcrumbs.Item><Breadcrumbs.Page>Transient load case 2026-08</Breadcrumbs.Page></Breadcrumbs.Item>
+          <Breadcrumbs.Item><Breadcrumbs.Link href="#long-path" aria-current="page">Transient load case 2026-08</Breadcrumbs.Link></Breadcrumbs.Item>
         </Breadcrumbs.List>
       </Breadcrumbs.Root>
     </div>
@@ -104,7 +104,7 @@ withDefaults(defineProps<{ variant?: DemoVariant }>(), { variant: "preview" });
         <Breadcrumbs.Separator />
         <Breadcrumbs.Item><Breadcrumbs.Ellipsis /></Breadcrumbs.Item>
         <Breadcrumbs.Separator />
-        <Breadcrumbs.Item><Breadcrumbs.Page>Run 042</Breadcrumbs.Page></Breadcrumbs.Item>
+        <Breadcrumbs.Item><Breadcrumbs.Link href="#collapsed" aria-current="page">Run 042</Breadcrumbs.Link></Breadcrumbs.Item>
       </Breadcrumbs.List>
     </Breadcrumbs.Root>
 
@@ -126,7 +126,7 @@ withDefaults(defineProps<{ variant?: DemoVariant }>(), { variant: "preview" });
           </Dropdown.Root>
         </Breadcrumbs.Item>
         <Breadcrumbs.Separator />
-        <Breadcrumbs.Item><Breadcrumbs.Page>Run 042</Breadcrumbs.Page></Breadcrumbs.Item>
+        <Breadcrumbs.Item><Breadcrumbs.Link href="#collapsed-menu" aria-current="page">Run 042</Breadcrumbs.Link></Breadcrumbs.Item>
       </Breadcrumbs.List>
     </Breadcrumbs.Root>
 
@@ -138,7 +138,7 @@ withDefaults(defineProps<{ variant?: DemoVariant }>(), { variant: "preview" });
           </Breadcrumbs.Link>
         </Breadcrumbs.Item>
         <Breadcrumbs.Separator />
-        <Breadcrumbs.Item><Breadcrumbs.Page>Run 042</Breadcrumbs.Page></Breadcrumbs.Item>
+        <Breadcrumbs.Item><Breadcrumbs.Link href="#router-link" aria-current="page">Run 042</Breadcrumbs.Link></Breadcrumbs.Item>
       </Breadcrumbs.List>
     </Breadcrumbs.Root>
 
@@ -148,7 +148,7 @@ withDefaults(defineProps<{ variant?: DemoVariant }>(), { variant: "preview" });
         <Breadcrumbs.Separator />
         <Breadcrumbs.Item><Breadcrumbs.Link href="#rtl-models">النماذج</Breadcrumbs.Link></Breadcrumbs.Item>
         <Breadcrumbs.Separator />
-        <Breadcrumbs.Item><Breadcrumbs.Page>التشغيل ٠٤٢</Breadcrumbs.Page></Breadcrumbs.Item>
+        <Breadcrumbs.Item><Breadcrumbs.Link href="#right-to-left" aria-current="page">التشغيل ٠٤٢</Breadcrumbs.Link></Breadcrumbs.Item>
       </Breadcrumbs.List>
     </Breadcrumbs.Root>
   </div>
@@ -208,11 +208,6 @@ withDefaults(defineProps<{ variant?: DemoVariant }>(), { variant: "preview" });
   min-width: 0;
   border-inline-start: 2px solid var(--docs-line);
   padding-inline-start: 0.9rem;
-}
-
-.breadcrumbs-demo :deep([data-slot="breadcrumbs-link"]),
-.breadcrumbs-demo :deep([data-slot="breadcrumbs-page"]) {
-  min-width: 0;
 }
 
 .breadcrumbs-demo__content-icon {

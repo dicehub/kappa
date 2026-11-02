@@ -13,15 +13,6 @@ defineSlots<BreadcrumbsSeparatorSlots>();
     role="presentation"
     aria-hidden="true"
   >
-    <slot>
-      <svg
-        class="kappa-breadcrumbs__separator-icon"
-        viewBox="0 0 16 16"
-        aria-hidden="true"
-        focusable="false"
-      >
-        <path d="m6.25 3.75 4 4.25-4 4.25" />
-      </svg>
-    </slot>
+    <slot>/</slot>
   </li>
 </template>

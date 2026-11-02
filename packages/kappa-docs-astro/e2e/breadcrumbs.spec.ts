@@ -88,25 +88,34 @@ test.describe("Breadcrumbs documentation", () => {
     const list = nav.locator('[data-slot="breadcrumbs-list"]');
     const items = list.locator('[data-slot="breadcrumbs-item"]');
     const links = list.locator('[data-slot="breadcrumbs-link"]');
-    const pagePart = list.locator('[data-slot="breadcrumbs-page"]');
+    const currentLink = links.last();
+    const pagePart = demo(page, "separator").locator('[data-slot="breadcrumbs-page"]');
     const separators = list.locator('[data-slot="breadcrumbs-separator"]');
 
     await expect(nav).toHaveAttribute("data-slot", "breadcrumbs");
     await expect(nav).toHaveAttribute("data-size", "base");
     await expect(list).toHaveJSProperty("tagName", "OL");
     await expect(items).toHaveCount(3);
-    await expect(links).toHaveCount(2);
+    await expect(links).toHaveCount(3);
+    await expect(currentLink).toHaveAttribute("href", "#basic");
+    await expect(currentLink).toHaveAttribute("aria-current", "page");
+    await expect(currentLink).toHaveCSS("font-weight", "600");
     await expect(links.first()).toHaveJSProperty("tagName", "A");
     await expect(pagePart).toHaveJSProperty("tagName", "SPAN");
     await expect(pagePart).toHaveAttribute("aria-current", "page");
     await expect(pagePart).not.toHaveAttribute("role");
     await expect(pagePart).not.toHaveAttribute("aria-disabled");
-    await expect(separators).toHaveCount(2);
+    await expect(separators).toHaveText(["/", "/"]);
     for (const separator of await separators.all()) {
       await expect(separator).toHaveAttribute("role", "presentation");
       await expect(separator).toHaveAttribute("aria-hidden", "true");
     }
-    await expect(nav.getByRole("link")).toHaveText(["Workspace", "Simulations"]);
+    await expect(nav.getByRole("link")).toHaveText(["Workspace", "Simulations", "Run 042"]);
+    await links.nth(1).focus();
+    await page.keyboard.press("Tab");
+    await expect(currentLink).toBeFocused();
+    await page.keyboard.press("Enter");
+    await expect(page).toHaveURL(/#basic$/);
 
     const routerLink = demo(page, "router").locator('[data-router-link="true"]');
     await expect(routerLink).toHaveAttribute("href", "#router-projects");
@@ -122,10 +131,10 @@ test.describe("Breadcrumbs documentation", () => {
     const fontSizes = await root(sizes).evaluateAll((elements) =>
       elements.map((element) => Number.parseFloat(getComputedStyle(element).fontSize)),
     );
-    expect(fontSizes[0]).toBeLessThan(fontSizes[1]);
+    expect(fontSizes).toEqual([12, 14]);
 
     const separator = demo(page, "separator").locator('[data-slot="breadcrumbs-separator"]');
-    await expect(separator).toHaveText(["/", "/"]);
+    await expect(separator).toHaveText(["·", "·"]);
     await expect(separator.locator("svg")).toHaveCount(0);
     const separatorDemo = demo(page, "separator");
     const alignment = await separatorDemo
@@ -150,9 +159,9 @@ test.describe("Breadcrumbs documentation", () => {
     await expect(contentIcon).toHaveCount(1);
     await expect(contentIcon).toHaveAttribute("aria-hidden", "true");
     await expect(contentIcon).toHaveAttribute("viewBox", "0 0 256 256");
-    await expect(icons.getByRole("link")).toHaveText(["Home", "Projects"]);
-    await expect(icons.locator('[data-slot="breadcrumbs-page"]')).toHaveText("Current Project");
-    await expect(icons.locator('[data-slot="breadcrumbs-page"] svg')).toHaveCount(0);
+    await expect(icons.getByRole("link")).toHaveText(["Home", "Projects", "Current Project"]);
+    await expect(icons.locator('[aria-current="page"]')).toHaveText("Current Project");
+    await expect(icons.locator('[aria-current="page"] svg')).toHaveCount(0);
     const iconStyle = await contentIcon.evaluate((element) => {
       const styles = getComputedStyle(element);
       const box = element.getBoundingClientRect();
@@ -227,23 +236,20 @@ test.describe("Breadcrumbs documentation", () => {
     await expect(trigger).toHaveAttribute("aria-expanded", "false");
   });
 
-  test("wraps on mobile without overflow and mirrors the default separator in RTL", async ({
+  test("wraps on mobile without overflow and keeps slash separators in RTL", async ({
     page,
   }) => {
     const basic = demo(page, "basic");
     const breadcrumbColors = await basic.evaluate((scope) => {
       const link = scope.querySelector('[data-slot="breadcrumbs-link"]');
       const separator = scope.querySelector('[data-slot="breadcrumbs-separator"]');
-      const arrow = separator?.querySelector("svg");
-      if (!link || !separator || !arrow) throw new Error("Missing breadcrumb parts");
+      if (!link || !separator) throw new Error("Missing breadcrumb parts");
       return {
         link: getComputedStyle(link).color,
         separator: getComputedStyle(separator).color,
-        arrow: getComputedStyle(arrow).stroke,
       };
     });
     expect(breadcrumbColors.separator).toBe(breadcrumbColors.link);
-    expect(breadcrumbColors.arrow).toBe(breadcrumbColors.link);
 
     const wrapping = demo(page, "wrapping");
     const list = wrapping.locator('[data-slot="breadcrumbs-list"]');
@@ -259,15 +265,14 @@ test.describe("Breadcrumbs documentation", () => {
     const rtl = root(demo(page, "rtl"));
     const rtlList = rtl.locator('[data-slot="breadcrumbs-list"]');
     const rtlItems = rtlList.locator('[data-slot="breadcrumbs-item"]');
-    const rtlIcon = rtl.locator('[data-slot="breadcrumbs-separator"] svg').first();
+    const rtlSeparators = rtl.locator('[data-slot="breadcrumbs-separator"]');
     await expect.poll(() => rtl.evaluate((element) => getComputedStyle(element).direction)).toBe("rtl");
     const rtlBoxes = await rtlItems.evaluateAll((elements) =>
       elements.map((element) => element.getBoundingClientRect()),
     );
     expect(rtlBoxes[1]!.x).toBeLessThan(rtlBoxes[0]!.x);
-    await expect.poll(() => rtlIcon.evaluate((element) => getComputedStyle(element).transform)).not.toBe(
-      "none",
-    );
+    await expect(rtlSeparators).toHaveText(["/", "/"]);
+    await expect(rtlSeparators.locator("svg")).toHaveCount(0);
 
     await page.setViewportSize({ width: 390, height: 844 });
     await page.reload();
@@ -280,12 +285,16 @@ test.describe("Breadcrumbs documentation", () => {
     const readColor = () => basicLink.evaluate((element) => getComputedStyle(element).color);
     const lightColor = await readColor();
     await basicLink.hover();
-    await expect
-      .poll(readColor)
-      .not.toBe(lightColor);
+    await expect.poll(readColor).toBe(lightColor);
     await expect
       .poll(() => basicLink.evaluate((element) => getComputedStyle(element).textDecorationLine))
-      .toBe("none");
+      .toBe("underline");
+    await page.mouse.down();
+    await expect(basicLink).toHaveCSS("outline-style", "solid");
+    await expect(basicLink).toHaveCSS("outline-width", "2px");
+    await page.mouse.move(0, 0);
+    await page.mouse.up();
+    await page.keyboard.press("Tab");
     await basicLink.focus();
     const focus = await basicLink.evaluate((element) => {
       const styles = getComputedStyle(element);
@@ -310,15 +319,16 @@ test.describe("Breadcrumbs documentation", () => {
     expect(forcedFocus.style).not.toBe("none");
     expect(forcedFocus.width).toBeGreaterThanOrEqual(2);
 
-    const separatorIcon = demo(page, "basic")
-      .locator('[data-slot="breadcrumbs-separator"] svg')
+    const separatorText = demo(page, "basic")
+      .locator('[data-slot="breadcrumbs-separator"]')
       .first();
-    const forcedSeparator = await separatorIcon.evaluate((element) => {
+    await expect(separatorText).toHaveText("/");
+    const forcedSeparator = await separatorText.evaluate((element) => {
       const styles = getComputedStyle(element);
       const box = element.getBoundingClientRect();
-      return { stroke: styles.stroke, width: box.width, height: box.height };
+      return { color: styles.color, width: box.width, height: box.height };
     });
-    expect(forcedSeparator.stroke).not.toBe("none");
+    expect(forcedSeparator.color).not.toBe("transparent");
     expect(forcedSeparator.width).toBeGreaterThan(0);
     expect(forcedSeparator.height).toBeGreaterThan(0);
   });
