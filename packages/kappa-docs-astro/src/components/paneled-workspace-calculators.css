@@ -1,0 +1,22 @@
+.paneled-calculator { container: paneled-calculator / inline-size; color: var(--kappa-default); font-size: 0.875rem; line-height: 1.5; }
+.paneled-calculator__intro { margin: 0 0 1.5rem; max-inline-size: 46rem; color: var(--kappa-subtle); }
+.paneled-calculator__layout { display: grid; gap: 2rem; align-items: start; }
+.paneled-calculator__inputs { display: grid; gap: 1.25rem; min-inline-size: 0; }
+.paneled-calculator__reset { justify-self: start; }
+.paneled-calculator__results { min-inline-size: 0; padding: 1.25rem; border: 1px solid var(--kappa-line); border-radius: 0.5rem; background: var(--kappa-tint); }
+.paneled-calculator h3 { margin: 0 0 1rem; font-size: 0.875rem; font-weight: 600; color: var(--kappa-strong); }
+.paneled-calculator__output { display: grid; gap: 1rem; margin: 0; }
+.paneled-calculator__output dt { color: var(--kappa-subtle); font-size: 0.875rem; }
+.paneled-calculator__output dd { margin: 0.25rem 0 0; font-size: 1.75rem; font-weight: 600; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.paneled-calculator__output dd span { color: var(--kappa-subtle); font-size: 0.875rem; font-weight: 400; }
+.paneled-calculator__details { display: grid; gap: 0.75rem; margin: 1.25rem 0 0; padding-block-start: 1rem; border-block-start: 1px solid var(--kappa-line); font-size: 0.875rem; }
+.paneled-calculator__details > div { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0.25rem 1rem; }
+.paneled-calculator__details dt { color: var(--kappa-subtle); }
+.paneled-calculator__details dd { margin: 0; font-variant-numeric: tabular-nums; }
+.paneled-calculator__note { margin: 1rem 0 0; color: var(--kappa-subtle); font-size: 0.875rem; }
+.paneled-calculator__method { margin-block-start: 2rem; padding-block-start: 1.5rem; border-block-start: 1px solid var(--kappa-line); color: var(--kappa-subtle); font-size: 0.875rem; }
+.paneled-calculator__method p { margin: 0.5rem 0; }
+.paneled-calculator__formula { color: var(--kappa-default); font-family: var(--kappa-font-mono); overflow-wrap: anywhere; }
+@container paneled-calculator (min-width: 40rem) {
+  .paneled-calculator__layout { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+}

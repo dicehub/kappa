@@ -1,0 +1,108 @@
+.paneled-profile__toggle { display: flex; flex: none; }
+.paneled-profile__trigger.kappa-dropdown__trigger {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  inline-size: 2rem;
+  block-size: 2rem;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: inherit;
+  text-decoration: none;
+  transition: background-color 200ms cubic-bezier(0.22, 0.61, 0.36, 1),
+    box-shadow 200ms cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+.paneled-profile__trigger.kappa-dropdown__trigger:is(:hover, :focus-visible) { background: var(--kappa-shell-action-hover); }
+.paneled-profile__trigger.kappa-dropdown__trigger:active { background: var(--kappa-shell-action-pressed); }
+.paneled-profile__trigger.kappa-dropdown__trigger:is(:active, :focus-visible) {
+  outline: none;
+  box-shadow: 0 0 0 1px var(--kappa-shell-nav-flyout-surface), 0 0 0 3px var(--kappa-focus);
+}
+.paneled-profile__avatar.kappa-avatar {
+  --kappa-avatar-size: 2rem;
+  --kappa-avatar-border: var(--kappa-shell-avatar-border);
+
+  inline-size: 2rem;
+  block-size: 2rem;
+  border-radius: 50%;
+}
+.paneled-profile__avatar .kappa-avatar__image { object-fit: contain; }
+
+/* The menu is teleported; keep its styles independent of the demo container. */
+.paneled-profile__menu.kappa-dropdown__content {
+  --kappa-dropdown-min-inline-size: 14rem;
+  --kappa-dropdown-max-inline-size: 14rem;
+
+  inline-size: 14rem;
+  max-block-size: var(--available-height, calc(100dvh - 4rem));
+  padding: 0;
+  overflow: visible;
+  border: 0;
+  border-radius: 0.5rem;
+  background: var(--kappa-shell-nav-flyout-surface);
+  color: var(--kappa-shell-menu-foreground);
+  box-shadow: none;
+  font-size: 0.875rem;
+  font-weight: 400;
+  line-height: 1rem;
+}
+.paneled-profile__menu.kappa-dropdown__content[data-state] { animation: none; }
+.paneled-profile__menu .kappa-dropdown__arrow {
+  --arrow-size: 0.5rem;
+  --arrow-background: var(--kappa-shell-nav-flyout-surface);
+}
+.paneled-profile__menu .kappa-dropdown__arrow-tip { border: 0; }
+.paneled-profile__scroll {
+  max-block-size: var(--available-height, calc(100dvh - 4rem));
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 0.25rem;
+  border-radius: inherit;
+  scrollbar-width: thin;
+}
+.paneled-profile__menu .kappa-dropdown__item {
+  min-block-size: 2rem;
+  gap: 0.5rem;
+  margin-block-end: 0.125rem;
+  padding: 0.5rem;
+  border-radius: 0.25rem;
+  color: inherit;
+  line-height: 1rem;
+  transition: background-color 100ms cubic-bezier(0.22, 0.61, 0.36, 1),
+    box-shadow 200ms cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+.paneled-profile__menu .kappa-dropdown__item:last-child { margin-block-end: 0; }
+.paneled-profile__menu .kappa-dropdown__item[data-highlighted] { background: var(--kappa-shell-action-hover); }
+.paneled-profile__menu .kappa-dropdown__item:active { background: var(--kappa-shell-action-pressed); }
+.paneled-profile__menu[data-keyboard-focus]:focus .kappa-dropdown__item[data-highlighted],
+.paneled-profile__menu .kappa-dropdown__item:active {
+  box-shadow: inset 0 0 0 2px var(--kappa-focus),
+    inset 0 0 0 3px var(--kappa-shell-nav-flyout-surface),
+    inset 0 0 0 1px var(--kappa-shell-nav-flyout-surface);
+}
+.paneled-profile__menu .kappa-dropdown__item-icon { inline-size: 1rem; block-size: 1rem; }
+.paneled-profile__menu .kappa-dropdown__separator {
+  margin-block: 0.25rem;
+  margin-inline: -0.25rem;
+  background: var(--kappa-shell-menu-divider);
+}
+.paneled-profile__identity.kappa-dropdown__item { display: grid; gap: 0.25rem; }
+.paneled-profile__identity strong { font-weight: 600; }
+.paneled-profile__identity span { color: var(--kappa-shell-nav-foreground); }
+
+@media (prefers-reduced-motion: reduce) {
+  .paneled-profile__trigger.kappa-dropdown__trigger,
+  .paneled-profile__menu .kappa-dropdown__item { transition: none; }
+}
+@media (forced-colors: active) {
+  .paneled-profile__menu.kappa-dropdown__content { border: 1px solid CanvasText; }
+  .paneled-profile__trigger.kappa-dropdown__trigger:is(:active, :focus-visible),
+  .paneled-profile__menu[data-keyboard-focus]:focus .kappa-dropdown__item[data-highlighted],
+  .paneled-profile__menu .kappa-dropdown__item:active {
+    outline: 2px solid Highlight;
+  }
+}

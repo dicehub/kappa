@@ -1,10 +1,10 @@
 import { expect, test, type Page } from "@playwright/test";
 
-const examplePath = "/examples/sidebar/paneled-workspace";
+const examplePath = "/examples/appshell/paneled-workspace";
 const blockSelector = '[data-sidebar-block="paneled-workspace"]';
 
-const block = (page: Page) => page.locator(blockSelector);
-const panels = (page: Page) => block(page).locator(".paneled-workspace-demo__panels");
+const block = (page: Page) => page.locator(blockSelector).locator(".kappa-app-shell");
+const panels = (page: Page) => block(page).locator(".kappa-app-shell__panels");
 const navigation = (page: Page) =>
   block(page).getByRole("navigation", { name: "Paneled workspace navigation", exact: true });
 const categoryPages = (page: Page, category: string) =>
@@ -25,7 +25,7 @@ async function expectNoHorizontalOverflow(page: Page) {
 }
 
 test.beforeEach(async ({ page }) => {
-  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.setViewportSize({ width: 1440, height: 1000 });
   await page.emulateMedia({ reducedMotion: "reduce" });
 });
 
@@ -37,7 +37,7 @@ test("server output and gallery keep the complete Paneled Workspace source", asy
   expect(html).toContain("Search or go to…");
   expect(html).toContain("Work items");
 
-  await page.goto("/docs/blocks/sidebar");
+  await page.goto("/docs/blocks/appshell");
   const examples = page.locator("[data-block-example]");
   await expect(examples).toHaveCount(18);
   const ids = await examples.evaluateAll(nodes =>
@@ -51,12 +51,12 @@ test("server output and gallery keep the complete Paneled Workspace source", asy
     examplePath,
   );
   const source = example.locator("[data-code-full] code");
-  await expect(source).toContainText("standalone: true");
-  await expect(source).toContainText("SidebarLayout");
-  await expect(source).toContainText("<style>");
+  await expect(source).toContainText("AppShell.Root");
+  await expect(source).toContainText("AppShell.Panels");
+  await expect(source).not.toContainText("<style");
   await expect(source).not.toContainText("style src=");
 
-  const markdown = await request.get("/docs/blocks/sidebar.md");
+  const markdown = await request.get("/docs/blocks/appshell.md");
   expect(markdown.ok()).toBe(true);
   expect(await markdown.text()).toContain("Paneled Workspace");
 });
@@ -67,19 +67,56 @@ test("header stays centered and navigation categories work in expanded and colla
   const topbar = shell.locator(".kappa-sidebar-layout__site-header");
   const search = shell.getByRole("button", { name: "Search or go to…", exact: true });
   await expect(topbar).toHaveCSS("height", "48px");
+  await expect(search.locator("kbd")).toHaveText(["Ctrl", "K"]);
+  await expect(search.locator(".kappa-kbd-group")).toBeVisible();
   const shellBounds = (await shell.boundingBox())!;
   const searchBounds = (await search.boundingBox())!;
+  expect(searchBounds.width).toBeCloseTo(344, 0);
+  expect(searchBounds.height).toBeCloseTo(32, 0);
   expect(searchBounds.x + searchBounds.width / 2).toBeCloseTo(
     shellBounds.x + shellBounds.width / 2,
     1,
   );
+  await page.setViewportSize({ width: 1920, height: 1000 });
+  const wideShellBounds = (await shell.boundingBox())!;
+  const wideSearchBounds = (await search.boundingBox())!;
+  expect(wideSearchBounds.width).toBeCloseTo(440, 0);
+  expect(wideSearchBounds.x + wideSearchBounds.width / 2).toBeCloseTo(
+    wideShellBounds.x + wideShellBounds.width / 2,
+    1,
+  );
+  await page.setViewportSize({ width: 1440, height: 1000 });
 
   const nav = navigation(page);
   await expect(nav).toHaveCSS("width", "240px");
-  const plan = nav.getByRole("button", { name: "Plan", exact: true });
-  const planGroup = nav.locator(".paneled-workspace-demo__nav-group").filter({ has: page.getByRole("button", { name: "Plan", exact: true }) });
-  const workItems = planGroup.getByRole("link", { name: "Work items", exact: true });
-  const milestones = planGroup.getByRole("link", { name: "Milestones", exact: true });
+  const frameBefore = (await block(page).locator(".kappa-app-shell__panel-frame").boundingBox())!;
+  expect(frameBefore.x).toBeCloseTo(240, 0);
+  expect(frameBefore.y).toBeCloseTo(48, 0);
+  expect(frameBefore.width).toBeCloseTo(1160, 0);
+  expect(frameBefore.height).toBeCloseTo(944, 0);
+
+  await expect(nav.getByRole("button", { name: "Pinned", exact: true })).toHaveCount(0);
+  await expect(nav.getByRole("link", { name: "Overview", exact: true })).toBeVisible();
+
+  await expect(nav.locator(".paneled-workspace-demo__context-label")).toHaveText("Your work");
+  const categories = ["Projects", "Templates", "Engineering tools", "Aircraft", "Simulation", "Flight testing", "Propulsion", "Flight operations", "Reports"];
+  for (const category of categories) {
+    await expect(nav.getByRole("button", { name: category, exact: true })).toBeVisible();
+  }
+  const navigationRowHeights = await nav
+    .locator(".paneled-workspace-demo__nav-group .kappa-sidebar__menu-button:visible")
+    .evaluateAll(rows => rows.map(row => Math.round(row.getBoundingClientRect().height)));
+  expect(navigationRowHeights.length).toBeGreaterThan(0);
+  expect(navigationRowHeights.every(height => height === 28)).toBe(true);
+  expect((await nav.getByRole("link", { name: "Overview", exact: true }).boundingBox())!.height)
+    .toBeCloseTo(28, 0);
+  expect((await nav.getByRole("button", { name: "Projects", exact: true }).boundingBox())!.height)
+    .toBeCloseTo(28, 0);
+
+  const plan = nav.getByRole("button", { name: "Projects", exact: true });
+  const planGroup = nav.locator(".paneled-workspace-demo__nav-group").filter({ has: page.getByRole("button", { name: "Projects", exact: true }) });
+  const workItems = planGroup.getByRole("link", { name: "Overview", exact: true });
+  const milestones = planGroup.getByRole("link", { name: "Applications", exact: true });
   await expect(workItems).toBeVisible();
   await expect(milestones).toBeVisible();
   await plan.click();
@@ -88,38 +125,40 @@ test("header stays centered and navigation categories work in expanded and colla
   await expect(workItems).toBeVisible();
   await expect(milestones).toBeVisible();
 
-  const codeExpanded = nav.getByRole("button", { name: "Code", exact: true });
-  const codeGroup = nav.locator(".paneled-workspace-demo__nav-group").filter({ has: page.getByRole("button", { name: "Code", exact: true }) });
-  const repositoriesExpanded = codeGroup.getByRole("link", { name: "Repositories", exact: true });
-  const branchesExpanded = codeGroup.getByRole("link", { name: "Branches", exact: true });
+  const codeExpanded = nav.getByRole("button", { name: "Aircraft", exact: true });
+  const codeGroup = nav.locator(".paneled-workspace-demo__nav-group").filter({ has: page.getByRole("button", { name: "Aircraft", exact: true }) });
+  const repositoriesExpanded = codeGroup.getByRole("link", { name: "Airframe", exact: true });
+  const branchesExpanded = codeGroup.getByRole("link", { name: "Configurations", exact: true });
   await expect(repositoriesExpanded).toBeHidden();
   await codeExpanded.click();
   await expect(repositoriesExpanded).toBeVisible();
   await expect(branchesExpanded).toBeVisible();
 
-  const canvasBefore = (await panels(page).boundingBox())!;
+  const canvasBefore = (await block(page).locator(".kappa-app-shell__panel-frame").boundingBox())!;
   await nav.getByRole("button", { name: "Collapse sidebar", exact: true }).click();
   await expect(nav).toHaveCSS("width", "44px");
-  const canvasAfter = (await panels(page).boundingBox())!;
+  const canvasAfter = (await block(page).locator(".kappa-app-shell__panel-frame").boundingBox())!;
+  expect(canvasAfter.x).toBeCloseTo(44, 0);
+  expect(canvasAfter.y).toBeCloseTo(48, 0);
   expect(canvasAfter.width).toBeGreaterThan(canvasBefore.width);
 
   await plan.hover();
-  const planPages = categoryPages(page, "Plan");
+  const planPages = categoryPages(page, "Projects");
   await expect(planPages).toBeVisible();
-  const afterHover = (await panels(page).boundingBox())!;
+  const afterHover = (await block(page).locator(".kappa-app-shell__panel-frame").boundingBox())!;
   expect(afterHover.x).toBeCloseTo(canvasAfter.x, 1);
   expect(afterHover.width).toBeCloseTo(canvasAfter.width, 1);
-  await planPages.getByRole("link", { name: "Work items", exact: true }).click();
+  await planPages.getByRole("link", { name: "Overview", exact: true }).click();
   await search.hover();
   await search.focus();
   await expect(planPages).toBeHidden();
   await expect(nav).toHaveCSS("width", "44px");
 
-  const code = nav.getByRole("button", { name: "Code", exact: true });
+  const code = nav.getByRole("button", { name: "Aircraft", exact: true });
   await code.focus();
-  const codePages = categoryPages(page, "Code");
+  const codePages = categoryPages(page, "Aircraft");
   await expect(codePages).toBeVisible();
-  const repositories = codePages.getByRole("link", { name: "Repositories", exact: true });
+  const repositories = codePages.getByRole("link", { name: "Airframe", exact: true });
   await repositories.focus();
   await expect(repositories).toBeFocused();
   await repositories.press("Enter");
@@ -132,6 +171,10 @@ test("work item search, status filters, and local creation update the list", asy
   const list = block(page).getByRole("list", { name: "Work items", exact: true });
   const rows = list.getByRole("listitem");
   await expect(block(page).getByRole("heading", { name: "Work items", exact: true })).toBeVisible();
+  const allItems = block(page).getByRole("tab", { name: "All items", exact: true });
+  const addView = block(page).getByRole("button", { name: "Add view", exact: true });
+  await expect(allItems).toHaveAttribute("aria-selected", "true");
+  await expect(addView).toBeVisible();
   await expect(list.getByRole("button", { name: "Refine the rotor mesh", exact: true })).toBeVisible();
   await expect(list.getByRole("button", { name: "Compare inlet boundary conditions", exact: true })).toBeVisible();
   await expect(list.getByRole("button", { name: "Review heat exchanger results", exact: true })).toBeVisible();
@@ -142,23 +185,33 @@ test("work item search, status filters, and local creation update the list", asy
   await expect(list.getByRole("button", { name: "Refine the rotor mesh", exact: true })).toBeVisible();
   await filter.fill("");
 
-  const all = block(page).getByRole("button", { name: "All", exact: true });
-  const open = block(page).getByRole("button", { name: "Open", exact: true });
-  const closed = block(page).getByRole("button", { name: "Closed", exact: true });
-  await expect(all).toHaveAttribute("aria-pressed", "true");
+  const all = block(page).getByRole("radio", { name: "All", exact: true });
+  const open = block(page).getByRole("radio", { name: "Open", exact: true });
+  const closed = block(page).getByRole("radio", { name: "Closed", exact: true });
+  await expect(all).toBeChecked();
   const allCount = await rows.count();
   await open.click();
-  await expect(open).toHaveAttribute("aria-pressed", "true");
+  await expect(open).toBeChecked();
   const openCount = await rows.count();
   await closed.click();
-  await expect(closed).toHaveAttribute("aria-pressed", "true");
+  await expect(closed).toBeChecked();
   const closedCount = await rows.count();
   expect(openCount).toBeGreaterThan(0);
   expect(closedCount).toBeGreaterThan(0);
   expect(openCount + closedCount).toBe(allCount);
 
   await all.click();
-  await expect(all).toHaveAttribute("aria-pressed", "true");
+  await expect(all).toBeChecked();
+  await expect(allItems).toHaveAttribute("aria-selected", "true");
+  await addView.click();
+  await page.getByRole("menuitem", { name: "Open items", exact: true }).click();
+  const openItems = block(page).getByRole("tab", { name: "Open items", exact: true });
+  await expect(openItems).toHaveAttribute("aria-selected", "true");
+  await expect(allItems).toHaveAttribute("aria-selected", "false");
+  await expect(open).toBeChecked();
+  await allItems.click();
+  await expect(allItems).toHaveAttribute("aria-selected", "true");
+  await expect(rows).toHaveCount(allCount);
   const beforeCreate = await rows.count();
   await block(page).getByRole("button", { name: "New item", exact: true }).click();
   await expect(rows).toHaveCount(beforeCreate + 1);
@@ -233,6 +286,23 @@ test("details use a nonmodal overlay below the threshold and a keyboard-resizabl
   );
 });
 
+test("detail overlay uses 80 percent of the workspace width at 600 pixels", async ({ page }) => {
+  await page.setViewportSize({ width: 600, height: 844 });
+  await openExample(page);
+  const workspace = panels(page);
+  await expect(workspace).toHaveAttribute("data-panel-mode", "overlay");
+  await block(page).getByRole("button", { name: "Refine the rotor mesh", exact: true }).click();
+
+  const detail = page.getByRole("dialog", { name: "Work item details", exact: true });
+  await expect(detail).toBeVisible();
+  const detailPositioner = workspace.locator(
+    ".kappa-dialog__positioner:has(> .kappa-app-shell__detail)",
+  );
+  const positionerBounds = (await detailPositioner.boundingBox())!;
+  const detailBounds = (await detail.boundingBox())!;
+  expect(detailBounds.width).toBeCloseTo(positionerBounds.width * 0.8, 0);
+});
+
 test("list and detail panels scroll independently; the activity rail opens a local dialog", async ({ page }) => {
   await openExample(page);
   const nav = navigation(page);
@@ -282,6 +352,80 @@ test("list and detail panels scroll independently; the activity rail opens a loc
   await expect(activityButton).toBeFocused();
 });
 
+test("activity panel resizes, maximizes, and restores while bloom motion respects reduced motion", async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: "no-preference" });
+  await openExample(page);
+  const shell = block(page);
+  const activityButton = shell.getByRole("button", { name: "Activity", exact: true });
+  const activity = page.getByRole("dialog", { name: "Workspace activity", exact: true });
+
+  await expect.poll(() => shell.evaluate(node =>
+    getComputedStyle(node, "::before").transitionDuration,
+  )).toBe("0.6s");
+  await expect.poll(() => shell.evaluate(node =>
+    getComputedStyle(node, "::before").backgroundImage,
+  )).toMatch(/(?:paneled-side|data:image\/png)/);
+  await activityButton.click();
+  await expect(activity).toBeVisible();
+  await expect.poll(() => activity.evaluate(node => node.getBoundingClientRect().width))
+    .toBeCloseTo(400, 0);
+  await expect.poll(() => activity.evaluate(node => node.getBoundingClientRect().x))
+    .toBeCloseTo(999, 0);
+  await expect.poll(() => shell.evaluate(node =>
+    getComputedStyle(node, "::before").opacity,
+  )).toBe("0");
+  await expect.poll(() => shell.evaluate(node =>
+    getComputedStyle(node, "::after").opacity,
+  )).toBe("1");
+
+  await activity.getByRole("button", { name: "Maximize activity", exact: true }).click();
+  await expect.poll(() => activity.evaluate(node => node.getBoundingClientRect().width))
+    .toBeCloseTo(1158, 0);
+  await expect.poll(() => activity.evaluate(node => node.getBoundingClientRect().x))
+    .toBeCloseTo(241, 0);
+  await activity.getByRole("button", { name: "Restore activity size", exact: true }).click();
+  await expect.poll(() => activity.evaluate(node => node.getBoundingClientRect().width))
+    .toBeCloseTo(400, 0);
+  await expect.poll(() => activity.evaluate(node => node.getBoundingClientRect().x))
+    .toBeCloseTo(999, 0);
+
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await expect.poll(() => shell.evaluate(node =>
+    getComputedStyle(node, "::before").transitionProperty,
+  )).toBe("none");
+  await expect.poll(() => shell.evaluate(node =>
+    getComputedStyle(node, "::before").transitionDuration,
+  )).toBe("0s");
+  await activity.getByRole("button", { name: "Close activity", exact: true }).click();
+  await expect(activity).toBeHidden();
+  await expect(activityButton).toBeFocused();
+});
+
+test("closing Activity after a mobile resize clears its maximized state", async ({ page }) => {
+  await openExample(page);
+  const shell = block(page);
+  const body = shell.locator(".kappa-app-shell__panels-body");
+  const activityButton = shell.getByRole("button", { name: "Activity", exact: true });
+  const activity = page.getByRole("dialog", { name: "Workspace activity", exact: true });
+
+  await activityButton.click();
+  await activity.getByRole("button", { name: "Maximize activity", exact: true }).click();
+  await expect(body).toHaveAttribute("data-maximized", "true");
+  await page.setViewportSize({ width: 390, height: 844 });
+  await expect(body).not.toHaveAttribute("data-maximized");
+  await activity.getByRole("button", { name: "Close activity", exact: true }).click();
+  await expect(activity).toBeHidden();
+  await expect(body).not.toHaveAttribute("data-maximized");
+
+  await activityButton.click();
+  await expect(activity).toBeVisible();
+  await expect(body).not.toHaveAttribute("data-maximized");
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await expect.poll(() => activity.evaluate(node => node.getBoundingClientRect().width))
+    .toBeCloseTo(400, 0);
+  await expect(activity.getByRole("button", { name: "Maximize activity", exact: true })).toBeVisible();
+});
+
 test("mobile navigation closes with Escape, returns focus, and keeps the page within the viewport", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await openExample(page);
@@ -289,7 +433,7 @@ test("mobile navigation closes with Escape, returns focus, and keeps the page wi
   const toggle = shell.getByRole("button", { name: "Open sidebar", exact: true });
   await toggle.click();
   const drawer = page.getByRole("dialog").filter({
-    has: page.getByRole("button", { name: "Plan", exact: true }),
+    has: page.getByRole("button", { name: "Projects", exact: true }),
   });
   await expect(drawer).toBeVisible();
   await expectNoHorizontalOverflow(page);
@@ -301,7 +445,7 @@ test("mobile navigation closes with Escape, returns focus, and keeps the page wi
 
 test("dark theme changes the workspace surface and reduced motion removes sidebar animation", async ({ page }) => {
   await openExample(page);
-  const workspace = panels(page);
+  const workspace = block(page).locator(".kappa-app-shell__panel-frame");
   const nav = navigation(page);
   const lightSurface = await workspace.evaluate(node => getComputedStyle(node).backgroundColor);
   await page.evaluate(() => {

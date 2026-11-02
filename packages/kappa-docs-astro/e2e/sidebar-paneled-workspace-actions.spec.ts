@@ -1,8 +1,8 @@
 import { expect, test, type Page } from "@playwright/test";
 
-const examplePath = "/examples/sidebar/paneled-workspace";
+const examplePath = "/examples/appshell/paneled-workspace";
 const blockSelector = '[data-sidebar-block="paneled-workspace"]';
-const block = (page: Page) => page.locator(blockSelector);
+const block = (page: Page) => page.locator(blockSelector).locator(".kappa-app-shell");
 const navigation = (page: Page) =>
   block(page).getByRole("navigation", { name: "Paneled workspace navigation", exact: true });
 
@@ -14,11 +14,11 @@ async function openExample(page: Page) {
 }
 
 test.beforeEach(async ({ page }) => {
-  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.setViewportSize({ width: 1440, height: 1000 });
   await page.emulateMedia({ reducedMotion: "reduce" });
 });
 
-test("search opens by button or slash, filters pages and items, and returns focus", async ({ page }) => {
+test("search opens by button or Ctrl+K, filters pages and items, and returns focus", async ({ page }) => {
   await openExample(page);
   const searchTrigger = block(page).getByRole("button", {
     name: "Search or go to…",
@@ -32,6 +32,16 @@ test("search opens by button or slash, filters pages and items, and returns focu
 
   await searchTrigger.click();
   await expect(input).toBeFocused();
+  await expect(palette.locator(".kappa-command-palette__group-label")).toHaveText([
+    "Places",
+    "Frequently visited projects",
+    "Workspaces",
+    "Aster VTOL",
+  ]);
+  const popupBounds = (await palette.boundingBox())!;
+  expect(popupBounds.width).toBeCloseTo(768, 0);
+  expect(popupBounds.y).toBeCloseTo(4, 0);
+
   await input.fill("Refine the rotor mesh");
   await expect(palette.getByRole("option")).toHaveCount(1);
   await expect(palette.getByRole("option").first()).toContainText("Refine the rotor mesh");
@@ -48,68 +58,145 @@ test("search opens by button or slash, filters pages and items, and returns focu
   await expect(detail).toBeHidden();
   await expect(searchTrigger).toBeFocused();
 
-  await page.keyboard.press("/");
+  await page.keyboard.press("Control+k");
   await expect(input).toBeFocused();
   await expect(palette).toBeVisible();
   await input.fill("Milestones");
   await expect(palette.getByRole("option")).toHaveCount(1);
   await expect(palette.getByRole("option").first()).toContainText("Milestones");
+
+  const searchFilters = palette.getByRole("button", { name: "Search filters", exact: true });
+  await searchFilters.click();
+  await page.getByRole("menuitem", { name: "Pages", exact: true }).click();
+  await input.fill("Refine the rotor mesh");
+  await expect(palette.getByRole("option")).toHaveCount(0);
+  await expect(palette).toContainText("No pages or work items found.");
+  await input.fill("Milestones");
+  await expect(palette.getByRole("option")).toHaveCount(1);
+  await expect(palette.getByRole("option").first()).toContainText("Milestones");
+
+  await searchFilters.click();
+  await page.getByRole("menuitem", { name: "Work items", exact: true }).click();
+  await input.fill("Milestones");
+  await expect(palette.getByRole("option")).toHaveCount(0);
+  await input.fill("Refine the rotor mesh");
+  await expect(palette.getByRole("option")).toHaveCount(1);
+  await expect(palette.getByRole("option").first()).toContainText("Refine the rotor mesh");
   await page.keyboard.press("Escape");
   await expect(palette).toBeHidden();
   await expect(searchTrigger).toBeFocused();
 });
 
-test("feature catalog filters pages and keeps navigation pins in sync", async ({ page }) => {
+test("search shortcuts work beside nonmodal panels and defer to text fields and modal dialogs", async ({ page }) => {
   await openExample(page);
-  const nav = navigation(page);
-  const catalogTrigger = nav.getByRole("button", { name: "Feature catalog", exact: true });
-  const pinned = nav
-    .locator(".paneled-workspace-demo__nav-group")
-    .filter({ has: page.getByRole("button", { name: "Pinned", exact: true }) });
-  const catalog = page.getByRole("dialog", { name: "Feature catalog", exact: true });
+  const shell = block(page);
+  const search = page.getByRole("dialog", { name: "Search paneled workspace", exact: true });
+  const item = shell.getByRole("button", { name: "Refine the rotor mesh", exact: true });
 
-  await catalogTrigger.click();
-  await expect(catalog).toBeVisible();
-  const search = catalog.getByRole("searchbox", { name: "Find a feature", exact: true });
-  await search.fill("Milestones");
-  await expect(catalog.getByRole("button", { name: "Milestones", exact: true })).toBeVisible();
-  const pin = catalog.getByRole("button", { name: "Pin Milestones", exact: true });
-  await expect(pin).toHaveAttribute("aria-pressed", "false");
-  await pin.click();
-  const unpin = catalog.getByRole("button", { name: "Unpin Milestones", exact: true });
-  await expect(unpin).toHaveAttribute("aria-pressed", "true");
+  await item.click();
+  const detail = page.getByRole("dialog", { name: "Work item details", exact: true, includeHidden: true });
+  await expect(detail).toBeVisible();
+  await page.keyboard.press("Control+k");
+  await expect(search).toBeVisible();
+  await expect(detail).toBeVisible();
   await page.keyboard.press("Escape");
-  await expect(catalog).toBeHidden();
-  await expect(pinned.getByRole("link", { name: "Milestones", exact: true })).toBeVisible();
-  await catalogTrigger.click();
-  await search.fill("Milestones");
+  await expect(search).toBeHidden();
+  await page.keyboard.press("Control+k");
+  await expect(search).toBeVisible();
+  await expect(detail).toBeVisible();
+  await page.keyboard.press("Escape");
+  await expect(search).toBeHidden();
 
-  await unpin.click();
-  await expect(pin).toHaveAttribute("aria-pressed", "false");
+  const comment = detail.getByRole("textbox", { name: "Add a comment", exact: true });
+  await comment.fill("");
+  await comment.press("/");
+  await expect(comment).toHaveValue("/");
+  await expect(search).toBeHidden();
+
+  await detail.getByRole("button", { name: "Close details", exact: true }).click();
+  const activityButton = shell.getByRole("button", { name: "Activity", exact: true });
+  await activityButton.click();
+  const activity = page.getByRole("dialog", { name: "Workspace activity", exact: true, includeHidden: true });
+  await expect(activity).toBeVisible();
+  await page.keyboard.press("Control+k");
+  await expect(search).toBeVisible();
+  await expect(activity).toBeVisible();
   await page.keyboard.press("Escape");
-  await expect(catalog).toBeHidden();
-  await expect(catalogTrigger).toBeFocused();
-  await expect(pinned.getByRole("link", { name: "Milestones", exact: true })).toBeHidden();
+  await expect(search).toBeHidden();
+  await expect(activity).toBeVisible();
+  await activity.getByRole("button", { name: "Close activity", exact: true }).click();
+
+  await page.setViewportSize({ width: 390, height: 844 });
+  await shell.getByRole("button", { name: "Open sidebar", exact: true }).click();
+  const drawer = page.getByRole("dialog", { name: "Paneled workspace navigation", exact: true });
+  await expect(drawer).toHaveAttribute("aria-modal", "true");
+  const project = drawer.getByRole("link", { name: "Dashboard", exact: true });
+  await project.focus();
+  await page.keyboard.press("Control+k");
+  await expect(search).toBeHidden();
+  await page.keyboard.press("Control+k");
+  await expect(drawer).toBeVisible();
+  await expect(search).toBeHidden();
+  await expect(project).toBeFocused();
 });
 
-test("mobile feature catalog opens after the drawer closes and returns focus", async ({ page }) => {
+test("Help keyboard shortcuts selection follows reload, Back, and Forward", async ({ page }) => {
+  await openExample(page);
+  await navigation(page).getByRole("button", { name: "Help", exact: true }).click();
+  await page.getByRole("menuitem", { name: "Keyboard shortcuts", exact: true }).click();
+  await expect(block(page).getByRole("heading", { name: "Keyboard shortcuts", exact: true, level: 2 })).toBeVisible();
+  await expect(page).toHaveURL(/view=Keyboard\+shortcuts|view=Keyboard%20shortcuts/);
+
+  await page.reload();
+  await expect.poll(() => block(page).evaluate(node =>
+    node.closest("astro-island")?.hasAttribute("ssr"),
+  )).toBe(false);
+  await expect(block(page).getByRole("heading", { name: "Keyboard shortcuts", exact: true, level: 2 })).toBeVisible();
+
+  await page.goBack();
+  await expect(block(page).getByRole("heading", { name: "Work items", exact: true })).toBeVisible();
+  await expect(page).not.toHaveURL(/view=Keyboard/);
+  await page.goForward();
+  await expect(block(page).getByRole("heading", { name: "Keyboard shortcuts", exact: true, level: 2 })).toBeVisible();
+  await expect(page).toHaveURL(/view=Keyboard\+shortcuts|view=Keyboard%20shortcuts/);
+});
+
+test("page rows navigate directly without pin controls", async ({ page }) => {
+  await openExample(page);
+  const nav = navigation(page);
+  const projectGroup = nav
+    .locator(".paneled-workspace-demo__nav-group")
+    .filter({ has: page.getByRole("button", { name: "Projects", exact: true }) });
+  const applications = projectGroup.getByRole("link", { name: "Applications", exact: true });
+
+  await expect(applications).toBeVisible();
+  await applications.hover();
+  await expect(projectGroup.getByRole("button", { name: /^(Pin|Unpin) / })).toHaveCount(0);
+  await applications.click();
+  await expect(applications).toHaveAttribute("aria-current", "page");
+  await expect(block(page).getByRole("heading", { name: "Applications", exact: true })).toBeVisible();
+});
+
+test("mobile navigation keeps the shell surface and returns focus", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await openExample(page);
   const shell = block(page);
+  const utilityRail = shell.getByRole("navigation", { name: "Workspace tools", exact: true });
+  const searchTrigger = shell.getByRole("button", { name: "Search or go to…", exact: true });
   const toggle = shell.getByRole("button", { name: "Open sidebar", exact: true });
+  await expect(utilityRail).toHaveCSS("height", "40px");
+  await expect(searchTrigger).toHaveCSS("translate", "none");
   await toggle.click();
-  const drawer = page.getByRole("dialog").filter({
-    has: page.getByRole("button", { name: "Feature catalog", exact: true }),
-  });
+  const drawer = page.getByRole("dialog", { name: "Paneled workspace navigation", exact: true });
   await expect(drawer).toBeVisible();
+  const shellSurface = await shell.evaluate(node => getComputedStyle(node).backgroundColor);
+  const drawerSurface = await drawer.evaluate(node => getComputedStyle(node).backgroundColor);
+  expect(drawerSurface).toBe(shellSurface);
+  expect(drawerSurface).not.toBe("rgba(0, 0, 0, 0)");
 
-  await drawer.getByRole("button", { name: "Feature catalog", exact: true }).click();
-  const catalog = page.getByRole("dialog", { name: "Feature catalog", exact: true });
-  await expect(catalog).toBeVisible();
+  await expect(drawer.getByRole("button", { name: "Projects", exact: true })).toBeVisible();
+  await page.keyboard.press("Escape");
   await expect(drawer).toBeHidden();
-  await expect(catalog.getByRole("searchbox", { name: "Find a feature", exact: true })).toBeFocused();
-  await catalog.getByRole("button", { name: "Close dialog", exact: true }).click();
-  await expect(catalog).toBeHidden();
   await expect(shell.getByRole("button", { name: "Open sidebar", exact: true })).toBeFocused();
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
 });
@@ -129,7 +216,7 @@ test("item status and comments persist while panels switch layout", async ({ pag
   await expect(addedComment).toBeVisible();
   await expect(detail.getByRole("button", { name: "Reopen item", exact: true })).toBeVisible();
   await detail.getByRole("button", { name: "Close details", exact: true }).click();
-  await block(page).getByRole("button", { name: "Closed", exact: true }).click();
+  await block(page).getByRole("radio", { name: "Closed", exact: true }).click();
   await expect(block(page).getByRole("button", { name: "Refine the rotor mesh", exact: true })).toBeVisible();
 });
 
@@ -141,9 +228,10 @@ test("mobile item details fit the viewport and Escape returns focus after animat
   await item.click();
   const detail = page.getByRole("dialog", { name: "Work item details", exact: true });
   await expect(detail).toBeVisible();
-  const bounds = (await detail.boundingBox())!;
-  expect(bounds.x).toBeGreaterThanOrEqual(0);
-  expect(bounds.x + bounds.width).toBeLessThanOrEqual(390);
+  await expect.poll(async () => {
+    const bounds = await detail.boundingBox();
+    return bounds !== null && bounds.x >= 0 && bounds.x + bounds.width <= 390;
+  }).toBe(true);
   expect(await detail.evaluate(node => node.scrollWidth <= node.clientWidth)).toBe(true);
   await page.keyboard.press("Escape");
   await expect(detail).toBeHidden();
@@ -153,10 +241,10 @@ test("mobile item details fit the viewport and Escape returns focus after animat
 test("rail links support keyboard entry, new tabs, and browser history", async ({ page, context }) => {
   await openExample(page);
   await navigation(page).getByRole("button", { name: "Collapse sidebar", exact: true }).click();
-  const code = navigation(page).getByRole("button", { name: "Code", exact: true });
+  const code = navigation(page).getByRole("button", { name: "Aircraft", exact: true });
   await code.focus();
   await code.press("ArrowDown");
-  const repositories = page.getByRole("navigation", { name: "Code pages", exact: true }).getByRole("link", { name: "Repositories", exact: true });
+  const repositories = page.getByRole("navigation", { name: "Aircraft pages", exact: true }).getByRole("link", { name: "Airframe", exact: true });
   await expect(repositories).toBeFocused();
   await repositories.press("Escape");
   await expect(repositories).toBeHidden();
@@ -166,13 +254,13 @@ test("rail links support keyboard entry, new tabs, and browser history", async (
   const newPage = context.waitForEvent("page");
   await repositories.click({ modifiers: ["ControlOrMeta"] });
   const tab = await newPage;
-  await expect(tab.getByRole("heading", { name: "Repositories", exact: true })).toBeVisible();
+  await expect(tab.getByRole("heading", { name: "Airframe", exact: true })).toBeVisible();
   await tab.close();
   await expect(block(page).getByRole("heading", { name: "Work items", exact: true })).toBeVisible();
   await code.press("ArrowDown");
   await repositories.press("Enter");
-  await expect(block(page).getByRole("heading", { name: "Repositories", exact: true })).toBeVisible();
-  await expect(page).toHaveURL(/view=Repositories/);
+  await expect(block(page).getByRole("heading", { name: "Airframe", exact: true })).toBeVisible();
+  await expect(page).toHaveURL(/view=Airframe/);
   await page.goBack();
   await expect(block(page).getByRole("heading", { name: "Work items", exact: true })).toBeVisible();
 });
