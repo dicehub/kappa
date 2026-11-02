@@ -310,13 +310,13 @@
 }
 
 .kappa-combobox__item {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
+  position: relative;
+  display: flex;
   align-items: center;
   gap: 0.625rem;
   min-block-size: 2rem;
   padding-block: 0.375rem;
-  padding-inline: 0.5rem;
+  padding-inline: 0.5rem 2rem;
   border-radius: 0.25rem;
   color: var(--kappa-default, #17191f);
   cursor: pointer;
@@ -343,12 +343,15 @@
 
 .kappa-combobox__item-text {
   min-inline-size: 0;
+  flex: 1 1 auto;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
 .kappa-combobox__item-indicator {
+  position: absolute;
+  inset-inline-end: 0.5rem;
   display: inline-flex;
   inline-size: 1rem;
   block-size: 1rem;

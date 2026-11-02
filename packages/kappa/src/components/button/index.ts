@@ -1,5 +1,21 @@
 export { default as Button } from "./Button.vue";
 export { default as LinkButton } from "./LinkButton.vue";
+export { default as ToolbarButton } from "../toolbar/ToolbarButton.vue";
+
+export {
+  TOOLBAR_BUTTON_DEFAULT_SIZE,
+  TOOLBAR_BUTTON_DEFAULT_VARIANT,
+  TOOLBAR_BUTTON_SIZES,
+  TOOLBAR_BUTTON_VARIANTS,
+  isToolbarButtonSize,
+  isToolbarButtonVariant,
+  resolveToolbarButtonSize,
+  resolveToolbarButtonVariant,
+  type ToolbarButtonProps,
+  type ToolbarButtonSize,
+  type ToolbarButtonSlots,
+  type ToolbarButtonVariant,
+} from "./toolbar-button";
 
 export {
   BUTTON_DEFAULT_ICON_POSITION,

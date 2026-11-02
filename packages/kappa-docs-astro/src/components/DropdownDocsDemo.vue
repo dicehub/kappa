@@ -5,18 +5,20 @@ import {
   ExternalLink,
   FileText,
   FolderOpen,
+  Plus,
   Settings,
   Share2,
   Trash2,
   User,
 } from "@lucide/vue";
-import { Button } from "@dicehub/kappa/components/button";
+import { Button, ToolbarButton } from "@dicehub/kappa/components/button";
 import { Dropdown } from "@dicehub/kappa/components/dropdown";
 import { ref } from "vue";
 
 type DemoVariant =
   | "preview"
   | "basic"
+  | "icon-trigger"
   | "icons-inset"
   | "action-callbacks"
   | "checkbox-items"
@@ -85,6 +87,17 @@ const setAction = (action: string) => {
         <Dropdown.Item value="new">New simulation</Dropdown.Item>
         <Dropdown.Item value="duplicate">Duplicate project</Dropdown.Item>
         <Dropdown.Item value="archive">Archive project</Dropdown.Item>
+      </Dropdown.Content>
+    </Dropdown.Root>
+
+    <Dropdown.Root v-else-if="props.variant === 'icon-trigger'" aria-label="Create item">
+      <Dropdown.Trigger as-child>
+        <ToolbarButton :icon="Plus" tooltip="Create new…" aria-label="Create item" variant="outline" size="sm" />
+      </Dropdown.Trigger>
+      <Dropdown.Content show-arrow data-dropdown-surface="icon-trigger">
+        <Dropdown.Item value="new-case">New case</Dropdown.Item>
+        <Dropdown.Item value="new-report">New report</Dropdown.Item>
+        <Dropdown.Item value="import">Import geometry</Dropdown.Item>
       </Dropdown.Content>
     </Dropdown.Root>
 
@@ -258,6 +271,7 @@ const setAction = (action: string) => {
         <Button variant="outline">Recent runs <Dropdown.Indicator /></Button>
       </Dropdown.Trigger>
       <Dropdown.Content
+        show-arrow
         data-dropdown-surface="long-list"
         style="--kappa-dropdown-max-block-size: 14rem; --kappa-dropdown-min-inline-size: 16rem"
       >

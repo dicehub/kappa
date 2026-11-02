@@ -15,13 +15,15 @@ export const Toolbar = Object.assign(ToolbarRoot, {
 });
 
 export {
-  ToolbarButton,
   ToolbarInput,
   ToolbarInputGroup,
   ToolbarLink,
   ToolbarRoot,
   ToolbarSeparator,
 };
+
+// Keep the original import path; the Button module owns the named control.
+export { ToolbarButton } from "../button";
 
 export type {
   ToolbarButtonProps,

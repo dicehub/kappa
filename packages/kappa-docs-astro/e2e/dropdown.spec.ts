@@ -4,6 +4,10 @@ const demo = (page: Page, variant: string) =>
   page.locator(`[data-dropdown-demo="${variant}"]`);
 const surface = (page: Page, variant: string) =>
   page.locator(`[data-dropdown-surface="${variant}"][data-state="open"]`);
+const pointer = (page: Page, variant: string) =>
+  page.locator('[data-slot="dropdown-positioner"]', {
+    has: page.locator(`[data-dropdown-surface="${variant}"]`),
+  }).locator('[data-slot="dropdown-arrow"]');
 const expectActiveItem = async (menu: Locator, item: Locator) => {
   await expect(menu).toBeFocused();
   const itemId = await item.getAttribute("id");
@@ -35,6 +39,7 @@ test.describe("Dropdown documentation", () => {
     for (const variant of [
       "preview",
       "basic",
+      "icon-trigger",
       "icons-inset",
       "action-callbacks",
       "checkbox-items",
@@ -95,6 +100,7 @@ test.describe("Dropdown documentation", () => {
       "Behavior and Selection",
       "Examples",
       "Basic",
+      "Icon Trigger",
       "Icons and Inset Alignment",
       "Action Callbacks",
       "Checkbox Items",
@@ -145,6 +151,7 @@ test.describe("Dropdown documentation", () => {
     await expect(menu).toBeVisible();
     await expect(menu).toHaveAttribute("role", "menu");
     await expect(menu).toHaveAttribute("aria-label", "Run actions");
+    await expect(pointer(page, "preview")).toHaveCount(0);
     await expectActiveItem(menu, menu.getByRole("menuitem", { name: "Open results" }));
 
     await page.keyboard.press("Escape");
@@ -169,6 +176,28 @@ test.describe("Dropdown documentation", () => {
     await trigger.click();
     await page.getByRole("heading", { level: 1, name: "Dropdown" }).click();
     await expect(surface(page, "preview")).toHaveCount(0);
+  });
+
+  test("shows an optional pointer above the icon-trigger menu and hides it on close", async ({ page }) => {
+    const trigger = demo(page, "icon-trigger").getByRole("button", { name: "Create item" });
+    await trigger.scrollIntoViewIfNeeded();
+    const menu = await openDemo(page, "icon-trigger", trigger);
+    const arrow = pointer(page, "icon-trigger");
+    await expect(arrow).toBeVisible();
+    await expect(menu.getByRole("menuitem")).toHaveText(["New case", "New report", "Import geometry"]);
+    await expect.poll(async () => {
+      const triggerBox = await trigger.boundingBox();
+      const menuBox = await menu.boundingBox();
+      const arrowBox = await arrow.boundingBox();
+      return !!triggerBox && !!menuBox && !!arrowBox && arrowBox.width > 0 && arrowBox.height > 0 &&
+        arrowBox.x + arrowBox.width / 2 >= triggerBox.x &&
+        arrowBox.x + arrowBox.width / 2 <= triggerBox.x + triggerBox.width &&
+        arrowBox.y < menuBox.y && arrowBox.y + arrowBox.height > menuBox.y;
+    }, { message: "The visible pointer extends above the menu toward its trigger" }).toBe(true);
+    await page.keyboard.press("Escape");
+    await expect(menu).not.toBeVisible();
+    await expect(arrow).not.toBeVisible();
+    await expect(trigger).toBeFocused();
   });
 
   test("routes action values and skips disabled items", async ({ page }) => {
@@ -393,10 +422,22 @@ test.describe("Dropdown documentation", () => {
     }));
     expect(dimensions.clientHeight).toBeLessThanOrEqual(224);
     expect(dimensions.scrollHeight).toBeGreaterThan(dimensions.clientHeight);
+    const arrow = pointer(page, "long-list");
+    await expect(arrow).toBeVisible();
+    const arrowBox = await arrow.boundingBox();
+    expect(arrowBox).not.toBeNull();
+    await listSurface.press("End");
+    const lastRun = listSurface.getByRole("menuitem", { name: "Run 36 · rotor sweep" });
+    await expectActiveItem(listSurface, lastRun);
+    await expect(lastRun).toBeInViewport();
+    await expect.poll(() => listSurface.evaluate((element) => element.scrollTop)).toBeGreaterThan(0);
+    await expect(arrow).toBeVisible();
+    await expect.poll(() => arrow.boundingBox()).toEqual(arrowBox);
     const lightBackground = await listSurface.evaluate(
       (element) => getComputedStyle(element).backgroundColor,
     );
     await page.keyboard.press("Escape");
+    await expect(arrow).not.toBeVisible();
     await page.getByRole("button", { name: "Toggle theme" }).filter({ visible: true }).click();
     await longList.getByRole("button", { name: "Recent runs" }).click();
     await expect

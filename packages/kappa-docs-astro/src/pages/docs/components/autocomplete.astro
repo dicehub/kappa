@@ -247,6 +247,7 @@ const description = "A free-form text input with an accessible, filtered suggest
           <h2><a class="docs-section-anchor" href="#accessibility">Accessibility</a></h2>
           <ul>
             <li>Ark UI supplies combobox semantics, active-descendant focus, and live option state.</li>
+            <li>Selected suggestions show a check mark at the logical end: right in left-to-right layouts, left in right-to-left layouts. The check stays in this position when the <code>before</code> slot adds an icon. Unselected rows reserve the same space.</li>
             <li><kbd>Arrow Down</kbd> and <kbd>Arrow Up</kbd> move through enabled suggestions.</li>
             <li><kbd>Enter</kbd> selects the highlighted suggestion; <kbd>Escape</kbd> closes the surface.</li>
             <li>Disabled suggestions are announced but skipped during keyboard navigation.</li>

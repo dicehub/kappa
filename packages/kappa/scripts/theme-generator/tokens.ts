@@ -6,6 +6,8 @@
  */
 
 import type { ThemeToken } from "./types.ts";
+import { dropdownTokens } from "./dropdown-tokens.ts";
+import { toolbarButtonTokens } from "./toolbar-button-tokens.ts";
 
 export const themeTokens: ThemeToken[] = [
   // Surfaces
@@ -444,6 +446,8 @@ export const themeTokens: ThemeToken[] = [
     dark: "none",
     preview: "shadow",
   },
+  ...toolbarButtonTokens,
+  ...dropdownTokens,
   {
     name: "--kappa-popover-shadow",
     group: "supporting",

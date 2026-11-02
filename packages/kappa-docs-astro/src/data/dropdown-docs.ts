@@ -113,6 +113,29 @@ export const examples = [
 </Dropdown.Root>`,
   },
   {
+    id: "icon-trigger",
+    title: "Icon Trigger",
+    description: "Use ToolbarButton for a compact create action. Its tooltip closes when the menu opens. Set showArrow on Content for a pointer to the trigger; plain menus have no pointer.",
+    code: `<script setup lang="ts">
+import { Plus } from "@lucide/vue";
+import { ToolbarButton } from "@dicehub/kappa/components/button";
+import { Dropdown } from "@dicehub/kappa/components/dropdown";
+</script>
+
+<template>
+  <Dropdown.Root aria-label="Create item">
+    <Dropdown.Trigger as-child>
+      <ToolbarButton :icon="Plus" tooltip="Create new…" aria-label="Create item" variant="outline" size="sm" />
+    </Dropdown.Trigger>
+    <Dropdown.Content show-arrow>
+      <Dropdown.Item value="new-case">New case</Dropdown.Item>
+      <Dropdown.Item value="new-report">New report</Dropdown.Item>
+      <Dropdown.Item value="import">Import geometry</Dropdown.Item>
+    </Dropdown.Content>
+  </Dropdown.Root>
+</template>`,
+  },
+  {
     id: "icons-inset",
     title: "Icons and Inset Alignment",
     description: "Use icon for a component icon. Use inset to align text-only rows with icon-bearing rows.",
@@ -162,7 +185,7 @@ const lastAction = ref("No action selected");
   {
     id: "radio-group",
     title: "Radio Group",
-    description: "Use RadioGroup for one choice. v-model is controlled; defaultValue supplies an uncontrolled initial choice.",
+    description: "Use RadioGroup for one choice. The selected option shows a check mark at the end of the row. v-model is controlled; defaultValue supplies an uncontrolled initial choice.",
     code: `<Dropdown.RadioGroup v-model="density">
   <Dropdown.Label>Row density</Dropdown.Label>
   <Dropdown.RadioItem value="compact">Compact</Dropdown.RadioItem>
@@ -232,8 +255,8 @@ const lastAction = ref("No action selected");
   {
     id: "long-list",
     title: "Long List",
-    description: "Content respects the available viewport height and scrolls without moving the trigger or page.",
-    code: `<Dropdown.Content style="--kappa-dropdown-max-block-size: 14rem">
+    description: "Content respects the available viewport height and scrolls without moving the trigger or page. Its optional pointer stays outside the scroll area.",
+    code: `<Dropdown.Content show-arrow style="--kappa-dropdown-max-block-size: 14rem">
   <Dropdown.Group>
     <Dropdown.Label>Recent runs</Dropdown.Label>
     <Dropdown.Item v-for="run in runs" :key="run.id" :value="run.id" :value-text="run.label">
@@ -291,6 +314,7 @@ export const rootProps = [
 ] as const;
 
 export const contentProps = [
+  { name: "showArrow", type: "boolean", defaultValue: "false", description: "Show a pointer to the trigger on Content or SubContent. Kappa keeps it outside the scroll area." },
   { name: "teleport", type: "boolean", defaultValue: "true", description: "Teleport Positioner and Content to the target." },
   { name: "teleportTo", type: "Teleport target", defaultValue: '"body"', description: "Vue Teleport target." },
   { name: "asChild", type: "boolean", defaultValue: "false", description: "Merge Content behavior into one child element." },
@@ -320,7 +344,7 @@ export const selectionProps = [
   { name: "RadioItem.closeOnSelect", type: "boolean", defaultValue: "false", description: "Keep the menu open while a radio choice changes." },
   { name: "CheckboxItem / RadioItem.valueText", type: "string", defaultValue: "value", description: "Searchable typeahead text for an option." },
   { name: "CheckboxItem / RadioItem.disabled", type: "boolean", defaultValue: "false", description: "Expose but skip an unavailable option." },
-  { name: "CheckboxItem / RadioItem.inset", type: "boolean", defaultValue: "false", description: "Add logical start spacing after the option indicator." },
+  { name: "CheckboxItem / RadioItem.inset", type: "boolean", defaultValue: "false", description: "Add logical start spacing to align with items that have leading icons. The check mark stays at the logical end." },
   { name: "CheckboxItem / RadioItem.asChild", type: "boolean", defaultValue: "false", description: "Merge option behavior into one custom child; compose its indicator manually." },
   { name: "RadioGroup.id / asChild", type: "string / boolean", defaultValue: "generated / false", description: "Group identity and custom-element composition." },
 ] as const;
@@ -341,7 +365,7 @@ export const parts = [
   { name: "Sub / SubTrigger / SubContent", element: "mixed", description: "Nested menu root, trigger item, and portalled surface." },
   { name: "ContextTrigger", element: "button", description: "Opens the menu from context-menu input." },
   { name: "Arrow", element: "div", description: "Optional positioned arrow and tip." },
-  { name: "ItemIndicator / RadioItemIndicator", element: "div", description: "Composable checked-state indicator for custom option items." },
+  { name: "ItemIndicator / RadioItemIndicator", element: "div", description: "Composable checked-state indicator for custom option items. Defaults to a check mark at the logical end." },
   { name: "ItemText", element: "span", description: "Composable item text with overflow handling." },
   { name: "Context / ItemContext", element: "none", description: "Scoped slots for Ark menu and item state." },
 ] as const;

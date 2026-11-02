@@ -56,7 +56,7 @@ test.describe("Button documentation", () => {
       'from "@dicehub/kappa/components/button"',
     );
     await expect(page.locator('pre:has-text("../../../kappa/src")')).toHaveCount(0);
-    await expect(page.getByRole("button", { name: "View Code" })).toHaveCount(22);
+    await expect(page.getByRole("button", { name: "View Code" })).toHaveCount(23);
 
     const sidebar = page.locator("#desktop-navigation").getByRole("link", {
       name: "Button",
@@ -78,9 +78,9 @@ test.describe("Button documentation", () => {
 
     const toc = page.getByRole("complementary", { name: "On this page" });
     await expect(toc.getByRole("link")).toHaveText([
-      "Installation", "Barrel", "Granular", "Usage", "Examples", "Basic", "Variants", "Sizes",
+      "Installation", "Barrel", "Granular", "Usage", "Examples", "Basic", "Variants", "Sizes", "Toolbar buttons",
       "With Icons", "Icon-only", "Loading", "Disabled", "Full Width", "Links and asChild",
-      "Native Forms", "Right-to-left", "Accessibility", "API Reference", "Button", "LinkButton",
+      "Native Forms", "Right-to-left", "Accessibility", "API Reference", "Button", "LinkButton", "ToolbarButton",
       "Variant Reference", "Exports",
     ]);
 

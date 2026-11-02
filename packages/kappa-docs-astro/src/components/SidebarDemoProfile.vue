@@ -27,7 +27,6 @@ const selected = computed(() => profiles.find(item => item.value === profile.val
         <Dropdown.RadioGroup v-model="profile">
           <Dropdown.Label>Switch profile</Dropdown.Label>
           <Dropdown.RadioItem v-for="item in profiles" :key="item.value" :value="item.value" close-on-select class="sidebar-demo__profile-option">
-            <template #indicator><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="m3 8.25 3 3 7-7" /></svg></template>
             {{ item.name }}
           </Dropdown.RadioItem>
         </Dropdown.RadioGroup>

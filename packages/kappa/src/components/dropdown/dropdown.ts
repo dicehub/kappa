@@ -163,6 +163,8 @@ export type DropdownContextTriggerSlots = DropdownSlots;
 
 export interface DropdownContentProps {
   asChild?: ArkMenuContentProps["asChild"];
+  /** Show a pointer toward the trigger, outside the scrollable menu surface. */
+  showArrow?: boolean;
   /** Keep the popup in the component DOM tree when false. */
   teleport?: boolean;
   /** Target for the popup teleport. */
