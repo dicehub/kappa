@@ -122,6 +122,7 @@ const description = "Previews linked or interactive context without leaving the 
             <li>Use a clear, focusable Trigger. Ark UI opens the card from pointer hover and keyboard focus, with the configured delay.</li>
             <li>Keep the preview supplementary. Required information and primary actions must have a non-hover path.</li>
             <li>Content is non-modal and does not trap focus. Links and controls inside it remain available while the pointer travels into the surface.</li>
+            <li>Closed cards do not block pointer access to other cards or the page, even when their content stays mounted.</li>
             <li>Use <code>as-child</code> with one native interactive element. Do not nest a button or link inside another trigger.</li>
             <li>Direction follows the inherited Ark UI locale. Provide an Ark UI LocaleProvider for right-to-left positioning and content.</li>
             <li>Disabled roots do not open. Do not use a disabled Trigger as the only way to discover essential information.</li>
