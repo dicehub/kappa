@@ -40,8 +40,9 @@ test.beforeEach(async ({ page }) => {
 
 test("morphing search grows from the field and returns to it after selection", async ({ page }) => {
   const trigger = page.locator('[data-morph-search-trigger]');
+  await expect(trigger.locator("kbd")).toHaveText(["Ctrl", "K"]);
   const origin = (await trigger.boundingBox())!;
-  const opening = await captureMorph(page, "command-palette-morph-in", () => trigger.press("/"));
+  const opening = await captureMorph(page, "command-palette-morph-in", () => trigger.press("Control+k"));
   for (const key of ["x", "y", "width", "height"] as const) expect(opening[0][key]).toBeCloseTo(origin[key], 1);
   expect(opening[1].width).toBeGreaterThan(origin.width);
   expect(opening[1].width).toBeLessThan(768);
@@ -78,7 +79,7 @@ test("interrupted opening and closing resume from the current panel bounds", asy
   await expect(dialog).toHaveAttribute("inert", "");
   const returning = (await dialog.boundingBox())!;
   const returningAppearance = await dialog.evaluate(node => ({ opacity: Number(getComputedStyle(node).opacity), radius: Number.parseFloat(getComputedStyle(node).borderRadius) }));
-  const reopening = await captureMorph(page, "command-palette-morph-in", () => trigger.press("/"));
+  const reopening = await captureMorph(page, "command-palette-morph-in", () => trigger.press("Control+k"));
   for (const key of ["x", "y", "width", "height"] as const) expect(reopening[0][key]).toBeCloseTo(returning[key], 1);
   expect(reopening[0].opacity).toBeCloseTo(returningAppearance.opacity, 3);
   expect(reopening[0].radius).toBeCloseTo(returningAppearance.radius, 3);

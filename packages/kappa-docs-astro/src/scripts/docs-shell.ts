@@ -15,7 +15,7 @@ const setUnavailable = (element: HTMLElement | null, unavailable: boolean) => {
 
 const readTheme = (): ThemeMode => {
   const stored = localStorage.getItem("theme");
-  return stored === "dark" || stored === "light" ? stored : "light";
+  return stored === "dark" || (stored === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches) ? "dark" : "light";
 };
 
 const applyTheme = (mode: ThemeMode, targetDocument: Document = document) => {
