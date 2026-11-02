@@ -1,0 +1,9 @@
+---
+import { sidebarBlocks } from "../../../../data/sidebar-blocks";
+import "../../../../styles/docs.css";
+import AppShellStarterDocsDemo from "../../../../components/AppShellStarterDocsDemo.vue";
+export function getStaticPaths() { return sidebarBlocks.map(block => ({ params: { variant: block.id } })); }
+---
+<!doctype html>
+<html lang="en" class="kappa-docs-root"><head><meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" /><title>Application Shell starter</title></head><body><AppShellStarterDocsDemo variant={Astro.params.variant!} client:load /></body></html>
+<style>body { margin: 0; }</style>

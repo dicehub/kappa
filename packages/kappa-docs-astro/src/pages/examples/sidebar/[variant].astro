@@ -26,7 +26,9 @@ const { block } = Astro.props;
     <meta name="robots" content="noindex" />
     <title>{block.title} Application Shell — Kappa Blocks</title>
     <script is:inline>
-      const mode = localStorage.getItem("theme") === "dark" ? "dark" : "light";
+      let stored = "light";
+      try { stored = localStorage.getItem("theme") ?? "light"; } catch {}
+      const mode = stored === "dark" || (stored === "system" && matchMedia("(prefers-color-scheme: dark)").matches) ? "dark" : "light";
       document.documentElement.dataset.mode = mode;
       document.documentElement.dataset.kappaTheme = mode;
       document.documentElement.style.colorScheme = mode;

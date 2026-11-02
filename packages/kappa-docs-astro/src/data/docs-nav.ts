@@ -31,7 +31,7 @@ const topLevel = (label: string, description: string): NavLink => ({
 });
 
 const hrefOverrides: Record<string, string> = {
-  "Blocks:Application Shell": "/docs/blocks/sidebar",
+  "Blocks:Application Shell": "/docs/blocks/appshell",
   "Charts:Custom Chart": "/docs/charts/custom",
   "Components:Input Area": "/docs/components/input-area",
   "Components:Input Group": "/docs/components/input-group",
@@ -181,7 +181,7 @@ const implementedPages = new Set([
   "/docs/blocks/resource-list",
   "/docs/blocks/signup",
   "/docs/blocks/settings",
-  "/docs/blocks/sidebar",
+  "/docs/blocks/appshell",
   "/docs/blocks/workspace-switcher",
   "/docs/components/accordion",
   "/docs/components/activity-feed",
