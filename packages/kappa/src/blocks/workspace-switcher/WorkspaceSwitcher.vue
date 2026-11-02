@@ -66,7 +66,6 @@ async function scrollHighlighted(details: { highlightedValue: string | null }) {
             <Dropdown.RadioItem v-for="item in props.items" :key="item.value" :value="workspacePrefix + item.value" :value-text="item.name"
               :aria-label="item.name" :aria-keyshortcuts="item.ariaKeyshortcuts" :disabled="item.disabled" close-on-select
               class="kappa-workspace-switcher__option">
-              <template #indicator><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="m3 8.25 3 3 7-7" /></svg></template>
               <WorkspaceSwitcherBadge :item="item" />
               <span class="kappa-workspace-switcher__name">{{ item.name }}</span>
               <Dropdown.Shortcut v-if="item.shortcut" aria-hidden="true">{{ item.shortcut }}</Dropdown.Shortcut>

@@ -8,6 +8,8 @@ export interface WorkspaceSwitcherItem {
   description?: string;
   icon?: Component;
   avatarSrc?: string;
+  /** Use a circle for personal identities. Defaults to square. */
+  avatarShape?: "circle" | "square";
   initials?: string;
   disabled?: boolean;
   shortcut?: string;

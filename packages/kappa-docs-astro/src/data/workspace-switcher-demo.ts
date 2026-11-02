@@ -6,6 +6,11 @@ export const namespaceSwitcherItems = [
   { value: "Personal", name: "Personal", description: "Free plan · 1 member", icon: UserRound },
 ];
 
+export const namespaceSwitcherAvatarItems = [
+  { value: "Ros.Space", name: "Ros.Space", description: "Free plan · 1 member", avatarSrc: "/avatars/ros-space-astronaut.webp", avatarShape: "circle" as const, initials: "RS" },
+  ...namespaceSwitcherItems.filter(item => item.value !== "Personal"),
+];
+
 export const namespaceSwitcherActions = [
   { value: "upgrade", label: "Upgrade", icon: CircleArrowUp, accent: true },
   { value: "settings", label: "Settings", icon: Settings },
