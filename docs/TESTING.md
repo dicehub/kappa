@@ -12,6 +12,8 @@ Git and OpenSSL must be available. No service credentials are needed.
 
 CI sets `CHOKIDAR_USEPOLLING=true` for development-server checks to avoid native
 file-watcher exhaustion in shared containers. File watching remains enabled.
+Owned Astro test servers use `--ignore-lock` to stay in the foreground when an
+agent runs the suite. This lets the harness observe startup and stop its server.
 
 ```sh
 pnpm test            # Public checks and the approved logic cases

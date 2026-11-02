@@ -58,7 +58,7 @@ test("development avoids speculative navigation and stays usable during sync and
 
   const root = await developmentFixture(fileURLToPath(new URL("../../", import.meta.url)));
   const url = `http://127.0.0.1:${await port()}`;
-  const server = await start("pnpm", ["exec", "astro", "dev", "--host", "127.0.0.1", "--port", new URL(url).port], {
+  const server = await start("pnpm", ["exec", "astro", "dev", "--ignore-lock", "--host", "127.0.0.1", "--port", new URL(url).port], {
     cwd: root, env: { KAPPA_SOURCE: "" }, log: info.outputPath("development.log"),
     ready: async (signal: AbortSignal) => (await fetch(`${url}/docs/components/button`, { signal })).ok,
   });
