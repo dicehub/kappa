@@ -127,7 +127,9 @@ describe("Markdown build output", () => {
     assert.match(dropdown, /@dicehub\/kappa\/components\/dropdown/);
     assert.match(dropdown, /```vue\n<script setup>/);
     assert.match(dropdown, /```javascript\nimport \{/);
-    assert.equal((dropdown.match(/```vue/g) ?? []).length, 16);
+    assert.equal((dropdown.match(/```vue/g) ?? []).length, 17);
+    assert.match(dropdown, /ToolbarButton/);
+    assert.match(dropdown, /showArrow/);
     assert.match(dropdown, /^## \[Keyboard Navigation\]\(#keyboard-navigation\)$/m);
     assert.match(dropdown, /^## \[Behavior and Selection\]\(#behavior-and-selection\)$/m);
     assert.match(dropdown, /^### \[Nested Submenu\]\(#nested-submenu\)$/m);
@@ -462,8 +464,9 @@ describe("Markdown build output", () => {
     assert.match(button, /pnpm add @lucide\/vue/);
     assert.doesNotMatch(button, /const icon = \(path\)/);
     assert.match(button, /```vue\n<script setup>/);
-    assert.match(button, /```javascript\nimport \{ Button, LinkButton \}/);
-    assert.equal((button.match(/```vue/g) ?? []).length, 22);
+    assert.match(button, /```javascript\nimport \{ Button, LinkButton, ToolbarButton \}/);
+    assert.equal((button.match(/```vue/g) ?? []).length, 23);
+    assert.match(button, /^### \[Toolbar buttons\]\(#toolbar-buttons\)$/m);
     assert.doesNotMatch(button, /lang="ts"|```typescript/);
     assert.match(button, /^## \[Installation\]\(#installation\)$/m);
     assert.match(button, /^## \[Examples\]\(#examples\)$/m);
