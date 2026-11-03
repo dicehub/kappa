@@ -9,6 +9,7 @@ import { Breadcrumbs } from "@dicehub/kappa/components/breadcrumbs";
 import { Field } from "@dicehub/kappa/components/field";
 import { Table } from "@dicehub/kappa/components/table";
 import { Badge } from "@dicehub/kappa/components/badge";
+import { ActivityFeed } from "@dicehub/kappa/components/activity-feed";
 import { Avatar } from "@dicehub/kappa/components/avatar";
 import { DicehubLogo, DICEHUB_WORDMARK_PATH, DICEHUB_WORDMARK_VIEWBOX } from "@dicehub/kappa/components/dicehub-logo";
 import { CommandPalette } from "@dicehub/kappa/components/command-palette";
@@ -16,6 +17,7 @@ import { Kbd, KbdGroup } from "@dicehub/kappa/components/kbd";
 import PaneledWorkspaceProfileMenu from "./PaneledWorkspaceProfileMenu.vue";
 import PaneledWorkspaceHelpMenu from "./PaneledWorkspaceHelpMenu.vue";
 import PaneledWorkspaceCredits from "./PaneledWorkspaceCredits.vue";
+import PaneledWorkspaceCreateMenu from "./PaneledWorkspaceCreateMenu.vue";
 import PaneledWorkspaceComputePages from "./PaneledWorkspaceComputePages.vue";
 import PaneledWorkspaceNotifications from "./PaneledWorkspaceNotifications.vue";
 import PaneledWorkspaceAiChat from "./PaneledWorkspaceAiChat.vue";
@@ -23,17 +25,16 @@ import { createWorkspaceNotifications, type WorkspaceNotification } from "./pane
 import type { WorkspaceChatState } from "./paneled-workspace-chat";
 import { workspaceCompute, runningJobs, creditAmount, runStatusVariant, type WorkspaceRun } from "./paneled-workspace-compute";
 import PaneledWorkspaceProjectPages from "./PaneledWorkspaceProjectPages.vue";
-import PaneledWorkspaceProjectSummary from "./PaneledWorkspaceProjectSummary.vue";
 import PaneledWorkspaceProjects from "./PaneledWorkspaceProjects.vue";
 import PaneledWorkspaceTemplates from "./PaneledWorkspaceTemplates.vue";
 import PaneledWorkspaceCalculators from "./PaneledWorkspaceCalculators.vue";
 import { workspaceCalculatorPages } from "./paneled-workspace-calculators";
-import { workspaceTemplatePages } from "./paneled-workspace-templates";
+import { workspaceTemplateItemPages, workspaceTemplatePages } from "./paneled-workspace-templates";
 import PaneledWorkspaceNavigation from "./PaneledWorkspaceNavigation.vue";
 import PaneledWorkspaceProjectSwitcher from "./PaneledWorkspaceProjectSwitcher.vue";
 import { usePaneledWorkspaceLocation } from "./use-paneled-workspace-location";
-import { limitedWorkspacePages, projectCategories, workspaceCategories as defaultWorkspaceCategories, workspaceUtilityDescriptions } from "./paneled-workspace-navigation";
-import { Activity, ArrowLeft, ArrowUpRight, ChevronsLeft, ChevronsRight, ChevronsUpDown, CirclePlay, LayoutDashboard, Maximize2, Minimize2, Plus, Search, Sparkles, UsersRound, X } from "@lucide/vue";
+import { limitedWorkspacePages, projectCategories, projectNavigation, workspaceCategories as defaultWorkspaceCategories, workspaceSearchCategories, workspaceUtilityDescriptions } from "./paneled-workspace-navigation";
+import { Activity, ArrowLeft, ArrowUpRight, ChevronsLeft, ChevronsRight, ChevronsUpDown, CirclePlay, History, LayoutDashboard, Maximize2, Minimize2, Plus, Search, Sparkles, UsersRound, X } from "@lucide/vue";
 
 const props = withDefaults(defineProps<{ standalone?: boolean }>(), { standalone: false });
 const root = ref<HTMLElement>();
@@ -41,16 +42,28 @@ const projectSwitcher = ref<HTMLElement>();
 const namespace = ref("Ros.Space");
 const projectNames = ref<Record<string, string>>({ "Ros.Space": "Aster VTOL", Engineering: "Vega demonstrator", Research: "Orion testbed" });
 const { projects: workspaceProjects, view, selectedProject, lastProject, isProjectOverview, hrefForPage: breadcrumbHref, selectPage, readLocation, renameProject } = usePaneledWorkspaceLocation(props.standalone);
-const workspaceCategories = computed(() => defaultWorkspaceCategories.map(group => group.label === "Projects"
-  ? { ...group, pages: ["All projects", ...workspaceProjects.value.slice(0, 6).map(project => project.code)] } : group));
-const pageLabel = (page: string) => workspaceProjects.value.find(project => project.code === page)?.name ?? page;
+const visibleProjectCount = ref(6);
+const visibleTemplateCount = ref(0);
+const workspaceCategories = computed(() => defaultWorkspaceCategories.map(group => {
+  if (group.label === "Projects") return { ...group, pages: ["All projects", ...workspaceProjects.value.slice(0, visibleProjectCount.value).map(project => project.code)], remainingCount: Math.max(0, workspaceProjects.value.length - visibleProjectCount.value) };
+  if (group.label === "Templates") return { ...group, pages: [...group.pages, ...workspaceTemplateItemPages.slice(0, visibleTemplateCount.value)], remainingCount: Math.max(0, workspaceTemplateItemPages.length - visibleTemplateCount.value) };
+  return group;
+}));
+function showMoreItems(category: string) {
+  if (category === "Projects") visibleProjectCount.value = workspaceProjects.value.length;
+  if (category === "Templates") visibleTemplateCount.value = workspaceTemplateItemPages.length;
+}
+watch(view, page => { if (workspaceTemplateItemPages.includes(page)) visibleTemplateCount.value = workspaceTemplateItemPages.length; }, { immediate: true });
+const pageAvatar = (page: string) => workspaceProjects.value.find(project => project.code === page);
+const pageLabel = (page: string) => pageAvatar(page)?.name ?? page;
 const projectName = computed(() => selectedProject.value?.name ?? projectNames.value[namespace.value]);
+const pageTitle = computed(() => isProjectOverview.value ? "Applications" : view.value);
 const workspaceOptions = namespaceSwitcherAvatarItems.filter(item => Object.hasOwn(projectNames.value, item.value));
 const workspaceMenuOpen = ref(false);
-const isTemplatePage = computed(() => workspaceTemplatePages.includes(view.value));
+const isTemplatePage = computed(() => workspaceTemplatePages.includes(view.value) || workspaceTemplateItemPages.includes(view.value));
 const isCalculatorPage = computed(() => workspaceCalculatorPages.includes(view.value));
 const utilityDescription = computed(() => workspaceUtilityDescriptions[view.value]);
-const isLimitedPage = computed(() => limitedWorkspacePages.includes(view.value));
+const isLimitedPage = computed(() => limitedWorkspacePages.includes(view.value) || !!selectedProject.value && view.value === "Settings");
 const navigationOpen = ref(true);
 const navigationInitialized = ref(!props.standalone);
 let navigationInitFrame = 0;
@@ -104,16 +117,16 @@ const namespaceNotifications = computed(() => notifications.value.filter(item =>
 watch(() => events.value.length, updateActivityScroll, { flush: "post" });
 type SearchEntry = { label: string; description: string; id?: string; page?: string; namespace?: string };
 type SearchGroup = { label: string; items: SearchEntry[] };
-const projectSearchPages = computed(() => selectedProject.value ? ["Overview", "Project activity"] : []);
+const projectSearchPages = computed(() => selectedProject.value ? [...projectNavigation.map(item => item.page), ...projectCategories.flatMap(group => group.pages)] : []);
 const navigationSearchGroups = computed<SearchGroup[]>(() => [
-  { label: "Your work", items: [{ label: "Dashboard", description: "" }, ...(!selectedProject.value ? [{ label: "Simulation runs", description: "" }] : [])] },
+  { label: "Your work", items: ["Dashboard", "Recents", ...(!selectedProject.value ? ["Activities", "Simulation runs"] : [])].map(page => ({ label: page, page, description: "" })) },
   { label: "Project", items: projectSearchPages.value.map(page => ({ label: page, page, description: "" })) },
-  ...[...workspaceCategories.value, ...(selectedProject.value ? projectCategories : [])].map(group => ({ label: group.label, items: group.pages.map(page => ({ label: pageLabel(page), page, description: "" })) })),
+  ...[...workspaceCategories.value, ...workspaceSearchCategories].map(group => ({ label: group.label, items: [...new Set([...('page' in group && group.page ? [group.page] : []), ...group.pages])].map(page => ({ label: pageLabel(page), page, description: "" })) })),
   { label: "Recent simulation runs", items: compute.value.runs.slice(0, 4).map(run => ({ label: run.name, description: `${run.id} · ${run.status}`, id: run.id })) },
   { label: "Workspaces", items: workspaceOptions.map(item => ({ label: item.name, namespace: item.value, description: "" })) },
 ]);
 const searchEntries = computed<SearchEntry[]>(() => [
-  ...[...new Set(["Dashboard", "Simulation runs", ...projectSearchPages.value, ...[...workspaceCategories.value, ...(selectedProject.value ? projectCategories : [])].flatMap(group => group.pages), ...workspaceProjects.value.map(project => project.code)])].map(page => ({ label: pageLabel(page), page, description: "" })),
+  ...[...new Set(["Dashboard", "Recents", "Activities", "Simulation runs", "All projects", ...projectSearchPages.value, ...[...workspaceCategories.value, ...workspaceSearchCategories].flatMap(group => group.pages), ...workspaceTemplateItemPages, ...workspaceProjects.value.map(project => project.code)])].map(page => ({ label: pageLabel(page), page, description: "" })),
   ...compute.value.runs.map(run => ({ label: run.name, description: `${run.id} · ${run.status}`, id: run.id })),
   ...workspaceOptions.map(item => ({ label: item.name, namespace: item.value, description: "Workspace" })),
 ].filter(item => `${item.label} ${item.description}`.toLowerCase().includes(searchQuery.value.trim().toLowerCase())));
@@ -150,7 +163,8 @@ function restoreRemovedPageFocus(previous: Element | null, wasMobileOpen: boolea
 }
 function focusWorkspaceNavigation(navigation: Element) {
   const workspace = navigation.querySelector<HTMLElement>('[data-slot="sidebar-sliding-view"][data-value="workspace"]');
-  const link = workspace?.querySelector<HTMLElement>('a[aria-current="page"]');
+  const link = workspace?.querySelector<HTMLElement>('a[aria-current="page"]')
+    ?? workspace?.querySelector<HTMLElement>('[data-paneled-section-title="Projects"]');
   link?.focus({ preventScroll: true });
   if (!link || document.activeElement !== link) workspace?.focus({ preventScroll: true });
 }
@@ -177,10 +191,10 @@ function syncLocation() {
   restoreRemovedPageFocus(active, wasMobileOpen);
   if (restoreWorkspaceFocus && !selectedProject.value && navigation) void nextTick(() => focusWorkspaceNavigation(navigation));
 }
-function navigate(page: string) {
+function navigate(page: string, projectCode = selectedProject.value?.code) {
   const previousFocus = document.activeElement;
   const wasMobileOpen = mobileOpen.value;
-  const contextChanged = selectPage(page);
+  const contextChanged = selectPage(page, true, projectCode);
   // Keep the drawer open to show project navigation or the return to all projects.
   finishNavigation(contextChanged && (!!selectedProject.value || page === "All projects"));
   restoreRemovedPageFocus(previousFocus, wasMobileOpen);
@@ -203,6 +217,7 @@ function createRun() {
   filter.value = "";
   stateFilter.value = "All runs";
   events.value.unshift(`Ros.Space created simulation run ${run.id}.`);
+  mobileOpen.value = false;
   void openRun(run);
 }
 function cancelRun() {
@@ -278,10 +293,11 @@ onBeforeUnmount(() => { railObserver?.disconnect(); cancelAnimationFrame(navigat
       <template #toolbar>
         <AppShell.SearchTrigger shortcut="Ctrl + K" data-paneled-search :icon="Search" aria-keyshortcuts="Control+K" aria-haspopup="dialog" :aria-expanded="searchOpen" @click="showSearch" />
         <div class="paneled-workspace-demo__global-actions">
+          <PaneledWorkspaceCreateMenu :project-code="selectedProject?.code" @navigate="navigate" />
           <PaneledWorkspaceCredits :namespace="namespace" :compute="compute" :loading="!creditsReady" @navigate="navigate" @add-credits="compute.balanceCents += $event" />
-          <ToolbarButton :icon="CirclePlay" :aria-label="`Runs: ${activeRunCount} active`" :tooltip="`${activeRunCount} active simulation runs`" @click="navigate('Simulation runs')">{{ activeRunCount }}</ToolbarButton>
+          <ToolbarButton :icon="CirclePlay" class="paneled-workspace-demo__runs" :aria-label="`Runs: ${activeRunCount} active`" :tooltip="`${activeRunCount} active simulation runs`" @click="navigate('Simulation runs')">{{ activeRunCount }}</ToolbarButton>
           <PaneledWorkspaceNotifications :items="namespaceNotifications" @open="openNotification" @read-all="readAllNotifications" />
-          <PaneledWorkspaceProfileMenu @navigate="navigate" />
+          <PaneledWorkspaceProfileMenu @navigate="navigate($event, '')" />
         </div>
       </template>
       <template #header="context">
@@ -296,20 +312,25 @@ onBeforeUnmount(() => { railObserver?.disconnect(); cancelAnimationFrame(navigat
         <div v-if="selectedProject" ref="projectSwitcher" class="paneled-workspace-demo__project-switcher" :data-collapsed="context.iconCollapsed || undefined">
           <PaneledWorkspaceProjectSwitcher :project="selectedProject" :projects="workspaceProjects" :href-for-page="breadcrumbHref"
             :compact="context.iconCollapsed" :is-mobile="context.isMobile" @navigate="navigateFromProjectSwitcher" />
+          <Sidebar.Separator aria-hidden="true" />
         </div>
       </template>
       <template #navigation="context">
         <Sidebar.SlidingViews class="paneled-workspace-demo__sliding-views" :data-initializing="!navigationInitialized || undefined" :active-key="selectedProject ? 'project' : 'workspace'" :direction="selectedProject ? 'left' : 'right'">
           <Sidebar.SlidingView value="workspace" label="Workspace navigation">
-            <PaneledWorkspaceNavigation :categories="workspaceCategories" :view="view" :active="!selectedProject" :icon-collapsed="context.iconCollapsed" :is-mobile="context.isMobile" :menu-open="workspaceMenuOpen" :run-count="compute.runs.length" label="Workspace links" :href-for-page="breadcrumbHref" :page-label="pageLabel" @navigate="navigateLink">
+            <PaneledWorkspaceNavigation :categories="workspaceCategories" :view="view" :active="!selectedProject" :icon-collapsed="context.iconCollapsed" :is-mobile="context.isMobile" :menu-open="workspaceMenuOpen" :run-count="compute.runs.length" label="Workspace links" :href-for-page="breadcrumbHref" :page-label="pageLabel" :page-avatar="pageAvatar" @navigate="navigateLink" @show-more="showMoreItems" @group-action="navigate('New project')">
               <Sidebar.MenuItem><Sidebar.MenuButton :href="breadcrumbHref('Dashboard')" tooltip="Dashboard" :icon="LayoutDashboard" :active="view === 'Dashboard'" class="paneled-workspace-demo__workspace paneled-workspace-demo__dashboard" @click="navigateLink('Dashboard', $event)">Dashboard</Sidebar.MenuButton></Sidebar.MenuItem>
+              <Sidebar.MenuItem><Sidebar.MenuButton :href="breadcrumbHref('Recents')" tooltip="Recents" :icon="History" :active="view === 'Recents'" @click="navigateLink('Recents', $event)">Recents</Sidebar.MenuButton></Sidebar.MenuItem>
+              <Sidebar.MenuItem><Sidebar.MenuButton :href="breadcrumbHref('Activities')" tooltip="Activities" :icon="Activity" :active="view === 'Activities'" @click="navigateLink('Activities', $event)">Activities</Sidebar.MenuButton></Sidebar.MenuItem>
               <Sidebar.MenuItem><Sidebar.MenuButton :href="breadcrumbHref('Simulation runs')" tooltip="Simulation runs" :icon="CirclePlay" :active="view === 'Simulation runs'" @click="navigateLink('Simulation runs', $event)">Simulation runs<span class="paneled-workspace-demo__count" aria-hidden="true">{{ compute.runs.length }}</span></Sidebar.MenuButton></Sidebar.MenuItem>
             </PaneledWorkspaceNavigation>
           </Sidebar.SlidingView>
           <Sidebar.SlidingView value="project" :label="`${lastProject.name} navigation`">
-            <PaneledWorkspaceNavigation :categories="projectCategories" :view="view" :active="!!selectedProject" :icon-collapsed="context.iconCollapsed" :is-mobile="context.isMobile" :menu-open="workspaceMenuOpen" :run-count="compute.runs.length" label="Project links" :href-for-page="breadcrumbHref" @navigate="navigateLink">
-              <Sidebar.MenuItem><Sidebar.MenuButton :href="breadcrumbHref(lastProject.code)" tooltip="Overview" :icon="LayoutDashboard" :active="isProjectOverview" @click="navigateLink(lastProject.code, $event)">Overview</Sidebar.MenuButton></Sidebar.MenuItem>
-              <Sidebar.MenuItem><Sidebar.MenuButton :href="breadcrumbHref('Project activity')" tooltip="Project activity" :icon="Activity" :active="view === 'Project activity'" @click="navigateLink('Project activity', $event)">Project activity</Sidebar.MenuButton></Sidebar.MenuItem>
+            <PaneledWorkspaceNavigation :categories="projectCategories" :view="pageTitle" :active="!!selectedProject" :icon-collapsed="context.iconCollapsed" :is-mobile="context.isMobile" :menu-open="workspaceMenuOpen" :run-count="compute.runs.length" label="Project links" :href-for-page="breadcrumbHref" @navigate="navigateLink" @group-action="createRun">
+              <Sidebar.MenuItem v-for="item in projectNavigation.slice(0, 3)" :key="item.page"><Sidebar.MenuButton :href="breadcrumbHref(item.page)" :tooltip="item.page" :icon="item.icon" :active="pageTitle === item.page" @click="navigateLink(item.page, $event)">{{ item.page }}</Sidebar.MenuButton></Sidebar.MenuItem>
+              <template #after>
+                <Sidebar.MenuItem v-for="item in projectNavigation.slice(-1)" :key="item.page"><Sidebar.MenuButton :href="breadcrumbHref(item.page)" :tooltip="item.page" :icon="item.icon" :active="view === item.page" @click="navigateLink(item.page, $event)">{{ item.page }}</Sidebar.MenuButton></Sidebar.MenuItem>
+              </template>
             </PaneledWorkspaceNavigation>
           </Sidebar.SlidingView>
         </Sidebar.SlidingViews>
@@ -345,18 +366,36 @@ onBeforeUnmount(() => { railObserver?.disconnect(); cancelAnimationFrame(navigat
                   <Breadcrumbs.List>
                     <Breadcrumbs.Item><Breadcrumbs.Link :href="breadcrumbHref('Dashboard')" @click="navigateLink('Dashboard', $event)">{{ namespace }}</Breadcrumbs.Link></Breadcrumbs.Item>
                     <Breadcrumbs.Separator />
-                    <template v-if="selectedProject && !isProjectOverview">
+                    <template v-if="selectedProject">
                       <Breadcrumbs.Item><Breadcrumbs.Link :href="breadcrumbHref(selectedProject.code)" @click="navigateLink(selectedProject.code, $event)">{{ selectedProject.name }}</Breadcrumbs.Link></Breadcrumbs.Item>
                       <Breadcrumbs.Separator />
                     </template>
-                    <Breadcrumbs.Item><Breadcrumbs.Link :href="breadcrumbHref(view)" aria-current="page" @click="navigateLink(view, $event)">{{ isProjectOverview ? projectName : view }}</Breadcrumbs.Link></Breadcrumbs.Item>
+                    <Breadcrumbs.Item><Breadcrumbs.Link :href="breadcrumbHref(view)" aria-current="page" @click="navigateLink(view, $event)">{{ pageTitle }}</Breadcrumbs.Link></Breadcrumbs.Item>
                   </Breadcrumbs.List>
                 </Breadcrumbs.Root>
                 <section class="paneled-workspace-demo__list-scroll" :data-width="isLimitedPage ? 'limited' : undefined" aria-label="Workspace page">
                   <div class="paneled-workspace-demo__page-content" :data-width="isLimitedPage ? 'limited' : undefined">
-                  <div class="paneled-workspace-demo__page-heading"><h2>{{ isProjectOverview ? projectName : view }}</h2><Button v-if="view === 'Simulation runs'" size="sm" :icon="Plus" @click="createRun">New simulation run</Button><Button v-else size="sm" variant="outline" :icon="CirclePlay" @click="navigate('Simulation runs')">View simulation runs</Button></div>
-                  <PaneledWorkspaceProjectSummary v-if="selectedProject && isProjectOverview" :project="selectedProject" />
+                  <div class="paneled-workspace-demo__page-heading"><h2>{{ pageTitle }}</h2><Button v-if="view === 'Simulation' || view === 'Simulation runs'" size="sm" :icon="Plus" @click="createRun">{{ view === 'Simulation' ? 'Create simulation' : 'New simulation run' }}</Button><Button v-else size="sm" variant="outline" :icon="CirclePlay" @click="navigate('Simulation runs')">View simulation runs</Button></div>
+                  <PaneledWorkspaceProjectPages v-if="selectedProject && isProjectOverview" page="Applications" :project="projectName" :href-for-page="breadcrumbHref" @navigate="navigate" />
                   <PaneledWorkspaceProjects v-else-if="view === 'All projects'" :projects="workspaceProjects" :href-for-page="breadcrumbHref" @open="navigateLink" />
+                  <div v-else-if="view === 'Recents'" class="paneled-workspace-demo__overview">
+                    <p>Continue with recent simulation runs in {{ namespace }}.</p>
+                    <Table compact aria-label="Recent simulation runs">
+                      <Table.Header><Table.Row><Table.Head scope="col">Simulation run</Table.Head><Table.Head scope="col">Status</Table.Head></Table.Row></Table.Header>
+                      <Table.Body><Table.Row v-for="run in compute.runs.slice(0, 4)" :key="run.id">
+                        <Table.Cell><Button variant="link" size="sm" @click="openRun(run, $event)">{{ run.name }}</Button></Table.Cell>
+                        <Table.Cell><Badge :variant="runStatusVariant(run.status)">{{ run.status }}</Badge></Table.Cell>
+                      </Table.Row></Table.Body>
+                    </Table>
+                  </div>
+                  <ActivityFeed.Root v-else-if="view === 'Activities' && !selectedProject">
+                    <ActivityFeed.List aria-label="Workspace activities">
+                      <ActivityFeed.Item v-for="(event, index) in events" :key="index">
+                        <ActivityFeed.Marker variant="icon"><Activity aria-hidden="true" /></ActivityFeed.Marker>
+                        <ActivityFeed.Content><ActivityFeed.Title>{{ event }}</ActivityFeed.Title></ActivityFeed.Content>
+                      </ActivityFeed.Item>
+                    </ActivityFeed.List>
+                  </ActivityFeed.Root>
                   <div v-else-if="view === 'Groups'" class="paneled-workspace-demo__overview">
                     <p>Choose a group to open its workspace.</p>
                     <Table compact aria-label="Groups">
@@ -370,7 +409,7 @@ onBeforeUnmount(() => { railObserver?.disconnect(); cancelAnimationFrame(navigat
                   <PaneledWorkspaceTemplates v-else-if="isTemplatePage" :key="view" :page="view" />
                   <PaneledWorkspaceCalculators v-else-if="isCalculatorPage" :key="view" :page="view" />
                   <PaneledWorkspaceProjectPages v-else-if="isLimitedPage && view !== 'Dashboard'" :key="`${namespace}-${selectedProject?.code}-${view}`" :page="view" :project="projectName" :href-for-page="breadcrumbHref" @navigate="navigate" @rename="renameProject" />
-                  <PaneledWorkspaceComputePages v-else-if="view === 'Simulation runs' || view === 'Compute usage' || view === 'Billing'" :key="`${namespace}-${view}`" :page="view" :namespace="namespace" :compute="compute" v-model:filter="stateFilter" v-model:query="filter" :selected-id="detailOpen ? detailId : undefined" @open="openRun" />
+                  <PaneledWorkspaceComputePages v-else-if="['Simulation runs', 'Analytics', 'Compute usage', 'Billing'].includes(view)" :key="`${namespace}-${view}`" :page="view" :namespace="view === 'Analytics' ? projectName : namespace" :compute="compute" v-model:filter="stateFilter" v-model:query="filter" :selected-id="detailOpen ? detailId : undefined" @open="openRun" />
                   <div v-else-if="utilityDescription" class="paneled-workspace-demo__overview">
                     <p>{{ utilityDescription }}</p>
                     <Button variant="outline" size="sm" @click="navigate('Dashboard')">Return to Dashboard</Button>
@@ -420,7 +459,7 @@ onBeforeUnmount(() => { railObserver?.disconnect(); cancelAnimationFrame(navigat
             <header><h2 ref="asideHeading" tabindex="-1">{{ panelTitle }}</h2><Button v-if="canMaximize" class="paneled-workspace-demo__activity-size" variant="ghost" size="sm" shape="square" :icon="asideMaximized ? Minimize2 : Maximize2" :aria-label="`${asideMaximized ? 'Restore' : 'Maximize'} ${panelTitle}`" @click="toggleMaximized" /><Button variant="ghost" size="sm" shape="square" :icon="X" :aria-label="`Close ${panelTitle}`" @click="updateAsideOpen(false)" /></header>
             <PaneledWorkspaceAiChat v-if="sidePanel === 'ai'" v-model="aiChat" :namespace="namespace" :runs="compute.runs" />
             <template v-else>
-              <p>Recent updates across {{ namespace }}.</p><div class="paneled-workspace-demo__activity-scroll" :data-scroll-start="activityScrollStart || undefined" :data-scroll-end="activityScrollEnd || undefined"><ol ref="activityList" @scroll="updateActivityScroll"><li v-for="(event, index) in events" :key="index"><Activity aria-hidden="true" /><div><p>{{ event }}</p><small>{{ index ? 'Earlier today' : 'Latest update' }}</small></div></li></ol></div><Button size="sm" variant="outline" @click="navigate('Activity log'); updateAsideOpen(false)">View activity log</Button>
+              <p>Recent updates across {{ namespace }}.</p><div class="paneled-workspace-demo__activity-scroll" :data-scroll-start="activityScrollStart || undefined" :data-scroll-end="activityScrollEnd || undefined"><ol ref="activityList" @scroll="updateActivityScroll"><li v-for="(event, index) in events" :key="index"><Activity aria-hidden="true" /><div><p>{{ event }}</p><small>{{ index ? 'Earlier today' : 'Latest update' }}</small></div></li></ol></div><Button size="sm" variant="outline" @click="navigate('Activities', ''); updateAsideOpen(false)">View activity log</Button>
             </template>
           </template>
         </AppShell.Panels>

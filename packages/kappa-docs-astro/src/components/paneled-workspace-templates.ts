@@ -143,3 +143,4 @@ export const workspaceTemplateCatalogs: Record<string, TemplateCatalog> = {
 };
 
 export const workspaceTemplatePages = ["All templates", ...Object.keys(workspaceTemplateCatalogs)];
+export const workspaceTemplateItemPages = Object.values(workspaceTemplateCatalogs).flatMap(catalog => catalog.templates.map(template => template.name));

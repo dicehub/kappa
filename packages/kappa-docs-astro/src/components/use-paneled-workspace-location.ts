@@ -14,12 +14,13 @@ export function usePaneledWorkspaceLocation(standalone: boolean) {
 
   function destination(requested: string, projectCode = selectedProject.value?.code) {
     const resolved = resolveWorkspacePage(requested);
+    const legacyProjectPage = ["Project settings", "Project Settings", "Project activity", "Activity log", "Activity"].includes(requested);
     const namedProject = projects.value.find(project => project.code === resolved || overviewPage(project) === resolved);
     let page = namedProject ? overviewPage(namedProject) : workspacePages.includes(resolved) ? resolved : "Dashboard";
     let project = namedProject ?? projects.value.find(project => project.code === projectCode);
     if (!namedProject && !projectContextPages.includes(page)) project = undefined;
     // Old project-page bookmarks did not carry a project code.
-    if (!project && projectContextPages.includes(page) && !["Simulation runs", "Compute usage"].includes(page)) {
+    if (!project && projectContextPages.includes(page) && (legacyProjectPage || !["Simulation runs", "Compute usage", "Activities", "Settings", "New application"].includes(page))) {
       project = projects.value.find(item => item.code === "AV-07");
     }
     if (page === "Overview" && project) page = overviewPage(project);

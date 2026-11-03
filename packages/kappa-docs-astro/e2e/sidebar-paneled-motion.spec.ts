@@ -2,12 +2,11 @@ import { expect, test, type Locator, type Page } from "@playwright/test";
 
 async function openExample(page: Page, mobile = false) {
   await page.setViewportSize({ width: mobile ? 390 : 1440, height: 1000 });
-  await page.goto("/examples/appshell/paneled-workspace?view=Pipelines");
-  await expect(page.getByRole("heading", { name: "Simulation runs", exact: true })).toBeVisible();
+  await page.goto("/examples/appshell/paneled-workspace?view=CFD+Templates");
+  await expect(page.getByRole("heading", { name: "CFD Templates", exact: true })).toBeVisible();
   if (mobile) await page.getByRole("button", { name: "Open sidebar", exact: true }).click();
   const nav = page.getByRole(mobile ? "dialog" : "navigation", { name: "Paneled workspace navigation", exact: true });
   const trigger = nav.getByRole("button", { name: "Templates", exact: true });
-  await trigger.click();
   await expect(trigger).toHaveAttribute("aria-expanded", "true");
   const content = page.locator(`[id="${await trigger.getAttribute("aria-controls")}"]`);
   await content.evaluate(node => Promise.all(node.getAnimations({ subtree: true }).map(animation => animation.finished.catch(() => {}))));
@@ -46,7 +45,7 @@ for (const mobile of [false, true]) {
   test(`${mobile ? "mobile" : "desktop"} submenus reveal height over 200ms with the label motion inside`, async ({ page }) => {
     await page.emulateMedia({ reducedMotion: "no-preference" });
     const { nav, trigger, content } = await openExample(page, mobile);
-    const nextGroup = nav.getByRole("button", { name: "Engineering tools", exact: true });
+    const nextGroup = nav.getByRole("heading", { name: "Projects", exact: true });
     const fullHeight = (await content.boundingBox())!.height;
     const expandedNextY = (await nextGroup.boundingBox())!.y;
     await toggleAndPause(trigger, content);
@@ -85,7 +84,7 @@ test("reduced motion opens and closes without intermediate motion or focusable h
   await expect(content).toBeHidden();
   await expect.poll(() => content.evaluate(node => node.getAnimations({ subtree: true }).length)).toBe(0);
   await trigger.press("Tab");
-  await expect(nav.getByRole("button", { name: "Engineering tools", exact: true })).toBeFocused();
+  await expect(nav.getByRole("button", { name: "Create project", exact: true })).toBeFocused();
   await trigger.click();
   await expect(nav.getByRole("link", { name: "CFD Templates", exact: true })).toBeVisible();
   await expect.poll(() => content.evaluate(node => node.getAnimations({ subtree: true }).length)).toBe(0);

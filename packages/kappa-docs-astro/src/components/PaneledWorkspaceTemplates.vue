@@ -12,12 +12,15 @@ const props = defineProps<{ page: string }>();
 const catalogs = computed(() => {
   if (props.page === "All templates") return Object.values(workspaceTemplateCatalogs);
   const catalog = workspaceTemplateCatalogs[props.page];
-  return catalog ? [catalog] : [];
+  if (catalog) return [catalog];
+  return Object.values(workspaceTemplateCatalogs)
+    .map(item => ({ ...item, templates: item.templates.filter(template => template.name === props.page) }))
+    .filter(item => item.templates.length);
 });
 const templates = computed(() => catalogs.value.flatMap(catalog => catalog.templates.map(template => ({ ...template, publisher: catalog.publisher }))));
 const description = computed(() => props.page === "All templates"
   ? "Browse CFD, experimental, and your published templates for aerodynamic, thermal, and fluid-flow studies."
-  : catalogs.value[0]?.description);
+  : templates.value.find(template => template.name === props.page)?.description ?? catalogs.value[0]?.description);
 const icons = { Aerodynamics: Wind, Thermodynamics: Thermometer, "Fluid mechanics": Waves, Multiphysics: Layers2 };
 </script>
 

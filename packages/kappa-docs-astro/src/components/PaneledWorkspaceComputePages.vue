@@ -13,6 +13,10 @@ const filter = defineModel<string>("filter", { default: "All runs" });
 const query = defineModel<string>("query", { default: "" });
 const filters = ["All runs", "Running", "Queued", "Completed", "Failed", "Cancelled"];
 const active = computed(() => runningJobs(props.compute.runs));
+const statusSummary = computed(() => filters.slice(1).map(status => {
+  const runs = props.compute.runs.filter(run => run.status === status);
+  return { status, count: runs.length, cpus: runningJobs(runs).reduce((total, run) => total + run.cpus, 0), costCents: runs.reduce((total, run) => total + run.costCents, 0) };
+}));
 const visibleRuns = (value: string) => props.compute.runs.filter(run =>
   (value === "All runs" || run.status === value) &&
   `${run.name} ${run.id} ${run.status}`.toLowerCase().includes(query.value.trim().toLowerCase()),
@@ -45,6 +49,17 @@ const visibleRuns = (value: string) => props.compute.runs.filter(run =>
           <p v-if="!visibleRuns(value).length" class="paneled-compute__empty">{{ query.trim() ? 'No simulation runs match your search.' : value === 'All runs' ? 'No simulation runs yet.' : `No ${value.toLowerCase()} simulation runs.` }}</p>
         </Tabs.Content>
       </Tabs.Root>
+    </template>
+    <template v-else-if="page === 'Analytics'">
+      <p class="paneled-compute__intro">Simulation run status, active compute capacity, and costs to date.</p>
+      <div class="paneled-compute__table">
+        <Table compact aria-label="Simulation analytics">
+          <Table.Header><Table.Row><Table.Head scope="col">Status</Table.Head><Table.Head scope="col">Runs</Table.Head><Table.Head scope="col">Active vCPUs</Table.Head><Table.Head scope="col">Cost to date</Table.Head></Table.Row></Table.Header>
+          <Table.Body><Table.Row v-for="summary in statusSummary" :key="summary.status">
+            <Table.Cell>{{ summary.status }}</Table.Cell><Table.Cell>{{ summary.count }}</Table.Cell><Table.Cell>{{ summary.cpus }}</Table.Cell><Table.Cell>{{ creditAmount(summary.costCents) }}</Table.Cell>
+          </Table.Row></Table.Body>
+        </Table>
+      </div>
     </template>
     <template v-else>
       <dl class="paneled-compute__metrics paneled-compute__usage">

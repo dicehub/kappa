@@ -96,43 +96,49 @@ test("header stays centered and navigation categories work in expanded and colla
   expect(frameBefore.height).toBeCloseTo(944, 0);
 
   await expect(nav.getByRole("button", { name: "Pinned", exact: true })).toHaveCount(0);
-  await expect(nav.getByRole("link", { name: "Overview", exact: true })).toBeVisible();
+  await expect(nav.getByRole("link", { name: "Wind Aero Study", exact: true })).toBeVisible();
 
   await expect(nav.locator(".paneled-workspace-demo__context-label")).toHaveText("Your work");
-  const categories = ["Projects", "Templates", "Engineering tools"];
-  for (const category of categories) {
-    await expect(nav.getByRole("button", { name: category, exact: true })).toBeVisible();
-  }
+  await expect(nav.getByRole("heading", { name: "Projects", exact: true })).toBeVisible();
+  await expect(nav.getByRole("button", { name: "Templates", exact: true })).toBeVisible();
+  await expect(nav.getByRole("button", { name: "Engineering tools", exact: true })).toHaveCount(0);
+  await expect(nav.locator('[data-slot="sidebar-menu"]').first().getByRole("link"))
+    .toHaveText(["Dashboard", "Recents", "Activities", /^Simulation runs/]);
+  await nav.getByRole("link", { name: "Recents", exact: true }).click();
+  await expect(shell.getByRole("table", { name: "Recent simulation runs", exact: true })).toBeVisible();
+  await expect(nav.getByRole("link", { name: "Recents", exact: true })).toHaveAttribute("aria-current", "page");
+  await nav.getByRole("link", { name: "Activities", exact: true }).click();
+  await expect(shell.getByRole("list", { name: "Workspace activities", exact: true })).toBeVisible();
+  await expect(nav.getByRole("link", { name: "Activities", exact: true })).toHaveAttribute("aria-current", "page");
+  await nav.getByRole("link", { name: "Simulation runs", exact: true }).click();
   const navigationRowHeights = await nav
     .locator(".paneled-workspace-demo__nav-group .kappa-sidebar__menu-button:visible")
     .evaluateAll(rows => rows.map(row => Math.round(row.getBoundingClientRect().height)));
   expect(navigationRowHeights.length).toBeGreaterThan(0);
   expect(navigationRowHeights.every(height => height === 28)).toBe(true);
-  expect((await nav.getByRole("link", { name: "Overview", exact: true }).boundingBox())!.height)
+  expect((await nav.getByRole("link", { name: "Wind Aero Study", exact: true }).boundingBox())!.height)
     .toBeCloseTo(28, 0);
-  expect((await nav.getByRole("button", { name: "Projects", exact: true }).boundingBox())!.height)
+  expect((await nav.locator(".paneled-workspace-demo__group-heading.paneled-workspace-demo__section-heading").boundingBox())!.height)
     .toBeCloseTo(28, 0);
 
-  const plan = nav.getByRole("button", { name: "Projects", exact: true });
-  const planGroup = nav.locator(".paneled-workspace-demo__nav-group").filter({ has: page.getByRole("button", { name: "Projects", exact: true }) });
-  const workItems = planGroup.getByRole("link", { name: "Overview", exact: true });
+  const plan = nav.getByRole("link", { name: "Projects", exact: true });
+  const planGroup = nav.locator(".paneled-workspace-demo__nav-group").filter({ has: page.getByRole("heading", { name: "Projects", exact: true }) });
+  const workItems = planGroup.getByRole("link", { name: "Helicopter", exact: true });
   const milestones = planGroup.getByRole("link", { name: "Wind Aero Study", exact: true });
   await expect(workItems).toBeVisible();
   await expect(milestones).toBeVisible();
-  await plan.click();
-  await expect(workItems).toBeHidden();
-  await plan.click();
-  await expect(workItems).toBeVisible();
-  await expect(milestones).toBeVisible();
-
-  const codeExpanded = nav.getByRole("button", { name: "Engineering tools", exact: true });
-  const codeGroup = nav.locator(".paneled-workspace-demo__nav-group").filter({ has: page.getByRole("button", { name: "Engineering tools", exact: true }) });
-  const repositoriesExpanded = codeGroup.getByRole("link", { name: "Y+ calculator", exact: true });
-  const branchesExpanded = codeGroup.getByRole("link", { name: "Boundary layer height calculator", exact: true });
-  await expect(repositoriesExpanded).toBeHidden();
-  await codeExpanded.click();
-  await expect(repositoriesExpanded).toBeVisible();
-  await expect(branchesExpanded).toBeVisible();
+  await expect(plan).toHaveCount(0);
+  const createProject = planGroup.getByRole("button", { name: "Create project", exact: true });
+  await page.mouse.move(600, 100);
+  await expect(createProject).toHaveCSS("opacity", "0");
+  await planGroup.getByRole("heading", { name: "Projects", exact: true }).hover();
+  await expect(createProject).toHaveCSS("opacity", "1");
+  await page.mouse.move(600, 100);
+  const templates = nav.getByRole("button", { name: "Templates", exact: true });
+  await templates.focus();
+  await templates.press("Tab");
+  await expect(createProject).toBeFocused();
+  await expect(createProject).toHaveCSS("opacity", "1");
 
   const canvasBefore = (await block(page).locator(".kappa-app-shell__panel-frame").boundingBox())!;
   await nav.getByRole("button", { name: "Collapse sidebar", exact: true }).click();
@@ -148,17 +154,17 @@ test("header stays centered and navigation categories work in expanded and colla
   const afterHover = (await block(page).locator(".kappa-app-shell__panel-frame").boundingBox())!;
   expect(afterHover.x).toBeCloseTo(canvasAfter.x, 1);
   expect(afterHover.width).toBeCloseTo(canvasAfter.width, 1);
-  await planPages.getByRole("link", { name: "Overview", exact: true }).click();
+  await plan.click();
   await search.hover();
   await search.focus();
   await expect(planPages).toBeHidden();
   await expect(nav).toHaveCSS("width", "44px");
 
-  const code = nav.getByRole("button", { name: "Engineering tools", exact: true });
+  const code = nav.getByRole("link", { name: "Projects", exact: true });
   await code.focus();
-  const codePages = categoryPages(page, "Engineering tools");
+  const codePages = categoryPages(page, "Projects");
   await expect(codePages).toBeVisible();
-  const repositories = codePages.getByRole("link", { name: "Y+ calculator", exact: true });
+  const repositories = codePages.getByRole("link", { name: "Helicopter", exact: true });
   await repositories.focus();
   await expect(repositories).toBeFocused();
   await repositories.press("Enter");
@@ -420,7 +426,7 @@ test("mobile navigation closes with Escape, returns focus, and keeps the page wi
   const toggle = shell.getByRole("button", { name: "Open sidebar", exact: true });
   await toggle.click();
   const drawer = page.getByRole("dialog").filter({
-    has: page.getByRole("button", { name: "Projects", exact: true }),
+    has: page.getByRole("heading", { name: "Projects", exact: true }),
   });
   await expect(drawer).toBeVisible();
   await expectNoHorizontalOverflow(page);

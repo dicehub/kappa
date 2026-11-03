@@ -1,23 +1,35 @@
-import { ChartNoAxesCombined, Compass, FolderKanban, LayoutTemplate, Wind } from "@lucide/vue";
+import { Activity, ChartNoAxesCombined, CirclePlay, Compass, FolderKanban, LayoutGrid, LayoutTemplate, Plus, Settings2, UsersRound } from "@lucide/vue";
 import { workspaceProjects } from "./paneled-workspace-projects";
-import { workspaceTemplatePages } from "./paneled-workspace-templates";
+import { workspaceTemplateItemPages, workspaceTemplatePages } from "./paneled-workspace-templates";
 import { workspaceCalculatorPages } from "./paneled-workspace-calculators";
 
 const projectPages = workspaceProjects.map(project => project.name);
 
 export const workspaceCategories = [
-  { label: "Projects", icon: FolderKanban, pages: ["All projects", ...projectPages.slice(0, 6)] },
   { label: "Templates", icon: LayoutTemplate, pages: workspaceTemplatePages },
+  { label: "Projects", page: "All projects", icon: FolderKanban, headingOnly: true, pages: ["All projects", ...projectPages.slice(0, 6)], collapsible: false, action: { label: "Create project", icon: Plus } },
+];
+
+export const workspaceSearchCategories = [
   { label: "Engineering tools", icon: Compass, pages: workspaceCalculatorPages },
 ];
 
+export const projectNavigation = [
+  { page: "Applications", icon: LayoutGrid },
+  { page: "Activities", icon: Activity },
+  { page: "Members", icon: UsersRound },
+  { page: "Simulation runs", icon: CirclePlay },
+  { page: "Analytics", icon: ChartNoAxesCombined },
+  { page: "Settings", icon: Settings2 },
+];
+
 export const projectCategories = [
-  { label: "Simulation", icon: Wind, pages: ["Simulation runs", "Results", "Storage"] },
+  { label: "Simulation runs", page: "Simulation runs", icon: CirclePlay, pages: ["Results", "Storage"], collapsible: false, action: { label: "Create simulation", icon: Plus } },
   { label: "Analytics", icon: ChartNoAxesCombined, pages: ["Reports"] },
 ];
 
 // Keep previous page URLs available without listing them in project navigation.
-const legacyProjectPages = ["Airframe", "Configurations", "Design reviews", "Flight test plan", "Test campaigns", "Engine models", "Thermal analysis", "Telemetry", "Anomalies", "Compute usage"];
+const legacyProjectPages = ["Simulation", "Results", "Storage", "Reports", "Airframe", "Configurations", "Design reviews", "Flight test plan", "Test campaigns", "Engine models", "Thermal analysis", "Telemetry", "Anomalies", "Compute usage"];
 
 export const workspaceUtilityDescriptions: Record<string, string> = {
   "New project": "Project creation preview. Organize geometry, applications, and simulation results in a project.",
@@ -32,14 +44,14 @@ export const workspaceUtilityDescriptions: Record<string, string> = {
   "What's new": "Release notes preview for Version 0.1.2.",
   "Log out": "This is a local preview of Log out. Your session stays signed in.",
 };
-export const projectContextPages = [...projectCategories.flatMap(group => group.pages), ...legacyProjectPages, "Overview", "Applications", "Project Settings", "Project activity"];
-export const workspacePages = [...new Set(["Dashboard", ...workspaceCategories.flatMap(group => group.pages), ...projectContextPages, ...projectPages, "Groups", "Team", "Profile", "Settings", "Billing", "Keyboard shortcuts", ...Object.keys(workspaceUtilityDescriptions)])];
-export const limitedWorkspacePages = ["Dashboard", "All projects", "Groups", "Overview", "Applications", "Project Settings", ...projectPages, ...workspaceTemplatePages, ...workspaceCalculatorPages, "Project activity", "Flight test plan"];
+export const projectContextPages = [...projectNavigation.map(item => item.page), ...legacyProjectPages, "Overview", "New application"];
+export const workspacePages = [...new Set(["Dashboard", "Recents", "Activities", "All projects", ...[...workspaceCategories, ...workspaceSearchCategories].flatMap(group => group.pages), ...workspaceTemplateItemPages, ...projectContextPages, ...projectPages, "Groups", "Team", "Profile", "Settings", "Billing", "Keyboard shortcuts", ...Object.keys(workspaceUtilityDescriptions)])];
+export const limitedWorkspacePages = ["Dashboard", "Recents", "Activities", "All projects", "Groups", "Overview", "Applications", "Members", ...projectPages, ...workspaceTemplatePages, ...workspaceTemplateItemPages, ...workspaceCalculatorPages, "Flight test plan"];
 
 // Keep existing example bookmarks and integrations working after the navigation rename.
 const pageAliases: Record<string, string> = {
   "Application templates": "CFD Templates", "Simulation templates": "CFD Templates", "Test templates": "Experimental",
-  "Mission brief": "Overview", "Project settings": "Project Settings", "Activity log": "Project activity", Members: "Team",
+  "Mission brief": "Overview", "Project settings": "Settings", "Project Settings": "Settings", "Activity log": "Activities", "Project activity": "Activities", Activity: "Activities",
   "Work items": "Simulation runs", "Issue boards": "Simulation runs", "Task boards": "Simulation runs",
   Milestones: "Flight test plan", Iterations: "Test campaigns", Requirements: "Design reviews", Labels: "Configurations",
   Assistant: "Y+ calculator", Agents: "Boundary layer height calculator",

@@ -6,8 +6,8 @@ const block = (page: Page) => page.locator(blockSelector).locator(".kappa-app-sh
 const navigation = (page: Page) =>
   block(page).getByRole("navigation", { name: "Paneled workspace navigation", exact: true });
 
-async function openExample(page: Page) {
-  await page.goto(`${examplePath}?view=Simulation+runs`);
+async function openExample(page: Page, query = "view=Simulation+runs") {
+  await page.goto(`${examplePath}?${query}`);
   await expect.poll(() => block(page).evaluate(node =>
     node.closest("astro-island")?.hasAttribute("ssr"),
   )).toBe(false);
@@ -18,6 +18,74 @@ test.beforeEach(async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
 });
 
+test("collapsed Projects creation returns focus to the rail link", async ({ page }) => {
+  for (const input of ["keyboard", "pointer"]) {
+    await openExample(page);
+    const nav = navigation(page);
+    await nav.getByRole("button", { name: "Collapse sidebar", exact: true }).click();
+    const projects = nav.getByRole("link", { name: "Projects", exact: true });
+    await projects.focus();
+    await projects.press("ArrowDown");
+    const flyout = page.locator('[data-paneled-flyout="Projects"]');
+    const overview = flyout.getByRole("link", { name: "Overview", exact: true });
+    const create = flyout.getByRole("button", { name: "Create project", exact: true });
+    await expect(overview).toBeFocused();
+    if (input === "keyboard") {
+      await overview.press("Shift+Tab");
+      await expect(create).toBeFocused();
+      await create.press("Enter");
+    } else {
+      await flyout.getByRole("heading", { name: "Projects", exact: true }).hover();
+      await create.click();
+    }
+    await expect(page).toHaveURL(/view=New\+project$/);
+    await expect(block(page).getByRole("heading", { name: "New project", exact: true })).toBeVisible();
+    await expect(projects).toBeFocused();
+    await expect(flyout).toBeHidden();
+  }
+});
+
+test("header creation separates workspace actions from the current project", async ({ page }) => {
+  const trigger = page.getByRole("button", { name: "Create new…", exact: true });
+  const menu = page.getByRole("menu", { name: "Create new…", exact: true });
+  for (const action of ["New project", "New group", "New application"]) {
+    await openExample(page, "view=Applications&project=WA-01");
+    await expect(page.getByRole("button", { name: "Switch project: Wind Aero Study", exact: true })).toBeVisible();
+    await trigger.click();
+    await expect(menu.getByRole("menuitem")).toHaveText(["New project", "New group", "New application", "New application"]);
+    await expect(menu.getByText("This project", { exact: true })).toBeVisible();
+    await menu.getByRole("menuitem", { name: action, exact: true }).first().click();
+    await expect(page).toHaveURL(`${examplePath}?${new URLSearchParams({ view: action })}`);
+    await expect(page.getByRole("button", { name: /^Switch project:/ })).toHaveCount(0);
+    await expect(page.getByRole("heading", { name: action, exact: true })).toBeVisible();
+  }
+  await trigger.click();
+  await expect(menu.getByRole("menuitem")).toHaveText(["New project", "New group", "New application"]);
+  await page.keyboard.press("Escape");
+  await expect(trigger).toBeFocused();
+
+  await openExample(page, "view=Applications&project=WA-01");
+  await expect(page.getByRole("button", { name: "Switch project: Wind Aero Study", exact: true })).toBeVisible();
+  await trigger.click();
+  await menu.getByRole("menuitem", { name: "New application", exact: true }).last().click();
+  await expect(page).toHaveURL(/view=New\+application&project=WA-01$/);
+  await page.reload();
+  await expect(page.getByRole("button", { name: "Switch project: Wind Aero Study", exact: true })).toBeVisible();
+  await expect(page.getByRole("navigation", { name: "Workspace breadcrumb" })).toContainText("Wind Aero Study");
+});
+
+test("activity panel opens the workspace feed from a project", async ({ page }) => {
+  await openExample(page, "view=Applications&project=WA-01");
+  await expect(page.getByRole("button", { name: "Switch project: Wind Aero Study", exact: true })).toBeVisible();
+  await page.getByRole("button", { name: "Activities", exact: true }).click();
+  const activities = page.getByRole("dialog", { name: "Activities", exact: true });
+  const updates = await activities.locator("li p").allTextContents();
+  await activities.getByRole("button", { name: "View activity log", exact: true }).click();
+  await expect(page).toHaveURL(/view=Activities$/);
+  await expect(page.getByRole("list", { name: "Workspace activities", exact: true }).getByRole("listitem")).toContainText(updates);
+  await expect(page.getByRole("button", { name: /^Switch project:/ })).toHaveCount(0);
+});
+
 test("search opens by button or Ctrl+K, finds pages and runs, and returns focus", async ({ page }) => {
   await openExample(page);
   const searchTrigger = block(page).getByRole("button", { name: "Search or go to…", exact: true });
@@ -26,7 +94,7 @@ test("search opens by button or Ctrl+K, finds pages and runs, and returns focus"
   await searchTrigger.click();
   await expect(input).toBeFocused();
   await expect(palette.locator(".kappa-command-palette__group-label")).toHaveText([
-    "Your work", "Projects", "Templates", "Engineering tools", "Recent simulation runs", "Workspaces",
+    "Your work", "Templates", "Projects", "Engineering tools", "Recent simulation runs", "Workspaces",
   ]);
   const popupBounds = (await palette.boundingBox())!;
   expect(popupBounds.width).toBeCloseTo(768, 0);
@@ -135,15 +203,15 @@ test("page rows navigate directly without pin controls", async ({ page }) => {
   const nav = navigation(page);
   const projectGroup = nav
     .locator(".paneled-workspace-demo__nav-group")
-    .filter({ has: page.getByRole("button", { name: "Projects", exact: true }) });
+    .filter({ has: page.getByRole("heading", { name: "Projects", exact: true }) });
   const applications = projectGroup.getByRole("link", { name: "Wind Aero Study", exact: true });
 
   await expect(applications).toBeVisible();
   await applications.hover();
   await expect(projectGroup.getByRole("button", { name: /^(Pin|Unpin) / })).toHaveCount(0);
   await applications.click();
-  await expect(nav.getByRole("link", { name: "Overview", exact: true })).toHaveAttribute("aria-current", "page");
-  await expect(block(page).getByRole("heading", { name: "Wind Aero Study", exact: true })).toBeVisible();
+  await expect(nav.getByRole("link", { name: "Applications", exact: true })).toHaveAttribute("aria-current", "page");
+  await expect(block(page).getByRole("heading", { name: "Applications", exact: true })).toBeVisible();
 });
 
 test("mobile navigation keeps the shell surface and returns focus", async ({ page }) => {
@@ -163,7 +231,7 @@ test("mobile navigation keeps the shell surface and returns focus", async ({ pag
   expect(drawerSurface).toBe(shellSurface);
   expect(drawerSurface).not.toBe("rgba(0, 0, 0, 0)");
 
-  await expect(drawer.getByRole("button", { name: "Projects", exact: true })).toBeVisible();
+  await expect(drawer.getByRole("heading", { name: "Projects", exact: true })).toBeVisible();
   await page.keyboard.press("Escape");
   await expect(drawer).toBeHidden();
   await expect(shell.getByRole("button", { name: "Open sidebar", exact: true })).toBeFocused();
@@ -212,10 +280,10 @@ test("mobile item details fit the viewport and Escape returns focus after animat
 test("rail links support keyboard entry, new tabs, and browser history", async ({ page, context }) => {
   await openExample(page);
   await navigation(page).getByRole("button", { name: "Collapse sidebar", exact: true }).click();
-  const code = navigation(page).getByRole("button", { name: "Templates", exact: true });
+  const code = navigation(page).getByRole("link", { name: "Projects", exact: true });
   await code.focus();
   await code.press("ArrowDown");
-  const repositories = page.getByRole("navigation", { name: "Templates pages", exact: true }).getByRole("link", { name: "Overview", exact: true });
+  const repositories = page.locator('[data-paneled-flyout="Projects"]').getByRole("link", { name: "Overview", exact: true });
   await expect(repositories).toBeFocused();
   await repositories.press("Escape");
   await expect(repositories).toBeHidden();
@@ -225,13 +293,13 @@ test("rail links support keyboard entry, new tabs, and browser history", async (
   const newPage = context.waitForEvent("page");
   await repositories.click({ modifiers: ["ControlOrMeta"] });
   const tab = await newPage;
-  await expect(tab.getByRole("heading", { name: "All templates", exact: true })).toBeVisible();
+  await expect(tab.getByRole("heading", { name: "All projects", exact: true })).toBeVisible();
   await tab.close();
   await expect(block(page).getByRole("heading", { name: "Simulation runs", exact: true })).toBeVisible();
   await code.press("ArrowDown");
   await repositories.press("Enter");
-  await expect(block(page).getByRole("heading", { name: "All templates", exact: true })).toBeVisible();
-  await expect(page).toHaveURL(/view=All(?:\+|%20)templates/);
+  await expect(block(page).getByRole("heading", { name: "All projects", exact: true })).toBeVisible();
+  await expect(page).toHaveURL(/view=All(?:\+|%20)projects/);
   await page.goBack();
   await expect(block(page).getByRole("heading", { name: "Simulation runs", exact: true })).toBeVisible();
 });
