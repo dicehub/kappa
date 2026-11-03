@@ -1,6 +1,8 @@
 .kappa-app-shell.kappa-sidebar-layout { position: relative; inline-size: 100%; block-size: 100%; min-inline-size: 0; min-block-size: 0; font-size: 0.875rem; line-height: 1.5; container: kappa-app-shell / inline-size; isolation: isolate; }
 .kappa-app-shell[data-fill] { block-size: 100svh; block-size: 100dvh; }
 .kappa-app-shell__brand { display: grid; flex: none; inline-size: 1.75rem; block-size: 1.75rem; place-items: center; border-radius: 0.3125rem; }
+.kappa-app-shell__brand--wordmark { display: inline-flex; inline-size: auto; align-items: center; gap: 0.5rem; }
+.kappa-app-shell__brand .kappa-app-shell__wordmark { flex: none; inline-size: 4.375rem; block-size: auto; }
 .kappa-app-shell__brand:focus-visible { outline: 2px solid var(--kappa-focus); outline-offset: 2px; }
 .kappa-app-shell__brand .kappa-dicehub-logo--glyph { inline-size: 1.5rem; block-size: 1.5rem; }
 .kappa-app-shell__brand .kappa-dicehub-logo__hit-area { pointer-events: all; }
@@ -41,6 +43,11 @@
   .kappa-app-shell > .kappa-sidebar-layout__site-header .kappa-app-shell__search { position: static; translate: none; inline-size: 2rem; min-inline-size: 2rem; padding: 0.375rem; }
   .kappa-app-shell__search .kappa-button__label { display: none; }
   .kappa-app-shell__page { padding: 1rem; }
+}
+
+@container kappa-app-shell (max-width: 23.999rem) {
+  .kappa-app-shell__brand--wordmark { gap: 0; }
+  .kappa-app-shell__brand .kappa-app-shell__wordmark { display: none; }
 }
 
 .kappa-app-shell[data-hide-desktop-trigger]:not([data-mobile]) > .kappa-sidebar-layout__site-header > .kappa-sidebar__trigger { display: none; }

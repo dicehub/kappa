@@ -3,7 +3,7 @@
 .kappa-app-shell[data-appearance="paneled"] { overflow: hidden; background: var(--kappa-paneled-chrome); }
 .kappa-app-shell[data-appearance="paneled"] > .kappa-sidebar-layout__site-header { z-index: 5; }
 .kappa-app-shell[data-appearance="paneled"][data-mobile] > .kappa-sidebar-layout__site-header { gap: 0.5rem; }
-.kappa-app-shell[data-appearance="paneled"][data-mobile] .kappa-app-shell__brand { inline-size: 1.5rem; }
+.kappa-app-shell[data-appearance="paneled"][data-mobile] .kappa-app-shell__brand:not(.kappa-app-shell__brand--wordmark) { inline-size: 1.5rem; }
 .kappa-app-shell[data-appearance="paneled"][data-mobile] .kappa-app-shell__page { padding-inline: 0.75rem; }
 .kappa-app-shell[data-appearance="paneled"] > .kappa-sidebar-layout__body { z-index: 1; padding-block-end: 0.5rem; }
 .kappa-app-shell[data-appearance="paneled"] .kappa-app-shell__panels-body { padding-block-end: 0; }

@@ -10,7 +10,7 @@ import { Field } from "@dicehub/kappa/components/field";
 import { Table } from "@dicehub/kappa/components/table";
 import { Badge } from "@dicehub/kappa/components/badge";
 import { Avatar } from "@dicehub/kappa/components/avatar";
-import { DicehubLogo } from "@dicehub/kappa/components/dicehub-logo";
+import { DicehubLogo, DICEHUB_WORDMARK_PATH, DICEHUB_WORDMARK_VIEWBOX } from "@dicehub/kappa/components/dicehub-logo";
 import { CommandPalette } from "@dicehub/kappa/components/command-palette";
 import { Kbd, KbdGroup } from "@dicehub/kappa/components/kbd";
 import PaneledWorkspaceProfileMenu from "./PaneledWorkspaceProfileMenu.vue";
@@ -268,7 +268,12 @@ onBeforeUnmount(() => { railObserver?.disconnect(); cancelAnimationFrame(navigat
   <div ref="root" class="paneled-workspace-demo" data-sidebar-block="paneled-workspace" :data-standalone="props.standalone || undefined" :data-activity="asideOpen || undefined" @keydown="shortcut">
     <AppShell.Root appearance="paneled" bloom hide-desktop-trigger resizable :default-width="240" :min-width="200" :max-width="420" v-model:open="navigationOpen" v-model:mobile-open="mobileOpen" label="Paneled workspace navigation" :navigation-props="{ class: 'paneled-workspace-demo__navigation' }" class="paneled-workspace-demo__layout">
       <template #toolbar-start>
-        <a class="kappa-app-shell__brand" :href="breadcrumbHref('Dashboard')" aria-label="dicehub home" @click="navigateLink('Dashboard', $event)"><DicehubLogo variant="glyph" aria-hidden="true" /></a>
+        <a class="kappa-app-shell__brand kappa-app-shell__brand--wordmark" :href="breadcrumbHref('Dashboard')" aria-label="dicehub home" @click="navigateLink('Dashboard', $event)">
+          <DicehubLogo variant="glyph" aria-hidden="true" />
+          <svg class="kappa-app-shell__wordmark kappa-dicehub-logo kappa-dicehub-logo--color" :viewBox="DICEHUB_WORDMARK_VIEWBOX" aria-hidden="true" focusable="false">
+            <path :d="DICEHUB_WORDMARK_PATH" fill="currentColor" />
+          </svg>
+        </a>
       </template>
       <template #toolbar>
         <AppShell.SearchTrigger shortcut="Ctrl + K" data-paneled-search :icon="Search" aria-keyshortcuts="Control+K" aria-haspopup="dialog" :aria-expanded="searchOpen" @click="showSearch" />
