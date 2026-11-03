@@ -1,6 +1,6 @@
 {
   "name": "@dicehub/kappa",
-  "version": "0.7.0",
+  "version": "1.0.0",
   "description": "Vue components and application blocks for dicehub products.",
   "license": "MIT",
   "type": "module",
