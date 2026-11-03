@@ -34,9 +34,7 @@
 .paneled-workspace-demo__workspace-row { display: flex; inline-size: 100%; min-inline-size: 0; align-items: center; gap: 0.25rem; }
 .paneled-workspace-demo__context-row .paneled-workspace-demo__context-label { flex: 1; }
 .paneled-workspace-demo__workspace-row .paneled-workspace-demo__workspace-switcher { flex: 1; min-inline-size: 0; }
-.paneled-workspace-demo__navigation .kappa-sidebar__footer .paneled-workspace-demo__help.kappa-toolbar-button { flex: none; inline-size: var(--kappa-button-size); justify-content: center; }
-.paneled-workspace-demo__help.kappa-toolbar-button { --kappa-toolbar-button-foreground: var(--kappa-shell-nav-foreground); }
-.paneled-workspace-demo__help:is(:hover, :active, :focus-visible, [aria-expanded="true"]).kappa-toolbar-button { --kappa-toolbar-button-foreground: var(--kappa-shell-nav-emphasis); }
+.paneled-workspace-demo__help { margin-block-start: auto; }
 .paneled-workspace-demo__workspace-row[data-collapsed] { flex-direction: column; }
 .paneled-workspace-demo__navigation[data-mobile] .paneled-workspace-demo__workspace-row { flex-direction: column; align-items: flex-start; }
 .paneled-workspace-demo__navigation[data-mobile] .paneled-workspace-demo__workspace-switcher { inline-size: 100%; }
@@ -46,7 +44,6 @@
 .paneled-workspace-demo__navigation[data-mobile] .paneled-workspace-demo__context-row { inline-size: calc(100% - 3rem); min-block-size: 2.75rem; }
 .paneled-workspace-demo__navigation[data-mobile] .paneled-workspace-demo__back { inline-size: calc(100% - 3rem); min-block-size: 2.75rem; }
 .paneled-workspace-demo__navigation[data-mobile] .paneled-workspace-demo__workspace-switcher { min-block-size: 2.75rem; }
-.paneled-workspace-demo__navigation[data-mobile] .paneled-workspace-demo__help { min-inline-size: 2.75rem; min-block-size: 2.75rem; }
 @media (hover: none) { .paneled-workspace-demo__pin { opacity: 1; } }
 .paneled-workspace-demo__workspace-switcher.kappa-sidebar__menu-button:is(:hover, :focus-visible, [aria-expanded="true"]):not([data-disabled]) { background: var(--kappa-shell-nav-highlight); }
 .paneled-workspace-demo__workspace-switcher .kappa-sidebar__menu-label > svg { opacity: 0; transition: opacity 200ms ease; }
@@ -231,6 +228,7 @@
 .paneled-workspace-demo__activity-scroll[data-scroll-start]::before,
 .paneled-workspace-demo__activity-scroll[data-scroll-end]::after { opacity: 1; }
 @container paneled-workspace (max-width: 61.999rem) {
+.paneled-workspace-demo__help { margin-block-start: 0; }
 .paneled-workspace-demo__activity-size { display: none; }
 }
 .paneled-workspace-demo__work-header { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem; padding-block: 0.5rem; }

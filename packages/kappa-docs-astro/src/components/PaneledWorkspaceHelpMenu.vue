@@ -4,7 +4,7 @@ import { ToolbarButton } from "@dicehub/kappa/components/button";
 import { Kbd } from "@dicehub/kappa/components/kbd";
 import { BookOpen, CircleHelp, FileText, Keyboard, MessageSquare, Sparkles } from "@lucide/vue";
 
-defineProps<{ isMobile: boolean; iconCollapsed: boolean; hrefForPage: (page: string) => string }>();
+defineProps<{ railOnBottom: boolean; hrefForPage: (page: string) => string }>();
 const emit = defineEmits<{ navigate: [page: string] }>();
 const resources = [
   { label: "Help", icon: CircleHelp },
@@ -19,12 +19,12 @@ const activateLink: NonNullable<DropdownProps["navigate"]> = ({ node }) => {
 
 <template>
   <Dropdown.Root aria-label="Help" :navigate="activateLink"
-    :positioning="{ placement: iconCollapsed ? 'right-end' : 'top-end', strategy: 'fixed', gutter: 4, fitViewport: true, overflowPadding: 8 }">
+    :positioning="{ placement: railOnBottom ? 'top-end' : 'left-end', strategy: 'fixed', gutter: 4, fitViewport: true, overflowPadding: 8 }">
     <Dropdown.Trigger as-child>
-      <ToolbarButton :icon="CircleHelp" :size="iconCollapsed ? 'sm' : 'base'" tooltip="Help" class="paneled-workspace-demo__help" />
+      <ToolbarButton :icon="CircleHelp" size="sm" tooltip="Help" :tooltip-placement="railOnBottom ? 'top' : 'left'" class="paneled-workspace-demo__help" />
     </Dropdown.Trigger>
     <Dropdown.Context v-slot="menu">
-      <Dropdown.Content show-arrow :teleport="!isMobile" :inert="!menu.open || undefined">
+      <Dropdown.Content show-arrow :inert="!menu.open || undefined">
         <Dropdown.Group>
           <Dropdown.Label>Version 0.1.2</Dropdown.Label>
           <Dropdown.Separator />

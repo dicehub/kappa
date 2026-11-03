@@ -311,7 +311,6 @@ onBeforeUnmount(() => { railObserver?.disconnect(); cancelAnimationFrame(navigat
       </template>
       <template #footer="context">
         <div class="paneled-workspace-demo__workspace-row" :data-collapsed="context.iconCollapsed || undefined">
-          <PaneledWorkspaceHelpMenu v-if="context.isMobile || context.iconCollapsed" :is-mobile="context.isMobile" :icon-collapsed="context.iconCollapsed" :href-for-page="breadcrumbHref" @navigate="navigate" />
           <WorkspaceSwitcher show-arrow :model-value="namespace" v-model:open="workspaceMenuOpen" :items="workspaceOptions"
             :workspace-actions="[{ value: 'New group', label: 'Create Group', icon: Plus }, { value: 'Groups', label: 'Show all groups', icon: UsersRound }]" @action="navigate($event.value)"
             label="Workspaces" account-label="ros@example.test" :teleport="!context.isMobile"
@@ -330,7 +329,6 @@ onBeforeUnmount(() => { railObserver?.disconnect(); cancelAnimationFrame(navigat
               </Sidebar.MenuButton>
             </template>
           </WorkspaceSwitcher>
-          <PaneledWorkspaceHelpMenu v-if="!context.isMobile && !context.iconCollapsed" :is-mobile="context.isMobile" :icon-collapsed="context.iconCollapsed" :href-for-page="breadcrumbHref" @navigate="navigate" />
         </div>
       </template>
       <template #default>
@@ -431,6 +429,7 @@ onBeforeUnmount(() => { railObserver?.disconnect(); cancelAnimationFrame(navigat
       <template #rail>
         <ToolbarButton variant="ghost" size="sm" :icon="Sparkles" tooltip="AI chat" :tooltip-placement="railOnBottom ? 'top' : 'left'" :aria-expanded="asideOpen && sidePanel === 'ai'" @click="toggleTool('ai', $event)" />
         <ToolbarButton variant="ghost" size="sm" :icon="Activity" tooltip="Activities" :tooltip-placement="railOnBottom ? 'top' : 'left'" :aria-expanded="asideOpen && sidePanel === 'activities'" @click="toggleTool('activities', $event)" />
+        <PaneledWorkspaceHelpMenu :rail-on-bottom="railOnBottom" :href-for-page="breadcrumbHref" @navigate="navigate" />
       </template>
     </AppShell.Root>
   </div>
