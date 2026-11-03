@@ -1,6 +1,6 @@
 import { expect, test, type Locator, type Page } from "@playwright/test";
 
-const path = "/examples/appshell/paneled-workspace?view=Pipelines";
+const path = "/examples/appshell/paneled-workspace?view=Simulation+runs&project=WA-01";
 const navigation = (page: Page) => page.getByRole("navigation", { name: "Paneled workspace navigation", exact: true });
 const flyout = (page: Page) => page.getByRole("navigation", { name: "Simulation pages", exact: true });
 
@@ -51,7 +51,7 @@ for (const theme of ["light", "dark"]) {
     await expect(popupPipelines).toBeVisible();
     const popupBox = popup.locator("..");
     await expect(popupBox).toHaveCSS("width", "200px");
-    await expect(popupBox).toHaveCSS("height", "66px");
+    await expect(popupBox).toHaveCSS("height", "96px");
     await expect(popupBox).toHaveCSS("padding", "4px 4px 2px");
     await expect(popupBox).toHaveCSS("border-radius", "8px");
     await expect(popupBox).toHaveCSS("background-color", theme === "light" ? "rgb(255, 255, 255)" : "rgb(40, 39, 45)");
@@ -84,11 +84,11 @@ for (const theme of ["light", "dark"]) {
     await expect(popupBox.getByRole("heading", { name: "Simulation", exact: true })).toBeVisible();
     await expect(popupPipelines).toBeVisible();
     await expect(popupPipelines).toHaveAttribute("aria-current", "page");
-    await popup.getByRole("link", { name: "Result files", exact: true }).click();
-    await expect(page.getByRole("heading", { name: "Result files", exact: true })).toBeVisible();
+    await popup.getByRole("link", { name: "Results", exact: true }).click();
+    await expect(page.getByRole("heading", { name: "Results", exact: true })).toBeVisible();
     await expect(popup).toBeHidden();
     await build.hover();
-    await expect(popup.getByRole("link", { name: "Result files", exact: true })).toHaveAttribute("aria-current", "page");
+    await expect(popup.getByRole("link", { name: "Results", exact: true })).toHaveAttribute("aria-current", "page");
     await expect(popupPipelines).not.toHaveAttribute("aria-current");
     await page.goBack();
     await expect(page.getByRole("heading", { name: "Simulation runs", exact: true })).toBeVisible();
@@ -113,7 +113,7 @@ for (const theme of ["light", "dark"]) {
     await page.mouse.move(600, 100);
     await build.hover();
     const pipelines = flyout(page).getByRole("link", { name: "Simulation runs", exact: true });
-    const artifacts = flyout(page).getByRole("link", { name: "Result files", exact: true });
+    const artifacts = flyout(page).getByRole("link", { name: "Results", exact: true });
     for (const link of [pipelines, artifacts]) {
       await link.hover();
       await expect(link).toHaveCSS("height", "28px");
@@ -141,9 +141,9 @@ for (const theme of ["light", "dark"]) {
 
 test("focus opens a closed category and its hover style follows the pointer into the submenu", async ({ page }) => {
   await openExample(page);
-  const code = navigation(page).getByRole("button", { name: "Aircraft", exact: true });
-  const pages = page.getByRole("navigation", { name: "Aircraft pages", exact: true });
-  const repositories = pages.getByRole("link", { name: "Airframe", exact: true });
+  const code = navigation(page).getByRole("button", { name: "Analytics", exact: true });
+  const pages = page.getByRole("navigation", { name: "Analytics pages", exact: true });
+  const repositories = pages.getByRole("link", { name: "Reports", exact: true });
   await code.focus();
   await expect(repositories).toBeVisible();
   await expect(code).toBeFocused();
@@ -164,16 +164,17 @@ test("focus opens a closed category and its hover style follows the pointer into
 
 test("collapsed flyouts allow pointer drift before entering a lower submenu item", async ({ page }) => {
   await openExample(page);
+  await navigation(page).getByRole("link", { name: "Back to Projects", exact: true }).click();
   const nav = navigation(page);
   await nav.getByRole("button", { name: "Collapse sidebar", exact: true }).click();
-  const project = nav.getByRole("button", { name: "Projects", exact: true });
-  const templates = nav.getByRole("button", { name: "Templates", exact: true });
+  const project = nav.getByRole("button", { name: "Templates", exact: true });
+  const templates = nav.getByRole("button", { name: "Engineering tools", exact: true });
   // An earlier popup must not leave an invisible container over this one.
-  await nav.getByRole("button", { name: "Aircraft", exact: true }).hover();
-  await expect(page.getByRole("navigation", { name: "Aircraft pages", exact: true })).toBeVisible();
+  await nav.getByRole("button", { name: "Projects", exact: true }).hover();
+  await expect(page.getByRole("navigation", { name: "Projects pages", exact: true })).toBeVisible();
   await project.hover();
-  const settings = page.getByRole("navigation", { name: "Projects pages", exact: true })
-    .getByRole("link", { name: "Project Settings", exact: true });
+  const settings = page.getByRole("navigation", { name: "Templates pages", exact: true })
+    .getByRole("link", { name: "My Published Templates", exact: true });
   await expect(settings).toBeVisible();
   const trigger = (await project.boundingBox())!;
   const destination = (await settings.boundingBox())!;
@@ -188,13 +189,13 @@ test("collapsed flyouts allow pointer drift before entering a lower submenu item
   await page.mouse.move(destination.x + 10, destination.y + destination.height / 2);
   await expect(settings).toBeVisible();
   await settings.click();
-  await expect(page.getByRole("heading", { name: "Project Settings", exact: true })).toBeFocused();
+  await expect(page.getByRole("heading", { name: "My Published Templates", exact: true })).toBeFocused();
 
   // Straight movement down the icon centers still selects the next category.
   await project.hover();
   const next = (await templates.boundingBox())!;
   await page.mouse.move(next.x + next.width / 2, next.y + next.height / 2);
-  await expect(page.getByRole("navigation", { name: "Templates pages", exact: true })).toBeVisible();
+  await expect(page.getByRole("navigation", { name: "Engineering tools pages", exact: true })).toBeVisible();
   await expect(settings).toBeHidden();
 });
 
@@ -212,7 +213,7 @@ test("mobile groups keep selection and use inline links inside the drawer", asyn
   const pipelines = drawer.getByRole("link", { name: "Simulation runs", exact: true });
   await expect(pipelines).toHaveAttribute("aria-current", "page");
   await expect(build).not.toHaveAttribute("aria-current");
-  await drawer.getByRole("link", { name: "Result files", exact: true }).click();
+  await drawer.getByRole("link", { name: "Results", exact: true }).click();
   await expect(drawer).toBeHidden();
-  await expect(page.getByRole("heading", { name: "Result files", exact: true })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Results", exact: true })).toBeVisible();
 });

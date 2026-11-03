@@ -1,9 +1,10 @@
 import { expect, test, type Locator, type Page } from "@playwright/test";
 
 const path = "/examples/appshell/paneled-workspace";
+const navigation = (page: Page) => page.getByRole("navigation", { name: "Paneled workspace navigation", exact: true });
 async function open(page: Page) {
   await page.emulateMedia({ reducedMotion: "reduce" });
-  await page.goto(path);
+  await page.goto(`${path}?view=Simulation+runs`);
   await expect.poll(() => page.locator("astro-island").evaluate(node => node.hasAttribute("ssr"))).toBe(false);
 }
 async function bounds(locator: Locator, expected: Record<string, number>) {
@@ -16,7 +17,7 @@ async function bounds(locator: Locator, expected: Record<string, number>) {
 test("selected paneled navigation indicators sit at the sidebar edge", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 1000 });
   await open(page);
-  const project = page.getByRole("link", { name: "Dashboard", exact: true });
+  const project = navigation(page).getByRole("link", { name: "Dashboard", exact: true });
   const expectIndicator = async (link: Locator) => {
     await expect(link).toHaveAttribute("aria-current", "page");
     expect(await link.evaluate(node => {
@@ -40,7 +41,7 @@ test("selected paneled navigation indicators sit at the sidebar edge", async ({ 
       };
     })).toEqual({ edge: 0, gap: 6, top: 4, bottom: 4, width: 2, height: 20, visibleWidth: 2 });
   };
-  await expectIndicator(page.getByRole("link", { name: "Work items", exact: true }).last());
+  await expectIndicator(navigation(page).getByRole("link", { name: "Simulation runs", exact: true }));
   await project.click();
   await expectIndicator(project);
   await page.getByRole("button", { name: "Collapse sidebar", exact: true }).click();
@@ -58,13 +59,13 @@ test("paneled navigation has no pinned section, pin controls, or feature catalog
   await open(page);
   await expect(page.getByRole("button", { name: "Pinned", exact: true })).toHaveCount(0);
   await expect(page.getByRole("button", { name: /^(Pin|Unpin) / })).toHaveCount(0);
-  await expect(page.getByRole("link", { name: "Work items", exact: true })).toHaveCount(1);
+  await expect(navigation(page).getByRole("link", { name: "Simulation runs", exact: true })).toHaveCount(1);
   await expect(page.getByRole("button", { name: "Feature catalog", exact: true })).toHaveCount(0);
   await expect(page.getByRole("dialog", { name: "Feature catalog", exact: true, includeHidden: true })).toHaveCount(0);
-  await expect(page.locator('[data-slot="sidebar-separator"]')).toBeVisible();
+  await expect(page.locator('[data-slot="sidebar-separator"]')).toHaveCount(0);
   await page.getByRole("button", { name: "Collapse sidebar", exact: true }).click();
   await expect(page.getByRole("button", { name: "Feature catalog", exact: true })).toHaveCount(0);
-  await expect(page.locator('[data-slot="sidebar-separator"]')).toBeVisible();
+  await expect(page.locator('[data-slot="sidebar-separator"]')).toHaveCount(0);
   await page.setViewportSize({ width: 390, height: 844 });
   await page.getByRole("button", { name: "Open sidebar", exact: true }).click();
   const drawer = page.getByRole("dialog", { name: "Paneled workspace navigation", exact: true });
@@ -72,7 +73,7 @@ test("paneled navigation has no pinned section, pin controls, or feature catalog
   await expect(drawer.getByRole("button", { name: "Pinned", exact: true })).toHaveCount(0);
   await expect(drawer.getByRole("button", { name: /^(Pin|Unpin) / })).toHaveCount(0);
   await expect(drawer.getByRole("button", { name: "Feature catalog", exact: true })).toHaveCount(0);
-  await expect(drawer.locator('[data-slot="sidebar-separator"]')).toBeVisible();
+  await expect(drawer.locator('[data-slot="sidebar-separator"]')).toHaveCount(0);
 });
 
 test("paneled navigation puts Dashboard under Your work in the scrolling navigation", async ({ page }) => {
@@ -81,43 +82,43 @@ test("paneled navigation puts Dashboard under Your work in the scrolling navigat
   const nav = page.getByRole("navigation", { name: "Paneled workspace navigation", exact: true });
   const heading = nav.locator(".paneled-workspace-demo__context-label");
   const project = nav.getByRole("link", { name: "Dashboard", exact: true });
-  const help = nav.getByRole("button", { name: "Help", exact: true });
+  const help = page.getByRole("navigation", { name: "Workspace tools", exact: true }).getByRole("button", { name: "Help", exact: true });
   const collapse = nav.getByRole("button", { name: "Collapse sidebar", exact: true });
   await bounds(nav, { x: 0, y: 48, width: 240, height: 944 });
-  await bounds(nav.getByRole("button", { name: "Workspace: Ros.Space", exact: true }), { x: 8, y: 954, width: 188, height: 28 });
-  await bounds(heading, { x: 16, y: 61.5, height: 21 });
+  await bounds(nav.getByRole("button", { name: "Workspace: Ros.Space", exact: true }), { x: 8, y: 956, width: 224, height: 28 });
+  await bounds(heading, { x: 16, y: 62, height: 21 });
   await bounds(project, { x: 8, y: 100, width: 224, height: 28 });
   await expect(project.locator(".lucide-layout-dashboard")).toBeVisible();
   await expect(nav.locator('[data-slot="sidebar-separator"]')).toHaveCount(0);
-  await bounds(nav.getByRole("button", { name: "Projects", exact: true }), { x: 8, y: 130, width: 224, height: 28 });
-  await bounds(help, { x: 200, y: 952, width: 32, height: 32 });
+  await bounds(nav.getByRole("button", { name: "Projects", exact: true }), { x: 8, y: 160, width: 224, height: 28 });
+  await bounds(help, { x: 1408, y: 960, width: 24, height: 24 });
   await bounds(collapse, { x: 200, y: 56, width: 32, height: 32 });
   await expect(project).toHaveCSS("font-size", "14px");
-  await expect(page.locator(".kappa-app-shell__panels")).toHaveCSS("font-size", "13px");
+  await expect(page.locator(".kappa-app-shell__panels")).toHaveCSS("font-size", "14px");
 
   await collapse.click();
   await bounds(nav, { width: 44 });
-  await bounds(project, { x: 8, y: 92, width: 28, height: 28 });
+  await bounds(project, { x: 8, y: 100, width: 28, height: 28 });
   await expect(project.locator(".lucide-layout-dashboard")).toBeVisible();
-  await bounds(nav.getByRole("button", { name: "Projects", exact: true }), { x: 8, y: 122, height: 28 });
+  await bounds(nav.getByRole("button", { name: "Projects", exact: true }), { x: 8, y: 160, height: 28 });
   await bounds(page.locator(".kappa-app-shell__panel-frame"), { x: 44, y: 48, width: 1356, height: 944 });
   await nav.getByRole("button", { name: "Expand sidebar", exact: true }).click();
 
   await page.setViewportSize({ width: 1440, height: 500 });
-  const scroll = nav.locator(".kappa-sidebar__content");
+  const scroll = nav.getByRole("region", { name: "Workspace links", exact: true });
   await scroll.hover();
   await page.mouse.wheel(0, 500);
   await expect.poll(() => scroll.evaluate(node => node.scrollTop)).toBeGreaterThan(0);
   await expect.poll(async () => (await project.boundingBox())?.y ?? 100).toBeLessThan(100);
-  await bounds(heading, { x: 16, y: 61.5 });
-  await bounds(help, { y: 452 });
+  await bounds(heading, { x: 16, y: 62 });
+  await bounds(help, { y: 460 });
   await bounds(collapse, { y: 56 });
 });
 
 test("paneled sidebar resizes without moving bounded content and retains its width", async ({ page }) => {
   await page.setViewportSize({ width: 2000, height: 1000 });
   await open(page);
-  await page.getByRole("link", { name: "Dashboard", exact: true }).click();
+  await navigation(page).getByRole("link", { name: "Dashboard", exact: true }).click();
   const nav = page.getByRole("navigation", { name: "Paneled workspace navigation", exact: true });
   const handle = page.getByRole("separator", { name: "Resize sidebar", exact: true });
   const content = page.locator('.paneled-workspace-demo__page-content[data-width="limited"]');
@@ -176,9 +177,10 @@ test("paneled mobile drawer keeps the same navigation spacing and restores focus
   await toggle.click();
   const drawer = page.getByRole("dialog", { name: "Paneled workspace navigation", exact: true });
   await bounds(drawer, { x: 0, y: 0, width: 312, height: 844 });
-  await bounds(drawer.locator(".paneled-workspace-demo__context-label"), { x: 16, y: 113, height: 21 });
-  await bounds(drawer.getByRole("link", { name: "Dashboard", exact: true }), { x: 8, y: 60, width: 296, height: 28 });
-  await bounds(drawer.getByRole("button", { name: "Help", exact: true }), { x: 4, y: 812, width: 300, height: 28 });
+  await bounds(drawer.locator(".paneled-workspace-demo__context-label"), { x: 16, y: 20, height: 21 });
+  await bounds(drawer.getByRole("link", { name: "Dashboard", exact: true }), { x: 8, y: 64, width: 296, height: 28 });
+  await expect(drawer.getByRole("button", { name: "Help", exact: true })).toHaveCount(0);
+  await bounds(drawer.getByRole("button", { name: "Workspace: Ros.Space", exact: true }), { x: 4, y: 796, width: 300, height: 44 });
   await page.keyboard.press("Escape");
   await expect(drawer).toBeHidden();
   await expect(toggle).toBeFocused();
@@ -193,7 +195,7 @@ test("tools stay in the shell when the complete panel container is removed", asy
     // Reproduce removing the panel container in DevTools. No Vue state is changed.
     await page.locator(".kappa-app-shell__panels-body").evaluate(node => node.remove());
     await expect(page.locator(".kappa-app-shell__panels-body")).toHaveCount(0);
-    await expect(rail.getByRole("button", { name: "Activity", exact: true })).toBeVisible();
+    await expect(rail.getByRole("button", { name: "Activities", exact: true })).toBeVisible();
     await bounds(rail, before);
     if (viewport.width >= 1200) {
       await page.getByRole("button", { name: "Collapse sidebar", exact: true }).click();
@@ -251,7 +253,7 @@ test("the footer switcher changes workspace in expanded, collapsed, and mobile n
   await expect(menu.locator('[data-slot="workspace-switcher-current"] .kappa-avatar')).toHaveCSS("border-radius", "50%");
   await menu.getByRole("menuitemradio", { name: "Research", exact: true }).click();
   await expect(trigger).toHaveAccessibleName("Workspace: Research");
-  await expect(page.getByRole("navigation", { name: "Workspace breadcrumb" }).getByRole("link", { name: "Orion testbed" })).toBeVisible();
+  await expect(page.getByRole("navigation", { name: "Workspace breadcrumb" }).getByRole("link", { name: "Research" })).toBeVisible();
   await expect(trigger).toBeFocused();
   await expect(dashboard.locator(".lucide-layout-dashboard")).toBeVisible();
 
@@ -271,13 +273,13 @@ test("the footer switcher changes workspace in expanded, collapsed, and mobile n
   await mobileMenu.getByRole("menuitemradio", { name: "Ros.Space", exact: true }).click();
   await expect(drawer).toBeHidden();
   await expect(opener).toBeFocused();
-  await expect(page.getByRole("navigation", { name: "Workspace breadcrumb" }).getByRole("link", { name: "Aster VTOL" })).toBeVisible();
+  await expect(page.getByRole("navigation", { name: "Workspace breadcrumb" }).getByRole("link", { name: "Ros.Space" })).toBeVisible();
 });
 
 test("Dashboard opens its summary without a dropdown", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 1000 });
   await open(page);
-  const project = page.getByRole("link", { name: "Dashboard", exact: true });
+  const project = navigation(page).getByRole("link", { name: "Dashboard", exact: true });
   await expect(project).toHaveAttribute("href", "?view=Dashboard");
   await expect(project).not.toHaveAttribute("aria-haspopup", /.+/);
   await project.click();

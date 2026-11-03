@@ -11,7 +11,7 @@ const categoryPages = (page: Page, category: string) =>
   page.getByRole("navigation", { name: `${category} pages`, exact: true });
 
 async function openExample(page: Page) {
-  await page.goto(examplePath);
+  await page.goto(`${examplePath}?view=Simulation+runs`);
   await expect.poll(() => block(page).evaluate(node =>
     node.closest("astro-island")?.hasAttribute("ssr"),
   )).toBe(false);
@@ -35,7 +35,7 @@ test("server output and gallery keep the complete Paneled Workspace source", asy
   const html = await response.text();
   expect(html).toContain('data-sidebar-block="paneled-workspace"');
   expect(html).toContain("Search or go to…");
-  expect(html).toContain("Work items");
+  expect(html).toContain("Simulation runs");
 
   await page.goto("/docs/blocks/appshell");
   const examples = page.locator("[data-block-example]");
@@ -99,7 +99,7 @@ test("header stays centered and navigation categories work in expanded and colla
   await expect(nav.getByRole("link", { name: "Overview", exact: true })).toBeVisible();
 
   await expect(nav.locator(".paneled-workspace-demo__context-label")).toHaveText("Your work");
-  const categories = ["Projects", "Templates", "Engineering tools", "Aircraft", "Simulation", "Flight testing", "Propulsion", "Flight operations", "Reports"];
+  const categories = ["Projects", "Templates", "Engineering tools"];
   for (const category of categories) {
     await expect(nav.getByRole("button", { name: category, exact: true })).toBeVisible();
   }
@@ -116,7 +116,7 @@ test("header stays centered and navigation categories work in expanded and colla
   const plan = nav.getByRole("button", { name: "Projects", exact: true });
   const planGroup = nav.locator(".paneled-workspace-demo__nav-group").filter({ has: page.getByRole("button", { name: "Projects", exact: true }) });
   const workItems = planGroup.getByRole("link", { name: "Overview", exact: true });
-  const milestones = planGroup.getByRole("link", { name: "Applications", exact: true });
+  const milestones = planGroup.getByRole("link", { name: "Wind Aero Study", exact: true });
   await expect(workItems).toBeVisible();
   await expect(milestones).toBeVisible();
   await plan.click();
@@ -125,10 +125,10 @@ test("header stays centered and navigation categories work in expanded and colla
   await expect(workItems).toBeVisible();
   await expect(milestones).toBeVisible();
 
-  const codeExpanded = nav.getByRole("button", { name: "Aircraft", exact: true });
-  const codeGroup = nav.locator(".paneled-workspace-demo__nav-group").filter({ has: page.getByRole("button", { name: "Aircraft", exact: true }) });
-  const repositoriesExpanded = codeGroup.getByRole("link", { name: "Airframe", exact: true });
-  const branchesExpanded = codeGroup.getByRole("link", { name: "Configurations", exact: true });
+  const codeExpanded = nav.getByRole("button", { name: "Engineering tools", exact: true });
+  const codeGroup = nav.locator(".paneled-workspace-demo__nav-group").filter({ has: page.getByRole("button", { name: "Engineering tools", exact: true }) });
+  const repositoriesExpanded = codeGroup.getByRole("link", { name: "Y+ calculator", exact: true });
+  const branchesExpanded = codeGroup.getByRole("link", { name: "Boundary layer height calculator", exact: true });
   await expect(repositoriesExpanded).toBeHidden();
   await codeExpanded.click();
   await expect(repositoriesExpanded).toBeVisible();
@@ -154,11 +154,11 @@ test("header stays centered and navigation categories work in expanded and colla
   await expect(planPages).toBeHidden();
   await expect(nav).toHaveCSS("width", "44px");
 
-  const code = nav.getByRole("button", { name: "Aircraft", exact: true });
+  const code = nav.getByRole("button", { name: "Engineering tools", exact: true });
   await code.focus();
-  const codePages = categoryPages(page, "Aircraft");
+  const codePages = categoryPages(page, "Engineering tools");
   await expect(codePages).toBeVisible();
-  const repositories = codePages.getByRole("link", { name: "Airframe", exact: true });
+  const repositories = codePages.getByRole("link", { name: "Y+ calculator", exact: true });
   await repositories.focus();
   await expect(repositories).toBeFocused();
   await repositories.press("Enter");
@@ -166,60 +166,43 @@ test("header stays centered and navigation categories work in expanded and colla
   await expect(nav).toHaveCSS("width", "44px");
 });
 
-test("work item search, status filters, and local creation update the list", async ({ page }) => {
+test("simulation run search, status tabs, and local creation update the table", async ({ page }) => {
   await openExample(page);
-  const list = block(page).getByRole("list", { name: "Work items", exact: true });
-  const rows = list.getByRole("listitem");
-  await expect(block(page).getByRole("heading", { name: "Work items", exact: true })).toBeVisible();
-  const allItems = block(page).getByRole("tab", { name: "All items", exact: true });
-  const addView = block(page).getByRole("button", { name: "Add view", exact: true });
-  await expect(allItems).toHaveAttribute("aria-selected", "true");
-  await expect(addView).toBeVisible();
-  await expect(list.getByRole("button", { name: "Refine the rotor mesh", exact: true })).toBeVisible();
-  await expect(list.getByRole("button", { name: "Compare inlet boundary conditions", exact: true })).toBeVisible();
-  await expect(list.getByRole("button", { name: "Review heat exchanger results", exact: true })).toBeVisible();
-
-  const filter = block(page).getByRole("searchbox", { name: "Filter work items", exact: true });
-  await filter.fill("rotor mesh");
-  await expect(rows).toHaveCount(1);
-  await expect(list.getByRole("button", { name: "Refine the rotor mesh", exact: true })).toBeVisible();
+  const shell = block(page);
+  const table = () => shell.getByRole("table", { name: / simulations$/ });
+  const runs = () => table().locator("tbody tr");
+  await expect(shell.getByRole("heading", { name: "Simulation runs", exact: true })).toBeVisible();
+  const all = shell.getByRole("tab", { name: /^All runs/ });
+  await expect(all).toHaveAttribute("aria-selected", "true");
+  const allCount = await runs().count();
+  expect(allCount).toBe(6);
+  const filter = shell.getByRole("searchbox", { name: "Filter simulation runs", exact: true });
+  await filter.fill("Rotor hover · baseline");
+  await expect(runs()).toHaveCount(1);
+  await expect(table().getByRole("button", { name: "Rotor hover · baseline", exact: true })).toBeVisible();
+  await filter.fill("missing simulation");
+  await expect(runs()).toHaveCount(0);
+  await expect(shell.getByText("No simulation runs match your search.", { exact: true })).toBeVisible();
   await filter.fill("");
-
-  const all = block(page).getByRole("radio", { name: "All", exact: true });
-  const open = block(page).getByRole("radio", { name: "Open", exact: true });
-  const closed = block(page).getByRole("radio", { name: "Closed", exact: true });
-  await expect(all).toBeChecked();
-  const allCount = await rows.count();
-  await open.click();
-  await expect(open).toBeChecked();
-  const openCount = await rows.count();
-  await closed.click();
-  await expect(closed).toBeChecked();
-  const closedCount = await rows.count();
-  expect(openCount).toBeGreaterThan(0);
-  expect(closedCount).toBeGreaterThan(0);
-  expect(openCount + closedCount).toBe(allCount);
-
+  let filteredCount = 0;
+  for (const status of ["Running", "Queued", "Completed", "Failed", "Cancelled"]) {
+    const tab = shell.getByRole("tab", { name: new RegExp(`^${status} `) });
+    await tab.click();
+    await expect(tab).toHaveAttribute("aria-selected", "true");
+    for (const row of await runs().all()) await expect(row).toContainText(status);
+    filteredCount += await runs().count();
+  }
+  expect(filteredCount).toBe(allCount);
   await all.click();
-  await expect(all).toBeChecked();
-  await expect(allItems).toHaveAttribute("aria-selected", "true");
-  await addView.click();
-  await page.getByRole("menuitem", { name: "Open items", exact: true }).click();
-  const openItems = block(page).getByRole("tab", { name: "Open items", exact: true });
-  await expect(openItems).toHaveAttribute("aria-selected", "true");
-  await expect(allItems).toHaveAttribute("aria-selected", "false");
-  await expect(open).toBeChecked();
-  await allItems.click();
-  await expect(allItems).toHaveAttribute("aria-selected", "true");
-  await expect(rows).toHaveCount(allCount);
-  const beforeCreate = await rows.count();
-  await block(page).getByRole("button", { name: "New item", exact: true }).click();
-  await expect(rows).toHaveCount(beforeCreate + 1);
-  const newItemDialog = page.getByRole("dialog", { name: "Work item details", exact: true });
-  await expect(newItemDialog).toBeVisible();
-  const newItemTitle = await newItemDialog.getByRole("heading", { level: 2 }).textContent();
-  expect(newItemTitle).toMatch(/^Untitled work item \d+$/);
-  await expect(list.getByRole("button", { name: newItemTitle!, exact: true })).toBeVisible();
+  await expect(runs()).toHaveCount(allCount);
+  await shell.getByRole("button", { name: "New simulation run", exact: true }).click();
+  await expect(runs()).toHaveCount(allCount + 1);
+  const detail = page.getByRole("dialog", { name: "Simulation run details", exact: true });
+  await expect(detail).toBeVisible();
+  const title = await detail.getByRole("heading", { level: 2 }).textContent();
+  expect(title).toMatch(/^Untitled simulation run \d+$/);
+  await expect(table().getByRole("button", { name: title!, exact: true })).toBeVisible();
+  await expect(detail.getByRole("complementary", { name: "Simulation run properties" })).toContainText("Queued");
 });
 
 test("details use a nonmodal overlay below the threshold and a keyboard-resizable split above it", async ({ page }) => {
@@ -229,23 +212,23 @@ test("details use a nonmodal overlay below the threshold and a keyboard-resizabl
   await expect(workspace).toHaveAttribute("data-panel-mode", "overlay");
   expect((await workspace.boundingBox())!.width).toBeLessThan(1200);
 
-  const first = block(page).getByRole("button", { name: "Refine the rotor mesh", exact: true });
+  const first = block(page).getByRole("button", { name: "Rotor hover · baseline", exact: true });
   await first.click();
-  const dialog = page.getByRole("dialog", { name: "Work item details", exact: true });
+  const dialog = page.getByRole("dialog", { name: "Simulation run details", exact: true });
   await expect(dialog).toBeVisible();
   await expect(dialog).not.toHaveAttribute("aria-modal", "true");
-  await expect(dialog.getByRole("heading", { name: "Refine the rotor mesh", exact: true })).toBeFocused();
+  await expect(dialog.getByRole("heading", { name: "Rotor hover · baseline", exact: true })).toBeFocused();
   await expect(dialog.getByRole("button", { name: "Close details", exact: true })).toBeVisible();
 
   // The list remains interactive while its nonmodal detail overlay is open.
   const second = block(page).getByRole("button", {
-    name: "Compare inlet boundary conditions",
+    name: "Wing cruise · angle of attack 6°",
     exact: true,
   });
   await second.click({ position: { x: 4, y: 8 } });
   await expect(dialog).toBeVisible();
   await expect(dialog.getByRole("heading", {
-    name: "Compare inlet boundary conditions",
+    name: "Wing cruise · angle of attack 6°",
     exact: true,
   })).toBeVisible();
   await dialog.getByRole("button", { name: "Close details", exact: true }).click();
@@ -264,12 +247,12 @@ test("details use a nonmodal overlay below the threshold and a keyboard-resizabl
   await expect(splitPanels).toHaveCount(2);
   await first.click();
   const splitDialog = splitPanels.nth(1).getByRole("dialog", {
-    name: "Work item details",
+    name: "Simulation run details",
     exact: true,
   });
   await expect(splitDialog).toBeVisible();
   await expect(splitDialog.getByRole("heading", {
-    name: "Refine the rotor mesh",
+    name: "Rotor hover · baseline",
     exact: true,
   })).toBeVisible();
   const separator = workspace.getByRole("separator");
@@ -281,8 +264,8 @@ test("details use a nonmodal overlay below the threshold and a keyboard-resizabl
   // Expand the rail again. The selected detail stays in the same workspace.
   await nav.getByRole("button", { name: "Expand sidebar", exact: true }).click();
   await expect(workspace).toHaveAttribute("data-panel-mode", "overlay");
-  await expect(page.getByRole("dialog", { name: "Work item details", exact: true })).toContainText(
-    "Refine the rotor mesh",
+  await expect(page.getByRole("dialog", { name: "Simulation run details", exact: true })).toContainText(
+    "Rotor hover · baseline",
   );
 });
 
@@ -291,9 +274,9 @@ test("detail overlay uses 80 percent of the workspace width at 600 pixels", asyn
   await openExample(page);
   const workspace = panels(page);
   await expect(workspace).toHaveAttribute("data-panel-mode", "overlay");
-  await block(page).getByRole("button", { name: "Refine the rotor mesh", exact: true }).click();
+  await block(page).getByRole("button", { name: "Rotor hover · baseline", exact: true }).click();
 
-  const detail = page.getByRole("dialog", { name: "Work item details", exact: true });
+  const detail = page.getByRole("dialog", { name: "Simulation run details", exact: true });
   await expect(detail).toBeVisible();
   const detailPositioner = workspace.locator(
     ".kappa-dialog__positioner:has(> .kappa-app-shell__detail)",
@@ -309,7 +292,11 @@ test("list and detail panels scroll independently; the activity rail opens a loc
   const workspace = panels(page);
   await nav.getByRole("button", { name: "Collapse sidebar", exact: true }).click();
   await expect(workspace).toHaveAttribute("data-panel-mode", "split");
-  await block(page).getByRole("button", { name: "Refine the rotor mesh", exact: true }).click();
+  for (let index = 0; index < 8; index++) {
+    await block(page).getByRole("button", { name: "New simulation run", exact: true }).click();
+    await page.getByRole("button", { name: "Close details", exact: true }).click();
+  }
+  await block(page).getByRole("button", { name: "Rotor hover · baseline", exact: true }).click();
 
   const splitPanels = workspace.locator('[data-slot="resizable-panel"]');
   const listScroll = workspace.locator(".paneled-workspace-demo__list-scroll");
@@ -317,7 +304,7 @@ test("list and detail panels scroll independently; the activity rail opens a loc
   await expect(splitPanels).toHaveCount(2);
   await expect(listScroll).toHaveCSS("overflow-y", "auto");
   await expect(detailScroll).toHaveCSS("overflow-y", "auto");
-  expect(await listScroll.getByRole("listitem").count()).toBeGreaterThanOrEqual(12);
+  expect(await listScroll.locator("tbody tr").count()).toBeGreaterThanOrEqual(12);
   await expect.poll(() => listScroll.evaluate(node =>
     (node as HTMLElement).scrollHeight > (node as HTMLElement).clientHeight,
   )).toBe(true);
@@ -340,14 +327,14 @@ test("list and detail panels scroll independently; the activity rail opens a loc
   await expect.poll(() => detailScroll.evaluate(node => (node as HTMLElement).scrollTop)).toBeGreaterThan(0);
   expect(await listScroll.evaluate(node => (node as HTMLElement).scrollTop)).toBe(listScrollTop);
 
-  const activityButton = block(page).getByRole("button", { name: "Activity", exact: true });
+  const activityButton = block(page).getByRole("button", { name: "Activities", exact: true });
   await expect(block(page).getByRole("navigation", { name: "Workspace tools" })).toHaveCSS("width", "40px");
   await activityButton.click();
-  const activity = page.getByRole("dialog", { name: "Workspace activity", exact: true });
+  const activity = page.getByRole("dialog", { name: "Activities", exact: true });
   await expect(activity).toBeVisible();
   await expect(activity).not.toHaveAttribute("aria-modal", "true");
-  await expect(activity.getByRole("heading", { name: "Activity", exact: true })).toBeFocused();
-  await activity.getByRole("button", { name: "Close activity", exact: true }).click();
+  await expect(activity.getByRole("heading", { name: "Activities", exact: true })).toBeFocused();
+  await activity.getByRole("button", { name: "Close Activities", exact: true }).click();
   await expect(activity).toBeHidden();
   await expect(activityButton).toBeFocused();
 });
@@ -356,8 +343,8 @@ test("activity panel resizes, maximizes, and restores while bloom motion respect
   await page.emulateMedia({ reducedMotion: "no-preference" });
   await openExample(page);
   const shell = block(page);
-  const activityButton = shell.getByRole("button", { name: "Activity", exact: true });
-  const activity = page.getByRole("dialog", { name: "Workspace activity", exact: true });
+  const activityButton = shell.getByRole("button", { name: "Activities", exact: true });
+  const activity = page.getByRole("dialog", { name: "Activities", exact: true });
 
   await expect.poll(() => shell.evaluate(node =>
     getComputedStyle(node, "::before").transitionDuration,
@@ -378,12 +365,12 @@ test("activity panel resizes, maximizes, and restores while bloom motion respect
     getComputedStyle(node, "::after").opacity,
   )).toBe("1");
 
-  await activity.getByRole("button", { name: "Maximize activity", exact: true }).click();
+  await activity.getByRole("button", { name: "Maximize Activities", exact: true }).click();
   await expect.poll(() => activity.evaluate(node => node.getBoundingClientRect().width))
     .toBeCloseTo(1158, 0);
   await expect.poll(() => activity.evaluate(node => node.getBoundingClientRect().x))
     .toBeCloseTo(241, 0);
-  await activity.getByRole("button", { name: "Restore activity size", exact: true }).click();
+  await activity.getByRole("button", { name: "Restore Activities", exact: true }).click();
   await expect.poll(() => activity.evaluate(node => node.getBoundingClientRect().width))
     .toBeCloseTo(400, 0);
   await expect.poll(() => activity.evaluate(node => node.getBoundingClientRect().x))
@@ -396,7 +383,7 @@ test("activity panel resizes, maximizes, and restores while bloom motion respect
   await expect.poll(() => shell.evaluate(node =>
     getComputedStyle(node, "::before").transitionDuration,
   )).toBe("0s");
-  await activity.getByRole("button", { name: "Close activity", exact: true }).click();
+  await activity.getByRole("button", { name: "Close Activities", exact: true }).click();
   await expect(activity).toBeHidden();
   await expect(activityButton).toBeFocused();
 });
@@ -405,15 +392,15 @@ test("closing Activity after a mobile resize clears its maximized state", async 
   await openExample(page);
   const shell = block(page);
   const body = shell.locator(".kappa-app-shell__panels-body");
-  const activityButton = shell.getByRole("button", { name: "Activity", exact: true });
-  const activity = page.getByRole("dialog", { name: "Workspace activity", exact: true });
+  const activityButton = shell.getByRole("button", { name: "Activities", exact: true });
+  const activity = page.getByRole("dialog", { name: "Activities", exact: true });
 
   await activityButton.click();
-  await activity.getByRole("button", { name: "Maximize activity", exact: true }).click();
+  await activity.getByRole("button", { name: "Maximize Activities", exact: true }).click();
   await expect(body).toHaveAttribute("data-maximized", "true");
   await page.setViewportSize({ width: 390, height: 844 });
   await expect(body).not.toHaveAttribute("data-maximized");
-  await activity.getByRole("button", { name: "Close activity", exact: true }).click();
+  await activity.getByRole("button", { name: "Close Activities", exact: true }).click();
   await expect(activity).toBeHidden();
   await expect(body).not.toHaveAttribute("data-maximized");
 
@@ -423,7 +410,7 @@ test("closing Activity after a mobile resize clears its maximized state", async 
   await page.setViewportSize({ width: 1440, height: 1000 });
   await expect.poll(() => activity.evaluate(node => node.getBoundingClientRect().width))
     .toBeCloseTo(400, 0);
-  await expect(activity.getByRole("button", { name: "Maximize activity", exact: true })).toBeVisible();
+  await expect(activity.getByRole("button", { name: "Maximize Activities", exact: true })).toBeVisible();
 });
 
 test("mobile navigation closes with Escape, returns focus, and keeps the page within the viewport", async ({ page }) => {

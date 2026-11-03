@@ -67,7 +67,7 @@ test("paneled bloom uses the reference placement, 992px breakpoint, and panel cr
   await expect.poll(async () => (await layer("::before")).opacity).toBe("1");
   await page.setViewportSize({ width: 1440, height: 1000 });
   await page.evaluate(() => document.documentElement.setAttribute("data-kappa-theme", "dark"));
-  await shell.getByRole("button", { name: "Activity", exact: true }).click();
+  await shell.getByRole("button", { name: "Activities", exact: true }).click();
   await expect.poll(async () => (await layer("::before")).opacity).toBe("0");
   await expect.poll(async () => (await layer("::after")).opacity).toBe("1");
   expect(await layer("::after")).toMatchObject({
