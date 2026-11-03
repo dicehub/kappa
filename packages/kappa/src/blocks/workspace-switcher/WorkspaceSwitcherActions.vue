@@ -7,7 +7,7 @@ defineEmits<{ action: [action: WorkspaceSwitcherAction] }>();
 
 <template>
   <Dropdown.Group>
-    <Dropdown.Separator v-if="section === 'footer'" />
+    <Dropdown.Separator v-if="section === 'workspace' || section === 'footer'" />
     <Dropdown.Item v-for="action in items" :key="action.value" :value="`workspace-action:${section}:${action.value}`"
       :value-text="action.label" :icon="action.icon" :disabled="action.disabled" :variant="action.variant"
       :data-accent="action.accent || undefined" class="kappa-workspace-switcher__action"
