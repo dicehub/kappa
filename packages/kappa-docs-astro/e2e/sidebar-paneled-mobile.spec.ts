@@ -23,11 +23,12 @@ test("mobile header puts the logo before the navigation toggle in display and ta
     await page.keyboard.press("Tab");
     await expect(toggle).toBeFocused();
     const search = (await page.getByRole("button", { name: "Search or go to…", exact: true }).boundingBox())!;
-    const create = (await page.getByRole("button", { name: "Create new", exact: true }).boundingBox())!;
-    expect(create.x - search.x - search.width).toBeGreaterThanOrEqual(8);
+    const credits = (await page.getByRole("button", { name: /^Credits:/ }).boundingBox())!;
+    expect(search.x).toBeGreaterThanOrEqual(button.x + button.width);
+    expect(credits.x - search.x - search.width).toBeGreaterThanOrEqual(8);
     if (width < 576) {
       const profile = (await page.getByRole("button", { name: "Profile: Alex Morgan", exact: true }).boundingBox())!;
-      expect(create.x - search.x - search.width).toBe(8);
+      expect(credits.x - search.x - search.width).toBe(8);
       expect(profile.x + profile.width).toBe(width - 8);
     }
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);

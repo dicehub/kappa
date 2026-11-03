@@ -24,9 +24,18 @@ test('minimal shell has reference proportions, one toggle, and a filterable proj
   const collapse = nav.getByRole('button', { name: 'Collapse sidebar', exact: true });
   await expect(collapse).toHaveCount(1);
   await expect(page.locator('.kappa-sidebar-layout__site-header').getByRole('button', { name: 'Collapse sidebar', exact: true })).toHaveCount(0);
-  const helpBox = (await nav.getByRole('button', { name: 'Help', exact: true }).boundingBox())!;
+  const namespace = nav.getByRole('button', { name: 'Namespace: Ros.Space', exact: true });
+  await expect(collapse).toHaveCSS('opacity', '0');
+  await namespace.hover();
+  await expect(collapse).toHaveCSS('opacity', '1');
+  const namespaceBox = (await namespace.boundingBox())!;
   const collapseBox = (await collapse.boundingBox())!;
-  expect(collapseBox.y).toBeGreaterThanOrEqual(helpBox.y + helpBox.height);
+  expect(collapseBox.x).toBeGreaterThan(namespaceBox.x + namespaceBox.width);
+  expect(collapseBox.y + collapseBox.height / 2).toBeCloseTo(namespaceBox.y + namespaceBox.height / 2, 1);
+  await page.mouse.move(0, 0);
+  await expect(collapse).toHaveCSS('opacity', '0');
+  await collapse.focus();
+  await expect(collapse).toHaveCSS('opacity', '1');
   const namespaceHeader = (await nav.locator('.kappa-sidebar__header').boundingBox())!;
   const breadcrumb = (await page.getByRole('navigation', { name: 'Workspace breadcrumb' }).boundingBox())!;
   expect(namespaceHeader.y + namespaceHeader.height).toBeCloseTo(breadcrumb.y + breadcrumb.height, 1);
@@ -71,6 +80,7 @@ test('project creation, templates, namespace selection, and page links use only 
 test('icon collapse retains namespace and Help menus while hiding project shortcuts', async ({ page }) => {
   await openExample(page);
   const nav = page.getByRole('navigation', { name: 'Minimal workspace navigation', exact: true });
+  await nav.getByRole('button', { name: 'Namespace: Ros.Space', exact: true }).hover();
   await page.getByRole('button', { name: 'Collapse sidebar', exact: true }).click();
   await expect(nav).toHaveCSS('width', '48px');
   await expect(nav.getByRole('list', { name: 'Project shortcuts', exact: true })).toHaveCount(0);
@@ -102,6 +112,7 @@ test('search remains centered on the full shell across viewport, collapse, and R
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   }
   await page.setViewportSize({ width: 1280, height: 900 });
+  await page.getByRole('button', { name: 'Namespace: Ros.Space', exact: true }).hover();
   await page.getByRole('button', { name: 'Collapse sidebar', exact: true }).click();
   await page.evaluate(() => { document.documentElement.dir = 'rtl'; });
   const search = (await page.getByRole('button', { name: 'Search or go to…', exact: true }).boundingBox())!;
@@ -188,8 +199,8 @@ test('Ctrl+K opens grouped search and leaves typing and other menus alone', asyn
   await expect(input).toBeFocused();
   await expect(input).toHaveValue('');
   await expect(dialog).toHaveCSS('width', '560px');
-  await expect(dialog.getByText('Go to', { exact: true })).toBeVisible();
-  await expect(dialog.getByRole('option').filter({ hasText: 'Rotor study' })).toHaveCount(0);
+  await expect(dialog.getByText('Your work', { exact: true })).toBeVisible();
+  await expect(dialog.getByRole('option').filter({ hasText: 'Rotor study' })).toBeVisible();
   await input.press('/');
   await expect(input).toHaveValue('/');
   await input.fill('Channel');
