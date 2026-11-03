@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup>
 import { Download, Layers, Plus, RotateCcw } from "@lucide/vue";
 import { ref } from "vue";
 import { ToolbarButton } from "@dicehub/kappa/components/button";
