@@ -1,0 +1,53 @@
+/* The navigation class follows the sidebar into its mobile portal. */
+.sidebar-inset-navigation .kappa-sidebar__menu-button {
+  position: relative;
+  border-radius: 0.5rem;
+  color: var(--kappa-shell-nav-foreground);
+  font-size: 0.875rem;
+  font-weight: 425;
+  line-height: 1.3125rem;
+  transition: none;
+}
+.sidebar-inset-navigation .kappa-sidebar__menu-button:not(.sidebar-block-demo__identity-button) {
+  min-block-size: 1.75rem;
+  padding: 0.125rem 0.25rem;
+}
+.sidebar-inset-navigation .kappa-sidebar__menu-button:not(.sidebar-block-demo__identity-button) > .kappa-sidebar__menu-icon {
+  display: inline-flex;
+  inline-size: 1.5rem;
+  block-size: 1.5rem;
+  align-items: center;
+  justify-content: center;
+  color: inherit;
+}
+.sidebar-inset-navigation .kappa-sidebar__menu-icon > svg { inline-size: 1rem; block-size: 1rem; }
+.sidebar-inset-navigation .kappa-sidebar__menu-button[data-active] { font-weight: 600; }
+.sidebar-inset-navigation .kappa-sidebar__menu-button:is(:hover, :focus-visible, [data-active]):not([data-disabled]),
+.sidebar-inset-navigation .sidebar-block-demo__identity-button[aria-expanded="true"]:not([data-disabled]) {
+  color: var(--kappa-shell-nav-emphasis);
+  background: var(--kappa-shell-nav-highlight);
+}
+.sidebar-inset-navigation .kappa-sidebar__menu-button:active:not([data-disabled]) {
+  color: var(--kappa-shell-nav-emphasis);
+  background: var(--kappa-shell-nav-pressed);
+}
+.sidebar-inset-navigation .kappa-sidebar__menu-button[data-active]::before {
+  position: absolute;
+  inset-block: 4px;
+  inset-inline-start: -8px;
+  inline-size: 2px;
+  border-start-end-radius: 4px;
+  border-end-end-radius: 4px;
+  background: var(--kappa-focus);
+  pointer-events: none;
+  content: "";
+}
+.sidebar-inset-navigation :is(.kappa-sidebar__menu, .kappa-sidebar__menu-sub) { gap: 0.125rem; }
+.sidebar-inset-navigation .kappa-sidebar__collapsible-content { margin-inline: -0.5rem; padding-inline: 0.5rem; }
+.sidebar-inset-navigation .kappa-sidebar__menu-sub { margin: 0.125rem 0 0; padding: 0; border: 0; }
+.sidebar-inset-navigation .kappa-sidebar__menu-sub .kappa-sidebar__menu-button { padding-inline: 2.25rem 0.75rem; }
+.sidebar-inset-navigation .sidebar-block-demo__search-button.kappa-sidebar__menu-button { min-block-size: 2rem; }
+.sidebar-inset-navigation[data-mobile] .kappa-sidebar__menu-button { min-block-size: 2.75rem; }
+@media (forced-colors: active) {
+  .sidebar-inset-navigation .kappa-sidebar__menu-button[data-active]::before { background: Highlight; }
+}

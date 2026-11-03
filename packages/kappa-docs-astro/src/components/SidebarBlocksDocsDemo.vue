@@ -115,7 +115,8 @@ function createProject() {
 <template>
   <div ref="searchScope" class="sidebar-block-demo" :data-sidebar-block="props.peeking ? 'peeking' : props.insetNavigation ? 'inset-navigation' : props.iconNavigation ? 'collapsible-icons' : props.variant" :data-standalone="props.standalone || undefined" @keydown="railSearchShortcut">
     <AppShell.Root :variant="props.variant" content-max-width="62rem" :mobile-breakpoint="props.variant === 'rail' ? railMobileBreakpoint : undefined" :label="props.peeking ? 'Peeking application navigation' : props.insetNavigation ? 'Inset application navigation' : props.iconNavigation ? 'Icon application navigation' : `${props.variant} application navigation`" :resizable="!props.peeking && !richNavigation && props.variant === 'workspace'"
-      :peekable="props.peeking" :default-open="props.peeking ? false : undefined" :trigger-props="props.peeking ? { expandLabel: 'Pin sidebar open' } : undefined" full-screen-on-mobile>
+      :peekable="props.peeking" :default-open="props.peeking ? false : undefined" :trigger-props="props.peeking ? { expandLabel: 'Pin sidebar open' } : undefined"
+      :navigation-props="props.insetNavigation ? { class: 'sidebar-inset-navigation' } : undefined" full-screen-on-mobile>
       <template #header="context">
         <WorkspaceSwitcher v-model="namespace" :items="namespaceSwitcherItems" label="Namespaces" :account-label="account.email"
           :actions="namespaceSwitcherActions" :workspace-actions="namespaceSwitcherWorkspaceActions" :footer-actions="namespaceSwitcherFooterActions"
@@ -141,7 +142,7 @@ function createProject() {
               <Sidebar.MenuItem v-for="group in navigationGroups" :key="group.label">
                 <Sidebar.Collapsible v-model:open="openGroups[group.label]">
                   <Sidebar.CollapsibleTrigger as-child>
-                    <Sidebar.MenuButton :icon="group.icon" :tooltip="group.label" :active="group.items.includes(selected)" :aria-current="undefined" class="sidebar-block-demo__group-trigger">{{ group.label }}<Sidebar.MenuChevron /></Sidebar.MenuButton>
+                    <Sidebar.MenuButton :icon="group.icon" :tooltip="group.label" :active="group.items.includes(selected) && (!props.insetNavigation || !openGroups[group.label] || context.iconCollapsed)" :aria-current="undefined" class="sidebar-block-demo__group-trigger">{{ group.label }}<Sidebar.MenuChevron /></Sidebar.MenuButton>
                   </Sidebar.CollapsibleTrigger>
                   <Sidebar.CollapsibleContent><Sidebar.MenuSub :aria-label="group.label">
                     <Sidebar.MenuSubItem v-for="item in group.items" :key="item"><Sidebar.MenuButton :active="selected === item" :href="`?view=${item.toLowerCase()}`" @click.prevent="navigate(item, context)">{{ item }}</Sidebar.MenuButton></Sidebar.MenuSubItem>
@@ -273,3 +274,4 @@ function createProject() {
 </template>
 
 <style src="./sidebar-blocks-demo.css"></style>
+<style src="./sidebar-inset-navigation-demo.css"></style>

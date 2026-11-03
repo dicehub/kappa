@@ -64,7 +64,7 @@ onBeforeUnmount(() => cancelAnimationFrame(focusFrame));
 
 <template>
   <Sidebar.Content ref="root" :aria-label="label">
-    <slot />
+    <Sidebar.Menu><slot /></Sidebar.Menu>
     <div v-for="group in categories" :key="group.label" class="paneled-workspace-demo__nav-group">
       <HoverCard.Root :open="active && flyout === group.label && !isMobile && (iconCollapsed || !groupsOpen[group.label])" :disabled="!active || isMobile || (!iconCollapsed && groupsOpen[group.label])" :open-delay="0" :close-delay="5" :positioning="{ placement: 'right-start', strategy: 'fixed', gutter: 10 }" @update:open="updateFlyout(group.label, $event)">
         <HoverCard.Trigger v-if="iconCollapsed" as-child><Sidebar.MenuButton :icon="group.icon" :aria-label="group.label" :data-paneled-group="group.label" @pointermove="pointTrigger(group.label, $event)" @pointerleave="leaveTrigger" :data-active-descendant="group.pages.includes(view) || undefined" :data-flyout-open="flyout === group.label || undefined" :aria-expanded="flyout === group.label" @click="flyout = group.label" @keydown.down.capture.prevent="focusFlyout(group.label)" @keydown.esc.stop.prevent="closeFlyout(group.label)">{{ group.label }}</Sidebar.MenuButton></HoverCard.Trigger>

@@ -297,14 +297,14 @@ onBeforeUnmount(() => { railObserver?.disconnect(); cancelAnimationFrame(navigat
         <Sidebar.SlidingViews class="paneled-workspace-demo__sliding-views" :data-initializing="!navigationInitialized || undefined" :active-key="selectedProject ? 'project' : 'workspace'" :direction="selectedProject ? 'left' : 'right'">
           <Sidebar.SlidingView value="workspace" label="Workspace navigation">
             <PaneledWorkspaceNavigation :categories="workspaceCategories" :view="view" :active="!selectedProject" :icon-collapsed="context.iconCollapsed" :is-mobile="context.isMobile" :menu-open="workspaceMenuOpen" :run-count="compute.runs.length" label="Workspace links" :href-for-page="breadcrumbHref" :page-label="pageLabel" @navigate="navigateLink">
-              <Sidebar.MenuButton :href="breadcrumbHref('Dashboard')" tooltip="Dashboard" :icon="LayoutDashboard" :active="view === 'Dashboard'" class="paneled-workspace-demo__workspace paneled-workspace-demo__dashboard" @click="navigateLink('Dashboard', $event)">Dashboard</Sidebar.MenuButton>
-              <Sidebar.MenuButton :href="breadcrumbHref('Simulation runs')" tooltip="Simulation runs" :icon="CirclePlay" :active="view === 'Simulation runs'" @click="navigateLink('Simulation runs', $event)">Simulation runs<span class="paneled-workspace-demo__count" aria-hidden="true">{{ compute.runs.length }}</span></Sidebar.MenuButton>
+              <Sidebar.MenuItem><Sidebar.MenuButton :href="breadcrumbHref('Dashboard')" tooltip="Dashboard" :icon="LayoutDashboard" :active="view === 'Dashboard'" class="paneled-workspace-demo__workspace paneled-workspace-demo__dashboard" @click="navigateLink('Dashboard', $event)">Dashboard</Sidebar.MenuButton></Sidebar.MenuItem>
+              <Sidebar.MenuItem><Sidebar.MenuButton :href="breadcrumbHref('Simulation runs')" tooltip="Simulation runs" :icon="CirclePlay" :active="view === 'Simulation runs'" @click="navigateLink('Simulation runs', $event)">Simulation runs<span class="paneled-workspace-demo__count" aria-hidden="true">{{ compute.runs.length }}</span></Sidebar.MenuButton></Sidebar.MenuItem>
             </PaneledWorkspaceNavigation>
           </Sidebar.SlidingView>
           <Sidebar.SlidingView value="project" :label="`${lastProject.name} navigation`">
             <PaneledWorkspaceNavigation :categories="projectCategories" :view="view" :active="!!selectedProject" :icon-collapsed="context.iconCollapsed" :is-mobile="context.isMobile" :menu-open="workspaceMenuOpen" :run-count="compute.runs.length" label="Project links" :href-for-page="breadcrumbHref" @navigate="navigateLink">
-              <Sidebar.MenuButton :href="breadcrumbHref(lastProject.code)" tooltip="Overview" :icon="LayoutDashboard" :active="isProjectOverview" @click="navigateLink(lastProject.code, $event)">Overview</Sidebar.MenuButton>
-              <Sidebar.MenuButton :href="breadcrumbHref('Project activity')" tooltip="Project activity" :icon="Activity" :active="view === 'Project activity'" @click="navigateLink('Project activity', $event)">Project activity</Sidebar.MenuButton>
+              <Sidebar.MenuItem><Sidebar.MenuButton :href="breadcrumbHref(lastProject.code)" tooltip="Overview" :icon="LayoutDashboard" :active="isProjectOverview" @click="navigateLink(lastProject.code, $event)">Overview</Sidebar.MenuButton></Sidebar.MenuItem>
+              <Sidebar.MenuItem><Sidebar.MenuButton :href="breadcrumbHref('Project activity')" tooltip="Project activity" :icon="Activity" :active="view === 'Project activity'" @click="navigateLink('Project activity', $event)">Project activity</Sidebar.MenuButton></Sidebar.MenuItem>
             </PaneledWorkspaceNavigation>
           </Sidebar.SlidingView>
         </Sidebar.SlidingViews>

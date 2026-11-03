@@ -29,11 +29,12 @@ default:
 verify:
   stage: verify
   variables:
+    GIT_DEPTH: "0"
     CHOKIDAR_USEPOLLING: "true"
   script:
     - apt-get update
     - apt-get install --no-install-recommends --yes ca-certificates git openssl
-    - git fetch --depth=100 origin dev
+    - git fetch origin dev
     - node scripts/check-release-state.mjs FETCH_HEAD
     - pnpm typecheck
     - pnpm build
