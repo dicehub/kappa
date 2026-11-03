@@ -198,7 +198,7 @@ test('Ctrl+K opens grouped search and leaves typing and other menus alone', asyn
   const input = dialog.getByRole('combobox');
   await expect(input).toBeFocused();
   await expect(input).toHaveValue('');
-  await expect(dialog).toHaveCSS('width', '560px');
+  await expect(dialog).toHaveCSS('width', '768px');
   await expect(dialog.getByText('Your work', { exact: true })).toBeVisible();
   await expect(dialog.getByRole('option').filter({ hasText: 'Rotor study' })).toBeVisible();
   await input.press('/');

@@ -1,16 +1,17 @@
 <script setup lang="ts">
-import { nextTick, onBeforeUnmount, onMounted, ref, useId, watch } from "vue";
+import { computed, nextTick, onBeforeUnmount, onMounted, ref, useId, watch } from "vue";
 import { AppShell } from "@dicehub/kappa/blocks/app-shell";
 import { WorkspaceSwitcher } from "@dicehub/kappa/blocks/workspace-switcher";
 import { namespaceSwitcherAvatarItems as workspaces } from "../data/workspace-switcher-demo";
 import { Avatar } from "@dicehub/kappa/components/avatar";
 import { Sidebar, type SidebarContextValue } from "@dicehub/kappa/components/sidebar";
 import { CommandPalette } from "@dicehub/kappa/components/command-palette";
+import { Dropdown } from "@dicehub/kappa/components/dropdown";
 import { DirectionProvider } from "@dicehub/kappa/components/direction-provider";
 import { Button } from "@dicehub/kappa/components/button";
 import { Tabs } from "@dicehub/kappa/components/tabs";
 import { Tooltip } from "@dicehub/kappa/components/tooltip";
-import { ChevronsLeft, ChevronsRight, ChevronsUpDown, Folder, House, Inbox, MessageCircle, Plus, Search, Settings, UsersRound } from "@lucide/vue";
+import { ChevronsLeft, ChevronsRight, ChevronsUpDown, Folder, House, Inbox, MessageCircle, Plus, Search, Settings, UserRound, UsersRound } from "@lucide/vue";
 
 const props = withDefaults(defineProps<{ standalone?: boolean; applicationShell?: boolean }>(), { standalone: false, applicationShell: false });
 const host = ref<HTMLElement>();
@@ -35,7 +36,8 @@ const locked = ref(false);
 const end = ref(false);
 const rtl = ref(false);
 const selected = ref("Create a project");
-const profile = "Casey Rivera";
+const profile = ref("Casey Rivera");
+const mobileProfilePositioning = computed(() => ({ placement: rtl.value ? 'left-start' : 'right-start', gutter: 4, strategy: 'fixed', fitViewport: true, overflowPadding: 8, overlap: true } as const));
 const requests = ref(0);
 const searchId = `hover-workspace-search-${useId()}`;
 const searchOpen = ref(false);
@@ -133,7 +135,7 @@ onBeforeUnmount(() => window.removeEventListener("keydown", shortcut));
 </script>
 
 <template>
-  <div ref="host" class="sidebar-hover-demo" :data-standalone="props.standalone || undefined" :data-sidebar-block="props.applicationShell ? 'hover-reveal' : undefined" data-sidebar-demo="hover-reveal">
+  <div ref="host" class="sidebar-hover-demo" :data-standalone="props.standalone || undefined" :data-sidebar-block="props.applicationShell ? 'hover-reveal' : undefined" data-sidebar-demo="hover-reveal" @keydown="shortcut">
     <DirectionProvider :locale="rtl ? 'ar' : 'en'">
       <AppShell.Root :open="open" peekable collapsible="offcanvas" content-max-width="42rem" resizable :full-screen-on-mobile="props.applicationShell"
         :min-width="260" :max-width="maxWidth" :collapse-on-resize="false"
@@ -194,6 +196,20 @@ onBeforeUnmount(() => window.removeEventListener("keydown", shortcut));
           </Tabs.Root>
         </template>
         <template #footer="{ isMobile }">
+          <Dropdown.Root v-if="!props.applicationShell" aria-label="Account menu" :positioning="{ placement: 'top-start', gutter: 6, strategy: 'fixed' }">
+            <Dropdown.Trigger as-child><Sidebar.MenuButton :icon="UserRound">{{ profile }}</Sidebar.MenuButton></Dropdown.Trigger>
+            <Dropdown.Content :teleport="!isMobile">
+              <Dropdown.Item value="preferences" @select="selected = 'Preferences'">Preferences</Dropdown.Item>
+              <Dropdown.Sub aria-label="Switch profile" :positioning="isMobile ? mobileProfilePositioning : undefined">
+                <Dropdown.SubTrigger>Switch profile</Dropdown.SubTrigger>
+                <Dropdown.SubContent :teleport="!isMobile">
+                  <Dropdown.RadioGroup v-model="profile">
+                    <Dropdown.RadioItem v-for="name in ['Casey Rivera', 'Jordan Lee']" :key="name" :value="name" close-on-select>{{ name }}</Dropdown.RadioItem>
+                  </Dropdown.RadioGroup>
+                </Dropdown.SubContent>
+              </Dropdown.Sub>
+            </Dropdown.Content>
+          </Dropdown.Root>
           <WorkspaceSwitcher v-model="workspace" :items="workspaces" label="Workspaces" account-label="ros@example.test" class="sidebar-hover-demo__workspace-menu"
             :actions="workspaceActions" :workspace-actions="creationActions" :teleport="!isMobile"
             :positioning="{ placement: 'top-start', gutter: 6, strategy: 'fixed', overflowPadding: 8 }"

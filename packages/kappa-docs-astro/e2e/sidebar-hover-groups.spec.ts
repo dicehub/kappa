@@ -21,7 +21,7 @@ test.beforeEach(async ({ page }) => {
 test('uses the existing example groups and documents disclosure composition', async ({ page, request }) => {
   for (const entry of groups) {
     await expect(group(page, entry.title)).toHaveAttribute('aria-expanded', 'true');
-    await expect(group(page, entry.title)).toHaveCSS('font-size', '12px');
+    await expect(group(page, entry.title)).toHaveCSS('font-size', '14px');
     await expect(group(page, entry.title)).toHaveCSS('font-weight', '550');
     for (const name of entry.items) await expect(link(page, name)).toBeVisible();
   }

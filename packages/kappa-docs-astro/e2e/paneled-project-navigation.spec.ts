@@ -170,15 +170,16 @@ test("a direct project URL does not play a selection slide", async ({ page }) =>
   expect(await page.evaluate(() => (window as typeof window & { sidebarTransitions: string[] }).sidebarTransitions)).toEqual([]);
 });
 
-test("mobile footer places Help above the namespace switcher and offers Create Group", async ({ page }) => {
+test("mobile tools rail keeps Help outside the drawer and the switcher offers Create Group", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 664 });
   await openProject(page);
+  const help = page.getByRole("navigation", { name: "Workspace tools", exact: true }).getByRole("button", { name: "Help", exact: true });
+  await expect(help).toBeVisible();
   await page.getByRole("button", { name: "Open sidebar", exact: true }).click();
   const drawer = page.getByRole("dialog", { name: "Paneled workspace navigation", exact: true });
-  const help = await drawer.getByRole("button", { name: "Help", exact: true }).boundingBox();
+  await expect(drawer.getByRole("button", { name: "Help", exact: true })).toHaveCount(0);
   const switcher = drawer.getByRole("button", { name: "Workspace: Ros.Space", exact: true });
-  const workspace = await switcher.boundingBox();
-  expect(help!.y + help!.height).toBeLessThanOrEqual(workspace!.y);
+  await expect(switcher).toBeVisible();
   await switcher.click();
   await page.getByRole("menuitem", { name: "Create Group", exact: true }).click();
   await expect(page.getByRole("heading", { name: "New group", exact: true })).toBeVisible();
@@ -218,7 +219,7 @@ test("page changes preserve focus when project content and header controls unmou
   const back = page.getByRole("link", { name: "Back to Projects", exact: true });
   await back.focus();
   await back.press("?");
-  await expect(page.getByRole("heading", { name: "Keyboard shortcuts", exact: true })).toBeFocused();
+  await expect(page.getByRole("heading", { name: "Keyboard shortcuts", exact: true, level: 2 })).toBeFocused();
 });
 
 test("project avatars preserve the first complete Unicode character", async ({ page }) => {

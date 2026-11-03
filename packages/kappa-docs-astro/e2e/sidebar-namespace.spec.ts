@@ -15,7 +15,7 @@ test("namespace menu shows current details, actions, and a checkmark on the righ
   await expect(menu).toHaveAttribute("data-placement", "bottom-start");
   await expect(menu.getByRole("group", { name: "casey@example.test", exact: true })).toBeVisible();
   await expect(menu.getByRole("menuitem")).toHaveCount(6);
-  await expect(menu.getByRole("separator")).toHaveCount(3);
+  await expect(menu.getByRole("separator")).toHaveCount(4);
   await expect(menu.locator('[data-slot="dropdown-label"]')).toHaveCSS("text-transform", "none");
   const buttonBox = (await trigger.boundingBox())!;
   const menuBox = (await menu.boundingBox())!;

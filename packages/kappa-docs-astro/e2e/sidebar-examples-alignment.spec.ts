@@ -55,6 +55,7 @@ for (const variant of variants) {
     await centered(demo);
     const before = await geometry(demo);
     expect(before.width).toBeGreaterThan(600);
+    if (variant === 'minimal-workspace') await demo.locator('.minimal-workspace-demo__namespace-row').hover();
     await desktopToggle(demo, variant, true).click();
     if (variant === 'hover-reveal') await columnFor(demo).getByRole('heading', { level: 2 }).click();
     await expect(shell).toHaveAttribute('data-state', 'collapsed');

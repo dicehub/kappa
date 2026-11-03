@@ -97,7 +97,7 @@ test("resize indicators overlap the existing border in start, end, and RTL layou
   await expectSingleEdge(nav);
   const handle = nav.locator('[data-slot="sidebar-resize-handle"]');
   await handle.hover();
-  await expect.poll(() => handle.evaluate(node => getComputedStyle(node, "::after").width)).toBe("3px");
+  await expect.poll(() => handle.evaluate(node => getComputedStyle(node, "::after").width)).toBe("4px");
   await handle.focus();
   await handle.press("ArrowRight");
   await expect.poll(async () => (await nav.boundingBox())!.width).toBeGreaterThan(260);

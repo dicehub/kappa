@@ -27,7 +27,7 @@ test("mobile header puts the logo before the navigation toggle in display and ta
     expect(search.x).toBeGreaterThanOrEqual(button.x + button.width);
     expect(credits.x - search.x - search.width).toBeGreaterThanOrEqual(8);
     if (width < 576) {
-      const profile = (await page.getByRole("button", { name: "Profile: Alex Morgan", exact: true }).boundingBox())!;
+      const profile = (await page.getByRole("link", { name: "Profile: Alex Morgan", exact: true }).boundingBox())!;
       expect(credits.x - search.x - search.width).toBe(8);
       expect(profile.x + profile.width).toBe(width - 8);
     }

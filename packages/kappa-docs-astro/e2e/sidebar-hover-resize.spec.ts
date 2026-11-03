@@ -29,7 +29,7 @@ test('drag clamps widths and keeps the reading column centered while it fits', a
   await expect(separator(page)).toHaveAttribute('aria-valuemax', '600');
   await expect(separator(page)).toHaveAttribute('aria-controls', (await nav(page).getAttribute('id'))!);
   await separator(page).hover();
-  await expect.poll(() => separator(page).evaluate(el => getComputedStyle(el, '::after').width)).toBe('3px');
+  await expect.poll(() => separator(page).evaluate(el => getComputedStyle(el, '::after').width)).toBe('4px');
   await drag(page, separator(page), 160);
   await expect(separator(page)).toHaveAttribute('aria-valuenow', '420');
   expect(await center(page)).toBe(1100);

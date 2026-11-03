@@ -34,7 +34,7 @@
 .minimal-workspace-demo__global-nav a:hover, .minimal-workspace-demo__global-nav a[aria-current] { color: var(--kappa-default); background: var(--kappa-overlay); }
 .minimal-workspace-demo__brand:focus-visible, .minimal-workspace-demo__global-nav a:focus-visible, .minimal-workspace-demo__breadcrumb a:focus-visible { outline: 2px solid var(--kappa-focus); outline-offset: 2px; }
 .minimal-workspace-demo__browse.kappa-button { display: none; }
-.minimal-workspace-demo .kappa-app-shell .minimal-workspace-demo__search { grid-area: 1 / 2; position: static; translate: none; }
+.minimal-workspace-demo .kappa-app-shell[data-appearance="compact"] .minimal-workspace-demo__search { grid-area: 1 / 2; position: static; translate: none; }
 .minimal-workspace-demo .kappa-app-shell__search.kappa-button { --kappa-shell-search-border: color-mix(in srgb, var(--kappa-shell-search-hover-border) 30%, transparent); }
 .minimal-workspace-demo .kappa-app-shell__search.kappa-button:is(:hover, :active, :focus-visible, [aria-expanded="true"]):not(:disabled, [aria-disabled="true"]) { border-color: var(--kappa-shell-search-hover-border); }
 .minimal-workspace-demo__profile.kappa-button { padding: 0.125rem 0.25rem; flex: 0 0 auto; gap: 0.375rem; }

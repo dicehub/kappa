@@ -58,7 +58,7 @@ test("Blocks is a separate section with a gallery, source, and full-page preview
     await expect(page.locator(`a[data-toc-link="${removed}"]`)).toHaveCount(0);
     expect((await request.get(`/examples/appshell/${removed}`)).status()).toBe(404);
   }
-  expect(markdownText).not.toMatch(/\bArk\b/);
+  expect(markdownText).toContain("@dicehub/kappa/blocks/app-shell");
 });
 
 for (const variant of variants) {

@@ -28,14 +28,14 @@ test.beforeEach(async ({ page }) => {
   await ready(page);
 });
 
-test('workspace menu opens below, marks the selection, and changes the workspace while peeking', async ({ page }) => {
+test('workspace menu opens above, marks the selection, and changes the workspace while peeking', async ({ page }) => {
   await collapse(page);
   await reveal(page);
   await workspace(page).click();
   const menu = page.getByRole('menu', { name: 'Workspace: Ros.Space', exact: true });
-  await expect(menu).toHaveAttribute('data-placement', 'bottom-start');
+  await expect(menu).toHaveAttribute('data-placement', 'top-start');
   const triggerBox = await workspace(page).boundingBox();
-  await expect.poll(() => menu.evaluate(el => el.getBoundingClientRect().y)).toBeGreaterThanOrEqual(triggerBox!.y + triggerBox!.height);
+  await expect.poll(() => menu.evaluate(el => el.getBoundingClientRect().bottom)).toBeLessThanOrEqual(triggerBox!.y);
   const selected = menu.getByRole('menuitemradio', { name: 'Ros.Space', exact: true });
   await expect(selected).toHaveAttribute('aria-checked', 'true');
   const itemBox = await selected.boundingBox();
@@ -52,7 +52,7 @@ test('workspace menu opens below, marks the selection, and changes the workspace
   await expect(workspace(page, 'Research')).toBeFocused();
 });
 
-test('workspace hover and open menu share their background and chevron without leaving pointer selection highlighted', async ({ page }) => {
+test('workspace hover, open menu, and visible focus reveal the chevron', async ({ page }) => {
   const chevron = (value = 'Ros.Space') => workspace(page, value).locator('.kappa-sidebar__menu-label > svg');
   await page.locator('.sidebar-hover-demo__article').hover();
   const original = await workspace(page).boundingBox();
@@ -73,6 +73,8 @@ test('workspace hover and open menu share their background and chevron without l
   await expect(workspace(page)).toHaveCSS('background-color', hoverBackground);
   await menu.getByRole('menuitemradio', { name: 'Research', exact: true }).click();
   await expect(workspace(page, 'Research')).toBeFocused();
+  await expect(chevron('Research')).toHaveCSS('opacity', '1');
+  await page.locator('.sidebar-hover-demo__article h2').click();
   await expect(chevron('Research')).toHaveCSS('opacity', '0');
   await expect(workspace(page, 'Research')).toHaveCSS('background-color', 'rgba(0, 0, 0, 0)');
 });
@@ -81,15 +83,16 @@ test('keyboard focus retains its outline and opening the menu reveals the worksp
   await page.locator('.sidebar-hover-demo__article').hover();
   const chevron = workspace(page).locator('.kappa-sidebar__menu-label > svg');
   await page.keyboard.press('Tab');
+  await workspace(page).focus();
   await expect(workspace(page)).toBeFocused();
   await expect(workspace(page)).toHaveCSS('outline-width', '2px');
-  await expect(chevron).toHaveCSS('opacity', '0');
+  await expect(chevron).toHaveCSS('opacity', '1');
   await page.keyboard.press('Enter');
   await expect(page.getByRole('menu', { name: 'Workspace: Ros.Space', exact: true })).toBeVisible();
   await expect(chevron).toHaveCSS('opacity', '1');
   await page.keyboard.press('Escape');
   await expect(workspace(page)).toBeFocused();
-  await expect(chevron).toHaveCSS('opacity', '0');
+  await expect(chevron).toHaveCSS('opacity', '1');
 });
 
 for (const rtl of [false, true]) {
@@ -100,9 +103,9 @@ for (const rtl of [false, true]) {
     await reveal(page);
     await workspace(page).click();
     const menu = page.getByRole('menu', { name: 'Workspace: Ros.Space', exact: true });
-    await expect(menu).toHaveAttribute('data-side', 'bottom');
+    await expect(menu).toHaveAttribute('data-side', 'top');
     const box = await workspace(page).boundingBox();
-    await expect.poll(() => menu.evaluate(el => el.getBoundingClientRect().y)).toBeGreaterThanOrEqual(box!.y + box!.height);
+    await expect.poll(() => menu.evaluate(el => el.getBoundingClientRect().bottom)).toBeLessThanOrEqual(box!.y);
     await menu.getByRole('menuitemradio', { name: 'Research', exact: true }).click();
     await expect(workspace(page, 'Research')).toBeFocused();
     await expect(nav(page)).toHaveAttribute('data-state', 'peeking');

@@ -27,7 +27,7 @@ for (const rtl of [false, true]) {
       await page.mouse.move(x, y);
       expect(await handle.evaluate((el, point) => el === document.elementFromPoint(point.x, point.y), { x, y })).toBe(true);
       await expect(handle).toHaveCSS('cursor', 'col-resize');
-      await expect.poll(async () => (await line()).width).toBe(3);
+      await expect.poll(async () => (await line()).width).toBe(4);
       expect((await line()).center).toBeCloseTo(before.center, 1);
       expect(await handle.evaluate((el, point) => el === document.elementFromPoint(point.x, point.y), { x: edge - sign * 5, y })).toBe(false);
       await page.mouse.down();

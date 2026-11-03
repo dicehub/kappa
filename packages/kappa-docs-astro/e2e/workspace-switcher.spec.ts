@@ -48,7 +48,7 @@ for (const variant of ['minimal-workspace', 'workspace', 'rail', 'inset', 'float
     await expect(menu.locator('[data-slot="workspace-switcher-current"]')).toContainText(initial);
     await expect(menu.locator('[data-slot="workspace-switcher-current"]')).toContainText(/plan · \d+ members?/);
     await selectedCheck(menu, initial);
-    for (const name of ['Upgrade', 'Settings', 'Invite members', 'Add account', 'Add namespace', 'Log out']) {
+    for (const name of ['Upgrade', 'Settings', 'Invite members', 'Add account', variant === 'minimal-workspace' ? 'New group' : 'Add namespace', 'Log out']) {
       await expect(menu.getByRole('menuitem', { name, exact: true })).toBeVisible();
     }
     await menu.getByRole('menuitemradio', { name: 'Research', exact: true }).click();
@@ -196,9 +196,9 @@ for (const mode of ['light', 'dark']) {
     }, token);
     const destructive = menu.getByRole('menuitem', { name: 'Remove workspace', exact: true });
     expect(await destructive.getAttribute('id')).not.toBe(await menu.getByRole('menuitem', { name: 'Settings', exact: true }).getAttribute('id'));
-    await expect(destructive).toHaveCSS('color', await tokenColor('--kappa-danger-text'));
+    await expect(destructive).toHaveCSS('color', await tokenColor('--kappa-dropdown-danger-foreground'));
     await destructive.hover();
-    await expect(destructive).toHaveCSS('color', await tokenColor('--kappa-danger-text'));
+    await expect(destructive).toHaveCSS('color', await tokenColor('--kappa-dropdown-danger-hover-foreground'));
     for (const name of ['Upgrade', 'Invite members', 'Log out']) {
       const disabled = menu.getByRole('menuitem', { name, exact: true });
       await expect(disabled).toHaveAttribute('aria-disabled', 'true');

@@ -43,8 +43,8 @@ test("copied namespace and profile menus select values and restore focus", async
   await expect(page.getByRole("button", { name: "Namespace: Research", exact: true })).toBeFocused();
   await open(page, "profile-selector");
   await page.getByRole("button", { name: "Casey Rivera", exact: true }).click();
-  await expect(page.getByRole("menuitem", { name: "Casey Rivera", exact: true })).toHaveAttribute('aria-current', 'true');
-  await page.getByRole("menuitem", { name: "Jordan Lee", exact: true }).click();
+  await expect(page.getByRole("menuitemradio", { name: "Casey Rivera", exact: true })).toHaveAttribute('aria-checked', 'true');
+  await page.getByRole("menuitemradio", { name: "Jordan Lee", exact: true }).click();
   await expect(page.getByRole("heading", { name: "Jordan Lee", exact: true })).toBeVisible();
   await expect(page.getByRole("button", { name: "Jordan Lee", exact: true })).toBeFocused();
 });

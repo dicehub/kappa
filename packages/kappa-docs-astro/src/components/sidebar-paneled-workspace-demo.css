@@ -18,7 +18,7 @@
 .paneled-workspace-demo__navigation.kappa-sidebar[data-app-shell-appearance="paneled"][data-state] > .kappa-sidebar__header { display: flex; padding: 0.5rem; }
 .paneled-workspace-demo__navigation.kappa-sidebar[data-app-shell-appearance="paneled"][data-state="collapsed"] > .kappa-sidebar__header { padding-block-end: 0; }
 /* Each navigation view owns its scroll position; the header and footer stay fixed. */
-.paneled-workspace-demo__navigation.kappa-sidebar .kappa-sidebar-layout__primary {
+.paneled-workspace-demo__navigation.kappa-sidebar[data-app-shell-appearance="paneled"] .kappa-sidebar-layout__primary {
   display: flex;
   padding: 0;
   overflow: hidden;

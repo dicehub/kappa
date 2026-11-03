@@ -72,11 +72,13 @@ test("tracks manual scrolling after TOC navigation", async ({ page }) => {
   await page.mouse.wheel(0, 120);
   await expect.poll(() => page.locator("#sizes").evaluate((element) => element.getBoundingClientRect().top)).toBeLessThan(0);
   await expectActiveIndicator(toc, toc.getByRole("link", { name: "Sizes", exact: true }));
-  for (let step = 0; step < 4; step += 1) {
+  for (let step = 0; step < 20; step += 1) {
+    if (await page.locator('#with-icons').evaluate(element => element.getBoundingClientRect().top <= 80)) break;
     const previousY = await page.evaluate(() => scrollY);
     await page.mouse.wheel(0, 120);
     await expect.poll(() => page.evaluate(() => scrollY)).toBeGreaterThan(previousY);
   }
+  await expect.poll(() => page.locator('#with-icons').evaluate(element => element.getBoundingClientRect().top)).toBeLessThanOrEqual(80);
   await expectActiveIndicator(toc, toc.getByRole("link", { name: "With Icons", exact: true }));
   for (let step = 0; step < 18; step += 1) {
     await page.evaluate(() => {

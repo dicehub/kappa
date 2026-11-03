@@ -22,7 +22,7 @@ test('parent rows open popup links with keyboard selection and dismissal', async
   await page.keyboard.press('ArrowDown');
   await expect(menu.getByRole('menuitem', { name: 'Prepare a mesh', exact: true })).toHaveAttribute('data-highlighted', '');
   await page.keyboard.press('Enter');
-  await expect(page).toHaveURL(/\/examples\/sidebar\/dropdown-submenus$/);
+  await expect(page).toHaveURL(/\/examples\/appshell\/dropdown-submenus$/);
   await expect(menu).toBeHidden();
   await expect(parent).toBeFocused();
   await expect(page.getByRole('heading', { name: 'Prepare a mesh', exact: true })).toBeVisible();

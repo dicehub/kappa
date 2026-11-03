@@ -84,7 +84,7 @@ test('Quick search filters the active namespace; Home and utility links navigate
     await page.getByRole('list', { name: 'Utility links', exact: true }).getByRole('link', { name: title, exact: true }).click();
     await expect(page.getByRole('heading', { name: title, exact: true })).toBeVisible();
   }
-  await expect(page).toHaveURL(/\/examples\/sidebar\/workspace-pages$/);
+  await expect(page).toHaveURL(/\/examples\/appshell\/workspace-pages$/);
 });
 
 test('mobile namespace and search stay usable; selection restores focus and survives viewport changes', async ({ page }) => {

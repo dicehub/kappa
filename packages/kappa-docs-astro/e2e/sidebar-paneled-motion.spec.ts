@@ -10,6 +10,7 @@ async function openExample(page: Page, mobile = false) {
   await trigger.click();
   await expect(trigger).toHaveAttribute("aria-expanded", "true");
   const content = page.locator(`[id="${await trigger.getAttribute("aria-controls")}"]`);
+  await content.evaluate(node => Promise.all(node.getAnimations({ subtree: true }).map(animation => animation.finished.catch(() => {}))));
   return { nav, trigger, content };
 }
 
