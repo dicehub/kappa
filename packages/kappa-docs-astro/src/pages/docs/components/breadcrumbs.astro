@@ -73,8 +73,10 @@ const description = "Shows the current resource inside an ordered hierarchy of a
         <section id="usage" class="docs-section">
           <h2><a class="docs-section-anchor" href="#usage">Usage</a></h2>
           <p>
-            Root renders a labelled navigation landmark, List preserves hierarchy as an ordered list,
-            and Current is an alias of the noninteractive Page part.
+            Root renders a labelled navigation landmark and List preserves hierarchy as an ordered list.
+            Use Link with a real destination for each level, including the current page. Set
+            <code>aria-current="page"</code> on the current link for its accessible state and bold style.
+            Page and its Current alias remain available when the current location has no link.
           </p>
         </section>
 
@@ -83,8 +85,9 @@ const description = "Shows the current resource inside an ordered hierarchy of a
           <CompositionTree component="breadcrumbs" />
           <p>
             Root creates the navigation landmark. List and Item preserve the ordered hierarchy.
-            Alternate linked ancestors with decorative separators, then end with Page or its Current
-            alias for the active location.
+            Alternate links with decorative separators. Separator renders <code>/</code> by default.
+            Links underline on hover and show an outline on press or keyboard focus. These styles
+            come from Kappa and require no application overrides.
           </p>
         </section>
 
@@ -92,7 +95,7 @@ const description = "Shows the current resource inside an ordered hierarchy of a
           <h2><a class="docs-section-anchor" href="#examples">Examples</a></h2>
 
           <h3 id="basic"><a class="docs-section-anchor" href="#basic">Basic</a></h3>
-          <p>Link each ancestor and render the current page as the final, noninteractive item.</p>
+          <p>Link each level and mark the final link with <code>aria-current="page"</code>. Native links support Tab, Enter, copying the address, and opening in a new tab.</p>
           <div class="docs-component-example">
             <div class="docs-component-preview"><BreadcrumbsDocsDemo variant="basic" /></div>
             <CodeBlock code={basicCode} lang="vue" collapsible revealId="breadcrumbs-basic-code" />
@@ -101,14 +104,14 @@ const description = "Shows the current resource inside an ordered hierarchy of a
           <h3 id="custom-separator">
             <a class="docs-section-anchor" href="#custom-separator">Custom Separator</a>
           </h3>
-          <p>Replace the default direction-aware chevron through Separator's default slot.</p>
+          <p>Replace the default slash through Separator's default slot. This example also uses Page for a noninteractive current location; Current is an alias of Page.</p>
           <div class="docs-component-example">
             <div class="docs-component-preview"><BreadcrumbsDocsDemo variant="separator" /></div>
             <CodeBlock code={separatorCode} lang="vue" collapsible revealId="breadcrumbs-separator-code" />
           </div>
 
           <h3 id="sizes"><a class="docs-section-anchor" href="#sizes">Sizes</a></h3>
-          <p>Use <code>sm</code> in dense toolbars and <code>base</code> for standard page context.</p>
+          <p>Use <code>sm</code> for 12px text in dense toolbars and <code>base</code> for 14px text in standard page context.</p>
           <div class="docs-component-example">
             <div class="docs-component-preview"><BreadcrumbsDocsDemo variant="sizes" /></div>
             <CodeBlock code={sizesCode} lang="vue" collapsible revealId="breadcrumbs-sizes-code" />
@@ -167,7 +170,7 @@ const description = "Shows the current resource inside an ordered hierarchy of a
           <h3 id="right-to-left">
             <a class="docs-section-anchor" href="#right-to-left">Right-to-left</a>
           </h3>
-          <p>Logical flow reverses the trail and the default directional separator.</p>
+          <p>Logical flow reverses the trail. The slash separator works in both directions.</p>
           <div class="docs-component-example">
             <div class="docs-component-preview"><BreadcrumbsDocsDemo variant="rtl" /></div>
             <CodeBlock code={rtlCode} lang="vue" collapsible revealId="breadcrumbs-rtl-code" />
@@ -178,7 +181,7 @@ const description = "Shows the current resource inside an ordered hierarchy of a
           <h2><a class="docs-section-anchor" href="#accessibility">Accessibility</a></h2>
           <ul>
             <li>Give each trail a concise <code>aria-label</code> or <code>aria-labelledby</code>; Root defaults to “Breadcrumb”.</li>
-            <li>Keep ancestor destinations as links and the final Page or Current as a noninteractive span with <code>aria-current="page"</code>.</li>
+            <li>Use real links and mark exactly one current location with <code>aria-current="page"</code>. Page or Current provides a noninteractive span when the current location has no destination.</li>
             <li>Separators and Ellipsis are decorative and hidden from assistive technology.</li>
             <li>Breadcrumbs add no arrow-key model. Native links use the normal Tab order and Enter activation.</li>
             <li>A collapsed ancestor trigger needs an accessible name and a real Menu with managed focus, Escape, and outside-dismiss behavior.</li>
@@ -206,7 +209,8 @@ const description = "Shows the current resource inside an ordered hierarchy of a
             <h3 id="link-api"><a class="docs-section-anchor" href="#link-api">Link</a></h3>
             <p>
               Forwards native anchor attributes and listeners. Use <code>href</code> for a native anchor
-              or <code>asChild</code> with a router component that renders one anchor.
+              or <code>asChild</code> with a router component that renders one anchor. Set
+              <code>aria-current="page"</code> on the link for the current location.
             </p>
             <div class="docs-api-table">
               <table>

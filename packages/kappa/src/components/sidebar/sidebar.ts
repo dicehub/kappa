@@ -8,6 +8,7 @@ export const SIDEBAR_DEFAULTS = {
   side: "start",
   compact: false,
   mobileBreakpoint: 768,
+  mobileBreakpointReference: "viewport",
   width: "16.25rem",
   collapsedWidth: "3.25rem",
   mobileWidth: "18rem",
@@ -22,6 +23,7 @@ export const SIDEBAR_DEFAULTS = {
 export type SidebarSide = "start" | "end";
 export type SidebarCollapsibleMode = "icon" | "offcanvas" | "none";
 export type SidebarState = "expanded" | "collapsed" | "peeking";
+export type SidebarMobileBreakpointReference = "viewport" | "container";
 
 export interface SidebarProviderProps {
   id?: string;
@@ -33,8 +35,10 @@ export interface SidebarProviderProps {
   collapsible?: SidebarCollapsibleMode;
   side?: SidebarSide;
   compact?: boolean;
-  /** Viewport widths below this value use the mobile drawer. Zero disables it. */
+  /** Reference widths below this value use the mobile drawer. Zero disables it. */
   mobileBreakpoint?: number;
+  /** Measure the viewport or the Provider's content-box width for mobile mode. */
+  mobileBreakpointReference?: SidebarMobileBreakpointReference;
   width?: string;
   collapsedWidth?: string;
   mobileWidth?: string;

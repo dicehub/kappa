@@ -371,7 +371,7 @@
 {"name":"ToggleGroupRoot","type":"component","group":"toggle-group","importPath":"@dicehub/kappa/components/toggle-group"}
 {"name":"ToggleGroupRootProvider","type":"component","group":"toggle-group","importPath":"@dicehub/kappa/components/toggle-group"}
 {"name":"Toolbar","type":"component","group":"toolbar","importPath":"@dicehub/kappa/components/toolbar","parts":["Root","Button","Link","Input","InputGroup","Separator"]}
-{"name":"ToolbarButton","type":"component","group":"toolbar","importPath":"@dicehub/kappa/components/toolbar"}
+{"name":"ToolbarButton","type":"component","group":"button","importPath":"@dicehub/kappa/components/button"}
 {"name":"ToolbarInput","type":"component","group":"toolbar","importPath":"@dicehub/kappa/components/toolbar"}
 {"name":"ToolbarInputGroup","type":"component","group":"toolbar","importPath":"@dicehub/kappa/components/toolbar"}
 {"name":"ToolbarLink","type":"component","group":"toolbar","importPath":"@dicehub/kappa/components/toolbar"}

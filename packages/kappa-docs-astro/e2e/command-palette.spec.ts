@@ -234,6 +234,7 @@ test.describe("Documentation search", () => {
     await page.goto("/docs/components/button");
 
     const trigger = page.locator(".docs-header [data-docs-search-open]");
+    await expect(trigger.locator("kbd")).toHaveText(["Ctrl", "K"]);
     await expect(trigger).toBeEnabled();
     await expect(trigger).toHaveAttribute("data-docs-search-ready", "true");
     await trigger.click();

@@ -18,6 +18,7 @@ interface ResizeContext {
   handleId: ComputedRef<"navigation:remainder" | "remainder:navigation">;
   range: ComputedRef<{ min: number; max: number; collapsed: number }>;
   canCollapse: ComputedRef<boolean>;
+  defaultSize: ComputedRef<number>;
   setIsResizing: (value: boolean) => void;
 }
 const resizeKey: InjectionKey<ResizeContext> = Symbol("KappaSidebarResize");
@@ -84,7 +85,7 @@ export function useSidebarResize(props: Required<Pick<SidebarProviderProps, "def
       ids: { root: `${options.id.value}-layout`, panel: (id) => id === "navigation" ? options.navId.value : `${options.id.value}-remainder` },
       panels: sidebarIndex.value ? [{ id: "remainder", minSize: 0 }, navigation] : [navigation, { id: "remainder", minSize: 0 }],
       size: sidebarIndex.value ? [100 - percentage, percentage] : [percentage, 100 - percentage],
-      keyboardResizeBy: 1,
+      keyboardResizeBy: groupWidth.value > 0 ? 24 / groupWidth.value * 100 : 1,
       onResize: ({ size }: { size: number[] }) => {
         if (!enabled.value || groupWidth.value <= 0) return;
         const next = (size[sidebarIndex.value] ?? 0) / 100 * groupWidth.value;
@@ -95,6 +96,9 @@ export function useSidebarResize(props: Required<Pick<SidebarProviderProps, "def
       onResizeEnd: () => { if (enabled.value) options.onResizeEnd(width.value); },
     };
   });
-  provide(resizeKey, { props: splitterProps, handleId, range, canCollapse, setIsResizing: (value) => { resizing.value = value; } });
+  const defaultSize = computed(() => groupWidth.value > 0
+    ? clampSidebarWidth(props.defaultWidth, bounds.value.minWidth, bounds.value.maxWidth) / groupWidth.value * 100
+    : 25);
+  provide(resizeKey, { props: splitterProps, handleId, range, canCollapse, defaultSize, setIsResizing: (value) => { resizing.value = value; } });
   return { width, setWidth, isResizing: computed(() => enabled.value && resizing.value) };
 }

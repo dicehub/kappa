@@ -34,7 +34,7 @@ export const sidebarFeatureExamples = [
   },
   {
     id: "hover-reveal", title: "Hover Reveal",
-    description: "Collapse the sidebar, then hover over the header toggle. Click to pin it open. Drag the pinned divider to resize within the width limits. Use Home, AI Chat, Projects, or Inbox to change the navigation below. Every context label appears as soon as the full row fits. Otherwise, only the selected label is shown. Context changes keep the current page and group state. Hover over the workspace name to show its menu icon. Its background stays highlighted while the menu is open. Use the search icon or press / to find a page across contexts. The shortcut works in the full example, or while focus is inside this preview. Escape closes menus and search before dismissing the panel. On mobile, the toggle opens a drawer.",
+    description: "Collapse the sidebar, then hover over the header toggle. Click to pin it open. Drag the pinned divider to resize within the width limits. Use Home, AI Chat, Projects, or Inbox to change the navigation below. Every context label appears as soon as the full row fits. Otherwise, only the selected label is shown. Context changes keep the current page and group state. Hover over the workspace name to show its menu icon. Its background stays highlighted while the menu is open. Use the search icon or press Ctrl + K to find a page across contexts. The shortcut works in the full example, or while focus is inside this preview. Escape closes menus and search before dismissing the panel. On mobile, the toggle opens a drawer.",
     code: sidebarSnippet("hover-reveal"),
   },
   {

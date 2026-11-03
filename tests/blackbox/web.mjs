@@ -58,7 +58,7 @@ export async function browserSuite(root, scratch, full, args = []) {
       });
     } catch (error) { failures.push(error); }
     try { await run("pnpm", ["exec", "playwright", "test", "-c", "playwright.blackbox.config.ts", ...args], {
-      cwd: full, timeout: 1_800_000, log: join(scratch, "browser.log"),
+      cwd: full, timeout: 2_700_000, log: join(scratch, "browser.log"),
       env: { PLAYWRIGHT_BASE_URL: url, KAPPA_BLACKBOX_SERVICE: service.url },
     }); } catch (error) { failures.push(error); }
   } finally {

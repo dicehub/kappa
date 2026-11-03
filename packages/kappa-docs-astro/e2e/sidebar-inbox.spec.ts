@@ -1,7 +1,7 @@
 import { expect, test, type Page } from '@playwright/test';
 
 async function openExample(page: Page) {
-  await page.goto('/examples/sidebar/inbox-navigation');
+  await page.goto('/examples/appshell/inbox-navigation');
   await expect.poll(() => page.locator('[data-sidebar-block="inbox-navigation"]').evaluate(node => node.closest('astro-island')?.hasAttribute('ssr'))).toBe(false);
 }
 
@@ -103,11 +103,11 @@ test('inbox supports both themes, RTL, narrow layouts, and copyable gallery sour
   await page.getByRole('button', { name: 'Open sidebar', exact: true }).click();
   const drawer = page.getByRole('dialog', { name: 'Inbox navigation', exact: true });
   expect(await drawer.evaluate(node => node.scrollWidth <= node.clientWidth)).toBe(true);
-  await page.goto('/docs/blocks/sidebar');
-  await expect(page.locator('[data-block-example]')).toHaveCount(15);
+  await page.goto('/docs/blocks/appshell');
+  await expect(page.locator('[data-block-example]')).toHaveCount(18);
   const example = page.locator('[data-block-example="inbox-navigation"]');
-  await expect(example.getByRole('link', { name: /Open full example/ })).toHaveAttribute('href', '/examples/sidebar/inbox-navigation');
-  await expect(example.locator('[data-code-full] code')).toContainText('standalone: true');
+  await expect(example.getByRole('link', { name: /Open full example/ })).toHaveAttribute('href', '/examples/appshell/inbox-navigation');
+  await expect(example.locator('[data-code-full] code')).toContainText('AppShell.Root');
   await expect(example.locator('[data-code-full] code')).not.toContainText('style src=');
-  expect(await (await request.get('/docs/blocks/sidebar.md')).text()).toContain('Inbox Navigation');
+  expect(await (await request.get('/docs/blocks/appshell.md')).text()).toContain('Inbox Navigation');
 });

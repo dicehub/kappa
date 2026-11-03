@@ -13,7 +13,6 @@
   align-items: center;
   justify-content: center;
   margin-inline-start: var(--kappa-dropdown-indicator-gap, 0.375rem);
-  transition: transform 120ms ease;
 }
 
 .kappa-dropdown__indicator svg,
@@ -30,15 +29,16 @@
   stroke-width: 1.75;
 }
 
-.kappa-dropdown__indicator[data-state="open"] {
-  transform: rotate(180deg);
-}
-
 .kappa-dropdown__positioner {
   /* Ark writes this variable inline, so Kappa must win the cascade here. */
   --z-index: var(--kappa-dropdown-z-index, 1000) !important;
 
   max-inline-size: calc(100vw - 1rem);
+  /* Shadow the panel and pointer together. Keep the scrollable content unfiltered
+     so fixed, inline submenus keep their existing positioning boundary. */
+  filter: drop-shadow(0 0 0.5px var(--kappa-dropdown-shadow-color, rgba(5, 5, 6, 0.16)))
+    drop-shadow(0 0.5px 1px var(--kappa-dropdown-shadow-color, rgba(5, 5, 6, 0.16)))
+    drop-shadow(0 1px 3px var(--kappa-dropdown-shadow-color, rgba(5, 5, 6, 0.16)));
 }
 
 .kappa-dropdown__positioner--sub {
@@ -49,13 +49,10 @@
 }
 
 .kappa-dropdown__content {
-  --kappa-dropdown-enter-x: 0;
-  --kappa-dropdown-enter-y: -0.25rem;
-
   box-sizing: border-box;
   inline-size: max-content;
   min-inline-size: min(
-    var(--kappa-dropdown-min-inline-size, 11rem),
+    var(--kappa-dropdown-min-inline-size, 14rem),
     var(--available-width, calc(100vw - 1rem)),
     calc(100vw - 1rem)
   );
@@ -65,56 +62,28 @@
     calc(100vw - 1rem)
   );
   max-block-size: min(var(--available-height, 24rem), var(--kappa-dropdown-max-block-size, 24rem));
-  padding: 0.375rem;
+  padding: 0.25rem;
   overflow-x: hidden;
   overflow-y: auto;
   overscroll-behavior: contain;
-  scroll-padding-block: 0.375rem;
-  border: 1px solid var(--kappa-line, #e3e6eb);
+  scroll-padding-block: 0.25rem;
+  border: 0;
   border-radius: 0.5rem;
-  background: var(--kappa-control, #ffffff);
-  box-shadow: var(
-    --kappa-popover-shadow,
-    0 10px 28px -8px rgba(16, 24, 40, 0.2),
-    0 2px 6px -3px rgba(16, 24, 40, 0.12)
-  );
-  color: var(--kappa-default, #17191f);
+  background: var(--kappa-dropdown-surface, #ffffff);
+  color: var(--kappa-dropdown-foreground, #28272d);
   font-family: var(--kappa-font-sans, inherit);
-  font-size: 0.8125rem;
-  line-height: 1.25rem;
+  font-size: 0.875rem;
+  font-weight: 400;
+  line-height: 1rem;
   outline: none;
-  scrollbar-color: var(--kappa-line, #e3e6eb) transparent;
+  scrollbar-color: var(--kappa-dropdown-divider, #dcdbd9) transparent;
   scrollbar-width: thin;
-  transform-origin: var(--transform-origin);
-}
-
-.kappa-dropdown__content--sub {
-  --kappa-dropdown-min-inline-size: 10rem;
-}
-
-.kappa-dropdown__content[data-side="top"] {
-  --kappa-dropdown-enter-y: 0.25rem;
-}
-
-.kappa-dropdown__content[data-side="left"] {
-  --kappa-dropdown-enter-x: 0.25rem;
-  --kappa-dropdown-enter-y: 0;
-}
-
-.kappa-dropdown__content[data-side="right"] {
-  --kappa-dropdown-enter-x: -0.25rem;
-  --kappa-dropdown-enter-y: 0;
-}
-
-.kappa-dropdown__content[data-state="open"] {
-  animation: kappa-dropdown-in 120ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .kappa-dropdown__content[data-state="closed"] {
   opacity: 0;
   pointer-events: none;
   visibility: hidden;
-  animation: kappa-dropdown-out 80ms ease-out;
 }
 
 .kappa-dropdown__content > *,
@@ -132,49 +101,75 @@
   min-block-size: 2rem;
   align-items: center;
   gap: 0.5rem;
-  padding-block: 0.375rem;
-  padding-inline: 0.5rem;
+  margin-block-end: 0.125rem;
+  padding: 0.5rem;
   border: 0;
-  border-radius: 0.375rem;
+  border-radius: 0.25rem;
   background: transparent;
-  color: var(--kappa-default, #17191f);
+  color: var(--kappa-dropdown-foreground, #28272d);
   cursor: pointer;
   font: inherit;
-  line-height: 1.25rem;
+  line-height: 1rem;
   outline: none;
   text-align: start;
   text-decoration: none;
   user-select: none;
   white-space: nowrap;
   transition:
-    background-color 80ms ease,
-    color 80ms ease;
+    background-color 100ms cubic-bezier(0.22, 0.61, 0.36, 1),
+    box-shadow 200ms cubic-bezier(0.22, 0.61, 0.36, 1);
 }
 
-.kappa-dropdown__item[data-highlighted],
+.kappa-dropdown__item:last-child {
+  margin-block-end: 0;
+}
+
+.kappa-dropdown__item:is([data-highlighted], :focus-visible),
 .kappa-dropdown__sub-trigger[data-state="open"] {
-  background: var(--kappa-overlay, rgba(16, 24, 40, 0.06));
+  background: var(--kappa-dropdown-hover, rgba(5, 5, 6, 0.06));
 }
 
-.kappa-dropdown__item:focus-visible {
+.kappa-dropdown__item:active {
+  background: var(--kappa-dropdown-pressed, rgba(5, 5, 6, 0.16));
+}
+
+.kappa-dropdown__content[data-kappa-keyboard-focus]:focus .kappa-dropdown__item[data-highlighted],
+.kappa-dropdown__item:is(:focus-visible, :active) {
   box-shadow:
-    inset 0 0 0 1px var(--kappa-focus, #4c63ff),
-    0 0 0 2px var(--kappa-focus-soft, rgba(76, 99, 255, 0.16));
+    inset 0 0 0 2px var(--kappa-dropdown-focus, #1f73ca),
+    inset 0 0 0 3px var(--kappa-dropdown-focus-surface, #ffffff),
+    inset 0 0 0 1px var(--kappa-dropdown-focus-surface, #ffffff);
+}
+
+.kappa-dropdown__item:is([data-selected], [data-state="checked"]) {
+  background: var(--kappa-dropdown-selected-surface, #ecebea);
+}
+
+.kappa-dropdown__item:is([data-selected], [data-state="checked"]):is([data-highlighted], :focus-visible) {
+  background: var(--kappa-dropdown-selected-hover, #dcdbd9);
+}
+
+.kappa-dropdown__item:is([data-selected], [data-state="checked"]):active {
+  background: var(--kappa-dropdown-selected-pressed, #c1bfbe);
 }
 
 .kappa-dropdown__item[data-variant="destructive"] {
-  color: var(--kappa-danger-text, var(--kappa-danger, #b42318));
+  color: var(--kappa-dropdown-danger-foreground, #c52042);
 }
 
-.kappa-dropdown__item[data-variant="destructive"][data-highlighted] {
-  background: var(--kappa-danger-tint, rgba(180, 35, 24, 0.08));
-  color: var(--kappa-danger-text, var(--kappa-danger, #b42318));
+.kappa-dropdown__item[data-variant="destructive"]:is([data-highlighted], :focus-visible) {
+  background: var(--kappa-dropdown-danger-hover-surface, rgba(222, 29, 75, 0.16));
+  color: var(--kappa-dropdown-danger-hover-foreground, #891c2f);
+}
+
+.kappa-dropdown__item[data-variant="destructive"]:active {
+  background: var(--kappa-dropdown-danger-pressed-surface, rgba(172, 32, 58, 0.24));
+  color: var(--kappa-dropdown-danger-pressed-foreground, #48151d);
 }
 
 .kappa-dropdown__item[data-disabled] {
-  color: var(--kappa-muted, #9aa2ae);
+  color: var(--kappa-dropdown-disabled-foreground, #8a8888);
   cursor: not-allowed;
-  opacity: var(--kappa-disabled-opacity, 0.58);
   pointer-events: none;
 }
 
@@ -183,8 +178,8 @@
 }
 
 .kappa-dropdown__item-icon {
-  inline-size: 0.9375rem;
-  block-size: 0.9375rem;
+  inline-size: 1rem;
+  block-size: 1rem;
   flex: none;
   color: currentColor;
   pointer-events: none;
@@ -192,8 +187,8 @@
 
 .kappa-dropdown__item > svg:not(.kappa-dropdown__sub-caret),
 .kappa-dropdown__item > [data-icon] {
-  inline-size: 0.9375rem;
-  block-size: 0.9375rem;
+  inline-size: 1rem;
+  block-size: 1rem;
   flex: none;
   pointer-events: none;
 }
@@ -221,16 +216,12 @@
 }
 
 .kappa-dropdown__option-item {
-  padding-inline-start: 2rem;
-}
-
-.kappa-dropdown__option-item[data-inset] {
-  padding-inline-start: 2.5rem;
+  padding-inline-end: 2rem;
 }
 
 .kappa-dropdown__item-indicator {
   position: absolute;
-  inset-inline-start: 0.5rem;
+  inset-inline-end: 0.5rem;
   display: inline-flex;
   inline-size: 0.875rem;
   block-size: 0.875rem;
@@ -250,14 +241,12 @@
 
 .kappa-dropdown__label {
   display: block;
-  padding-block: 0.375rem 0.25rem;
+  padding-block: 0.25rem;
   padding-inline: 0.5rem;
-  color: var(--kappa-subtle, #6c7480);
-  font-size: 0.6875rem;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  line-height: 1rem;
-  text-transform: uppercase;
+  color: var(--kappa-dropdown-label-foreground, #18171d);
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1.125rem;
 }
 
 .kappa-dropdown__label[data-inset] {
@@ -267,9 +256,9 @@
 .kappa-dropdown__separator {
   block-size: 1px;
   margin-block: 0.25rem;
-  margin-inline: -0.125rem;
+  margin-inline: -0.25rem;
   border: 0;
-  background: var(--kappa-hairline, rgba(16, 24, 40, 0.08));
+  background: var(--kappa-dropdown-divider, #dcdbd9);
 }
 
 .kappa-dropdown__shortcut {
@@ -295,40 +284,26 @@
 
 .kappa-dropdown__arrow {
   --arrow-size: 0.5rem;
-  --arrow-background: var(--kappa-control, #ffffff);
-
-  color: var(--kappa-line, #e3e6eb);
+  --arrow-background: var(--kappa-dropdown-surface, #ffffff);
 }
 
 .kappa-dropdown__arrow-tip {
-  border-block-start: 1px solid currentColor;
-  border-inline-start: 1px solid currentColor;
+  border: 0;
 }
 
-@keyframes kappa-dropdown-in {
-  from {
-    opacity: 0;
-    transform: translate(var(--kappa-dropdown-enter-x), var(--kappa-dropdown-enter-y))
-      scale(0.985);
-  }
+/* The pointer overlaps the panel; the positioner shadows their combined shape. */
+.kappa-dropdown__positioner--arrow > .kappa-dropdown__arrow {
+  z-index: 1;
+  pointer-events: none;
 }
 
-@keyframes kappa-dropdown-out {
-  to {
-    opacity: 0;
-    transform: translate(var(--kappa-dropdown-enter-x), var(--kappa-dropdown-enter-y))
-      scale(0.985);
-  }
+.kappa-dropdown__positioner--arrow > .kappa-dropdown__arrow[data-state="closed"] {
+  visibility: hidden;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .kappa-dropdown__indicator,
   .kappa-dropdown__item {
     transition: none;
-  }
-
-  .kappa-dropdown__content[data-state] {
-    animation: none;
   }
 }
 
@@ -339,11 +314,20 @@
 }
 
 @media (forced-colors: active) {
+  .kappa-dropdown__positioner { filter: none; }
+
   .kappa-dropdown__content {
-    border-color: CanvasText;
+    border: 1px solid CanvasText;
+    box-shadow: none;
+  }
+
+  .kappa-dropdown__positioner--arrow > .kappa-dropdown__arrow > .kappa-dropdown__arrow-tip {
+    outline: 1px solid CanvasText;
+    box-shadow: none;
   }
 
   .kappa-dropdown__item[data-highlighted],
+  .kappa-dropdown__item:is(:focus-visible, :active),
   .kappa-dropdown__sub-trigger[data-state="open"] {
     outline: 1px solid Highlight;
     outline-offset: -1px;

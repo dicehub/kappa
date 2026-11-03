@@ -11,7 +11,7 @@ const locked = ref(props.variant === "controlled");
 const requested = ref("");
 const action = ref("");
 const items = computed<WorkspaceSwitcherItem[]>(() => [
-  { value: "ros", name: "Ros.Space", description: "Free plan · 1 member", avatarSrc: "/avatars/ros-space-astronaut.webp", initials: "RS" },
+  { value: "ros", name: "Ros.Space", description: "Free plan · 1 member", avatarSrc: "/avatars/ros-space-astronaut.webp", avatarShape: "circle", initials: "RS" },
   ...namespaceSwitcherItems.map(item => item.value === "Engineering" ? { ...item, value: "workspace-action:primary:settings" } : item),
   { value: "restricted", name: "Restricted workspace", disabled: true, initials: "RW" },
   ...(props.variant === "long" ? Array.from({ length: 35 }, (_, n) => ({ value: `workspace-${n}`, name: `Workspace ${n + 1}` })) : []),

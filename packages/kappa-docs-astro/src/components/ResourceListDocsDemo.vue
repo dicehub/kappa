@@ -137,7 +137,7 @@ const showsChrome = computed(() => props.variant !== "minimal");
           : undefined
       "
     >
-      <template v-if="showsChrome" #icon>
+      <template v-if="props.variant === 'complete'" #icon>
         <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
           <path d="M4 7.5h6l2-2h8v13H4z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" />
           <path d="M4 10h16" stroke="currentColor" stroke-width="1.6" />

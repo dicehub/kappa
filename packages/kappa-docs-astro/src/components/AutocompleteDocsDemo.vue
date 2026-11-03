@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
+import { MapPin } from "@lucide/vue";
 import {
   Autocomplete,
   createAutocompleteCollection,
@@ -201,6 +202,7 @@ const regionCollection = computed(() =>
               :key="region.value"
               :item="region"
             >
+              <template #before><MapPin :size="16" aria-hidden="true" /></template>
               {{ region.label }}
             </Autocomplete.Item>
           </Autocomplete.Group>

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { Search } from "@lucide/vue";
-import { Button } from "@dicehub/kappa/components/button";
+import { AppShellSearchTrigger } from "@dicehub/kappa/blocks/app-shell";
 import { CommandPalette } from "@dicehub/kappa/components/command-palette";
 
 const container = ref<HTMLElement>();
@@ -45,7 +45,7 @@ function select(item: unknown) {
   setOpen(false);
 }
 function shortcut(event: KeyboardEvent) {
-  if (event.key !== "/" || event.defaultPrevented || event.repeat || event.isComposing || event.metaKey || event.ctrlKey || event.altKey || open.value) return;
+  if (event.key.toLowerCase() !== "k" || !event.ctrlKey || event.metaKey || event.altKey || event.shiftKey || event.defaultPrevented || event.repeat || event.isComposing || open.value) return;
   if (document.querySelector('[role="dialog"][data-state="open"], [role="menu"][data-state="open"]')) return;
   const target = event.composedPath().find(node => node instanceof HTMLElement) as HTMLElement | undefined;
   if (target?.isContentEditable || target?.closest('input, textarea, select, [role="textbox"], [role="combobox"], [role="searchbox"], [role="dialog"], [role="menu"], [role="listbox"]')) return;
@@ -57,9 +57,7 @@ function shortcut(event: KeyboardEvent) {
 
 <template>
   <div ref="container" class="command-palette-morph-demo" @keydown="shortcut">
-    <Button variant="ghost" :icon="Search" class="command-palette-morph-demo__trigger" data-morph-search-trigger aria-label="Search or go to…" aria-keyshortcuts="/" aria-haspopup="dialog" :aria-expanded="open" @click="setOpen(true)">
-      <span>Search or go to…</span><kbd aria-hidden="true">/</kbd>
-    </Button>
+    <AppShellSearchTrigger :icon="Search" shortcut="Ctrl + K" class="command-palette-morph-demo__trigger" data-morph-search-trigger aria-keyshortcuts="Control+K" :aria-expanded="open" @click="setOpen(true)" />
     <p class="command-palette-morph-demo__status" role="status">{{ selected ? `Opened ${selected}.` : "" }}</p>
     <CommandPalette.Dialog :open="open" :style="motion" class="command-palette-morph-dialog" aria-label="Morphing search" @update:open="setOpen">
       <div ref="body" class="command-palette-morph-dialog__body">
@@ -78,12 +76,7 @@ function shortcut(event: KeyboardEvent) {
 
 <style>
 .command-palette-morph-demo { inline-size: 21.5rem; max-inline-size: 100%; margin-inline: auto; }
-.command-palette-morph-demo__trigger.kappa-button { inline-size: 100%; min-inline-size: 0; block-size: 2rem; min-block-size: 2rem; border: 1px solid var(--kappa-line); border-radius: 0.75rem; background: color-mix(in srgb, var(--kappa-control) 50%, var(--kappa-tint)); color: var(--kappa-subtle); }
-.command-palette-morph-demo__trigger.kappa-button[data-variant="ghost"] { --kappa-button-hover-background: color-mix(in srgb, var(--kappa-control) 50%, var(--kappa-tint)); --kappa-button-hover-foreground: var(--kappa-subtle); }
-.command-palette-morph-demo__trigger.kappa-button:hover { border-color: color-mix(in srgb, var(--kappa-line) 90%, var(--kappa-subtle)); }
-.command-palette-morph-demo__trigger .kappa-button__label { display: flex; flex: 1; align-items: center; gap: 0.5rem; min-inline-size: 0; }
-.command-palette-morph-demo__trigger .kappa-button__label > span { flex: 1; overflow: hidden; text-align: start; text-overflow: ellipsis; white-space: nowrap; }
-.command-palette-morph-demo__trigger kbd { display: grid; place-items: center; min-inline-size: 1.25rem; block-size: 1.25rem; border: 1px solid var(--kappa-line); border-radius: 0.1875rem; font: 0.75rem / 1 var(--kappa-font-mono); }
+.command-palette-morph-demo__trigger.kappa-button { inline-size: 100%; }
 .command-palette-morph-demo__status { block-size: 1.5rem; margin: 0.5rem 0 0; overflow: hidden; color: var(--kappa-subtle); font-size: 0.875rem; line-height: 1.5rem; white-space: nowrap; text-overflow: ellipsis; }
 .kappa-command-palette__positioner:has(> .command-palette-morph-dialog) { padding: 0.25rem 0.5rem 0.5rem; }
 .command-palette-morph-dialog.kappa-command-palette__content { inline-size: min(48rem, calc(100vw - 1rem)); block-size: min(20rem, calc(100dvh - 0.75rem)); max-block-size: calc(100dvh - 0.75rem); border: 0; border-radius: 1rem; }

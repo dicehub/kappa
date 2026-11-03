@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, onMounted, ref, useId } from "vue";
-import { SidebarLayout, type SidebarLayoutVariant } from "@dicehub/kappa/blocks/sidebar-layout";
+import { AppShell } from "@dicehub/kappa/blocks/app-shell";
+import type { SidebarLayoutVariant } from "@dicehub/kappa/blocks/sidebar-layout";
 import { WorkspaceSwitcher } from "@dicehub/kappa/blocks/workspace-switcher";
 import { namespaceSwitcherItems, namespaceSwitcherActions, namespaceSwitcherFooterActions, namespaceSwitcherWorkspaceActions, namespaceActionDescriptions } from "../data/workspace-switcher-demo";
 import { Sidebar, type SidebarContextValue } from "@dicehub/kappa/components/sidebar";
@@ -8,10 +9,11 @@ import { Button } from "@dicehub/kappa/components/button";
 import { Dropdown } from "@dicehub/kappa/components/dropdown";
 import { Avatar } from "@dicehub/kappa/components/avatar";
 import { CommandPalette } from "@dicehub/kappa/components/command-palette";
+import { Kbd, KbdGroup } from "@dicehub/kappa/components/kbd";
 import { Table } from "@dicehub/kappa/components/table";
 import { Building2, ChevronsUpDown, Folder, LayoutDashboard, FileText, Settings, Search, Plus, Box, CircleHelp, MessageSquare, BadgeCheck, Bell, CreditCard, LogOut, Sparkles, UsersRound } from "@lucide/vue";
 
-const props = withDefaults(defineProps<{ variant?: SidebarLayoutVariant; standalone?: boolean; iconNavigation?: boolean; insetNavigation?: boolean }>(), { variant: "workspace", standalone: false, iconNavigation: false, insetNavigation: false });
+const props = withDefaults(defineProps<{ variant?: SidebarLayoutVariant; standalone?: boolean; iconNavigation?: boolean; insetNavigation?: boolean; peeking?: boolean }>(), { variant: "workspace", standalone: false, iconNavigation: false, insetNavigation: false, peeking: false });
 const richNavigation = computed(() => props.iconNavigation || props.insetNavigation);
 const headingId = useId();
 const namespace = ref("Engineering");
@@ -77,7 +79,7 @@ function navigate(value: string, context: SidebarContextValue) {
 }
 function search(context: SidebarContextValue, event?: Event) { if (event?.currentTarget instanceof HTMLElement) event.currentTarget.focus(); query.value = ""; navigating.value = false; searchFromDrawer.value = context.isMobile && context.mobileOpen; searchOpen.value = true; }
 function railSearchShortcut(event: KeyboardEvent) {
-  if (props.variant !== "rail" || event.key !== "/" || event.defaultPrevented || event.repeat || event.isComposing || event.metaKey || event.ctrlKey || event.altKey || searchOpen.value) return;
+  if (props.variant !== "rail" || event.key.toLowerCase() !== "k" || !event.ctrlKey || event.metaKey || event.altKey || event.shiftKey || event.defaultPrevented || event.repeat || event.isComposing || searchOpen.value) return;
   if (document.querySelector('[role="dialog"][data-state="open"], [role="menu"][data-state="open"]')) return;
   const target = event.composedPath().find(node => node instanceof HTMLElement) as HTMLElement | undefined;
   if (target?.isContentEditable || target?.closest('input, textarea, select, [role="textbox"], [role="combobox"], [role="searchbox"], [role="dialog"], [role="menu"], [role="listbox"]')) return;
@@ -111,8 +113,10 @@ function createProject() {
 </script>
 
 <template>
-  <div ref="searchScope" class="sidebar-block-demo" :data-sidebar-block="props.insetNavigation ? 'inset-navigation' : props.iconNavigation ? 'collapsible-icons' : props.variant" :data-standalone="props.standalone || undefined" @keydown="railSearchShortcut">
-    <SidebarLayout :variant="props.variant" :mobile-breakpoint="props.variant === 'rail' ? railMobileBreakpoint : undefined" :label="props.insetNavigation ? 'Inset application navigation' : props.iconNavigation ? 'Icon application navigation' : `${props.variant} application navigation`" :resizable="!richNavigation && props.variant === 'workspace'" full-screen-on-mobile>
+  <div ref="searchScope" class="sidebar-block-demo" :data-sidebar-block="props.peeking ? 'peeking' : props.insetNavigation ? 'inset-navigation' : props.iconNavigation ? 'collapsible-icons' : props.variant" :data-standalone="props.standalone || undefined" @keydown="railSearchShortcut">
+    <AppShell.Root :variant="props.variant" content-max-width="62rem" :mobile-breakpoint="props.variant === 'rail' ? railMobileBreakpoint : undefined" :label="props.peeking ? 'Peeking application navigation' : props.insetNavigation ? 'Inset application navigation' : props.iconNavigation ? 'Icon application navigation' : `${props.variant} application navigation`" :resizable="!props.peeking && !richNavigation && props.variant === 'workspace'"
+      :peekable="props.peeking" :default-open="props.peeking ? false : undefined" :trigger-props="props.peeking ? { expandLabel: 'Pin sidebar open' } : undefined"
+      :navigation-props="props.insetNavigation ? { class: 'sidebar-inset-navigation' } : undefined" full-screen-on-mobile>
       <template #header="context">
         <WorkspaceSwitcher v-model="namespace" :items="namespaceSwitcherItems" label="Namespaces" :account-label="account.email"
           :actions="namespaceSwitcherActions" :workspace-actions="namespaceSwitcherWorkspaceActions" :footer-actions="namespaceSwitcherFooterActions"
@@ -138,7 +142,7 @@ function createProject() {
               <Sidebar.MenuItem v-for="group in navigationGroups" :key="group.label">
                 <Sidebar.Collapsible v-model:open="openGroups[group.label]">
                   <Sidebar.CollapsibleTrigger as-child>
-                    <Sidebar.MenuButton :icon="group.icon" :tooltip="group.label" :active="group.items.includes(selected)" :aria-current="undefined" class="sidebar-block-demo__group-trigger">{{ group.label }}<Sidebar.MenuChevron /></Sidebar.MenuButton>
+                    <Sidebar.MenuButton :icon="group.icon" :tooltip="group.label" :active="group.items.includes(selected) && (!props.insetNavigation || !openGroups[group.label] || context.iconCollapsed)" :aria-current="undefined" class="sidebar-block-demo__group-trigger">{{ group.label }}<Sidebar.MenuChevron /></Sidebar.MenuButton>
                   </Sidebar.CollapsibleTrigger>
                   <Sidebar.CollapsibleContent><Sidebar.MenuSub :aria-label="group.label">
                     <Sidebar.MenuSubItem v-for="item in group.items" :key="item"><Sidebar.MenuButton :active="selected === item" :href="`?view=${item.toLowerCase()}`" @click.prevent="navigate(item, context)">{{ item }}</Sidebar.MenuButton></Sidebar.MenuSubItem>
@@ -212,7 +216,6 @@ function createProject() {
                 <Dropdown.RadioGroup v-model="profile">
                   <Dropdown.Label>Profiles</Dropdown.Label>
                   <Dropdown.RadioItem v-for="item in profiles" :key="item.value" :value="item.value" close-on-select class="sidebar-block-demo__profile-option">
-                    <template #indicator><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="m3 8.25 3 3 7-7" /></svg></template>
                     {{ item.name }}
                   </Dropdown.RadioItem>
                 </Dropdown.RadioGroup>
@@ -225,7 +228,7 @@ function createProject() {
       </template>
       <template #toolbar="context">
         <span v-if="props.variant !== 'rail'" class="sidebar-block-demo__breadcrumb"><span>{{ namespace }}</span><span aria-hidden="true">/</span><span>{{ selected }}</span></span>
-        <Button v-if="props.variant === 'rail'" variant="ghost" :icon="Search" class="sidebar-block-demo__rail-search" data-rail-search-trigger aria-label="Search or go to…" aria-keyshortcuts="/" aria-haspopup="dialog" :aria-expanded="searchOpen" @click="search(context, $event)"><span>Search or go to…</span><kbd aria-hidden="true">/</kbd></Button>
+        <Button v-if="props.variant === 'rail'" variant="ghost" :icon="Search" class="sidebar-block-demo__rail-search" data-rail-search-trigger aria-label="Search or go to…" aria-keyshortcuts="Control+K" aria-haspopup="dialog" :aria-expanded="searchOpen" @click="search(context, $event)"><span>Search or go to…</span><KbdGroup aria-hidden="true"><Kbd>Ctrl</Kbd><span>+</span><Kbd>K</Kbd></KbdGroup></Button>
       </template>
       <template #default="context">
         <CommandPalette.Dialog v-if="props.variant === 'rail'" v-model:open="searchOpen" :restore-focus="!navigating || !searchFromDrawer" class="sidebar-rail-search-dialog" aria-label="Search navigation">
@@ -266,8 +269,9 @@ function createProject() {
           <p v-else class="sidebar-block-demo__note" role="status">{{ projects.length > 3 ? 'New projects added to this example.' : 'Example data. Changes stay in this preview.' }}</p>
         </section>
       </template>
-    </SidebarLayout>
+    </AppShell.Root>
   </div>
 </template>
 
 <style src="./sidebar-blocks-demo.css"></style>
+<style src="./sidebar-inset-navigation-demo.css"></style>

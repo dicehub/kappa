@@ -71,14 +71,14 @@ const examples = [
   },
   {
     code: topAlignedCode,
-    description: "Click the search field, or press / while it has focus. The panel expands and fades in at the top of the screen. Reduced motion removes the animation.",
+    description: "Click the search field, or press Ctrl + K while it has focus. The panel expands and fades in at the top of the screen. Reduced motion removes the animation.",
     id: "top-aligned-search",
     title: "Top-aligned search",
     variant: "top-aligned",
   },
   {
     code: morphingCode,
-    description: "Click the search field, or press / while it has focus. The field expands into a search panel and returns when closed. Reduced motion opens it without animation.",
+    description: "Uses the workspace's AppShellSearchTrigger for its text, surface, border, and hover styles. Click the search field, or press Ctrl + K while it has focus. The field expands into a search panel and returns when closed. Reduced motion opens it without animation.",
     id: "morphing-search",
     title: "Morphing search",
     variant: "morphing",
@@ -207,6 +207,8 @@ const examples = [
             <li>Dialog traps focus, blocks background interaction, and restores focus after dismissal.</li>
             <li>Closing panels cannot receive focus during an exit animation.</li>
             <li>The search input receives initial focus and has a configurable accessible name.</li>
+            <li>Mouse clicks place the caret, and text selection stays in place while results update.</li>
+            <li>Click or tap a result to run it. The results use Ark UI listbox semantics.</li>
             <li>Disabled commands remain perceivable and are skipped during keyboard navigation.</li>
             <li>Empty and Loading expose complete no-result and progress states.</li>
             <li>Overlay and result motion honor <code>prefers-reduced-motion</code>.</li>

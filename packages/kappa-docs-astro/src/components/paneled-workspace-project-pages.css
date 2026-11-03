@@ -1,0 +1,40 @@
+.paneled-project-pages { color: var(--kappa-default); font-size: 0.875rem; line-height: 1.55; }
+.paneled-project-pages__intro { max-inline-size: 48rem; margin: 0 0 1.5rem; color: var(--kappa-subtle); }
+.paneled-project-pages a { color: var(--kappa-accent); text-decoration: none; }
+.paneled-project-pages a:hover { text-decoration: underline; text-underline-offset: 0.2em; }
+.paneled-project-pages a:focus-visible { outline: 2px solid var(--kappa-focus); outline-offset: 3px; border-radius: 0.125rem; }
+.paneled-project-pages__more { margin-block-start: 1.25rem; }
+.paneled-project-pages__eyebrow { margin: 0 0 0.5rem; color: var(--kappa-subtle); font-size: 0.75rem; letter-spacing: 0.04em; text-transform: uppercase; }
+.paneled-project-pages__lead { max-inline-size: 42rem; margin: 0 0 0.75rem; color: var(--kappa-strong); font-size: clamp(1.125rem, 2vw, 1.375rem); font-weight: 450; line-height: 1.45; }
+.paneled-project-pages__facts { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1.5rem; margin: 1.75rem 0; padding-block: 1rem; border-block: 1px solid var(--kappa-line); }
+.paneled-project-pages dt { color: var(--kappa-subtle); font-size: 0.75rem; }
+.paneled-project-pages dd { margin: 0.25rem 0 0; color: var(--kappa-default); font-weight: 500; }
+.paneled-project-pages__section { margin-block-start: 2rem; }
+.paneled-project-pages__section h3 { margin: 0 0 0.75rem; color: var(--kappa-strong); font-size: 1rem; font-weight: 600; }
+.paneled-project-pages h4 { margin: 0 0 0.25rem; color: var(--kappa-default); font-size: 0.875rem; font-weight: 600; }
+.paneled-project-pages__objectives { margin: 0; padding: 0; list-style: none; }
+.paneled-project-pages__objectives > li { display: grid; grid-template-columns: 1.75rem minmax(0, 1fr) auto; gap: 0.75rem; align-items: start; padding-block: 1.125rem; border-block-end: 1px solid var(--kappa-line); }
+.paneled-project-pages__objectives > li > span { padding-block-start: 0.125rem; color: var(--kappa-subtle); font-size: 0.75rem; font-variant-numeric: tabular-nums; }
+.paneled-project-pages__objectives p, .paneled-project-pages__checkpoint p { margin: 0; color: var(--kappa-subtle); }
+.paneled-project-pages__objectives a, .paneled-project-pages__footer-link, .paneled-project-pages__test-detail > a { display: inline-flex; align-items: center; gap: 0.375rem; }
+.paneled-project-pages__objectives a { font-size: 0.875rem; white-space: nowrap; }
+.paneled-project-pages a svg { inline-size: 0.875rem; block-size: 0.875rem; flex: none; }
+.paneled-project-pages__checkpoint { display: flex; flex-wrap: wrap; align-items: start; gap: 0.875rem; padding-block: 0.5rem 1.25rem; border-block-end: 1px solid var(--kappa-line); }
+.paneled-project-pages__checkpoint > svg { inline-size: 1.25rem; block-size: 1.25rem; color: var(--kappa-accent); flex: none; }
+.paneled-project-pages__checkpoint > div { flex: 1; min-inline-size: 12rem; }
+.paneled-project-pages__checkpoint p + p { margin-block-start: 0.375rem; }
+.paneled-project-pages__footer-link { margin-block-start: 1.5rem; }
+.paneled-project-pages__table-scroll { max-inline-size: 100%; overflow-x: auto; }
+.paneled-project-pages__detail-heading { display: flex; align-items: center; gap: 0.5rem; }
+.paneled-project-pages__detail-heading > svg { inline-size: 1.125rem; block-size: 1.125rem; color: var(--kappa-subtle); }
+.paneled-project-pages__detail-heading h3 { margin: 0; }
+.paneled-project-pages__test-detail > p { color: var(--kappa-subtle); }
+.paneled-project-pages__test-detail dl { display: flex; flex-wrap: wrap; gap: 1rem 3rem; margin-block: 1rem 1.5rem; }
+@media (max-width: 767px) {
+  .paneled-project-pages__facts { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
+  .paneled-project-pages__objectives > li { grid-template-columns: 1.5rem minmax(0, 1fr); }
+  .paneled-project-pages__objectives a { grid-column: 2; }
+}
+.paneled-project-pages__catalog-description { margin: 0.25rem 0 0; color: var(--kappa-subtle); }
+.paneled-project-pages__settings { display: grid; justify-items: start; gap: 1.25rem; max-inline-size: 36rem; }
+.paneled-project-pages__settings > .kappa-field { inline-size: 100%; }

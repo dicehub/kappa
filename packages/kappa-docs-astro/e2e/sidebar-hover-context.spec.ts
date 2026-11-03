@@ -191,9 +191,9 @@ test('resizing reveals every context label when wide and restores compact labels
     await page.mouse.up();
     await expect(handle).toHaveAttribute('aria-valuenow', String(width));
   }
-  for (const width of [360, 380, 420, 500, 600, 360, 260]) {
+  for (const width of [360, 380, 400, 420, 500, 600, 360, 260]) {
     await resizeTo(width);
-    const wide = width >= 380;
+    const wide = width >= 400;
     for (const name of names) {
       const label = tab(page, name).locator('.sidebar-hover-demo__context-label');
       await expect(label).toHaveCSS('opacity', wide || name === 'Home' ? '1' : '0');
@@ -252,7 +252,7 @@ test('label expansion follows the text size instead of a fixed sidebar breakpoin
   const box = (await handle.boundingBox())!;
   await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
   await page.mouse.down();
-  await page.mouse.move(box.x + box.width / 2 + 120, box.y + box.height / 2, { steps: 8 });
+  await page.mouse.move(box.x + box.width / 2 + 160, box.y + box.height / 2, { steps: 8 });
   await page.mouse.up();
   const label = tab(page, 'AI Chat').locator('.sidebar-hover-demo__context-label');
   await expect(label).toHaveCSS('opacity', '1');

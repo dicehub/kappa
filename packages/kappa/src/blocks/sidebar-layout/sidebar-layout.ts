@@ -7,7 +7,9 @@ export type SidebarLayoutContentAlignment = "available" | "shell";
 
 export const SIDEBAR_LAYOUT_DEFAULTS = {
   variant: "workspace",
-  contentAlignment: "available",
+  contentAlignment: "shell",
+  contentMaxWidth: "72rem",
+  mobileBreakpointReference: "viewport",
   label: "Application navigation",
   navigationLabel: "Navigation links",
   secondaryLabel: "Secondary navigation",
@@ -18,11 +20,15 @@ export const SIDEBAR_LAYOUT_DEFAULTS = {
 
 export interface SidebarLayoutProps extends SidebarProviderProps {
   variant?: SidebarLayoutVariant;
-  /** Center the content region within the available space or the complete shell. */
+  /** Center bounded content in the shell when it fits, or use all available space. */
   contentAlignment?: SidebarLayoutContentAlignment;
+  /** Maximum content width in shell alignment. A CSS length, including page padding. */
+  contentMaxWidth?: string;
   /** Name of the navigation landmark and mobile dialog. */
   label?: string;
   navigationLabel?: string;
+  /** Attributes for the navigation element, including its mobile instance. */
+  navigationProps?: Record<string, unknown>;
   secondaryLabel?: string;
   closeLabel?: string;
   resizeLabel?: string;
@@ -38,8 +44,14 @@ export interface SidebarLayoutSlots {
   footer?: (context: SidebarContextValue) => VNodeChild;
   /** Used by split; hidden with the collapsed rail and stacked on mobile. */
   secondary?: (context: SidebarContextValue) => VNodeChild;
+  /** Content before the header toggle, such as a brand link. Preserves DOM and tab order. */
+  "toolbar-start"?: (context: SidebarContextValue) => VNodeChild;
+  /** Optional replacement for the built-in header toggle. Compose Sidebar.Trigger. */
+  "toolbar-trigger"?: (context: SidebarContextValue) => VNodeChild;
   /** Content after the built-in toggle; in the site header for header. */
   toolbar?: (context: SidebarContextValue) => VNodeChild;
+  /** Shell-level tools, outside the main content region. */
+  rail?: (context: SidebarContextValue) => VNodeChild;
   default?: (context: SidebarContextValue) => VNodeChild;
 }
 

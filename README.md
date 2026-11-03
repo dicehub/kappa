@@ -52,12 +52,10 @@ Kappa source code, examples, and documentation text are available under the
 [MIT license](LICENSE), copyright 2026 dicehub GmbH.
 
 Adapted third-party source, dependencies, and bundled fonts keep their own
-licenses. See the [third-party notices](packages/kappa/THIRD_PARTY_NOTICES.md),
-[font licenses](packages/kappa-docs-astro/public/fonts/), and
-[source records](docs/THIRD_PARTY_SOURCES.md).
+licenses. See the [third-party notices](packages/kappa/THIRD_PARTY_NOTICES.md) and
+[font licenses](packages/kappa-docs-astro/public/fonts/).
 
 Documentation artwork under `packages/kappa-docs-astro/public/` and brand artwork,
 including the exported `DicehubLogo` artwork, are excluded from Kappa's MIT
-license. Component code remains MIT. See the
-[artwork license scope](docs/THIRD_PARTY_SOURCES.md#artwork-and-brand-assets).
-The MIT license does not grant trademark rights.
+license. Component code remains MIT. The MIT license does not grant trademark
+rights.

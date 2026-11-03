@@ -36,6 +36,12 @@
   max-inline-size: min(var(--available-width, calc(100vw - 1.5rem)), calc(100vw - 1.5rem));
 }
 
+/* Closed content can remain mounted for presence and positioning. Its empty
+   positioner must not intercept another card or the page underneath it. */
+.kappa-hover-card__positioner:has(> .kappa-hover-card__content[data-state="closed"]) {
+  pointer-events: none;
+}
+
 .kappa-hover-card__content {
   --kappa-hover-card-enter-x: 0;
   --kappa-hover-card-enter-y: -0.25rem;

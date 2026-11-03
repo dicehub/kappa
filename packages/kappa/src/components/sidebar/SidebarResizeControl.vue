@@ -18,6 +18,9 @@ function toggleTrailingPanel(event: KeyboardEvent) {
   if (sidebar.open.value) api.value.collapsePanel("navigation");
   else api.value.expandPanel("navigation");
 }
+function resetWidth() {
+  if (!props.disabled) api.value.resizePanel("navigation", resize.defaultSize.value);
+}
 watch(() => api.value.dragging, resize.setIsResizing);
 onScopeDispose(() => resize.setIsResizing(false));
 </script>
@@ -36,6 +39,7 @@ onScopeDispose(() => resize.setIsResizing(false));
     :aria-valuetext="sidebar.open.value ? `${Math.round(sidebar.width.value)} pixels` : 'Collapsed'"
     :aria-disabled="props.disabled || undefined"
     @keydown.capture="toggleTrailingPanel"
+    @dblclick.prevent="resetWidth"
   />
 </template>
 

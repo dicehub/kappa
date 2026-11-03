@@ -1,4 +1,5 @@
-import type { ButtonProps, ButtonSlots, LinkButtonProps } from "../button/button";
+import type { ButtonSlots, LinkButtonProps } from "../button/button";
+export type { ToolbarButtonProps, ToolbarButtonSlots } from "../button/toolbar-button";
 import type {
   InputGroupRootProps,
   InputGroupSlots,
@@ -55,10 +56,6 @@ export type ToolbarProps = ToolbarRootProps;
 export interface ToolbarSlots {
   default?: () => VNodeChild;
 }
-
-export type ToolbarButtonProps = Omit<ButtonProps, "size" | "variant">;
-
-export type ToolbarButtonSlots = ButtonSlots;
 
 export interface ToolbarLinkProps
   extends Omit<LinkButtonProps, "size" | "variant"> {}

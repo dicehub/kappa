@@ -48,6 +48,8 @@ const handleCheckedUpdate = (value: boolean) => {
   >
     <slot v-if="props.asChild" />
     <template v-else>
+      <slot />
+      <slot name="end" />
       <ArkMenu.ItemIndicator
         class="kappa-dropdown__item-indicator"
         data-slot="dropdown-item-indicator"
@@ -58,8 +60,6 @@ const handleCheckedUpdate = (value: boolean) => {
           </svg>
         </slot>
       </ArkMenu.ItemIndicator>
-      <slot />
-      <slot name="end" />
     </template>
   </ArkMenu.CheckboxItem>
 </template>

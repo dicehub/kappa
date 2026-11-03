@@ -4,7 +4,8 @@
   --kappa-breadcrumbs-focus: var(--kappa-focus, #4c63ff);
   --kappa-breadcrumbs-font-size: 0.875rem;
   --kappa-breadcrumbs-line-height: 1.25rem;
-  --kappa-breadcrumbs-gap: 0.375rem;
+  --kappa-breadcrumbs-gap: 0.5rem;
+  --kappa-breadcrumbs-item-height: 1.75rem;
 
   box-sizing: border-box;
   min-inline-size: 0;
@@ -15,14 +16,15 @@
 }
 
 .kappa-breadcrumbs[data-size="sm"] {
-  --kappa-breadcrumbs-font-size: 0.8125rem;
+  --kappa-breadcrumbs-font-size: 0.75rem;
   --kappa-breadcrumbs-line-height: 1.125rem;
-  --kappa-breadcrumbs-gap: 0.25rem;
+  --kappa-breadcrumbs-item-height: 1.5rem;
 }
 
 .kappa-breadcrumbs__list {
   display: flex;
   min-inline-size: 0;
+  max-inline-size: 100%;
   flex-wrap: wrap;
   align-items: center;
   gap: var(--kappa-breadcrumbs-gap);
@@ -35,6 +37,7 @@
   display: inline-flex;
   max-inline-size: 100%;
   min-inline-size: 0;
+  min-block-size: var(--kappa-breadcrumbs-item-height);
   align-items: center;
   gap: 0.25rem;
   color: inherit;
@@ -58,21 +61,24 @@
 .kappa-breadcrumbs__link {
   cursor: pointer;
   text-decoration: none;
+  text-underline-offset: 0.125rem;
   transition: color 120ms ease;
 }
 
 .kappa-breadcrumbs__link:hover {
-  color: var(--kappa-breadcrumbs-strong);
+  color: inherit;
+  text-decoration: underline;
 }
 
-.kappa-breadcrumbs__link:focus-visible {
+.kappa-breadcrumbs__link:is(:focus-visible, :active) {
   outline: 2px solid var(--kappa-breadcrumbs-focus);
   outline-offset: 2px;
 }
 
-.kappa-breadcrumbs__page {
+.kappa-breadcrumbs__page,
+.kappa-breadcrumbs__link[aria-current="page"] {
   color: var(--kappa-breadcrumbs-strong);
-  font-weight: 500;
+  font-weight: 600;
 }
 
 .kappa-breadcrumbs .kappa-breadcrumbs__separator {
@@ -83,21 +89,6 @@
   color: inherit;
   font-size: inherit;
   line-height: 1;
-}
-
-.kappa-breadcrumbs__separator-icon {
-  inline-size: 0.875rem;
-  block-size: 0.875rem;
-  fill: none;
-  stroke: currentColor;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  stroke-width: 1.5;
-  transition: transform 120ms ease;
-}
-
-.kappa-breadcrumbs:dir(rtl) .kappa-breadcrumbs__separator-icon {
-  transform: rotate(180deg);
 }
 
 .kappa-breadcrumbs__ellipsis {
@@ -116,14 +107,13 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .kappa-breadcrumbs__link,
-  .kappa-breadcrumbs__separator-icon {
+  .kappa-breadcrumbs__link {
     transition: none;
   }
 }
 
 @media (forced-colors: active) {
-  .kappa-breadcrumbs__link:focus-visible {
+  .kappa-breadcrumbs__link:is(:focus-visible, :active) {
     outline-color: Highlight;
   }
 

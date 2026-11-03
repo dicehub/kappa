@@ -4,7 +4,7 @@ import {
   createListCollection,
   type ComboboxHighlightChangeDetails,
   type ComboboxInputValueChangeDetails,
-  type ComboboxSelectionDetails,
+  type ComboboxValueChangeDetails,
 } from "@ark-ui/vue/combobox";
 import { computed, getCurrentInstance, ref, watch } from "vue";
 import {
@@ -100,8 +100,12 @@ const handleHighlightChange = (details: ComboboxHighlightChangeDetails<unknown>)
     reason: item === undefined ? "reset" : highlightReason.value,
   });
 };
-const handleSelect = (details: ComboboxSelectionDetails) => {
-  const item = findItemByValue(details.itemValue);
+const handleSelection = (details: ComboboxValueChangeDetails<unknown>) => {
+  // Ark UI Vue 5.39.2 does not forward its Combobox select event.
+  // Value changes still report pointer activation through the public API.
+  const value = details.value[0];
+  if (value === undefined) return;
+  const item = findItemByValue(value);
   if (item !== undefined) selectItem(item, { newTab: false });
 };
 
@@ -170,7 +174,7 @@ watch(
     selection-behavior="preserve"
     @highlight-change="handleHighlightChange"
     @input-value-change="handleInputValueChange"
-    @select="handleSelect"
+    @value-change="handleSelection"
     @update:highlighted-value="highlightedValue = $event"
   >
     <slot

@@ -28,7 +28,7 @@ test("workspace examples served over HTTP compile in a strict installed-package 
   const base = new URL(process.env.PLAYWRIGHT_BASE_URL);
   assert.equal(base.protocol, "http:");
   assert.equal(base.hostname, "127.0.0.1");
-  const response = await fetch(new URL("/docs/blocks/sidebar/", base), { redirect: "error" });
+  const response = await fetch(new URL("/docs/blocks/appshell/", base), { redirect: "error" });
   assert.equal(response.status, 200);
   const html = await response.text();
   const parsed = parse(`<template v-pre>${html}</template>`, {
@@ -40,7 +40,7 @@ test("workspace examples served over HTTP compile in a strict installed-package 
   collect(parsed.descriptor.template.ast);
   const attribute = (node, name) => node.props?.find(prop => prop.type === 6 && prop.name === name)?.value?.content;
   const text = node => node.type === 2 ? node.content : (node.children ?? []).map(text).join("");
-  for (const variant of ["minimal-workspace", "workspace", "workspace-pages"]) {
+  for (const variant of ["grouped", "collapsible-sections", "submenus", "floating-submenus", "collapsible-submenus", "dropdown-submenus", "collapsible-icons", "peeking", "hover-reveal", "inset-navigation", "inbox-navigation", "workspace-pages", "minimal-workspace", "paneled-workspace", "workspace", "rail", "inset", "floating"]) {
     const wrapper = nodes.find(node => attribute(node, "id") === `sidebar-block-${variant}-code`);
     assert.ok(wrapper, `The ${variant} source is available to copy.`);
     const children = [];
@@ -49,6 +49,8 @@ test("workspace examples served over HTTP compile in a strict installed-package 
     const code = children.find(node => node.tag === "code");
     assert.ok(code, `${variant} has a code block.`);
     const source = text(code);
+    assert.ok(!source.includes("<style"), `${variant} owns no layout CSS.`);
+    assert.ok(source.split("\n").length < 100, `${variant} stays small enough to copy.`);
     const component = parse(source, { filename: `PublicCopied-${variant}.vue` });
     assert.deepEqual(component.errors, [], `${variant} is a complete Vue component.`);
     const script = compileScript(component.descriptor, { id: `public-copied-${variant}` });

@@ -23,19 +23,27 @@ test.beforeEach(async ({ page }) => {
   await expect.poll(() => page.locator('[data-sidebar-demo="hover-reveal"]').evaluate(el => el.closest('astro-island')?.hasAttribute('ssr'))).toBe(false);
 });
 
-test('drag clamps to the width limits without collapse or a moving reading center', async ({ page }) => {
+test('drag clamps widths and keeps the reading column centered while it fits', async ({ page }) => {
+  await page.setViewportSize({ width: 2200, height: 900 });
   await expect(separator(page)).toHaveAttribute('aria-valuemin', '260');
   await expect(separator(page)).toHaveAttribute('aria-valuemax', '600');
   await expect(separator(page)).toHaveAttribute('aria-controls', (await nav(page).getAttribute('id'))!);
   await separator(page).hover();
-  await expect.poll(() => separator(page).evaluate(el => getComputedStyle(el, '::after').width)).toBe('3px');
+  await expect.poll(() => separator(page).evaluate(el => getComputedStyle(el, '::after').width)).toBe('4px');
   await drag(page, separator(page), 160);
   await expect(separator(page)).toHaveAttribute('aria-valuenow', '420');
-  expect(await center(page)).toBe(720);
+  expect(await center(page)).toBe(1100);
   await drag(page, separator(page), 600);
   await expect(separator(page)).toHaveAttribute('aria-valuenow', '600');
   await expect(nav(page)).toHaveAttribute('data-state', 'expanded');
-  expect(await center(page)).toBe(720);
+  expect(await center(page)).toBe(1100);
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await expect.poll(() => center(page)).toBeGreaterThan(720);
+  const column = (await article(page).boundingBox())!;
+  const navigation = (await nav(page).boundingBox())!;
+  expect(column.x).toBeGreaterThanOrEqual(navigation.x + navigation.width);
+  expect(column.x + column.width).toBeLessThanOrEqual(1440);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   await drag(page, separator(page), -700);
   await expect(separator(page)).toHaveAttribute('aria-valuenow', '260');
   await expect(nav(page)).toHaveAttribute('data-state', 'expanded');

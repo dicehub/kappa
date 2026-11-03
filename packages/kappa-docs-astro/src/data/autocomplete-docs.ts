@@ -128,6 +128,7 @@ const countries = [
 
 export const groupedCode = `<script setup>
 import { computed, ref } from "vue";
+import { MapPin } from "@lucide/vue";
 import {
   Autocomplete,
   createAutocompleteCollection,
@@ -169,6 +170,7 @@ const collection = computed(() =>
         >
           <Autocomplete.GroupLabel>{{ group }}</Autocomplete.GroupLabel>
           <Autocomplete.Item v-for="item in items" :key="item.value" :item="item">
+            <template #before><MapPin :size="16" aria-hidden="true" /></template>
             {{ item.label }}
           </Autocomplete.Item>
         </Autocomplete.Group>

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
+import { Cpu } from "@lucide/vue";
 import { Button } from "@dicehub/kappa/components/button";
 import {
   Combobox,
@@ -186,6 +187,7 @@ const selectedTagCount = computed(() => multipleValue.value.length);
             <Combobox.Group v-for="[group, items] in collection.group()" :key="group">
               <Combobox.GroupLabel>{{ group }}</Combobox.GroupLabel>
               <Combobox.Item v-for="item in items" :key="item.value" :item="item">
+                <template #before><Cpu :size="16" aria-hidden="true" /></template>
                 {{ item.label }}
               </Combobox.Item>
             </Combobox.Group>

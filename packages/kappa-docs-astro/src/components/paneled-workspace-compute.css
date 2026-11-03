@@ -1,0 +1,35 @@
+.paneled-credits__trigger .kappa-button__label { display: flex; align-items: center; gap: 0.5rem; }
+.paneled-credits__trigger.kappa-toolbar-button:where([aria-expanded="true"]):not(:active) { background: var(--kappa-button-hover-background); border-color: var(--kappa-button-hover-border); }
+.paneled-credits__label { color: var(--kappa-subtle); font-weight: 400; }
+.paneled-credits__value { display: inline-flex; min-inline-size: 5ch; justify-content: center; font-variant-numeric: tabular-nums; }
+.paneled-credits__popover { --kappa-popover-min-inline-size: 19.75rem; --kappa-popover-max-inline-size: 19.75rem; --kappa-popover-padding: 0.75rem; }
+.paneled-credits__surface { display: flex; flex-direction: column; gap: 1.5rem; }
+.paneled-credits__summary { display: flex; min-block-size: 4.25rem; flex-direction: column; gap: 0.25rem; }
+.paneled-credits__title.kappa-popover__title { color: var(--kappa-subtle); font-size: 0.75rem; font-weight: 400; line-height: 1rem; letter-spacing: normal; }
+.paneled-credits__balance-row { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.5rem; }
+.paneled-credits__balance-row > strong { color: var(--kappa-strong); font-size: 1.25rem; font-weight: 600; line-height: 1.5rem; font-variant-numeric: tabular-nums; }
+.paneled-credits__usage-badge.kappa-badge { min-block-size: 0; padding: 0.0625rem 0.25rem; font-size: 0.625rem; line-height: 0.75rem; white-space: nowrap; }
+.paneled-credits__runway.kappa-progress { --kappa-progress-range-color: var(--kappa-strong); --kappa-progress-track-size: 0.5rem; }
+.paneled-credits__note { margin: 0; color: var(--kappa-subtle); font-size: 0.75rem; line-height: 1rem; }
+.paneled-credits__actions, .paneled-credits__form { display: flex; flex-direction: column; gap: 0.5rem; }
+.paneled-credits__action-row { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.5rem; }
+.paneled-credits__buy.kappa-button { --kappa-button-background: var(--kappa-strong); --kappa-button-border: transparent; --kappa-button-foreground: var(--kappa-base); --kappa-button-hover-background: color-mix(in srgb, var(--kappa-strong) 88%, var(--kappa-base)); }
+.paneled-credits__form-title { font-weight: 550; font-size: 0.8125rem; }
+.paneled-credits__sr-only { position: absolute; inline-size: 1px; block-size: 1px; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.paneled-compute__metrics { display: grid; gap: 0.625rem; margin: 0 0 0.5rem; padding-block: 0.875rem; border-block-start: 1px solid var(--kappa-line); font-size: 0.875rem; }
+.paneled-compute__metrics > div { display: flex; justify-content: space-between; gap: 1.5rem; }
+.paneled-compute__metrics dt { color: var(--kappa-subtle); }
+.paneled-compute__metrics dd { margin: 0; font-weight: 500; font-variant-numeric: tabular-nums; }
+.paneled-compute__intro, .paneled-compute__empty { color: var(--kappa-subtle); }
+.paneled-compute__intro { margin: 0 0 1.25rem; }
+.paneled-compute__search { margin-block-end: 1rem; }
+.paneled-compute__empty { padding-block: 1rem; }
+.paneled-compute__table { max-inline-size: 100%; overflow-x: auto; }
+.paneled-compute__table small { display: block; margin-block-start: 0.125rem; color: var(--kappa-subtle); font-size: 0.75rem; }
+.paneled-compute__usage { max-inline-size: 28rem; border-block: 1px solid var(--kappa-line); margin-block-end: 1.5rem; }
+@container paneled-workspace (max-width: 63.999rem) {
+  .paneled-credits__label { display: none; }
+}
+@container paneled-workspace (max-width: 35.999rem) {
+  .paneled-credits__chevron { display: none; }
+}

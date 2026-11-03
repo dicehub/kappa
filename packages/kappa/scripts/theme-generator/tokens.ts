@@ -6,6 +6,9 @@
  */
 
 import type { ThemeToken } from "./types.ts";
+import { appShellTokens } from "./app-shell-tokens.ts";
+import { dropdownTokens } from "./dropdown-tokens.ts";
+import { toolbarButtonTokens } from "./toolbar-button-tokens.ts";
 
 export const themeTokens: ThemeToken[] = [
   // Surfaces
@@ -78,6 +81,14 @@ export const themeTokens: ThemeToken[] = [
   },
 
   // Text
+  {
+    name: "--kappa-dicehub-logo-foreground",
+    group: "text",
+    description: "Default dicehub logo and wordmark ink. Explicit black and white variants stay fixed.",
+    light: "#333333",
+    dark: "#ffffff",
+    preview: "text",
+  },
   {
     name: "--kappa-default",
     group: "text",
@@ -436,6 +447,9 @@ export const themeTokens: ThemeToken[] = [
     dark: "none",
     preview: "shadow",
   },
+  ...toolbarButtonTokens,
+  ...dropdownTokens,
+  ...appShellTokens,
   {
     name: "--kappa-popover-shadow",
     group: "supporting",

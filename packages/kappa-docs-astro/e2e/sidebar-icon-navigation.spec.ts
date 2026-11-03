@@ -1,7 +1,7 @@
 import { expect, test, type Locator, type Page } from '@playwright/test';
 
 async function openExample(page: Page) {
-  await page.goto('/examples/sidebar/collapsible-icons');
+  await page.goto('/examples/appshell/collapsible-icons');
   await expect.poll(() => page.locator('[data-sidebar-block="collapsible-icons"]').evaluate(node => node.closest('astro-island')?.hasAttribute('ssr'))).toBe(false);
 }
 
@@ -193,15 +193,15 @@ test('touch profile submenu keeps names and right-side checkmarks visible', asyn
 });
 
 test('gallery retains the old rail and publishes complete source', async ({ page, request }) => {
-  await page.goto('/docs/blocks/sidebar');
-  await expect(page.locator('[data-block-example]')).toHaveCount(15);
+  await page.goto('/docs/blocks/appshell');
+  await expect(page.locator('[data-block-example]')).toHaveCount(18);
   await expect(page.locator('[data-block-example="rail"]')).toHaveCount(1);
   const example = page.locator('[data-block-example="collapsible-icons"]');
-  await expect(example.getByRole('link', { name: /Open full example/ })).toHaveAttribute('href', '/examples/sidebar/collapsible-icons');
+  await expect(example.getByRole('link', { name: /Open full example/ })).toHaveAttribute('href', '/examples/appshell/collapsible-icons');
   const code = example.locator('[data-code-full] code');
-  await expect(code).toContainText('iconNavigation: true');
-  await expect(code).toContainText('variant: "workspace", standalone: true');
-  await expect(code).toContainText('<style>');
+  await expect(code).toContainText('Sidebar.Collapsible');
+  await expect(code).toContainText('variant="workspace"');
+  await expect(code).not.toContainText('<style');
   await expect(code).not.toContainText('style src=');
-  expect(await (await request.get('/docs/blocks/sidebar.md')).text()).toContain('Collapsible Icon Navigation');
+  expect(await (await request.get('/docs/blocks/appshell.md')).text()).toContain('Collapsible Icon Navigation');
 });

@@ -1,6 +1,10 @@
-export const barrelCode = `import { Button, LinkButton } from "@dicehub/kappa";`;
+import toolbarCode from "../components/ToolbarButtonDocsDemo.vue?raw";
 
-export const granularCode = `import { Button, LinkButton } from "@dicehub/kappa/components/button";`;
+export { toolbarCode };
+
+export const barrelCode = `import { Button, LinkButton, ToolbarButton } from "@dicehub/kappa";`;
+
+export const granularCode = `import { Button, LinkButton, ToolbarButton } from "@dicehub/kappa/components/button";`;
 
 export const lucideInstallCode = `pnpm add @lucide/vue`;
 
@@ -190,11 +194,27 @@ export const linkButtonProps = [
   { name: "variant / size / shape / fullWidth", type: "Button styling props", defaultValue: "shared defaults", description: "Shares Button geometry and visual variants." },
 ] as const;
 
+export const toolbarButtonProps = [
+  { name: "variant", type: '"ghost" | "outline"', defaultValue: '"ghost"', description: "Quiet action or bordered control. Other Button variants are not supported." },
+  { name: "size", type: '"sm" | "base"', defaultValue: '"base"', description: "24 or 32 pixel height. Both sizes use 16 pixel icons and 12 pixel text." },
+  { name: "shape", type: '"base" | "square" | "circle"', defaultValue: "automatic", description: "Square when only the icon prop is present; base with label content. An explicit shape takes priority." },
+  { name: "tooltip", type: "string", defaultValue: "—", description: "Optional bottom tooltip with a 500 ms open delay and no close delay. Hidden while disabled, loading, or expanded. Supplies the icon-only accessible name when no explicit name is set." },
+  { name: "tooltipPlacement", type: 'TooltipPositioningOptions["placement"]', defaultValue: '"bottom"', description: "Preferred tooltip placement. Use left beside a right rail or top above a bottom rail. Viewport collision handling remains enabled." },
+  { name: "Other props / native attributes", type: "ButtonProps", defaultValue: "shared defaults", description: "Shares Button type, disabled, loading, fullWidth, icon, iconProps, iconPosition, title, native attributes, and listeners." },
+] as const;
+
 export const variants = variantExamples.map(({ name, purpose }) => ({ name, purpose }));
 
 export const exportsList = [
   { name: "Button", description: "Native action button with complete visual and async states." },
   { name: "LinkButton", description: "Anchor and router-link composition with Button styling." },
+  { name: "ToolbarButton", description: "Compact native Button preset for toolbar counters and actions." },
+  { name: "ToolbarButtonProps / ToolbarButtonSlots", description: "Standalone and grouped toolbar button Vue contracts." },
+  { name: "ToolbarButtonSize / ToolbarButtonVariant", description: "Restricted standalone toolbar button option unions." },
+  { name: "TOOLBAR_BUTTON_SIZES / TOOLBAR_BUTTON_VARIANTS", description: "Readonly standalone toolbar button option lists." },
+  { name: "TOOLBAR_BUTTON_DEFAULT_SIZE / TOOLBAR_BUTTON_DEFAULT_VARIANT", description: "Standalone defaults: base and ghost." },
+  { name: "isToolbarButtonSize / isToolbarButtonVariant", description: "Runtime guards for standalone toolbar button options." },
+  { name: "resolveToolbarButtonSize / resolveToolbarButtonVariant", description: "Runtime default resolvers for standalone toolbar button options." },
   { name: "BUTTON_VARIANTS / BUTTON_SIZES / BUTTON_SHAPES", description: "Readonly visual option lists." },
   { name: "BUTTON_ICON_POSITIONS / BUTTON_TYPES", description: "Readonly logical icon-position and native-type lists." },
   { name: "BUTTON_DEFAULT_*", description: "Public variant, size, shape, icon-position, and type defaults." },

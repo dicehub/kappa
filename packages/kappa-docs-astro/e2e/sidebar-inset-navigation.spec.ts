@@ -1,7 +1,7 @@
 import { expect, test, type Page } from '@playwright/test';
 
 async function openExample(page: Page) {
-  await page.goto('/examples/sidebar/inset-navigation');
+  await page.goto('/examples/appshell/inset-navigation');
   await expect.poll(() => page.locator('[data-sidebar-block="inset-navigation"]').evaluate(node => node.closest('astro-island')?.hasAttribute('ssr'))).toBe(false);
 }
 
@@ -135,15 +135,15 @@ test('mobile uses a full-screen drawer and secondary navigation restores focus',
 });
 
 test('gallery keeps Inset Content and provides complete inset navigation source', async ({ page, request }) => {
-  await page.goto('/docs/blocks/sidebar');
-  await expect(page.locator('[data-block-example]')).toHaveCount(15);
+  await page.goto('/docs/blocks/appshell');
+  await expect(page.locator('[data-block-example]')).toHaveCount(18);
   await expect(page.locator('[data-block-example="inset"]')).toHaveCount(1);
   const example = page.locator('[data-block-example="inset-navigation"]');
-  await expect(example.getByRole('link', { name: /Open full example/ })).toHaveAttribute('href', '/examples/sidebar/inset-navigation');
+  await expect(example.getByRole('link', { name: /Open full example/ })).toHaveAttribute('href', '/examples/appshell/inset-navigation');
   const code = example.locator('[data-code-full] code');
-  await expect(code).toContainText('variant: "inset", standalone: true');
-  await expect(code).toContainText('insetNavigation: true');
-  await expect(code).toContainText('<style>');
+  await expect(code).toContainText('variant="inset"');
+  await expect(code).toContainText('collapsible="icon"');
+  await expect(code).not.toContainText('<style');
   await expect(code).not.toContainText('style src=');
-  expect(await (await request.get('/docs/blocks/sidebar.md')).text()).toContain('Inset Navigation');
+  expect(await (await request.get('/docs/blocks/appshell.md')).text()).toContain('Inset Navigation');
 });

@@ -320,7 +320,7 @@ export const toolbarPartProps = [
   {
     name: "Toolbar.Button",
     type: "ToolbarButtonProps",
-    description: "Button action with quiet toolbar styling and inherited size.",
+    description: "Button action with ghost styling and inherited size and disabled state. Per-button size and variant apply only outside Toolbar.Root.",
   },
   {
     name: "Toolbar.Link",

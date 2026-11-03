@@ -1,5 +1,6 @@
 ---
 import { ClientRouter } from "astro:transitions";
+import { Kbd, KbdGroup } from "@dicehub/kappa/components/kbd";
 import DocsSidebar from "../components/DocsSidebar.astro";
 import DocsSearchDialog from "../components/DocsSearchDialog.vue";
 import DocsTableOfContents from "../components/DocsTableOfContents.vue";
@@ -57,7 +58,7 @@ const useClientRouter = !import.meta.env.DEV;
       (function () {
         document.documentElement.dataset.docsJs = "true";
         const stored = localStorage.getItem("theme");
-        const mode = stored === "dark" || stored === "light" ? stored : "light";
+        const mode = stored === "dark" || (stored === "system" && matchMedia("(prefers-color-scheme: dark)").matches) ? "dark" : "light";
         document.documentElement.setAttribute("data-mode", mode);
         document.documentElement.setAttribute("data-kappa-theme", mode);
         document.documentElement.style.colorScheme = mode;
@@ -150,6 +151,7 @@ const useClientRouter = !import.meta.env.DEV;
             class="docs-search docs-header__search"
             type="button"
             aria-label="Search documentation"
+            aria-keyshortcuts="Control+K Meta+K"
             aria-controls="docs-search-dialog"
             aria-expanded="false"
             data-docs-search-open
@@ -158,8 +160,8 @@ const useClientRouter = !import.meta.env.DEV;
               <circle cx="11" cy="11" r="6.25" stroke="currentColor" stroke-width="1.8" />
               <path d="M16 16L20 20" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
             </svg>
-            <span>Search documentation</span>
-            <span class="docs-search__shortcut" aria-hidden="true">Ctrl K</span>
+            <span class="docs-search__label">Search documentation</span>
+            <KbdGroup class="docs-search__shortcut" aria-hidden="true"><Kbd>Ctrl</Kbd><span>+</span><Kbd>K</Kbd></KbdGroup>
           </button>
           <span class="docs-header__package">{kappaPackage.name}</span>
           <span class="docs-header__version">v{kappaPackage.version}</span>

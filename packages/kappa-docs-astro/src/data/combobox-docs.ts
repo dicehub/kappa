@@ -99,6 +99,7 @@ import { Combobox } from "@dicehub/kappa/components/combobox";
 </template>`;
 
 export const groupedCode = `<script setup>
+import { Cpu } from "@lucide/vue";
 import { Combobox, createComboboxCollection } from "@dicehub/kappa/components/combobox";
 
 const collection = createComboboxCollection({
@@ -122,6 +123,7 @@ const collection = createComboboxCollection({
           >
             <Combobox.GroupLabel>{{ group }}</Combobox.GroupLabel>
             <Combobox.Item v-for="item in items" :key="item.value" :item="item">
+              <template #before><Cpu :size="16" aria-hidden="true" /></template>
               {{ item.label }}
             </Combobox.Item>
           </Combobox.Group>

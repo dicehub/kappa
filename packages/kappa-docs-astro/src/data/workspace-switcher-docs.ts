@@ -6,7 +6,7 @@ import { Building2, Plus, Settings, UsersRound } from "@lucide/vue";
 const workspace = ref("engineering");
 const items = [
   { value: "engineering", name: "Engineering", description: "Pro plan · 12 members", icon: Building2 },
-  { value: "personal", name: "Personal", description: "Free plan · 1 member", initials: "P" },
+  { value: "personal", name: "Personal", description: "Free plan · 1 member", avatarShape: "circle", initials: "P" },
 ];
 const actions = [
   { value: "settings", label: "Settings", icon: Settings },

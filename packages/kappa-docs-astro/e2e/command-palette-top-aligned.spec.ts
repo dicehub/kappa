@@ -18,8 +18,9 @@ test("top-aligned search expands and fades, filters, and restores focus", async 
   });
   const demo = page.locator('[data-command-palette-demo="top-aligned"]');
   const trigger = demo.getByRole("button", { name: "Search or go to…", exact: true });
-  await expect(trigger).toHaveAttribute("aria-keyshortcuts", "/");
-  await expectSearchPanelMotion(page, "command-palette-top-search-in", () => trigger.press("/"));
+  await expect(trigger.locator("kbd")).toHaveText(["Ctrl", "K"]);
+  await expect(trigger).toHaveAttribute("aria-keyshortcuts", "Control+K");
+  await expectSearchPanelMotion(page, "command-palette-top-search-in", () => trigger.press("Control+k"));
   const dialog = page.locator(".command-palette-top-search-dialog");
   const input = dialog.getByRole("combobox");
   await expect(input).toBeFocused();

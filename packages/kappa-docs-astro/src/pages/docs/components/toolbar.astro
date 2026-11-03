@@ -99,6 +99,13 @@ const getDescriptionParts = (value: string) =>
             <li><code>Toolbar.Separator</code> is decorative and defaults to the toolbar cross-axis.</li>
             <li>Set <code>orientation="vertical"</code> for a stacked toolbar. Set <code>loopFocus="false"</code> to stop at either edge.</li>
           </ul>
+          <p>
+            For a standalone counter or action, use
+            <a href="/docs/components/button#toolbar-buttons">ToolbarButton</a> from the Button module.
+            Inside <code>Toolbar.Root</code>, the same component keeps grouped ghost styling and
+            inherits the root size and disabled state. Per-button size and variant props apply only
+            outside a toolbar root.
+          </p>
         </section>
 
         <section id="examples" class="docs-section docs-section--component-examples">

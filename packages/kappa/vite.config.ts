@@ -48,6 +48,8 @@ const publicEntries = Object.fromEntries(
 );
 
 export default defineConfig({
+  // Packaged artwork must resolve from the stylesheet in any consumer base path.
+  base: "./",
   plugins: [
     vue(),
     dts({
@@ -87,6 +89,8 @@ export default defineConfig({
     themeAssets(),
   ],
   build: {
+    // Library assets are emitted at dist/, not Vite's application assets/ folder.
+    assetsDir: "",
     cssMinify: "esbuild",
     lib: {
       entry: {

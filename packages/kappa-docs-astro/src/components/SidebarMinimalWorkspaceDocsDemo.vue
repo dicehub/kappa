@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, onMounted, ref, useId, watch, type Component } from "vue";
-import { SidebarLayout } from "@dicehub/kappa/blocks/sidebar-layout";
+import { AppShell } from "@dicehub/kappa/blocks/app-shell";
 import { Sidebar, type SidebarContextValue } from "@dicehub/kappa/components/sidebar";
 import { DicehubLogo } from "@dicehub/kappa/components/dicehub-logo";
 import { Avatar } from "@dicehub/kappa/components/avatar";
@@ -8,10 +8,10 @@ import { Button } from "@dicehub/kappa/components/button";
 import { CommandPalette } from "@dicehub/kappa/components/command-palette";
 import { Dropdown } from "@dicehub/kappa/components/dropdown";
 import { WorkspaceSwitcher, type WorkspaceSwitcherItem } from "@dicehub/kappa/blocks/workspace-switcher";
-import { namespaceSwitcherItems, namespaceSwitcherActions, namespaceSwitcherFooterActions, namespaceSwitcherWorkspaceActions, namespaceActionDescriptions } from "../data/workspace-switcher-demo";
+import { namespaceSwitcherAvatarItems, namespaceSwitcherActions, namespaceSwitcherFooterActions, namespaceActionDescriptions } from "../data/workspace-switcher-demo";
 import { Input } from "@dicehub/kappa/components/input";
 import { Table } from "@dicehub/kappa/components/table";
-import { Activity, Building2, ChevronDown, CircleHelp, Clock3, Compass, CreditCard, FileText, Folder, House, LayoutDashboard, LogOut, PanelLeftClose, PanelLeftOpen, Plus, Search, Settings, UserRound, UsersRound } from "@lucide/vue";
+import { Activity, Building2, ChevronDown, ChevronsLeft, ChevronsRight, ChevronsUpDown, CircleHelp, Clock3, Compass, CreditCard, FileText, Folder, House, LayoutDashboard, LogOut, Plus, Search, Settings, UserRound, UsersRound } from "@lucide/vue";
 
 const props = withDefaults(defineProps<{ standalone?: boolean }>(), { standalone: false });
 const headingId = useId();
@@ -20,13 +20,11 @@ const selected = ref("Dashboard");
 const filter = ref("");
 const query = ref("");
 const searchOpen = ref(false);
+const searchKeyboard = ref(false);
 const searchScope = ref<HTMLElement>();
 type SearchItem = { label: string; icon: Component; namespace?: string };
 type SearchGroup = { label: string; items: SearchItem[] };
-const namespaces: WorkspaceSwitcherItem[] = [
-  { value: "Ros.Space", name: "Ros.Space", description: "Free plan · 1 member", avatarSrc: "/avatars/ros-space-astronaut.webp", initials: "RS" },
-  ...namespaceSwitcherItems.filter(item => item.value !== "Personal"),
-];
+const namespaces: WorkspaceSwitcherItem[] = namespaceSwitcherAvatarItems;
 const globalLinks = ["Dashboard", "Explore", "Templates", "Community"];
 const links = [
   { label: "Dashboard", icon: LayoutDashboard },
@@ -42,6 +40,7 @@ const descriptions: Record<string, string> = {
   Activities: "Recent updates in this sample namespace.",
   "User settings": "Profile and account settings preview. No settings are changed.",
   Groups: "Choose a group namespace to see its projects.",
+  "New group": "Group creation preview. Bring people and projects together in a shared group.",
   Explore: "Browse the sample projects available in this namespace.",
   Templates: "Start with a sample project template.",
   Community: "Share project notes and review ideas with your team.",
@@ -70,8 +69,10 @@ const searchPages: SearchItem[] = [
 ];
 const searchGroups = computed(() => {
   const term = query.value.trim().toLocaleLowerCase();
-  const groups: SearchGroup[] = [{ label: "Go to", items: term ? searchPages : searchPages.filter(item => globalLinks.includes(item.label)) }];
-  if (term) groups.push({ label: "Projects", items: namespaceProjects.value.map(project => ({ label: project.name, namespace: project.namespace, icon: Folder })) });
+  const groups: SearchGroup[] = [
+    { label: "Your work", items: searchPages },
+    { label: "Projects", items: namespaceProjects.value.map(project => ({ label: project.name, namespace: project.namespace, icon: Folder })) },
+  ];
   return groups.map(group => ({ ...group, items: group.items.filter(item => `${item.label} ${item.namespace ?? ""}`.toLocaleLowerCase().includes(term)) })).filter(group => group.items.length);
 });
 const selectableSearchItems = (groups: unknown[]) => (groups as SearchGroup[]).flatMap(group => group.items);
@@ -84,9 +85,9 @@ function navigate(label: string, context: SidebarContextValue) {
   filter.value = "";
   context.setMobileOpen(false);
 }
-function search() { searchScope.value?.querySelector<HTMLElement>('[data-workspace-search-trigger]')?.focus(); query.value = ""; searchOpen.value = true; }
+function search() { searchKeyboard.value = false; searchScope.value?.querySelector<HTMLElement>('[data-workspace-search-trigger]')?.focus(); query.value = ""; searchOpen.value = true; }
 function searchShortcut(event: KeyboardEvent) {
-  if (event.key !== "/" || event.defaultPrevented || event.repeat || event.isComposing || event.metaKey || event.ctrlKey || event.altKey || searchOpen.value) return;
+  if (event.key.toLowerCase() !== "k" || !event.ctrlKey || event.metaKey || event.altKey || event.shiftKey || event.defaultPrevented || event.repeat || event.isComposing || searchOpen.value) return;
   if (document.querySelector('[role="dialog"][data-state="open"], [role="menu"][data-state="open"]')) return;
   const target = event.composedPath().find(node => node instanceof HTMLElement) as HTMLElement | undefined;
   if (target?.isContentEditable || target?.closest('input, textarea, select, [role="textbox"], [role="combobox"], [role="searchbox"], [role="dialog"], [role="menu"], [role="listbox"]')) return;
@@ -106,13 +107,13 @@ function createProject(context: SidebarContextValue, template?: string) {
 
 <template>
   <div ref="searchScope" class="minimal-workspace-demo" data-sidebar-block="minimal-workspace" :data-standalone="props.standalone || undefined" @keydown="searchShortcut">
-    <SidebarLayout variant="header" label="Minimal workspace navigation" width="250px" :default-width="250" :min-width="200" :max-width="420" collapsed-width="48px" resizable full-screen-on-mobile>
+    <AppShell.Root appearance="compact" variant="header" content-max-width="72rem" label="Minimal workspace navigation" width="250px" :default-width="250" :min-width="200" :max-width="420" collapsed-width="48px" resizable full-screen-on-mobile :navigation-props="{ class: 'minimal-workspace-demo__navigation' }">
       <template #toolbar="context">
         <div class="minimal-workspace-demo__header-start">
         <a href="?view=dashboard" class="minimal-workspace-demo__brand" aria-label="dicehub home" @click.prevent="navigate('Dashboard', context)"><DicehubLogo aria-hidden="true" /></a>
         <nav class="minimal-workspace-demo__global-nav" aria-label="Application pages"><a v-for="label in globalLinks" :key="label" :href="`?view=${encodeURIComponent(label)}`" :aria-current="selected === label ? 'page' : undefined" @click.prevent="navigate(label, context)">{{ label }}</a></nav>
         </div>
-        <Button size="sm" variant="ghost" :icon="Search" class="minimal-workspace-demo__search" data-workspace-search-trigger aria-label="Search or go to…" aria-keyshortcuts="/" aria-haspopup="dialog" :aria-expanded="searchOpen" @click="search"><span>Search or go to…</span><kbd aria-hidden="true">/</kbd></Button>
+        <AppShell.SearchTrigger :icon="Search" shortcut="Ctrl + K" class="minimal-workspace-demo__search" data-workspace-search-trigger aria-keyshortcuts="Control+K" :aria-expanded="searchOpen" @click="search" />
         <div class="minimal-workspace-demo__header-end">
         <Dropdown.Root :positioning="menuPosition">
           <Dropdown.Trigger as-child><Button size="sm" shape="square" variant="ghost" :icon="Compass" aria-label="Browse application pages" class="minimal-workspace-demo__browse" /></Dropdown.Trigger>
@@ -133,16 +134,23 @@ function createProject(context: SidebarContextValue, template?: string) {
         </div>
       </template>
       <template #header="context">
-        <WorkspaceSwitcher v-model="namespace" :items="namespaces" label="Namespaces" account-label="ros@example.test"
-          :actions="namespaceSwitcherActions" :footer-actions="namespaceSwitcherFooterActions"
-          :workspace-actions="[...namespaceSwitcherWorkspaceActions, { value: 'groups', label: 'Show all groups', icon: UsersRound }]"
-          :teleport="!context.isMobile" :positioning="{ placement: context.iconCollapsed ? 'right-start' : 'bottom-start', strategy: 'fixed', gutter: 6 }"
-          @action="navigate($event.value === 'groups' ? 'Groups' : $event.label, context)">
-          <template #trigger><Sidebar.MenuButton class="minimal-workspace-demo__namespace" :aria-label="`Namespace: ${namespace}`" :tooltip="`Namespace: ${namespace}`">
-            <template #icon><Avatar.Root v-if="namespace === 'Ros.Space'" aria-hidden="true"><Avatar.Image src="/avatars/ros-space-astronaut.webp" alt="" /><Avatar.Fallback>RS</Avatar.Fallback></Avatar.Root><Building2 v-else aria-hidden="true" /></template>
-            <span>{{ namespace }}</span><ChevronDown aria-hidden="true" />
-          </Sidebar.MenuButton></template>
-        </WorkspaceSwitcher>
+        <div class="minimal-workspace-demo__namespace-row" :data-collapsed="context.iconCollapsed || undefined">
+          <WorkspaceSwitcher v-model="namespace" :items="namespaces" label="Namespaces" account-label="ros@example.test"
+            :actions="namespaceSwitcherActions" :footer-actions="namespaceSwitcherFooterActions"
+            :workspace-actions="[{ value: 'new-group', label: 'New group', icon: Plus }, { value: 'groups', label: 'Show all groups', icon: UsersRound }]"
+            :teleport="!context.isMobile" :positioning="{ placement: context.iconCollapsed ? 'right-start' : 'bottom-start', strategy: 'fixed', gutter: 6 }"
+            @action="navigate($event.value === 'groups' ? 'Groups' : $event.label, context)">
+            <template #trigger><Sidebar.MenuButton class="minimal-workspace-demo__namespace" :aria-label="`Namespace: ${namespace}`" :tooltip="`Namespace: ${namespace}`">
+              <template #icon><Avatar.Root v-if="namespace === 'Ros.Space'" aria-hidden="true"><Avatar.Image src="/avatars/ros-space-astronaut.webp" alt="" /><Avatar.Fallback>RS</Avatar.Fallback></Avatar.Root><Building2 v-else aria-hidden="true" /></template>
+              <span>{{ namespace }}</span><ChevronsUpDown aria-hidden="true" />
+            </Sidebar.MenuButton></template>
+          </WorkspaceSwitcher>
+          <Sidebar.Trigger v-if="!context.isMobile" class="minimal-workspace-demo__collapse"
+            :aria-label="context.open ? 'Collapse sidebar' : 'Expand sidebar'"
+            :title="context.open ? 'Collapse sidebar' : 'Expand sidebar'">
+            <component :is="context.open ? ChevronsLeft : ChevronsRight" aria-hidden="true" />
+          </Sidebar.Trigger>
+        </div>
       </template>
       <template #navigation="context">
         <Sidebar.Group>
@@ -162,10 +170,9 @@ function createProject(context: SidebarContextValue, template?: string) {
           <Dropdown.Trigger as-child><Sidebar.MenuButton :icon="CircleHelp" tooltip="Help" class="minimal-workspace-demo__help">Help</Sidebar.MenuButton></Dropdown.Trigger>
           <Dropdown.Context v-slot="menu"><Dropdown.Content :teleport="!context.isMobile" :inert="!menu.open || undefined"><Dropdown.Group><Dropdown.Label>Help and resources</Dropdown.Label><Dropdown.Item v-for="label in ['Help', 'Documentation', 'Support']" :key="label" :value="label" @select="navigate(label, context)">{{ label }}</Dropdown.Item></Dropdown.Group></Dropdown.Content></Dropdown.Context>
         </Dropdown.Root>
-        <Sidebar.Trigger v-if="!context.isMobile" as-child><Sidebar.MenuButton class="minimal-workspace-demo__collapse" :icon="context.open ? PanelLeftClose : PanelLeftOpen" :tooltip="context.open ? 'Collapse sidebar' : 'Expand sidebar'">{{ context.open ? 'Collapse sidebar' : 'Expand sidebar' }}</Sidebar.MenuButton></Sidebar.Trigger>
       </template>
       <template #default="context">
-        <CommandPalette.Dialog v-model:open="searchOpen" class="minimal-workspace-search-dialog" aria-label="Search minimal workspace">
+        <AppShell.SearchDialog v-model:open="searchOpen" class="workspace-search-dialog minimal-workspace-search-dialog" aria-label="Search minimal workspace" :data-search-keyboard="searchKeyboard || undefined" @pointermove.capture="searchKeyboard = false" @keydown.capture="searchKeyboard = ['ArrowDown', 'ArrowUp', 'Home', 'End', 'PageDown', 'PageUp'].includes($event.key)">
           <CommandPalette.Panel v-model:value="query" :open="searchOpen" :items="searchGroups" :filter="false" :get-selectable-items="selectableSearchItems" :item-to-string-value="searchItemLabel" @close="searchOpen = false" @select="item => { searchOpen = false; navigate(searchItemLabel(item), context); }">
             <CommandPalette.Input aria-label="Search pages and projects" placeholder="Search or go to…" />
             <CommandPalette.List>
@@ -177,7 +184,7 @@ function createProject(context: SidebarContextValue, template?: string) {
             </CommandPalette.List>
             <CommandPalette.Footer><span>↑↓ Navigate</span><span>Enter Open</span><span>Esc Close</span></CommandPalette.Footer>
           </CommandPalette.Panel>
-        </CommandPalette.Dialog>
+        </AppShell.SearchDialog>
         <nav class="minimal-workspace-demo__breadcrumb" aria-label="Workspace breadcrumb"><a href="?view=dashboard" aria-label="Workspace home" @click.prevent="navigate('Dashboard', context)"><House aria-hidden="true" /></a><a href="?view=projects" @click.prevent="navigate('Projects', context)">{{ namespace }}</a><span aria-hidden="true">/</span><span aria-current="page">{{ selected }}</span></nav>
         <section class="minimal-workspace-demo__page" :aria-labelledby="headingId">
           <div class="minimal-workspace-demo__page-heading"><div><h2 :id="headingId">{{ selected }}</h2><p>{{ currentProject ? 'Project overview in this local workspace.' : descriptions[selected] }}</p></div><Button v-if="isProjectList" size="sm" :icon="Plus" @click="createProject(context)">New project</Button></div>
@@ -197,7 +204,7 @@ function createProject(context: SidebarContextValue, template?: string) {
           <p class="minimal-workspace-demo__note">Example data only. Changes stay in this preview until reload.</p>
         </section>
       </template>
-    </SidebarLayout>
+    </AppShell.Root>
   </div>
 </template>
 

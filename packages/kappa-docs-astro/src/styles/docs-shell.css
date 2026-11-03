@@ -162,20 +162,19 @@
   flex: none;
 }
 
+.docs-search__label {
+  min-width: 0;
+  overflow: hidden;
+  text-align: start;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .docs-search__shortcut {
-  display: inline-flex;
-  min-width: 1.75rem;
-  align-items: center;
-  justify-content: center;
+  flex: none;
   margin-left: auto;
-  padding: 0.1rem 0.35rem;
-  border: 1px solid var(--docs-border);
-  border-radius: 0.25rem;
-  background: var(--docs-base);
   color: var(--docs-subtle);
-  font-family: var(--docs-font-mono);
-  font-size: 0.625rem;
-  line-height: 1rem;
+  font-size: 0.6875rem;
 }
 
 .docs-nav-list {

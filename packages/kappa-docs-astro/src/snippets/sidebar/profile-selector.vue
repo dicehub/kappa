@@ -17,9 +17,10 @@ const profiles = ["Casey Rivera", "Jordan Lee"];
           <Sidebar.MenuButton :icon="UserRound" :tooltip="profile">{{ profile }}</Sidebar.MenuButton>
         </Dropdown.Trigger>
         <Dropdown.Content :teleport="!isMobile">
-          <Dropdown.Label>Switch profile</Dropdown.Label>
-          <Dropdown.Item v-for="name in profiles" :key="name" :value="name" :selected="profile === name"
-            :aria-current="profile === name ? 'true' : undefined" @select="profile = name">{{ name }}</Dropdown.Item>
+          <Dropdown.RadioGroup v-model="profile">
+            <Dropdown.Label>Switch profile</Dropdown.Label>
+            <Dropdown.RadioItem v-for="name in profiles" :key="name" :value="name" close-on-select>{{ name }}</Dropdown.RadioItem>
+          </Dropdown.RadioGroup>
         </Dropdown.Content>
       </Dropdown.Root>
     </template>

@@ -81,7 +81,7 @@ const autocompleteOpen = ref(false);
 const autocompleteSearch = ref("");
 const resultOpen = ref(false);
 const resultSearch = ref("");
-let loadingTimer: ReturnType<typeof window.setTimeout> | undefined;
+let loadingTimer: number | undefined;
 
 const filterGroups = (groups: CommandGroup[], query: string) => {
   const normalizedQuery = query.trim().toLocaleLowerCase();
@@ -194,10 +194,7 @@ onBeforeUnmount(() => {
             <CommandPalette.Group :items="(group as CommandGroup).items">
               <CommandPalette.GroupLabel>{{ (group as CommandGroup).label }}</CommandPalette.GroupLabel>
               <CommandPalette.Items v-slot="{ item }">
-                <CommandPalette.Item
-                  :disabled="(item as CommandItem).disabled"
-                  :value="item"
-                >
+                <CommandPalette.Item :value="item">
                   <span class="command-palette-demo__item">
                     <component
                       :is="(item as CommandItem).icon"

@@ -89,7 +89,7 @@ export type { SidebarContextValue } from "./sidebar-context";
 export type {
   SidebarProps, SidebarRootProps, SidebarSlots, SidebarRootSlots,
   SidebarProviderProps, SidebarProviderEmits, SidebarProviderSlots,
-  SidebarSide, SidebarCollapsibleMode, SidebarState, SidebarOpenChangeDetails,
+  SidebarSide, SidebarCollapsibleMode, SidebarState, SidebarMobileBreakpointReference, SidebarOpenChangeDetails,
   SidebarPartProps, SidebarTriggerProps, SidebarCloseProps,
   SidebarMenuButtonProps, SidebarMenuButtonSlots,
   SidebarCollapsibleProps, SidebarCollapsibleEmits,

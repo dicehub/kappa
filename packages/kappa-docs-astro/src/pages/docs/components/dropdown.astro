@@ -76,6 +76,25 @@ const description =
             label must differ from the rendered item text. Checkbox and radio options also need it
             when their visible label differs from <code>value</code>.
           </p>
+          <p>
+            Root menus and nested menus share a compact surface with an 8px radius, 4px
+            padding, 32px action rows, and sentence-case group labels. Their minimum width is
+            14rem and their maximum width is 20rem, limited by the available viewport. Set
+            <code>--kappa-dropdown-min-inline-size</code> and
+            <code>--kappa-dropdown-max-inline-size</code> on Content or SubContent to change
+            those limits. The <code>--kappa-dropdown-*</code> color tokens define the same
+            hover, pressed, selected, disabled, and focus states in light and dark modes.
+            The outer edge has no border. Three drop shadows surround the menu and its
+            pointer as one shape, using <code>--kappa-dropdown-shadow-color</code>.
+          </p>
+          <p>
+            Set <code>showArrow</code> on <code>Content</code> or <code>SubContent</code> to add a
+            pointer to its trigger. The default is <code>false</code>. Kappa keeps the pointer
+            outside the menu's scroll area. This pointer is separate from the trigger's
+            <code>Indicator</code>, which does not rotate when the menu opens.
+            The <a href="#icon-trigger">icon trigger example</a> combines it with a compact
+            <a href="/docs/components/button#toolbar-buttons">ToolbarButton</a> and its tooltip.
+          </p>
           <div class="docs-component-example">
             <CodeBlock code={usageCode} lang="vue" collapsible revealId="dropdown-usage-code" />
           </div>
@@ -131,6 +150,7 @@ const description =
           <ul>
             <li>Normal Item activates one action and closes by default. Set <code>closeOnSelect</code> only for a deliberate workflow.</li>
             <li>CheckboxItem and RadioItem stay open by default so users can change more than one option.</li>
+            <li>Selected CheckboxItem and RadioItem options show a check mark at the logical end: right in left-to-right layouts, left in right-to-left layouts. Unselected options reserve the same space so labels stay aligned. This shared style also applies to ContextMenu and MenuBar options.</li>
             <li>Use <code>v-model:checked</code> and <code>v-model</code> for controlled option state. Use <code>defaultChecked</code> and <code>defaultValue</code> for uncontrolled state.</li>
             <li>A menu is not a form field. Use Select, Checkbox, or Radio when a value must be submitted with a form.</li>
             <li>Use a Dialog for destructive confirmation. A destructive Item communicates risk but does not request confirmation.</li>
@@ -163,7 +183,7 @@ const description =
             <li>Shortcut is visual text only. Register application shortcuts separately and document their platform behavior.</li>
             <li>ContextTrigger supports pointer and keyboard context-menu input. Always keep its target keyboard focusable.</li>
             <li>ContextTrigger renders <code>type="button"</code> by default. When <code>asChild</code> supplies a custom button, set its type explicitly.</li>
-            <li>Focus indicators remain visible. Open, close, and caret motion stop under reduced-motion preferences.</li>
+            <li>Focus indicators remain visible. Menus open and close without animation, and trigger arrows keep their direction. Item transitions stop under reduced-motion preferences.</li>
             <li>Closed menus and submenus are inert and cannot receive focus.</li>
           </ul>
         </section>
@@ -175,7 +195,7 @@ const description =
             <div class="docs-api-table"><table><thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>{rootProps.map((prop) => <tr><td><code>{prop.name}</code></td><td><code>{prop.type}</code></td><td><code>{prop.defaultValue}</code></td><td>{prop.description}</td></tr>)}</tbody></table></div>
           </div>
           <div class="docs-api-group">
-            <h3 id="content-api"><a class="docs-section-anchor" href="#content-api">Dropdown.Content</a></h3>
+            <h3 id="content-api"><a class="docs-section-anchor" href="#content-api">Dropdown.Content and SubContent</a></h3>
             <div class="docs-api-table"><table><thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>{contentProps.map((prop) => <tr><td><code>{prop.name}</code></td><td><code>{prop.type}</code></td><td><code>{prop.defaultValue}</code></td><td>{prop.description}</td></tr>)}</tbody></table></div>
           </div>
           <div class="docs-api-group">

@@ -43,8 +43,8 @@ test("copied namespace and profile menus select values and restore focus", async
   await expect(page.getByRole("button", { name: "Namespace: Research", exact: true })).toBeFocused();
   await open(page, "profile-selector");
   await page.getByRole("button", { name: "Casey Rivera", exact: true }).click();
-  await expect(page.getByRole("menuitem", { name: "Casey Rivera", exact: true })).toHaveAttribute('aria-current', 'true');
-  await page.getByRole("menuitem", { name: "Jordan Lee", exact: true }).click();
+  await expect(page.getByRole("menuitemradio", { name: "Casey Rivera", exact: true })).toHaveAttribute('aria-checked', 'true');
+  await page.getByRole("menuitemradio", { name: "Jordan Lee", exact: true }).click();
   await expect(page.getByRole("heading", { name: "Jordan Lee", exact: true })).toBeVisible();
   await expect(page.getByRole("button", { name: "Jordan Lee", exact: true })).toBeFocused();
 });
@@ -77,7 +77,7 @@ test("copied hover reveal opens, pins, and resizes without application handlers"
   await separator.press("End");
   await expect(separator).toHaveAttribute("aria-valuenow", "600");
   await page.setViewportSize({ width: 1024, height: 900 });
-  await expect(page.locator('.kappa-sidebar-layout')).toHaveAttribute('data-content-alignment', 'available');
+  await expect(page.locator('.kappa-sidebar-layout')).toHaveAttribute('data-content-alignment', 'shell');
   const content = page.locator('.kappa-sidebar-layout__content');
   expect(await content.evaluate(el => el.scrollWidth - el.clientWidth)).toBe(0);
   await expect(page.getByRole('heading', { name: 'Overview', exact: true })).toBeVisible();

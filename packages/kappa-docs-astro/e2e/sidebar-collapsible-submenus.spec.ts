@@ -1,7 +1,7 @@
 import { expect, test, type Page } from '@playwright/test';
 
 async function openExample(page: Page) {
-  await page.goto('/examples/sidebar/collapsible-submenus');
+  await page.goto('/examples/appshell/collapsible-submenus');
   await expect.poll(() => page.locator('[data-sidebar-block="collapsible-submenus"]').evaluate(node => node.closest('astro-island')?.hasAttribute('ssr'))).toBe(false);
 }
 
@@ -56,14 +56,14 @@ test('search reveals closed submenus, handles empty results, and retains mobile 
 });
 
 test('gallery exposes a complete example without replacing the existing layouts', async ({ page, request }) => {
-  await page.goto('/docs/blocks/sidebar');
-  await expect(page.locator('[data-block-example]')).toHaveCount(15);
+  await page.goto('/docs/blocks/appshell');
+  await expect(page.locator('[data-block-example]')).toHaveCount(18);
   const example = page.locator('[data-block-example="collapsible-submenus"]');
-  await expect(example.getByRole('link', { name: /Open full example/ })).toHaveAttribute('href', '/examples/sidebar/collapsible-submenus');
+  await expect(example.getByRole('link', { name: /Open full example/ })).toHaveAttribute('href', '/examples/appshell/collapsible-submenus');
   const code = example.locator('[data-code-full] code');
-  await expect(code).toContainText('collapsible: true');
+  await expect(code).toContainText('Sidebar.Collapsible');
   await expect(code).toContainText('Sidebar.CollapsibleContent');
-  await expect(code).toContainText('<style>');
+  await expect(code).not.toContainText('<style');
   await expect(code).not.toContainText('style src=');
-  expect(await (await request.get('/docs/blocks/sidebar.md')).text()).toContain('Collapsible Submenus');
+  expect(await (await request.get('/docs/blocks/appshell.md')).text()).toContain('Collapsible Submenus');
 });

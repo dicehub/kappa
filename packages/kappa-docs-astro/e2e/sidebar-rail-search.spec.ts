@@ -12,9 +12,9 @@ test("rail header search expands and fades, then navigates pages and projects", 
   await page.emulateMedia({ reducedMotion: "no-preference" });
   await openExample(page);
   const trigger = page.getByRole("button", { name: "Search or go to…", exact: true });
-  await expect(trigger).toHaveAttribute("aria-keyshortcuts", "/");
-  await expect(trigger.locator("kbd")).toHaveText("/");
-  await expectSearchPanelMotion(page, "sidebar-rail-search-in", () => page.keyboard.press("/"));
+  await expect(trigger).toHaveAttribute("aria-keyshortcuts", "Control+K");
+  await expect(trigger.locator("kbd")).toHaveText(["Ctrl", "K"]);
+  await expectSearchPanelMotion(page, "sidebar-rail-search-in", () => page.keyboard.press("Control+k"));
   const dialog = page.locator(".sidebar-rail-search-dialog");
   const input = dialog.getByRole("combobox");
   await expect(input).toBeFocused();
@@ -75,15 +75,20 @@ test("rail field stays at the shell center through sidebar width changes", async
   }
 });
 
-test("embedded rail search stays centered and uses a drawer in narrow frames", async ({ page }) => {
-  await page.setViewportSize({ width: 1440, height: 1000 });
-  await page.emulateMedia({ reducedMotion: "reduce" });
-  await page.goto('/docs/blocks/sidebar');
-  const demo = page.locator('[data-sidebar-block="rail"]');
-  await expect.poll(() => demo.evaluate(node => node.closest('astro-island')?.hasAttribute('ssr'))).toBe(false);
-  await demo.getByRole('button', { name: 'Expand sidebar', exact: true }).click();
-  for (const width of [600, 590, 588, 580, 360]) {
-    await demo.evaluate((node, width) => { (node as HTMLElement).style.inlineSize = `${width}px`; }, width);
+for (const width of [800, 600, 590, 588, 580, 360]) {
+  test(`embedded rail search stays centered and uses the expected drawer at ${width}px`, async ({ page }) => {
+    await page.setViewportSize({ width: 1920, height: 1000 });
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    await page.goto('/docs/blocks/sidebar');
+    const demo = page.locator('[data-sidebar-block="rail"]');
+    await expect.poll(() => demo.evaluate(node => node.closest('astro-island')?.hasAttribute('ssr'))).toBe(false);
+    await demo.evaluate(node => { (node as HTMLElement).style.minInlineSize = '800px'; });
+    await expect(demo.locator('.kappa-sidebar-layout')).not.toHaveAttribute('data-mobile');
+    await demo.getByRole('button', { name: 'Expand sidebar', exact: true }).click();
+    // The embedded shell has a 1px border on each side of its measured content box.
+    await demo.evaluate((node, width) => {
+      Object.assign((node as HTMLElement).style, { inlineSize: `${width}px`, minInlineSize: `${width}px` });
+    }, width);
     const layout = demo.locator('.kappa-sidebar-layout');
     if (width < 590) await expect(layout).toHaveAttribute('data-mobile', '');
     else await expect(layout).not.toHaveAttribute('data-mobile', '');
@@ -100,18 +105,18 @@ test("embedded rail search stays centered and uses a drawer in narrow frames", a
     await expect(dialog.getByRole('combobox')).toBeFocused();
     await page.keyboard.press('Escape');
     await expect(trigger).toBeFocused();
-  }
-});
+  });
+}
 
-test("rail slash shortcut respects open menus and input text", async ({ page }) => {
+test("rail Ctrl+K shortcut respects open menus and input text", async ({ page }) => {
   await openExample(page);
   await page.getByRole("button", { name: "Profile: Ros.Space", exact: true }).click();
-  await page.keyboard.press("/");
+  await page.keyboard.press("Control+k");
   await expect(page.getByRole("menu", { name: "Profile: Ros.Space", exact: true })).toBeVisible();
   await expect(page.locator(".sidebar-rail-search-dialog")).toHaveCount(0);
   await page.keyboard.press("Escape");
   const trigger = page.getByRole("button", { name: "Search or go to…", exact: true });
-  await trigger.press("/");
+  await trigger.press("Control+k");
   const dialog = page.getByRole("dialog", { name: "Search navigation", exact: true });
   const input = dialog.getByRole("combobox");
   await expect(input).toBeFocused();

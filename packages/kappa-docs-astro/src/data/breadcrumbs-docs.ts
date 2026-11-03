@@ -31,7 +31,7 @@ import { Breadcrumbs } from "@dicehub/kappa/components/breadcrumbs";
       </Breadcrumbs.Item>
       <Breadcrumbs.Separator />
       <Breadcrumbs.Item>
-        <Breadcrumbs.Page>Run 042</Breadcrumbs.Page>
+        <Breadcrumbs.Link href="/projects/rotor-study/runs/042" aria-current="page">Run 042</Breadcrumbs.Link>
       </Breadcrumbs.Item>
     </Breadcrumbs.List>
   </Breadcrumbs.Root>
@@ -53,7 +53,7 @@ import { Breadcrumbs } from "@dicehub/kappa/components/breadcrumbs";
       </Breadcrumbs.Item>
       <Breadcrumbs.Separator />
       <Breadcrumbs.Item>
-        <Breadcrumbs.Current>Run 042</Breadcrumbs.Current>
+        <Breadcrumbs.Link href="/simulations/runs/042" aria-current="page">Run 042</Breadcrumbs.Link>
       </Breadcrumbs.Item>
     </Breadcrumbs.List>
   </Breadcrumbs.Root>
@@ -67,9 +67,9 @@ import { Breadcrumbs } from "@dicehub/kappa/components/breadcrumbs";
   <Breadcrumbs.Root aria-label="Dataset path">
     <Breadcrumbs.List>
       <Breadcrumbs.Item><Breadcrumbs.Link href="/data">Data</Breadcrumbs.Link></Breadcrumbs.Item>
-      <Breadcrumbs.Separator><span aria-hidden="true">/</span></Breadcrumbs.Separator>
+      <Breadcrumbs.Separator><span aria-hidden="true">·</span></Breadcrumbs.Separator>
       <Breadcrumbs.Item><Breadcrumbs.Link href="/data/wind">Wind</Breadcrumbs.Link></Breadcrumbs.Item>
-      <Breadcrumbs.Separator><span aria-hidden="true">/</span></Breadcrumbs.Separator>
+      <Breadcrumbs.Separator><span aria-hidden="true">·</span></Breadcrumbs.Separator>
       <Breadcrumbs.Item><Breadcrumbs.Page>inlet.csv</Breadcrumbs.Page></Breadcrumbs.Item>
     </Breadcrumbs.List>
   </Breadcrumbs.Root>
@@ -91,7 +91,7 @@ import { Breadcrumbs } from "@dicehub/kappa/components/breadcrumbs";
       <Breadcrumbs.Separator />
       <Breadcrumbs.Item><Breadcrumbs.Link href="/cases">Cases</Breadcrumbs.Link></Breadcrumbs.Item>
       <Breadcrumbs.Separator />
-      <Breadcrumbs.Item><Breadcrumbs.Page>Run 042</Breadcrumbs.Page></Breadcrumbs.Item>
+      <Breadcrumbs.Item><Breadcrumbs.Link href="/cases/run-042" aria-current="page">Run 042</Breadcrumbs.Link></Breadcrumbs.Item>
     </Breadcrumbs.List>
   </Breadcrumbs.Root>
 </template>`;
@@ -114,7 +114,7 @@ import { Breadcrumbs } from "@dicehub/kappa/components/breadcrumbs";
       <Breadcrumbs.Separator />
       <Breadcrumbs.Item><Breadcrumbs.Link href="/projects">Projects</Breadcrumbs.Link></Breadcrumbs.Item>
       <Breadcrumbs.Separator />
-      <Breadcrumbs.Item><Breadcrumbs.Page>Current Project</Breadcrumbs.Page></Breadcrumbs.Item>
+      <Breadcrumbs.Item><Breadcrumbs.Link href="/projects/current" aria-current="page">Current Project</Breadcrumbs.Link></Breadcrumbs.Item>
     </Breadcrumbs.List>
   </Breadcrumbs.Root>
 </template>`;
@@ -131,7 +131,7 @@ import { Breadcrumbs } from "@dicehub/kappa/components/breadcrumbs";
         <Breadcrumbs.Separator />
         <Breadcrumbs.Item><Breadcrumbs.Link href="/projects/offshore-platform">Offshore platform verification</Breadcrumbs.Link></Breadcrumbs.Item>
         <Breadcrumbs.Separator />
-        <Breadcrumbs.Item><Breadcrumbs.Page>Transient load case 2026-08</Breadcrumbs.Page></Breadcrumbs.Item>
+        <Breadcrumbs.Item><Breadcrumbs.Link href="/projects/offshore-platform/cases/transient-2026-08" aria-current="page">Transient load case 2026-08</Breadcrumbs.Link></Breadcrumbs.Item>
       </Breadcrumbs.List>
     </Breadcrumbs.Root>
   </div>
@@ -152,7 +152,7 @@ import { Breadcrumbs } from "@dicehub/kappa/components/breadcrumbs";
       <Breadcrumbs.Separator />
       <Breadcrumbs.Item><Breadcrumbs.Ellipsis /></Breadcrumbs.Item>
       <Breadcrumbs.Separator />
-      <Breadcrumbs.Item><Breadcrumbs.Page>Run 042</Breadcrumbs.Page></Breadcrumbs.Item>
+      <Breadcrumbs.Item><Breadcrumbs.Link href="/projects/rotor-study/runs/042" aria-current="page">Run 042</Breadcrumbs.Link></Breadcrumbs.Item>
     </Breadcrumbs.List>
   </Breadcrumbs.Root>
 </template>`;
@@ -180,7 +180,7 @@ import { Dropdown } from "@dicehub/kappa/components/dropdown";
         </Dropdown.Root>
       </Breadcrumbs.Item>
       <Breadcrumbs.Separator />
-      <Breadcrumbs.Item><Breadcrumbs.Page>Run 042</Breadcrumbs.Page></Breadcrumbs.Item>
+      <Breadcrumbs.Item><Breadcrumbs.Link href="/models/rotor/runs/042" aria-current="page">Run 042</Breadcrumbs.Link></Breadcrumbs.Item>
     </Breadcrumbs.List>
   </Breadcrumbs.Root>
 </template>
@@ -219,7 +219,7 @@ import { Breadcrumbs } from "@dicehub/kappa/components/breadcrumbs";
         </Breadcrumbs.Link>
       </Breadcrumbs.Item>
       <Breadcrumbs.Separator />
-      <Breadcrumbs.Item><Breadcrumbs.Page>Run 042</Breadcrumbs.Page></Breadcrumbs.Item>
+      <Breadcrumbs.Item><Breadcrumbs.Link href="/runs/042" aria-current="page">Run 042</Breadcrumbs.Link></Breadcrumbs.Item>
     </Breadcrumbs.List>
   </Breadcrumbs.Root>
 </template>`;
@@ -235,7 +235,7 @@ import { Breadcrumbs } from "@dicehub/kappa/components/breadcrumbs";
       <Breadcrumbs.Separator />
       <Breadcrumbs.Item><Breadcrumbs.Link href="/models">النماذج</Breadcrumbs.Link></Breadcrumbs.Item>
       <Breadcrumbs.Separator />
-      <Breadcrumbs.Item><Breadcrumbs.Page>التشغيل ٠٤٢</Breadcrumbs.Page></Breadcrumbs.Item>
+      <Breadcrumbs.Item><Breadcrumbs.Link href="/models/runs/042" aria-current="page">التشغيل ٠٤٢</Breadcrumbs.Link></Breadcrumbs.Item>
     </Breadcrumbs.List>
   </Breadcrumbs.Root>
 </template>`;
@@ -263,9 +263,9 @@ export const parts = [
   { name: "Root", element: "nav", description: "Labelled navigation landmark; forwards native nav attributes." },
   { name: "List", element: "ol", description: "Ordered hierarchy of breadcrumb items." },
   { name: "Item", element: "li", description: "Wraps one link, current page, ellipsis, or composed control." },
-  { name: "Link", element: "a", description: "Ancestor link; supports asChild for router-link composition." },
+  { name: "Link", element: "a", description: "Ancestor or current-page link; supports aria-current and asChild for router-link composition." },
   { name: "Page / Current", element: "span", description: "Noninteractive current location with aria-current=page." },
-  { name: "Separator", element: "li", description: "Decorative, assistive-technology-hidden separator with a replaceable default slot." },
+  { name: "Separator", element: "li", description: "Decorative slash separator, hidden from assistive technology; replaceable through its default slot." },
   { name: "Ellipsis", element: "span", description: "Decorative collapsed-state indicator; it does not hide items by itself." },
 ];
 
@@ -274,7 +274,7 @@ export const exportsList = [
   { name: "BreadcrumbsRoot", description: "Unaugmented root component." },
   { name: "BreadcrumbsList", description: "Ordered-list part." },
   { name: "BreadcrumbsItem", description: "List-item part." },
-  { name: "BreadcrumbsLink", description: "Ancestor-link part." },
+  { name: "BreadcrumbsLink", description: "Ancestor or current-page link part." },
   { name: "BreadcrumbsPage", description: "Current-page part." },
   { name: "BreadcrumbsCurrent", description: "Alias of BreadcrumbsPage." },
   { name: "BreadcrumbsSeparator", description: "Decorative separator part." },

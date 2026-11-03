@@ -29,18 +29,18 @@ defineSlots<DropdownRadioItemSlots>();
   >
     <slot v-if="props.asChild" />
     <template v-else>
+      <slot />
+      <slot name="end" />
       <ArkMenu.ItemIndicator
         class="kappa-dropdown__item-indicator"
         data-slot="dropdown-radio-item-indicator"
       >
         <slot name="indicator">
           <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false">
-            <circle cx="8" cy="8" r="2.5" fill="currentColor" stroke="none" />
+            <path d="m3 8.25 3 3 7-7" />
           </svg>
         </slot>
       </ArkMenu.ItemIndicator>
-      <slot />
-      <slot name="end" />
     </template>
   </ArkMenu.RadioItem>
 </template>

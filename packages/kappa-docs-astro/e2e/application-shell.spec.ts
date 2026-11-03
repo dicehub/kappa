@@ -97,14 +97,18 @@ test("resize indicators overlap the existing border in start, end, and RTL layou
   await expectSingleEdge(nav);
   const handle = nav.locator('[data-slot="sidebar-resize-handle"]');
   await handle.hover();
-  await expect.poll(() => handle.evaluate(node => getComputedStyle(node, "::after").width)).toBe("3px");
+  await expect.poll(() => handle.evaluate(node => getComputedStyle(node, "::after").width)).toBe("4px");
   await handle.focus();
   await handle.press("ArrowRight");
   await expect.poll(async () => (await nav.boundingBox())!.width).toBeGreaterThan(260);
 });
 
 test("the first gallery preview has no unnecessary navigation scrollbar", async ({ page }) => {
+  await page.setViewportSize({ width: 1920, height: 1000 });
   await page.goto("/docs/blocks/sidebar");
+  const demo = page.locator('[data-sidebar-block="workspace"]');
+  await expect.poll(() => demo.evaluate(node => node.closest('astro-island')?.hasAttribute('ssr'))).toBe(false);
+  await expect(demo.locator('.kappa-sidebar-layout')).not.toHaveAttribute('data-mobile');
   const content = page.locator('[data-sidebar-block="workspace"] [data-slot="sidebar-content"]');
   await expect(content).toBeVisible();
   await expect.poll(() => content.evaluate(node => node.scrollHeight <= node.clientHeight)).toBe(true);

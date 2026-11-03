@@ -1,6 +1,6 @@
 import { existsSync, readFileSync } from "node:fs";
 import { resolve } from "node:path";
-import { adaptedSources } from "./third-party-sources.mjs";
+import { adaptedSources, bundledFonts } from "./third-party-sources.mjs";
 
 export function validateLicenses(manifest, packedRoot, packageRoot) {
   if (manifest.license !== "MIT") throw new Error("The package must declare its MIT license.");
@@ -20,7 +20,7 @@ export function validateLicenses(manifest, packedRoot, packageRoot) {
   if (!existsSync(noticesPath)) throw new Error("The package tarball must include third-party notices.");
   const notices = readFileSync(noticesPath, "utf8");
 
-  for (const { name, licenseFile } of adaptedSources) {
+  for (const { name, licenseFile } of [...adaptedSources, ...bundledFonts]) {
     const sourceFile = resolve(packageRoot, licenseFile);
     assertUnchanged(resolve(packedRoot, licenseFile), sourceFile, `${name}'s original license`);
     if (!notices.includes(readFileSync(sourceFile, "utf8").trim())) {

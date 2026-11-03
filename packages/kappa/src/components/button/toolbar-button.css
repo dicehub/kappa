@@ -1,0 +1,70 @@
+.kappa-toolbar-button.kappa-button {
+  --kappa-button-size: 2rem;
+  --kappa-button-icon-size: 1rem;
+  --kappa-button-radius: 0.5rem;
+  --kappa-button-background: transparent;
+  --kappa-button-border: transparent;
+  --kappa-button-foreground: var(--kappa-toolbar-button-foreground, #28272d);
+  --kappa-button-hover-foreground: var(--kappa-button-foreground);
+  --kappa-button-hover-background: var(--kappa-toolbar-button-hover, rgba(5, 5, 6, 0.06));
+  --kappa-button-active-background: var(--kappa-toolbar-button-pressed, rgba(5, 5, 6, 0.16));
+  --kappa-button-hover-border: transparent;
+  --kappa-toolbar-button-active-border: transparent;
+
+  min-inline-size: var(--kappa-button-size);
+  gap: 0.25rem;
+  border-radius: var(--kappa-button-radius);
+  color: var(--kappa-button-foreground);
+  font-size: 0.75rem;
+  font-weight: 500;
+  line-height: 1rem;
+  font-variant-numeric: tabular-nums;
+  transition: color 200ms cubic-bezier(0.22, 0.61, 0.36, 1),
+    background-color 200ms cubic-bezier(0.22, 0.61, 0.36, 1),
+    border-color 200ms cubic-bezier(0.22, 0.61, 0.36, 1),
+    box-shadow 200ms cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+.kappa-toolbar-button.kappa-button[data-size="sm"] { --kappa-button-size: 1.5rem; }
+.kappa-toolbar-button.kappa-button[data-size] { --kappa-button-icon-size: 1rem; }
+.kappa-toolbar-button.kappa-button[data-variant="ghost"] { --kappa-button-hover-border: transparent; }
+.kappa-toolbar-button.kappa-button[data-shape="circle"] { --kappa-button-radius: 999px; }
+
+/* Both sides stay equal when Button renders a leading or trailing icon. */
+.kappa-toolbar-button.kappa-button[data-shape="base"][data-size] { padding-inline: 0.5rem; }
+
+.kappa-toolbar-button.kappa-button[data-variant="outline"] {
+  --kappa-button-foreground: var(--kappa-toolbar-button-outline-foreground, #3a383f);
+  --kappa-button-background: var(--kappa-toolbar-button-outline-surface, #ffffff);
+  --kappa-button-hover-background: var(--kappa-toolbar-button-outline-hover-surface, #ececef);
+  --kappa-button-active-background: var(--kappa-toolbar-button-outline-pressed-surface, #dcdcde);
+  --kappa-button-border: var(--kappa-toolbar-button-outline-border, #bfbfc3);
+  --kappa-button-hover-border: var(--kappa-toolbar-button-outline-hover-border, #89888d);
+  --kappa-toolbar-button-active-border: var(--kappa-toolbar-button-outline-pressed-border, #626168);
+}
+
+.kappa-toolbar-button.kappa-button:focus-visible {
+  outline: none;
+  background: var(--kappa-button-hover-background);
+  border-color: var(--kappa-button-hover-border);
+  box-shadow: 0 0 0 1px var(--kappa-toolbar-button-focus-surface, #ffffff),
+    0 0 0 3px var(--kappa-focus, #247ab7);
+}
+
+.kappa-toolbar-button.kappa-button:active:not(:disabled, [aria-disabled="true"]) {
+  transform: none;
+  background: var(--kappa-button-active-background);
+  border-color: var(--kappa-toolbar-button-active-border);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kappa-toolbar-button.kappa-button { transition: none; }
+}
+
+@media (forced-colors: active) {
+  .kappa-toolbar-button.kappa-button,
+  .kappa-toolbar-button.kappa-button:is(:hover, :active, :focus-visible):not(:disabled, [aria-disabled="true"]) { border-color: ButtonText; }
+  .kappa-toolbar-button.kappa-button:disabled,
+  .kappa-toolbar-button.kappa-button[aria-disabled="true"] { border-color: GrayText; }
+  .kappa-toolbar-button.kappa-button:focus-visible { outline: 2px solid Highlight; outline-offset: 2px; }
+}

@@ -3,6 +3,7 @@ import { ref } from "vue";
 import { Search } from "@lucide/vue";
 import { Button } from "@dicehub/kappa/components/button";
 import { CommandPalette } from "@dicehub/kappa/components/command-palette";
+import { Kbd, KbdGroup } from "@dicehub/kappa/components/kbd";
 
 const container = ref<HTMLElement>();
 const open = ref(false);
@@ -15,7 +16,7 @@ function showSearch() {
   open.value = true;
 }
 function shortcut(event: KeyboardEvent) {
-  if (event.key !== "/" || event.defaultPrevented || event.repeat || event.isComposing || event.metaKey || event.ctrlKey || event.altKey || open.value) return;
+  if (event.key.toLowerCase() !== "k" || !event.ctrlKey || event.metaKey || event.altKey || event.shiftKey || event.defaultPrevented || event.repeat || event.isComposing || open.value) return;
   const target = event.composedPath().find(node => node instanceof HTMLElement) as HTMLElement | undefined;
   if (target?.isContentEditable || target?.closest('input, textarea, select, [role="textbox"], [role="combobox"], [role="searchbox"], [role="dialog"], [role="menu"]')) return;
   event.preventDefault();
@@ -26,8 +27,8 @@ function shortcut(event: KeyboardEvent) {
 
 <template>
   <div ref="container" class="command-palette-top-search-demo" @keydown="shortcut">
-    <Button variant="ghost" :icon="Search" class="command-palette-top-search-demo__trigger" data-search-trigger aria-label="Search or go to…" aria-keyshortcuts="/" aria-haspopup="dialog" :aria-expanded="open" @click="showSearch">
-      <span>Search or go to…</span><kbd aria-hidden="true">/</kbd>
+    <Button variant="ghost" :icon="Search" class="command-palette-top-search-demo__trigger" data-search-trigger aria-label="Search or go to…" aria-keyshortcuts="Control+K" aria-haspopup="dialog" :aria-expanded="open" @click="showSearch">
+      <span>Search or go to…</span><KbdGroup aria-hidden="true"><Kbd>Ctrl</Kbd><span>+</span><Kbd>K</Kbd></KbdGroup>
     </Button>
     <p v-if="selected" role="status">Opened {{ selected }}.</p>
     <CommandPalette.Dialog v-model:open="open" class="command-palette-top-search-dialog" aria-label="Top-aligned search">
@@ -49,8 +50,8 @@ function shortcut(event: KeyboardEvent) {
 .command-palette-top-search-demo__trigger.kappa-button[data-variant="ghost"] { --kappa-button-hover-background: color-mix(in srgb, var(--kappa-control) 25%, var(--kappa-tint)); --kappa-button-hover-foreground: var(--kappa-subtle); }
 .command-palette-top-search-demo__trigger.kappa-button:hover { border-color: color-mix(in srgb, var(--kappa-line) 90%, var(--kappa-subtle)); }
 .command-palette-top-search-demo__trigger .kappa-button__label { display: flex; flex: 1; align-items: center; gap: 0.5rem; min-inline-size: 0; }
-.command-palette-top-search-demo__trigger .kappa-button__label > span { flex: 1; overflow: hidden; text-align: start; text-overflow: ellipsis; white-space: nowrap; }
-.command-palette-top-search-demo__trigger kbd { display: grid; place-items: center; min-inline-size: 1.25rem; block-size: 1.25rem; border: 1px solid var(--kappa-line); border-radius: 0.1875rem; font: 0.75rem / 1 var(--kappa-font-mono); }
+.command-palette-top-search-demo__trigger .kappa-button__label > span:not(.kappa-kbd-group) { flex: 1; overflow: hidden; text-align: start; text-overflow: ellipsis; white-space: nowrap; }
+.command-palette-top-search-demo__trigger .kappa-kbd-group { flex: none; }
 .kappa-command-palette__positioner:has(> .command-palette-top-search-dialog) { padding: 0.25rem 0.5rem 0.5rem; }
 .command-palette-top-search-dialog.kappa-command-palette__content { inline-size: min(48rem, calc(100vw - 1rem)); max-block-size: calc(100dvh - 0.75rem); border: 0; border-radius: 1rem; transform-origin: center top; }
 .command-palette-top-search-dialog .kappa-command-palette__input-header { min-block-size: 2.5rem; margin: 0.25rem; padding-inline: 0.5rem; gap: 0.5rem; border: 0; border-radius: 0.75rem; background: var(--kappa-control); }

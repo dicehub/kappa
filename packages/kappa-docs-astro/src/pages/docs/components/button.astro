@@ -1,5 +1,6 @@
 ---
 import ButtonDocsDemo from "../../../components/ButtonDocsDemo.vue";
+import ToolbarButtonDocsDemo from "../../../components/ToolbarButtonDocsDemo.vue";
 import CodeBlock from "../../../components/CodeBlock.astro";
 import CopyPageControls from "../../../components/CopyPageControls.vue";
 import DocsPageNavigation from "../../../components/DocsPageNavigation.astro";
@@ -21,6 +22,8 @@ import {
   previewCode,
   rtlCode,
   sizesCode,
+  toolbarButtonProps,
+  toolbarCode,
   usageCode,
   variantExamples,
   variants,
@@ -125,6 +128,42 @@ const description = "Triggers an action or presents a link with consistent Kappa
             <CodeBlock code={sizesCode} lang="vue" collapsible revealId="button-sizes-code" />
           </div>
 
+          <h3 id="toolbar-buttons"><a class="docs-section-anchor" href="#toolbar-buttons">Toolbar buttons</a></h3>
+          <p>
+            Use <code>ToolbarButton</code> for compact counters and actions. It shares the native Button
+            behavior, with <code>ghost</code> as the default variant and <code>outline</code> for a visible
+            boundary. The default <code>base</code> size is 32 px high; <code>sm</code> is 24 px high.
+            Both use 16 px icons, 12 px text at weight 500, 8 px corners, and 8 px inline padding
+            for text buttons. An icon without label content gets a square button automatically.
+          </p>
+          <p>
+            Hover and press use 200 ms color transitions without moving the control. Keyboard focus
+            keeps a visible ring, and reduced-motion settings remove the transitions. Disabled and
+            loading states use the same activation rules as Button.
+          </p>
+          <p>
+            Set <code>tooltip</code> to show a label below the button after 500 ms. It closes without
+            a delay and stays hidden while the button is disabled, loading, or has an open menu.
+            For an icon-only button, the tooltip also supplies its accessible name unless you set
+            <code>aria-label</code> or <code>aria-labelledby</code>.
+          </p>
+          <p>Use <code>tooltip-placement="left"</code> for a right-side toolbar or <code>"top"</code> for a bottom toolbar. The default is <code>"bottom"</code>. Tooltips use fixed positioning and adjust to viewport edges.</p>
+          <p>
+            The “+” button opens a <a href="/docs/components/dropdown#icon-trigger">Dropdown</a>
+            with <code>showArrow</code> on its content. The components manage the tooltip and menu together.
+          </p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview"><ToolbarButtonDocsDemo client:load /></div>
+            <CodeBlock code={toolbarCode} lang="vue" collapsible revealId="button-toolbar-code" />
+          </div>
+          <p>
+            Compose a menu trigger with <code>Dropdown.Trigger as-child</code>, as shown above. <a href="/docs/components/dropdown">Dropdown</a> owns menu state, keyboard navigation, and
+            focus return. Standalone ToolbarButton has native button keyboard behavior. For a group
+            with arrow-key navigation, use <a href="/docs/components/toolbar">Toolbar.Root</a> and
+            <code>Toolbar.Button</code>. Inside a Toolbar.Root, the button keeps the group's ghost
+            styling, shared size, and disabled state; standalone size and variant props do not apply.
+          </p>
+
           <h3 id="with-icons"><a class="docs-section-anchor" href="#with-icons">With Icons</a></h3>
           <p>
             These examples use <code>@lucide/vue</code>, but <code>icon</code> accepts any Vue component.
@@ -224,6 +263,15 @@ const description = "Triggers an action or presents a link with consistent Kappa
             <div class="docs-api-table"><table><thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>{linkButtonProps.map((prop) => <tr><td><code>{prop.name}</code></td><td><code>{prop.type}</code></td><td><code>{prop.defaultValue}</code></td><td>{prop.description}</td></tr>)}</tbody></table></div>
           </div>
           <div class="docs-api-group">
+            <h3 id="toolbar-button-api"><a class="docs-section-anchor" href="#toolbar-button-api">ToolbarButton</a></h3>
+            <p>
+              Shares <a href="#button-api">Button props</a>, its default slot, and native attribute
+              forwarding. These defaults apply outside Toolbar.Root. The named export is also
+              available from <code>@dicehub/kappa/components/toolbar</code>.
+            </p>
+            <div class="docs-api-table"><table><thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>{toolbarButtonProps.map((prop) => <tr><td><code>{prop.name}</code></td><td><code>{prop.type}</code></td><td><code>{prop.defaultValue}</code></td><td>{prop.description}</td></tr>)}</tbody></table></div>
+          </div>
+          <div class="docs-api-group">
             <h3 id="variant-reference"><a class="docs-section-anchor" href="#variant-reference">Variant Reference</a></h3>
             <div class="docs-api-table"><table><thead><tr><th>Variant</th><th>Purpose</th></tr></thead><tbody>{variants.map((variant) => <tr><td><code>{variant.name}</code></td><td>{variant.purpose}</td></tr>)}</tbody></table></div>
           </div>
@@ -242,9 +290,9 @@ const description = "Triggers an action or presents a link with consistent Kappa
           <ul>
             <li><a href="#installation" data-toc-link="installation">Installation</a><ul><li><a href="#barrel" data-toc-link="barrel">Barrel</a></li><li><a href="#granular" data-toc-link="granular">Granular</a></li></ul></li>
             <li><a href="#usage" data-toc-link="usage">Usage</a></li>
-            <li><a href="#examples" data-toc-link="examples">Examples</a><ul><li><a href="#basic" data-toc-link="basic">Basic</a></li><li><a href="#variants" data-toc-link="variants">Variants</a></li><li><a href="#sizes" data-toc-link="sizes">Sizes</a></li><li><a href="#with-icons" data-toc-link="with-icons">With Icons</a></li><li><a href="#icon-only" data-toc-link="icon-only">Icon-only</a></li><li><a href="#loading" data-toc-link="loading">Loading</a></li><li><a href="#disabled" data-toc-link="disabled">Disabled</a></li><li><a href="#full-width" data-toc-link="full-width">Full Width</a></li><li><a href="#links" data-toc-link="links">Links and asChild</a></li><li><a href="#native-forms" data-toc-link="native-forms">Native Forms</a></li><li><a href="#right-to-left" data-toc-link="right-to-left">Right-to-left</a></li></ul></li>
+            <li><a href="#examples" data-toc-link="examples">Examples</a><ul><li><a href="#basic" data-toc-link="basic">Basic</a></li><li><a href="#variants" data-toc-link="variants">Variants</a></li><li><a href="#sizes" data-toc-link="sizes">Sizes</a></li><li><a href="#toolbar-buttons" data-toc-link="toolbar-buttons">Toolbar buttons</a></li><li><a href="#with-icons" data-toc-link="with-icons">With Icons</a></li><li><a href="#icon-only" data-toc-link="icon-only">Icon-only</a></li><li><a href="#loading" data-toc-link="loading">Loading</a></li><li><a href="#disabled" data-toc-link="disabled">Disabled</a></li><li><a href="#full-width" data-toc-link="full-width">Full Width</a></li><li><a href="#links" data-toc-link="links">Links and asChild</a></li><li><a href="#native-forms" data-toc-link="native-forms">Native Forms</a></li><li><a href="#right-to-left" data-toc-link="right-to-left">Right-to-left</a></li></ul></li>
             <li><a href="#accessibility" data-toc-link="accessibility">Accessibility</a></li>
-            <li><a href="#api-reference" data-toc-link="api-reference">API Reference</a><ul><li><a href="#button-api" data-toc-link="button-api">Button</a></li><li><a href="#link-button-api" data-toc-link="link-button-api">LinkButton</a></li><li><a href="#variant-reference" data-toc-link="variant-reference">Variant Reference</a></li><li><a href="#exports-api" data-toc-link="exports-api">Exports</a></li></ul></li>
+            <li><a href="#api-reference" data-toc-link="api-reference">API Reference</a><ul><li><a href="#button-api" data-toc-link="button-api">Button</a></li><li><a href="#link-button-api" data-toc-link="link-button-api">LinkButton</a></li><li><a href="#toolbar-button-api" data-toc-link="toolbar-button-api">ToolbarButton</a></li><li><a href="#variant-reference" data-toc-link="variant-reference">Variant Reference</a></li><li><a href="#exports-api" data-toc-link="exports-api">Exports</a></li></ul></li>
           </ul>
         </div>
       </aside>

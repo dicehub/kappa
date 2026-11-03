@@ -16,7 +16,7 @@ const props = withDefaults(defineProps<SidebarLayoutProps>(), {
 const emit = defineEmits<SidebarLayoutEmits>();
 defineSlots<SidebarLayoutSlots>();
 const providerProps = computed(() => {
-  const { variant, contentAlignment, label, navigationLabel, secondaryLabel, closeLabel, resizeLabel, fullScreenOnMobile, triggerProps, ...provider } = props;
+  const { variant, contentAlignment, contentMaxWidth, label, navigationLabel, navigationProps, secondaryLabel, closeLabel, resizeLabel, fullScreenOnMobile, triggerProps, ...provider } = props;
   return {
     ...provider,
     defaultOpen: props.defaultOpen ?? sidebarLayoutDefaultOpen(variant),
@@ -31,17 +31,19 @@ const providerProps = computed(() => {
     v-bind="{ ...$attrs, ...providerProps }"
     class="kappa-sidebar-layout" :data-variant="props.variant" :data-side="props.side"
     :data-content-alignment="props.contentAlignment" :data-collapsible="props.collapsible"
+    :style="{ '--kappa-sidebar-layout-content-max-width': props.contentMaxWidth }"
     @update:open="emit('update:open', $event)" @open-change="emit('openChange', $event)"
     @update:mobile-open="emit('update:mobileOpen', $event)" @mobile-open-change="emit('mobileOpenChange', $event)"
     @update:resize-width="emit('update:resizeWidth', $event)" @resize="emit('resize', $event)" @resize-end="emit('resizeEnd', $event)"
   >
     <Sidebar.Context v-slot="context">
       <header v-if="props.variant === 'header'" class="kappa-sidebar-layout__toolbar kappa-sidebar-layout__site-header">
-        <Sidebar.Trigger v-bind="props.triggerProps" />
+        <slot name="toolbar-start" v-bind="context" />
+        <slot name="toolbar-trigger" v-bind="context"><Sidebar.Trigger v-bind="props.triggerProps" /></slot>
         <slot name="toolbar" v-bind="context" />
       </header>
       <div class="kappa-sidebar-layout__body">
-        <Sidebar.Root :label="props.label" :full-screen-on-mobile="props.fullScreenOnMobile" class="kappa-sidebar-layout__navigation" :data-layout="props.variant">
+        <Sidebar.Root v-bind="props.navigationProps" :label="props.label" :full-screen-on-mobile="props.fullScreenOnMobile" class="kappa-sidebar-layout__navigation" :data-layout="props.variant">
           <Sidebar.Header>
             <slot name="header" v-bind="context" />
             <Sidebar.Close :label="props.closeLabel" />
@@ -60,13 +62,15 @@ const providerProps = computed(() => {
         </Sidebar.Root>
         <div class="kappa-sidebar-layout__main">
           <header v-if="props.variant !== 'header'" class="kappa-sidebar-layout__toolbar">
-            <Sidebar.Trigger v-bind="props.triggerProps" />
+            <slot name="toolbar-start" v-bind="context" />
+            <slot name="toolbar-trigger" v-bind="context"><Sidebar.Trigger v-bind="props.triggerProps" /></slot>
             <slot name="toolbar" v-bind="context" />
           </header>
           <div class="kappa-sidebar-layout__content-frame">
-            <div class="kappa-sidebar-layout__content"><slot v-bind="context" /></div>
+            <div class="kappa-sidebar-layout__content"><div class="kappa-sidebar-layout__content-body"><slot v-bind="context" /></div></div>
           </div>
         </div>
+        <slot name="rail" v-bind="context" />
       </div>
     </Sidebar.Context>
   </Sidebar.Provider>

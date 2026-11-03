@@ -12,6 +12,8 @@ Git and OpenSSL must be available. No service credentials are needed.
 
 CI sets `CHOKIDAR_USEPOLLING=true` for development-server checks to avoid native
 file-watcher exhaustion in shared containers. File watching remains enabled.
+Owned Astro test servers use `--ignore-lock` to stay in the foreground when an
+agent runs the suite. This lets the harness observe startup and stop its server.
 
 ```sh
 pnpm test            # Public checks and the approved logic cases
@@ -55,7 +57,9 @@ pnpm test:blackbox -- --project=consumer --grep 'controlled'
 ```
 
 The package, CLI, and logic checks still run. Browser retries are disabled so
-the result records the first attempt.
+the result records the first attempt. The complete browser suite has a 45-minute
+process budget for its single-worker run. Individual test and assertion timeouts
+remain defined by Playwright and the relevant specs.
 
 The contribution and adversarial review rules are in
 [CONTRIBUTING.md](../CONTRIBUTING.md) and [REVIEW.md](../REVIEW.md).

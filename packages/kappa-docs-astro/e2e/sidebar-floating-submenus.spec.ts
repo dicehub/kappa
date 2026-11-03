@@ -1,7 +1,7 @@
 import { expect, test, type Page } from '@playwright/test';
 
 async function openExample(page: Page) {
-  await page.goto('/examples/sidebar/floating-submenus');
+  await page.goto('/examples/appshell/floating-submenus');
   await expect.poll(() => page.locator('[data-sidebar-block="floating-submenus"]').evaluate(node => node.closest('astro-island')?.hasAttribute('ssr'))).toBe(false);
 }
 
@@ -50,11 +50,11 @@ test('floating submenus use the unframed full-screen mobile drawer', async ({ pa
 });
 
 test('floating submenu source and the original floating example remain available', async ({ page }) => {
-  await page.goto('/docs/blocks/sidebar');
+  await page.goto('/docs/blocks/appshell');
   const example = page.locator('[data-block-example="floating-submenus"]');
-  await expect(example.getByRole('link', { name: /Open full example/ })).toHaveAttribute('href', '/examples/sidebar/floating-submenus');
-  await expect(example.locator('[data-code-full] code')).toContainText('floating: true');
-  await expect(example.locator('[data-code-full] code')).toContainText('<style>');
+  await expect(example.getByRole('link', { name: /Open full example/ })).toHaveAttribute('href', '/examples/appshell/floating-submenus');
+  await expect(example.locator('[data-code-full] code')).toContainText('variant="floating"');
+  await expect(example.locator('[data-code-full] code')).not.toContainText('<style');
   await expect(page.locator('[data-block-example="floating"]')).toHaveCount(1);
   await expect(page.locator('[data-block-example="submenus"]')).toHaveCount(1);
 });
