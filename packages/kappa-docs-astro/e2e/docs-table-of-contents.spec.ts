@@ -80,17 +80,14 @@ test("tracks manual scrolling after TOC navigation", async ({ page }) => {
   }
   await expect.poll(() => page.locator('#with-icons').evaluate(element => element.getBoundingClientRect().top)).toBeLessThanOrEqual(80);
   await expectActiveIndicator(toc, toc.getByRole("link", { name: "With Icons", exact: true }));
-  for (let step = 0; step < 18; step += 1) {
-    await page.evaluate(() => {
-      document.documentElement.dataset.tocScrollEnded = "false";
-      window.addEventListener("scrollend", () => {
-        document.documentElement.dataset.tocScrollEnded = "true";
-      }, { once: true });
-    });
+  for (let step = 0; step < 20; step += 1) {
+    if (await page.locator('#with-icons').evaluate(element => element.getBoundingClientRect().top > 80)) break;
+    const previousY = await page.evaluate(() => scrollY);
     await page.mouse.wheel(0, -20);
-    await expect(page.locator("html")).toHaveAttribute("data-toc-scroll-ended", "true");
+    await expect.poll(() => page.evaluate(() => scrollY)).toBeLessThan(previousY);
   }
-  await expectActiveIndicator(toc, toc.getByRole("link", { name: "Sizes", exact: true }));
+  await expect.poll(() => page.locator('#with-icons').evaluate(element => element.getBoundingClientRect().top)).toBeGreaterThan(80);
+  await expectActiveIndicator(toc, toc.getByRole("link", { name: "Toolbar buttons", exact: true }));
   await page.evaluate(() => window.scrollTo({ top: document.documentElement.scrollHeight, behavior: "instant" }));
   await expectActiveIndicator(toc, toc.getByRole("link", { name: "Exports", exact: true }));
 });

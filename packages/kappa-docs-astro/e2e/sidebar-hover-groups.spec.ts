@@ -22,7 +22,7 @@ test('uses the existing example groups and documents disclosure composition', as
   for (const entry of groups) {
     await expect(group(page, entry.title)).toHaveAttribute('aria-expanded', 'true');
     await expect(group(page, entry.title)).toHaveCSS('font-size', '14px');
-    await expect(group(page, entry.title)).toHaveCSS('font-weight', '550');
+    await expect(group(page, entry.title)).toHaveCSS('font-weight', '425');
     for (const name of entry.items) await expect(link(page, name)).toBeVisible();
   }
   await expect(link(page, 'Create a project')).toHaveAttribute('aria-current', 'page');

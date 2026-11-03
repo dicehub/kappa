@@ -8,4 +8,4 @@ Add standalone toolbar button color tokens. Existing shell button tokens remain 
 
 Add a tooltip option with a 500 ms hover delay and automatic suppression while its menu is open. Add opt-in showArrow to Dropdown.Content and Dropdown.SubContent so consumers can show a menu pointer without custom scroll wrappers or styles.
 
-Keep toolbar icons at 16px in both sizes, independent of stylesheet order.
+Keep toolbar icons at 16px in both sizes and ghost hover borders transparent, independent of stylesheet order.

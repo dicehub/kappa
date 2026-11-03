@@ -27,6 +27,7 @@
 
 .kappa-toolbar-button.kappa-button[data-size="sm"] { --kappa-button-size: 1.5rem; }
 .kappa-toolbar-button.kappa-button[data-size] { --kappa-button-icon-size: 1rem; }
+.kappa-toolbar-button.kappa-button[data-variant="ghost"] { --kappa-button-hover-border: transparent; }
 .kappa-toolbar-button.kappa-button[data-shape="circle"] { --kappa-button-radius: 999px; }
 
 /* Both sides stay equal when Button renders a leading or trailing icon. */

@@ -202,7 +202,7 @@ for (const mode of ['light', 'dark']) {
     for (const name of ['Upgrade', 'Invite members', 'Log out']) {
       const disabled = menu.getByRole('menuitem', { name, exact: true });
       await expect(disabled).toHaveAttribute('aria-disabled', 'true');
-      await expect(disabled).toHaveCSS('color', await tokenColor('--kappa-muted'));
+      await expect(disabled).toHaveCSS('color', await tokenColor('--kappa-dropdown-disabled-foreground'));
     }
   });
 }

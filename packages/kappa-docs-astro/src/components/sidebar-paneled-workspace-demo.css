@@ -43,7 +43,7 @@
 .paneled-workspace-demo__context-row[data-collapsed] .paneled-workspace-demo__pin { min-inline-size: 1.75rem; min-block-size: 1.75rem; padding: 0.25rem; }
 .paneled-workspace-demo__navigation[data-mobile] .paneled-workspace-demo__context-row { inline-size: calc(100% - 3rem); min-block-size: 2.75rem; }
 .paneled-workspace-demo__navigation[data-mobile] .paneled-workspace-demo__back { inline-size: calc(100% - 3rem); min-block-size: 2.75rem; }
-.paneled-workspace-demo__navigation[data-mobile] .paneled-workspace-demo__workspace-switcher { min-block-size: 2.75rem; }
+.paneled-workspace-demo__navigation.kappa-sidebar[data-mobile] .paneled-workspace-demo__workspace-switcher { min-block-size: 2.75rem; }
 @media (hover: none) { .paneled-workspace-demo__pin { opacity: 1; } }
 .paneled-workspace-demo__workspace-switcher.kappa-sidebar__menu-button:is(:hover, :focus-visible, [aria-expanded="true"]):not([data-disabled]) { background: var(--kappa-shell-nav-highlight); }
 .paneled-workspace-demo__workspace-switcher .kappa-sidebar__menu-label > svg { opacity: 0; transition: opacity 200ms ease; }
