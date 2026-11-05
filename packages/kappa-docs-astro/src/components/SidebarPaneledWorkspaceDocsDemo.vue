@@ -14,12 +14,9 @@ import { Avatar } from "@dicehub/kappa/components/avatar";
 import { DicehubLogo, DICEHUB_WORDMARK_PATH, DICEHUB_WORDMARK_VIEWBOX } from "@dicehub/kappa/components/dicehub-logo";
 import { CommandPalette } from "@dicehub/kappa/components/command-palette";
 import { Kbd, KbdGroup } from "@dicehub/kappa/components/kbd";
-import PaneledWorkspaceProfileMenu from "./PaneledWorkspaceProfileMenu.vue";
+import PaneledWorkspaceHeaderControls from "./PaneledWorkspaceHeaderControls.vue";
 import PaneledWorkspaceHelpMenu from "./PaneledWorkspaceHelpMenu.vue";
-import PaneledWorkspaceCredits from "./PaneledWorkspaceCredits.vue";
-import PaneledWorkspaceCreateMenu from "./PaneledWorkspaceCreateMenu.vue";
 import PaneledWorkspaceComputePages from "./PaneledWorkspaceComputePages.vue";
-import PaneledWorkspaceNotifications from "./PaneledWorkspaceNotifications.vue";
 import PaneledWorkspaceAiChat from "./PaneledWorkspaceAiChat.vue";
 import { createWorkspaceNotifications, type WorkspaceNotification } from "./paneled-workspace-notifications";
 import type { WorkspaceChatState } from "./paneled-workspace-chat";
@@ -34,10 +31,19 @@ import PaneledWorkspaceNavigation from "./PaneledWorkspaceNavigation.vue";
 import PaneledWorkspaceProjectSwitcher from "./PaneledWorkspaceProjectSwitcher.vue";
 import { usePaneledWorkspaceLocation } from "./use-paneled-workspace-location";
 import { limitedWorkspacePages, projectCategories, projectNavigation, workspaceCategories as defaultWorkspaceCategories, workspaceSearchCategories, workspaceUtilityDescriptions } from "./paneled-workspace-navigation";
-import { Activity, ArrowLeft, ArrowUpRight, ChevronsLeft, ChevronsRight, ChevronsUpDown, CirclePlay, History, LayoutDashboard, Maximize2, Minimize2, Plus, Search, Sparkles, UsersRound, X } from "@lucide/vue";
+import { Activity, ArrowLeft, ArrowUpRight, ChevronsLeft, ChevronsRight, ChevronsUpDown, CirclePlay, History, LayoutDashboard, Maximize2, Minimize2, Plus, Sparkles, UsersRound, X } from "@lucide/vue";
 
 const props = withDefaults(defineProps<{ standalone?: boolean }>(), { standalone: false });
 const root = ref<HTMLElement>();
+const insetHeader = ref(false);
+const layoutStorageKey = "kappa-paneled-workspace-inset-header";
+async function setInsetHeader(value: boolean) {
+  insetHeader.value = value;
+  try { localStorage.setItem(layoutStorageKey, String(value)); } catch { /* Keep the in-memory choice. */ }
+  await nextTick();
+  // The menu trigger moves to the other header; keep keyboard focus on it.
+  root.value?.querySelector<HTMLElement>(".paneled-profile__trigger")?.focus({ preventScroll: true });
+}
 const projectSwitcher = ref<HTMLElement>();
 const namespace = ref("Ros.Space");
 const projectNames = ref<Record<string, string>>({ "Ros.Space": "Aster VTOL", Engineering: "Vega demonstrator", Research: "Orion testbed" });
@@ -262,6 +268,7 @@ function shortcut(event: KeyboardEvent) {
   showSearch();
 }
 onMounted(async () => {
+  try { insetHeader.value = localStorage.getItem(layoutStorageKey) === "true"; } catch { /* Use the default layout without storage. */ }
   creditsReady.value = true;
   if (root.value) {
     railOnBottom.value = root.value.clientWidth < 992;
@@ -280,7 +287,7 @@ onBeforeUnmount(() => { railObserver?.disconnect(); cancelAnimationFrame(navigat
 </script>
 
 <template>
-  <div ref="root" class="paneled-workspace-demo" data-sidebar-block="paneled-workspace" :data-standalone="props.standalone || undefined" :data-activity="asideOpen || undefined" @keydown="shortcut">
+  <div ref="root" class="paneled-workspace-demo" data-sidebar-block="paneled-workspace" :data-inset-header="insetHeader || undefined" :data-standalone="props.standalone || undefined" :data-activity="asideOpen || undefined" @keydown="shortcut">
     <AppShell.Root appearance="paneled" bloom hide-desktop-trigger resizable :default-width="240" :min-width="200" :max-width="420" v-model:open="navigationOpen" v-model:mobile-open="mobileOpen" label="Paneled workspace navigation" :navigation-props="{ class: 'paneled-workspace-demo__navigation' }" class="paneled-workspace-demo__layout">
       <template #toolbar-start>
         <a class="kappa-app-shell__brand kappa-app-shell__brand--wordmark" :href="breadcrumbHref('Dashboard')" aria-label="dicehub home" @click="navigateLink('Dashboard', $event)">
@@ -290,15 +297,9 @@ onBeforeUnmount(() => { railObserver?.disconnect(); cancelAnimationFrame(navigat
           </svg>
         </a>
       </template>
-      <template #toolbar>
-        <AppShell.SearchTrigger shortcut="Ctrl + K" data-paneled-search :icon="Search" aria-keyshortcuts="Control+K" aria-haspopup="dialog" :aria-expanded="searchOpen" @click="showSearch" />
-        <div class="paneled-workspace-demo__global-actions">
-          <PaneledWorkspaceCreateMenu :project-code="selectedProject?.code" @navigate="navigate" />
-          <PaneledWorkspaceCredits :namespace="namespace" :compute="compute" :loading="!creditsReady" @navigate="navigate" @add-credits="compute.balanceCents += $event" />
-          <ToolbarButton :icon="CirclePlay" class="paneled-workspace-demo__runs" :aria-label="`Runs: ${activeRunCount} active`" :tooltip="`${activeRunCount} active simulation runs`" @click="navigate('Simulation runs')">{{ activeRunCount }}</ToolbarButton>
-          <PaneledWorkspaceNotifications :items="namespaceNotifications" @open="openNotification" @read-all="readAllNotifications" />
-          <PaneledWorkspaceProfileMenu @navigate="navigate($event, '')" />
-        </div>
+      <template v-if="!insetHeader" #toolbar>
+        <PaneledWorkspaceHeaderControls :namespace="namespace" :project-code="selectedProject?.code" :compute="compute" :credits-ready="creditsReady" :active-run-count="activeRunCount" :notifications="namespaceNotifications" :search-open="searchOpen" :inset-header="insetHeader"
+          @search="showSearch" @navigate="navigate" @add-credits="compute.balanceCents += $event" @open-notification="openNotification" @read-all="readAllNotifications" @update:inset-header="setInsetHeader" />
       </template>
       <template #header="context">
         <Sidebar.MenuButton v-if="selectedProject" :href="breadcrumbHref('All projects')" tooltip="Back to Projects" :icon="ArrowLeft" class="paneled-workspace-demo__back" @click="navigateLink('All projects', $event)">Back to Projects</Sidebar.MenuButton>
@@ -358,10 +359,13 @@ onBeforeUnmount(() => { railObserver?.disconnect(); cancelAnimationFrame(navigat
         </div>
       </template>
       <template #default>
-        <AppShell.Panels v-model:detail-open="detailOpen" v-model:aside-open="asideOpen" v-model:aside-maximized="asideMaximized"
-          detail-label="Simulation run details" :aside-label="panelTitle" resize-label="Resize simulation run panels" :aside-resize-label="`Resize ${panelTitle}`"
-          :initial-detail-focus="() => detailHeading ?? null" :final-detail-focus="finalDetailFocus"
-          :initial-aside-focus="() => asideHeading ?? null" :final-aside-focus="finalAsideFocus">
+        <div class="paneled-workspace-demo__surface">
+          <AppShell.Panels v-model:detail-open="detailOpen" v-model:aside-open="asideOpen" v-model:aside-maximized="asideMaximized"
+            detail-label="Simulation run details" :aside-label="panelTitle" resize-label="Resize simulation run panels" :aside-resize-label="`Resize ${panelTitle}`"
+            :initial-detail-focus="() => detailHeading ?? null" :final-detail-focus="finalDetailFocus"
+            :initial-aside-focus="() => asideHeading ?? null" :final-aside-focus="finalAsideFocus">
+            <template #header>
+              <header :class="{ 'paneled-workspace-demo__panel-toolbar': insetHeader }" aria-label="Workspace toolbar">
                 <Breadcrumbs.Root size="sm" class="paneled-workspace-demo__breadcrumbs" aria-label="Workspace breadcrumb">
                   <Breadcrumbs.List>
                     <Breadcrumbs.Item><Breadcrumbs.Link :href="breadcrumbHref('Dashboard')" @click="navigateLink('Dashboard', $event)">{{ namespace }}</Breadcrumbs.Link></Breadcrumbs.Item>
@@ -373,6 +377,10 @@ onBeforeUnmount(() => { railObserver?.disconnect(); cancelAnimationFrame(navigat
                     <Breadcrumbs.Item><Breadcrumbs.Link :href="breadcrumbHref(view)" aria-current="page" @click="navigateLink(view, $event)">{{ pageTitle }}</Breadcrumbs.Link></Breadcrumbs.Item>
                   </Breadcrumbs.List>
                 </Breadcrumbs.Root>
+                <PaneledWorkspaceHeaderControls v-if="insetHeader" :namespace="namespace" :project-code="selectedProject?.code" :compute="compute" :credits-ready="creditsReady" :active-run-count="activeRunCount" :notifications="namespaceNotifications" :search-open="searchOpen" :inset-header="insetHeader"
+                  @search="showSearch" @navigate="navigate" @add-credits="compute.balanceCents += $event" @open-notification="openNotification" @read-all="readAllNotifications" @update:inset-header="setInsetHeader" />
+              </header>
+            </template>
                 <section class="paneled-workspace-demo__list-scroll" :data-width="isLimitedPage ? 'limited' : undefined" aria-label="Workspace page">
                   <div class="paneled-workspace-demo__page-content" :data-width="isLimitedPage ? 'limited' : undefined">
                   <div class="paneled-workspace-demo__page-heading"><h2>{{ pageTitle }}</h2><Button v-if="view === 'Simulation' || view === 'Simulation runs'" size="sm" :icon="Plus" @click="createRun">{{ view === 'Simulation' ? 'Create simulation' : 'New simulation run' }}</Button><Button v-else size="sm" variant="outline" :icon="CirclePlay" @click="navigate('Simulation runs')">View simulation runs</Button></div>
@@ -462,7 +470,8 @@ onBeforeUnmount(() => { railObserver?.disconnect(); cancelAnimationFrame(navigat
               <p>Recent updates across {{ namespace }}.</p><div class="paneled-workspace-demo__activity-scroll" :data-scroll-start="activityScrollStart || undefined" :data-scroll-end="activityScrollEnd || undefined"><ol ref="activityList" @scroll="updateActivityScroll"><li v-for="(event, index) in events" :key="index"><Activity aria-hidden="true" /><div><p>{{ event }}</p><small>{{ index ? 'Earlier today' : 'Latest update' }}</small></div></li></ol></div><Button size="sm" variant="outline" @click="navigate('Activities', ''); updateAsideOpen(false)">View activity log</Button>
             </template>
           </template>
-        </AppShell.Panels>
+          </AppShell.Panels>
+        </div>
         <AppShell.SearchDialog v-model:open="searchOpen" class="workspace-search-dialog paneled-workspace-search-dialog" aria-label="Search paneled workspace" :data-search-keyboard="searchKeyboard || undefined" @pointermove.capture="searchKeyboard = false" @keydown.capture="searchKeyboard = ['ArrowDown', 'ArrowUp', 'Home', 'End', 'PageDown', 'PageUp'].includes($event.key)">
           <CommandPalette.Panel v-model:value="searchQuery" :open="searchOpen" :items="searchGroups" :filter="false" :get-selectable-items="selectableSearchItems" :item-to-string-value="entryLabel" :item-to-value="entryValue" @close="searchOpen = false" @select="selectSearch">
             <CommandPalette.Input aria-label="Search pages and simulation runs" placeholder="Type to search…" />
@@ -480,3 +489,4 @@ onBeforeUnmount(() => { railObserver?.disconnect(); cancelAnimationFrame(navigat
 </template>
 
 <style src="./sidebar-paneled-workspace-demo.css"></style>
+<style src="./paneled-workspace-inset-header.css"></style>

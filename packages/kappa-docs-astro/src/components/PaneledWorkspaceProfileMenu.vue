@@ -8,6 +8,7 @@ import { CircleHelp, LogOut, Settings2, SunMoon, UserRoundPen } from "@lucide/vu
 import { usePaneledTheme } from "./use-paneled-theme";
 
 const emit = defineEmits<{ navigate: [page: string] }>();
+const insetHeader = defineModel<boolean>("insetHeader", { default: false });
 const isFocusVisible = useFocusVisible();
 const { theme, setTheme } = usePaneledTheme();
 // Ark keeps DOM focus on the menu while the pointer changes its highlighted item.
@@ -93,6 +94,13 @@ const themePositioning = { placement: "left-start", gutter: 4, fitViewport: true
             </Dropdown.RadioGroup>
           </Dropdown.SubContent>
         </Dropdown.Sub>
+        <Dropdown.Separator />
+        <Dropdown.Group>
+          <Dropdown.Label>Layout</Dropdown.Label>
+          <Dropdown.CheckboxItem v-model:checked="insetHeader" value="inset-header" close-on-select>
+            Inset header
+          </Dropdown.CheckboxItem>
+        </Dropdown.Group>
         <Dropdown.Separator />
         <Dropdown.LinkItem href="/examples/appshell/paneled-workspace?view=Help" value="help" :icon="CircleHelp" @click="navigate('Help', $event)">
           Help and resources
