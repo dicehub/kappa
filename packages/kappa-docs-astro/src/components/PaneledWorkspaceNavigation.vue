@@ -4,7 +4,7 @@ import { Sidebar } from "@dicehub/kappa/components/sidebar";
 import { Avatar } from "@dicehub/kappa/components/avatar";
 import { ToolbarButton } from "@dicehub/kappa/components/button";
 import { HoverCard } from "@dicehub/kappa/components/hover-card";
-import { ChevronRight, Folders } from "@lucide/vue";
+import { ChevronDown, ChevronRight, Folders } from "@lucide/vue";
 import { workspaceCategories } from "./paneled-workspace-navigation";
 import { usePaneledFlyoutIntent } from "./use-paneled-flyout-intent";
 
@@ -118,7 +118,7 @@ onBeforeUnmount(() => cancelAnimationFrame(focusFrame));
               </Sidebar.MenuButton>
             </Sidebar.MenuSubItem>
             <Sidebar.MenuSubItem v-if="group.remainingCount">
-              <Sidebar.MenuButton class="paneled-workspace-demo__show-more" @click="showMore(group, $event)">Show more ({{ group.remainingCount }})</Sidebar.MenuButton>
+              <Sidebar.MenuButton :icon="ChevronDown" class="paneled-workspace-demo__show-more" @click="showMore(group, $event)">Show more ({{ group.remainingCount }})</Sidebar.MenuButton>
             </Sidebar.MenuSubItem>
           </Sidebar.MenuSub></component>
         </component>
@@ -140,7 +140,7 @@ onBeforeUnmount(() => cancelAnimationFrame(focusFrame));
               </Avatar.Root>
               <span :title="navigationLabel(page)">{{ navigationLabel(page) }}</span><span v-if="page === 'Simulation runs'" class="paneled-workspace-demo__count" aria-hidden="true">{{ runCount }}</span>
             </a>
-            <Sidebar.MenuButton v-if="group.remainingCount" class="paneled-workspace-demo__show-more" @click="showMore(group, $event)">Show more ({{ group.remainingCount }})</Sidebar.MenuButton>
+            <Sidebar.MenuButton v-if="group.remainingCount" :icon="ChevronDown" class="paneled-workspace-demo__show-more" @click="showMore(group, $event)">Show more ({{ group.remainingCount }})</Sidebar.MenuButton>
           </nav>
         </HoverCard.Content>
       </HoverCard.Root>

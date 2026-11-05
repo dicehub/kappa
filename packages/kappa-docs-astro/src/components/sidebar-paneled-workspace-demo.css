@@ -16,7 +16,9 @@
 .paneled-workspace-demo__notification > span { position: absolute; inset-block-start: 0.125rem; inset-inline-end: 0.125rem; display: grid; min-inline-size: 0.875rem; block-size: 0.875rem; place-items: center; padding-inline: 0.125rem; border-radius: 999px; background: var(--kappa-focus); color: var(--kappa-control); font-size: 0.5625rem; font-weight: 600; line-height: 1; }
 .paneled-workspace-demo__context-label { margin: 0; display: block; min-inline-size: 0; overflow: hidden; color: var(--kappa-default); font-size: 0.875rem; font-weight: 600; line-height: 1.3125rem; text-overflow: ellipsis; white-space: nowrap; }
 .paneled-workspace-demo__navigation.kappa-sidebar[data-app-shell-appearance="paneled"][data-state] > .kappa-sidebar__header { display: flex; padding: 0.5rem; }
+.paneled-workspace-demo__navigation.kappa-sidebar[data-app-shell-appearance="paneled"][data-state] > .kappa-sidebar__header:has(> .paneled-workspace-demo__project-switcher) { padding-block-end: 0; }
 .paneled-workspace-demo__navigation.kappa-sidebar[data-app-shell-appearance="paneled"][data-state="collapsed"] > .kappa-sidebar__header { padding-block-end: 0; }
+.paneled-workspace-demo__navigation.kappa-sidebar .paneled-workspace-demo__sliding-views > [data-value="project"] > .kappa-sidebar__content { padding-block-start: 0; }
 /* Each navigation view owns its scroll position; the header and footer stay fixed. */
 .paneled-workspace-demo__navigation.kappa-sidebar[data-app-shell-appearance="paneled"] .kappa-sidebar-layout__primary {
   display: flex;
@@ -29,7 +31,7 @@
   transition-timing-function: cubic-bezier(0.77, 0, 0.175, 1);
 }
 .paneled-workspace-demo__sliding-views[data-initializing] > .kappa-sidebar__sliding-view { transition: none !important; }
-.paneled-workspace-demo__navigation .kappa-sidebar__menu-button.paneled-workspace-demo__back { margin-block-end: 1.625rem; font-weight: 500; }
+.paneled-workspace-demo__navigation .kappa-sidebar__menu-button.paneled-workspace-demo__back { font-weight: 500; }
 .paneled-workspace-demo__context-row,
 .paneled-workspace-demo__workspace-row { display: flex; inline-size: 100%; min-inline-size: 0; align-items: center; gap: 0.25rem; }
 .paneled-workspace-demo__context-row .paneled-workspace-demo__context-label { flex: 1; }
@@ -57,7 +59,8 @@
 .paneled-workspace-demo__navigation .kappa-sidebar__menu.paneled-workspace-demo__nav-footer { margin-block-start: 0.125rem; }
 .paneled-workspace-demo__sliding-views > [data-value="workspace"] .paneled-workspace-demo__nav-group + .paneled-workspace-demo__nav-group { margin-block-start: 0.75rem; }
 .paneled-workspace-demo__navigation.kappa-sidebar .kappa-sidebar__menu-sub .kappa-sidebar__menu-button { padding-inline-end: 0.75rem; }
-.paneled-workspace-demo__navigation.kappa-sidebar .kappa-sidebar__menu-sub .paneled-workspace-demo__project-entry { padding-inline-start: 0.25rem; }
+.paneled-workspace-demo__navigation.kappa-sidebar .kappa-sidebar__menu-sub .paneled-workspace-demo__project-entry,
+.paneled-workspace-demo__navigation.kappa-sidebar .kappa-sidebar__menu-sub .paneled-workspace-demo__show-more { padding-inline-start: 0.25rem; }
 .paneled-workspace-demo__project-avatar.kappa-avatar,
 .paneled-project-switcher__avatar.kappa-avatar { --kappa-avatar-background: color-mix(in srgb, var(--kappa-info-tint) 60%, var(--kappa-control)); --kappa-avatar-foreground: color-mix(in srgb, var(--kappa-info-text) 60%, var(--kappa-default)); }
 .paneled-workspace-demo__project-avatar.kappa-avatar { --kappa-avatar-size: 1.25rem; }

@@ -303,6 +303,7 @@ onBeforeUnmount(() => { railObserver?.disconnect(); cancelAnimationFrame(navigat
       </template>
       <template #header="context">
         <Sidebar.MenuButton v-if="selectedProject" :href="breadcrumbHref('All projects')" tooltip="Back to Projects" :icon="ArrowLeft" class="paneled-workspace-demo__back" @click="navigateLink('All projects', $event)">Back to Projects</Sidebar.MenuButton>
+        <Sidebar.Separator v-if="selectedProject" aria-hidden="true" />
         <div class="paneled-workspace-demo__context-row" :data-collapsed="context.iconCollapsed || undefined">
           <p v-if="!context.iconCollapsed" class="paneled-workspace-demo__context-label">{{ selectedProject ? "Project" : "Your work" }}</p>
           <Sidebar.Trigger v-if="!context.isMobile" class="paneled-workspace-demo__pin"
