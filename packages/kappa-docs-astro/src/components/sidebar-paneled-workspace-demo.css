@@ -18,7 +18,8 @@
 .paneled-workspace-demo__navigation.kappa-sidebar[data-app-shell-appearance="paneled"][data-state] > .kappa-sidebar__header { display: flex; padding: 0.5rem; }
 .paneled-workspace-demo__navigation.kappa-sidebar[data-app-shell-appearance="paneled"][data-state] > .kappa-sidebar__header:has(> .paneled-workspace-demo__project-switcher) { padding-block-end: 0; }
 .paneled-workspace-demo__navigation.kappa-sidebar[data-app-shell-appearance="paneled"][data-state="collapsed"] > .kappa-sidebar__header { padding-block-end: 0; }
-.paneled-workspace-demo__navigation.kappa-sidebar .paneled-workspace-demo__sliding-views > [data-value="project"] > .kappa-sidebar__content { padding-block-start: 0; }
+.paneled-workspace-demo__navigation > .kappa-sidebar__header .kappa-sidebar__separator { margin-block: 0.75rem; border-block-start-color: var(--kappa-shell-menu-divider); }
+.paneled-workspace-demo__navigation.kappa-sidebar .paneled-workspace-demo__sliding-views > [data-value="project"] > .kappa-sidebar__content { padding-block-start: 0.5rem; }
 /* Each navigation view owns its scroll position; the header and footer stay fixed. */
 .paneled-workspace-demo__navigation.kappa-sidebar[data-app-shell-appearance="paneled"] .kappa-sidebar-layout__primary {
   display: flex;
@@ -62,7 +63,9 @@
 .paneled-workspace-demo__navigation.kappa-sidebar .kappa-sidebar__menu-sub .paneled-workspace-demo__project-entry,
 .paneled-workspace-demo__navigation.kappa-sidebar .kappa-sidebar__menu-sub .paneled-workspace-demo__show-more { padding-inline-start: 0.25rem; }
 .paneled-workspace-demo__project-avatar.kappa-avatar,
-.paneled-project-switcher__avatar.kappa-avatar { --kappa-avatar-background: color-mix(in srgb, var(--kappa-info-tint) 60%, var(--kappa-control)); --kappa-avatar-foreground: color-mix(in srgb, var(--kappa-info-text) 60%, var(--kappa-default)); }
+.paneled-project-switcher__avatar.kappa-avatar { --kappa-avatar-background: color-mix(in srgb, var(--kappa-info-tint) 60%, var(--kappa-control)); --kappa-avatar-foreground: color-mix(in srgb, var(--kappa-info-text) 60%, var(--kappa-default)); --kappa-avatar-border: var(--kappa-shell-avatar-border); }
+.paneled-workspace-demo__project-avatar.kappa-avatar::after,
+.paneled-project-switcher__avatar.kappa-avatar::after { border: 1px solid var(--kappa-avatar-border); }
 .paneled-workspace-demo__project-avatar.kappa-avatar { --kappa-avatar-size: 1.25rem; }
 .paneled-workspace-demo__project-avatar .kappa-avatar__fallback { font-size: 0.75rem; }
 .paneled-workspace-demo__flyout .paneled-workspace-demo__overview-icon { box-sizing: border-box; flex: none; inline-size: 1.25rem; block-size: 1.25rem; padding: 0.125rem; }

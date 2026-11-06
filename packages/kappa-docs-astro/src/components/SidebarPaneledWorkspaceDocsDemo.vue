@@ -31,7 +31,7 @@ import PaneledWorkspaceNavigation from "./PaneledWorkspaceNavigation.vue";
 import PaneledWorkspaceProjectSwitcher from "./PaneledWorkspaceProjectSwitcher.vue";
 import { usePaneledWorkspaceLocation } from "./use-paneled-workspace-location";
 import { limitedWorkspacePages, projectCategories, projectNavigation, workspaceCategories as defaultWorkspaceCategories, workspaceSearchCategories, workspaceUtilityDescriptions } from "./paneled-workspace-navigation";
-import { Activity, ArrowLeft, ArrowUpRight, ChevronsLeft, ChevronsRight, ChevronsUpDown, CirclePlay, History, LayoutDashboard, Maximize2, Minimize2, Plus, Sparkles, UsersRound, X } from "@lucide/vue";
+import { Activity, ArrowUpRight, ChevronsLeft, ChevronsRight, ChevronsUpDown, CirclePlay, History, LayoutDashboard, Maximize2, Minimize2, Plus, Reply, Sparkles, UsersRound, X } from "@lucide/vue";
 
 const props = withDefaults(defineProps<{ standalone?: boolean }>(), { standalone: false });
 const root = ref<HTMLElement>();
@@ -302,7 +302,7 @@ onBeforeUnmount(() => { railObserver?.disconnect(); cancelAnimationFrame(navigat
           @search="showSearch" @navigate="navigate" @add-credits="compute.balanceCents += $event" @open-notification="openNotification" @read-all="readAllNotifications" @update:inset-header="setInsetHeader" />
       </template>
       <template #header="context">
-        <Sidebar.MenuButton v-if="selectedProject" :href="breadcrumbHref('All projects')" tooltip="Back to Projects" :icon="ArrowLeft" class="paneled-workspace-demo__back" @click="navigateLink('All projects', $event)">Back to Projects</Sidebar.MenuButton>
+        <Sidebar.MenuButton v-if="selectedProject" :href="breadcrumbHref('All projects')" tooltip="Back to Projects" :icon="Reply" class="paneled-workspace-demo__back" @click="navigateLink('All projects', $event)">Back to Projects</Sidebar.MenuButton>
         <Sidebar.Separator v-if="selectedProject" aria-hidden="true" />
         <div class="paneled-workspace-demo__context-row" :data-collapsed="context.iconCollapsed || undefined">
           <p v-if="!context.iconCollapsed" class="paneled-workspace-demo__context-label">{{ selectedProject ? "Project" : "Your work" }}</p>
@@ -314,7 +314,6 @@ onBeforeUnmount(() => { railObserver?.disconnect(); cancelAnimationFrame(navigat
         <div v-if="selectedProject" ref="projectSwitcher" class="paneled-workspace-demo__project-switcher" :data-collapsed="context.iconCollapsed || undefined">
           <PaneledWorkspaceProjectSwitcher :project="selectedProject" :projects="workspaceProjects" :href-for-page="breadcrumbHref"
             :compact="context.iconCollapsed" :is-mobile="context.isMobile" @navigate="navigateFromProjectSwitcher" />
-          <Sidebar.Separator aria-hidden="true" />
         </div>
       </template>
       <template #navigation="context">
