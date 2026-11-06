@@ -47,6 +47,18 @@
   min-block-size: 3.5rem;
   padding: 0.75rem;
 }
+.paneled-workspace-demo[data-inset-header] .paneled-workspace-demo__global-actions { position: relative; isolation: isolate; }
+.paneled-workspace-demo[data-inset-header] .paneled-workspace-demo__global-actions::before {
+  position: absolute;
+  z-index: -1;
+  inset: -0.25rem;
+  content: "";
+  pointer-events: none;
+  border: 1px solid var(--kappa-line);
+  border-radius: 0.75rem;
+  background: var(--kappa-canvas);
+  box-shadow: var(--kappa-shadow);
+}
 .paneled-workspace-demo__panel-toolbar .paneled-workspace-demo__breadcrumbs {
   flex: 1;
   min-block-size: 2rem;
@@ -79,6 +91,7 @@
   .paneled-workspace-demo__panel-toolbar .paneled-workspace-demo__breadcrumbs { order: 1; flex-basis: 100%; min-block-size: 1.5rem; margin-block-start: 0.25rem; }
   .paneled-workspace-demo .paneled-workspace-demo__panel-toolbar .kappa-app-shell__search { margin-inline-start: auto; }
   .paneled-workspace-demo__panel-toolbar .paneled-workspace-demo__global-actions { gap: 0.125rem; }
+  .paneled-workspace-demo[data-inset-header] .paneled-workspace-demo__global-actions::before { inset-inline: -0.125rem; }
 }
 @container paneled-surface (max-width: 22.499rem) {
   .paneled-workspace-demo__panel-toolbar .paneled-workspace-demo__global-actions { gap: 0; }
