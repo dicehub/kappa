@@ -20,6 +20,7 @@ const props = defineProps<{
   hrefForPage: (page: string) => string;
   pageLabel?: (page: string) => string;
   pageAvatar?: (page: string) => { name: string; avatarSrc?: string } | undefined;
+  projectGuide?: boolean;
 }>();
 const emit = defineEmits<{ navigate: [page: string, event: MouseEvent]; showMore: [category: string]; groupAction: [category: string] }>();
 const root = ref<ComponentPublicInstance>();
@@ -98,10 +99,10 @@ onBeforeUnmount(() => cancelAnimationFrame(focusFrame));
             <ToolbarButton v-if="group.action" size="sm" :icon="group.action.icon" :tooltip="group.action.label" @click="runGroupAction(group)" />
           </div>
           <HoverCard.Trigger v-else as-child><Sidebar.CollapsibleTrigger as-child><Sidebar.MenuButton :icon="group.icon" :active="isGroupPage(group)" class="paneled-workspace-demo__group-toggle" :data-paneled-group="group.label" @pointermove="pointTrigger(group.label, $event)" @pointerleave="leaveTrigger" :data-active-descendant="!groupsOpen[group.label] && group.pages.includes(view) || undefined" :data-flyout-open="!groupsOpen[group.label] && flyout === group.label || undefined" @keydown.down.capture="!isMobile && !groupsOpen[group.label] && ($event.preventDefault(), focusFlyout(group.label))" @keydown.esc="flyout === group.label && ($event.stopPropagation(), $event.preventDefault(), closeFlyout(group.label))"><span>{{ group.label }}</span><ChevronRight aria-hidden="true" /></Sidebar.MenuButton></Sidebar.CollapsibleTrigger></HoverCard.Trigger>
-          <component :is="group.collapsible === false ? 'div' : Sidebar.CollapsibleContent" class="paneled-workspace-demo__group-content"><Sidebar.MenuSub>
+          <component :is="group.collapsible === false ? 'div' : Sidebar.CollapsibleContent" class="paneled-workspace-demo__group-content"><Sidebar.MenuSub :data-project-guide="group.label === 'Projects' && projectGuide || undefined">
             <Sidebar.MenuSubItem v-for="page in group.pages" :key="page">
-              <Sidebar.MenuButton :href="hrefForPage(page)" :icon="page === 'All projects' ? Folders : undefined" :active="view === page && (group.headingOnly || page !== group.page)" :class="{ 'paneled-workspace-demo__project-entry': pageAvatar?.(page) || page === 'All projects' }" @click="emit('navigate', page, $event)">
-                <template v-if="pageAvatar?.(page)" #icon>
+              <Sidebar.MenuButton :href="hrefForPage(page)" :icon="!projectGuide && page === 'All projects' ? Folders : undefined" :active="view === page && (group.headingOnly || page !== group.page)" :class="{ 'paneled-workspace-demo__project-entry': pageAvatar?.(page) || page === 'All projects' }" @click="emit('navigate', page, $event)">
+                <template v-if="!projectGuide && pageAvatar?.(page)" #icon>
                   <Avatar.Root class="paneled-workspace-demo__project-avatar kappa-app-shell__project-avatar" aria-hidden="true">
                     <Avatar.Image v-if="pageAvatar?.(page)?.avatarSrc" :src="pageAvatar?.(page)?.avatarSrc" alt="" />
                     <Avatar.Fallback>{{ avatarInitial(page) }}</Avatar.Fallback>
@@ -126,8 +127,8 @@ onBeforeUnmount(() => cancelAnimationFrame(focusFrame));
           </template>
           <nav :aria-label="`${group.label} pages`">
             <a v-for="page in group.pages" :key="page" :href="hrefForPage(page)" :aria-current="view === page && (group.headingOnly || page !== group.page) ? 'page' : undefined" @click="emit('navigate', page, $event)">
-              <Folders v-if="page === 'All projects'" class="paneled-workspace-demo__overview-icon" aria-hidden="true" />
-              <Avatar.Root v-if="pageAvatar?.(page)" class="paneled-workspace-demo__project-avatar kappa-app-shell__project-avatar" aria-hidden="true">
+              <Folders v-if="!projectGuide && page === 'All projects'" class="paneled-workspace-demo__overview-icon" aria-hidden="true" />
+              <Avatar.Root v-if="!projectGuide && pageAvatar?.(page)" class="paneled-workspace-demo__project-avatar kappa-app-shell__project-avatar" aria-hidden="true">
                 <Avatar.Image v-if="pageAvatar?.(page)?.avatarSrc" :src="pageAvatar?.(page)?.avatarSrc" alt="" />
                 <Avatar.Fallback>{{ avatarInitial(page) }}</Avatar.Fallback>
               </Avatar.Root>

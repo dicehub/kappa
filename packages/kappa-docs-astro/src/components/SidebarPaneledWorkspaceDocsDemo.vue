@@ -30,7 +30,6 @@ import { workspaceTemplateItemPages } from "./paneled-workspace-templates";
 import PaneledWorkspaceNavigation from "./PaneledWorkspaceNavigation.vue";
 import PaneledWorkspaceProjectSwitcher from "./PaneledWorkspaceProjectSwitcher.vue";
 import { usePaneledWorkspaceLocation } from "./use-paneled-workspace-location";
-import { usePaneledSearchDialogStyle } from "./use-paneled-search-dialog-style";
 import { limitedWorkspacePages, projectCategories, projectNavigation, workspaceCategories as defaultWorkspaceCategories, workspaceExplorePages, workspaceLinks, workspaceSearchCategories, workspaceUtilityDescriptions } from "./paneled-workspace-navigation";
 import { Activity, ArrowUpRight, ChevronsLeft, ChevronsRight, ChevronsUpDown, CirclePlay, History, LayoutDashboard, Maximize2, Minimize2, Plus, Reply, Sparkles, UsersRound, X } from "@lucide/vue";
 
@@ -38,6 +37,12 @@ const props = withDefaults(defineProps<{ standalone?: boolean }>(), { standalone
 const root = ref<HTMLElement>();
 const insetHeader = ref(false);
 const layoutStorageKey = "kappa-paneled-workspace-inset-header";
+const projectGuide = ref(false);
+const projectGuideStorageKey = "kappa-paneled-workspace-project-guide";
+function setProjectGuide(value: boolean) {
+  projectGuide.value = value;
+  try { localStorage.setItem(projectGuideStorageKey, String(value)); } catch { /* Keep the in-memory choice. */ }
+}
 async function setInsetHeader(value: boolean) {
   insetHeader.value = value;
   try { localStorage.setItem(layoutStorageKey, String(value)); } catch { /* Keep the in-memory choice. */ }
@@ -75,7 +80,6 @@ watch([navigationOpen, mobileOpen], () => { workspaceMenuOpen.value = false; });
 const filter = ref("");
 const stateFilter = ref("All runs");
 const searchOpen = ref(false);
-const searchDialogStyle = usePaneledSearchDialogStyle(root, searchOpen, insetHeader);
 const searchQuery = ref("");
 const searchKeyboard = ref(false);
 const asideOpen = ref(false);
@@ -267,6 +271,7 @@ function shortcut(event: KeyboardEvent) {
 }
 onMounted(async () => {
   try { insetHeader.value = localStorage.getItem(layoutStorageKey) === "true"; } catch { /* Use the default layout without storage. */ }
+  try { projectGuide.value = localStorage.getItem(projectGuideStorageKey) === "true"; } catch { /* Keep the guide hidden without storage. */ }
   creditsReady.value = true;
   if (root.value) {
     railOnBottom.value = root.value.clientWidth < 992;
@@ -296,7 +301,7 @@ onBeforeUnmount(() => { railObserver?.disconnect(); cancelAnimationFrame(navigat
         </a>
       </template>
       <template v-if="!insetHeader" #toolbar>
-        <PaneledWorkspaceHeaderControls :namespace="namespace" :project-code="selectedProject?.code" :compute="compute" :credits-ready="creditsReady" :active-run-count="activeRunCount" :notifications="namespaceNotifications" :search-open="searchOpen" :inset-header="insetHeader"
+        <PaneledWorkspaceHeaderControls :namespace="namespace" :project-code="selectedProject?.code" :compute="compute" :credits-ready="creditsReady" :active-run-count="activeRunCount" :notifications="namespaceNotifications" :search-open="searchOpen" :inset-header="insetHeader" :project-guide="projectGuide" @update:project-guide="setProjectGuide"
           @search="showSearch" @navigate="navigate" @add-credits="compute.balanceCents += $event" @open-notification="openNotification" @read-all="readAllNotifications" @update:inset-header="setInsetHeader" />
       </template>
       <template #header="context">
@@ -317,7 +322,7 @@ onBeforeUnmount(() => { railObserver?.disconnect(); cancelAnimationFrame(navigat
       <template #navigation="context">
         <Sidebar.SlidingViews class="paneled-workspace-demo__sliding-views" :data-initializing="!navigationInitialized || undefined" :active-key="selectedProject ? 'project' : 'workspace'" :direction="selectedProject ? 'left' : 'right'">
           <Sidebar.SlidingView value="workspace" label="Workspace navigation">
-            <PaneledWorkspaceNavigation :categories="workspaceCategories" :view="view" :active="!selectedProject" :icon-collapsed="context.iconCollapsed" :is-mobile="context.isMobile" :menu-open="workspaceMenuOpen" :run-count="compute.runs.length" label="Workspace links" :href-for-page="breadcrumbHref" :page-label="pageLabel" :page-avatar="pageAvatar" @navigate="navigateLink" @show-more="showMoreItems" @group-action="navigate('New project')">
+            <PaneledWorkspaceNavigation :categories="workspaceCategories" :view="view" :active="!selectedProject" :icon-collapsed="context.iconCollapsed" :is-mobile="context.isMobile" :menu-open="workspaceMenuOpen" :run-count="compute.runs.length" label="Workspace links" :href-for-page="breadcrumbHref" :page-label="pageLabel" :page-avatar="pageAvatar" :project-guide="projectGuide" @navigate="navigateLink" @show-more="showMoreItems" @group-action="navigate('New project')">
               <Sidebar.MenuItem><Sidebar.MenuButton :href="breadcrumbHref('Dashboard')" tooltip="Dashboard" :icon="LayoutDashboard" :active="view === 'Dashboard'" class="paneled-workspace-demo__workspace paneled-workspace-demo__dashboard" @click="navigateLink('Dashboard', $event)">Dashboard</Sidebar.MenuButton></Sidebar.MenuItem>
               <Sidebar.MenuItem><Sidebar.MenuButton :href="breadcrumbHref('Recents')" tooltip="Recents" :icon="History" :active="view === 'Recents'" @click="navigateLink('Recents', $event)">Recents</Sidebar.MenuButton></Sidebar.MenuItem>
               <Sidebar.MenuItem><Sidebar.MenuButton :href="breadcrumbHref('Activities')" tooltip="Activities" :icon="Activity" :active="view === 'Activities'" @click="navigateLink('Activities', $event)">Activities</Sidebar.MenuButton></Sidebar.MenuItem>
@@ -376,7 +381,7 @@ onBeforeUnmount(() => { railObserver?.disconnect(); cancelAnimationFrame(navigat
                     <Breadcrumbs.Item><Breadcrumbs.Link :href="breadcrumbHref(view)" aria-current="page" @click="navigateLink(view, $event)">{{ pageTitle }}</Breadcrumbs.Link></Breadcrumbs.Item>
                   </Breadcrumbs.List>
                 </Breadcrumbs.Root>
-                <PaneledWorkspaceHeaderControls v-if="insetHeader" :namespace="namespace" :project-code="selectedProject?.code" :compute="compute" :credits-ready="creditsReady" :active-run-count="activeRunCount" :notifications="namespaceNotifications" :search-open="searchOpen" :inset-header="insetHeader"
+                <PaneledWorkspaceHeaderControls v-if="insetHeader" :namespace="namespace" :project-code="selectedProject?.code" :compute="compute" :credits-ready="creditsReady" :active-run-count="activeRunCount" :notifications="namespaceNotifications" :search-open="searchOpen" :inset-header="insetHeader" :project-guide="projectGuide" @update:project-guide="setProjectGuide"
                   @search="showSearch" @navigate="navigate" @add-credits="compute.balanceCents += $event" @open-notification="openNotification" @read-all="readAllNotifications" @update:inset-header="setInsetHeader" />
               </header>
             </template>
@@ -471,7 +476,7 @@ onBeforeUnmount(() => { railObserver?.disconnect(); cancelAnimationFrame(navigat
           </template>
           </AppShell.Panels>
         </div>
-        <AppShell.SearchDialog v-model:open="searchOpen" class="workspace-search-dialog paneled-workspace-search-dialog" aria-label="Search paneled workspace" :style="searchDialogStyle" :data-inset-header="insetHeader || undefined" :data-search-keyboard="searchKeyboard || undefined" @pointermove.capture="searchKeyboard = false" @keydown.capture="searchKeyboard = ['ArrowDown', 'ArrowUp', 'Home', 'End', 'PageDown', 'PageUp'].includes($event.key)">
+        <AppShell.SearchDialog v-model:open="searchOpen" class="workspace-search-dialog paneled-workspace-search-dialog" aria-label="Search paneled workspace" :data-search-keyboard="searchKeyboard || undefined" @pointermove.capture="searchKeyboard = false" @keydown.capture="searchKeyboard = ['ArrowDown', 'ArrowUp', 'Home', 'End', 'PageDown', 'PageUp'].includes($event.key)">
           <CommandPalette.Panel v-model:value="searchQuery" :open="searchOpen" :items="searchGroups" :filter="false" :get-selectable-items="selectableSearchItems" :item-to-string-value="entryLabel" :item-to-value="entryValue" @close="searchOpen = false" @select="selectSearch">
             <CommandPalette.Input aria-label="Search pages and simulation runs" placeholder="Type to search…" />
             <CommandPalette.List><CommandPalette.Results v-slot="{ item: group }"><CommandPalette.Group :items="(group as SearchGroup).items"><CommandPalette.GroupLabel>{{ (group as SearchGroup).label }}</CommandPalette.GroupLabel><CommandPalette.ResultItem v-for="item in (group as SearchGroup).items" :key="entryValue(item)" :value="item" :title="item.label" :description="item.description" :show-arrow="false" /></CommandPalette.Group></CommandPalette.Results><CommandPalette.Empty>No pages or simulation runs found.</CommandPalette.Empty></CommandPalette.List>

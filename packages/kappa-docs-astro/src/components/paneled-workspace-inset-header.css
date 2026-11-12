@@ -79,9 +79,6 @@
   padding: 0.375rem 0.625rem;
 }
 .paneled-workspace-demo__panel-toolbar .kappa-app-shell__search .kappa-button__label { display: flex; }
-.paneled-workspace-search-dialog.kappa-app-shell__search-dialog[data-inset-header] {
-  inline-size: min(var(--kappa-paneled-search-width, 48rem), calc(100vw - 8px));
-}
 .paneled-workspace-demo .kappa-app-shell[data-mobile] .paneled-workspace-demo__panel-toolbar::before { content: ""; flex: none; inline-size: 4.25rem; }
 
 @container paneled-surface (max-width: 43.999rem) {
