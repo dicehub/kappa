@@ -1,0 +1,17 @@
+.paneled-workspace-community { container: paneled-community / inline-size; }
+
+@container paneled-community (max-width: 28rem) {
+  .paneled-workspace-community__sections {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    inline-size: 100%;
+    block-size: auto;
+  }
+
+  .paneled-workspace-community__sections .kappa-tabs__trigger {
+    block-size: 100%;
+    min-block-size: 2.75rem;
+    padding: 0.375rem 0.5rem;
+    white-space: normal;
+  }
+}

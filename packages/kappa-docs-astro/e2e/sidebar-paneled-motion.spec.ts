@@ -2,11 +2,11 @@ import { expect, test, type Locator, type Page } from "@playwright/test";
 
 async function openExample(page: Page, mobile = false) {
   await page.setViewportSize({ width: mobile ? 390 : 1440, height: 1000 });
-  await page.goto("/examples/appshell/paneled-workspace?view=CFD+Templates");
-  await expect(page.getByRole("heading", { name: "CFD Templates", exact: true })).toBeVisible();
+  await page.goto("/examples/appshell/paneled-workspace?view=Reports&project=WA-01");
+  await expect(page.getByRole("heading", { name: "Reports", exact: true })).toBeVisible();
   if (mobile) await page.getByRole("button", { name: "Open sidebar", exact: true }).click();
   const nav = page.getByRole(mobile ? "dialog" : "navigation", { name: "Paneled workspace navigation", exact: true });
-  const trigger = nav.getByRole("button", { name: "Templates", exact: true });
+  const trigger = nav.getByRole("button", { name: "Analytics", exact: true });
   await expect(trigger).toHaveAttribute("aria-expanded", "true");
   const content = page.locator(`[id="${await trigger.getAttribute("aria-controls")}"]`);
   await content.evaluate(node => Promise.all(node.getAnimations({ subtree: true }).map(animation => animation.finished.catch(() => {}))));
@@ -45,7 +45,7 @@ for (const mobile of [false, true]) {
   test(`${mobile ? "mobile" : "desktop"} submenus reveal height over 200ms with the label motion inside`, async ({ page }) => {
     await page.emulateMedia({ reducedMotion: "no-preference" });
     const { nav, trigger, content } = await openExample(page, mobile);
-    const nextGroup = nav.getByRole("heading", { name: "Projects", exact: true });
+    const nextGroup = nav.getByRole("link", { name: "Settings", exact: true });
     const fullHeight = (await content.boundingBox())!.height;
     const expandedNextY = (await nextGroup.boundingBox())!.y;
     await toggleAndPause(trigger, content);
@@ -84,9 +84,9 @@ test("reduced motion opens and closes without intermediate motion or focusable h
   await expect(content).toBeHidden();
   await expect.poll(() => content.evaluate(node => node.getAnimations({ subtree: true }).length)).toBe(0);
   await trigger.press("Tab");
-  await expect(nav.getByRole("button", { name: "Create project", exact: true })).toBeFocused();
+  await expect(nav.getByRole("link", { name: "Settings", exact: true })).toBeFocused();
   await trigger.click();
-  await expect(nav.getByRole("link", { name: "CFD Templates", exact: true })).toBeVisible();
+  await expect(nav.getByRole("link", { name: "Reports", exact: true })).toBeVisible();
   await expect.poll(() => content.evaluate(node => node.getAnimations({ subtree: true }).length)).toBe(0);
 });
 
@@ -104,7 +104,7 @@ test("reopening during collapse settles at full height and survives sidebar coll
   await trigger.click();
   await nav.getByRole("button", { name: "Collapse sidebar", exact: true }).click();
   await nav.getByRole("button", { name: "Expand sidebar", exact: true }).click();
-  await expect(nav.getByRole("link", { name: "CFD Templates", exact: true })).toBeVisible();
+  await expect(nav.getByRole("link", { name: "Reports", exact: true })).toBeVisible();
   await expect(trigger).toHaveAttribute("aria-expanded", "true");
 });
 
@@ -123,15 +123,15 @@ test("enabling reduced motion during collapse completes closure", async ({ page 
 test("the popup stays open across its pointer gap and closes without an exit animation", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "no-preference" });
   const { nav } = await openExample(page);
-  const build = nav.getByRole("button", { name: "Templates", exact: true });
+  const build = nav.getByRole("button", { name: "Analytics", exact: true });
   await build.click();
   await expect(build).toHaveAttribute("aria-expanded", "false");
   await page.mouse.move(900, 100);
   await build.hover();
-  const popup = page.getByRole("navigation", { name: "Templates pages", exact: true, includeHidden: true });
+  const popup = page.getByRole("navigation", { name: "Analytics pages", exact: true, includeHidden: true });
   await expect(popup).toBeVisible();
   const button = (await build.boundingBox())!;
-  const row = (await popup.getByRole("link", { name: "CFD Templates", exact: true }).boundingBox())!;
+  const row = (await popup.getByRole("link", { name: "Reports", exact: true }).boundingBox())!;
   await page.mouse.move(button.x + button.width - 1, button.y + button.height / 2);
   await page.mouse.move(button.x + button.width + 5, button.y + button.height / 2, { steps: 6 });
   await expect(popup).toBeVisible();

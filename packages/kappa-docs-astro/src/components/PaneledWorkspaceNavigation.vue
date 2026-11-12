@@ -5,16 +5,9 @@ import { Avatar } from "@dicehub/kappa/components/avatar";
 import { ToolbarButton } from "@dicehub/kappa/components/button";
 import { HoverCard } from "@dicehub/kappa/components/hover-card";
 import { ChevronDown, ChevronRight, Folders } from "@lucide/vue";
-import { workspaceCategories } from "./paneled-workspace-navigation";
+import type { NavigationCategory } from "./paneled-workspace-navigation";
 import { usePaneledFlyoutIntent } from "./use-paneled-flyout-intent";
 
-type NavigationCategory = (typeof workspaceCategories)[number] & {
-  remainingCount?: number;
-  collapsible?: boolean;
-  headingOnly?: boolean;
-  page?: string;
-  action?: { label: string; icon: (typeof workspaceCategories)[number]["icon"] };
-};
 const props = defineProps<{
   categories: NavigationCategory[];
   view: string;
@@ -37,7 +30,7 @@ const flyout = ref("");
 const flyoutOwner = useId();
 const { corridor, pointTrigger, leaveTrigger, enterContent } = usePaneledFlyoutIntent(flyout, flyoutOwner);
 let focusFrame = 0;
-const navigationLabel = (page: string) => page === "All projects" || page === "All templates" ? "Overview" : props.pageLabel?.(page) ?? page;
+const navigationLabel = (page: string) => page === "All projects" ? "Overview" : props.pageLabel?.(page) ?? page;
 const characters = new Intl.Segmenter(undefined, { granularity: "grapheme" });
 const avatarInitial = (page: string) => characters.segment(props.pageAvatar?.(page)?.name.trim() ?? "")[Symbol.iterator]().next().value?.segment.toUpperCase() ?? "";
 function runGroupAction(group: NavigationCategory) {

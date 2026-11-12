@@ -1,16 +1,36 @@
 import { Activity, ChartNoAxesCombined, CirclePlay, Compass, FolderKanban, LayoutGrid, LayoutTemplate, Plus, Settings2, UsersRound } from "@lucide/vue";
+import type { Component } from "vue";
 import { workspaceProjects } from "./paneled-workspace-projects";
 import { workspaceTemplateItemPages, workspaceTemplatePages } from "./paneled-workspace-templates";
 import { workspaceCalculatorPages } from "./paneled-workspace-calculators";
 
 const projectPages = workspaceProjects.map(project => project.name);
 
-export const workspaceCategories = [
-  { label: "Templates", icon: LayoutTemplate, pages: workspaceTemplatePages },
+export interface NavigationCategory {
+  label: string;
+  icon: Component;
+  pages: string[];
+  page?: string;
+  collapsible?: boolean;
+  headingOnly?: boolean;
+  remainingCount?: number;
+  action?: { label: string; icon: Component };
+}
+
+export const workspaceLinks = [
+  { label: "Explore", page: "Explore", icon: Compass },
+];
+
+export const workspaceCommunityPages = ["Community", "Public projects", "Public groups"];
+export const workspaceExplorePages = ["Explore", ...workspaceCommunityPages, ...workspaceTemplatePages, ...workspaceTemplateItemPages];
+
+export const workspaceCategories: NavigationCategory[] = [
   { label: "Projects", page: "All projects", icon: FolderKanban, headingOnly: true, pages: ["All projects", ...projectPages.slice(0, 6)], collapsible: false, action: { label: "Create project", icon: Plus } },
 ];
 
 export const workspaceSearchCategories = [
+  { label: "Explore", icon: Compass, pages: ["Explore", ...workspaceCommunityPages] },
+  { label: "Templates", icon: LayoutTemplate, pages: workspaceTemplatePages },
   { label: "Engineering tools", icon: Compass, pages: workspaceCalculatorPages },
 ];
 
@@ -45,8 +65,8 @@ export const workspaceUtilityDescriptions: Record<string, string> = {
   "Log out": "This is a local preview of Log out. Your session stays signed in.",
 };
 export const projectContextPages = [...projectNavigation.map(item => item.page), ...legacyProjectPages, "Overview", "New application"];
-export const workspacePages = [...new Set(["Dashboard", "Recents", "Activities", "All projects", ...[...workspaceCategories, ...workspaceSearchCategories].flatMap(group => group.pages), ...workspaceTemplateItemPages, ...projectContextPages, ...projectPages, "Groups", "Team", "Profile", "Settings", "Billing", "Keyboard shortcuts", ...Object.keys(workspaceUtilityDescriptions)])];
-export const limitedWorkspacePages = ["Dashboard", "Recents", "Activities", "All projects", "Groups", "Overview", "Applications", "Members", ...projectPages, ...workspaceTemplatePages, ...workspaceTemplateItemPages, ...workspaceCalculatorPages, "Flight test plan"];
+export const workspacePages = [...new Set(["Dashboard", "Recents", "Activities", "All projects", ...workspaceLinks.map(item => item.page), ...[...workspaceCategories, ...workspaceSearchCategories].flatMap(group => group.pages), ...workspaceTemplateItemPages, ...projectContextPages, ...projectPages, "Groups", "Team", "Profile", "Settings", "Billing", "Keyboard shortcuts", ...Object.keys(workspaceUtilityDescriptions)])];
+export const limitedWorkspacePages = ["Dashboard", "Recents", "Activities", "All projects", "Groups", "Overview", "Applications", "Members", ...projectPages, ...workspaceCalculatorPages, "Flight test plan"];
 
 // Keep existing example bookmarks and integrations working after the navigation rename.
 const pageAliases: Record<string, string> = {

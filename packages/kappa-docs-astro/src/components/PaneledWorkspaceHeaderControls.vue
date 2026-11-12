@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { AppShell } from "@dicehub/kappa/blocks/app-shell";
 import { ToolbarButton } from "@dicehub/kappa/components/button";
+import { Tooltip } from "@dicehub/kappa/components/tooltip";
 import { CirclePlay, Search } from "@lucide/vue";
 import PaneledWorkspaceCreateMenu from "./PaneledWorkspaceCreateMenu.vue";
 import PaneledWorkspaceCredits from "./PaneledWorkspaceCredits.vue";
@@ -29,7 +30,15 @@ const emit = defineEmits<{
 </script>
 
 <template>
-  <AppShell.SearchTrigger shortcut="Ctrl + K" data-paneled-search :icon="Search" aria-keyshortcuts="Control+K" aria-haspopup="dialog" :aria-expanded="searchOpen" @click="emit('search')" />
+  <AppShell.SearchTrigger v-if="!insetHeader" shortcut="Ctrl + K" data-paneled-search :icon="Search" aria-keyshortcuts="Control+K" aria-haspopup="dialog" :aria-expanded="searchOpen" @click="emit('search')" />
+  <div v-if="insetHeader" class="paneled-workspace-demo__search-island">
+    <Tooltip.Root :disabled="searchOpen" :open-delay="500" :close-delay="0" :positioning="{ placement: 'bottom', gutter: 8 }">
+      <Tooltip.Trigger as-child>
+        <AppShell.SearchTrigger label="Search…" shortcut="Ctrl + K" data-paneled-search :icon="Search" aria-label="Search or go to…" aria-keyshortcuts="Control+K" aria-haspopup="dialog" :aria-expanded="searchOpen" @click="emit('search')" />
+      </Tooltip.Trigger>
+      <Tooltip.Content :show-arrow="false">Search or go to… (Ctrl + K)</Tooltip.Content>
+    </Tooltip.Root>
+  </div>
   <div class="paneled-workspace-demo__global-actions">
     <PaneledWorkspaceCreateMenu :project-code="projectCode" @navigate="(page, project) => emit('navigate', page, project)" />
     <PaneledWorkspaceCredits :namespace="namespace" :compute="compute" :loading="!creditsReady" @navigate="emit('navigate', $event)" @add-credits="emit('addCredits', $event)" />

@@ -94,7 +94,7 @@ test("search opens by button or Ctrl+K, finds pages and runs, and returns focus"
   await searchTrigger.click();
   await expect(input).toBeFocused();
   await expect(palette.locator(".kappa-command-palette__group-label")).toHaveText([
-    "Your work", "Templates", "Projects", "Engineering tools", "Recent simulation runs", "Workspaces",
+    "Your work", "Projects", "Explore", "Templates", "Engineering tools", "Recent simulation runs", "Workspaces",
   ]);
   const popupBounds = (await palette.boundingBox())!;
   expect(popupBounds.width).toBeCloseTo(768, 0);

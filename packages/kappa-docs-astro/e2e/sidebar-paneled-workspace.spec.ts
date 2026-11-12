@@ -100,10 +100,10 @@ test("header stays centered and navigation categories work in expanded and colla
 
   await expect(nav.locator(".paneled-workspace-demo__context-label")).toHaveText("Your work");
   await expect(nav.getByRole("heading", { name: "Projects", exact: true })).toBeVisible();
-  await expect(nav.getByRole("button", { name: "Templates", exact: true })).toBeVisible();
+  await expect(nav.getByRole("link", { name: "Explore", exact: true })).toBeVisible();
   await expect(nav.getByRole("button", { name: "Engineering tools", exact: true })).toHaveCount(0);
   await expect(nav.locator('[data-slot="sidebar-menu"]').first().getByRole("link"))
-    .toHaveText(["Dashboard", "Recents", "Activities", /^Simulation runs/]);
+    .toHaveText(["Dashboard", "Recents", "Activities", /^Simulation runs/, "Explore"]);
   await nav.getByRole("link", { name: "Recents", exact: true }).click();
   await expect(shell.getByRole("table", { name: "Recent simulation runs", exact: true })).toBeVisible();
   await expect(nav.getByRole("link", { name: "Recents", exact: true })).toHaveAttribute("aria-current", "page");
@@ -134,9 +134,9 @@ test("header stays centered and navigation categories work in expanded and colla
   await planGroup.getByRole("heading", { name: "Projects", exact: true }).hover();
   await expect(createProject).toHaveCSS("opacity", "1");
   await page.mouse.move(600, 100);
-  const templates = nav.getByRole("button", { name: "Templates", exact: true });
-  await templates.focus();
-  await templates.press("Tab");
+  const explore = nav.getByRole("link", { name: "Explore", exact: true });
+  await explore.focus();
+  await explore.press("Tab");
   await expect(createProject).toBeFocused();
   await expect(createProject).toHaveCSS("opacity", "1");
 

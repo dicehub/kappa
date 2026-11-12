@@ -36,19 +36,21 @@ test("legacy project bookmarks keep context while shared workspace pages stay gl
   }
 });
 
-test("an individual template bookmark reveals its navigation entry independently of Projects", async ({ page }) => {
+test("an individual template bookmark keeps Explore and its Templates tab selected", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 1000 });
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto(`${examplePath}?view=Airfoil+aerodynamics`);
   await expect.poll(() => page.locator("astro-island").evaluate(node => node.hasAttribute("ssr"))).toBe(false);
   const nav = page.getByRole("navigation", { name: "Paneled workspace navigation", exact: true });
-  const templates = nav.locator(".paneled-workspace-demo__nav-group").filter({ has: page.getByRole("button", { name: "Templates", exact: true }) });
-  await expect(templates.getByRole("button", { name: "Templates", exact: true })).toHaveAttribute("aria-expanded", "true");
-  await expect(templates.getByRole("link", { name: "Airfoil aerodynamics", exact: true })).toHaveAttribute("aria-current", "page");
-  await expect(templates.getByRole("link")).toHaveCount(22);
-  await expect(templates.getByRole("button", { name: /^Show more/ })).toHaveCount(0);
+  const templates = nav.getByRole("link", { name: "Explore", exact: true });
+  await expect(templates).toHaveAttribute("aria-current", "page");
+  await expect(templates).not.toHaveAttribute("aria-expanded");
+  await expect(templates).toHaveAttribute("href", "?view=Explore");
+  await expect(nav.getByRole("link", { name: "Airfoil aerodynamics", exact: true })).toHaveCount(0);
   await expect(nav.getByRole("button", { name: "Show more (18)", exact: true })).toBeVisible();
-  await expect(page.getByRole("heading", { name: "Airfoil aerodynamics", exact: true, level: 2 })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Explore", exact: true, level: 2 })).toBeVisible();
+  await expect(page.getByRole("tab", { name: "Templates", exact: true })).toHaveAttribute("aria-selected", "true");
+  await expect(page.getByRole("heading", { name: "Airfoil aerodynamics", exact: true, level: 3 })).toBeVisible();
 });
 
 for (const mode of ["expanded", "collapsed", "mobile"] as const) {

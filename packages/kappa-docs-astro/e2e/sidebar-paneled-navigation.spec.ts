@@ -4,9 +4,9 @@ const path = "/examples/appshell/paneled-workspace?view=Simulation+runs&project=
 const navigation = (page: Page) => page.getByRole("navigation", { name: "Paneled workspace navigation", exact: true });
 const flyout = (page: Page, category = "Simulation runs") => page.getByRole("navigation", { name: `${category} pages`, exact: true });
 
-async function openExample(page: Page, theme = "light", templates = false) {
-  await page.goto(templates ? "/examples/appshell/paneled-workspace?view=All+templates" : path);
-  await expect(page.getByRole("heading", { name: templates ? "All templates" : "Simulation runs", exact: true })).toBeVisible();
+async function openExample(page: Page, theme = "light", reports = false) {
+  await page.goto(reports ? "/examples/appshell/paneled-workspace?view=Reports&project=WA-01" : path);
+  await expect(page.getByRole("heading", { name: reports ? "Reports" : "Simulation runs", exact: true })).toBeVisible();
   await page.evaluate(value => document.documentElement.setAttribute("data-kappa-theme", value), theme);
 }
 
@@ -26,8 +26,8 @@ for (const theme of ["light", "dark"]) {
   test(`${theme}: selection follows a closed group and its hover submenu`, async ({ page }) => {
     await openExample(page, theme, true);
     const nav = navigation(page);
-    const build = nav.getByRole("button", { name: "Templates", exact: true });
-    const pipelines = nav.locator(".paneled-workspace-demo__nav-group").filter({ has: page.getByRole("button", { name: "Templates", exact: true }) }).getByRole("link", { name: "Overview", exact: true });
+    const build = nav.getByRole("button", { name: "Analytics", exact: true });
+    const pipelines = nav.locator(".paneled-workspace-demo__nav-group").filter({ has: page.getByRole("button", { name: "Analytics", exact: true }) }).getByRole("link", { name: "Reports", exact: true });
     const selected = theme === "light" ? "rgb(220, 220, 222)" : "rgb(58, 56, 63)";
     const foreground = theme === "light" ? "rgb(24, 23, 29)" : "rgb(255, 255, 255)";
 
@@ -46,16 +46,16 @@ for (const theme of ["light", "dark"]) {
     expect(await indicator(build)).toEqual({ content: '""', left: "-8px", top: "4px", width: "2px", height: "20px" });
 
     await build.hover();
-    const popup = flyout(page, "Templates");
-    const popupPipelines = popup.getByRole("link", { name: "Overview", exact: true });
+    const popup = flyout(page, "Analytics");
+    const popupPipelines = popup.getByRole("link", { name: "Reports", exact: true });
     await expect(popupPipelines).toBeVisible();
     const popupBox = popup.locator("..");
     expect((await popupBox.boundingBox())!.width).toBeGreaterThanOrEqual(200);
-    await expect(popupBox).toHaveCSS("height", "154px");
+    await expect(popupBox).toHaveCSS("height", "34px");
     await expect(popupBox).toHaveCSS("padding", "4px 4px 2px");
     await expect(popupBox).toHaveCSS("border-radius", "8px");
     await expect(popupBox).toHaveCSS("background-color", theme === "light" ? "rgb(255, 255, 255)" : "rgb(40, 39, 45)");
-    await expect(popupBox.getByText("Templates", { exact: true })).toHaveCount(0);
+    await expect(popupBox.getByText("Analytics", { exact: true })).toHaveCount(0);
     const shadowColor = theme === "light" ? "rgba(5, 5, 6, 0.16)" : "rgba(5, 5, 6, 0.4)";
     await expect(popupBox).toHaveCSS("filter", `drop-shadow(${shadowColor} 0px 0px 0.5px) drop-shadow(${shadowColor} 0px 0.5px 1px) drop-shadow(${shadowColor} 0px 1px 3px)`);
     const triggerBounds = (await build.boundingBox())!;
@@ -81,23 +81,26 @@ for (const theme of ["light", "dark"]) {
     await nav.getByRole("button", { name: "Collapse sidebar", exact: true }).click();
     await expect(build).toHaveCSS("font-weight", "600");
     await build.hover();
-    await expect(popupBox.getByRole("heading", { name: "Templates", exact: true })).toBeVisible();
+    await expect(popupBox.getByRole("heading", { name: "Analytics", exact: true })).toBeVisible();
     await expect(popupPipelines).toBeVisible();
     await expect(popupPipelines).toHaveAttribute("aria-current", "page");
-    await popup.getByRole("link", { name: "CFD Templates", exact: true }).click();
-    await expect(page.getByRole("heading", { name: "CFD Templates", exact: true })).toBeVisible();
+    await nav.getByRole("link", { name: "Settings", exact: true }).click();
+    await expect(page.getByRole("heading", { name: "Settings", exact: true })).toBeVisible();
+    await build.hover();
+    await expect(popupPipelines).not.toHaveAttribute("aria-current");
+    await popupPipelines.click();
+    await expect(page.getByRole("heading", { name: "Reports", exact: true })).toBeVisible();
     await expect(popup).toBeHidden();
     await build.hover();
-    await expect(popup.getByRole("link", { name: "CFD Templates", exact: true })).toHaveAttribute("aria-current", "page");
-    await expect(popupPipelines).not.toHaveAttribute("aria-current");
+    await expect(popupPipelines).toHaveAttribute("aria-current", "page");
     await page.goBack();
-    await expect(page.getByRole("heading", { name: "All templates", exact: true })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Settings", exact: true })).toBeVisible();
   });
 
   test(`${theme}: sidebar and submenu share text, hover, focus, and pressed styles`, async ({ page }) => {
     await openExample(page, theme, true);
     const nav = navigation(page);
-    const build = nav.getByRole("button", { name: "Templates", exact: true });
+    const build = nav.getByRole("button", { name: "Analytics", exact: true });
     const hover = theme === "light" ? "rgb(220, 220, 222)" : "rgb(58, 56, 63)";
     const pressed = theme === "light" ? "rgb(191, 191, 195)" : "rgb(24, 23, 29)";
     const normal = theme === "light" ? "rgb(98, 97, 104)" : "rgb(191, 191, 195)";
@@ -112,19 +115,16 @@ for (const theme of ["light", "dark"]) {
     await expect(build).toHaveAttribute("aria-expanded", "false");
     await page.mouse.move(600, 100);
     await build.hover();
-    const pipelines = flyout(page, "Templates").getByRole("link", { name: "Overview", exact: true });
-    const artifacts = flyout(page, "Templates").getByRole("link", { name: "CFD Templates", exact: true });
-    for (const link of [pipelines, artifacts]) {
-      await link.hover();
-      await expect(link).toHaveCSS("height", "28px");
-      await expect(link).toHaveCSS("background-color", hover);
-      await page.mouse.down();
-      await expect(link).toHaveCSS("background-color", pressed);
-      // Release outside the link to inspect the next state without navigating.
-      await page.mouse.move(600, 100);
-      await page.mouse.up();
-      await build.hover();
-    }
+    const pipelines = flyout(page, "Analytics").getByRole("link", { name: "Reports", exact: true });
+    await pipelines.hover();
+    await expect(pipelines).toHaveCSS("height", "28px");
+    await expect(pipelines).toHaveCSS("background-color", hover);
+    await page.mouse.down();
+    await expect(pipelines).toHaveCSS("background-color", pressed);
+    // Release outside the link to inspect the next state without navigating.
+    await page.mouse.move(600, 100);
+    await page.mouse.up();
+    await build.hover();
     await build.focus();
     await build.press("ArrowDown");
     await expect(pipelines).toBeFocused();
@@ -135,7 +135,7 @@ for (const theme of ["light", "dark"]) {
     await expect(build).toBeFocused();
     await build.press("Enter");
     await expect(build).toHaveAttribute("aria-expanded", "true");
-    await expect(nav.locator(".paneled-workspace-demo__nav-group").filter({ has: page.getByRole("button", { name: "Templates", exact: true }) }).getByRole("link", { name: "Overview", exact: true })).toBeVisible();
+    await expect(nav.locator(".paneled-workspace-demo__nav-group").filter({ has: page.getByRole("button", { name: "Analytics", exact: true }) }).getByRole("link", { name: "Reports", exact: true })).toBeVisible();
   });
 }
 

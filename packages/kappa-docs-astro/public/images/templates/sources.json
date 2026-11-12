@@ -1,0 +1,149 @@
+{
+  "created": "2026-11-11",
+  "source": "OpenAI native image_gen through Codex using the OpenAI provider",
+  "purpose": "Illustrative CFD and thermal previews for dicehub template cards. Synthetic artwork, not solver results.",
+  "rights": "Generated for the dicehub documentation preview. Documentation artwork is excluded from the repository MIT license.",
+  "processing": "Center-cropped and reduced from the original generated images to 480 by 360 pixels with Lanczos resampling; WebP quality 78, compression method 6, no metadata. No upscaling.",
+  "reusedAssets": {
+    "sourceRecord": "../community/sources.json",
+    "files": [
+      "../community/propeller.webp",
+      "../community/winglet.webp",
+      "../community/drone.webp"
+    ]
+  },
+  "assets": [
+    {
+      "file": "airfoil.webp",
+      "originalSize": [
+        1448,
+        1086
+      ],
+      "size": [
+        480,
+        360
+      ],
+      "prompt": "Use case: scientific-educational. Asset type: a clean technical CFD template thumbnail, landscape 4:3 if available. Crisp engineering post-processing illustration on a pale cool-gray background. Simple identifiable geometry in neutral gray; blue/cyan/green/yellow contours with small warm highlights where meaningful. Professional visualization rather than a dramatic illustration. Center the geometry with 10 percent safety margins for a 4:3 crop. No UI, text, labels, numbers, logos, watermarks, axes, color-scale legends, border or collage. Synthetic educational artwork, not measured or validated solver results. Highest native resolution, no upscaling.\n\nSubject: A horizontal streamlined airfoil cross-section in a wind tunnel, rounded leading edge at left, sharp trailing edge at right, gray solid profile, clear blue and cyan velocity field with a compact green/yellow/red leading-edge pressure area, thin smooth curved streamlines above and below. Entire airfoil visible."
+    },
+    {
+      "file": "heat-exchanger.webp",
+      "originalSize": [
+        1448,
+        1086
+      ],
+      "size": [
+        480,
+        360
+      ],
+      "prompt": "Use case: scientific-educational. Asset type: a clean technical CFD template thumbnail, landscape 4:3 if available. Crisp engineering post-processing illustration on a pale cool-gray background. Simple identifiable geometry in neutral gray; blue/cyan/green/yellow contours with small warm highlights where meaningful. Professional visualization rather than a dramatic illustration. Center the geometry with 10 percent safety margins for a 4:3 crop. No UI, text, labels, numbers, logos, watermarks, axes, color-scale legends, border or collage. Synthetic educational artwork, not measured or validated solver results. Highest native resolution, no upscaling.\n\nSubject: An oblique cutaway of a compact parallel-plate heat exchanger, alternating narrow hot and cold fluid channels between solid gray plates. Smooth blue/cyan and orange/yellow flow paths through distinct channels. Four or five plates, no pipes or clutter."
+    },
+    {
+      "file": "battery-cooling.webp",
+      "originalSize": [
+        1448,
+        1086
+      ],
+      "size": [
+        480,
+        360
+      ],
+      "prompt": "Use case: scientific-educational. Asset type: a clean technical CFD template thumbnail, landscape 4:3 if available. Crisp engineering post-processing illustration on a pale cool-gray background. Simple identifiable geometry in neutral gray; blue/cyan/green/yellow contours with small warm highlights where meaningful. Professional visualization rather than a dramatic illustration. Center the geometry with 10 percent safety margins for a 4:3 crop. No UI, text, labels, numbers, logos, watermarks, axes, color-scale legends, border or collage. Synthetic educational artwork, not measured or validated solver results. Highest native resolution, no upscaling.\n\nSubject: A compact arrangement of six cylindrical battery cells on a rectangular liquid cooling plate, at an oblique angle. Gray cylinders with subtle blue/green/yellow surface temperature contours, visible serpentine blue coolant channel in the plate. No branding or markings."
+    },
+    {
+      "file": "cooling-duct.webp",
+      "originalSize": [
+        1448,
+        1086
+      ],
+      "size": [
+        480,
+        360
+      ],
+      "prompt": "Use case: scientific-educational. Asset type: a clean technical CFD template thumbnail, landscape 4:3 if available. Crisp engineering post-processing illustration on a pale cool-gray background. Simple identifiable geometry in neutral gray; blue/cyan/green/yellow contours with small warm highlights where meaningful. Professional visualization rather than a dramatic illustration. Center the geometry with 10 percent safety margins for a 4:3 crop. No UI, text, labels, numbers, logos, watermarks, axes, color-scale legends, border or collage. Synthetic educational artwork, not measured or validated solver results. Highest native resolution, no upscaling.\n\nSubject: A simple thick-walled 90-degree elbow duct in cutaway, inlet at left and outlet downward. Precise rectangular section, clear blue/cyan/green velocity streamlines turning around the bend, small yellow region at the outer corner. Centered, entire duct visible."
+    },
+    {
+      "file": "free-surface.webp",
+      "originalSize": [
+        1448,
+        1086
+      ],
+      "size": [
+        480,
+        360
+      ],
+      "prompt": "Use case: scientific-educational. Asset type: a clean technical CFD template thumbnail, landscape 4:3 if available. Crisp engineering post-processing illustration on a pale cool-gray background. Simple identifiable geometry in neutral gray; blue/cyan/green/yellow contours with small warm highlights where meaningful. Professional visualization rather than a dramatic illustration. Center the geometry with 10 percent safety margins for a 4:3 crop. No UI, text, labels, numbers, logos, watermarks, axes, color-scale legends, border or collage. Synthetic educational artwork, not measured or validated solver results. Highest native resolution, no upscaling.\n\nSubject: A transparent rectangular tank half-filled with blue water, a visible tilted wavy liquid surface and subtle cyan flow curves inside. Gray tank edges, clean oblique view, contained water with no splashes or external landscape."
+    },
+    {
+      "file": "hypersonic-heating.webp",
+      "originalSize": [
+        1448,
+        1086
+      ],
+      "size": [
+        480,
+        360
+      ],
+      "prompt": "Use case: scientific-educational. Asset type: a clean technical CFD template thumbnail, landscape 4:3 if available. Crisp engineering post-processing illustration on a pale cool-gray background. Simple identifiable geometry in neutral gray; blue/cyan/green/yellow contours with small warm highlights where meaningful. Professional visualization rather than a dramatic illustration. Center the geometry with 10 percent safety margins for a 4:3 crop. No UI, text, labels, numbers, logos, watermarks, axes, color-scale legends, border or collage. Synthetic educational artwork, not measured or validated solver results. Highest native resolution, no upscaling.\n\nSubject: An axisymmetric blunt-nosed gray cone oriented horizontally with its nose toward left. Smooth attached body, a distinct detached blue/cyan bow-shock contour ahead of the nose, small red/orange surface heating area at the nose fading toward blue downstream. Engineering contour cut-plane, no flames."
+    },
+    {
+      "file": "phase-change.webp",
+      "originalSize": [
+        1448,
+        1086
+      ],
+      "size": [
+        480,
+        360
+      ],
+      "prompt": "Use case: scientific-educational. Asset type: a clean technical CFD template thumbnail, landscape 4:3 if available. Crisp engineering post-processing illustration on a pale cool-gray background. Simple identifiable geometry in neutral gray; blue/cyan/green/yellow contours with small warm highlights where meaningful. Professional visualization rather than a dramatic illustration. Center the geometry with 10 percent safety margins for a 4:3 crop. No UI, text, labels, numbers, logos, watermarks, axes, color-scale legends, border or collage. Synthetic educational artwork, not measured or validated solver results. Highest native resolution, no upscaling.\n\nSubject: An oblique cutaway rectangular thermal storage block with a gray fin structure. The interior shows a clear smooth blue solid region and amber liquid melt region divided by a curved melting front, compact yellow thermal contours around one heating fin. No smoke, flame, labels or vessel clutter."
+    },
+    {
+      "file": "hydrogen-mixing.webp",
+      "originalSize": [
+        1448,
+        1086
+      ],
+      "size": [
+        480,
+        360
+      ],
+      "prompt": "Use case: scientific-educational. Asset type: a clean technical CFD template thumbnail, landscape 4:3 if available. Crisp engineering post-processing illustration on a pale cool-gray background. Simple identifiable geometry in neutral gray; blue/cyan/green/yellow contours with small warm highlights where meaningful. Professional visualization rather than a dramatic illustration. Center the geometry with 10 percent safety margins for a 4:3 crop. No UI, text, labels, numbers, logos, watermarks, axes, color-scale legends, border or collage. Synthetic educational artwork, not measured or validated solver results. Highest native resolution, no upscaling.\n\nSubject: A horizontal transparent cylindrical mixing duct, two slim coaxial inlet streams at left in blue and green, blending into a smooth teal/yellow concentration plume at right. Sparse streamlines show gas mixing within the gray-outlined duct. No molecules, flames or labels."
+    },
+    {
+      "file": "combustion.webp",
+      "originalSize": [
+        1448,
+        1086
+      ],
+      "size": [
+        480,
+        360
+      ],
+      "prompt": "Use case: scientific-educational. Asset type: a clean technical CFD template thumbnail, landscape 4:3 if available. Crisp engineering post-processing illustration on a pale cool-gray background. Simple identifiable geometry in neutral gray; blue/cyan/green/yellow contours with small warm highlights where meaningful. Professional visualization rather than a dramatic illustration. Center the geometry with 10 percent safety margins for a 4:3 crop. No UI, text, labels, numbers, logos, watermarks, axes, color-scale legends, border or collage. Synthetic educational artwork, not measured or validated solver results. Highest native resolution, no upscaling.\n\nSubject: An oblique cutaway of a short gray cylindrical combustor with a clearly contained red/orange/yellow temperature field downstream from small blue inlet jets. A scientific smooth temperature contour rather than a photorealistic fire, the outer shape and flow path remain clear."
+    },
+    {
+      "file": "electronics-cooling.webp",
+      "originalSize": [
+        1448,
+        1086
+      ],
+      "size": [
+        480,
+        360
+      ],
+      "prompt": "Use case: scientific-educational. Asset type: a clean technical CFD template thumbnail, landscape 4:3 if available. Crisp engineering post-processing illustration on a pale cool-gray background. Simple identifiable geometry in neutral gray; blue/cyan/green/yellow contours with small warm highlights where meaningful. Professional visualization rather than a dramatic illustration. Center the geometry with 10 percent safety margins for a 4:3 crop. No UI, text, labels, numbers, logos, watermarks, axes, color-scale legends, border or collage. Synthetic educational artwork, not measured or validated solver results. Highest native resolution, no upscaling.\n\nSubject: A small gray circuit board with three rectangular electronic chips and a finned aluminum heat sink, oblique view. Fine blue/cyan airflow paths pass through the fins, selective yellow/orange chip-temperature patches. No text, branding, wires, or realistic green PCB silkscreen."
+    },
+    {
+      "file": "rotor-thermal.webp",
+      "originalSize": [
+        1448,
+        1086
+      ],
+      "size": [
+        480,
+        360
+      ],
+      "prompt": "Use case: scientific-educational. Asset type: a clean technical CFD template thumbnail, landscape 4:3 if available. Crisp engineering post-processing illustration on a pale cool-gray background. Simple identifiable geometry in neutral gray; blue/cyan/green/yellow contours with small warm highlights where meaningful. Professional visualization rather than a dramatic illustration. Center the geometry with 10 percent safety margins for a 4:3 crop. No UI, text, labels, numbers, logos, watermarks, axes, color-scale legends, border or collage. Synthetic educational artwork, not measured or validated solver results. Highest native resolution, no upscaling.\n\nSubject: A single gray metallic turbine disk with radial blades, oblique view, surface thermal contours fading from warm orange near the hub through yellow/green to blue at the blade tips. Compact finite-element-style mesh lines, visibly rigid physical geometry, no flames."
+    }
+  ]
+}

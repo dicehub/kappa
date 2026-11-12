@@ -30,6 +30,7 @@ const icons = { Aerodynamics: Wind, Thermodynamics: Thermometer, "Fluid mechanic
     <Grid.Root as="ul" gap="sm" class="paneled-template-catalog__grid" :aria-label="page">
       <Grid.Item v-for="template in templates" :key="template.name" as="li">
         <Card as="article" size="sm" class="paneled-template-catalog__card">
+          <img :src="template.image" alt="" width="480" height="360" loading="lazy" decoding="async" class="paneled-template-catalog__image" />
           <Card.Header>
             <p class="paneled-template-catalog__discipline"><component :is="icons[template.discipline]" :size="18" aria-hidden="true" />{{ template.discipline }}</p>
             <Card.Title as="h3">{{ template.name }}</Card.Title>
