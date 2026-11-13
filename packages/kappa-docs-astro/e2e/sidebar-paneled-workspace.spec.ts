@@ -130,10 +130,11 @@ test("header stays centered and navigation categories work in expanded and colla
   await expect(plan).toHaveCount(0);
   const createProject = planGroup.getByRole("button", { name: "Create project", exact: true });
   await page.mouse.move(600, 100);
-  await expect(createProject).toHaveCSS("opacity", "1");
+  await expect(createProject).toHaveCSS("opacity", "0");
   await planGroup.getByRole("heading", { name: "Projects", exact: true }).hover();
   await expect(createProject).toHaveCSS("opacity", "1");
   await page.mouse.move(600, 100);
+  await expect(createProject).toHaveCSS("opacity", "0");
   const explore = nav.getByRole("link", { name: "Explore", exact: true });
   await explore.focus();
   await explore.press("Tab");

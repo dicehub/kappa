@@ -59,7 +59,8 @@
 .paneled-workspace-demo__nav-group:first-child { margin-block-start: 0; }
 .paneled-workspace-demo__navigation .kappa-sidebar__menu.paneled-workspace-demo__nav-footer { margin-block-start: 0.125rem; }
 .paneled-workspace-demo__sliding-views > [data-value="workspace"] .paneled-workspace-demo__nav-group { margin-block-start: 0.75rem; }
-.paneled-workspace-demo__sliding-views > [data-value="workspace"] .paneled-workspace-demo__nav-group[data-heading-link] { margin-block-start: 1.5rem; }
+.paneled-workspace-demo__sliding-views > [data-value="workspace"] .paneled-workspace-demo__nav-group[data-heading-link] { position: relative; margin-block-start: 1.5rem; }
+.paneled-workspace-demo__projects-separator.kappa-sidebar__separator { position: absolute; inset-block-start: -0.75rem; inset-inline: 0.5rem; margin: 0; border-block-start-color: color-mix(in srgb, var(--kappa-shell-menu-divider) 60%, transparent); pointer-events: none; }
 .paneled-workspace-demo__navigation.kappa-sidebar .kappa-sidebar__menu-sub .kappa-sidebar__menu-button { padding-inline-end: 0.75rem; }
 .paneled-workspace-demo__navigation.kappa-sidebar .kappa-sidebar__menu-sub .paneled-workspace-demo__project-entry,
 .paneled-workspace-demo__navigation.kappa-sidebar .kappa-sidebar__menu-sub .paneled-workspace-demo__show-more { padding-inline-start: 0.25rem; }
@@ -106,8 +107,8 @@
 .paneled-workspace-demo__group-content > .kappa-sidebar__menu-sub { margin-block-start: 0.125rem; }
 .paneled-workspace-demo__flyout-heading { display: flex; align-items: center; justify-content: space-between; }
 @media (hover: hover) and (pointer: fine) {
-  :is(.paneled-workspace-demo__group-heading, .paneled-workspace-demo__flyout-heading):not(.paneled-workspace-demo__section-heading) .kappa-toolbar-button { opacity: 0; pointer-events: none; }
-  :is(.paneled-workspace-demo__group-heading, .paneled-workspace-demo__flyout-heading):not(.paneled-workspace-demo__section-heading):is(:hover, :has(:focus-visible)) .kappa-toolbar-button { opacity: 1; pointer-events: auto; }
+  :is(.paneled-workspace-demo__group-heading, .paneled-workspace-demo__flyout-heading) .kappa-toolbar-button { opacity: 0; pointer-events: none; }
+  :is(.paneled-workspace-demo__group-heading, .paneled-workspace-demo__flyout-heading):is(:hover, :has(:focus-visible)) .kappa-toolbar-button { opacity: 1; pointer-events: auto; }
 }
 .kappa-sidebar__collapsible[data-state="open"] .paneled-workspace-demo__group-toggle .kappa-sidebar__menu-label > svg { transform: rotate(90deg); }
 .paneled-workspace-demo__count { color: var(--kappa-subtle); font-size: 0.75rem; }

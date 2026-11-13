@@ -35,6 +35,7 @@ for (const inset of [false, true]) {
     await nav.getByRole("link", { name: "Wind Aero Study", exact: true }).click();
     await nav.getByRole("link", { name: "Back to Projects", exact: true }).click();
     await expect(projects).toBeFocused();
+    await projects.hover();
     await nav.getByRole("button", { name: "Create project", exact: true }).click();
     await expect(page).toHaveURL(/view=New\+project$/);
     await page.reload();
