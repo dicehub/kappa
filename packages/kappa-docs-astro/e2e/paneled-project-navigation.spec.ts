@@ -309,7 +309,7 @@ test("page changes preserve focus when project content and header controls unmou
   await page.setViewportSize({ width: 1440, height: 1000 });
   await openProject(page);
   await page.getByRole("link", { name: "Back to Projects", exact: true }).click();
-  const project = page.getByRole("table", { name: "All projects", exact: true }).getByRole("link", { name: "Helicopter", exact: true });
+  const project = page.getByRole("grid", { name: "All projects", exact: true }).getByRole("link", { name: "Helicopter", exact: true });
   await project.focus();
   await project.press("Enter");
   await expect(page.getByRole("heading", { name: "Applications", exact: true })).toBeFocused();

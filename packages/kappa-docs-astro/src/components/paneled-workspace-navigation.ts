@@ -66,7 +66,7 @@ export const workspaceUtilityDescriptions: Record<string, string> = {
 };
 export const projectContextPages = [...projectNavigation.map(item => item.page), ...legacyProjectPages, "Overview", "New application"];
 export const workspacePages = [...new Set(["Dashboard", "Recents", "Activities", "All projects", ...workspaceLinks.map(item => item.page), ...[...workspaceCategories, ...workspaceSearchCategories].flatMap(group => group.pages), ...workspaceTemplateItemPages, ...projectContextPages, ...projectPages, "Groups", "Team", "Profile", "Settings", "Billing", "Keyboard shortcuts", ...Object.keys(workspaceUtilityDescriptions)])];
-export const limitedWorkspacePages = ["Dashboard", "Recents", "Activities", "All projects", "Groups", "Overview", "Applications", "Members", ...projectPages, ...workspaceCalculatorPages, "Flight test plan"];
+export const limitedWorkspacePages = ["Dashboard", "Recents", "Activities", "Groups", "Overview", "Applications", "Members", ...projectPages, ...workspaceCalculatorPages, "Flight test plan"];
 
 // Keep existing example bookmarks and integrations working after the navigation rename.
 const pageAliases: Record<string, string> = {
