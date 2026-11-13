@@ -10,6 +10,7 @@ import { usePaneledTheme } from "./use-paneled-theme";
 const emit = defineEmits<{ navigate: [page: string] }>();
 const insetHeader = defineModel<boolean>("insetHeader", { default: false });
 const projectGuide = defineModel<boolean>("projectGuide", { default: false });
+const projectHeadingLink = defineModel<boolean>("projectHeadingLink", { default: false });
 const isFocusVisible = useFocusVisible();
 const { theme, setTheme } = usePaneledTheme();
 // Ark keeps DOM focus on the menu while the pointer changes its highlighted item.
@@ -103,6 +104,9 @@ const themePositioning = { placement: "left-start", gutter: 4, fitViewport: true
           </Dropdown.CheckboxItem>
           <Dropdown.CheckboxItem v-model:checked="projectGuide" value="project-guide" close-on-select>
             Project guide line
+          </Dropdown.CheckboxItem>
+          <Dropdown.CheckboxItem v-model:checked="projectHeadingLink" value="project-heading-link" close-on-select>
+            Clickable Projects heading
           </Dropdown.CheckboxItem>
         </Dropdown.Group>
         <Dropdown.Separator />

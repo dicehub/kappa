@@ -30,22 +30,15 @@ import { workspaceTemplateItemPages } from "./paneled-workspace-templates";
 import PaneledWorkspaceNavigation from "./PaneledWorkspaceNavigation.vue";
 import PaneledWorkspaceProjectSwitcher from "./PaneledWorkspaceProjectSwitcher.vue";
 import { usePaneledWorkspaceLocation } from "./use-paneled-workspace-location";
+import { usePaneledWorkspaceLayout } from "./use-paneled-workspace-layout";
 import { limitedWorkspacePages, projectCategories, projectNavigation, workspaceCategories as defaultWorkspaceCategories, workspaceExplorePages, workspaceLinks, workspaceSearchCategories, workspaceUtilityDescriptions } from "./paneled-workspace-navigation";
 import { Activity, ArrowUpRight, ChevronsLeft, ChevronsRight, ChevronsUpDown, CirclePlay, History, LayoutDashboard, Maximize2, Minimize2, Plus, Reply, Sparkles, UsersRound, X } from "@lucide/vue";
 
 const props = withDefaults(defineProps<{ standalone?: boolean }>(), { standalone: false });
 const root = ref<HTMLElement>();
-const insetHeader = ref(false);
-const layoutStorageKey = "kappa-paneled-workspace-inset-header";
-const projectGuide = ref(false);
-const projectGuideStorageKey = "kappa-paneled-workspace-project-guide";
-function setProjectGuide(value: boolean) {
-  projectGuide.value = value;
-  try { localStorage.setItem(projectGuideStorageKey, String(value)); } catch { /* Keep the in-memory choice. */ }
-}
+const { insetHeader, setStoredInsetHeader, projectGuide, setProjectGuide, projectHeadingLink, setProjectHeadingLink } = usePaneledWorkspaceLayout();
 async function setInsetHeader(value: boolean) {
-  insetHeader.value = value;
-  try { localStorage.setItem(layoutStorageKey, String(value)); } catch { /* Keep the in-memory choice. */ }
+  setStoredInsetHeader(value);
   await nextTick();
   // The menu trigger moves to the other header; keep keyboard focus on it.
   root.value?.querySelector<HTMLElement>(".paneled-profile__trigger")?.focus({ preventScroll: true });
@@ -56,7 +49,7 @@ const projectNames = ref<Record<string, string>>({ "Ros.Space": "Aster VTOL", En
 const { projects: workspaceProjects, view, selectedProject, lastProject, isProjectOverview, hrefForPage: breadcrumbHref, selectPage, readLocation, renameProject } = usePaneledWorkspaceLocation(props.standalone);
 const visibleProjectCount = ref(6);
 const workspaceCategories = computed(() => defaultWorkspaceCategories.map(group => {
-  if (group.label === "Projects") return { ...group, pages: ["All projects", ...workspaceProjects.value.slice(0, visibleProjectCount.value).map(project => project.code)], remainingCount: Math.max(0, workspaceProjects.value.length - visibleProjectCount.value) };
+  if (group.label === "Projects") return { ...group, headingLink: projectHeadingLink.value, pages: [...(projectHeadingLink.value ? [] : ["All projects"]), ...workspaceProjects.value.slice(0, visibleProjectCount.value).map(project => project.code)], remainingCount: Math.max(0, workspaceProjects.value.length - visibleProjectCount.value) };
   return group;
 }));
 function showMoreItems(category: string) {
@@ -270,8 +263,6 @@ function shortcut(event: KeyboardEvent) {
   showSearch();
 }
 onMounted(async () => {
-  try { insetHeader.value = localStorage.getItem(layoutStorageKey) === "true"; } catch { /* Use the default layout without storage. */ }
-  try { projectGuide.value = localStorage.getItem(projectGuideStorageKey) === "true"; } catch { /* Keep the guide hidden without storage. */ }
   creditsReady.value = true;
   if (root.value) {
     railOnBottom.value = root.value.clientWidth < 992;
@@ -301,7 +292,7 @@ onBeforeUnmount(() => { railObserver?.disconnect(); cancelAnimationFrame(navigat
         </a>
       </template>
       <template v-if="!insetHeader" #toolbar>
-        <PaneledWorkspaceHeaderControls :namespace="namespace" :project-code="selectedProject?.code" :compute="compute" :credits-ready="creditsReady" :active-run-count="activeRunCount" :notifications="namespaceNotifications" :search-open="searchOpen" :inset-header="insetHeader" :project-guide="projectGuide" @update:project-guide="setProjectGuide"
+        <PaneledWorkspaceHeaderControls :namespace="namespace" :project-code="selectedProject?.code" :compute="compute" :credits-ready="creditsReady" :active-run-count="activeRunCount" :notifications="namespaceNotifications" :search-open="searchOpen" :inset-header="insetHeader" :project-guide="projectGuide" @update:project-guide="setProjectGuide" :project-heading-link="projectHeadingLink" @update:project-heading-link="setProjectHeadingLink"
           @search="showSearch" @navigate="navigate" @add-credits="compute.balanceCents += $event" @open-notification="openNotification" @read-all="readAllNotifications" @update:inset-header="setInsetHeader" />
       </template>
       <template #header="context">
@@ -381,7 +372,7 @@ onBeforeUnmount(() => { railObserver?.disconnect(); cancelAnimationFrame(navigat
                     <Breadcrumbs.Item><Breadcrumbs.Link :href="breadcrumbHref(view)" aria-current="page" @click="navigateLink(view, $event)">{{ pageTitle }}</Breadcrumbs.Link></Breadcrumbs.Item>
                   </Breadcrumbs.List>
                 </Breadcrumbs.Root>
-                <PaneledWorkspaceHeaderControls v-if="insetHeader" :namespace="namespace" :project-code="selectedProject?.code" :compute="compute" :credits-ready="creditsReady" :active-run-count="activeRunCount" :notifications="namespaceNotifications" :search-open="searchOpen" :inset-header="insetHeader" :project-guide="projectGuide" @update:project-guide="setProjectGuide"
+                <PaneledWorkspaceHeaderControls v-if="insetHeader" :namespace="namespace" :project-code="selectedProject?.code" :compute="compute" :credits-ready="creditsReady" :active-run-count="activeRunCount" :notifications="namespaceNotifications" :search-open="searchOpen" :inset-header="insetHeader" :project-guide="projectGuide" @update:project-guide="setProjectGuide" :project-heading-link="projectHeadingLink" @update:project-heading-link="setProjectHeadingLink"
                   @search="showSearch" @navigate="navigate" @add-credits="compute.balanceCents += $event" @open-notification="openNotification" @read-all="readAllNotifications" @update:inset-header="setInsetHeader" />
               </header>
             </template>

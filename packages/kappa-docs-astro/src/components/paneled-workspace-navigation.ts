@@ -1,4 +1,4 @@
-import { Activity, ChartNoAxesCombined, CirclePlay, Compass, FolderKanban, LayoutGrid, LayoutTemplate, Plus, Settings2, UsersRound } from "@lucide/vue";
+import { Activity, ChartNoAxesCombined, CirclePlay, Compass, LayoutGrid, LayoutTemplate, Plus, Presentation, Settings2, UsersRound } from "@lucide/vue";
 import type { Component } from "vue";
 import { workspaceProjects } from "./paneled-workspace-projects";
 import { workspaceTemplateItemPages, workspaceTemplatePages } from "./paneled-workspace-templates";
@@ -13,6 +13,7 @@ export interface NavigationCategory {
   page?: string;
   collapsible?: boolean;
   headingOnly?: boolean;
+  headingLink?: boolean;
   remainingCount?: number;
   action?: { label: string; icon: Component };
 }
@@ -25,7 +26,7 @@ export const workspaceCommunityPages = ["Community", "Public projects", "Public 
 export const workspaceExplorePages = ["Explore", ...workspaceCommunityPages, ...workspaceTemplatePages, ...workspaceTemplateItemPages];
 
 export const workspaceCategories: NavigationCategory[] = [
-  { label: "Projects", page: "All projects", icon: FolderKanban, headingOnly: true, pages: ["All projects", ...projectPages.slice(0, 6)], collapsible: false, action: { label: "Create project", icon: Plus } },
+  { label: "Projects", page: "All projects", icon: Presentation, headingOnly: true, pages: ["All projects", ...projectPages.slice(0, 6)], collapsible: false, action: { label: "Create project", icon: Plus } },
 ];
 
 export const workspaceSearchCategories = [

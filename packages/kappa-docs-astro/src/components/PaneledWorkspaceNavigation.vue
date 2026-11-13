@@ -88,12 +88,15 @@ onBeforeUnmount(() => cancelAnimationFrame(focusFrame));
 <template>
   <Sidebar.Content ref="root" :aria-label="label">
     <Sidebar.Menu><slot /></Sidebar.Menu>
-    <div v-for="group in categories" :key="group.label" class="paneled-workspace-demo__nav-group">
+    <div v-for="group in categories" :key="group.label" class="paneled-workspace-demo__nav-group" :data-heading-link="group.headingLink || undefined">
       <HoverCard.Root :open="active && flyout === group.label && !isMobile && (iconCollapsed || !isGroupOpen(group))" :disabled="!active || isMobile || (!iconCollapsed && isGroupOpen(group))" :open-delay="0" :close-delay="5" :positioning="{ placement: 'right-start', strategy: 'fixed', gutter: 10 }" @update:open="updateFlyout(group.label, $event)">
         <HoverCard.Trigger v-if="iconCollapsed" as-child><Sidebar.MenuButton :icon="group.icon" :aria-label="group.label" :href="group.page ? hrefForPage(group.page) : undefined" :active="isGroupPage(group)" :data-paneled-group="group.label" @pointermove="pointTrigger(group.label, $event)" @pointerleave="leaveTrigger" :data-active-descendant="group.pages.includes(view) || undefined" :data-flyout-open="flyout === group.label || undefined" :aria-expanded="flyout === group.label" @click="group.page ? emit('navigate', group.page, $event) : flyout = group.label" @keydown.down.capture.prevent="focusFlyout(group.label)" @keydown.esc.stop.prevent="closeFlyout(group.label)">{{ group.label }}</Sidebar.MenuButton></HoverCard.Trigger>
         <component :is="group.collapsible === false ? 'div' : Sidebar.Collapsible" v-else v-bind="group.collapsible === false ? {} : { open: groupsOpen[group.label] }" @update:open="groupsOpen[group.label] = $event; flyout = ''">
           <div v-if="group.collapsible === false" class="paneled-workspace-demo__group-heading" :class="{ 'paneled-workspace-demo__section-heading': group.headingOnly }">
-            <h3 v-if="group.headingOnly" :data-paneled-section-title="group.label" tabindex="-1">{{ group.label }}</h3>
+            <h3 v-if="group.headingOnly" :data-paneled-section-title="group.label" :data-linked="group.headingLink || undefined" :tabindex="group.headingLink ? undefined : -1">
+              <Sidebar.MenuButton v-if="group.headingLink && group.page" :icon="group.icon" class="paneled-workspace-demo__section-link" :href="hrefForPage(group.page)" :active="isGroupPage(group)" @click="emit('navigate', group.page, $event)">{{ group.label }}</Sidebar.MenuButton>
+              <template v-else>{{ group.label }}</template>
+            </h3>
             <Sidebar.MenuButton v-else-if="group.page" :icon="group.icon" :href="hrefForPage(group.page)" :active="isGroupPage(group)" @click="emit('navigate', group.page, $event)">{{ group.label }}</Sidebar.MenuButton>
             <h3 v-else><span aria-hidden="true"><component :is="group.icon" focusable="false" /></span>{{ group.label }}</h3>
             <ToolbarButton v-if="group.action" size="sm" :icon="group.action.icon" :tooltip="group.action.label" @click="runGroupAction(group)" />
@@ -120,7 +123,7 @@ onBeforeUnmount(() => cancelAnimationFrame(focusFrame));
           <div v-if="flyout === group.label && corridor" data-flyout-corridor class="paneled-workspace-demo__flyout-corridor" :style="corridor" aria-hidden="true" />
           <template v-if="iconCollapsed">
             <div class="paneled-workspace-demo__flyout-heading" :class="{ 'paneled-workspace-demo__section-heading': group.headingOnly }">
-              <h3 class="paneled-workspace-demo__flyout-title"><a v-if="group.page && !group.headingOnly" :href="hrefForPage(group.page)" :aria-current="view === group.page ? 'page' : undefined" @click="emit('navigate', group.page, $event)">{{ group.label }}</a><template v-else>{{ group.label }}</template></h3>
+              <h3 class="paneled-workspace-demo__flyout-title"><a v-if="group.page && (!group.headingOnly || group.headingLink)" :href="hrefForPage(group.page)" :aria-current="view === group.page ? 'page' : undefined" @click="emit('navigate', group.page, $event)">{{ group.label }}</a><template v-else>{{ group.label }}</template></h3>
               <ToolbarButton v-if="group.action" size="sm" :icon="group.action.icon" :tooltip="group.action.label" @click="runGroupAction(group)" />
             </div>
             <hr class="paneled-workspace-demo__flyout-divider" aria-hidden="true" />
