@@ -62,7 +62,10 @@
 .paneled-workspace-demo__navigation.kappa-sidebar .kappa-sidebar__menu-sub .kappa-sidebar__menu-button { padding-inline-end: 0.75rem; }
 .paneled-workspace-demo__navigation.kappa-sidebar .kappa-sidebar__menu-sub .paneled-workspace-demo__project-entry,
 .paneled-workspace-demo__navigation.kappa-sidebar .kappa-sidebar__menu-sub .paneled-workspace-demo__show-more { padding-inline-start: 0.25rem; }
-.paneled-workspace-demo__navigation.kappa-sidebar .kappa-sidebar__menu-sub[data-project-guide] { margin-inline-start: 1rem; padding-inline-start: 0.5rem; border-inline-start: 1px solid var(--kappa-shell-menu-divider); }
+.paneled-workspace-demo__navigation.kappa-sidebar .kappa-sidebar__menu-sub[data-project-guide] { --kappa-paneled-project-guide-offset: 1rem; position: relative; isolation: isolate; margin-inline-start: 0; padding-inline-start: 0; border: 0; }
+.paneled-workspace-demo__navigation .kappa-sidebar__menu-sub[data-project-guide]::before { position: absolute; z-index: 1; inset-block: 0.5rem; inset-inline-start: var(--kappa-paneled-project-guide-offset); inline-size: 1px; background: var(--kappa-shell-menu-divider); content: ""; pointer-events: none; }
+.paneled-workspace-demo__navigation.kappa-sidebar .kappa-sidebar__menu-sub[data-project-guide] .kappa-sidebar__menu-button { padding-inline-start: calc(var(--kappa-paneled-project-guide-offset) + 0.875rem); }
+.paneled-workspace-demo__navigation.kappa-sidebar .kappa-sidebar__menu-sub[data-project-guide] .kappa-sidebar__menu-button[data-active]::before { z-index: 2; inset-inline-start: calc(var(--kappa-paneled-project-guide-offset) - 1px); inset-block: 50% auto; inline-size: 3px; block-size: 1.125rem; translate: 0 -50%; border-radius: 999px; background: var(--kappa-subtle); }
 .paneled-workspace-demo__project-avatar.kappa-avatar,
 .paneled-project-switcher__avatar.kappa-avatar { --kappa-avatar-background: color-mix(in srgb, var(--kappa-info-tint) 60%, var(--kappa-control)); --kappa-avatar-foreground: color-mix(in srgb, var(--kappa-info-text) 60%, var(--kappa-default)); --kappa-avatar-border: var(--kappa-shell-avatar-border); }
 .paneled-workspace-demo__project-avatar.kappa-avatar::after,
