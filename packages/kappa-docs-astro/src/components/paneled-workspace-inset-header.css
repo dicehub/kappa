@@ -21,6 +21,11 @@
 .paneled-workspace-demo[data-inset-header] .kappa-app-shell[data-mobile] .kappa-app-shell__brand { inset-inline-start: 0.5rem; }
 .paneled-workspace-demo[data-inset-header] .kappa-app-shell[data-mobile] .kappa-app-shell__wordmark { display: none; }
 
+@container kappa-app-shell (min-width: 36rem) {
+  .paneled-workspace-demo[data-inset-header] .kappa-app-shell[data-mobile] .kappa-app-shell__brand { inset-inline-start: 1.25rem; }
+  .paneled-workspace-demo[data-inset-header] .kappa-app-shell[data-mobile] > .kappa-sidebar-layout__site-header > .kappa-sidebar__trigger { inset-inline-start: 3.5rem; }
+}
+
 .paneled-workspace-demo__surface {
   display: flex;
   flex: 1;
