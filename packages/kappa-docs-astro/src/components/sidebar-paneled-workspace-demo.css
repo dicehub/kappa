@@ -144,6 +144,7 @@
 }
 .paneled-workspace-demo__page-heading { margin-block-start: 1rem; display: flex; min-inline-size: 0; align-items: center; justify-content: space-between; gap: 1rem; margin-block-end: 1.25rem; }
 .paneled-workspace-demo__page-heading h2 { margin: 0; color: var(--kappa-strong); font-size: 1.5rem; font-weight: 600; letter-spacing: -0.025em; line-height: 1.75rem; }
+.paneled-workspace-demo__create-project.kappa-button { --kappa-button-primary: var(--kappa-strong); --kappa-button-foreground: var(--kappa-base); }
 .paneled-workspace-demo__detail-scroll h2 { margin: 0; color: var(--kappa-strong); font-size: 1.5rem; font-weight: 600; letter-spacing: -0.025em; line-height: 1.4; }
 .paneled-workspace-demo__eyebrow { margin: 0 0 0.25rem; color: var(--kappa-subtle); font-size: 0.75rem; font-weight: 550; letter-spacing: 0.045em; line-height: 1.2; text-transform: uppercase; }
 .paneled-workspace-demo__list-meta { display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; }
