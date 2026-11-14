@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import { Breadcrumbs } from "@dicehub/kappa/components/breadcrumbs";
 import { Dropdown } from "@dicehub/kappa/components/dropdown";
+import ContextBreadcrumbs from "../snippets/breadcrumbs/ContextBreadcrumbs.vue";
 
 type DemoVariant =
   | "preview"
   | "basic"
+  | "context"
   | "separator"
   | "sizes"
   | "icons"
@@ -31,6 +33,8 @@ withDefaults(defineProps<{ variant?: DemoVariant }>(), { variant: "preview" });
         </Breadcrumbs.List>
       </Breadcrumbs.Root>
     </div>
+
+    <ContextBreadcrumbs v-else-if="variant === 'context'" />
 
     <Breadcrumbs.Root v-else-if="variant === 'basic'">
       <Breadcrumbs.List>

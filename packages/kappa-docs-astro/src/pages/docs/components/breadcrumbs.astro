@@ -7,6 +7,7 @@ import DocsPageNavigation from "../../../components/DocsPageNavigation.astro";
 import {
   barrelCode,
   basicCode,
+  contextCode,
   ellipsisCode,
   exportsList,
   granularCode,
@@ -86,8 +87,9 @@ const description = "Shows the current resource inside an ordered hierarchy of a
           <p>
             Root creates the navigation landmark. List and Item preserve the ordered hierarchy.
             Alternate links with decorative separators. Separator renders <code>/</code> by default.
-            Links underline on hover and show an outline on press or keyboard focus. These styles
-            come from Kappa and require no application overrides.
+            Default links underline on hover and show an outline on press or keyboard focus.
+            The context variant uses padded links with a quiet hover surface. These styles come
+            from Kappa and require no application overrides.
           </p>
         </section>
 
@@ -101,6 +103,18 @@ const description = "Shows the current resource inside an ordered hierarchy of a
             <CodeBlock code={basicCode} lang="vue" collapsible revealId="breadcrumbs-basic-code" />
           </div>
 
+          <h3 id="context"><a class="docs-section-anchor" href="#context">Context Switcher</a></h3>
+          <p>
+            Use <code>variant="context"</code> for a workspace and resource trail in an application
+            header. Click the project name to open it, or use the arrow to find and switch projects.
+          </p>
+          <div class="docs-component-example">
+            <div class="docs-component-preview docs-component-preview--open-space">
+              <BreadcrumbsDocsDemo client:load variant="context" />
+            </div>
+            <CodeBlock code={contextCode} lang="vue" collapsible revealId="breadcrumbs-context-code" />
+          </div>
+
           <h3 id="custom-separator">
             <a class="docs-section-anchor" href="#custom-separator">Custom Separator</a>
           </h3>
@@ -111,7 +125,7 @@ const description = "Shows the current resource inside an ordered hierarchy of a
           </div>
 
           <h3 id="sizes"><a class="docs-section-anchor" href="#sizes">Sizes</a></h3>
-          <p>Use <code>sm</code> for 12px text in dense toolbars and <code>base</code> for 14px text in standard page context.</p>
+          <p>Use <code>sm</code> in compact toolbars and <code>base</code> for standard page context.</p>
           <div class="docs-component-example">
             <div class="docs-component-preview"><BreadcrumbsDocsDemo variant="sizes" /></div>
             <CodeBlock code={sizesCode} lang="vue" collapsible revealId="breadcrumbs-sizes-code" />
@@ -185,11 +199,14 @@ const description = "Shows the current resource inside an ordered hierarchy of a
             <li>Separators and Ellipsis are decorative and hidden from assistive technology.</li>
             <li>Breadcrumbs add no arrow-key model. Native links use the normal Tab order and Enter activation.</li>
             <li>A collapsed ancestor trigger needs an accessible name and a real Menu with managed focus, Escape, and outside-dismiss behavior.</li>
+            <li>Keep a context switcher button separate from its resource link. Give Trigger an accessible name, such as “Switch project”; the caret is decorative. Popover or Dropdown provides expanded state and focus management.</li>
             <li>Keep a visible focus indicator and do not depend on separator shape or color to communicate hierarchy.</li>
           </ul>
           <p>
             See the <a href="https://www.w3.org/WAI/ARIA/apg/patterns/breadcrumb/">WAI-ARIA Breadcrumb Pattern</a>
-            and <a href="https://ark-ui.com/docs/components/menu">Ark UI Menu guidance</a>.
+            and Ark UI guidance for <a href="https://ark-ui.com/docs/components/menu">Menu</a>,
+            <a href="https://ark-ui.com/docs/components/popover">Popover</a>, and
+            <a href="https://ark-ui.com/docs/components/combobox">Combobox</a>.
           </p>
         </section>
 
@@ -218,6 +235,16 @@ const description = "Shows the current resource inside an ordered hierarchy of a
                 <tbody>{linkProps.map((prop) => <tr><td><code>{prop.name}</code></td><td><code>{prop.type}</code></td><td><code>{prop.defaultValue}</code></td><td>{prop.description}</td></tr>)}</tbody>
               </table>
             </div>
+          </div>
+          <div class="docs-api-group">
+            <h3 id="trigger-api"><a class="docs-section-anchor" href="#trigger-api">Trigger</a></h3>
+            <p>
+              Renders a native button with <code>type="button"</code>. Forwards button attributes,
+              disabled state, ARIA properties, and listeners. Set <code>asChild</code> to merge
+              its styling onto one child button. The default slot can replace the decorative caret.
+              Trigger does not open a menu itself: wrap it in <code>Popover.Trigger as-child</code>
+              or <code>Dropdown.Trigger as-child</code>. Do not nest a button inside a link.
+            </p>
           </div>
           <div class="docs-api-group">
             <h3 id="parts-api"><a class="docs-section-anchor" href="#parts-api">Parts</a></h3>
@@ -249,9 +276,9 @@ const description = "Shows the current resource inside an ordered hierarchy of a
             <li><a href="#installation" data-toc-link="installation">Installation</a><ul><li><a href="#barrel" data-toc-link="barrel">Barrel</a></li><li><a href="#granular" data-toc-link="granular">Granular</a></li></ul></li>
             <li><a href="#usage" data-toc-link="usage">Usage</a></li>
             <li><a href="#composition" data-toc-link="composition">Composition</a></li>
-            <li><a href="#examples" data-toc-link="examples">Examples</a><ul><li><a href="#basic" data-toc-link="basic">Basic</a></li><li><a href="#custom-separator" data-toc-link="custom-separator">Custom Separator</a></li><li><a href="#sizes" data-toc-link="sizes">Sizes</a></li><li><a href="#with-icons" data-toc-link="with-icons">With Icons</a></li><li><a href="#long-path" data-toc-link="long-path">Long and Wrapping</a></li><li><a href="#collapsed" data-toc-link="collapsed">Collapsed</a></li><li><a href="#collapsed-menu" data-toc-link="collapsed-menu">Collapsed Ancestor Menu</a></li><li><a href="#router-link" data-toc-link="router-link">Router Link</a></li><li><a href="#right-to-left" data-toc-link="right-to-left">Right-to-left</a></li></ul></li>
+            <li><a href="#examples" data-toc-link="examples">Examples</a><ul><li><a href="#basic" data-toc-link="basic">Basic</a></li><li><a href="#context" data-toc-link="context">Context Switcher</a></li><li><a href="#custom-separator" data-toc-link="custom-separator">Custom Separator</a></li><li><a href="#sizes" data-toc-link="sizes">Sizes</a></li><li><a href="#with-icons" data-toc-link="with-icons">With Icons</a></li><li><a href="#long-path" data-toc-link="long-path">Long and Wrapping</a></li><li><a href="#collapsed" data-toc-link="collapsed">Collapsed</a></li><li><a href="#collapsed-menu" data-toc-link="collapsed-menu">Collapsed Ancestor Menu</a></li><li><a href="#router-link" data-toc-link="router-link">Router Link</a></li><li><a href="#right-to-left" data-toc-link="right-to-left">Right-to-left</a></li></ul></li>
             <li><a href="#accessibility" data-toc-link="accessibility">Accessibility</a></li>
-            <li><a href="#api-reference" data-toc-link="api-reference">API Reference</a><ul><li><a href="#root-api" data-toc-link="root-api">Root</a></li><li><a href="#link-api" data-toc-link="link-api">Link</a></li><li><a href="#parts-api" data-toc-link="parts-api">Parts</a></li><li><a href="#exports-api" data-toc-link="exports-api">Exports</a></li></ul></li>
+            <li><a href="#api-reference" data-toc-link="api-reference">API Reference</a><ul><li><a href="#root-api" data-toc-link="root-api">Root</a></li><li><a href="#link-api" data-toc-link="link-api">Link</a></li><li><a href="#trigger-api" data-toc-link="trigger-api">Trigger</a></li><li><a href="#parts-api" data-toc-link="parts-api">Parts</a></li><li><a href="#exports-api" data-toc-link="exports-api">Exports</a></li></ul></li>
           </ul>
         </div>
       </aside>

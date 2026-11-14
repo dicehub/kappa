@@ -1,5 +1,6 @@
 import type {
   AnchorHTMLAttributes,
+  ButtonHTMLAttributes,
   HTMLAttributes,
   LiHTMLAttributes,
   OlHTMLAttributes,
@@ -8,8 +9,17 @@ import type {
 
 export const BREADCRUMBS_SIZES = ["sm", "base"] as const;
 export const BREADCRUMBS_DEFAULT_SIZE = "base" as const;
+export const BREADCRUMBS_VARIANTS = ["default", "context"] as const;
+export const BREADCRUMBS_DEFAULT_VARIANT = "default" as const;
 
 export type BreadcrumbsSize = (typeof BREADCRUMBS_SIZES)[number];
+export type BreadcrumbsVariant = (typeof BREADCRUMBS_VARIANTS)[number];
+
+export const isBreadcrumbsVariant = (value: unknown): value is BreadcrumbsVariant =>
+  typeof value === "string" && BREADCRUMBS_VARIANTS.includes(value as BreadcrumbsVariant);
+
+export const resolveBreadcrumbsVariant = (value: unknown): BreadcrumbsVariant =>
+  isBreadcrumbsVariant(value) ? value : BREADCRUMBS_DEFAULT_VARIANT;
 
 export const isBreadcrumbsSize = (value: unknown): value is BreadcrumbsSize =>
   typeof value === "string" && BREADCRUMBS_SIZES.includes(value as BreadcrumbsSize);
@@ -20,6 +30,8 @@ export const resolveBreadcrumbsSize = (value: unknown): BreadcrumbsSize =>
 export interface BreadcrumbsProps {
   /** Density of the breadcrumb trail. */
   size?: BreadcrumbsSize;
+  /** Context trails use padded links with quiet hover surfaces. */
+  variant?: BreadcrumbsVariant;
 }
 
 export type BreadcrumbsRootProps = BreadcrumbsProps & HTMLAttributes;
@@ -64,5 +76,17 @@ export interface BreadcrumbsLinkProps extends /* @vue-ignore */ AnchorHTMLAttrib
 }
 
 export interface BreadcrumbsLinkSlots {
+  default?: () => VNodeChild;
+}
+
+export interface BreadcrumbsTriggerProps extends /* @vue-ignore */ ButtonHTMLAttributes {
+  /** Merge styling and attributes onto a single child button. */
+  asChild?: boolean;
+  /** Native button type. Defaults to button to avoid form submission. */
+  type?: ButtonHTMLAttributes["type"];
+}
+
+export interface BreadcrumbsTriggerSlots {
+  /** Optional replacement for the decorative down caret. */
   default?: () => VNodeChild;
 }

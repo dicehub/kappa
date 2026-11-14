@@ -5,6 +5,7 @@ import BreadcrumbsLink from "./BreadcrumbsLink.vue";
 import BreadcrumbsList from "./BreadcrumbsList.vue";
 import BreadcrumbsPage from "./BreadcrumbsPage.vue";
 import BreadcrumbsSeparator from "./BreadcrumbsSeparator.vue";
+import BreadcrumbsTrigger from "./BreadcrumbsTrigger.vue";
 
 const BreadcrumbsCurrent = BreadcrumbsPage;
 
@@ -17,6 +18,7 @@ export const Breadcrumbs = Object.assign(BreadcrumbsRoot, {
   Current: BreadcrumbsCurrent,
   Separator: BreadcrumbsSeparator,
   Ellipsis: BreadcrumbsEllipsis,
+  Trigger: BreadcrumbsTrigger,
 });
 
 export {
@@ -28,13 +30,18 @@ export {
   BreadcrumbsPage,
   BreadcrumbsRoot,
   BreadcrumbsSeparator,
+  BreadcrumbsTrigger,
 };
 
 export {
   BREADCRUMBS_DEFAULT_SIZE,
+  BREADCRUMBS_DEFAULT_VARIANT,
   BREADCRUMBS_SIZES,
+  BREADCRUMBS_VARIANTS,
   isBreadcrumbsSize,
+  isBreadcrumbsVariant,
   resolveBreadcrumbsSize,
+  resolveBreadcrumbsVariant,
   type BreadcrumbsCurrentProps,
   type BreadcrumbsCurrentSlots,
   type BreadcrumbsEllipsisProps,
@@ -54,4 +61,7 @@ export {
   type BreadcrumbsSeparatorSlots,
   type BreadcrumbsSize,
   type BreadcrumbsSlots,
+  type BreadcrumbsTriggerProps,
+  type BreadcrumbsTriggerSlots,
+  type BreadcrumbsVariant,
 } from "./breadcrumbs";

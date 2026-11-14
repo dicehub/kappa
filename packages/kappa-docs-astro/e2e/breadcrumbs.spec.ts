@@ -9,6 +9,7 @@ test.describe("Breadcrumbs documentation", () => {
   test.beforeEach(async ({ page }) => {
     await page.goto("/docs/components/breadcrumbs");
     await expect(page.locator('astro-island[ssr]:has([data-breadcrumbs-demo="menu"])')).toHaveCount(0);
+    await expect(page.locator('astro-island[ssr]:has([data-breadcrumbs-demo="context"])')).toHaveCount(0);
   });
 
   test("renders the implemented route, public snippets, navigation, TOC, and Markdown", async ({
@@ -25,7 +26,7 @@ test.describe("Breadcrumbs documentation", () => {
       'from "@dicehub/kappa/components/breadcrumbs"',
     );
     await expect(page.locator('pre:has-text("../../../kappa/src")')).toHaveCount(0);
-    await expect(page.getByRole("button", { name: "View Code" })).toHaveCount(10);
+    await expect(page.getByRole("button", { name: "View Code" })).toHaveCount(11);
 
     const sidebar = page
       .locator("#desktop-navigation")
@@ -54,6 +55,7 @@ test.describe("Breadcrumbs documentation", () => {
       "Composition",
       "Examples",
       "Basic",
+      "Context Switcher",
       "Custom Separator",
       "Sizes",
       "With Icons",
@@ -66,6 +68,7 @@ test.describe("Breadcrumbs documentation", () => {
       "API Reference",
       "Root",
       "Link",
+      "Trigger",
       "Parts",
       "Exports",
     ]);
@@ -145,13 +148,14 @@ test.describe("Breadcrumbs documentation", () => {
           return {
             center: box.top + box.height / 2,
             fontSize: Number.parseFloat(getComputedStyle(element).fontSize),
+            separator: element.getAttribute("data-slot") === "breadcrumbs-separator",
           };
         }),
       );
     const expectedCenter = alignment[0]!.center;
     for (const part of alignment) {
       expect(Math.abs(part.center - expectedCenter)).toBeLessThanOrEqual(1);
-      expect(part.fontSize).toBe(14);
+      expect(part.fontSize).toBe(part.separator ? 12 : 14);
     }
 
     const icons = demo(page, "icons");

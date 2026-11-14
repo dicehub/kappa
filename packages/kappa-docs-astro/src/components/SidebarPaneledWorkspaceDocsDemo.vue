@@ -5,7 +5,7 @@ import { WorkspaceSwitcher } from "@dicehub/kappa/blocks/workspace-switcher";
 import { namespaceSwitcherAvatarItems } from "../data/workspace-switcher-demo";
 import { Sidebar } from "@dicehub/kappa/components/sidebar";
 import { Button, ToolbarButton } from "@dicehub/kappa/components/button";
-import { Breadcrumbs } from "@dicehub/kappa/components/breadcrumbs";
+import PaneledWorkspaceBreadcrumbs from "./PaneledWorkspaceBreadcrumbs.vue";
 import { Field } from "@dicehub/kappa/components/field";
 import { Table } from "@dicehub/kappa/components/table";
 import { Badge } from "@dicehub/kappa/components/badge";
@@ -361,17 +361,8 @@ onBeforeUnmount(() => { railObserver?.disconnect(); cancelAnimationFrame(navigat
             :initial-aside-focus="() => asideHeading ?? null" :final-aside-focus="finalAsideFocus">
             <template #header>
               <header :class="{ 'paneled-workspace-demo__panel-toolbar': insetHeader }" aria-label="Workspace toolbar">
-                <Breadcrumbs.Root size="sm" class="paneled-workspace-demo__breadcrumbs" aria-label="Workspace breadcrumb">
-                  <Breadcrumbs.List>
-                    <Breadcrumbs.Item><Breadcrumbs.Link :href="breadcrumbHref('Dashboard')" @click="navigateLink('Dashboard', $event)">{{ namespace }}</Breadcrumbs.Link></Breadcrumbs.Item>
-                    <Breadcrumbs.Separator />
-                    <template v-if="selectedProject">
-                      <Breadcrumbs.Item><Breadcrumbs.Link :href="breadcrumbHref(selectedProject.code)" @click="navigateLink(selectedProject.code, $event)">{{ selectedProject.name }}</Breadcrumbs.Link></Breadcrumbs.Item>
-                      <Breadcrumbs.Separator />
-                    </template>
-                    <Breadcrumbs.Item><Breadcrumbs.Link :href="breadcrumbHref(view)" aria-current="page" @click="navigateLink(view, $event)">{{ pageTitle }}</Breadcrumbs.Link></Breadcrumbs.Item>
-                  </Breadcrumbs.List>
-                </Breadcrumbs.Root>
+                <PaneledWorkspaceBreadcrumbs :namespace="namespace" :project="selectedProject" :projects="workspaceProjects"
+                  :view="view" :page-title="pageTitle" :href-for-page="breadcrumbHref" @open="navigateLink" @navigate="navigate" />
                 <PaneledWorkspaceHeaderControls v-if="insetHeader" :namespace="namespace" :project-code="selectedProject?.code" :compute="compute" :credits-ready="creditsReady" :active-run-count="activeRunCount" :notifications="namespaceNotifications" :search-open="searchOpen" :inset-header="insetHeader" :project-guide="projectGuide" @update:project-guide="setProjectGuide" :project-heading-link="projectHeadingLink" @update:project-heading-link="setProjectHeadingLink"
                   @search="showSearch" @navigate="navigate" @add-credits="compute.balanceCents += $event" @open-notification="openNotification" @read-all="readAllNotifications" @update:inset-header="setInsetHeader" />
               </header>

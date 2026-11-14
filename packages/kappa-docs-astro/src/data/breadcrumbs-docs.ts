@@ -1,3 +1,5 @@
+export { default as contextCode } from "../snippets/breadcrumbs/ContextBreadcrumbs.vue?raw";
+
 export const barrelCode = `import {
   Breadcrumbs,
   BreadcrumbsCurrent,
@@ -13,6 +15,7 @@ export const granularCode = `import {
   BreadcrumbsPage,
   BreadcrumbsRoot,
   BreadcrumbsSeparator,
+  BreadcrumbsTrigger,
 } from "@dicehub/kappa/components/breadcrumbs";`;
 
 export const previewCode = `<script setup>
@@ -242,6 +245,7 @@ import { Breadcrumbs } from "@dicehub/kappa/components/breadcrumbs";
 
 export const rootProps = [
   { name: "size", type: '"sm" | "base"', defaultValue: '"base"', description: "Trail density." },
+  { name: "variant", type: '"default" | "context"', defaultValue: '"default"', description: "Context trails use padded links with quiet hover surfaces and a separate switcher control." },
 ];
 
 export const linkProps = [
@@ -267,10 +271,11 @@ export const parts = [
   { name: "Page / Current", element: "span", description: "Noninteractive current location with aria-current=page." },
   { name: "Separator", element: "li", description: "Decorative slash separator, hidden from assistive technology; replaceable through its default slot." },
   { name: "Ellipsis", element: "span", description: "Decorative collapsed-state indicator; it does not hide items by itself." },
+  { name: "Trigger", element: "button", description: "Separate caret control. Compose with Popover.Trigger or Dropdown.Trigger using as-child; supply an accessible name." },
 ];
 
 export const exportsList = [
-  { name: "Breadcrumbs", description: "Compound root with Root, List, Item, Link, Page, Current, Separator, and Ellipsis." },
+  { name: "Breadcrumbs", description: "Compound root with Root, List, Item, Link, Page, Current, Separator, Ellipsis, and Trigger." },
   { name: "BreadcrumbsRoot", description: "Unaugmented root component." },
   { name: "BreadcrumbsList", description: "Ordered-list part." },
   { name: "BreadcrumbsItem", description: "List-item part." },
@@ -279,8 +284,11 @@ export const exportsList = [
   { name: "BreadcrumbsCurrent", description: "Alias of BreadcrumbsPage." },
   { name: "BreadcrumbsSeparator", description: "Decorative separator part." },
   { name: "BreadcrumbsEllipsis", description: "Decorative ellipsis part." },
+  { name: "BreadcrumbsTrigger", description: "Native caret button with asChild support and a replaceable icon slot." },
   { name: "BREADCRUMBS_SIZES", description: "Supported root-size values." },
   { name: "BREADCRUMBS_DEFAULT_SIZE", description: "Default root size." },
   { name: "isBreadcrumbsSize / resolveBreadcrumbsSize", description: "Runtime size guard and resolver." },
+  { name: "BREADCRUMBS_VARIANTS / BREADCRUMBS_DEFAULT_VARIANT", description: "Supported variants and the unchanged default appearance." },
+  { name: "isBreadcrumbsVariant / resolveBreadcrumbsVariant", description: "Runtime variant guard and resolver." },
   { name: "Breadcrumbs*Props / Breadcrumbs*Slots", description: "Public root and part TypeScript contracts." },
 ];
