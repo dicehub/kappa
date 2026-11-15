@@ -9,6 +9,7 @@ import { usePaneledTheme } from "./use-paneled-theme";
 
 const emit = defineEmits<{ navigate: [page: string] }>();
 const insetHeader = defineModel<boolean>("insetHeader", { default: false });
+const sidebarSearch = defineModel<boolean>("sidebarSearch", { default: false });
 const projectGuide = defineModel<boolean>("projectGuide", { default: false });
 const projectHeadingLink = defineModel<boolean>("projectHeadingLink", { default: false });
 const isFocusVisible = useFocusVisible();
@@ -101,6 +102,9 @@ const themePositioning = { placement: "left-start", gutter: 4, fitViewport: true
           <Dropdown.Label>Layout</Dropdown.Label>
           <Dropdown.CheckboxItem v-model:checked="insetHeader" value="inset-header" close-on-select>
             Inset header
+          </Dropdown.CheckboxItem>
+          <Dropdown.CheckboxItem v-model:checked="sidebarSearch" value="sidebar-search" close-on-select>
+            Search in sidebar
           </Dropdown.CheckboxItem>
           <Dropdown.CheckboxItem v-model:checked="projectGuide" value="project-guide" close-on-select>
             Project guide line

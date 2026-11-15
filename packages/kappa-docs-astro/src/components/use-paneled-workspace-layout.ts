@@ -15,7 +15,8 @@ function useLayoutOption(name: string) {
 
 export function usePaneledWorkspaceLayout() {
   const [insetHeader, setStoredInsetHeader] = useLayoutOption("inset-header");
+  const [sidebarSearch, setSidebarSearch] = useLayoutOption("sidebar-search");
   const [projectGuide, setProjectGuide] = useLayoutOption("project-guide");
   const [projectHeadingLink, setProjectHeadingLink] = useLayoutOption("project-heading-link");
-  return { insetHeader, setStoredInsetHeader, projectGuide, setProjectGuide, projectHeadingLink, setProjectHeadingLink };
+  return { insetHeader, setStoredInsetHeader, sidebarSearch, setSidebarSearch, projectGuide, setProjectGuide, projectHeadingLink, setProjectHeadingLink };
 }

@@ -15,6 +15,7 @@ import { DicehubLogo, DICEHUB_WORDMARK_PATH, DICEHUB_WORDMARK_VIEWBOX } from "@d
 import { CommandPalette } from "@dicehub/kappa/components/command-palette";
 import { Kbd, KbdGroup } from "@dicehub/kappa/components/kbd";
 import PaneledWorkspaceHeaderControls from "./PaneledWorkspaceHeaderControls.vue";
+import PaneledWorkspaceSidebarSearch from "./PaneledWorkspaceSidebarSearch.vue";
 import PaneledWorkspaceHelpMenu from "./PaneledWorkspaceHelpMenu.vue";
 import PaneledWorkspaceComputePages from "./PaneledWorkspaceComputePages.vue";
 import PaneledWorkspaceAiChat from "./PaneledWorkspaceAiChat.vue";
@@ -36,7 +37,7 @@ import { Activity, ArrowUpRight, ChevronsLeft, ChevronsRight, ChevronsUpDown, Ci
 
 const props = withDefaults(defineProps<{ standalone?: boolean }>(), { standalone: false });
 const root = ref<HTMLElement>();
-const { insetHeader, setStoredInsetHeader, projectGuide, setProjectGuide, projectHeadingLink, setProjectHeadingLink } = usePaneledWorkspaceLayout();
+const { insetHeader, setStoredInsetHeader, sidebarSearch, setSidebarSearch, projectGuide, setProjectGuide, projectHeadingLink, setProjectHeadingLink } = usePaneledWorkspaceLayout();
 async function setInsetHeader(value: boolean) {
   setStoredInsetHeader(value);
   await nextTick();
@@ -73,6 +74,13 @@ watch([navigationOpen, mobileOpen], () => { workspaceMenuOpen.value = false; });
 const filter = ref("");
 const stateFilter = ref("All runs");
 const searchOpen = ref(false);
+let searchOpener: HTMLElement | undefined;
+watch(searchOpen, async open => {
+  if (open) return;
+  await nextTick();
+  // A viewport change can replace the opener while the search dialog is open.
+  if (searchOpener && !searchOpener.isConnected) root.value?.querySelector<HTMLElement>('[data-paneled-search]')?.focus({ preventScroll: true });
+});
 const searchQuery = ref("");
 const searchKeyboard = ref(false);
 const asideOpen = ref(false);
@@ -239,7 +247,7 @@ function updateAsideOpen(open: boolean) { asideOpen.value = open; }
 function finalAsideFocus() { return asideOpener?.isConnected ? asideOpener : null; }
 function openNotification(notification: WorkspaceNotification) { notification.read = true; navigate(notification.page); }
 function readAllNotifications() { namespaceNotifications.value.forEach(item => { item.read = true; }); }
-function showSearch() { searchKeyboard.value = false; searchQuery.value = ""; searchOpen.value = true; }
+function showSearch() { searchOpener = root.value?.querySelector<HTMLElement>('[data-paneled-search]'); searchKeyboard.value = false; searchQuery.value = ""; searchOpen.value = true; }
 async function selectSearch(value: unknown) {
   const entry = value as SearchEntry;
   searchOpen.value = false;
@@ -291,11 +299,12 @@ onBeforeUnmount(() => { railObserver?.disconnect(); cancelAnimationFrame(navigat
           </svg>
         </a>
       </template>
-      <template v-if="!insetHeader" #toolbar>
-        <PaneledWorkspaceHeaderControls :namespace="namespace" :project-code="selectedProject?.code" :compute="compute" :credits-ready="creditsReady" :active-run-count="activeRunCount" :notifications="namespaceNotifications" :search-open="searchOpen" :inset-header="insetHeader" :project-guide="projectGuide" @update:project-guide="setProjectGuide" :project-heading-link="projectHeadingLink" @update:project-heading-link="setProjectHeadingLink"
+      <template v-if="!insetHeader" #toolbar="context">
+        <PaneledWorkspaceHeaderControls :namespace="namespace" :project-code="selectedProject?.code" :compute="compute" :credits-ready="creditsReady" :active-run-count="activeRunCount" :notifications="namespaceNotifications" :search-open="searchOpen" :inset-header="insetHeader" :is-mobile="context.isMobile" :sidebar-search="sidebarSearch" @update:sidebar-search="setSidebarSearch" :project-guide="projectGuide" @update:project-guide="setProjectGuide" :project-heading-link="projectHeadingLink" @update:project-heading-link="setProjectHeadingLink"
           @search="showSearch" @navigate="navigate" @add-credits="compute.balanceCents += $event" @open-notification="openNotification" @read-all="readAllNotifications" @update:inset-header="setInsetHeader" />
       </template>
       <template #header="context">
+        <PaneledWorkspaceSidebarSearch v-if="sidebarSearch && !context.isMobile" :collapsed="context.iconCollapsed" :open="searchOpen" @search="showSearch" />
         <Sidebar.MenuButton v-if="selectedProject" :href="breadcrumbHref('All projects')" tooltip="Back to Projects" :icon="Reply" class="paneled-workspace-demo__back" @click="navigateLink('All projects', $event)">Back to Projects</Sidebar.MenuButton>
         <Sidebar.Separator v-if="selectedProject" aria-hidden="true" />
         <div class="paneled-workspace-demo__context-row" :data-collapsed="context.iconCollapsed || undefined">
@@ -353,7 +362,7 @@ onBeforeUnmount(() => { railObserver?.disconnect(); cancelAnimationFrame(navigat
           </WorkspaceSwitcher>
         </div>
       </template>
-      <template #default>
+      <template #default="context">
         <div class="paneled-workspace-demo__surface">
           <AppShell.Panels v-model:detail-open="detailOpen" v-model:aside-open="asideOpen" v-model:aside-maximized="asideMaximized"
             detail-label="Simulation run details" :aside-label="panelTitle" resize-label="Resize simulation run panels" :aside-resize-label="`Resize ${panelTitle}`"
@@ -363,7 +372,7 @@ onBeforeUnmount(() => { railObserver?.disconnect(); cancelAnimationFrame(navigat
               <header :class="{ 'paneled-workspace-demo__panel-toolbar': insetHeader }" aria-label="Workspace toolbar">
                 <PaneledWorkspaceBreadcrumbs :namespace="namespace" :project="selectedProject" :projects="workspaceProjects"
                   :view="view" :page-title="pageTitle" :href-for-page="breadcrumbHref" @open="navigateLink" @navigate="navigate" />
-                <PaneledWorkspaceHeaderControls v-if="insetHeader" :namespace="namespace" :project-code="selectedProject?.code" :compute="compute" :credits-ready="creditsReady" :active-run-count="activeRunCount" :notifications="namespaceNotifications" :search-open="searchOpen" :inset-header="insetHeader" :project-guide="projectGuide" @update:project-guide="setProjectGuide" :project-heading-link="projectHeadingLink" @update:project-heading-link="setProjectHeadingLink"
+                <PaneledWorkspaceHeaderControls v-if="insetHeader" :namespace="namespace" :project-code="selectedProject?.code" :compute="compute" :credits-ready="creditsReady" :active-run-count="activeRunCount" :notifications="namespaceNotifications" :search-open="searchOpen" :inset-header="insetHeader" :is-mobile="context.isMobile" :sidebar-search="sidebarSearch" @update:sidebar-search="setSidebarSearch" :project-guide="projectGuide" @update:project-guide="setProjectGuide" :project-heading-link="projectHeadingLink" @update:project-heading-link="setProjectHeadingLink"
                   @search="showSearch" @navigate="navigate" @add-credits="compute.balanceCents += $event" @open-notification="openNotification" @read-all="readAllNotifications" @update:inset-header="setInsetHeader" />
               </header>
             </template>

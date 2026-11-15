@@ -18,8 +18,10 @@ defineProps<{
   activeRunCount: number;
   notifications: WorkspaceNotification[];
   searchOpen: boolean;
+  isMobile: boolean;
 }>();
 const insetHeader = defineModel<boolean>("insetHeader", { required: true });
+const sidebarSearch = defineModel<boolean>("sidebarSearch", { required: true });
 const projectGuide = defineModel<boolean>("projectGuide", { required: true });
 const projectHeadingLink = defineModel<boolean>("projectHeadingLink", { required: true });
 const emit = defineEmits<{
@@ -32,8 +34,8 @@ const emit = defineEmits<{
 </script>
 
 <template>
-  <AppShell.SearchTrigger v-if="!insetHeader" shortcut="Ctrl + K" data-paneled-search :icon="Search" aria-keyshortcuts="Control+K" aria-haspopup="dialog" :aria-expanded="searchOpen" @click="emit('search')" />
-  <div v-if="insetHeader" class="paneled-workspace-demo__search-island">
+  <AppShell.SearchTrigger v-if="!insetHeader && (!sidebarSearch || isMobile)" shortcut="Ctrl + K" data-paneled-search :icon="Search" aria-keyshortcuts="Control+K" aria-haspopup="dialog" :aria-expanded="searchOpen" @click="emit('search')" />
+  <div v-if="insetHeader && (!sidebarSearch || isMobile)" class="paneled-workspace-demo__search-island">
     <Tooltip.Root :disabled="searchOpen" :open-delay="500" :close-delay="0" :positioning="{ placement: 'bottom', gutter: 8 }">
       <Tooltip.Trigger as-child>
         <AppShell.SearchTrigger label="Search…" shortcut="Ctrl + K" data-paneled-search :icon="Search" aria-label="Search or go to…" aria-keyshortcuts="Control+K" aria-haspopup="dialog" :aria-expanded="searchOpen" @click="emit('search')" />
@@ -46,6 +48,6 @@ const emit = defineEmits<{
     <PaneledWorkspaceCredits :namespace="namespace" :compute="compute" :loading="!creditsReady" @navigate="emit('navigate', $event)" @add-credits="emit('addCredits', $event)" />
     <ToolbarButton :icon="CirclePlay" class="paneled-workspace-demo__runs" :aria-label="`Runs: ${activeRunCount} active`" :tooltip="`${activeRunCount} active simulation runs`" @click="emit('navigate', 'Simulation runs')">{{ activeRunCount }}</ToolbarButton>
     <PaneledWorkspaceNotifications :items="notifications" @open="emit('openNotification', $event)" @read-all="emit('readAll')" />
-    <PaneledWorkspaceProfileMenu v-model:inset-header="insetHeader" v-model:project-guide="projectGuide" v-model:project-heading-link="projectHeadingLink" @navigate="emit('navigate', $event, '')" />
+    <PaneledWorkspaceProfileMenu v-model:inset-header="insetHeader" v-model:sidebar-search="sidebarSearch" v-model:project-guide="projectGuide" v-model:project-heading-link="projectHeadingLink" @navigate="emit('navigate', $event, '')" />
   </div>
 </template>
