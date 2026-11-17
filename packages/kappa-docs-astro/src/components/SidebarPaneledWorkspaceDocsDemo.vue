@@ -38,7 +38,7 @@ import { Activity, ArrowUpRight, ChevronsLeft, ChevronsRight, ChevronsUpDown, Ci
 
 const props = withDefaults(defineProps<{ standalone?: boolean }>(), { standalone: false });
 const root = ref<HTMLElement>();
-const { smartResize, setSmartResize, showSnapGuide, setShowSnapGuide, insetHeader, setStoredInsetHeader, sidebarSearch, setSidebarSearch, projectGuide, setProjectGuide, projectHeadingLink, setProjectHeadingLink, collapsibleProjects, setCollapsibleProjects } = usePaneledWorkspaceLayout();
+const { smartResize, setSmartResize, showSnapGuide, setShowSnapGuide, insetHeader, setStoredInsetHeader, sidebarSearch, setSidebarSearch, projectGuide, setProjectGuide, projectHeadingLink, setProjectHeadingLink, collapsibleProjects, setCollapsibleProjects, projectsSection, setProjectsSection } = usePaneledWorkspaceLayout();
 const projectSwitcher = ref<HTMLElement>();
 const namespace = ref("Ros.Space");
 const projectNames = ref<Record<string, string>>({ "Ros.Space": "Aster VTOL", Engineering: "Vega demonstrator", Research: "Orion testbed" });
@@ -170,7 +170,8 @@ function focusWorkspaceNavigation(navigation: Element) {
   const workspace = navigation.querySelector<HTMLElement>('[data-slot="sidebar-sliding-view"][data-value="workspace"]');
   const link = [workspace?.querySelector<HTMLElement>('a[aria-current="page"]'),
     workspace?.querySelector<HTMLElement>('.paneled-project-disclosure'),
-    workspace?.querySelector<HTMLElement>('[data-paneled-section-title="Projects"]')]
+    workspace?.querySelector<HTMLElement>('[data-paneled-section-title="Projects"]'),
+    workspace?.querySelector<HTMLElement>('.paneled-projects-section__trigger')]
     .find(target => target?.getClientRects().length);
   link?.focus({ preventScroll: true });
   if (!link || document.activeElement !== link) workspace?.focus({ preventScroll: true });
@@ -320,7 +321,7 @@ onBeforeUnmount(() => { railObserver?.disconnect(); cancelAnimationFrame(navigat
       <template #navigation="context">
         <Sidebar.SlidingViews class="paneled-workspace-demo__sliding-views" :data-initializing="!navigationInitialized || undefined" :active-key="selectedProject ? 'project' : 'workspace'" :direction="selectedProject ? 'left' : 'right'">
           <Sidebar.SlidingView value="workspace" label="Workspace navigation">
-            <PaneledWorkspaceNavigation v-model:groups-open="workspaceGroupsOpen" :categories="workspaceCategories" :view="view" :active="!selectedProject" :icon-collapsed="context.iconCollapsed" :is-mobile="context.isMobile" :menu-open="workspaceMenuOpen" :run-count="compute.runs.length" label="Workspace links" :href-for-page="breadcrumbHref" :page-label="pageLabel" :page-avatar="pageAvatar" :project-guide="projectGuide" @navigate="navigateLink" @show-more="showMoreItems" @group-action="navigate('New project')">
+            <PaneledWorkspaceNavigation v-model:groups-open="workspaceGroupsOpen" :categories="workspaceCategories" :view="view" :active="!selectedProject" :icon-collapsed="context.iconCollapsed" :is-mobile="context.isMobile" :menu-open="workspaceMenuOpen" :run-count="compute.runs.length" label="Workspace links" :href-for-page="breadcrumbHref" :page-label="pageLabel" :page-avatar="pageAvatar" :project-guide="projectGuide" :projects-section="projectsSection" @navigate="navigateLink" @show-more="showMoreItems" @group-action="navigate('New project')">
               <Sidebar.MenuItem><Sidebar.MenuButton :href="breadcrumbHref('Dashboard')" tooltip="Dashboard" :icon="LayoutDashboard" :active="view === 'Dashboard'" class="paneled-workspace-demo__workspace paneled-workspace-demo__dashboard" @click="navigateLink('Dashboard', $event)">Dashboard</Sidebar.MenuButton></Sidebar.MenuItem>
               <Sidebar.MenuItem><Sidebar.MenuButton :href="breadcrumbHref('Recents')" tooltip="Recents" :icon="History" :active="view === 'Recents'" @click="navigateLink('Recents', $event)">Recents</Sidebar.MenuButton></Sidebar.MenuItem>
               <Sidebar.MenuItem><Sidebar.MenuButton :href="breadcrumbHref('Activities')" tooltip="Activities" :icon="Activity" :active="view === 'Activities'" @click="navigateLink('Activities', $event)">Activities</Sidebar.MenuButton></Sidebar.MenuItem>
@@ -482,7 +483,8 @@ onBeforeUnmount(() => { railObserver?.disconnect(); cancelAnimationFrame(navigat
           :show-snap-guide="showSnapGuide" @update:show-snap-guide="setShowSnapGuide"
           :project-guide="projectGuide" @update:project-guide="setProjectGuide"
           :project-heading-link="projectHeadingLink" @update:project-heading-link="setProjectHeadingLink"
-          :collapsible-projects="collapsibleProjects" @update:collapsible-projects="setCollapsibleProjects" />
+          :collapsible-projects="collapsibleProjects" @update:collapsible-projects="setCollapsibleProjects"
+          :projects-section="projectsSection" @update:projects-section="setProjectsSection" />
         <PaneledWorkspaceHelpMenu :rail-on-bottom="railOnBottom" :href-for-page="breadcrumbHref" @navigate="navigate" />
       </template>
     </AppShell.Root>

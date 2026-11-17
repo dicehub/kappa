@@ -8,6 +8,7 @@ import { ChevronDown, ChevronRight, Folders } from "@lucide/vue";
 import type { NavigationCategory } from "./paneled-workspace-navigation";
 import { usePaneledFlyoutIntent } from "./use-paneled-flyout-intent";
 import PaneledWorkspaceProjectDisclosure from "./PaneledWorkspaceProjectDisclosure.vue";
+import PaneledWorkspaceProjectsSection from "./PaneledWorkspaceProjectsSection.vue";
 
 const props = defineProps<{
   categories: NavigationCategory[];
@@ -22,6 +23,7 @@ const props = defineProps<{
   pageLabel?: (page: string) => string;
   pageAvatar?: (page: string) => { name: string; avatarSrc?: string } | undefined;
   projectGuide?: boolean;
+  projectsSection?: boolean;
 }>();
 const emit = defineEmits<{ navigate: [page: string, event: MouseEvent]; showMore: [category: string]; groupAction: [category: string] }>();
 const root = ref<ComponentPublicInstance>();
@@ -30,6 +32,8 @@ const setGroupOpen = (label: string, open: boolean) => { groupsOpen.value = { ..
 const isGroupOpen = (group: NavigationCategory) => group.collapsible === false || (groupsOpen.value[group.label] ?? group.iconCollapsible ?? false);
 const hasFlyout = (group: NavigationCategory) => props.iconCollapsed || (!group.iconCollapsible && !isGroupOpen(group));
 const isGroupPage = (group: NavigationCategory) => props.view === (group.page ?? group.label);
+const hasProjectsSection = (group: NavigationCategory) => props.projectsSection && group.label === "Projects";
+const groupLabel = (group: NavigationCategory) => hasProjectsSection(group) ? "My Projects" : group.label;
 const flyout = ref("");
 const flyoutOwner = useId();
 const { corridor, pointTrigger, leaveTrigger, enterContent } = usePaneledFlyoutIntent(flyout, flyoutOwner);
@@ -91,16 +95,17 @@ onBeforeUnmount(() => cancelAnimationFrame(focusFrame));
 <template>
   <Sidebar.Content ref="root" :aria-label="label">
     <Sidebar.Menu><slot /></Sidebar.Menu>
-    <div v-for="group in categories" :key="group.label" class="paneled-workspace-demo__nav-group" :data-heading-link="group.headingLink || undefined">
-      <Sidebar.Separator v-if="group.headingLink" class="paneled-workspace-demo__projects-separator" aria-hidden="true" />
+    <div v-for="group in categories" :key="group.label" class="paneled-workspace-demo__nav-group" :data-heading-link="group.headingLink && !hasProjectsSection(group) || undefined">
+      <Sidebar.Separator v-if="group.headingLink && !hasProjectsSection(group)" class="paneled-workspace-demo__projects-separator" aria-hidden="true" />
+      <PaneledWorkspaceProjectsSection :enabled="!!hasProjectsSection(group) && !iconCollapsed" :open="groupsOpen['Projects section'] ?? true" @update:open="setGroupOpen('Projects section', $event); flyout = ''">
       <HoverCard.Root :open="active && flyout === group.label && !isMobile && hasFlyout(group)" :disabled="!active || isMobile || !hasFlyout(group)" :open-delay="0" :close-delay="5" :positioning="{ placement: 'right-start', strategy: 'fixed', gutter: 10 }" @update:open="updateFlyout(group.label, $event)">
-        <HoverCard.Trigger v-if="iconCollapsed" as-child><Sidebar.MenuButton :icon="group.icon" :aria-label="group.label" :href="group.page ? hrefForPage(group.page) : undefined" :active="isGroupPage(group)" :data-paneled-group="group.label" @pointermove="pointTrigger(group.label, $event)" @pointerleave="leaveTrigger" :data-active-descendant="group.pages.includes(view) || undefined" :data-flyout-open="flyout === group.label || undefined" :aria-expanded="flyout === group.label" @click="group.page ? emit('navigate', group.page, $event) : flyout = group.label" @keydown.down.capture.prevent="focusFlyout(group.label)" @keydown.esc.stop.prevent="closeFlyout(group.label)">{{ group.label }}</Sidebar.MenuButton></HoverCard.Trigger>
+        <HoverCard.Trigger v-if="iconCollapsed" as-child><Sidebar.MenuButton :icon="group.icon" :aria-label="groupLabel(group)" :href="group.page ? hrefForPage(group.page) : undefined" :active="isGroupPage(group)" :data-paneled-group="group.label" @pointermove="pointTrigger(group.label, $event)" @pointerleave="leaveTrigger" :data-active-descendant="group.pages.includes(view) || undefined" :data-flyout-open="flyout === group.label || undefined" :aria-expanded="flyout === group.label" @click="group.page ? emit('navigate', group.page, $event) : flyout = group.label" @keydown.down.capture.prevent="focusFlyout(group.label)" @keydown.esc.stop.prevent="closeFlyout(group.label)">{{ groupLabel(group) }}</Sidebar.MenuButton></HoverCard.Trigger>
         <component :is="group.collapsible === false ? 'div' : Sidebar.Collapsible" v-else v-bind="group.collapsible === false ? {} : { open: isGroupOpen(group) }" @update:open="setGroupOpen(group.label, $event); flyout = ''">
           <div v-if="group.collapsible === false || group.iconCollapsible" class="paneled-workspace-demo__group-heading" :class="{ 'paneled-workspace-demo__section-heading': group.headingOnly }" :data-icon-collapse="group.iconCollapsible || undefined">
-            <PaneledWorkspaceProjectDisclosure v-if="group.iconCollapsible" :icon="group.icon" :expanded="isGroupOpen(group)" />
+            <PaneledWorkspaceProjectDisclosure v-if="group.iconCollapsible" :icon="group.icon" :expanded="isGroupOpen(group)" :label="hasProjectsSection(group) ? 'My Projects' : 'projects'" />
             <h3 v-if="group.headingOnly" :data-paneled-section-title="group.label" :data-linked="group.headingLink || undefined" :tabindex="group.headingLink ? undefined : -1">
-              <Sidebar.MenuButton v-if="group.headingLink && group.page" :icon="group.iconCollapsible ? undefined : group.icon" class="paneled-workspace-demo__section-link" :href="hrefForPage(group.page)" :active="isGroupPage(group)" @click="emit('navigate', group.page, $event)">{{ group.label }}</Sidebar.MenuButton>
-              <template v-else>{{ group.label }}</template>
+              <Sidebar.MenuButton v-if="group.headingLink && group.page" :icon="group.iconCollapsible ? undefined : group.icon" class="paneled-workspace-demo__section-link" :href="hrefForPage(group.page)" :active="isGroupPage(group)" @click="emit('navigate', group.page, $event)">{{ groupLabel(group) }}</Sidebar.MenuButton>
+              <template v-else>{{ groupLabel(group) }}</template>
             </h3>
             <Sidebar.MenuButton v-else-if="group.page" :icon="group.icon" :href="hrefForPage(group.page)" :active="isGroupPage(group)" @click="emit('navigate', group.page, $event)">{{ group.label }}</Sidebar.MenuButton>
             <h3 v-else><span aria-hidden="true"><component :is="group.icon" focusable="false" /></span>{{ group.label }}</h3>
@@ -128,7 +133,7 @@ onBeforeUnmount(() => cancelAnimationFrame(focusFrame));
           <div v-if="flyout === group.label && corridor" data-flyout-corridor class="paneled-workspace-demo__flyout-corridor" :style="corridor" aria-hidden="true" />
           <template v-if="iconCollapsed">
             <div class="paneled-workspace-demo__flyout-heading" :class="{ 'paneled-workspace-demo__section-heading': group.headingOnly }">
-              <h3 class="paneled-workspace-demo__flyout-title"><a v-if="group.page && (!group.headingOnly || group.headingLink)" :href="hrefForPage(group.page)" :aria-current="view === group.page ? 'page' : undefined" @click="emit('navigate', group.page, $event)">{{ group.label }}</a><template v-else>{{ group.label }}</template></h3>
+              <h3 class="paneled-workspace-demo__flyout-title"><a v-if="group.page && (!group.headingOnly || group.headingLink)" :href="hrefForPage(group.page)" :aria-current="view === group.page ? 'page' : undefined" @click="emit('navigate', group.page, $event)">{{ groupLabel(group) }}</a><template v-else>{{ groupLabel(group) }}</template></h3>
               <ToolbarButton v-if="group.action" size="sm" :icon="group.action.icon" :tooltip="group.action.label" @click="runGroupAction(group)" />
             </div>
             <hr class="paneled-workspace-demo__flyout-divider" aria-hidden="true" />
@@ -146,6 +151,7 @@ onBeforeUnmount(() => cancelAnimationFrame(focusFrame));
           </nav>
         </HoverCard.Content>
       </HoverCard.Root>
+      </PaneledWorkspaceProjectsSection>
     </div>
     <Sidebar.Menu v-if="$slots.after" class="paneled-workspace-demo__nav-footer"><slot name="after" /></Sidebar.Menu>
   </Sidebar.Content>

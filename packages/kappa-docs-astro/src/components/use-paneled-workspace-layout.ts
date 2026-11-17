@@ -21,5 +21,6 @@ export function usePaneledWorkspaceLayout() {
   const [projectGuide, setProjectGuide] = useLayoutOption("project-guide");
   const [projectHeadingLink, setProjectHeadingLink] = useLayoutOption("project-heading-link");
   const [collapsibleProjects, setCollapsibleProjects] = useLayoutOption("collapsible-projects");
-  return { smartResize, setSmartResize, showSnapGuide, setShowSnapGuide, insetHeader, setStoredInsetHeader, sidebarSearch, setSidebarSearch, projectGuide, setProjectGuide, projectHeadingLink, setProjectHeadingLink, collapsibleProjects, setCollapsibleProjects };
+  const [projectsSection, setProjectsSection] = useLayoutOption("projects-section");
+  return { smartResize, setSmartResize, showSnapGuide, setShowSnapGuide, insetHeader, setStoredInsetHeader, sidebarSearch, setSidebarSearch, projectGuide, setProjectGuide, projectHeadingLink, setProjectHeadingLink, collapsibleProjects, setCollapsibleProjects, projectsSection, setProjectsSection };
 }

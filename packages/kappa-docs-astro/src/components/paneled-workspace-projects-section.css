@@ -1,0 +1,19 @@
+.paneled-workspace-demo__navigation.kappa-sidebar .paneled-projects-section__trigger {
+  justify-content: flex-start;
+  gap: 0.25rem;
+  margin-block-end: 0.25rem;
+  padding-inline: 0.5rem;
+  color: var(--kappa-subtle);
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+.paneled-workspace-demo__navigation.kappa-sidebar .paneled-projects-section__trigger > svg {
+  inline-size: 0.75rem;
+  block-size: 0.75rem;
+  transition: transform 100ms ease;
+}
+.paneled-projects-section__trigger[data-state="open"] > svg { transform: rotate(90deg); }
+.paneled-workspace-demo__navigation.kappa-sidebar .paneled-projects-section > .paneled-projects-section__content[data-state] { animation-duration: 100ms; }
+@media (prefers-reduced-motion: reduce) {
+  .paneled-workspace-demo__navigation.kappa-sidebar .paneled-projects-section__trigger > svg { transition: none; }
+}

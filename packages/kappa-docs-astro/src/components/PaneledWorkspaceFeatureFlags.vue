@@ -11,6 +11,7 @@ const showSnapGuide = defineModel<boolean>("showSnapGuide", { required: true });
 const projectGuide = defineModel<boolean>("projectGuide", { required: true });
 const projectHeadingLink = defineModel<boolean>("projectHeadingLink", { required: true });
 const collapsibleProjects = defineModel<boolean>("collapsibleProjects", { required: true });
+const projectsSection = defineModel<boolean>("projectsSection", { required: true });
 </script>
 
 <template>
@@ -43,6 +44,9 @@ const collapsibleProjects = defineModel<boolean>("collapsibleProjects", { requir
           </Dropdown.CheckboxItem>
           <Dropdown.CheckboxItem v-model:checked="collapsibleProjects" value="collapsible-projects" close-on-select>
             Collapsible projects
+          </Dropdown.CheckboxItem>
+          <Dropdown.CheckboxItem v-model:checked="projectsSection" value="projects-section" close-on-select>
+            Projects section header
           </Dropdown.CheckboxItem>
         </Dropdown.Group>
       </Dropdown.Content>
