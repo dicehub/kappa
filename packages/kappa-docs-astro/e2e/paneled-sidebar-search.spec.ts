@@ -7,17 +7,17 @@ for (const inset of [false, true]) {
     await page.addInitScript(value => localStorage.setItem("kappa-paneled-workspace-inset-header", String(value)), inset);
     await page.goto("/examples/appshell/paneled-workspace?view=All+projects");
     await expect(page.locator("astro-island[ssr]")).toHaveCount(0);
-    const profile = page.getByRole("link", { name: "Profile: Alex Morgan", exact: true });
+    const flags = page.getByRole("button", { name: "Feature flags", exact: true });
     const option = page.getByRole("menuitemcheckbox", { name: "Search in sidebar", exact: true });
     const search = page.getByRole("button", { name: "Search or go to…", exact: true });
     const sidebar = page.getByRole("navigation", { name: "Paneled workspace navigation", exact: true });
     const sidebarSearch = sidebar.getByRole("button", { name: "Search or go to…", exact: true });
     const input = page.getByRole("combobox", { name: "Search pages and simulation runs", exact: true });
 
-    await profile.click();
+    await flags.click();
     await expect(option).not.toBeChecked();
     await option.click();
-    await expect(profile).toBeFocused();
+    await expect(flags).toBeFocused();
     await expect(search).toHaveCount(1);
     await expect(sidebarSearch).toBeVisible();
     await sidebarSearch.click();
@@ -60,7 +60,7 @@ for (const inset of [false, true]) {
     await expect(sidebarSearch).toBeVisible();
     await input.press("Escape");
     await expect(sidebarSearch).toBeFocused();
-    await profile.click();
+    await flags.click();
     await expect(option).toBeChecked();
     await expect(page.getByRole("menuitemcheckbox", { name: "Inset header", exact: true })).toHaveAttribute("aria-checked", String(inset));
     await option.click();

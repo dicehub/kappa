@@ -32,6 +32,8 @@ export const providerProps = [
   ["mobileBreakpointReference", '"viewport" | "container"', '"viewport"', "Measure the browser viewport or the Provider's content-box width. Use container for navigation embedded in a narrow panel."],
   ["width / collapsedWidth / mobileWidth", "CSS length", '"16.25rem" / "3.25rem" / "18rem"', "Expanded desktop, icon rail, and mobile widths. Mobile width leaves at least 3rem for the backdrop."],
   ["resizable", "boolean", "false", "Enable desktop resizing through ResizeHandle. The numeric resize width replaces the fixed width prop."],
+  ["smartResize", "boolean", "false", "Snap to defaultWidth from the first drag, then learn a preferred width. Keyboard resizing stays unsnapped. History lasts until the Provider unmounts."],
+  ["showSnapGuide", "boolean", "false", "Display the fixed snap zone while smartResize is enabled. Hiding the guide does not change snapping or learned widths."],
   ["collapseOnResize", "boolean", "true", "Allow the separator to collapse navigation. Set false to stop at minWidth and hide the separator during collapse. Sidebar.Trigger can still hide the sidebar."],
   ["resizeWidth / defaultWidth", "number (px)", "undefined / 260", "Controlled or initial expanded resize width. Resize emits requests; a controlled parent can reject them."],
   ["minWidth / maxWidth", "number (px)", "180 / 400", "Expanded resize bounds. A collapsed icon rail can be smaller than minWidth."],

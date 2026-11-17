@@ -24,6 +24,7 @@ const profile = ref("casey");
 const surface = ref("workspace");
 const resizeWidth = ref(240);
 const resizeLocked = ref(false);
+const smartResize = ref(false);
 const controlled = computed(() => props.variant === "controlled");
 const mobile = computed(() => ["mobile", "full-screen-mobile"].includes(props.variant));
 const resizable = computed(() => ["resizable", "resizable-controlled", "end", "rtl"].includes(props.variant));
@@ -49,6 +50,8 @@ function trackRequest(_details: SidebarOpenChangeDetails) { requests.value += 1;
         :mobile-breakpoint="mobile ? 10000 : 768"
         :dir="rtl ? 'rtl' : 'ltr'"
         :resizable="resizable"
+        :smart-resize="smartResize"
+        show-snap-guide
         :default-width="240"
         :min-width="180"
         :max-width="400"
@@ -119,6 +122,7 @@ function trackRequest(_details: SidebarOpenChangeDetails) { requests.value += 1;
             </div>
             <Button v-if="props.variant === 'loading'" size="sm" variant="secondary" @click="loading = !loading">{{ loading ? 'Show navigation' : 'Show loading' }}</Button>
             <Button v-if="props.variant === 'resizable-controlled'" size="sm" variant="secondary" @click="resizeLocked = !resizeLocked">{{ resizeLocked ? 'Unlock width' : 'Lock width' }}</Button>
+            <Button v-if="resizable" size="sm" variant="secondary" :aria-pressed="smartResize" @click="smartResize = !smartResize">Smart resizing</Button>
             <template v-if="controlled">
               <div class="sidebar-demo__controls">
                 <Button size="sm" variant="secondary" @click="locked = !locked">{{ locked ? 'Unlock state' : 'Lock state' }}</Button>

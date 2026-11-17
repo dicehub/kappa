@@ -15,8 +15,11 @@ function useLayoutOption(name: string) {
 
 export function usePaneledWorkspaceLayout() {
   const [insetHeader, setStoredInsetHeader] = useLayoutOption("inset-header");
+  const [smartResize, setSmartResize] = useLayoutOption("smart-resize");
+  const [showSnapGuide, setShowSnapGuide] = useLayoutOption("snap-guide");
   const [sidebarSearch, setSidebarSearch] = useLayoutOption("sidebar-search");
   const [projectGuide, setProjectGuide] = useLayoutOption("project-guide");
   const [projectHeadingLink, setProjectHeadingLink] = useLayoutOption("project-heading-link");
-  return { insetHeader, setStoredInsetHeader, sidebarSearch, setSidebarSearch, projectGuide, setProjectGuide, projectHeadingLink, setProjectHeadingLink };
+  const [collapsibleProjects, setCollapsibleProjects] = useLayoutOption("collapsible-projects");
+  return { smartResize, setSmartResize, showSnapGuide, setShowSnapGuide, insetHeader, setStoredInsetHeader, sidebarSearch, setSidebarSearch, projectGuide, setProjectGuide, projectHeadingLink, setProjectHeadingLink, collapsibleProjects, setCollapsibleProjects };
 }

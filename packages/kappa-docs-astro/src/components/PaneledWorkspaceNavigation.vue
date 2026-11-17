@@ -7,6 +7,7 @@ import { HoverCard } from "@dicehub/kappa/components/hover-card";
 import { ChevronDown, ChevronRight, Folders } from "@lucide/vue";
 import type { NavigationCategory } from "./paneled-workspace-navigation";
 import { usePaneledFlyoutIntent } from "./use-paneled-flyout-intent";
+import PaneledWorkspaceProjectDisclosure from "./PaneledWorkspaceProjectDisclosure.vue";
 
 const props = defineProps<{
   categories: NavigationCategory[];
@@ -24,8 +25,10 @@ const props = defineProps<{
 }>();
 const emit = defineEmits<{ navigate: [page: string, event: MouseEvent]; showMore: [category: string]; groupAction: [category: string] }>();
 const root = ref<ComponentPublicInstance>();
-const groupsOpen = ref<Record<string, boolean>>({});
-const isGroupOpen = (group: NavigationCategory) => group.collapsible === false || groupsOpen.value[group.label];
+const groupsOpen = defineModel<Record<string, boolean>>("groupsOpen", { default: () => ({}) });
+const setGroupOpen = (label: string, open: boolean) => { groupsOpen.value = { ...groupsOpen.value, [label]: open }; };
+const isGroupOpen = (group: NavigationCategory) => group.collapsible === false || (groupsOpen.value[group.label] ?? group.iconCollapsible ?? false);
+const hasFlyout = (group: NavigationCategory) => props.iconCollapsed || (!group.iconCollapsible && !isGroupOpen(group));
 const isGroupPage = (group: NavigationCategory) => props.view === (group.page ?? group.label);
 const flyout = ref("");
 const flyoutOwner = useId();
@@ -50,7 +53,7 @@ async function showMore(group: NavigationCategory, event: MouseEvent) {
 }
 watch(() => [props.active, props.iconCollapsed, props.isMobile, props.menuOpen, props.view], () => { flyout.value = ""; });
 watch(() => props.view, page => {
-  if (props.active) for (const group of props.categories) if (group.pages.includes(page)) groupsOpen.value[group.label] = true;
+  if (props.active) for (const group of props.categories) if (group.collapsible !== false && !group.iconCollapsible && group.pages.includes(page)) setGroupOpen(group.label, true);
 }, { immediate: true });
 async function updateFlyout(label: string, open: boolean) {
   if (open) { if (props.active) flyout.value = label; return; }
@@ -90,12 +93,13 @@ onBeforeUnmount(() => cancelAnimationFrame(focusFrame));
     <Sidebar.Menu><slot /></Sidebar.Menu>
     <div v-for="group in categories" :key="group.label" class="paneled-workspace-demo__nav-group" :data-heading-link="group.headingLink || undefined">
       <Sidebar.Separator v-if="group.headingLink" class="paneled-workspace-demo__projects-separator" aria-hidden="true" />
-      <HoverCard.Root :open="active && flyout === group.label && !isMobile && (iconCollapsed || !isGroupOpen(group))" :disabled="!active || isMobile || (!iconCollapsed && isGroupOpen(group))" :open-delay="0" :close-delay="5" :positioning="{ placement: 'right-start', strategy: 'fixed', gutter: 10 }" @update:open="updateFlyout(group.label, $event)">
+      <HoverCard.Root :open="active && flyout === group.label && !isMobile && hasFlyout(group)" :disabled="!active || isMobile || !hasFlyout(group)" :open-delay="0" :close-delay="5" :positioning="{ placement: 'right-start', strategy: 'fixed', gutter: 10 }" @update:open="updateFlyout(group.label, $event)">
         <HoverCard.Trigger v-if="iconCollapsed" as-child><Sidebar.MenuButton :icon="group.icon" :aria-label="group.label" :href="group.page ? hrefForPage(group.page) : undefined" :active="isGroupPage(group)" :data-paneled-group="group.label" @pointermove="pointTrigger(group.label, $event)" @pointerleave="leaveTrigger" :data-active-descendant="group.pages.includes(view) || undefined" :data-flyout-open="flyout === group.label || undefined" :aria-expanded="flyout === group.label" @click="group.page ? emit('navigate', group.page, $event) : flyout = group.label" @keydown.down.capture.prevent="focusFlyout(group.label)" @keydown.esc.stop.prevent="closeFlyout(group.label)">{{ group.label }}</Sidebar.MenuButton></HoverCard.Trigger>
-        <component :is="group.collapsible === false ? 'div' : Sidebar.Collapsible" v-else v-bind="group.collapsible === false ? {} : { open: groupsOpen[group.label] }" @update:open="groupsOpen[group.label] = $event; flyout = ''">
-          <div v-if="group.collapsible === false" class="paneled-workspace-demo__group-heading" :class="{ 'paneled-workspace-demo__section-heading': group.headingOnly }">
+        <component :is="group.collapsible === false ? 'div' : Sidebar.Collapsible" v-else v-bind="group.collapsible === false ? {} : { open: isGroupOpen(group) }" @update:open="setGroupOpen(group.label, $event); flyout = ''">
+          <div v-if="group.collapsible === false || group.iconCollapsible" class="paneled-workspace-demo__group-heading" :class="{ 'paneled-workspace-demo__section-heading': group.headingOnly }" :data-icon-collapse="group.iconCollapsible || undefined">
+            <PaneledWorkspaceProjectDisclosure v-if="group.iconCollapsible" :icon="group.icon" :expanded="isGroupOpen(group)" />
             <h3 v-if="group.headingOnly" :data-paneled-section-title="group.label" :data-linked="group.headingLink || undefined" :tabindex="group.headingLink ? undefined : -1">
-              <Sidebar.MenuButton v-if="group.headingLink && group.page" :icon="group.icon" class="paneled-workspace-demo__section-link" :href="hrefForPage(group.page)" :active="isGroupPage(group)" @click="emit('navigate', group.page, $event)">{{ group.label }}</Sidebar.MenuButton>
+              <Sidebar.MenuButton v-if="group.headingLink && group.page" :icon="group.iconCollapsible ? undefined : group.icon" class="paneled-workspace-demo__section-link" :href="hrefForPage(group.page)" :active="isGroupPage(group)" @click="emit('navigate', group.page, $event)">{{ group.label }}</Sidebar.MenuButton>
               <template v-else>{{ group.label }}</template>
             </h3>
             <Sidebar.MenuButton v-else-if="group.page" :icon="group.icon" :href="hrefForPage(group.page)" :active="isGroupPage(group)" @click="emit('navigate', group.page, $event)">{{ group.label }}</Sidebar.MenuButton>

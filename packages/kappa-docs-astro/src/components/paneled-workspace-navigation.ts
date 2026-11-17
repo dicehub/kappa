@@ -14,6 +14,7 @@ export interface NavigationCategory {
   collapsible?: boolean;
   headingOnly?: boolean;
   headingLink?: boolean;
+  iconCollapsible?: boolean;
   remainingCount?: number;
   action?: { label: string; icon: Component };
 }

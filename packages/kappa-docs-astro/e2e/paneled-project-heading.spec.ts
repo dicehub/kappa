@@ -11,7 +11,7 @@ async function openExample(page: Page) {
 }
 
 async function toggleLayout(page: Page, name: string) {
-  await page.getByRole("link", { name: "Profile: Alex Morgan", exact: true }).click();
+  await page.getByRole("button", { name: "Feature flags", exact: true }).click();
   await page.getByRole("menuitemcheckbox", { name, exact: true }).click();
 }
 
@@ -41,7 +41,7 @@ for (const inset of [false, true]) {
     await page.reload();
     await expect(projects).toBeVisible();
     await expect(overview).toHaveCount(0);
-    await page.getByRole("link", { name: "Profile: Alex Morgan", exact: true }).click();
+    await page.getByRole("button", { name: "Feature flags", exact: true }).click();
     await expect(page.getByRole("menuitemcheckbox", { name: optionName, exact: true })).toHaveAttribute("aria-checked", "true");
     await page.getByRole("menuitemcheckbox", { name: optionName, exact: true }).click();
     await expect(projects).toHaveCount(0);

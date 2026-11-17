@@ -19,13 +19,26 @@ function toggleTrailingPanel(event: KeyboardEvent) {
   else api.value.expandPanel("navigation");
 }
 function resetWidth() {
+  resize.cancelSnap();
   if (!props.disabled) api.value.resizePanel("navigation", resize.defaultSize.value);
 }
 watch(() => api.value.dragging, resize.setIsResizing);
-onScopeDispose(() => resize.setIsResizing(false));
+watch(() => props.disabled, disabled => { if (disabled) resize.cancelSnap(); });
+onScopeDispose(() => { resize.cancelSnap(); resize.setIsResizing(false); });
 </script>
 
 <template>
+  <span
+    v-if="resize.snapZone.value && !props.disabled"
+    class="kappa-sidebar__snap-zone"
+    data-slot="sidebar-snap-zone"
+    :data-active="resize.snapZone.value.active || undefined"
+    aria-hidden="true"
+    :style="{
+      '--kappa-sidebar-snap-point': `${resize.snapZone.value.width}px`,
+      '--kappa-sidebar-snap-radius': `${resize.snapZone.value.radius}px`,
+    }"
+  />
   <div
     v-bind="{ ...handleProps, ...$attrs }"
     class="kappa-sidebar__resize-handle"
@@ -38,7 +51,9 @@ onScopeDispose(() => resize.setIsResizing(false));
     :aria-valuenow="Math.round(sidebar.open.value ? sidebar.width.value : resize.range.value.collapsed)"
     :aria-valuetext="sidebar.open.value ? `${Math.round(sidebar.width.value)} pixels` : 'Collapsed'"
     :aria-disabled="props.disabled || undefined"
+    :data-snapped="resize.snapped.value || undefined"
     @keydown.capture="toggleTrailingPanel"
+    @pointerdown.capture="!props.disabled && resize.startPointer($event)"
     @dblclick.prevent="resetWidth"
   />
 </template>
