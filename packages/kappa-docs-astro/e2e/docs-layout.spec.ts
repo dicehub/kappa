@@ -17,6 +17,15 @@ const expectNoHorizontalOverflow = async (page: Page) => {
     .toBe(true);
 };
 
+async function expectReadingColumnCentered(page: Page) {
+  for (const selector of [".docs-page-header__title-row", ".docs-page-body > .docs-article"]) {
+    await expect.poll(() => page.locator(selector).evaluate(element => {
+      const { left, right } = element.getBoundingClientRect();
+      return Math.abs(left - (document.documentElement.clientWidth - right));
+    })).toBeLessThanOrEqual(1);
+  }
+}
+
 test.describe("Docs shell", () => {
   test("defaults to light mode and persists an explicit theme", async ({ page }) => {
     await page.emulateMedia({ colorScheme: "dark" });
@@ -51,7 +60,6 @@ test.describe("Docs shell", () => {
     const app = page.locator("[data-docs-app]");
     const desktopSidebar = page.locator("#desktop-navigation");
     const desktopHeader = page.locator(".docs-header");
-    const mainShell = page.locator(".docs-main-shell");
     const sidebarToggle = desktopHeader.getByRole("button", { name: "Collapse navigation" });
     const marker = `soft-navigation-${Date.now()}`;
 
@@ -65,7 +73,7 @@ test.describe("Docs shell", () => {
     await expect(app).toHaveAttribute("data-sidebar-open", "true");
     await expect(desktopSidebar).toHaveAttribute("aria-hidden", "false");
     await expect(desktopSidebar).not.toHaveAttribute("inert", "");
-    await expect(mainShell).toHaveCSS("margin-left", "256px");
+    await expectReadingColumnCentered(page);
     expect(await desktopHeader.boundingBox()).toMatchObject({ x: 0, width: 1440, height: 64 });
     expect(await desktopSidebar.boundingBox()).toMatchObject({ x: 0, y: 74, width: 256, height: 840 });
 
@@ -79,11 +87,12 @@ test.describe("Docs shell", () => {
     await expect(app).toHaveAttribute("data-sidebar-open", "false");
     await expect(desktopSidebar).toHaveAttribute("aria-hidden", "true");
     await expect(desktopSidebar).toHaveAttribute("inert", "");
-    await expect(mainShell).toHaveCSS("margin-left", "0px");
+    await expectReadingColumnCentered(page);
 
     await page.getByRole("link", { name: "Kappa home" }).click();
     await expect(page).toHaveURL(/\/docs\/?$/);
     await expect(page).toHaveTitle("Kappa");
+    await expectReadingColumnCentered(page);
     await expect(app).toHaveAttribute("data-sidebar-open", "false");
     await expect(page.getByRole("button", { name: "Expand navigation" })).toHaveAttribute(
       "aria-pressed",
