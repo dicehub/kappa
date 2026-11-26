@@ -36,5 +36,6 @@
   .paneled-project-pages__objectives a { grid-column: 2; }
 }
 .paneled-project-pages__catalog-description { margin: 0.25rem 0 0; color: var(--kappa-subtle); }
+.paneled-project-pages__member { display: flex; align-items: center; gap: 0.5rem; }
 .paneled-project-pages__settings { display: grid; justify-items: start; gap: 1.25rem; max-inline-size: 36rem; }
 .paneled-project-pages__settings > .kappa-field { inline-size: 100%; }

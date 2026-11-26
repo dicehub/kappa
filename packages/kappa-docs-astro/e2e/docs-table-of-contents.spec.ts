@@ -72,21 +72,23 @@ test("tracks manual scrolling after TOC navigation", async ({ page }) => {
   await page.mouse.wheel(0, 120);
   await expect.poll(() => page.locator("#sizes").evaluate((element) => element.getBoundingClientRect().top)).toBeLessThan(0);
   await expectActiveIndicator(toc, toc.getByRole("link", { name: "Sizes", exact: true }));
+  const iconsTop = () => page.locator("#with-icons").evaluate(element => element.getBoundingClientRect().top);
   for (let step = 0; step < 20; step += 1) {
-    if (await page.locator('#with-icons').evaluate(element => element.getBoundingClientRect().top <= 80)) break;
+    if (await iconsTop() <= 80) break;
     const previousY = await page.evaluate(() => scrollY);
     await page.mouse.wheel(0, 120);
     await expect.poll(() => page.evaluate(() => scrollY)).toBeGreaterThan(previousY);
   }
-  await expect.poll(() => page.locator('#with-icons').evaluate(element => element.getBoundingClientRect().top)).toBeLessThanOrEqual(80);
+  await expect.poll(iconsTop).toBeLessThanOrEqual(80);
   await expectActiveIndicator(toc, toc.getByRole("link", { name: "With Icons", exact: true }));
+  // Clear the one-pixel tolerance for fractional heading positions.
   for (let step = 0; step < 20; step += 1) {
-    if (await page.locator('#with-icons').evaluate(element => element.getBoundingClientRect().top > 80)) break;
+    if (await iconsTop() > 81) break;
     const previousY = await page.evaluate(() => scrollY);
     await page.mouse.wheel(0, -20);
     await expect.poll(() => page.evaluate(() => scrollY)).toBeLessThan(previousY);
   }
-  await expect.poll(() => page.locator('#with-icons').evaluate(element => element.getBoundingClientRect().top)).toBeGreaterThan(80);
+  await expect.poll(iconsTop).toBeGreaterThan(81);
   await expectActiveIndicator(toc, toc.getByRole("link", { name: "Toolbar buttons", exact: true }));
   await page.evaluate(() => window.scrollTo({ top: document.documentElement.scrollHeight, behavior: "instant" }));
   await expectActiveIndicator(toc, toc.getByRole("link", { name: "Exports", exact: true }));

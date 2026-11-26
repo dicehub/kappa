@@ -116,6 +116,11 @@ Documentation artwork includes the five images in
 The paths beginning with `public/` are relative to the docs package. Brand artwork
 also includes the exported `packages/kappa/src/components/dicehub-logo/` artwork.
 
+Explore uses generated CFD illustrations in `public/images/community/` and
+`public/images/templates/`. Each directory's `sources.json` records the source,
+prompts, rights, and WebP processing. These images are illustrative artwork,
+not solver results.
+
 The horizontal logo uses dicehub's supplied `logo-35-text.svg` (SHA-256
 `648935cefa858d0ba26ce3f390c9a64cf9457237c0070664c6627d686b561afa`).
 The vertical logo uses the supplied `logo_vertical.svg` (SHA-256

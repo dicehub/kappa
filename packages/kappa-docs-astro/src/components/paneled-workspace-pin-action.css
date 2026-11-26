@@ -1,0 +1,42 @@
+.paneled-pin-row { position: relative; }
+.paneled-workspace-demo__navigation.kappa-sidebar .paneled-pin-row > .kappa-sidebar__menu-button,
+.paneled-workspace-demo__flyout .paneled-pin-row > a { padding-inline-end: 2.25rem; }
+.paneled-workspace-demo__flyout .paneled-pin-row > .paneled-workspace-demo__flyout-title { flex: 1; padding-inline-end: 2.25rem; }
+.paneled-pin-row > :is(.paneled-pin-action, .paneled-pin-replaced-action).kappa-toolbar-button { position: absolute; inset-inline-end: 0.25rem; inset-block-start: 50%; translate: 0 -50%; }
+.paneled-pin-row > .paneled-pin-action.kappa-toolbar-button { opacity: 1; pointer-events: auto; }
+.paneled-pin-row:has(> .paneled-pin-action:hover) > :is(.kappa-sidebar__menu-button, a):not(.paneled-project-disclosure),
+.paneled-pin-row:has(> .paneled-pin-action:focus-visible) > :is(.kappa-sidebar__menu-button, a):not(.paneled-project-disclosure) { background: var(--kappa-shell-nav-highlight); color: var(--kappa-shell-nav-emphasis); }
+@keyframes kappa-paneled-pin-reveal {
+  from { opacity: 0; pointer-events: none; }
+  99% { pointer-events: none; }
+  to { opacity: 1; pointer-events: auto; }
+}
+@keyframes kappa-paneled-pin-replace {
+  from { opacity: 1; pointer-events: auto; }
+  to { opacity: 0; pointer-events: none; }
+}
+@media (hover: hover) and (pointer: fine) {
+  .paneled-pin-row > .paneled-pin-action.kappa-toolbar-button { opacity: 0; pointer-events: none; }
+  .paneled-workspace-demo__navigation.kappa-sidebar .paneled-pin-row > .kappa-sidebar__menu-button:has(.paneled-workspace-demo__count),
+  .paneled-workspace-demo__flyout .paneled-pin-row > a:has(.paneled-workspace-demo__count) { padding-inline-end: 0.25rem; }
+  .paneled-pin-row:hover > .paneled-pin-action.kappa-toolbar-button { animation: kappa-paneled-pin-reveal 100ms linear 400ms both; }
+  .paneled-pin-row:hover > .paneled-pin-replaced-action.kappa-toolbar-button,
+  .paneled-pin-row:hover .paneled-workspace-demo__count { animation: kappa-paneled-pin-replace 100ms linear 400ms both; }
+  .paneled-pin-row:has(:focus-visible) > .paneled-pin-action.kappa-toolbar-button { animation: none !important; opacity: 1; pointer-events: auto; }
+  .paneled-pin-row:has(:focus-visible) > .paneled-pin-replaced-action.kappa-toolbar-button,
+  .paneled-pin-row:has(:focus-visible) .paneled-workspace-demo__count { animation: none !important; opacity: 0; pointer-events: none; }
+  .paneled-pin-row > .paneled-pin-replaced-action.kappa-toolbar-button:focus-visible { animation: none !important; opacity: 1; pointer-events: auto; }
+  .paneled-pin-row:has(> .paneled-pin-replaced-action:focus-visible) > .paneled-pin-action.kappa-toolbar-button { animation: none !important; opacity: 0; pointer-events: none; }
+}
+@media (prefers-reduced-motion: reduce) and (hover: hover) and (pointer: fine) {
+  .paneled-pin-row:hover:not(:has(:focus-visible)) > .paneled-pin-action.kappa-toolbar-button { animation: kappa-paneled-pin-reveal 0s linear 400ms both !important; }
+  .paneled-pin-row:hover:not(:has(:focus-visible)) > .paneled-pin-replaced-action.kappa-toolbar-button,
+  .paneled-pin-row:hover:not(:has(:focus-visible)) .paneled-workspace-demo__count { animation: kappa-paneled-pin-replace 0s linear 400ms both !important; }
+}
+@media (hover: none), (pointer: coarse) {
+  .paneled-pin-row > .paneled-pin-action.kappa-toolbar-button,
+  .paneled-pin-row > .paneled-pin-replaced-action.kappa-toolbar-button,
+  .paneled-pin-row .paneled-workspace-demo__count { animation: none !important; opacity: 1; pointer-events: auto; }
+  .paneled-pin-row:has(> .paneled-pin-replaced-action) > .paneled-pin-action.kappa-toolbar-button { inset-inline-end: 2rem; }
+  .paneled-workspace-demo__navigation.kappa-sidebar .paneled-pin-row .paneled-workspace-demo__section-link { padding-inline-end: 4rem; }
+}

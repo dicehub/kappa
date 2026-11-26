@@ -11,6 +11,101 @@ async function openProject(page: Page) {
   )).toBe(false);
 }
 
+test("legacy project bookmarks keep context while shared workspace pages stay global", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  for (const [requested, resolved] of [
+    ["Project Settings", "Settings"], ["Project settings", "Settings"],
+    ["Project activity", "Activities"], ["Activity log", "Activities"], ["Activity", "Activities"],
+  ]) {
+    await page.goto(`${examplePath}?${new URLSearchParams({ view: requested })}`);
+    await expect(page).toHaveURL(`${examplePath}?${new URLSearchParams({ view: resolved, project: "AV-07" })}`);
+    await expect(page.getByRole("button", { name: "Switch project: Aster VTOL", exact: true })).toBeVisible();
+    await expect(page.getByRole("heading", { name: resolved, exact: true })).toBeVisible();
+    if (resolved === "Settings") await expect(page.getByRole("textbox", { name: /Project name/ })).toHaveValue("Aster VTOL");
+  }
+  await page.reload();
+  await expect(page).toHaveURL(/view=Activities&project=AV-07$/);
+  await expect(page.getByRole("button", { name: "Switch project: Aster VTOL", exact: true })).toBeVisible();
+  for (const [view, canonical] of [["Settings", "Account details"], ["Activities", "Activities"]]) {
+    await page.goto(`${examplePath}?${new URLSearchParams({ view })}`);
+    await expect.poll(() => page.locator("astro-island").evaluate(node => node.hasAttribute("ssr"))).toBe(false);
+    await expect(page).toHaveURL(`${examplePath}?${new URLSearchParams({ view: canonical })}`);
+    await expect(page.getByRole("button", { name: /^Switch project:/ })).toHaveCount(0);
+    await expect(page.getByRole("heading", { name: canonical, exact: true })).toBeVisible();
+  }
+});
+
+test("an individual template bookmark keeps Explore and its Templates tab selected", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto(`${examplePath}?view=Airfoil+aerodynamics`);
+  await expect.poll(() => page.locator("astro-island").evaluate(node => node.hasAttribute("ssr"))).toBe(false);
+  const nav = page.getByRole("navigation", { name: "Paneled workspace navigation", exact: true });
+  const templates = nav.getByRole("link", { name: "Explore", exact: true });
+  await expect(templates).toHaveAttribute("aria-current", "page");
+  await expect(templates).not.toHaveAttribute("aria-expanded");
+  await expect(templates).toHaveAttribute("href", "?view=Explore");
+  await expect(nav.getByRole("link", { name: "Airfoil aerodynamics", exact: true })).toHaveCount(0);
+  await expect(nav.getByRole("button", { name: "Show more (18)", exact: true })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Explore", exact: true, level: 2 })).toBeVisible();
+  await expect(page.getByRole("tab", { name: "Templates", exact: true })).toHaveAttribute("aria-selected", "true");
+  await expect(page.getByRole("heading", { name: "Airfoil aerodynamics", exact: true, level: 3 })).toBeVisible();
+});
+
+for (const mode of ["expanded", "collapsed", "mobile"] as const) {
+  test(`Show more reveals all projects without navigating in ${mode} navigation`, async ({ page }) => {
+    await page.setViewportSize({ width: mode === "mobile" ? 390 : 1440, height: 1000 });
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    await page.goto(`${examplePath}?view=Dashboard`);
+    await expect.poll(() => page.locator('astro-island').evaluate(node => node.hasAttribute('ssr'))).toBe(false);
+    if (mode === "mobile") await page.getByRole("button", { name: "Open sidebar", exact: true }).click();
+    const navigation = page.getByRole(mode === "mobile" ? "dialog" : "navigation", { name: "Paneled workspace navigation", exact: true });
+    const projects = navigation.getByRole("link", { name: "Projects", exact: true });
+    if (mode === "collapsed") {
+      await navigation.getByRole("button", { name: "Collapse sidebar", exact: true }).click();
+      await projects.focus();
+      await projects.press("ArrowDown");
+    }
+    const list = mode === "collapsed"
+      ? page.getByRole("navigation", { name: "Projects pages", exact: true })
+      : navigation.locator(".paneled-workspace-demo__nav-group").filter({ has: page.getByRole("heading", { name: "Projects", exact: true }) }).locator('[data-slot="sidebar-menu-sub"]');
+    const showMore = list.getByRole("button", { name: "Show more (18)", exact: true });
+    await expect(list.getByRole("link")).toHaveCount(7);
+    await showMore.focus();
+    await showMore.press("Enter");
+    await expect(list.getByRole("link")).toHaveCount(25);
+    await expect(list.getByRole("link", { name: "Aster VTOL", exact: true })).toBeFocused();
+    await expect(page).toHaveURL(/view=Dashboard$/);
+    await expect(list).toBeVisible();
+    await expect(showMore).toHaveCount(0);
+    await expect(list.getByRole("link", { name: "Avionics Bay Cooling", exact: true })).toBeVisible();
+    await list.getByRole("link", { name: "Rocket Nozzle", exact: true }).click();
+    await expect(page).toHaveURL(/project=RN-12$/);
+    await navigation.getByRole("link", { name: "Back to Projects", exact: true }).click();
+    if (mode === "collapsed") {
+      await projects.focus();
+      await projects.press("ArrowDown");
+    }
+    await expect(list.getByRole("link")).toHaveCount(25);
+    await expect(showMore).toHaveCount(0);
+  });
+}
+
+test("Analytics summary retains its navigation selection when the submenu opens", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto(`${examplePath}?view=Analytics&project=WA-01`);
+  await expect.poll(() => page.locator("astro-island").evaluate(node => node.hasAttribute("ssr"))).toBe(false);
+  const nav = page.getByRole("navigation", { name: "Paneled workspace navigation", exact: true });
+  const analytics = nav.getByRole("button", { name: "Analytics", exact: true });
+  await expect(analytics).toHaveAttribute("aria-current", "page");
+  await analytics.click();
+  await expect(nav.getByRole("link", { name: "Reports", exact: true })).toBeVisible();
+  await expect(analytics).toHaveAttribute("aria-current", "page");
+  await expect(page.getByRole("table", { name: "Simulation analytics", exact: true })).toBeVisible();
+});
+
 test("project search reaches Reports with arrow keys and keeps project context", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 1000 });
   await openProject(page);
@@ -18,6 +113,7 @@ test("project search reaches Reports with arrow keys and keeps project context",
   const palette = page.getByRole("dialog", { name: "Search paneled workspace", exact: true });
   const input = palette.getByRole("combobox", { name: "Search pages and simulation runs", exact: true });
   const options = palette.getByRole("option");
+  await expect(options.filter({ hasText: /^Applications$/ })).toHaveCount(1);
   await expect(options.filter({ hasText: /^Simulation runs$/ })).toHaveCount(1);
   const reports = options.filter({ hasText: /^Reports$/ });
   const reportsId = await reports.getAttribute("id");
@@ -95,11 +191,12 @@ test("project rename updates labels while links retain stable project identity",
   await navigation.getByRole("button", { name: "Analytics", exact: true }).click();
   await navigation.getByRole("link", { name: "Reports", exact: true }).click();
   await expect(page).toHaveURL(/view=Reports&project=HC-02$/);
-  await navigation.getByRole("link", { name: "Overview", exact: true }).click();
-  await expect(page).toHaveURL(/view=Helicopter&project=HC-02$/);
-  await expect(page.getByRole("heading", { name: "Reports", exact: true })).toBeVisible();
+  await navigation.getByRole("link", { name: "Applications", exact: true }).click();
+  await expect(page).toHaveURL(/view=Applications&project=HC-02$/);
+  await expect(page.getByRole("heading", { name: "Applications", exact: true })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Switch project: Reports", exact: true })).toBeVisible();
   await page.reload();
-  await expect(page.getByRole("heading", { name: "Helicopter", exact: true })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Applications", exact: true })).toBeVisible();
 });
 
 test("browser Back restores workspace focus when project header controls disappear", async ({ page }) => {
@@ -198,13 +295,13 @@ test("search limits project pages to a selected project and includes its top-lev
   await input.press("Escape");
   const navigation = page.getByRole("navigation", { name: "Paneled workspace navigation", exact: true });
   await navigation.getByRole("link", { name: "Helicopter", exact: true }).click();
-  for (const label of ["Project activity", "Overview"]) {
+  for (const label of ["Activities", "Applications", "Members", "Settings"]) {
     await search.click();
     await input.fill(label);
     await expect(page.getByRole("option", { name: label, exact: true })).toBeVisible();
     await input.press("Enter");
     await expect(page).toHaveURL(/project=HC-02$/);
-    await expect(page.getByRole("heading", { name: label === "Overview" ? "Helicopter" : label, exact: true })).toBeVisible();
+    await expect(page.getByRole("heading", { name: label, exact: true })).toBeVisible();
   }
 });
 
@@ -212,10 +309,10 @@ test("page changes preserve focus when project content and header controls unmou
   await page.setViewportSize({ width: 1440, height: 1000 });
   await openProject(page);
   await page.getByRole("link", { name: "Back to Projects", exact: true }).click();
-  const project = page.getByRole("table", { name: "All projects", exact: true }).getByRole("link", { name: "Helicopter", exact: true });
+  const project = page.getByRole("grid", { name: "All projects", exact: true }).getByRole("link", { name: "Helicopter", exact: true });
   await project.focus();
   await project.press("Enter");
-  await expect(page.getByRole("heading", { name: "Helicopter", exact: true })).toBeFocused();
+  await expect(page.getByRole("heading", { name: "Applications", exact: true })).toBeFocused();
   const back = page.getByRole("link", { name: "Back to Projects", exact: true });
   await back.focus();
   await back.press("?");

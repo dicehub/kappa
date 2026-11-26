@@ -14,6 +14,8 @@ export const SIDEBAR_DEFAULTS = {
   mobileWidth: "18rem",
   resizable: false,
   collapseOnResize: true,
+  smartResize: false,
+  showSnapGuide: false,
   defaultWidth: 260,
   minWidth: 180,
   maxWidth: 400,
@@ -46,6 +48,10 @@ export interface SidebarProviderProps {
   resizable?: boolean;
   /** Allow the resize separator to collapse navigation. Triggers remain independent. */
   collapseOnResize?: boolean;
+  /** Snap to defaultWidth immediately, then learn a preferred width. Keyboard resizing stays unsnapped. */
+  smartResize?: boolean;
+  /** Show the snap zone when smart resizing is enabled. Does not change resize behavior. */
+  showSnapGuide?: boolean;
   /** Controlled expanded resize width, in pixels. Used only with resizable. */
   resizeWidth?: number;
   defaultWidth?: number;

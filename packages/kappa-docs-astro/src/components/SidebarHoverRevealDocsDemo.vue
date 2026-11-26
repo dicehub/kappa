@@ -14,13 +14,15 @@ import { Tooltip } from "@dicehub/kappa/components/tooltip";
 import { ChevronsLeft, ChevronsRight, ChevronsUpDown, Folder, House, Inbox, MessageCircle, Plus, Search, Settings, UserRound, UsersRound } from "@lucide/vue";
 
 const props = withDefaults(defineProps<{ standalone?: boolean; applicationShell?: boolean }>(), { standalone: false, applicationShell: false });
+const minNavigationWidth = 260;
+const readingSpace = 240;
 const host = ref<HTMLElement>();
 const maxWidth = ref(600);
 watch(host, (element, _, onCleanup) => {
   if (!element) return;
   const observer = new ResizeObserver(([entry]) => {
-    const available = entry.contentRect.width - 240;
-    maxWidth.value = Math.max(260, Math.min(600, Math.floor(props.standalone ? available / 2 : available)));
+    const available = entry.contentRect.width - readingSpace;
+    maxWidth.value = Math.max(minNavigationWidth, Math.min(600, Math.floor(props.standalone ? available / 2 : available)));
   });
   observer.observe(element);
   onCleanup(() => observer.disconnect());
@@ -138,7 +140,9 @@ onBeforeUnmount(() => window.removeEventListener("keydown", shortcut));
   <div ref="host" class="sidebar-hover-demo" :data-standalone="props.standalone || undefined" :data-sidebar-block="props.applicationShell ? 'hover-reveal' : undefined" data-sidebar-demo="hover-reveal" @keydown="shortcut">
     <DirectionProvider :locale="rtl ? 'ar' : 'en'">
       <AppShell.Root :open="open" peekable collapsible="offcanvas" content-max-width="42rem" resizable :full-screen-on-mobile="props.applicationShell"
-        :min-width="260" :max-width="maxWidth" :collapse-on-resize="false"
+        :min-width="minNavigationWidth" :max-width="maxWidth" :collapse-on-resize="false"
+        :mobile-breakpoint-reference="props.standalone ? 'viewport' : 'container'"
+        :mobile-breakpoint="props.standalone ? undefined : minNavigationWidth + readingSpace"
         :side="end ? 'end' : 'start'" :dir="rtl ? 'rtl' : 'ltr'" label="Hover navigation"
         :trigger-props="{ peek: true, expandLabel: 'Pin sidebar open' }" :navigation-props="{ class: 'sidebar-hover-demo__navigation' }" class="sidebar-hover-demo__layout"
         @update:open="updateOpen" @open-change="requests += 1">

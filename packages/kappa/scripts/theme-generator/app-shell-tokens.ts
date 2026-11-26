@@ -3,6 +3,15 @@ import type { ThemeToken } from "./types.ts";
 
 export const appShellTokens: ThemeToken[] = [
   {
+    name: "--kappa-paneled-chrome",
+    group: "surfaces",
+    description: "Background behind paneled shell navigation, headers, and content panels.",
+    light: "#f4f4f4",
+    dark: "#181818",
+    preview: "background",
+    compatibility: "Previously mixed canvas and border colors inside the shell. The default dark surface is unchanged.",
+  },
+  {
     name: "--kappa-shell-action-foreground",
     group: "text",
     description: "Text and icons in shell toolbar actions.",

@@ -12,12 +12,15 @@ const props = defineProps<{ page: string }>();
 const catalogs = computed(() => {
   if (props.page === "All templates") return Object.values(workspaceTemplateCatalogs);
   const catalog = workspaceTemplateCatalogs[props.page];
-  return catalog ? [catalog] : [];
+  if (catalog) return [catalog];
+  return Object.values(workspaceTemplateCatalogs)
+    .map(item => ({ ...item, templates: item.templates.filter(template => template.name === props.page) }))
+    .filter(item => item.templates.length);
 });
 const templates = computed(() => catalogs.value.flatMap(catalog => catalog.templates.map(template => ({ ...template, publisher: catalog.publisher }))));
 const description = computed(() => props.page === "All templates"
   ? "Browse CFD, experimental, and your published templates for aerodynamic, thermal, and fluid-flow studies."
-  : catalogs.value[0]?.description);
+  : templates.value.find(template => template.name === props.page)?.description ?? catalogs.value[0]?.description);
 const icons = { Aerodynamics: Wind, Thermodynamics: Thermometer, "Fluid mechanics": Waves, Multiphysics: Layers2 };
 </script>
 
@@ -27,6 +30,7 @@ const icons = { Aerodynamics: Wind, Thermodynamics: Thermometer, "Fluid mechanic
     <Grid.Root as="ul" gap="sm" class="paneled-template-catalog__grid" :aria-label="page">
       <Grid.Item v-for="template in templates" :key="template.name" as="li">
         <Card as="article" size="sm" class="paneled-template-catalog__card">
+          <img :src="template.image" alt="" width="480" height="360" loading="lazy" decoding="async" class="paneled-template-catalog__image" />
           <Card.Header>
             <p class="paneled-template-catalog__discipline"><component :is="icons[template.discipline]" :size="18" aria-hidden="true" />{{ template.discipline }}</p>
             <Card.Title as="h3">{{ template.name }}</Card.Title>

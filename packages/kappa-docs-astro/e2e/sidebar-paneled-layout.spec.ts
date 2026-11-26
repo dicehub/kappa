@@ -54,7 +54,7 @@ test("selected paneled navigation indicators sit at the sidebar edge", async ({ 
     .getByRole("link", { name: "Dashboard", exact: true }));
 });
 
-test("paneled navigation has no pinned section, pin controls, or feature catalog", async ({ page }) => {
+test("paneled navigation hides optional pins by default and has no feature catalog", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 1000 });
   await open(page);
   await expect(page.getByRole("button", { name: "Pinned", exact: true })).toHaveCount(0);
@@ -90,7 +90,7 @@ test("paneled navigation puts Dashboard under Your work in the scrolling navigat
   await bounds(project, { x: 8, y: 100, width: 224, height: 28 });
   await expect(project.locator(".lucide-layout-dashboard")).toBeVisible();
   await expect(nav.locator('[data-slot="sidebar-separator"]')).toHaveCount(0);
-  await bounds(nav.getByRole("button", { name: "Projects", exact: true }), { x: 8, y: 160, width: 224, height: 28 });
+  await bounds(nav.locator(".paneled-workspace-demo__group-heading.paneled-workspace-demo__section-heading"), { x: 8, y: 290, width: 224, height: 28 });
   await bounds(help, { x: 1408, y: 960, width: 24, height: 24 });
   await bounds(collapse, { x: 200, y: 56, width: 32, height: 32 });
   await expect(project).toHaveCSS("font-size", "14px");
@@ -100,7 +100,7 @@ test("paneled navigation puts Dashboard under Your work in the scrolling navigat
   await bounds(nav, { width: 44 });
   await bounds(project, { x: 8, y: 100, width: 28, height: 28 });
   await expect(project.locator(".lucide-layout-dashboard")).toBeVisible();
-  await bounds(nav.getByRole("button", { name: "Projects", exact: true }), { x: 8, y: 160, height: 28 });
+  await bounds(nav.getByRole("link", { name: "Projects", exact: true }), { x: 8, y: 290, height: 28 });
   await bounds(page.locator(".kappa-app-shell__panel-frame"), { x: 44, y: 48, width: 1356, height: 944 });
   await nav.getByRole("button", { name: "Expand sidebar", exact: true }).click();
 

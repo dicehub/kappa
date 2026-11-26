@@ -5,52 +5,74 @@ import { WorkspaceSwitcher } from "@dicehub/kappa/blocks/workspace-switcher";
 import { namespaceSwitcherAvatarItems } from "../data/workspace-switcher-demo";
 import { Sidebar } from "@dicehub/kappa/components/sidebar";
 import { Button, ToolbarButton } from "@dicehub/kappa/components/button";
-import { Breadcrumbs } from "@dicehub/kappa/components/breadcrumbs";
+import PaneledWorkspaceBreadcrumbs from "./PaneledWorkspaceBreadcrumbs.vue";
 import { Field } from "@dicehub/kappa/components/field";
 import { Table } from "@dicehub/kappa/components/table";
 import { Badge } from "@dicehub/kappa/components/badge";
+import { ActivityFeed } from "@dicehub/kappa/components/activity-feed";
 import { Avatar } from "@dicehub/kappa/components/avatar";
 import { DicehubLogo, DICEHUB_WORDMARK_PATH, DICEHUB_WORDMARK_VIEWBOX } from "@dicehub/kappa/components/dicehub-logo";
 import { CommandPalette } from "@dicehub/kappa/components/command-palette";
 import { Kbd, KbdGroup } from "@dicehub/kappa/components/kbd";
-import PaneledWorkspaceProfileMenu from "./PaneledWorkspaceProfileMenu.vue";
+import PaneledWorkspaceHeaderControls from "./PaneledWorkspaceHeaderControls.vue";
+import PaneledWorkspaceSidebarSearch from "./PaneledWorkspaceSidebarSearch.vue";
 import PaneledWorkspaceHelpMenu from "./PaneledWorkspaceHelpMenu.vue";
-import PaneledWorkspaceCredits from "./PaneledWorkspaceCredits.vue";
+import PaneledWorkspaceFeatureFlags from "./PaneledWorkspaceFeatureFlags.vue";
 import PaneledWorkspaceComputePages from "./PaneledWorkspaceComputePages.vue";
-import PaneledWorkspaceNotifications from "./PaneledWorkspaceNotifications.vue";
 import PaneledWorkspaceAiChat from "./PaneledWorkspaceAiChat.vue";
 import { createWorkspaceNotifications, type WorkspaceNotification } from "./paneled-workspace-notifications";
 import type { WorkspaceChatState } from "./paneled-workspace-chat";
 import { workspaceCompute, runningJobs, creditAmount, runStatusVariant, type WorkspaceRun } from "./paneled-workspace-compute";
 import PaneledWorkspaceProjectPages from "./PaneledWorkspaceProjectPages.vue";
-import PaneledWorkspaceProjectSummary from "./PaneledWorkspaceProjectSummary.vue";
 import PaneledWorkspaceProjects from "./PaneledWorkspaceProjects.vue";
-import PaneledWorkspaceTemplates from "./PaneledWorkspaceTemplates.vue";
+import PaneledWorkspaceExplore from "./PaneledWorkspaceExplore.vue";
 import PaneledWorkspaceCalculators from "./PaneledWorkspaceCalculators.vue";
 import { workspaceCalculatorPages } from "./paneled-workspace-calculators";
-import { workspaceTemplatePages } from "./paneled-workspace-templates";
-import PaneledWorkspaceNavigation from "./PaneledWorkspaceNavigation.vue";
+import { workspaceTemplateItemPages } from "./paneled-workspace-templates";
+import PaneledWorkspaceNavigationViews from "./PaneledWorkspaceNavigationViews.vue";
+import PaneledWorkspaceSettingsPages from "./PaneledWorkspaceSettingsPages.vue";
+import { settingsPageTitle } from "./paneled-workspace-settings";
 import PaneledWorkspaceProjectSwitcher from "./PaneledWorkspaceProjectSwitcher.vue";
 import { usePaneledWorkspaceLocation } from "./use-paneled-workspace-location";
-import { limitedWorkspacePages, projectCategories, workspaceCategories as defaultWorkspaceCategories, workspaceUtilityDescriptions } from "./paneled-workspace-navigation";
-import { Activity, ArrowLeft, ArrowUpRight, ChevronsLeft, ChevronsRight, ChevronsUpDown, CirclePlay, LayoutDashboard, Maximize2, Minimize2, Plus, Search, Sparkles, UsersRound, X } from "@lucide/vue";
+import { usePaneledWorkspaceLayout } from "./use-paneled-workspace-layout";
+import { usePaneledSearchCenter } from "./use-paneled-search-center";
+import { usePaneledWorkspacePins } from "./use-paneled-workspace-pins";
+import { limitedWorkspacePages, projectCategories, projectNavigation, workspaceCategories as defaultWorkspaceCategories, workspaceExplorePages, workspaceLinks, workspaceSearchCategories, workspaceUtilityDescriptions } from "./paneled-workspace-navigation";
+import { Activity, ArrowUpRight, ChevronsLeft, ChevronsRight, ChevronsUpDown, CirclePlay, Maximize2, Minimize2, Plus, Reply, Sparkles, UsersRound, X } from "@lucide/vue";
 
 const props = withDefaults(defineProps<{ standalone?: boolean }>(), { standalone: false });
 const root = ref<HTMLElement>();
+const { smartResize, setSmartResize, showSnapGuide, setShowSnapGuide, insetHeader, setStoredInsetHeader, centeredSearch, setCenteredSearch, sidebarSearch, setSidebarSearch, projectGuide, setProjectGuide, projectHeadingLink, setProjectHeadingLink, collapsibleProjects, setCollapsibleProjects, projectsSection, setProjectsSection, compactShowMore, setCompactShowMore, pinnedSection, setPinnedSection } = usePaneledWorkspaceLayout();
+const panelToolbar = ref<HTMLElement>();
+const pageContent = ref<HTMLElement>();
+usePaneledSearchCenter(panelToolbar, pageContent, computed(() => insetHeader.value && centeredSearch.value));
+const { pinnedPages, setPinnedPages } = usePaneledWorkspacePins();
 const projectSwitcher = ref<HTMLElement>();
 const namespace = ref("Ros.Space");
 const projectNames = ref<Record<string, string>>({ "Ros.Space": "Aster VTOL", Engineering: "Vega demonstrator", Research: "Orion testbed" });
-const { projects: workspaceProjects, view, selectedProject, lastProject, isProjectOverview, hrefForPage: breadcrumbHref, selectPage, readLocation, renameProject } = usePaneledWorkspaceLocation(props.standalone);
-const workspaceCategories = computed(() => defaultWorkspaceCategories.map(group => group.label === "Projects"
-  ? { ...group, pages: ["All projects", ...workspaceProjects.value.slice(0, 6).map(project => project.code)] } : group));
-const pageLabel = (page: string) => workspaceProjects.value.find(project => project.code === page)?.name ?? page;
+const { projects: workspaceProjects, view, selectedProject, lastProject, isProjectOverview, navigationContext, hrefForPage: breadcrumbHref, selectPage, readLocation, renameProject } = usePaneledWorkspaceLocation(props.standalone);
+const visibleProjectCount = ref(6);
+const workspaceGroupsOpen = ref<Record<string, boolean>>({});
+const workspaceCategories = computed(() => defaultWorkspaceCategories.map(group => {
+  if (group.label === "Projects") return { ...group, collapsible: collapsibleProjects.value, iconCollapsible: collapsibleProjects.value, headingLink: projectHeadingLink.value, pages: [...(projectHeadingLink.value ? [] : ["All projects"]), ...workspaceProjects.value.slice(0, visibleProjectCount.value).map(project => project.code)], remainingCount: Math.max(0, workspaceProjects.value.length - visibleProjectCount.value) };
+  return group;
+}));
+function showMoreItems(category: string) {
+  if (category === "Projects") visibleProjectCount.value = workspaceProjects.value.length;
+}
+const pageAvatar = (page: string) => workspaceProjects.value.find(project => project.code === page);
+const pageLabel = (page: string) => pageAvatar(page)?.name ?? page;
 const projectName = computed(() => selectedProject.value?.name ?? projectNames.value[namespace.value]);
+const isSettings = computed(() => navigationContext.value === "settings");
+const backPage = computed(() => isSettings.value ? "Dashboard" : "All projects");
+const backLabel = computed(() => isSettings.value ? "Back to Dashboard" : "Back to Projects");
+const pageTitle = computed(() => isSettings.value ? settingsPageTitle(view.value) : isProjectOverview.value ? "Applications" : isExplorePage.value ? "Explore" : view.value);
 const workspaceOptions = namespaceSwitcherAvatarItems.filter(item => Object.hasOwn(projectNames.value, item.value));
 const workspaceMenuOpen = ref(false);
-const isTemplatePage = computed(() => workspaceTemplatePages.includes(view.value));
+const isExplorePage = computed(() => workspaceExplorePages.includes(view.value));
 const isCalculatorPage = computed(() => workspaceCalculatorPages.includes(view.value));
 const utilityDescription = computed(() => workspaceUtilityDescriptions[view.value]);
-const isLimitedPage = computed(() => limitedWorkspacePages.includes(view.value));
+const isLimitedPage = computed(() => isSettings.value || limitedWorkspacePages.includes(view.value) || !!selectedProject.value && view.value === "Settings");
 const navigationOpen = ref(true);
 const navigationInitialized = ref(!props.standalone);
 let navigationInitFrame = 0;
@@ -59,6 +81,13 @@ watch([navigationOpen, mobileOpen], () => { workspaceMenuOpen.value = false; });
 const filter = ref("");
 const stateFilter = ref("All runs");
 const searchOpen = ref(false);
+let searchOpener: HTMLElement | undefined;
+watch(searchOpen, async open => {
+  if (open) return;
+  await nextTick();
+  // A viewport change can replace the opener while the search dialog is open.
+  if (searchOpener && !searchOpener.isConnected) root.value?.querySelector<HTMLElement>('[data-paneled-search]')?.focus({ preventScroll: true });
+});
 const searchQuery = ref("");
 const searchKeyboard = ref(false);
 const asideOpen = ref(false);
@@ -104,16 +133,16 @@ const namespaceNotifications = computed(() => notifications.value.filter(item =>
 watch(() => events.value.length, updateActivityScroll, { flush: "post" });
 type SearchEntry = { label: string; description: string; id?: string; page?: string; namespace?: string };
 type SearchGroup = { label: string; items: SearchEntry[] };
-const projectSearchPages = computed(() => selectedProject.value ? ["Overview", "Project activity"] : []);
+const projectSearchPages = computed(() => selectedProject.value ? [...projectNavigation.map(item => item.page), ...projectCategories.flatMap(group => group.pages)] : []);
 const navigationSearchGroups = computed<SearchGroup[]>(() => [
-  { label: "Your work", items: [{ label: "Dashboard", description: "" }, ...(!selectedProject.value ? [{ label: "Simulation runs", description: "" }] : [])] },
+  { label: "Your work", items: ["Dashboard", "Recents", ...(!selectedProject.value ? ["Activities", "Simulation runs"] : [])].map(page => ({ label: page, page, description: "" })) },
   { label: "Project", items: projectSearchPages.value.map(page => ({ label: page, page, description: "" })) },
-  ...[...workspaceCategories.value, ...(selectedProject.value ? projectCategories : [])].map(group => ({ label: group.label, items: group.pages.map(page => ({ label: pageLabel(page), page, description: "" })) })),
+  ...[...workspaceCategories.value, ...workspaceSearchCategories].map(group => ({ label: group.label, items: [...new Set([...('page' in group && group.page ? [group.page] : []), ...group.pages])].map(page => ({ label: pageLabel(page), page, description: "" })) })),
   { label: "Recent simulation runs", items: compute.value.runs.slice(0, 4).map(run => ({ label: run.name, description: `${run.id} · ${run.status}`, id: run.id })) },
   { label: "Workspaces", items: workspaceOptions.map(item => ({ label: item.name, namespace: item.value, description: "" })) },
 ]);
 const searchEntries = computed<SearchEntry[]>(() => [
-  ...[...new Set(["Dashboard", "Simulation runs", ...projectSearchPages.value, ...[...workspaceCategories.value, ...(selectedProject.value ? projectCategories : [])].flatMap(group => group.pages), ...workspaceProjects.value.map(project => project.code)])].map(page => ({ label: pageLabel(page), page, description: "" })),
+  ...[...new Set(["Dashboard", "Recents", "Activities", "Simulation runs", "All projects", ...workspaceLinks.map(item => item.page), ...projectSearchPages.value, ...[...workspaceCategories.value, ...workspaceSearchCategories].flatMap(group => group.pages), ...workspaceTemplateItemPages, ...workspaceProjects.value.map(project => project.code)])].map(page => ({ label: pageLabel(page), page, description: "" })),
   ...compute.value.runs.map(run => ({ label: run.name, description: `${run.id} · ${run.status}`, id: run.id })),
   ...workspaceOptions.map(item => ({ label: item.name, namespace: item.value, description: "Workspace" })),
 ].filter(item => `${item.label} ${item.description}`.toLowerCase().includes(searchQuery.value.trim().toLowerCase())));
@@ -133,7 +162,7 @@ function navigateLink(page: string, event: MouseEvent) {
   const fromFlyout = event.currentTarget instanceof Element && event.currentTarget.closest("[data-paneled-flyout]");
   const backNavigation = event.currentTarget instanceof Element && event.currentTarget.matches(".paneled-workspace-demo__back")
     ? event.currentTarget.closest(".paneled-workspace-demo__navigation") : null;
-  navigate(page);
+  navigate(page, undefined, !!backNavigation);
   if (backNavigation) void nextTick(() => focusWorkspaceNavigation(backNavigation));
   if (fromFlyout) void nextTick(focusPageHeading);
 }
@@ -150,7 +179,11 @@ function restoreRemovedPageFocus(previous: Element | null, wasMobileOpen: boolea
 }
 function focusWorkspaceNavigation(navigation: Element) {
   const workspace = navigation.querySelector<HTMLElement>('[data-slot="sidebar-sliding-view"][data-value="workspace"]');
-  const link = workspace?.querySelector<HTMLElement>('a[aria-current="page"]');
+  const link = [...workspace?.querySelectorAll<HTMLElement>('a[aria-current="page"]') ?? [],
+    workspace?.querySelector<HTMLElement>('.paneled-project-disclosure'),
+    workspace?.querySelector<HTMLElement>('[data-paneled-section-title="Projects"]'),
+    workspace?.querySelector<HTMLElement>('.paneled-projects-section__trigger')]
+    .find(target => target?.getClientRects().length);
   link?.focus({ preventScroll: true });
   if (!link || document.activeElement !== link) workspace?.focus({ preventScroll: true });
 }
@@ -166,23 +199,23 @@ function finishNavigation(keepDrawer = false) {
   filter.value = "";
 }
 function syncLocation() {
-  const navigation = projectSwitcher.value?.closest('.paneled-workspace-demo__navigation');
   const active = document.activeElement;
+  const navigation = active?.closest('.paneled-workspace-demo__navigation') ?? projectSwitcher.value?.closest('.paneled-workspace-demo__navigation') ?? root.value?.querySelector('.paneled-workspace-demo__navigation');
   const restoreWorkspaceFocus = navigation?.querySelector('[data-slot="sidebar-header"]')?.contains(active)
     || active?.closest('.paneled-project-switcher__popover');
-  const previousProject = selectedProject.value?.code;
+  const previousContext = `${navigationContext.value}:${selectedProject.value?.code ?? ""}`;
   const wasMobileOpen = mobileOpen.value;
   readLocation();
-  finishNavigation(previousProject !== selectedProject.value?.code);
+  finishNavigation(previousContext !== `${navigationContext.value}:${selectedProject.value?.code ?? ""}`);
   restoreRemovedPageFocus(active, wasMobileOpen);
-  if (restoreWorkspaceFocus && !selectedProject.value && navigation) void nextTick(() => focusWorkspaceNavigation(navigation));
+  if (restoreWorkspaceFocus && navigationContext.value === "workspace" && navigation) void nextTick(() => focusWorkspaceNavigation(navigation));
 }
-function navigate(page: string) {
+function navigate(page: string, projectCode = selectedProject.value?.code, keepDrawer = false) {
   const previousFocus = document.activeElement;
   const wasMobileOpen = mobileOpen.value;
-  const contextChanged = selectPage(page);
-  // Keep the drawer open to show project navigation or the return to all projects.
-  finishNavigation(contextChanged && (!!selectedProject.value || page === "All projects"));
+  const contextChanged = selectPage(page, true, projectCode);
+  // Keep the drawer open when entering a context or using its back link.
+  finishNavigation(keepDrawer || contextChanged && (navigationContext.value !== "workspace" || page === "All projects"));
   restoreRemovedPageFocus(previousFocus, wasMobileOpen);
 }
 function changeNamespace(value: string) { namespace.value = value; stateFilter.value = "All runs"; navigate("Dashboard"); mobileOpen.value = false; }
@@ -203,6 +236,7 @@ function createRun() {
   filter.value = "";
   stateFilter.value = "All runs";
   events.value.unshift(`Ros.Space created simulation run ${run.id}.`);
+  mobileOpen.value = false;
   void openRun(run);
 }
 function cancelRun() {
@@ -223,7 +257,7 @@ function updateAsideOpen(open: boolean) { asideOpen.value = open; }
 function finalAsideFocus() { return asideOpener?.isConnected ? asideOpener : null; }
 function openNotification(notification: WorkspaceNotification) { notification.read = true; navigate(notification.page); }
 function readAllNotifications() { namespaceNotifications.value.forEach(item => { item.read = true; }); }
-function showSearch() { searchKeyboard.value = false; searchQuery.value = ""; searchOpen.value = true; }
+function showSearch() { searchOpener = root.value?.querySelector<HTMLElement>('[data-paneled-search]'); searchKeyboard.value = false; searchQuery.value = ""; searchOpen.value = true; }
 async function selectSearch(value: unknown) {
   const entry = value as SearchEntry;
   searchOpen.value = false;
@@ -265,8 +299,8 @@ onBeforeUnmount(() => { railObserver?.disconnect(); cancelAnimationFrame(navigat
 </script>
 
 <template>
-  <div ref="root" class="paneled-workspace-demo" data-sidebar-block="paneled-workspace" :data-standalone="props.standalone || undefined" :data-activity="asideOpen || undefined" @keydown="shortcut">
-    <AppShell.Root appearance="paneled" bloom hide-desktop-trigger resizable :default-width="240" :min-width="200" :max-width="420" v-model:open="navigationOpen" v-model:mobile-open="mobileOpen" label="Paneled workspace navigation" :navigation-props="{ class: 'paneled-workspace-demo__navigation' }" class="paneled-workspace-demo__layout">
+  <div ref="root" class="paneled-workspace-demo" data-sidebar-block="paneled-workspace" :data-inset-header="insetHeader || undefined" :data-centered-search="insetHeader && centeredSearch || undefined" :data-standalone="props.standalone || undefined" :data-activity="asideOpen || undefined" @keydown="shortcut">
+    <AppShell.Root appearance="paneled" bloom hide-desktop-trigger resizable :smart-resize="smartResize" :show-snap-guide="showSnapGuide" :default-width="240" :min-width="200" :max-width="420" v-model:open="navigationOpen" v-model:mobile-open="mobileOpen" label="Paneled workspace navigation" :navigation-props="{ class: 'paneled-workspace-demo__navigation' }" class="paneled-workspace-demo__layout">
       <template #toolbar-start>
         <a class="kappa-app-shell__brand kappa-app-shell__brand--wordmark" :href="breadcrumbHref('Dashboard')" aria-label="dicehub home" @click="navigateLink('Dashboard', $event)">
           <DicehubLogo variant="glyph" aria-hidden="true" />
@@ -275,19 +309,16 @@ onBeforeUnmount(() => { railObserver?.disconnect(); cancelAnimationFrame(navigat
           </svg>
         </a>
       </template>
-      <template #toolbar>
-        <AppShell.SearchTrigger shortcut="Ctrl + K" data-paneled-search :icon="Search" aria-keyshortcuts="Control+K" aria-haspopup="dialog" :aria-expanded="searchOpen" @click="showSearch" />
-        <div class="paneled-workspace-demo__global-actions">
-          <PaneledWorkspaceCredits :namespace="namespace" :compute="compute" :loading="!creditsReady" @navigate="navigate" @add-credits="compute.balanceCents += $event" />
-          <ToolbarButton :icon="CirclePlay" :aria-label="`Runs: ${activeRunCount} active`" :tooltip="`${activeRunCount} active simulation runs`" @click="navigate('Simulation runs')">{{ activeRunCount }}</ToolbarButton>
-          <PaneledWorkspaceNotifications :items="namespaceNotifications" @open="openNotification" @read-all="readAllNotifications" />
-          <PaneledWorkspaceProfileMenu @navigate="navigate" />
-        </div>
+      <template v-if="!insetHeader" #toolbar="context">
+        <PaneledWorkspaceHeaderControls :namespace="namespace" :project-code="selectedProject?.code" :compute="compute" :credits-ready="creditsReady" :active-run-count="activeRunCount" :notifications="namespaceNotifications" :search-open="searchOpen" :inset-header="insetHeader" :is-mobile="context.isMobile" :sidebar-search="sidebarSearch"
+          @search="showSearch" @navigate="navigate" @add-credits="compute.balanceCents += $event" @open-notification="openNotification" @read-all="readAllNotifications" />
       </template>
       <template #header="context">
-        <Sidebar.MenuButton v-if="selectedProject" :href="breadcrumbHref('All projects')" tooltip="Back to Projects" :icon="ArrowLeft" class="paneled-workspace-demo__back" @click="navigateLink('All projects', $event)">Back to Projects</Sidebar.MenuButton>
+        <PaneledWorkspaceSidebarSearch v-if="sidebarSearch && !context.isMobile" :collapsed="context.iconCollapsed" :open="searchOpen" @search="showSearch" />
+        <Sidebar.MenuButton v-if="navigationContext !== 'workspace'" :href="breadcrumbHref(backPage)" :tooltip="backLabel" :icon="Reply" class="paneled-workspace-demo__back" @click="navigateLink(backPage, $event)">{{ backLabel }}</Sidebar.MenuButton>
+        <Sidebar.Separator v-if="navigationContext !== 'workspace'" aria-hidden="true" />
         <div class="paneled-workspace-demo__context-row" :data-collapsed="context.iconCollapsed || undefined">
-          <p v-if="!context.iconCollapsed" class="paneled-workspace-demo__context-label">{{ selectedProject ? "Project" : "Your work" }}</p>
+          <p v-if="!context.iconCollapsed" class="paneled-workspace-demo__context-label">{{ selectedProject ? "Project" : isSettings ? "Settings" : "Your work" }}</p>
           <Sidebar.Trigger v-if="!context.isMobile" class="paneled-workspace-demo__pin"
             :aria-label="navigationOpen ? 'Collapse sidebar' : 'Expand sidebar'">
             <component :is="navigationOpen ? ChevronsLeft : ChevronsRight" aria-hidden="true" />
@@ -299,20 +330,12 @@ onBeforeUnmount(() => { railObserver?.disconnect(); cancelAnimationFrame(navigat
         </div>
       </template>
       <template #navigation="context">
-        <Sidebar.SlidingViews class="paneled-workspace-demo__sliding-views" :data-initializing="!navigationInitialized || undefined" :active-key="selectedProject ? 'project' : 'workspace'" :direction="selectedProject ? 'left' : 'right'">
-          <Sidebar.SlidingView value="workspace" label="Workspace navigation">
-            <PaneledWorkspaceNavigation :categories="workspaceCategories" :view="view" :active="!selectedProject" :icon-collapsed="context.iconCollapsed" :is-mobile="context.isMobile" :menu-open="workspaceMenuOpen" :run-count="compute.runs.length" label="Workspace links" :href-for-page="breadcrumbHref" :page-label="pageLabel" @navigate="navigateLink">
-              <Sidebar.MenuItem><Sidebar.MenuButton :href="breadcrumbHref('Dashboard')" tooltip="Dashboard" :icon="LayoutDashboard" :active="view === 'Dashboard'" class="paneled-workspace-demo__workspace paneled-workspace-demo__dashboard" @click="navigateLink('Dashboard', $event)">Dashboard</Sidebar.MenuButton></Sidebar.MenuItem>
-              <Sidebar.MenuItem><Sidebar.MenuButton :href="breadcrumbHref('Simulation runs')" tooltip="Simulation runs" :icon="CirclePlay" :active="view === 'Simulation runs'" @click="navigateLink('Simulation runs', $event)">Simulation runs<span class="paneled-workspace-demo__count" aria-hidden="true">{{ compute.runs.length }}</span></Sidebar.MenuButton></Sidebar.MenuItem>
-            </PaneledWorkspaceNavigation>
-          </Sidebar.SlidingView>
-          <Sidebar.SlidingView value="project" :label="`${lastProject.name} navigation`">
-            <PaneledWorkspaceNavigation :categories="projectCategories" :view="view" :active="!!selectedProject" :icon-collapsed="context.iconCollapsed" :is-mobile="context.isMobile" :menu-open="workspaceMenuOpen" :run-count="compute.runs.length" label="Project links" :href-for-page="breadcrumbHref" @navigate="navigateLink">
-              <Sidebar.MenuItem><Sidebar.MenuButton :href="breadcrumbHref(lastProject.code)" tooltip="Overview" :icon="LayoutDashboard" :active="isProjectOverview" @click="navigateLink(lastProject.code, $event)">Overview</Sidebar.MenuButton></Sidebar.MenuItem>
-              <Sidebar.MenuItem><Sidebar.MenuButton :href="breadcrumbHref('Project activity')" tooltip="Project activity" :icon="Activity" :active="view === 'Project activity'" @click="navigateLink('Project activity', $event)">Project activity</Sidebar.MenuButton></Sidebar.MenuItem>
-            </PaneledWorkspaceNavigation>
-          </Sidebar.SlidingView>
-        </Sidebar.SlidingViews>
+        <PaneledWorkspaceNavigationViews v-model:groups-open="workspaceGroupsOpen" :context="navigationContext" :initialized="navigationInitialized"
+          :pinned-section="pinnedSection" :pinned-pages="pinnedPages" @update:pinned-pages="setPinnedPages"
+          :categories="workspaceCategories" :view="view" :page-title="pageTitle" :project-name="lastProject.name" :is-explore-page="isExplorePage"
+          :icon-collapsed="context.iconCollapsed" :is-mobile="context.isMobile" :menu-open="workspaceMenuOpen" :run-count="compute.runs.length"
+          :href-for-page="breadcrumbHref" :page-label="pageLabel" :page-avatar="pageAvatar" :project-guide="projectGuide" :projects-section="projectsSection" :compact-show-more="compactShowMore"
+          @navigate="navigateLink" @show-more="showMoreItems" @create-project="navigate('New project')" @create-run="createRun" />
       </template>
       <template #footer="context">
         <div class="paneled-workspace-demo__workspace-row" :data-collapsed="context.iconCollapsed || undefined">
@@ -336,27 +359,45 @@ onBeforeUnmount(() => { railObserver?.disconnect(); cancelAnimationFrame(navigat
           </WorkspaceSwitcher>
         </div>
       </template>
-      <template #default>
-        <AppShell.Panels v-model:detail-open="detailOpen" v-model:aside-open="asideOpen" v-model:aside-maximized="asideMaximized"
-          detail-label="Simulation run details" :aside-label="panelTitle" resize-label="Resize simulation run panels" :aside-resize-label="`Resize ${panelTitle}`"
-          :initial-detail-focus="() => detailHeading ?? null" :final-detail-focus="finalDetailFocus"
-          :initial-aside-focus="() => asideHeading ?? null" :final-aside-focus="finalAsideFocus">
-                <Breadcrumbs.Root size="sm" class="paneled-workspace-demo__breadcrumbs" aria-label="Workspace breadcrumb">
-                  <Breadcrumbs.List>
-                    <Breadcrumbs.Item><Breadcrumbs.Link :href="breadcrumbHref('Dashboard')" @click="navigateLink('Dashboard', $event)">{{ namespace }}</Breadcrumbs.Link></Breadcrumbs.Item>
-                    <Breadcrumbs.Separator />
-                    <template v-if="selectedProject && !isProjectOverview">
-                      <Breadcrumbs.Item><Breadcrumbs.Link :href="breadcrumbHref(selectedProject.code)" @click="navigateLink(selectedProject.code, $event)">{{ selectedProject.name }}</Breadcrumbs.Link></Breadcrumbs.Item>
-                      <Breadcrumbs.Separator />
-                    </template>
-                    <Breadcrumbs.Item><Breadcrumbs.Link :href="breadcrumbHref(view)" aria-current="page" @click="navigateLink(view, $event)">{{ isProjectOverview ? projectName : view }}</Breadcrumbs.Link></Breadcrumbs.Item>
-                  </Breadcrumbs.List>
-                </Breadcrumbs.Root>
+      <template #default="context">
+        <div class="paneled-workspace-demo__surface">
+          <AppShell.Panels v-model:detail-open="detailOpen" v-model:aside-open="asideOpen" v-model:aside-maximized="asideMaximized"
+            detail-label="Simulation run details" :aside-label="panelTitle" resize-label="Resize simulation run panels" :aside-resize-label="`Resize ${panelTitle}`"
+            :initial-detail-focus="() => detailHeading ?? null" :final-detail-focus="finalDetailFocus"
+            :initial-aside-focus="() => asideHeading ?? null" :final-aside-focus="finalAsideFocus">
+            <template #header>
+              <header ref="panelToolbar" :class="{ 'paneled-workspace-demo__panel-toolbar': insetHeader }" aria-label="Workspace toolbar">
+                <PaneledWorkspaceBreadcrumbs :namespace="namespace" :project="selectedProject" :projects="workspaceProjects"
+                  :view="view" :page-title="pageTitle" :settings="isSettings" :href-for-page="breadcrumbHref" @open="navigateLink" @navigate="navigate" />
+                <PaneledWorkspaceHeaderControls v-if="insetHeader" :namespace="namespace" :project-code="selectedProject?.code" :compute="compute" :credits-ready="creditsReady" :active-run-count="activeRunCount" :notifications="namespaceNotifications" :search-open="searchOpen" :inset-header="insetHeader" :is-mobile="context.isMobile" :sidebar-search="sidebarSearch"
+                  @search="showSearch" @navigate="navigate" @add-credits="compute.balanceCents += $event" @open-notification="openNotification" @read-all="readAllNotifications" />
+              </header>
+            </template>
                 <section class="paneled-workspace-demo__list-scroll" :data-width="isLimitedPage ? 'limited' : undefined" aria-label="Workspace page">
-                  <div class="paneled-workspace-demo__page-content" :data-width="isLimitedPage ? 'limited' : undefined">
-                  <div class="paneled-workspace-demo__page-heading"><h2>{{ isProjectOverview ? projectName : view }}</h2><Button v-if="view === 'Simulation runs'" size="sm" :icon="Plus" @click="createRun">New simulation run</Button><Button v-else size="sm" variant="outline" :icon="CirclePlay" @click="navigate('Simulation runs')">View simulation runs</Button></div>
-                  <PaneledWorkspaceProjectSummary v-if="selectedProject && isProjectOverview" :project="selectedProject" />
+                  <div ref="pageContent" class="paneled-workspace-demo__page-content" :data-width="isLimitedPage ? 'limited' : undefined">
+                  <div class="paneled-workspace-demo__page-heading"><h2>{{ pageTitle }}</h2><Button v-if="view === 'Simulation' || view === 'Simulation runs'" size="sm" :icon="Plus" @click="createRun">{{ view === 'Simulation' ? 'Create simulation' : 'New simulation run' }}</Button><Button v-else-if="view === 'All projects'" variant="primary" class="paneled-workspace-demo__create-project" @click="navigate('New project')">New project</Button><Button v-else-if="!isExplorePage && !isSettings" size="sm" variant="outline" :icon="CirclePlay" @click="navigate('Simulation runs')">View simulation runs</Button></div>
+                  <PaneledWorkspaceSettingsPages v-if="isSettings" :page="pageTitle" :namespace="namespace" :compute="compute" :project-count="workspaceProjects.length" />
+                  <PaneledWorkspaceProjectPages v-else-if="selectedProject && isProjectOverview" page="Applications" :project="projectName" :href-for-page="breadcrumbHref" @navigate="navigate" />
                   <PaneledWorkspaceProjects v-else-if="view === 'All projects'" :projects="workspaceProjects" :href-for-page="breadcrumbHref" @open="navigateLink" />
+                  <PaneledWorkspaceExplore v-else-if="isExplorePage" :page="view" :projects="workspaceProjects" :href-for-page="breadcrumbHref" @navigate="navigate" @open="navigateLink" />
+                  <div v-else-if="view === 'Recents'" class="paneled-workspace-demo__overview">
+                    <p>Continue with recent simulation runs in {{ namespace }}.</p>
+                    <Table compact aria-label="Recent simulation runs">
+                      <Table.Header><Table.Row><Table.Head scope="col">Simulation run</Table.Head><Table.Head scope="col">Status</Table.Head></Table.Row></Table.Header>
+                      <Table.Body><Table.Row v-for="run in compute.runs.slice(0, 4)" :key="run.id">
+                        <Table.Cell><Button variant="link" size="sm" @click="openRun(run, $event)">{{ run.name }}</Button></Table.Cell>
+                        <Table.Cell><Badge :variant="runStatusVariant(run.status)">{{ run.status }}</Badge></Table.Cell>
+                      </Table.Row></Table.Body>
+                    </Table>
+                  </div>
+                  <ActivityFeed.Root v-else-if="view === 'Activities' && !selectedProject">
+                    <ActivityFeed.List aria-label="Workspace activities">
+                      <ActivityFeed.Item v-for="(event, index) in events" :key="index">
+                        <ActivityFeed.Marker variant="icon"><Activity aria-hidden="true" /></ActivityFeed.Marker>
+                        <ActivityFeed.Content><ActivityFeed.Title>{{ event }}</ActivityFeed.Title></ActivityFeed.Content>
+                      </ActivityFeed.Item>
+                    </ActivityFeed.List>
+                  </ActivityFeed.Root>
                   <div v-else-if="view === 'Groups'" class="paneled-workspace-demo__overview">
                     <p>Choose a group to open its workspace.</p>
                     <Table compact aria-label="Groups">
@@ -367,10 +408,9 @@ onBeforeUnmount(() => { railObserver?.disconnect(); cancelAnimationFrame(navigat
                       </Table.Row></Table.Body>
                     </Table>
                   </div>
-                  <PaneledWorkspaceTemplates v-else-if="isTemplatePage" :key="view" :page="view" />
                   <PaneledWorkspaceCalculators v-else-if="isCalculatorPage" :key="view" :page="view" />
                   <PaneledWorkspaceProjectPages v-else-if="isLimitedPage && view !== 'Dashboard'" :key="`${namespace}-${selectedProject?.code}-${view}`" :page="view" :project="projectName" :href-for-page="breadcrumbHref" @navigate="navigate" @rename="renameProject" />
-                  <PaneledWorkspaceComputePages v-else-if="view === 'Simulation runs' || view === 'Compute usage' || view === 'Billing'" :key="`${namespace}-${view}`" :page="view" :namespace="namespace" :compute="compute" v-model:filter="stateFilter" v-model:query="filter" :selected-id="detailOpen ? detailId : undefined" @open="openRun" />
+                  <PaneledWorkspaceComputePages v-else-if="['Simulation runs', 'Analytics', 'Compute usage', 'Billing'].includes(view)" :key="`${namespace}-${view}`" :page="view" :namespace="view === 'Analytics' ? projectName : namespace" :compute="compute" v-model:filter="stateFilter" v-model:query="filter" :selected-id="detailOpen ? detailId : undefined" @open="openRun" />
                   <div v-else-if="utilityDescription" class="paneled-workspace-demo__overview">
                     <p>{{ utilityDescription }}</p>
                     <Button variant="outline" size="sm" @click="navigate('Dashboard')">Return to Dashboard</Button>
@@ -420,10 +460,11 @@ onBeforeUnmount(() => { railObserver?.disconnect(); cancelAnimationFrame(navigat
             <header><h2 ref="asideHeading" tabindex="-1">{{ panelTitle }}</h2><Button v-if="canMaximize" class="paneled-workspace-demo__activity-size" variant="ghost" size="sm" shape="square" :icon="asideMaximized ? Minimize2 : Maximize2" :aria-label="`${asideMaximized ? 'Restore' : 'Maximize'} ${panelTitle}`" @click="toggleMaximized" /><Button variant="ghost" size="sm" shape="square" :icon="X" :aria-label="`Close ${panelTitle}`" @click="updateAsideOpen(false)" /></header>
             <PaneledWorkspaceAiChat v-if="sidePanel === 'ai'" v-model="aiChat" :namespace="namespace" :runs="compute.runs" />
             <template v-else>
-              <p>Recent updates across {{ namespace }}.</p><div class="paneled-workspace-demo__activity-scroll" :data-scroll-start="activityScrollStart || undefined" :data-scroll-end="activityScrollEnd || undefined"><ol ref="activityList" @scroll="updateActivityScroll"><li v-for="(event, index) in events" :key="index"><Activity aria-hidden="true" /><div><p>{{ event }}</p><small>{{ index ? 'Earlier today' : 'Latest update' }}</small></div></li></ol></div><Button size="sm" variant="outline" @click="navigate('Activity log'); updateAsideOpen(false)">View activity log</Button>
+              <p>Recent updates across {{ namespace }}.</p><div class="paneled-workspace-demo__activity-scroll" :data-scroll-start="activityScrollStart || undefined" :data-scroll-end="activityScrollEnd || undefined"><ol ref="activityList" @scroll="updateActivityScroll"><li v-for="(event, index) in events" :key="index"><Activity aria-hidden="true" /><div><p>{{ event }}</p><small>{{ index ? 'Earlier today' : 'Latest update' }}</small></div></li></ol></div><Button size="sm" variant="outline" @click="navigate('Activities', ''); updateAsideOpen(false)">View activity log</Button>
             </template>
           </template>
-        </AppShell.Panels>
+          </AppShell.Panels>
+        </div>
         <AppShell.SearchDialog v-model:open="searchOpen" class="workspace-search-dialog paneled-workspace-search-dialog" aria-label="Search paneled workspace" :data-search-keyboard="searchKeyboard || undefined" @pointermove.capture="searchKeyboard = false" @keydown.capture="searchKeyboard = ['ArrowDown', 'ArrowUp', 'Home', 'End', 'PageDown', 'PageUp'].includes($event.key)">
           <CommandPalette.Panel v-model:value="searchQuery" :open="searchOpen" :items="searchGroups" :filter="false" :get-selectable-items="selectableSearchItems" :item-to-string-value="entryLabel" :item-to-value="entryValue" @close="searchOpen = false" @select="selectSearch">
             <CommandPalette.Input aria-label="Search pages and simulation runs" placeholder="Type to search…" />
@@ -434,6 +475,18 @@ onBeforeUnmount(() => { railObserver?.disconnect(); cancelAnimationFrame(navigat
       <template #rail>
         <ToolbarButton variant="ghost" size="sm" :icon="Sparkles" tooltip="AI chat" :tooltip-placement="railOnBottom ? 'top' : 'left'" :aria-expanded="asideOpen && sidePanel === 'ai'" @click="toggleTool('ai', $event)" />
         <ToolbarButton variant="ghost" size="sm" :icon="Activity" tooltip="Activities" :tooltip-placement="railOnBottom ? 'top' : 'left'" :aria-expanded="asideOpen && sidePanel === 'activities'" @click="toggleTool('activities', $event)" />
+        <PaneledWorkspaceFeatureFlags :rail-on-bottom="railOnBottom"
+          :inset-header="insetHeader" @update:inset-header="setStoredInsetHeader"
+          :centered-search="centeredSearch" @update:centered-search="setCenteredSearch"
+          :sidebar-search="sidebarSearch" @update:sidebar-search="setSidebarSearch"
+          :smart-resize="smartResize" @update:smart-resize="setSmartResize"
+          :show-snap-guide="showSnapGuide" @update:show-snap-guide="setShowSnapGuide"
+          :project-guide="projectGuide" @update:project-guide="setProjectGuide"
+          :project-heading-link="projectHeadingLink" @update:project-heading-link="setProjectHeadingLink"
+          :collapsible-projects="collapsibleProjects" @update:collapsible-projects="setCollapsibleProjects"
+          :projects-section="projectsSection" @update:projects-section="setProjectsSection"
+          :compact-show-more="compactShowMore" @update:compact-show-more="setCompactShowMore"
+          :pinned-section="pinnedSection" @update:pinned-section="setPinnedSection" />
         <PaneledWorkspaceHelpMenu :rail-on-bottom="railOnBottom" :href-for-page="breadcrumbHref" @navigate="navigate" />
       </template>
     </AppShell.Root>
@@ -441,3 +494,4 @@ onBeforeUnmount(() => { railObserver?.disconnect(); cancelAnimationFrame(navigat
 </template>
 
 <style src="./sidebar-paneled-workspace-demo.css"></style>
+<style src="./paneled-workspace-inset-header.css"></style>

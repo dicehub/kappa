@@ -1,0 +1,46 @@
+.paneled-workspace-demo__navigation.kappa-sidebar .paneled-workspace-demo__group-heading[data-icon-collapse] :is(h3:not([data-linked]), .paneled-workspace-demo__section-link) {
+  padding-inline-start: 2.25rem;
+}
+.paneled-workspace-demo__navigation.kappa-sidebar .paneled-workspace-demo__group-heading[data-icon-collapse]:is(:hover, :has(:focus-visible)) .paneled-workspace-demo__section-link {
+  background: var(--kappa-shell-nav-highlight);
+  color: var(--kappa-shell-nav-emphasis);
+}
+.paneled-workspace-demo__navigation.kappa-sidebar .paneled-workspace-demo__group-heading[data-icon-collapse]:has(.paneled-workspace-demo__section-link:active) .paneled-workspace-demo__section-link {
+  background: var(--kappa-shell-nav-pressed);
+}
+.paneled-workspace-demo__navigation.kappa-sidebar .paneled-workspace-demo__group-heading[data-icon-collapse]:is(:hover, :has(:focus-visible, .paneled-workspace-demo__section-link[data-active])) > .paneled-project-disclosure {
+  color: var(--kappa-shell-nav-emphasis);
+}
+.paneled-workspace-demo__navigation.kappa-sidebar .paneled-workspace-demo__group-heading > .paneled-project-disclosure.kappa-sidebar__menu-button {
+  position: absolute;
+  z-index: 1;
+  inset-inline-start: 0.25rem;
+  inset-block-start: 50%;
+  translate: 0 -50%;
+  display: grid;
+  flex: none;
+  place-items: center;
+  inline-size: 1.5rem;
+  min-inline-size: 1.5rem;
+  min-block-size: 1.5rem;
+  padding: 0.125rem;
+  border-radius: 0.5rem;
+}
+.paneled-workspace-demo__navigation.kappa-sidebar .paneled-project-disclosure.kappa-sidebar__menu-button:is(:hover, :focus-visible) {
+  background: var(--kappa-toolbar-button-hover);
+}
+.paneled-workspace-demo__navigation.kappa-sidebar .paneled-project-disclosure.kappa-sidebar__menu-button:active {
+  background: var(--kappa-toolbar-button-pressed);
+}
+.paneled-workspace-demo__navigation.kappa-sidebar .paneled-workspace-demo__group-heading[data-icon-collapse] + .kappa-sidebar__collapsible-content[data-state] {
+  animation-duration: 100ms;
+}
+.paneled-project-disclosure > svg { grid-area: 1 / 1; inline-size: 1rem; block-size: 1rem; pointer-events: none; }
+.paneled-project-disclosure__chevron { opacity: 0; }
+.paneled-project-disclosure[data-state="open"] .paneled-project-disclosure__chevron { transform: rotate(90deg); }
+.paneled-project-disclosure:is(:hover, :focus-visible) .paneled-project-disclosure__icon { opacity: 0; }
+.paneled-project-disclosure:is(:hover, :focus-visible) .paneled-project-disclosure__chevron { opacity: 1; }
+@media (hover: none) {
+  .paneled-project-disclosure .paneled-project-disclosure__icon { opacity: 0; }
+  .paneled-project-disclosure .paneled-project-disclosure__chevron { opacity: 1; }
+}

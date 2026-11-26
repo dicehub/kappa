@@ -1,10 +1,12 @@
 <script setup lang="ts">
-import { computed, ref, watch } from "vue";
+import { computed, ref, useId, watch } from "vue";
 import { Check, ChevronsUpDown, Search } from "@lucide/vue";
 import { Avatar } from "@dicehub/kappa/components/avatar";
 import { ToolbarButton } from "@dicehub/kappa/components/button";
+import { Breadcrumbs } from "@dicehub/kappa/components/breadcrumbs";
 import { CommandPalette, type CommandPaletteSelectOptions } from "@dicehub/kappa/components/command-palette";
 import { Popover } from "@dicehub/kappa/components/popover";
+import { Tooltip } from "@dicehub/kappa/components/tooltip";
 import type { WorkspaceProject } from "./paneled-workspace-projects";
 
 const props = defineProps<{
@@ -13,11 +15,13 @@ const props = defineProps<{
   hrefForPage: (page: string) => string;
   compact: boolean;
   isMobile: boolean;
+  variant?: "sidebar" | "breadcrumb";
 }>();
 const emit = defineEmits<{ navigate: [page: string] }>();
 const open = ref(false);
 const query = ref("");
 const surface = ref<HTMLElement>();
+const triggerId = useId();
 const sortedProjects = computed(() => [...props.projects].sort((a, b) => a.name.localeCompare(b.name, "en")));
 const projectLabel = (item: unknown) => (item as WorkspaceProject).name;
 const projectCode = (item: unknown) => (item as WorkspaceProject).code;
@@ -54,9 +58,18 @@ function allProjects(event: MouseEvent) {
 </script>
 
 <template>
-  <Popover.Root v-model:open="open" :portalled="!isMobile" :initial-focus-el="() => surface?.querySelector('input') ?? null"
+  <Popover.Root v-model:open="open" :ids="{ trigger: triggerId }" :portalled="!isMobile" :initial-focus-el="() => surface?.querySelector('input') ?? null"
     :positioning="{ placement: compact ? 'right-start' : 'bottom-start', strategy: 'fixed', gutter: 10, overflowPadding: 8 }">
-    <Popover.Trigger as-child>
+    <Tooltip.Root v-if="variant === 'breadcrumb'" :ids="{ trigger: triggerId }" :disabled="open"
+      :open-delay="500" :close-delay="0" :positioning="{ placement: 'bottom' }">
+      <Tooltip.Trigger as-child>
+        <Popover.Trigger as-child>
+          <Breadcrumbs.Trigger aria-label="Switch project" />
+        </Popover.Trigger>
+      </Tooltip.Trigger>
+      <Tooltip.Content>Switch project</Tooltip.Content>
+    </Tooltip.Root>
+    <Popover.Trigger v-else as-child>
       <ToolbarButton class="paneled-project-switcher__trigger" :data-compact="compact || undefined" :data-mobile="isMobile || undefined"
         :aria-label="`Switch project: ${project.name}`" :tooltip="`Switch project: ${project.name}`">
         <Avatar.Root class="paneled-project-switcher__avatar kappa-app-shell__project-avatar" aria-hidden="true">

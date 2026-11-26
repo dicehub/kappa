@@ -2,6 +2,7 @@ import type { UseSplitterProps } from "@ark-ui/vue/splitter";
 import { DEFAULT_LOCALE, useLocaleContext } from "@ark-ui/vue/locale";
 import { computed, inject, onMounted, onScopeDispose, provide, ref, type ComputedRef, type InjectionKey, type Ref } from "vue";
 import { clampSidebarWidth, resolveSidebarWidthBounds, type SidebarProviderProps } from "./sidebar";
+import { useSidebarSmartResize } from "./sidebar-smart-resize";
 
 interface ResizeOptions {
   layout: Ref<HTMLElement | undefined>;
@@ -20,6 +21,11 @@ interface ResizeContext {
   canCollapse: ComputedRef<boolean>;
   defaultSize: ComputedRef<number>;
   setIsResizing: (value: boolean) => void;
+  startPointer: (event: PointerEvent) => void;
+  cancelSnap: () => void;
+  clickHandle: (event: MouseEvent) => void;
+  snapped: Readonly<Ref<boolean>>;
+  snapZone: ComputedRef<{ width: number; radius: number; active: boolean } | null>;
 }
 const resizeKey: InjectionKey<ResizeContext> = Symbol("KappaSidebarResize");
 export const useSidebarResizeContext = () => inject(resizeKey)!;
@@ -45,6 +51,14 @@ export function useSidebarResize(props: Required<Pick<SidebarProviderProps, "def
   const range = computed(() => {
     const collapsed = props.collapsible === "offcanvas" ? 0 : Math.min(collapsedPixels.value, bounds.value.minWidth);
     return { min: canCollapse.value ? collapsed : bounds.value.minWidth, max: Math.min(groupWidth.value || Infinity, bounds.value.maxWidth), collapsed };
+  });
+  const snapGeometry = computed(() => [bounds.value.minWidth, range.value.max, groupWidth.value, sidebarIndex.value] as const);
+  const snap = useSidebarSmartResize({
+    enabled: () => enabled.value && !!props.smartResize,
+    width: () => options.open.value ? width.value : range.value.collapsed, open: () => options.open.value,
+    defaultWidth: () => clampSidebarWidth(props.defaultWidth, bounds.value.minWidth, bounds.value.maxWidth),
+    setWidth,
+    geometry: () => snapGeometry.value,
   });
   let observer: ResizeObserver | undefined;
 
@@ -91,7 +105,8 @@ export function useSidebarResize(props: Required<Pick<SidebarProviderProps, "def
         const next = (size[sidebarIndex.value] ?? 0) / 100 * groupWidth.value;
         const isCollapsed = canCollapse.value && next <= collapsed + 0.5;
         options.setOpen(!isCollapsed);
-        if (!isCollapsed) setWidth(next);
+        const adjusted = snap.apply(next, isCollapsed);
+        if (!isCollapsed) setWidth(adjusted);
       },
       onResizeEnd: () => { if (enabled.value) options.onResizeEnd(width.value); },
     };
@@ -99,6 +114,7 @@ export function useSidebarResize(props: Required<Pick<SidebarProviderProps, "def
   const defaultSize = computed(() => groupWidth.value > 0
     ? clampSidebarWidth(props.defaultWidth, bounds.value.minWidth, bounds.value.maxWidth) / groupWidth.value * 100
     : 25);
-  provide(resizeKey, { props: splitterProps, handleId, range, canCollapse, defaultSize, setIsResizing: (value) => { resizing.value = value; } });
+  const snapZone = computed(() => props.showSnapGuide ? snap.zone.value : null);
+  provide(resizeKey, { props: splitterProps, handleId, range, canCollapse, defaultSize, startPointer: snap.start, cancelSnap: snap.cancel, clickHandle: snap.click, snapped: snap.snapped, snapZone, setIsResizing: (value) => { resizing.value = value; } });
   return { width, setWidth, isResizing: computed(() => enabled.value && resizing.value) };
 }

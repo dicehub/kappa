@@ -1,0 +1,81 @@
+{
+  "created": "2026-11-11",
+  "source": "OpenAI native image_gen through Codex using the OpenAI provider",
+  "purpose": "Illustrative CFD previews for the dicehub Community project gallery. These are synthetic artwork, not solver results.",
+  "rights": "Generated for the dicehub documentation preview. Documentation artwork is excluded from the repository MIT license.",
+  "processing": "Center-cropped and reduced from the original generated images to 800 by 500 pixels with Lanczos resampling; WebP quality 78, compression method 6, no metadata. No upscaling.",
+  "assets": [
+    {
+      "file": "helicopter.webp",
+      "originalSize": [
+        1586,
+        992
+      ],
+      "size": [
+        800,
+        500
+      ],
+      "prompt": "Use case: scientific-educational.\nAsset type: landscape CFD project thumbnail for a clean technical software gallery, used on a Community project card.\nScene/backdrop: pale cool gray background.\nStyle/medium: crisp engineering visualization; professional CFD post-processing viewport with realistic proportions, restrained gray geometry and detailed mesh or streamlines. Selective blue/cyan/green/yellow velocity or pressure contours with occasional small red high-value regions only where appropriate.\nComposition/framing: landscape composition, identifiable central geometry. Keep the complete subject inside the central 85 percent so a 16:10 card crop retains it. Prefer the highest native landscape output. Create one single image.\nConstraints: illustrative synthetic CFD artwork, not a claim of measured or validated simulation results.\nAvoid: software chrome, labels, letters, scales, axis legends, title, watermark, logos, collage, dark backgrounds, border, or human figures.\nSubject: Three-quarter side view of a generic unbranded light helicopter fuselage with main rotor, tail boom and tail rotor, pale gray solid geometry; several fine cyan wake streamlines flowing over and behind the fuselage, a faint circular rotor wake. Do not hide helicopter inside a flow cloud."
+    },
+    {
+      "file": "drone.webp",
+      "originalSize": [
+        1586,
+        992
+      ],
+      "size": [
+        800,
+        500
+      ],
+      "prompt": "Use case: scientific-educational.\nAsset type: landscape CFD project thumbnail for a clean technical software gallery, used on a Community project card.\nScene/backdrop: pale cool gray background.\nStyle/medium: crisp engineering visualization; professional CFD post-processing viewport with realistic proportions, restrained gray geometry and detailed mesh or streamlines. Selective blue/cyan/green/yellow velocity or pressure contours with occasional small red high-value regions only where appropriate.\nComposition/framing: landscape composition, identifiable central geometry. Keep the complete subject inside the central 85 percent so a 16:10 card crop retains it. Prefer the highest native landscape output. Create one single image.\nConstraints: illustrative synthetic CFD artwork, not a claim of measured or validated simulation results.\nAvoid: software chrome, labels, letters, scales, axis legends, title, watermark, logos, collage, dark backgrounds, border, or human figures.\nSubject: Generic compact quadcopter geometry seen from above at a three-quarter angle, four rotors clearly visible; blue/teal wake streamlines underneath each propeller, neutral gray frame. Balanced composition."
+    },
+    {
+      "file": "wind-turbine.webp",
+      "originalSize": [
+        1586,
+        992
+      ],
+      "size": [
+        800,
+        500
+      ],
+      "prompt": "Use case: scientific-educational.\nAsset type: landscape CFD project thumbnail for a clean technical software gallery, used on a Community project card.\nScene/backdrop: pale cool gray background.\nStyle/medium: crisp engineering visualization; professional CFD post-processing viewport with realistic proportions, restrained gray geometry and detailed mesh or streamlines. Selective blue/cyan/green/yellow velocity or pressure contours with occasional small red high-value regions only where appropriate.\nComposition/framing: landscape composition, identifiable central geometry. Keep the complete subject inside the central 85 percent so a 16:10 card crop retains it. Prefer the highest native landscape output. Create one single image.\nConstraints: illustrative synthetic CFD artwork, not a claim of measured or validated simulation results.\nAvoid: software chrome, labels, letters, scales, axis legends, title, watermark, logos, collage, dark backgrounds, border, or human figures.\nSubject: Generic three-bladed horizontal-axis wind turbine rotor and short nacelle, seen at an oblique angle; blue/green blade surface pressure contours and faint downstream spiral wake, mostly pale background."
+    },
+    {
+      "file": "winglet.webp",
+      "originalSize": [
+        1586,
+        992
+      ],
+      "size": [
+        800,
+        500
+      ],
+      "prompt": "Use case: scientific-educational.\nAsset type: landscape CFD project thumbnail for a clean technical software gallery, used on a Community project card.\nScene/backdrop: pale cool gray background.\nStyle/medium: crisp engineering visualization; professional CFD post-processing viewport with realistic proportions, restrained gray geometry and detailed mesh or streamlines. Selective blue/cyan/green/yellow velocity or pressure contours with occasional small red high-value regions only where appropriate.\nComposition/framing: landscape composition, identifiable central geometry. Keep the complete subject inside the central 85 percent so a 16:10 card crop retains it. Prefer the highest native landscape output. Create one single image.\nConstraints: illustrative synthetic CFD artwork, not a claim of measured or validated simulation results.\nAvoid: software chrome, labels, letters, scales, axis legends, title, watermark, logos, collage, dark backgrounds, border, or human figures.\nSubject: Isolated swept aircraft wing with an upward curved winglet on its visible tip, fine gray surface mesh with selective cyan/yellow pressure contours; several thin cyan streamlines and a subtle tip vortex. No whole aircraft."
+    },
+    {
+      "file": "propeller.webp",
+      "originalSize": [
+        1586,
+        992
+      ],
+      "size": [
+        800,
+        500
+      ],
+      "prompt": "Use case: scientific-educational.\nAsset type: landscape CFD project thumbnail for a clean technical software gallery, used on a Community project card.\nScene/backdrop: pale cool gray background.\nStyle/medium: crisp engineering visualization; professional CFD post-processing viewport with realistic proportions, restrained gray geometry and detailed mesh or streamlines. Selective blue/cyan/green/yellow velocity or pressure contours with occasional small red high-value regions only where appropriate.\nComposition/framing: landscape composition, identifiable central geometry. Keep the complete subject inside the central 85 percent so a 16:10 card crop retains it. Prefer the highest native landscape output. Create one single image.\nConstraints: illustrative synthetic CFD artwork, not a claim of measured or validated simulation results.\nAvoid: software chrome, labels, letters, scales, axis legends, title, watermark, logos, collage, dark backgrounds, border, or human figures.\nSubject: Three-bladed propeller on a short hub with blue/teal blade loading colors and fine wake trajectories; a sparse set of subtle acoustic contour arcs downstream. Centered oblique view."
+    },
+    {
+      "file": "air-taxi.webp",
+      "originalSize": [
+        1586,
+        992
+      ],
+      "size": [
+        800,
+        500
+      ],
+      "prompt": "Use case: scientific-educational.\nAsset type: landscape CFD project thumbnail for a clean technical software gallery, used on a Community project card.\nScene/backdrop: pale cool gray background.\nStyle/medium: crisp engineering visualization; professional CFD post-processing viewport with realistic proportions, restrained gray geometry and detailed mesh or streamlines. Selective blue/cyan/green/yellow velocity or pressure contours with occasional small red high-value regions only where appropriate.\nComposition/framing: landscape composition, identifiable central geometry. Keep the complete subject inside the central 85 percent so a 16:10 card crop retains it. Prefer the highest native landscape output. Create one single image.\nConstraints: illustrative synthetic CFD artwork, not a claim of measured or validated simulation results.\nAvoid: software chrome, labels, letters, scales, axis legends, title, watermark, logos, collage, dark backgrounds, border, or human figures.\nSubject: Generic unbranded electric VTOL aircraft above a small simple landing pad, four rotor positions, light gray wing and fuselage; restrained blue/cyan rotor downwash streamlines meeting the ground. Clear technical perspective, no city or landscape.\nGeometry correction: All four rotors must be mechanically connected to the aircraft by clearly visible solid light-gray arms or longitudinal booms. Use two rigid booms attached to the wing, one on each side of the fuselage, with one rotor at each boom end. Show the complete structural connection from every motor mount to its boom and from each boom to the wing. No floating or disconnected rotors. Keep downwash sparse and transparent enough that all four rotor supports remain visible. Keep the entire aircraft and landing pad inside the central 85 percent."
+    }
+  ]
+}

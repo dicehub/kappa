@@ -22,10 +22,10 @@ test("cube and wordmark share one Dashboard link and fit narrow headers", async 
     await expect(page).toHaveURL(/\?view=Dashboard$/);
     await expect(page.getByRole("heading", { name: "Dashboard", exact: true })).toBeVisible();
   }
-  for (const width of [320, 375, 384, 390]) {
+  for (const width of [320, 375, 390, 447, 448]) {
     await page.setViewportSize({ width, height: 844 });
     await expect(home.locator(".kappa-dicehub-logo--glyph")).toBeVisible();
-    if (width < 384) await expect(home.locator(".kappa-app-shell__wordmark")).toBeHidden();
+    if (width < 448) await expect(home.locator(".kappa-app-shell__wordmark")).toBeHidden();
     else await expect(home.locator(".kappa-app-shell__wordmark")).toBeVisible();
     const brand = (await home.boundingBox())!;
     const toggle = (await page.getByRole("button", { name: "Open sidebar", exact: true }).boundingBox())!;

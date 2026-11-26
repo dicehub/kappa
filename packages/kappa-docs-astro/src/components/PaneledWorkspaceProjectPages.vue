@@ -15,6 +15,12 @@ const emit = defineEmits<{ navigate: [page: string]; rename: [name: string] }>()
 const activityFilter = ref("All activity");
 const visibleCount = ref(6);
 const activityFilters = ["All activity", "Engineering", "Reviews", "Flight tests"];
+const members = [
+  { name: "Ros.Space", initials: "RS", role: "Owner" },
+  { name: "Maya Chen", initials: "MC", role: "Maintainer" },
+  { name: "Alex Morgan", initials: "AM", role: "Engineer" },
+  { name: "Sam Rivera", initials: "SR", role: "Viewer" },
+];
 const updates = [
   { id: 1, day: "Today", date: "2026-10-31T10:42:00", time: "10:42", author: "Maya Chen", initials: "MC", category: "Engineering", icon: Wind, action: "completed a simulation", title: "Hover efficiency · rotor configuration B", detail: "Run SIM-204 converged. Results are ready for the design review.", page: "Simulation runs" },
   { id: 2, day: "Today", date: "2026-10-31T10:16:00", time: "10:16", author: "Alex Morgan", initials: "AM", category: "Reviews", icon: ClipboardCheck, action: "requested a review", title: "Wing-to-fuselage interface · revision 03", detail: "Check the load assumptions and updated attachment geometry.", page: "Design reviews" },
@@ -55,7 +61,7 @@ watch(testFilter, filter => {
 
 <template>
   <div class="paneled-project-pages">
-    <template v-if="props.page === 'Project activity'">
+    <template v-if="props.page === 'Activities'">
       <p class="paneled-project-pages__intro">Engineering updates, reviews, and test results across {{ props.project }}.</p>
       <Tabs.Root v-model="activityFilter" lazy-mount unmount-on-exit @value-change="visibleCount = 6">
         <Tabs.List variant="line" size="sm" aria-label="Activity type">
@@ -106,7 +112,7 @@ watch(testFilter, filter => {
         <h3>Next project checkpoint</h3>
         <div class="paneled-project-pages__checkpoint"><Radar aria-hidden="true" /><div><h4>Flight readiness review</h4><p>3 November · 09:00 UTC · Engineering and flight operations</p><p>Review the test sequence, pending simulation runs, and the latest simulation evidence.</p></div><Badge variant="warning">In preparation</Badge></div>
       </section>
-      <a class="paneled-project-pages__footer-link" :href="hrefForPage('Project activity')" @click="follow('Project activity', $event)"><Activity aria-hidden="true" />View project activity <ArrowUpRight aria-hidden="true" /></a>
+      <a class="paneled-project-pages__footer-link" :href="hrefForPage('Activity')" @click="follow('Activity', $event)"><Activity aria-hidden="true" />View activity <ArrowUpRight aria-hidden="true" /></a>
     </template>
 
     <template v-else-if="props.page === 'Flight test plan'">
@@ -138,7 +144,17 @@ watch(testFilter, filter => {
         <a :href="hrefForPage('Simulation runs')" @click="follow('Simulation runs', $event)">Open simulation runs <ArrowUpRight aria-hidden="true" /></a>
       </section>
     </template>
-    <PaneledWorkspaceProjectSettings v-else-if="props.page === 'Project Settings'" :project="props.project" @rename="emit('rename', $event)" />
+    <template v-else-if="props.page === 'Members'">
+      <p class="paneled-project-pages__intro">People with access to {{ props.project }}.</p>
+      <Table compact aria-label="Project members">
+        <Table.Header><Table.Row><Table.Head scope="col">Member</Table.Head><Table.Head scope="col">Role</Table.Head><Table.Head scope="col">Status</Table.Head></Table.Row></Table.Header>
+        <Table.Body><Table.Row v-for="member in members" :key="member.name">
+          <Table.Cell><div class="paneled-project-pages__member"><Avatar.Root size="sm"><Avatar.Fallback>{{ member.initials }}</Avatar.Fallback></Avatar.Root><span>{{ member.name }}</span></div></Table.Cell>
+          <Table.Cell>{{ member.role }}</Table.Cell><Table.Cell><Badge variant="success">Active</Badge></Table.Cell>
+        </Table.Row></Table.Body>
+      </Table>
+    </template>
+    <PaneledWorkspaceProjectSettings v-else-if="props.page === 'Settings'" :project="props.project" @rename="emit('rename', $event)" />
     <PaneledWorkspaceCatalog v-else :key="props.page" :page="props.page" @navigate="emit('navigate', $event)" />
   </div>
 </template>

@@ -11,7 +11,7 @@ test("mobile header puts the logo before the navigation toggle in display and ta
   await open(page);
   const home = page.getByRole("link", { name: "dicehub home", exact: true });
   const toggle = page.getByRole("button", { name: "Open sidebar", exact: true });
-  for (const width of [320, 390, 575, 576, 768, 991, 992, 1199]) {
+  for (const width of [320, 390, 575, 576, 640, 703, 704, 768, 991, 992, 1199]) {
     await page.setViewportSize({ width, height: 844 });
     const inset = width < 992 ? 8 : 12;
     await expect.poll(async () => (await home.boundingBox())!.x).toBe(inset);
@@ -23,12 +23,15 @@ test("mobile header puts the logo before the navigation toggle in display and ta
     await page.keyboard.press("Tab");
     await expect(toggle).toBeFocused();
     const search = (await page.getByRole("button", { name: "Search or go to…", exact: true }).boundingBox())!;
+    const create = (await page.getByRole("button", { name: "Create new…", exact: true }).boundingBox())!;
     const credits = (await page.getByRole("button", { name: /^Credits:/ }).boundingBox())!;
     expect(search.x).toBeGreaterThanOrEqual(button.x + button.width);
-    expect(credits.x - search.x - search.width).toBeGreaterThanOrEqual(8);
+    expect(create).toMatchObject({ width: 32, height: 32 });
+    expect(create.x - search.x - search.width).toBeGreaterThanOrEqual(width < 360 ? 4 : 8);
+    expect(credits.x).toBeGreaterThanOrEqual(create.x + create.width);
     if (width < 576) {
       const profile = (await page.getByRole("link", { name: "Profile: Alex Morgan", exact: true }).boundingBox())!;
-      expect(credits.x - search.x - search.width).toBe(8);
+      expect(create.x - search.x - search.width).toBe(width < 360 ? 4 : 8);
       expect(profile.x + profile.width).toBe(width - 8);
     }
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);

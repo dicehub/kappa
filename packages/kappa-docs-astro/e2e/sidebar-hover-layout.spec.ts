@@ -43,7 +43,7 @@ async function resize(root: Locator, key: 'Home' | 'End') {
   await readable(root);
 }
 
-for (const width of [1920, 1440, 1280, 1024, 768, 390]) {
+for (const [width, usesDrawer] of [[1920, false], [1440, false], [1280, false], [1024, true], [768, false], [390, true]] as const) {
   test(`embedded content stays readable at ${width}px and the maximum sidebar width`, async ({ page }) => {
     await loaded(page, '/docs/components/sidebar#hover-reveal', width);
     const root = demo(page);
@@ -52,7 +52,7 @@ for (const width of [1920, 1440, 1280, 1024, 768, 390]) {
     await expect(shell).toHaveAttribute('data-content-alignment', 'shell');
     await readable(root);
     const separator = root.getByRole('separator', { name: 'Resize sidebar', exact: true });
-    if (width >= 768) {
+    if (!usesDrawer) {
       await expect(shell).not.toHaveAttribute('data-mobile');
       await resize(root, 'End');
       await root.getByRole('link', { name: 'Troubleshooting', exact: true }).click();
@@ -76,6 +76,11 @@ for (const width of [1920, 1440, 1280, 1024, 768, 390]) {
       await page.keyboard.press('Escape');
       await expect(drawer).toBeHidden();
       await expect(trigger).toBeFocused();
+      if (width === 1024) {
+        await page.locator('.docs-header').getByRole('button', { name: 'Collapse navigation', exact: true }).click();
+        await expect(shell).not.toHaveAttribute('data-mobile');
+        await resize(root, 'End');
+      }
     }
     expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(width);
   });

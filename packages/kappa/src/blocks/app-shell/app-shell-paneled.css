@@ -1,5 +1,3 @@
-.kappa-app-shell[data-appearance="paneled"],
-.kappa-sidebar__positioner:has([data-app-shell-appearance="paneled"]) { --kappa-paneled-chrome: color-mix(in srgb, var(--kappa-canvas) 40%, var(--kappa-line)); }
 .kappa-app-shell[data-appearance="paneled"] { overflow: hidden; background: var(--kappa-paneled-chrome); }
 .kappa-app-shell[data-appearance="paneled"] > .kappa-sidebar-layout__site-header { z-index: 5; }
 .kappa-app-shell[data-appearance="paneled"][data-mobile] > .kappa-sidebar-layout__site-header { gap: 0.5rem; }

@@ -2,7 +2,7 @@
 .kappa-app-shell[data-fill] { block-size: 100svh; block-size: 100dvh; }
 .kappa-app-shell__brand { display: grid; flex: none; inline-size: 1.75rem; block-size: 1.75rem; place-items: center; border-radius: 0.3125rem; }
 .kappa-app-shell__brand--wordmark { display: inline-flex; inline-size: auto; align-items: center; gap: 0.5rem; }
-.kappa-app-shell__brand .kappa-app-shell__wordmark { flex: none; inline-size: 4.375rem; block-size: auto; }
+.kappa-app-shell__brand .kappa-app-shell__wordmark { flex: none; inline-size: 4.375rem; block-size: auto; overflow: visible; }
 .kappa-app-shell__brand:focus-visible { outline: 2px solid var(--kappa-focus); outline-offset: 2px; }
 .kappa-app-shell__brand .kappa-dicehub-logo--glyph { inline-size: 1.5rem; block-size: 1.5rem; }
 .kappa-app-shell__brand .kappa-dicehub-logo__hit-area { pointer-events: all; }
@@ -24,6 +24,7 @@
 .kappa-app-shell__actions { display: flex; flex: none; align-items: center; gap: 0.25rem; margin-inline-start: auto; }
 .kappa-app-shell__search.kappa-button { --kappa-button-hover-background: var(--kappa-shell-search-surface); --kappa-button-hover-foreground: var(--kappa-subtle); position: relative; inline-size: min(22rem, 100%); min-inline-size: 0; block-size: 2rem; justify-content: flex-start; padding-inline: 0.625rem; border: 1px solid var(--kappa-shell-search-border); border-radius: 0.625rem; background: var(--kappa-shell-search-surface); color: var(--kappa-subtle); font-size: 0.875rem; font-weight: 400; }
 .kappa-app-shell__search.kappa-button:hover:not(:disabled, [aria-disabled="true"]) { border-color: var(--kappa-shell-search-hover-border); background: var(--kappa-shell-search-surface); }
+.kappa-app-shell__search[data-kappa-focus-visible="false"]:focus-visible { outline: none; }
 .kappa-app-shell__search .kappa-button__label { display: flex; flex: 1; align-items: center; gap: 0.625rem; min-inline-size: 0; }
 .kappa-app-shell__search-label { overflow: hidden; font-weight: 320; line-height: 1.25; text-overflow: ellipsis; white-space: nowrap; }
 .kappa-app-shell__search .kappa-kbd-group { flex: none; margin-inline-start: auto; color: var(--kappa-subtle); font-size: 0.75rem; font-weight: 400; }
