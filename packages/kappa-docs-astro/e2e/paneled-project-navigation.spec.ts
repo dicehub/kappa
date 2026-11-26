@@ -27,12 +27,12 @@ test("legacy project bookmarks keep context while shared workspace pages stay gl
   await page.reload();
   await expect(page).toHaveURL(/view=Activities&project=AV-07$/);
   await expect(page.getByRole("button", { name: "Switch project: Aster VTOL", exact: true })).toBeVisible();
-  for (const view of ["Settings", "Activities"]) {
+  for (const [view, canonical] of [["Settings", "Account details"], ["Activities", "Activities"]]) {
     await page.goto(`${examplePath}?${new URLSearchParams({ view })}`);
     await expect.poll(() => page.locator("astro-island").evaluate(node => node.hasAttribute("ssr"))).toBe(false);
-    await expect(page).toHaveURL(`${examplePath}?${new URLSearchParams({ view })}`);
+    await expect(page).toHaveURL(`${examplePath}?${new URLSearchParams({ view: canonical })}`);
     await expect(page.getByRole("button", { name: /^Switch project:/ })).toHaveCount(0);
-    await expect(page.getByRole("heading", { name: view, exact: true })).toBeVisible();
+    await expect(page.getByRole("heading", { name: canonical, exact: true })).toBeVisible();
   }
 });
 

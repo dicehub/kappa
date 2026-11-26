@@ -6,6 +6,7 @@ const flyout = (page: Page, category = "Simulation runs") => page.getByRole("nav
 
 async function openExample(page: Page, theme = "light", reports = false) {
   await page.goto(reports ? "/examples/appshell/paneled-workspace?view=Reports&project=WA-01" : path);
+  await expect(page.locator('astro-island[ssr]:has([data-sidebar-block="paneled-workspace"])')).toHaveCount(0);
   await expect(page.getByRole("heading", { name: reports ? "Reports" : "Simulation runs", exact: true })).toBeVisible();
   await page.evaluate(value => document.documentElement.setAttribute("data-kappa-theme", value), theme);
 }

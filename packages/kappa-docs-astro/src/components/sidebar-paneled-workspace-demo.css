@@ -229,8 +229,8 @@
 .paneled-workspace-demo__flyout .paneled-workspace-demo__flyout-title:has(a) { padding: 0; }
 .paneled-workspace-demo__flyout .paneled-workspace-demo__flyout-title a { min-block-size: 1.5rem; margin: 0; padding: 0.25rem 1rem; font: inherit; color: inherit; }
 .paneled-workspace-demo__flyout-divider { margin: 0.25rem -0.25rem; border: 0; border-block-start: 1px solid var(--kappa-shell-menu-divider); }
-.paneled-workspace-demo__flyout nav { display: grid; min-inline-size: 12rem; max-inline-size: 17rem; max-block-size: 70vh; overflow-y: auto; }
-.paneled-workspace-demo__flyout a { display: flex; min-block-size: 1.75rem; align-items: center; justify-content: space-between; gap: 0.75rem; margin-block-end: 0.125rem; padding: 0.125rem 0.25rem; padding-inline-start: 1rem; border-radius: 0.25rem; color: var(--kappa-shell-nav-foreground); font-size: 0.875rem; font-weight: 425; line-height: 1.3125rem; text-decoration: none; }
+.paneled-workspace-demo__flyout nav { display: grid; row-gap: 0.125rem; min-inline-size: 12rem; max-inline-size: 17rem; max-block-size: 70vh; overflow-y: auto; }
+.paneled-workspace-demo__flyout a { display: flex; min-block-size: 1.75rem; align-items: center; justify-content: space-between; gap: 0.75rem; padding: 0.125rem 0.25rem; padding-inline-start: 1rem; border-radius: 0.25rem; color: var(--kappa-shell-nav-foreground); font-size: 0.875rem; font-weight: 425; line-height: 1.3125rem; text-decoration: none; }
 .paneled-workspace-demo__flyout a:is(:hover, :focus-visible, [aria-current="page"]) { color: var(--kappa-shell-nav-emphasis); background: var(--kappa-shell-nav-highlight); }
 .paneled-workspace-demo__flyout a[aria-current="page"] { font-weight: 600; }
 .paneled-workspace-demo__flyout a { padding-inline-end: 0.75rem; }
@@ -259,7 +259,8 @@
 }
 @container paneled-workspace (max-width: 22.499rem) {
 .paneled-workspace-demo__global-actions { gap: 0; }
-.paneled-workspace-demo .kappa-app-shell[data-appearance="paneled"] > .kappa-sidebar-layout__site-header { gap: 0.25rem; }
+.paneled-workspace-demo .kappa-app-shell[data-appearance="paneled"][data-mobile] > .kappa-sidebar-layout__site-header { gap: 0.25rem; }
+.paneled-workspace-demo .kappa-app-shell[data-mobile] > .kappa-sidebar-layout__site-header > .kappa-app-shell__brand { margin-inline-end: 0.25rem; }
 .paneled-workspace-demo__runs .kappa-button__label { display: none; }
 }
 @container paneled-workspace (max-width: 42rem) {

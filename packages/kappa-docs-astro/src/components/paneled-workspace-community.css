@@ -1,7 +1,7 @@
 .paneled-workspace-community { container: paneled-community / inline-size; }
 
 @container paneled-community (max-width: 28rem) {
-  .paneled-workspace-community__sections {
+  .paneled-workspace-community .paneled-workspace-community__sections {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
     inline-size: 100%;

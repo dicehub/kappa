@@ -44,9 +44,10 @@ for (const inset of [false, true]) {
     await sidebarSearch.click();
     await expect(input).toBeFocused();
     await page.setViewportSize({ width: 390, height: 844 });
+    await expect(input).toBeFocused();
+    await input.press("Escape");
     await expect(sidebarSearch).toHaveCount(0);
     await expect(search).toHaveCount(1);
-    await input.press("Escape");
     await expect(search).toBeFocused();
     await search.click();
     await expect(input).toBeFocused();
@@ -57,8 +58,9 @@ for (const inset of [false, true]) {
     await search.click();
     await expect(input).toBeFocused();
     await page.setViewportSize({ width: 1440, height: 1000 });
-    await expect(sidebarSearch).toBeVisible();
+    await expect(input).toBeFocused();
     await input.press("Escape");
+    await expect(search).toHaveCount(1);
     await expect(sidebarSearch).toBeFocused();
     await flags.click();
     await expect(option).toBeChecked();

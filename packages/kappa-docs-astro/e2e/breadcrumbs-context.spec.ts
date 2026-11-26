@@ -1,6 +1,7 @@
 import { expect, test } from "@playwright/test";
 
 test.beforeEach(async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/docs/components/breadcrumbs#context");
   await expect(page.locator('astro-island[ssr]:has([data-breadcrumbs-demo="context"])')).toHaveCount(0);
 });
@@ -85,7 +86,8 @@ test("context separates quiet dividers from links and preserves dark keyboard fo
   await page.getByRole("button", { name: "Toggle theme", exact: true }).filter({ visible: true }).click();
   await expect.poll(() => link.evaluate(el => getComputedStyle(el).color)).not.toBe(light);
   const trigger = trail.getByRole("button", { name: "Switch project", exact: true });
-  await trigger.focus();
+  await trail.getByRole("link", { name: "Wind Aero Study", exact: true }).press("Tab");
+  await expect(trigger).toBeFocused();
   await expect(trigger).toHaveCSS("outline-style", "solid");
   await trigger.press("Enter");
   await page.getByRole("combobox", { name: "Search projects", exact: true }).press("Escape");
