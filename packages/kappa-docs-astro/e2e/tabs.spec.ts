@@ -154,6 +154,9 @@ test.describe("Tabs documentation", () => {
   });
 
   test("supports many tabs, edge controls, and a dynamic tab count", async ({ page }) => {
+    // Seven tabs fit at this width. With ten, Settings reaches the forward control.
+    await page.setViewportSize({ width: 1184, height: 800 });
+    await page.emulateMedia({ reducedMotion: "reduce" });
     const many = demo(page, "many");
     const manyList = many.getByRole("tablist");
     await expect(many.getByRole("tab")).toHaveCount(8);

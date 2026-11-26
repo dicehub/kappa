@@ -352,16 +352,15 @@ test("a narrower container keeps its fallback guide stable", async ({ page }) =>
   await demo.getByRole("button", { name: "Smart resizing", exact: true }).click();
   const handle = demo.getByRole("separator", { name: "Resize sidebar", exact: true });
   const zone = demo.locator('[data-slot="sidebar-snap-zone"]');
-  for (let index = 0; index < 10; index += 1) {
-    await handle.dblclick();
-    await dragTo(page, handle, 300 + index % 3);
-    await page.clock.fastForward(2100);
-  }
+  const initialZone = (await zone.boundingBox())!;
+  await train(page, handle);
+  expect((await zone.boundingBox())!.x - initialZone.x).toBeCloseTo(301 - 240, 1);
   await demo.evaluate(element => { element.style.width = "260px"; element.style.maxWidth = "260px"; });
   await expect(handle).toHaveAttribute("aria-valuemax", "260");
   const fallbackZone = (await zone.boundingBox())!;
   await page.clock.pauseAt(await page.evaluate(() => Date.now() + 1000));
-  for (let index = 0; index < 7; index += 1) {
+  // Three releases can establish a new preference. Check the next drag as well.
+  for (let index = 0; index < 4; index += 1) {
     await handle.dblclick();
     await expect(handle).toHaveAttribute("aria-valuenow", "240");
     const pointer = await moveTo(page, handle, 246);
