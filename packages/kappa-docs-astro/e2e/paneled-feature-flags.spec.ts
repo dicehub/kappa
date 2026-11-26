@@ -1,5 +1,39 @@
 import { expect, test } from "@playwright/test";
 
+test("Compact Show more saves its setting and keeps the project count and load action", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.goto("/examples/appshell/paneled-workspace?view=Dashboard");
+  await expect(page.locator("astro-island[ssr]")).toHaveCount(0);
+  const flags = page.getByRole("button", { name: "Feature flags", exact: true });
+  const option = page.getByRole("menuitemcheckbox", { name: "Compact Show more", exact: true });
+  const navigation = page.getByRole("navigation", { name: "Paneled workspace navigation", exact: true });
+  const more = navigation.getByRole("button", { name: "Show more (18)", exact: true });
+  const originalSize = await more.evaluate(node => getComputedStyle(node).fontSize);
+  await flags.click();
+  await expect(option).not.toBeChecked();
+  await option.click();
+  await expect(flags).toBeFocused();
+  await expect(more.locator("svg")).toHaveCount(0);
+  expect(await more.evaluate(node => parseFloat(getComputedStyle(node).fontSize))).toBeLessThan(parseFloat(originalSize));
+  await page.reload();
+  await expect(page.locator("astro-island[ssr]")).toHaveCount(0);
+  await flags.click();
+  await expect(option).toBeChecked();
+  await page.keyboard.press("Escape");
+  await more.focus();
+  await more.press("Enter");
+  await expect(navigation.getByRole("link", { name: "Aster VTOL", exact: true })).toBeFocused();
+  await expect(more).toHaveCount(0);
+  await expect(navigation.getByRole("link", { name: "Avionics Bay Cooling", exact: true })).toBeVisible();
+  await expect(page).toHaveURL(/view=Dashboard$/);
+  await flags.click();
+  await option.click();
+  await page.reload();
+  await expect(page.locator("astro-island[ssr]")).toHaveCount(0);
+  await expect(more).toHaveCSS("font-size", originalSize);
+  await expect(more.locator("svg")).toHaveCount(1);
+});
+
 for (const viewport of [{ width: 1440, height: 1000 }, { width: 390, height: 844 }]) {
   test(`feature flags open from the tools rail at ${viewport.width}px`, async ({ page }) => {
     await page.setViewportSize(viewport);

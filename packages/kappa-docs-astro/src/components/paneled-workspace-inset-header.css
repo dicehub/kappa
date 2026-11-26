@@ -71,10 +71,12 @@
   min-block-size: 2rem;
   padding: 0;
 }
-.paneled-workspace-demo .paneled-workspace-demo__panel-toolbar .kappa-app-shell__search {
+.paneled-workspace-demo[data-inset-header] .paneled-workspace-demo__search-island > .kappa-app-shell__search {
   position: static;
-  flex: none;
   translate: none;
+}
+.paneled-workspace-demo .paneled-workspace-demo__panel-toolbar .kappa-app-shell__search {
+  flex: none;
   inline-size: 12rem;
   min-inline-size: 12rem;
   max-inline-size: 12rem;
@@ -85,6 +87,18 @@
 }
 .paneled-workspace-demo__panel-toolbar .kappa-app-shell__search .kappa-button__label { display: flex; }
 .paneled-workspace-demo .kappa-app-shell[data-mobile] .paneled-workspace-demo__panel-toolbar::before { content: ""; flex: none; inline-size: 4.25rem; }
+
+@container paneled-surface (min-width: 60rem) {
+  .paneled-workspace-demo[data-centered-search] .paneled-workspace-demo__panel-toolbar:has(.paneled-workspace-demo__search-island) {
+    display: grid;
+    grid-template-columns: minmax(0, calc((100% - 12rem - 1.5rem) / 2 + var(--kappa-paneled-search-center-offset, 0px))) 12rem minmax(0, 1fr);
+  }
+  .paneled-workspace-demo[data-centered-search] .paneled-workspace-demo__search-island { margin-inline: 0; }
+  .paneled-workspace-demo[data-inset-header][data-centered-search] .paneled-workspace-demo__search-island::before { background: transparent; border: 0; box-shadow: none; }
+  .paneled-workspace-demo[data-centered-search] .paneled-workspace-demo__global-actions { justify-self: end; }
+  .paneled-workspace-demo[data-centered-search] .kappa-app-shell[data-mobile] .paneled-workspace-demo__panel-toolbar::before { position: absolute; }
+  .paneled-workspace-demo[data-centered-search] .kappa-app-shell[data-mobile] .paneled-workspace-demo__panel-toolbar .paneled-workspace-demo__breadcrumbs { padding-inline-start: 4.25rem; }
+}
 
 @container paneled-surface (max-width: 43.999rem) {
   .paneled-workspace-demo__panel-toolbar { flex-wrap: wrap; gap: 0.25rem; padding-inline: 0.5rem; }

@@ -15,6 +15,7 @@ function useLayoutOption(name: string) {
 
 export function usePaneledWorkspaceLayout() {
   const [insetHeader, setStoredInsetHeader] = useLayoutOption("inset-header");
+  const [centeredSearch, setCenteredSearch] = useLayoutOption("centered-search");
   const [smartResize, setSmartResize] = useLayoutOption("smart-resize");
   const [showSnapGuide, setShowSnapGuide] = useLayoutOption("snap-guide");
   const [sidebarSearch, setSidebarSearch] = useLayoutOption("sidebar-search");
@@ -22,5 +23,7 @@ export function usePaneledWorkspaceLayout() {
   const [projectHeadingLink, setProjectHeadingLink] = useLayoutOption("project-heading-link");
   const [collapsibleProjects, setCollapsibleProjects] = useLayoutOption("collapsible-projects");
   const [projectsSection, setProjectsSection] = useLayoutOption("projects-section");
-  return { smartResize, setSmartResize, showSnapGuide, setShowSnapGuide, insetHeader, setStoredInsetHeader, sidebarSearch, setSidebarSearch, projectGuide, setProjectGuide, projectHeadingLink, setProjectHeadingLink, collapsibleProjects, setCollapsibleProjects, projectsSection, setProjectsSection };
+  const [compactShowMore, setCompactShowMore] = useLayoutOption("compact-show-more");
+  const [pinnedSection, setPinnedSection] = useLayoutOption("pinned-section");
+  return { smartResize, setSmartResize, showSnapGuide, setShowSnapGuide, insetHeader, setStoredInsetHeader, centeredSearch, setCenteredSearch, sidebarSearch, setSidebarSearch, projectGuide, setProjectGuide, projectHeadingLink, setProjectHeadingLink, collapsibleProjects, setCollapsibleProjects, projectsSection, setProjectsSection, compactShowMore, setCompactShowMore, pinnedSection, setPinnedSection };
 }

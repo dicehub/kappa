@@ -3,6 +3,7 @@ import type { Component } from "vue";
 import { workspaceProjects } from "./paneled-workspace-projects";
 import { workspaceTemplateItemPages, workspaceTemplatePages } from "./paneled-workspace-templates";
 import { workspaceCalculatorPages } from "./paneled-workspace-calculators";
+import { settingsPages } from "./paneled-workspace-settings";
 
 const projectPages = workspaceProjects.map(project => project.name);
 
@@ -21,6 +22,7 @@ export interface NavigationCategory {
 
 export const workspaceLinks = [
   { label: "Explore", page: "Explore", icon: Compass },
+  { label: "Settings", page: "Account details", icon: Settings2 },
 ];
 
 export const workspaceCommunityPages = ["Community", "Public projects", "Public groups"];
@@ -34,6 +36,7 @@ export const workspaceSearchCategories = [
   { label: "Explore", icon: Compass, pages: ["Explore", ...workspaceCommunityPages] },
   { label: "Templates", icon: LayoutTemplate, pages: workspaceTemplatePages },
   { label: "Engineering tools", icon: Compass, pages: workspaceCalculatorPages },
+  { label: "Settings", icon: Settings2, pages: settingsPages },
 ];
 
 export const projectNavigation = [

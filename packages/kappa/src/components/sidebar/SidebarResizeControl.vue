@@ -54,6 +54,7 @@ onScopeDispose(() => { resize.cancelSnap(); resize.setIsResizing(false); });
     :data-snapped="resize.snapped.value || undefined"
     @keydown.capture="toggleTrailingPanel"
     @pointerdown.capture="!props.disabled && resize.startPointer($event)"
+    @click="!props.disabled && resize.clickHandle($event)"
     @dblclick.prevent="resetWidth"
   />
 </template>

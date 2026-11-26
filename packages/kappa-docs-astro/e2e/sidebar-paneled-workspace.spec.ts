@@ -103,7 +103,7 @@ test("header stays centered and navigation categories work in expanded and colla
   await expect(nav.getByRole("link", { name: "Explore", exact: true })).toBeVisible();
   await expect(nav.getByRole("button", { name: "Engineering tools", exact: true })).toHaveCount(0);
   await expect(nav.locator('[data-slot="sidebar-menu"]').first().getByRole("link"))
-    .toHaveText(["Dashboard", "Recents", "Activities", /^Simulation runs/, "Explore"]);
+    .toHaveText(["Dashboard", "Recents", "Activities", /^Simulation runs/, "Explore", "Settings"]);
   await nav.getByRole("link", { name: "Recents", exact: true }).click();
   await expect(shell.getByRole("table", { name: "Recent simulation runs", exact: true })).toBeVisible();
   await expect(nav.getByRole("link", { name: "Recents", exact: true })).toHaveAttribute("aria-current", "page");
@@ -138,6 +138,9 @@ test("header stays centered and navigation categories work in expanded and colla
   const explore = nav.getByRole("link", { name: "Explore", exact: true });
   await explore.focus();
   await explore.press("Tab");
+  const settings = nav.getByRole("link", { name: "Settings", exact: true });
+  await expect(settings).toBeFocused();
+  await settings.press("Tab");
   await expect(createProject).toBeFocused();
   await expect(createProject).toHaveCSS("opacity", "1");
 

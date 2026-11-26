@@ -1,6 +1,7 @@
 import { computed, ref } from "vue";
 import { projectContextPages, resolveWorkspacePage, workspacePages } from "./paneled-workspace-navigation";
 import { workspaceProjects, type WorkspaceProject } from "./paneled-workspace-projects";
+import { isWorkspaceSettingsPage, settingsPageTitle, type WorkspaceNavigationContext } from "./paneled-workspace-settings";
 
 // Navigation state belongs to the example. Sidebar parts do not depend on a router.
 export function usePaneledWorkspaceLocation(standalone: boolean) {
@@ -11,6 +12,7 @@ export function usePaneledWorkspaceLocation(standalone: boolean) {
   const lastProject = ref(projects.value[0]);
   const overviewPage = (project: WorkspaceProject) => workspaceProjects.find(item => item.code === project.code)!.name;
   const isProjectOverview = computed(() => !!selectedProject.value && overviewPage(selectedProject.value) === view.value);
+  const navigationContext = computed<WorkspaceNavigationContext>(() => selectedProject.value ? "project" : isWorkspaceSettingsPage(view.value) ? "settings" : "workspace");
 
   function destination(requested: string, projectCode = selectedProject.value?.code) {
     const resolved = resolveWorkspacePage(requested);
@@ -24,6 +26,7 @@ export function usePaneledWorkspaceLocation(standalone: boolean) {
       project = projects.value.find(item => item.code === "AV-07");
     }
     if (page === "Overview" && project) page = overviewPage(project);
+    if (!project && isWorkspaceSettingsPage(page)) page = settingsPageTitle(page);
     return { page, project };
   }
 
@@ -40,7 +43,8 @@ export function usePaneledWorkspaceLocation(standalone: boolean) {
 
   function selectPage(page: string, updateLocation = true, projectCode = selectedProject.value?.code) {
     const target = destination(page, projectCode);
-    const contextChanged = target.project?.code !== selectedProject.value?.code;
+    const nextContext = target.project ? "project" : isWorkspaceSettingsPage(target.page) ? "settings" : "workspace";
+    const contextChanged = nextContext !== navigationContext.value || target.project?.code !== selectedProject.value?.code;
     view.value = target.page;
     selectedProject.value = target.project;
     if (target.project) lastProject.value = target.project;
@@ -64,5 +68,5 @@ export function usePaneledWorkspaceLocation(standalone: boolean) {
     if (url.href !== window.location.href) window.history.replaceState(null, "", url);
   }
 
-  return { projects, view, selectedProject, lastProject, isProjectOverview, hrefForPage, selectPage, readLocation, renameProject };
+  return { projects, view, selectedProject, lastProject, isProjectOverview, navigationContext, hrefForPage, selectPage, readLocation, renameProject };
 }

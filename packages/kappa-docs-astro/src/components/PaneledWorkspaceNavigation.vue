@@ -9,6 +9,8 @@ import type { NavigationCategory } from "./paneled-workspace-navigation";
 import { usePaneledFlyoutIntent } from "./use-paneled-flyout-intent";
 import PaneledWorkspaceProjectDisclosure from "./PaneledWorkspaceProjectDisclosure.vue";
 import PaneledWorkspaceProjectsSection from "./PaneledWorkspaceProjectsSection.vue";
+import PaneledWorkspacePinAction from "./PaneledWorkspacePinAction.vue";
+import { pinnableWorkspacePages } from "./use-paneled-workspace-pins";
 
 const props = defineProps<{
   categories: NavigationCategory[];
@@ -24,8 +26,12 @@ const props = defineProps<{
   pageAvatar?: (page: string) => { name: string; avatarSrc?: string } | undefined;
   projectGuide?: boolean;
   projectsSection?: boolean;
+  compactShowMore?: boolean;
+  pinEnabled?: boolean;
+  pinnedPages?: string[];
 }>();
-const emit = defineEmits<{ navigate: [page: string, event: MouseEvent]; showMore: [category: string]; groupAction: [category: string] }>();
+const emit = defineEmits<{ navigate: [page: string, event: MouseEvent]; showMore: [category: string]; groupAction: [category: string]; togglePin: [page: string] }>();
+const canPin = (page?: string) => !!props.pinEnabled && pinnableWorkspacePages.some(item => item.page === page);
 const root = ref<ComponentPublicInstance>();
 const groupsOpen = defineModel<Record<string, boolean>>("groupsOpen", { default: () => ({}) });
 const setGroupOpen = (label: string, open: boolean) => { groupsOpen.value = { ...groupsOpen.value, [label]: open }; };
@@ -94,6 +100,7 @@ onBeforeUnmount(() => cancelAnimationFrame(focusFrame));
 
 <template>
   <Sidebar.Content ref="root" :aria-label="label">
+    <slot name="before" />
     <Sidebar.Menu><slot /></Sidebar.Menu>
     <div v-for="group in categories" :key="group.label" class="paneled-workspace-demo__nav-group" :data-heading-link="group.headingLink && !hasProjectsSection(group) || undefined">
       <Sidebar.Separator v-if="group.headingLink && !hasProjectsSection(group)" class="paneled-workspace-demo__projects-separator" aria-hidden="true" />
@@ -101,7 +108,7 @@ onBeforeUnmount(() => cancelAnimationFrame(focusFrame));
       <HoverCard.Root :open="active && flyout === group.label && !isMobile && hasFlyout(group)" :disabled="!active || isMobile || !hasFlyout(group)" :open-delay="0" :close-delay="5" :positioning="{ placement: 'right-start', strategy: 'fixed', gutter: 10 }" @update:open="updateFlyout(group.label, $event)">
         <HoverCard.Trigger v-if="iconCollapsed" as-child><Sidebar.MenuButton :icon="group.icon" :aria-label="groupLabel(group)" :href="group.page ? hrefForPage(group.page) : undefined" :active="isGroupPage(group)" :data-paneled-group="group.label" @pointermove="pointTrigger(group.label, $event)" @pointerleave="leaveTrigger" :data-active-descendant="group.pages.includes(view) || undefined" :data-flyout-open="flyout === group.label || undefined" :aria-expanded="flyout === group.label" @click="group.page ? emit('navigate', group.page, $event) : flyout = group.label" @keydown.down.capture.prevent="focusFlyout(group.label)" @keydown.esc.stop.prevent="closeFlyout(group.label)">{{ groupLabel(group) }}</Sidebar.MenuButton></HoverCard.Trigger>
         <component :is="group.collapsible === false ? 'div' : Sidebar.Collapsible" v-else v-bind="group.collapsible === false ? {} : { open: isGroupOpen(group) }" @update:open="setGroupOpen(group.label, $event); flyout = ''">
-          <div v-if="group.collapsible === false || group.iconCollapsible" class="paneled-workspace-demo__group-heading" :class="{ 'paneled-workspace-demo__section-heading': group.headingOnly }" :data-icon-collapse="group.iconCollapsible || undefined">
+          <div v-if="group.collapsible === false || group.iconCollapsible" class="paneled-workspace-demo__group-heading" :class="{ 'paneled-workspace-demo__section-heading': group.headingOnly, 'paneled-pin-row': group.headingLink && canPin(group.page) }" :data-icon-collapse="group.iconCollapsible || undefined">
             <PaneledWorkspaceProjectDisclosure v-if="group.iconCollapsible" :icon="group.icon" :expanded="isGroupOpen(group)" :label="hasProjectsSection(group) ? 'My Projects' : 'projects'" />
             <h3 v-if="group.headingOnly" :data-paneled-section-title="group.label" :data-linked="group.headingLink || undefined" :tabindex="group.headingLink ? undefined : -1">
               <Sidebar.MenuButton v-if="group.headingLink && group.page" :icon="group.iconCollapsible ? undefined : group.icon" class="paneled-workspace-demo__section-link" :href="hrefForPage(group.page)" :active="isGroupPage(group)" @click="emit('navigate', group.page, $event)">{{ groupLabel(group) }}</Sidebar.MenuButton>
@@ -109,11 +116,12 @@ onBeforeUnmount(() => cancelAnimationFrame(focusFrame));
             </h3>
             <Sidebar.MenuButton v-else-if="group.page" :icon="group.icon" :href="hrefForPage(group.page)" :active="isGroupPage(group)" @click="emit('navigate', group.page, $event)">{{ group.label }}</Sidebar.MenuButton>
             <h3 v-else><span aria-hidden="true"><component :is="group.icon" focusable="false" /></span>{{ group.label }}</h3>
-            <ToolbarButton v-if="group.action" size="sm" :icon="group.action.icon" :tooltip="group.action.label" @click="runGroupAction(group)" />
+            <PaneledWorkspacePinAction v-if="group.headingLink && group.page && canPin(group.page)" :page="group.page" :label="group.page" :pinned="!!pinnedPages?.includes(group.page)" @toggle="emit('togglePin', $event)" />
+            <ToolbarButton v-if="group.action" size="sm" :icon="group.action.icon" :tooltip="group.action.label" :class="{ 'paneled-pin-replaced-action': group.headingLink && canPin(group.page) }" @click="runGroupAction(group)" />
           </div>
           <HoverCard.Trigger v-else as-child><Sidebar.CollapsibleTrigger as-child><Sidebar.MenuButton :icon="group.icon" :active="isGroupPage(group)" class="paneled-workspace-demo__group-toggle" :data-paneled-group="group.label" @pointermove="pointTrigger(group.label, $event)" @pointerleave="leaveTrigger" :data-active-descendant="!groupsOpen[group.label] && group.pages.includes(view) || undefined" :data-flyout-open="!groupsOpen[group.label] && flyout === group.label || undefined" @keydown.down.capture="!isMobile && !groupsOpen[group.label] && ($event.preventDefault(), focusFlyout(group.label))" @keydown.esc="flyout === group.label && ($event.stopPropagation(), $event.preventDefault(), closeFlyout(group.label))"><span>{{ group.label }}</span><ChevronRight aria-hidden="true" /></Sidebar.MenuButton></Sidebar.CollapsibleTrigger></HoverCard.Trigger>
           <component :is="group.collapsible === false ? 'div' : Sidebar.CollapsibleContent" class="paneled-workspace-demo__group-content"><Sidebar.MenuSub :data-project-guide="group.label === 'Projects' && projectGuide || undefined">
-            <Sidebar.MenuSubItem v-for="page in group.pages" :key="page">
+            <Sidebar.MenuSubItem v-for="page in group.pages" :key="page" :class="{ 'paneled-pin-row': canPin(page) }">
               <Sidebar.MenuButton :href="hrefForPage(page)" :icon="!projectGuide && page === 'All projects' ? Folders : undefined" :active="view === page && (group.headingOnly || page !== group.page)" :class="{ 'paneled-workspace-demo__project-entry': pageAvatar?.(page) || page === 'All projects' }" @click="emit('navigate', page, $event)">
                 <template v-if="!projectGuide && pageAvatar?.(page)" #icon>
                   <Avatar.Root class="paneled-workspace-demo__project-avatar kappa-app-shell__project-avatar" aria-hidden="true">
@@ -123,23 +131,26 @@ onBeforeUnmount(() => cancelAnimationFrame(focusFrame));
                 </template>
                 <span :title="navigationLabel(page)">{{ navigationLabel(page) }}</span><span v-if="page === 'Simulation runs'" class="paneled-workspace-demo__count" aria-hidden="true">{{ runCount }}</span>
               </Sidebar.MenuButton>
+              <PaneledWorkspacePinAction v-if="canPin(page)" :page="page" :label="page" :pinned="!!pinnedPages?.includes(page)" @toggle="emit('togglePin', $event)" />
             </Sidebar.MenuSubItem>
             <Sidebar.MenuSubItem v-if="group.remainingCount">
-              <Sidebar.MenuButton :icon="ChevronDown" class="paneled-workspace-demo__show-more" @click="showMore(group, $event)">Show more ({{ group.remainingCount }})</Sidebar.MenuButton>
+              <Sidebar.MenuButton :icon="compactShowMore ? undefined : ChevronDown" class="paneled-workspace-demo__show-more" :data-compact="compactShowMore || undefined" @click="showMore(group, $event)">Show more ({{ group.remainingCount }})</Sidebar.MenuButton>
             </Sidebar.MenuSubItem>
           </Sidebar.MenuSub></component>
         </component>
         <HoverCard.Content :show-arrow="false" class="paneled-workspace-demo__flyout" :data-paneled-flyout="group.label" :data-flyout-owner="flyoutOwner" @pointermove="enterContent" @keydown.esc.stop.prevent="closeFlyout(group.label)">
           <div v-if="flyout === group.label && corridor" data-flyout-corridor class="paneled-workspace-demo__flyout-corridor" :style="corridor" aria-hidden="true" />
           <template v-if="iconCollapsed">
-            <div class="paneled-workspace-demo__flyout-heading" :class="{ 'paneled-workspace-demo__section-heading': group.headingOnly }">
+            <div class="paneled-workspace-demo__flyout-heading" :class="{ 'paneled-workspace-demo__section-heading': group.headingOnly, 'paneled-pin-row': group.headingLink && canPin(group.page) }">
               <h3 class="paneled-workspace-demo__flyout-title"><a v-if="group.page && (!group.headingOnly || group.headingLink)" :href="hrefForPage(group.page)" :aria-current="view === group.page ? 'page' : undefined" @click="emit('navigate', group.page, $event)">{{ groupLabel(group) }}</a><template v-else>{{ groupLabel(group) }}</template></h3>
-              <ToolbarButton v-if="group.action" size="sm" :icon="group.action.icon" :tooltip="group.action.label" @click="runGroupAction(group)" />
+              <PaneledWorkspacePinAction v-if="group.headingLink && group.page && canPin(group.page)" :page="group.page" :label="group.page" :pinned="!!pinnedPages?.includes(group.page)" @toggle="emit('togglePin', $event)" />
+              <ToolbarButton v-if="group.action" size="sm" :icon="group.action.icon" :tooltip="group.action.label" :class="{ 'paneled-pin-replaced-action': group.headingLink && canPin(group.page) }" @click="runGroupAction(group)" />
             </div>
             <hr class="paneled-workspace-demo__flyout-divider" aria-hidden="true" />
           </template>
           <nav :aria-label="`${group.label} pages`">
-            <a v-for="page in group.pages" :key="page" :href="hrefForPage(page)" :aria-current="view === page && (group.headingOnly || page !== group.page) ? 'page' : undefined" @click="emit('navigate', page, $event)">
+            <div v-for="page in group.pages" :key="page" :class="{ 'paneled-pin-row': canPin(page) }">
+            <a :href="hrefForPage(page)" :aria-current="view === page && (group.headingOnly || page !== group.page) ? 'page' : undefined" @click="emit('navigate', page, $event)">
               <Folders v-if="!projectGuide && page === 'All projects'" class="paneled-workspace-demo__overview-icon" aria-hidden="true" />
               <Avatar.Root v-if="!projectGuide && pageAvatar?.(page)" class="paneled-workspace-demo__project-avatar kappa-app-shell__project-avatar" aria-hidden="true">
                 <Avatar.Image v-if="pageAvatar?.(page)?.avatarSrc" :src="pageAvatar?.(page)?.avatarSrc" alt="" />
@@ -147,7 +158,9 @@ onBeforeUnmount(() => cancelAnimationFrame(focusFrame));
               </Avatar.Root>
               <span :title="navigationLabel(page)">{{ navigationLabel(page) }}</span><span v-if="page === 'Simulation runs'" class="paneled-workspace-demo__count" aria-hidden="true">{{ runCount }}</span>
             </a>
-            <Sidebar.MenuButton v-if="group.remainingCount" :icon="ChevronDown" class="paneled-workspace-demo__show-more" @click="showMore(group, $event)">Show more ({{ group.remainingCount }})</Sidebar.MenuButton>
+            <PaneledWorkspacePinAction v-if="canPin(page)" :page="page" :label="page" :pinned="!!pinnedPages?.includes(page)" @toggle="emit('togglePin', $event)" />
+            </div>
+            <Sidebar.MenuButton v-if="group.remainingCount" :icon="compactShowMore ? undefined : ChevronDown" class="paneled-workspace-demo__show-more" :data-compact="compactShowMore || undefined" @click="showMore(group, $event)">Show more ({{ group.remainingCount }})</Sidebar.MenuButton>
           </nav>
         </HoverCard.Content>
       </HoverCard.Root>

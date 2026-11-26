@@ -54,7 +54,7 @@ test("selected paneled navigation indicators sit at the sidebar edge", async ({ 
     .getByRole("link", { name: "Dashboard", exact: true }));
 });
 
-test("paneled navigation has no pinned section, pin controls, or feature catalog", async ({ page }) => {
+test("paneled navigation hides optional pins by default and has no feature catalog", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 1000 });
   await open(page);
   await expect(page.getByRole("button", { name: "Pinned", exact: true })).toHaveCount(0);

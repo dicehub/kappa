@@ -77,6 +77,8 @@
 .paneled-workspace-demo__flyout .paneled-workspace-demo__overview-icon { box-sizing: border-box; flex: none; inline-size: 1.25rem; block-size: 1.25rem; padding: 0.125rem; }
 .paneled-workspace-demo__navigation.kappa-sidebar .paneled-workspace-demo__show-more,
 .paneled-workspace-demo__flyout .paneled-workspace-demo__show-more { color: var(--kappa-subtle); font-size: 0.875rem; font-weight: 425; }
+.paneled-workspace-demo__navigation.kappa-sidebar .paneled-workspace-demo__show-more[data-compact],
+.paneled-workspace-demo__flyout .paneled-workspace-demo__show-more[data-compact] { font-size: 0.75rem; font-weight: 400; line-height: 1.25rem; }
 .paneled-workspace-demo__flyout .paneled-workspace-demo__show-more { padding: 0.125rem 0.75rem 0.125rem 1rem; min-block-size: 1.75rem; border-radius: 0.25rem; }
 .paneled-workspace-demo__flyout .paneled-workspace-demo__show-more:is(:hover, :focus-visible) { color: var(--kappa-shell-nav-emphasis); background: var(--kappa-shell-nav-highlight); }
 .paneled-workspace-demo__flyout .paneled-workspace-demo__show-more:active { background: var(--kappa-shell-nav-pressed); }

@@ -10,6 +10,7 @@ const props = defineProps<{
   projects: WorkspaceProject[];
   view: string;
   pageTitle: string;
+  settings?: boolean;
   hrefForPage: (page: string) => string;
 }>();
 const trail = ref<{ $el: HTMLElement }>();
@@ -37,6 +38,12 @@ function switchProject(page: string) {
           <Breadcrumbs.Link :href="hrefForPage(project.code)" @click="emit('open', project.code, $event)">{{ project.name }}</Breadcrumbs.Link>
           <PaneledWorkspaceProjectSwitcher variant="breadcrumb" :project="project" :projects="projects"
             :href-for-page="hrefForPage" :compact="false" :is-mobile="false" @navigate="switchProject" />
+        </Breadcrumbs.Item>
+        <Breadcrumbs.Separator />
+      </template>
+      <template v-else-if="settings">
+        <Breadcrumbs.Item>
+          <Breadcrumbs.Link :href="hrefForPage('Account details')" @click="emit('open', 'Account details', $event)">Settings</Breadcrumbs.Link>
         </Breadcrumbs.Item>
         <Breadcrumbs.Separator />
       </template>

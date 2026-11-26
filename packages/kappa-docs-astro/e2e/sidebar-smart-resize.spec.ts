@@ -293,6 +293,40 @@ test("keyboard resizing and reset bypass an active learned preference", async ({
   await page.mouse.up();
 });
 
+test("a secondary pointer leaves the primary drag snapped", async ({ page }) => {
+  const handle = await openWorkspace(page);
+  await page.clock.pauseAt(await page.evaluate(() => Date.now() + 1000));
+  const pointer = await moveTo(page, handle, 245);
+  await expect(handle).toHaveAttribute("data-snapped", "true");
+  await handle.dispatchEvent("pointerdown", { pointerId: 9, pointerType: "touch", isPrimary: false, button: 0, buttons: 1, clientX: pointer.x, clientY: pointer.y });
+  await page.mouse.move(pointer.x + 2, pointer.y);
+  await expect(handle).toHaveAttribute("aria-valuenow", "240");
+  await expect(handle).toHaveAttribute("data-snapped", "true");
+  await page.mouse.up();
+});
+
+test("a double-click reset with pointer movement does not train the sidebar", async ({ page }) => {
+  const handle = await openWorkspace(page);
+  for (let index = 0; index < 3; index += 1) {
+    for (let step = 0; step < 3; step += 1) await handle.press("ArrowRight");
+    await expect(handle).toHaveAttribute("aria-valuenow", "312");
+    const box = (await handle.boundingBox())!;
+    const x = box.x + box.width / 2;
+    const y = box.y + 30;
+    await page.mouse.move(x, y);
+    await page.mouse.down({ clickCount: 1 });
+    await page.mouse.move(x + 1, y);
+    await expect(handle).toHaveAttribute("aria-valuenow", "313");
+    await page.mouse.up({ clickCount: 1 });
+    await page.mouse.down({ clickCount: 2 });
+    await page.mouse.up({ clickCount: 2 });
+    await expect(handle).toHaveAttribute("aria-valuenow", "240");
+    await page.clock.fastForward(2100);
+  }
+  await dragTo(page, handle, 318);
+  await expect(handle).toHaveAttribute("aria-valuenow", "318");
+});
+
 test("cancelled drags and rapid corrections do not establish a preference", async ({ page }) => {
   const handle = await openWorkspace(page);
   for (const width of [300, 302, 301]) {
@@ -326,8 +360,10 @@ test("a narrower container keeps its fallback guide stable", async ({ page }) =>
   await demo.evaluate(element => { element.style.width = "260px"; element.style.maxWidth = "260px"; });
   await expect(handle).toHaveAttribute("aria-valuemax", "260");
   const fallbackZone = (await zone.boundingBox())!;
+  await page.clock.pauseAt(await page.evaluate(() => Date.now() + 1000));
   for (let index = 0; index < 7; index += 1) {
     await handle.dblclick();
+    await expect(handle).toHaveAttribute("aria-valuenow", "240");
     const pointer = await moveTo(page, handle, 246);
     await expect(handle).toHaveAttribute("aria-valuenow", "240");
     await page.clock.fastForward(350);

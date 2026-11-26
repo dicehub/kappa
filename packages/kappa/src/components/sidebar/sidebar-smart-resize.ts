@@ -1,5 +1,5 @@
-import { computed, onScopeDispose, ref, watch } from "vue";
-import { createPreferredWidth, SIDEBAR_SNAP_DISTANCE } from "./sidebar-preferred-width";
+import { computed, onScopeDispose, ref, shallowRef, watch } from "vue";
+import { recordPreferredWidth, SIDEBAR_SNAP_DISTANCE, type WidthHistory } from "./sidebar-preferred-width";
 
 interface SmartResizeOptions {
   enabled: () => boolean;
@@ -12,13 +12,14 @@ interface SmartResizeOptions {
 
 /** Applies a preferred width to Ark's pointer requests without replacing its interaction. */
 export function useSidebarSmartResize(options: SmartResizeOptions) {
-  const preference = createPreferredWidth();
-  const learnedPoint = ref<number | null>(null);
+  const history = shallowRef<WidthHistory>({ samples: [], preferred: null });
+  let beforeDrag = history.value;
+  let beforeClickPair = history.value;
   const caught = ref(false);
   const targetPoint = computed(() => {
     if (!options.enabled()) return null;
     const [min, max] = options.geometry();
-    const preferred = learnedPoint.value;
+    const preferred = history.value.preferred;
     const target = preferred !== null && preferred >= min && preferred <= max ? preferred : options.defaultWidth();
     return target >= min && target <= max ? target : null;
   });
@@ -47,8 +48,9 @@ export function useSidebarSmartResize(options: SmartResizeOptions) {
   function cancel() { stopPointer(); caught.value = false; }
 
   function start(event: PointerEvent) {
-    stopPointer();
     if (!options.enabled() || event.button !== 0 || !event.isPrimary) return;
+    stopPointer();
+    beforeDrag = history.value;
     const target = event.currentTarget as HTMLElement;
     const doc = target.ownerDocument;
     const win = doc.defaultView;
@@ -83,10 +85,7 @@ export function useSidebarSmartResize(options: SmartResizeOptions) {
         && lastTarget !== undefined && Math.abs(width - lastTarget) < 0.5;
       if (next.type === "pointerup") stopPointer();
       else cancel();
-      if (record) {
-        preference.record(Math.round(width), Date.now(), point);
-        learnedPoint.value = preference.value;
-      }
+      if (record) history.value = recordPreferredWidth(history.value, Math.round(width), Date.now(), point);
     };
     const lost = (next: PointerEvent) => { if (next.pointerId === pointerId) cancel(); };
     doc.addEventListener("pointermove", move, true);
@@ -161,5 +160,12 @@ export function useSidebarSmartResize(options: SmartResizeOptions) {
   const zone = computed(() => options.open() && targetPoint.value !== null
     ? { width: targetPoint.value, radius: SIDEBAR_SNAP_DISTANCE, active: caught.value && inZone.value }
     : null);
-  return { start, apply, cancel, snapped: visiblySnapped, zone };
+  // Only the browser knows whether two releases form a double-click. A reset
+  // discards movement from both clicks and keeps any earlier width samples.
+  function click(event: MouseEvent) {
+    if (!options.enabled()) return;
+    if (event.detail === 1) beforeClickPair = beforeDrag;
+    if (event.detail === 2) history.value = beforeClickPair;
+  }
+  return { start, apply, cancel, click, snapped: visiblySnapped, zone };
 }

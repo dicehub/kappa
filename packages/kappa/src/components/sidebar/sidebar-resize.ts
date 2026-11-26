@@ -23,6 +23,7 @@ interface ResizeContext {
   setIsResizing: (value: boolean) => void;
   startPointer: (event: PointerEvent) => void;
   cancelSnap: () => void;
+  clickHandle: (event: MouseEvent) => void;
   snapped: Readonly<Ref<boolean>>;
   snapZone: ComputedRef<{ width: number; radius: number; active: boolean } | null>;
 }
@@ -114,6 +115,6 @@ export function useSidebarResize(props: Required<Pick<SidebarProviderProps, "def
     ? clampSidebarWidth(props.defaultWidth, bounds.value.minWidth, bounds.value.maxWidth) / groupWidth.value * 100
     : 25);
   const snapZone = computed(() => props.showSnapGuide ? snap.zone.value : null);
-  provide(resizeKey, { props: splitterProps, handleId, range, canCollapse, defaultSize, startPointer: snap.start, cancelSnap: snap.cancel, snapped: snap.snapped, snapZone, setIsResizing: (value) => { resizing.value = value; } });
+  provide(resizeKey, { props: splitterProps, handleId, range, canCollapse, defaultSize, startPointer: snap.start, cancelSnap: snap.cancel, clickHandle: snap.click, snapped: snap.snapped, snapZone, setIsResizing: (value) => { resizing.value = value; } });
   return { width, setWidth, isResizing: computed(() => enabled.value && resizing.value) };
 }

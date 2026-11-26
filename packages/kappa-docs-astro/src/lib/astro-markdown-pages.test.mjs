@@ -434,8 +434,9 @@ describe("Markdown build output", () => {
     assert.match(breadcrumbs, /@dicehub\/kappa\/components\/breadcrumbs/);
     assert.match(breadcrumbs, /```vue\n<script setup>/);
     assert.match(breadcrumbs, /```javascript\nimport \{/);
-    assert.equal((breadcrumbs.match(/```vue/g) ?? []).length, 10);
-    assert.doesNotMatch(breadcrumbs, /lang="ts"|```typescript/);
+    assert.equal((breadcrumbs.match(/```vue/g) ?? []).length, 11);
+    assert.equal((breadcrumbs.match(/```vue\n<script setup>/g) ?? []).length, 10);
+    assert.match(breadcrumbs, /### \[Context Switcher\]\(#context\)[\s\S]*?```vue\n<script setup lang="ts">/);
     assert.match(breadcrumbs, /^## \[Examples\]\(#examples\)$/m);
     assert.match(breadcrumbs, /^### \[Basic\]\(#basic\)$/m);
     assert.match(breadcrumbs, /^### \[Collapsed Ancestor Menu\]\(#collapsed-menu\)$/m);

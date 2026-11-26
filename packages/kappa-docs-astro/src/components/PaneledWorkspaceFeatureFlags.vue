@@ -5,6 +5,7 @@ import { Flag } from "@lucide/vue";
 
 defineProps<{ railOnBottom: boolean }>();
 const insetHeader = defineModel<boolean>("insetHeader", { required: true });
+const centeredSearch = defineModel<boolean>("centeredSearch", { required: true });
 const sidebarSearch = defineModel<boolean>("sidebarSearch", { required: true });
 const smartResize = defineModel<boolean>("smartResize", { required: true });
 const showSnapGuide = defineModel<boolean>("showSnapGuide", { required: true });
@@ -12,6 +13,8 @@ const projectGuide = defineModel<boolean>("projectGuide", { required: true });
 const projectHeadingLink = defineModel<boolean>("projectHeadingLink", { required: true });
 const collapsibleProjects = defineModel<boolean>("collapsibleProjects", { required: true });
 const projectsSection = defineModel<boolean>("projectsSection", { required: true });
+const compactShowMore = defineModel<boolean>("compactShowMore", { required: true });
+const pinnedSection = defineModel<boolean>("pinnedSection", { required: true });
 </script>
 
 <template>
@@ -26,6 +29,9 @@ const projectsSection = defineModel<boolean>("projectsSection", { required: true
           <Dropdown.Label>Feature flags</Dropdown.Label>
           <Dropdown.CheckboxItem v-model:checked="insetHeader" value="inset-header" close-on-select>
             Inset header
+          </Dropdown.CheckboxItem>
+          <Dropdown.CheckboxItem v-if="insetHeader" v-model:checked="centeredSearch" value="centered-search" inset :disabled="sidebarSearch" close-on-select>
+            Centered search
           </Dropdown.CheckboxItem>
           <Dropdown.CheckboxItem v-model:checked="sidebarSearch" value="sidebar-search" close-on-select>
             Search in sidebar
@@ -47,6 +53,12 @@ const projectsSection = defineModel<boolean>("projectsSection", { required: true
           </Dropdown.CheckboxItem>
           <Dropdown.CheckboxItem v-model:checked="projectsSection" value="projects-section" close-on-select>
             Projects section header
+          </Dropdown.CheckboxItem>
+          <Dropdown.CheckboxItem v-model:checked="compactShowMore" value="compact-show-more" close-on-select>
+            Compact Show more
+          </Dropdown.CheckboxItem>
+          <Dropdown.CheckboxItem v-model:checked="pinnedSection" value="pinned-section" close-on-select>
+            Pinned section
           </Dropdown.CheckboxItem>
         </Dropdown.Group>
       </Dropdown.Content>
