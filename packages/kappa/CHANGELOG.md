@@ -1,5 +1,24 @@
 # @dicehub/kappa
 
+## 1.1.0
+
+### Minor Changes
+
+- 3a7b25f: Add a context breadcrumb variant with padded links, quiet hover surfaces, and a separate caret trigger for resource switching. Compose Breadcrumbs.Trigger with Popover or Dropdown while preserving native links and Ark UI focus behavior.
+
+  Use the same smaller, muted separator across all breadcrumb variants and sizes.
+
+- 23b1659: Add optional smart sidebar resizing with a separately controlled snap-zone guide, hidden by default. Snap to the default width immediately, then learn a stable preferred width from completed pointer drags. Retain the learned guide until a replacement has enough support. Keep the zone highlighted through fine adjustment and release until the edge leaves it. Pause near the snap point for precise adjustment; keyboard resizing, collapse, and reset keep their existing behavior.
+
+### Patch Changes
+
+- 70dbead: Use a neutral #f4f4f4 background for paneled application shells in light mode.
+  Define the existing --kappa-paneled-chrome variable in the theme so navigation,
+  headers, and mobile drawers share the same surface. Keep the default dark
+  background and content panel colors unchanged.
+- 69d02ff: Prevent the application shell wordmark from clipping text edges at fractional display scales without changing its size or position.
+- d24b4c7: Prevent the app shell search button from showing a keyboard focus ring after pointer dismissal of search. Preserve focus restoration and keyboard focus indicators.
+
 ## 1.0.0
 
 ### Major Changes
